@@ -19,13 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expenses.Data.Abstractions", "src\Expenses.Data.Abstractions\Expenses.Data.Abstractions.csproj", "{D774549E-4375-4F11-B0CE-72AEBCDF46F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expenses.Data.EntityFramework.Sqlite", "src\Expenses.Data.EntityFramework.Sqlite\Expenses.Data.EntityFramework.Sqlite.csproj", "{434BD43E-72F9-4502-AF86-F3875AEE5D79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expenses.Data.EntityFramework.SqlServer", "src\Expenses.Data.EntityFramework.Sqlite\Expenses.Data.EntityFramework.SqlServer.csproj", "{434BD43E-72F9-4502-AF86-F3875AEE5D79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Expenses.Data.Entities", "src\Expenses.Data.Entities\Expenses.Data.Entities.csproj", "{00D45B51-C01F-4113-B9CE-B2FE02BDB15F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incomes.Data.Abstractions", "src\Incomes.Data.Abstractions\Incomes.Data.Abstractions.csproj", "{44DAA191-BDE7-434C-82CE-4BBB4F1CA249}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incomes.Data.EntityFramework.Sqlite", "src\Incomes.Data.EntityFramework.Sqlite\Incomes.Data.EntityFramework.Sqlite.csproj", "{B9AFD197-EC71-4FA5-95F1-9403825ACF58}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incomes.Data.EntityFramework.SqlServer", "src\Incomes.Data.EntityFramework.Sqlite\Incomes.Data.EntityFramework.SqlServer.csproj", "{B9AFD197-EC71-4FA5-95F1-9403825ACF58}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Incomes.Data.Entities", "src\Incomes.Data.Entities\Incomes.Data.Entities.csproj", "{A25198EA-9157-4E8A-865A-153362DE563F}"
 EndProject

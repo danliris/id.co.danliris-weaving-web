@@ -8,6 +8,6 @@ namespace Weaving.Application.Repositories
     {
         void SetCurrentUser(string userId);
 
-        Task Save(ManufactureOrder order);
+        Task Update(ManufactureOrder order);
     }
 }

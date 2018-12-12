@@ -10,14 +10,15 @@
     <PackageReference Include="ExtCore.Mvc" Version="3.3.0" />
     <PackageReference Include="ExtCore.WebApplication" Version="3.3.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Barebone\Barebone.csproj" />
+    <ProjectReference Include="..\Expenses.Data.EntityFramework.Sqlite\Expenses.Data.EntityFramework.SqlServer.csproj" />
+    <ProjectReference Include="..\Incomes.Data.EntityFramework.Sqlite\Incomes.Data.EntityFramework.SqlServer.csproj" />
     <ProjectReference Include="..\Incomes\Incomes.csproj" />
-    <ProjectReference Include="..\Incomes.Data.EntityFramework.Sqlite\Incomes.Data.EntityFramework.Sqlite.csproj" />
     <ProjectReference Include="..\Expenses\Expenses.csproj" />
-    <ProjectReference Include="..\Expenses.Data.EntityFramework.Sqlite\Expenses.Data.EntityFramework.Sqlite.csproj" />
     <ProjectReference Include="..\Balance\Balance.csproj" />
     <ProjectReference Include="..\Weaving\Weaving.csproj" />
   </ItemGroup>

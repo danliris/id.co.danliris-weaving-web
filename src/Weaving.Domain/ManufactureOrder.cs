@@ -14,10 +14,10 @@ namespace Weaving.Domain
             Finished = 30,
         }
 
-        public ManufactureOrder(Guid id, DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId)
+        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId)
         {
             Identity = id;
-            OrderDate = date;
+            OrderDate = orderDate;
             UnitId = unitId;
             YarnCodes = yarnCodes;
             Construction = construction;
@@ -25,8 +25,6 @@ namespace Weaving.Domain
             MachineId = machineId;
 
             State = Status.Draft;
-
-            Created = DateTime.Now;
         }
 
         public DateTimeOffset OrderDate { get; }
@@ -43,6 +41,21 @@ namespace Weaving.Domain
 
         public Status State { get; }
 
-        public DateTimeOffset Created { get; }
+        /// <summary>
+        /// Owner
+        /// </summary>
+        public string UserId { get; private set; }
+
+        public IAuditTrail AuditTrail { get; private set; }
+
+        public void SetUserId(string userId)
+        {
+            UserId = userId;
+        }
+
+        public void SetAuditTrail(IAuditTrail audit)
+        {
+            AuditTrail = audit;
+        }
     }
 }

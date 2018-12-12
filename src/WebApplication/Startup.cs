@@ -3,48 +3,68 @@
 
 using ExtCore.Data.EntityFramework;
 using ExtCore.WebApplication.Extensions;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace DanLiris.Admin.Web
 {
     public class Startup
     {
-        private IConfiguration configuration;
-        private string extensionsPath;
+        private readonly IConfiguration configuration;
+
+        private readonly string extensionsPath;
 
         public Startup(IHostingEnvironment hostingEnvironment, IConfiguration configuration, ILoggerFactory loggerFactory)
         {
             this.configuration = configuration;
             this.extensionsPath = hostingEnvironment.ContentRootPath + this.configuration["Extensions:Path"];
+
             loggerFactory.AddConsole();
             loggerFactory.AddDebug();
         }
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddExtCore(this.extensionsPath);
-
             services.Configure<StorageContextOptions>(options =>
                 {
                     options.ConnectionString = this.configuration.GetConnectionString("Default");
+                    options.MigrationsAssembly = typeof(DesignTimeStorageContextFactory).GetTypeInfo().Assembly.FullName;
                 }
             );
+
+            services.AddExtCore(this.extensionsPath);
+
+            DesignTimeStorageContextFactory.Initialize(services.BuildServiceProvider());
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "My API", Version = "v1" });
+            });
         }
 
-        public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (hostingEnvironment.IsDevelopment())
+            if (env.IsDevelopment())
             {
-                applicationBuilder.UseDeveloperExceptionPage();
-                applicationBuilder.UseDatabaseErrorPage();
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
 
-            applicationBuilder.UseExtCore();
+            app.UseExtCore();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
         }
     }
 }

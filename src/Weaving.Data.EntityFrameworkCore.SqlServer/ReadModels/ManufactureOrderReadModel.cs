@@ -23,19 +23,19 @@ namespace Weaving.Domain.ReadModels
         public string BlendedJson { get; set; }
 
         #region IAuditTrail ISoftDelete
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; internal set; }
 
-        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; internal set; }
 
-        public string ModifiedBy { get; set; }
+        public string ModifiedBy { get; internal set; }
 
-        public DateTimeOffset? ModifiedDate { get; set; }
+        public DateTimeOffset? ModifiedDate { get; internal set; }
 
-        public bool? Deleted { get; set; }
+        public bool? Deleted { get; internal set; }
 
-        public DateTimeOffset? DeletedDate { get; set; }
+        public DateTimeOffset? DeletedDate { get; internal set; }
 
-        public string DeletedBy { get; set; }
+        public string DeletedBy { get; internal set; }
         #endregion
     }
 }

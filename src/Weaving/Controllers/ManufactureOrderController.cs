@@ -8,14 +8,9 @@ namespace Weaving.Controllers
     [ApiController]
     public class ManufactureOrderController : ControllerBase
     {
-        public ManufactureOrderController()
+        public ManufactureOrderController(IStorage storage)
         {
         }
-
-        //public ActionResult Index()
-        //{
-        //    return this.View();
-        //}
 
         [HttpPost]
         public IActionResult Post([FromBody]ManufactureOrderForm form)

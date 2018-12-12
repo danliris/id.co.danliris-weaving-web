@@ -7,7 +7,7 @@ namespace Infrastructure
 {
     public class ServicesRegistrar : IConfigureServicesAction
     {
-        public int Priority => 100;
+        public int Priority => 1000;
 
         public void Execute(IServiceCollection services, IServiceProvider sp)
         {

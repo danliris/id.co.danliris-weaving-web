@@ -1,8 +1,13 @@
+using ExtCore.Data.Abstractions;
+using FluentAssertions;
+using Moonlay.ExtCore.Mvc.Abstractions;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Weaving.Application;
+using Weaving.Application.Repositories;
+using Weaving.Domain;
 using Weaving.Domain.Entities;
 using Weaving.Domain.ValueObjects;
 using Xunit;
@@ -12,14 +17,28 @@ namespace Weaving.Tests
     public class ManufactureOrderServiceTests : IDisposable
     {
         private readonly MockRepository mockRepository;
-
-
+        private readonly Mock<IStorage> mockStorage;
+        private readonly Mock<IManufactureOrderRepository> mockOrderRepo;
+        private readonly Mock<IWorkContext> mockWorkContext;
 
         public ManufactureOrderServiceTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
+            this.mockStorage = this.mockRepository.Create<IStorage>();
 
+            this.mockStorage.Setup(x => x.Save());
 
+            this.mockOrderRepo = this.mockRepository.Create<IManufactureOrderRepository>();
+
+            var userId = Guid.NewGuid().ToString();
+
+            this.mockOrderRepo.Setup(x => x.SetCurrentUser(userId));
+
+            this.mockStorage.Setup(x => x.GetRepository<IManufactureOrderRepository>()).Returns(mockOrderRepo.Object);
+
+            this.mockWorkContext = this.mockRepository.Create<IWorkContext>();
+
+            this.mockWorkContext.Setup(x => x.CurrentUser).Returns(userId);
         }
 
         public void Dispose()
@@ -29,11 +48,11 @@ namespace Weaving.Tests
 
         private IManufactureOrderService CreateService()
         {
-            return new ManufactureOrderService();
+            return new ManufactureOrderService(mockStorage.Object, mockWorkContext.Object);
         }
 
         [Fact]
-        public async Task PlacedOrderAsync_StateUnderTest_ExpectedBehavior()
+        public async Task PlacedOrderAsync_UnitTest()
         {
             // Arrange
             var unitUnderTest = this.CreateService();
@@ -48,6 +67,8 @@ namespace Weaving.Tests
 
             var machineId = new MachineId(1);
 
+            this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
+
             // Act
             var result = await unitUnderTest.PlacedOrderAsync(date: DateTime.Now, 
                 unitId: unitId, 
@@ -57,7 +78,7 @@ namespace Weaving.Tests
                 machineId: machineId);
 
             // Assert
-            Assert.True(false);
+            result.Should().NotBeNull();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using ExtCore.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Weaving.Domain;
@@ -18,7 +19,7 @@ namespace Weaving.Application.Repositories
 
         public DbSet<GoodsConstruction> GoodsConstructionSet { get; }
 
-        public Task Save(ManufactureOrder order)
+        public Task Update(ManufactureOrder order)
         {
             var readModel = new ManufactureOrderReadModel(order.Identity)
             {
@@ -28,9 +29,9 @@ namespace Weaving.Application.Repositories
                 State = order.State,
                 OrderDate = order.OrderDate,
                 BlendedJson = order.Blended.ToString(),
-                CreatedBy = CurrentUser,
-                CreatedDate = order.Created,
-                Deleted = false
+
+                //CreatedBy = CurrentUser,
+                //Deleted = false
             };
 
             dbSet.Update(readModel);
