@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
+    <PackageReference Include="Moonlay.ExtCore.Mvc.Abstractions" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Weaving.Data.EntityFrameworkCore.SqlServer\Weaving.Data.EntityFrameworkCore.SqlServer.csproj" />
+    <ProjectReference Include="..\Weaving.Domain.Events\Weaving.Domain.Events.csproj" />
+  </ItemGroup>
+
+</Project>
