@@ -2,7 +2,7 @@
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Weaving.Application.Repositories;
+using Weaving.Domain.Repositories;
 using Weaving.Domain;
 using Weaving.Domain.Entities;
 using Weaving.Domain.Events;
@@ -33,7 +33,7 @@ namespace Weaving.Application
 
             order.SetUserId(_workContext.CurrentUser);
 
-            await _orderRepository.Update(order);
+            await _orderRepository.Insert(order);
 
             _storage.Save();
 

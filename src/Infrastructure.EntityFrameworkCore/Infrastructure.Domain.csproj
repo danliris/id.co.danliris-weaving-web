@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moonlay.Domain" Version="1.0.1" />
-    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.1" />
+    <PackageReference Include="ExtCore.Data.Entities.Abstractions" Version="3.3.0" />
+    <PackageReference Include="Moonlay.Domain" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

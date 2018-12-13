@@ -1,40 +1,23 @@
-﻿using System;
-using System.Threading.Tasks;
-using ExtCore.Data.EntityFramework;
+﻿using ExtCore.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
-using Weaving.Domain;
+using System.Linq;
+using System.Threading.Tasks;
 using Weaving.Domain.Entities;
 using Weaving.Domain.ReadModels;
 
-namespace Weaving.Application.Repositories
+namespace Weaving.Domain.Repositories
 {
     public class ManufactureOrderRepository : RepositoryBase<ManufactureOrderReadModel>, IManufactureOrderRepository
     {
-        public ManufactureOrderRepository()
-        {
-            GoodsConstructionSet = this.storageContext.Set<GoodsConstruction>();
-        }
-
         public string CurrentUser { get; private set; }
 
         public DbSet<GoodsConstruction> GoodsConstructionSet { get; }
 
-        public Task Update(ManufactureOrder order)
+        public IQueryable<ManufactureOrder> Query => dbSet.Select(o=> new ManufactureOrder(o));
+
+        public Task Insert(ManufactureOrder order)
         {
-            var readModel = new ManufactureOrderReadModel(order.Identity)
-            {
-                MachineId = order.MachineId.Value,
-                UnitDepartmentId = order.UnitId.Value,
-                YarnCodesJson = order.YarnCodes.ToString(),
-                State = order.State,
-                OrderDate = order.OrderDate,
-                BlendedJson = order.Blended.ToString(),
-
-                //CreatedBy = CurrentUser,
-                //Deleted = false
-            };
-
-            dbSet.Update(readModel);
+            dbSet.Add(order.ReadModel);
 
             return Task.CompletedTask;
         }
@@ -42,6 +25,13 @@ namespace Weaving.Application.Repositories
         public void SetCurrentUser(string userId)
         {
             CurrentUser = userId;
+        }
+
+        public Task Update(ManufactureOrder order)
+        {
+            dbSet.Update(order.ReadModel);
+
+            return Task.CompletedTask;
         }
     }
 }

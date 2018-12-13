@@ -5,23 +5,11 @@ using System.Collections.Generic;
 
 namespace Weaving.Domain.ValueObjects
 {
-    public class Blended : ValueObject
+    public class Blended : List<float>
     {
-        public Blended(List<float> items)
+        public Blended(IEnumerable<float> items)
         {
-            Items = items;
-        }
-
-        public List<float> Items { get; }
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return Items;
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
+            this.AddRange(items);
         }
     }
 }

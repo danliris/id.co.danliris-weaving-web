@@ -1,10 +1,11 @@
-﻿using Moonlay.Domain;
+﻿using ExtCore.Data.Entities.Abstractions;
+using Moonlay.Domain;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Infrastructure
+namespace Infrastructure.Domain.ReadModels
 {
-    public abstract class DanLirisReadModel : ReadModelExtCore, IAuditTrail, ISoftDelete
+    public abstract class DanLirisReadModel : ReadModel, IEntity, IAuditTrail, ISoftDelete
     {
         protected DanLirisReadModel(Guid identity)
         {

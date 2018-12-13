@@ -1,6 +1,6 @@
 ﻿using ExtCore.Data.EntityFramework;
 using ExtCore.Data.EntityFramework.SqlServer;
-using Infrastructure;
+using Infrastructure.Domain.ReadModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moonlay.ExtCore.Mvc.Abstractions;

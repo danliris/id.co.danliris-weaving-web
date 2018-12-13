@@ -1,8 +1,10 @@
 ﻿// Copyright © 2017 Dmitry Sikorsky. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using DanLiris.Admin.Web.Schedulers;
 using ExtCore.Data.EntityFramework;
 using ExtCore.WebApplication.Extensions;
+using FluentScheduler;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +46,7 @@ namespace DanLiris.Admin.Web
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "My API", Version = "v1" });
             });
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -65,6 +68,8 @@ namespace DanLiris.Admin.Web
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
+
+            JobManager.Initialize(new DefaultScheduleRegistry());
         }
     }
 }

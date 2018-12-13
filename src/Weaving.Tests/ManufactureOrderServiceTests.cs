@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Weaving.Application;
-using Weaving.Application.Repositories;
+using Weaving.Domain.Repositories;
 using Weaving.Domain;
 using Weaving.Domain.Entities;
 using Weaving.Domain.ValueObjects;
@@ -67,7 +67,7 @@ namespace Weaving.Tests
 
             var machineId = new MachineId(1);
 
-            this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
+            this.mockOrderRepo.Setup(x => x.Insert(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
 
             // Act
             var result = await unitUnderTest.PlacedOrderAsync(date: DateTime.Now, 

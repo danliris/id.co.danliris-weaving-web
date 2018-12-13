@@ -6,23 +6,11 @@ using System.Text;
 
 namespace Weaving.Domain.ValueObjects
 {
-    public class YarnCodes : ValueObject
+    public class YarnCodes : List<string>
     {
-        public YarnCodes(List<string> codes)
+        public YarnCodes(IEnumerable<string> items)
         {
-            Codes = codes;
-        }
-
-        public List<string> Codes { get; }
-
-        protected override IEnumerable<object> GetAtomicValues()
-        {
-            yield return Codes;
-        }
-
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
+            this.AddRange(items);
         }
     }
 }

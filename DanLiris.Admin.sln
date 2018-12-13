@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Domain.Events", "sr
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.EntityFrameworkCore", "src\Infrastructure.EntityFrameworkCore\Infrastructure.EntityFrameworkCore.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain", "src\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
