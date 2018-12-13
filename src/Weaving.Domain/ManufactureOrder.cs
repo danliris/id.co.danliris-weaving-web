@@ -1,4 +1,5 @@
-﻿using Moonlay.Domain;
+﻿using Moonlay;
+using Moonlay.Domain;
 using System;
 using Weaving.Domain.Entities;
 using Weaving.Domain.ReadModels;
@@ -61,6 +62,8 @@ namespace Weaving.Domain
         public UnitDepartmentId UnitDepartmentId { get; private set; }
         public void SetUnitDepartment(UnitDepartmentId newUnit)
         {
+            Validator.ThrowIfNull(() => newUnit);
+
             if(newUnit != UnitDepartmentId)
             {
                 UnitDepartmentId = newUnit;
@@ -71,7 +74,9 @@ namespace Weaving.Domain
         public YarnCodes YarnCodes { get; private set; }
         public void SetYarnCodes(YarnCodes newCodes)
         {
-            if(newCodes != YarnCodes)
+            Validator.ThrowIfNullOrEmpty(() => newCodes);
+
+            if (newCodes != YarnCodes)
             {
                 YarnCodes = newCodes;
                 ReadModel.YarnCodesJson = YarnCodes.Serialize();
@@ -84,7 +89,9 @@ namespace Weaving.Domain
         public Blended Blended { get; private set; }
         public void SetBlended(Blended newBlended)
         {
-            if(newBlended != Blended)
+            Validator.ThrowIfNullOrEmpty(() => newBlended);
+
+            if (newBlended != Blended)
             {
                 Blended = newBlended;
                 ReadModel.BlendedJson = Blended.Serialize();
@@ -94,7 +101,9 @@ namespace Weaving.Domain
         public MachineId MachineId { get; private set; }
         public void SetMachineId(MachineId newMachine)
         {
-            if(newMachine != MachineId)
+            Validator.ThrowIfNull(() => newMachine);
+
+            if (newMachine != MachineId)
             {
                 MachineId = newMachine;
                 ReadModel.MachineId = MachineId.Value;
@@ -118,6 +127,8 @@ namespace Weaving.Domain
 
         public void SetUserId(string newUser)
         {
+            Validator.ThrowIfNullOrEmpty(() => newUser);
+
             if (newUser != UserId)
             {
                 UserId = newUser;

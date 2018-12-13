@@ -21,7 +21,7 @@ namespace Weaving.Dtos
         /// <summary>
         /// Owner
         /// </summary>
-        public string UserId { get; set; }
+        public string UserId { internal get; set; }
     }
 
     public class ManufactureOrderFormValidator : AbstractValidator<ManufactureOrderForm>
@@ -29,12 +29,18 @@ namespace Weaving.Dtos
         public ManufactureOrderFormValidator()
         {
             RuleFor(r => r.OrderDate).NotNull();
+
             RuleFor(r => r.MachineId).NotNull();
+
             RuleFor(r => r.UnitDepartmentId).NotNull();
+
             RuleFor(r => r.YarnCodes).NotNull();
+
             RuleFor(r => r.Blended).NotNull();
 
-            RuleFor(r => r.UnitDepartmentId.Value).GreaterThan(0);
+            RuleFor(r => r.UserId).NotNull();
+
+            RuleFor(r => r.UnitDepartmentId).NotNull();
         }
     }
 }
