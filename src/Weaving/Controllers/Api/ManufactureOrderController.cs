@@ -50,7 +50,6 @@ namespace Weaving.Controllers
 
             order.SetBlended(form.Blended);
             order.SetMachineId(form.MachineId);
-            order.SetState(form.State);
             order.SetUnitDepartment(form.UnitDepartmentId);
             order.SetUserId(form.UserId);
             order.SetYarnCodes(form.YarnCodes);

@@ -16,8 +16,6 @@ namespace Weaving.Dtos
 
         public MachineId MachineId { internal get; set; }
 
-        public Domain.ManufactureOrder.Status State { internal get; set; }
-
         /// <summary>
         /// Owner
         /// </summary>

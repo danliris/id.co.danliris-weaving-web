@@ -15,8 +15,10 @@ namespace Weaving.Dtos
             MachineId = order.MachineId;
             State = order.State;
             UserId = order.UserId;
-            Id = order.Identity.ToString();
+            Id = order.Identity.ToString("N");
         }
+
+        public string Id { get; }
 
         public DateTimeOffset OrderDate { get; internal set; }
 
@@ -35,6 +37,5 @@ namespace Weaving.Dtos
         /// </summary>
         public string UserId { get; internal set; }
 
-        public string Id { get; }
     }
 }
