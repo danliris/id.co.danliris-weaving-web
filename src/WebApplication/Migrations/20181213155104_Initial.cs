@@ -56,7 +56,8 @@ namespace DanLiris.Admin.Web.Migrations
                     YarnCodesJson = table.Column<string>(maxLength: 255, nullable: true),
                     State = table.Column<int>(nullable: false),
                     OrderDate = table.Column<DateTimeOffset>(nullable: false),
-                    BlendedJson = table.Column<string>(maxLength: 255, nullable: true)
+                    BlendedJson = table.Column<string>(maxLength: 255, nullable: true),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

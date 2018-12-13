@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class DanlirisStorageContextModelSnapshot : ModelSnapshot
+    partial class AppStorageContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -53,7 +53,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Incomes");
                 });
 
-            modelBuilder.Entity("Weaving.Domain.ReadModels.ManufactureOrderReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.ReadModels.ManufactureOrderReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();

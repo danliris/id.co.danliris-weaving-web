@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20181213051321_Initial")]
+    [Migration("20181213155104_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,7 +55,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Incomes");
                 });
 
-            modelBuilder.Entity("Weaving.Domain.ReadModels.ManufactureOrderReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.ReadModels.ManufactureOrderReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -92,6 +92,8 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<int>("State");
 
                     b.Property<int>("UnitDepartmentId");
+
+                    b.Property<string>("UserId");
 
                     b.Property<string>("YarnCodesJson")
                         .HasMaxLength(255);
