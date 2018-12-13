@@ -51,11 +51,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Application", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Domain.Events", "src\Weaving.Domain.Events\Weaving.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain", "src\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Domain.Events", "src\Infrastructure.Events\Infrastructure.Domain.Events.csproj", "{207AA666-8015-4201-B1D0-A5BEC14B4988}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain.Events", "src\Infrastructure.Events\Infrastructure.Domain.Events.csproj", "{207AA666-8015-4201-B1D0-A5BEC14B4988}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

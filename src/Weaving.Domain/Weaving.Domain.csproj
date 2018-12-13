@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj" />
+    <ProjectReference Include="..\Weaving.Domain.Events\Weaving.Domain.Events.csproj" />
   </ItemGroup>
 
 </Project>

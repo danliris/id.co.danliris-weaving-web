@@ -3,6 +3,7 @@ using Moonlay;
 using Moonlay.Domain;
 using System;
 using Weaving.Domain.Entities;
+using Weaving.Domain.Events;
 using Weaving.Domain.ReadModels;
 using Weaving.Domain.ValueObjects;
 
@@ -52,6 +53,7 @@ namespace Weaving.Domain
             };
 
             ReadModel.AddDomainEvent(new OnEntityCreated<ManufactureOrder>(this));
+            ReadModel.AddDomainEvent(new OnWeavingOrderPlaced(this.Identity));
         }
 
         public ManufactureOrder(ManufactureOrderReadModel readModel)

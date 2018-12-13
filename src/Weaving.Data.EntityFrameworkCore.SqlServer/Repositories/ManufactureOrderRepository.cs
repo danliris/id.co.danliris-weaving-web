@@ -27,6 +27,8 @@ namespace Weaving.Domain.Repositories
         {
             dbSet.Update(order.ReadModel);
 
+            order.MarkChanged();
+
             return Task.CompletedTask;
         }
     }
