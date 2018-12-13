@@ -10,14 +10,14 @@ namespace Infrastructure.Mvc.Filters
 {
     public class TransactionDbFilter : IActionFilter
     {
+        private readonly IStorage _storage;
         private DbContext _dbContext;
-        private readonly IServiceProvider _provider;
 
         private IDbContextTransaction _currentTransaction;
 
-        public TransactionDbFilter(IServiceProvider provider)
+        public TransactionDbFilter(IStorage storage)
         {
-            _provider = provider;
+            _storage = storage;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -38,7 +38,7 @@ namespace Infrastructure.Mvc.Filters
             if (new string[] { "POST", "PUT", "DELETE" }.Contains(context.HttpContext.Request.Method))
             {
                 //if (_dbContext == null)
-                _dbContext = _provider.GetService<IStorageContext>() as DbContext;
+                _dbContext = _storage.StorageContext as DbContext;
 
                 _currentTransaction = _dbContext.Database.BeginTransaction();
             }

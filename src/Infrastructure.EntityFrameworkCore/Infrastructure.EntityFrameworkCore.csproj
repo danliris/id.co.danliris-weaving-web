@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Authors>Dmitry Sikorsky</Authors>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExtCore.Mvc.Infrastructure" Version="3.3.0" />
+    <PackageReference Include="Moonlay.Domain" Version="1.0.1" />
+    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.1" />
   </ItemGroup>
 
 </Project>

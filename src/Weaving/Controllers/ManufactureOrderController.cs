@@ -6,9 +6,9 @@ namespace Weaving.Controllers
 {
     [Route("weaving/manufacture-orders")]
     [ApiController]
-    public class ManufactureOrderController : ControllerBase
+    public class ManufactureOrderController : Barebone.Controllers.ControllerApiBase
     {
-        public ManufactureOrderController(IStorage storage)
+        public ManufactureOrderController(IStorage storage) : base(storage)
         {
         }
 

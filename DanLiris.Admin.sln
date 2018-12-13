@@ -51,7 +51,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Application", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Domain.Events", "src\Weaving.Domain.Events\Weaving.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infras Extension", "Infras Extension", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.EntityFrameworkCore", "src\Infrastructure.EntityFrameworkCore\Infrastructure.EntityFrameworkCore.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{B7B43E57-729B-4600-99EF-1B0717DD5E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7B43E57-729B-4600-99EF-1B0717DD5E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7B43E57-729B-4600-99EF-1B0717DD5E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -160,6 +166,7 @@ Global
 		{A9C4D0F2-D4EF-4702-ADB9-537CA4B3063E} = {046C60FF-9D48-480A-B87D-070ABD0F15EB}
 		{B7B43E57-729B-4600-99EF-1B0717DD5E02} = {046C60FF-9D48-480A-B87D-070ABD0F15EB}
 		{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5} = {2FE680E8-878C-4FF3-80FC-4241411518C6}
+		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2} = {A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8093777F-7CB1-4658-B7A0-08077AA5AFD5}

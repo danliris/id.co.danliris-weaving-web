@@ -7,7 +7,7 @@ using Weaving.Dtos;
 
 namespace Infrastructure.Mvc
 {
-    public class MvcConfig : IAddMvcAction
+    public class ConfigurationMvc : IAddMvcAction
     {
         public int Priority => 1000;
 
@@ -15,9 +15,9 @@ namespace Infrastructure.Mvc
         {
             builder.AddMvcOptions(c =>
             {
-                c.Filters.Add(new TransactionDbFilter(sp));
+                c.Filters.Add<TransactionDbFilter>();
 
-                c.Filters.Add(new GlobalExceptionFilter());
+                c.Filters.Add<GlobalExceptionFilter>();
             });
 
             builder.AddFluentValidation(fv =>
