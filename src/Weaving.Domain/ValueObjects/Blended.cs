@@ -1,15 +1,11 @@
-﻿using Moonlay.Domain;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Weaving.Domain.ValueObjects
 {
-    public class Blended : List<float>
+    public class Blended : ListX<float>
     {
-        public Blended(IEnumerable<float> items)
+        public Blended(IEnumerable<float> collection) : base(collection)
         {
-            this.AddRange(items);
         }
     }
 }

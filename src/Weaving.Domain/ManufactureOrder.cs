@@ -8,8 +8,6 @@ namespace Weaving.Domain
 {
     public class ManufactureOrder : Entity, IAggregateRoot
     {
-        private ManufactureOrderReadModel _ReadModel;
-
         public enum Status
         {
             Draft = 10,
@@ -17,7 +15,7 @@ namespace Weaving.Domain
             Finished = 30,
         }
 
-        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId)
+        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId, string userId)
         {
             Identity = id;
             OrderDate = orderDate;
@@ -26,40 +24,41 @@ namespace Weaving.Domain
             Construction = construction;
             Blended = blended;
             MachineId = machineId;
-
+            UserId = userId;
             State = Status.Draft;
+
+            ReadModel = new ManufactureOrderReadModel(Identity)
+            {
+                MachineId = this.MachineId.Value,
+                UnitDepartmentId = this.UnitDepartmentId.Value,
+                YarnCodesJson = this.YarnCodes.Serialize(),
+                State = this.State,
+                OrderDate = this.OrderDate,
+                BlendedJson = this.Blended.Serialize(),
+                UserId = this.UserId,
+            };
         }
 
         public ManufactureOrder(ManufactureOrderReadModel readModel)
         {
-            this._ReadModel = readModel;
+            this.ReadModel = readModel;
 
-            this.Identity = _ReadModel.Identity;
-            this.MachineId = new MachineId(_ReadModel.MachineId);
-            this.Blended = _ReadModel.BlendedJson.Deserialize<Blended>();
+            this.Identity = ReadModel.Identity;
+            this.MachineId = new MachineId(ReadModel.MachineId);
+            this.Blended = ReadModel.BlendedJson.Deserialize<Blended>();
 
-            this.OrderDate = _ReadModel.OrderDate;
-            this.State = _ReadModel.State;
-            this.UnitDepartmentId = new UnitDepartmentId(_ReadModel.UnitDepartmentId);
-            this.UserId = _ReadModel.UserId;
-            this.YarnCodes = _ReadModel.YarnCodesJson.Deserialize<YarnCodes>();
+            this.OrderDate = ReadModel.OrderDate;
+            this.State = ReadModel.State;
+            this.UnitDepartmentId = new UnitDepartmentId(ReadModel.UnitDepartmentId);
+            this.UserId = ReadModel.UserId;
+            this.YarnCodes = ReadModel.YarnCodesJson.Deserialize<YarnCodes>();
         }
 
-        public ManufactureOrderReadModel ReadModel => _ReadModel ?? new ManufactureOrderReadModel(Identity)
-        {
-            MachineId = this.MachineId.Value,
-            UnitDepartmentId = this.UnitDepartmentId.Value,
-            YarnCodesJson = this.YarnCodes.Serialize(),
-            State = this.State,
-            OrderDate = this.OrderDate,
-            BlendedJson = this.Blended.Serialize(),
-            UserId = this.UserId,
-        };
+        public ManufactureOrderReadModel ReadModel { get; }
 
         public DateTimeOffset OrderDate { get; }
 
         public UnitDepartmentId UnitDepartmentId { get; private set; }
-
         public void SetUnitDepartment(UnitDepartmentId newUnit)
         {
             if(newUnit != UnitDepartmentId)
@@ -117,9 +116,13 @@ namespace Weaving.Domain
         /// </summary>
         public string UserId { get; private set; }
 
-        public void SetUserId(string userId)
+        public void SetUserId(string newUser)
         {
-            UserId = userId;
+            if (newUser != UserId)
+            {
+                UserId = newUser;
+                ReadModel.UserId = UserId;
+            }
         }
     }
 }

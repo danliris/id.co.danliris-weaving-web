@@ -29,9 +29,14 @@ namespace Weaving.Application
 
         public async Task<ManufactureOrder> PlacedOrderAsync(DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId)
         {
-            var order = new ManufactureOrder(id: Guid.NewGuid(), orderDate: date, unitId: unitId, yarnCodes: yarnCodes, construction: construction, blended: blended, machineId: machineId);
-
-            order.SetUserId(_workContext.CurrentUser);
+            var order = new ManufactureOrder(id: Guid.NewGuid(), 
+                orderDate: date, 
+                unitId: unitId, 
+                yarnCodes: yarnCodes, 
+                construction: construction, 
+                blended: blended, 
+                machineId: machineId,
+                userId: _workContext.CurrentUser);
 
             await _orderRepository.Insert(order);
 

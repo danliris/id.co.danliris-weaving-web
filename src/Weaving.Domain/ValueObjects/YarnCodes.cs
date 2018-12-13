@@ -1,16 +1,12 @@
-﻿using Moonlay.Domain;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Weaving.Domain.ValueObjects
 {
-    public class YarnCodes : List<string>
+    public class YarnCodes : ListX<string>
     {
-        public YarnCodes(IEnumerable<string> items)
+        public YarnCodes(IEnumerable<string> collection) : base(collection)
         {
-            this.AddRange(items);
+
         }
     }
 }
