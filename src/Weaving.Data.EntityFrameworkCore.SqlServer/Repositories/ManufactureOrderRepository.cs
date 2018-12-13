@@ -1,8 +1,6 @@
 ﻿using ExtCore.Data.EntityFramework;
-using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-using Weaving.Domain.Entities;
 using Weaving.Domain.ReadModels;
 
 namespace Weaving.Domain.Repositories
@@ -10,8 +8,6 @@ namespace Weaving.Domain.Repositories
     public class ManufactureOrderRepository : RepositoryBase<ManufactureOrderReadModel>, IManufactureOrderRepository
     {
         public string CurrentUser { get; private set; }
-
-        public DbSet<GoodsConstruction> GoodsConstructionSet { get; }
 
         public IQueryable<ManufactureOrder> Query => dbSet.Select(o=> new ManufactureOrder(o));
 
