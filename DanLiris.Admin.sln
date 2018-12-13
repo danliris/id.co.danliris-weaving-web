@@ -37,19 +37,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Expenses Extension", "Expen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Incomes Extension", "Incomes Extension", "{B1601E21-8E3F-4A08-8C44-4E0771EF0FF6}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Weaving Extension", "Weaving Extension", "{046C60FF-9D48-480A-B87D-070ABD0F15EB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manufactures Extension", "Manufactures Extension", "{046C60FF-9D48-480A-B87D-070ABD0F15EB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving", "src\Weaving\Weaving.csproj", "{88ECA920-F734-45C3-B57F-E9BAD7A74495}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures", "src\Manufactures\Manufactures.csproj", "{88ECA920-F734-45C3-B57F-E9BAD7A74495}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Data.EntityFrameworkCore.SqlServer", "src\Weaving.Data.EntityFrameworkCore.SqlServer\Weaving.Data.EntityFrameworkCore.SqlServer.csproj", "{A2073F22-1BEF-4833-8DB6-1E21A91C1C2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Data.EntityFrameworkCore.SqlServer", "src\Manufactures.Data.EntityFrameworkCore.SqlServer\Manufactures.Data.EntityFrameworkCore.SqlServer.csproj", "{A2073F22-1BEF-4833-8DB6-1E21A91C1C2B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Domain", "src\Weaving.Domain\Weaving.Domain.csproj", "{1FC0341B-A39A-488C-B3BB-E9C247513A2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Domain", "src\Manufactures.Domain\Manufactures.Domain.csproj", "{1FC0341B-A39A-488C-B3BB-E9C247513A2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Tests", "src\Weaving.Tests\Weaving.Tests.csproj", "{C001B35D-0A15-4DD0-AB83-634E3118F620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Tests", "src\Manufactures.Tests\Manufactures.Tests.csproj", "{C001B35D-0A15-4DD0-AB83-634E3118F620}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Application", "src\Weaving.Application\Weaving.Application.csproj", "{A9C4D0F2-D4EF-4702-ADB9-537CA4B3063E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Application", "src\Manufactures.Application\Manufactures.Application.csproj", "{A9C4D0F2-D4EF-4702-ADB9-537CA4B3063E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Weaving.Domain.Events", "src\Weaving.Domain.Events\Weaving.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Domain.Events", "src\Manufactures.Domain.Events\Manufactures.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
 EndProject

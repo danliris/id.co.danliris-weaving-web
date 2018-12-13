@@ -3,7 +3,7 @@ using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Weaving.Dtos;
+using Manufactures.Dtos;
 
 namespace Infrastructure.Mvc
 {

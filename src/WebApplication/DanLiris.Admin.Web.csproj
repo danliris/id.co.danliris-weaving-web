@@ -22,7 +22,7 @@
     <ProjectReference Include="..\Incomes\Incomes.csproj" />
     <ProjectReference Include="..\Expenses\Expenses.csproj" />
     <ProjectReference Include="..\Balance\Balance.csproj" />
-    <ProjectReference Include="..\Weaving\Weaving.csproj" />
+    <ProjectReference Include="..\Manufactures\Manufactures.csproj" />
   </ItemGroup>
 
   <ItemGroup>
