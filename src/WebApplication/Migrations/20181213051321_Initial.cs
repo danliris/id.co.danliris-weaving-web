@@ -43,19 +43,20 @@ namespace DanLiris.Admin.Web.Migrations
                 columns: table => new
                 {
                     Identity = table.Column<Guid>(nullable: false),
-                    UnitDepartmentId = table.Column<int>(nullable: false),
-                    MachineId = table.Column<int>(nullable: false),
-                    YarnCodesJson = table.Column<string>(maxLength: 255, nullable: true),
-                    State = table.Column<int>(nullable: false),
-                    OrderDate = table.Column<DateTimeOffset>(nullable: false),
-                    BlendedJson = table.Column<string>(maxLength: 255, nullable: true),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
                     CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
                     CreatedDate = table.Column<DateTimeOffset>(nullable: false),
                     ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
                     ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
                     Deleted = table.Column<bool>(nullable: true),
                     DeletedDate = table.Column<DateTimeOffset>(nullable: true),
-                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true)
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    UnitDepartmentId = table.Column<int>(nullable: false),
+                    MachineId = table.Column<int>(nullable: false),
+                    YarnCodesJson = table.Column<string>(maxLength: 255, nullable: true),
+                    State = table.Column<int>(nullable: false),
+                    OrderDate = table.Column<DateTimeOffset>(nullable: false),
+                    BlendedJson = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {

@@ -1,5 +1,6 @@
 ﻿using Moonlay.Domain;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure
 {
@@ -11,6 +12,9 @@ namespace Infrastructure
         }
 
         #region IAuditTrail ISoftDelete
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
         public string CreatedBy { get; set; }
 
         public DateTimeOffset CreatedDate { get; set; }

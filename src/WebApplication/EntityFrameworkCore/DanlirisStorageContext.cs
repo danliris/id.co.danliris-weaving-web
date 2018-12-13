@@ -43,6 +43,7 @@ namespace DanLiris.Admin.Web
             {
                 added.CreatedBy = currentUser;
                 added.CreatedDate = now;
+                added.Deleted = false;
             }
 
             foreach (var modified in modifiedAuditedEntities)
