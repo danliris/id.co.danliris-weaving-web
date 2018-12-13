@@ -43,7 +43,7 @@ namespace Weaving.Application
             _storage.Save();
 
             // Pulish an event
-            new OnManufactureOroderPlaced(order.Identity).Broadcast();
+            //new OnManufactureOroderPlaced(order.Identity).Broadcast();
 
             return order;
         }

@@ -9,4 +9,8 @@
     <PackageReference Include="Moonlay.Domain" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Events\Infrastructure.Domain.Events.csproj" />
+  </ItemGroup>
+
 </Project>

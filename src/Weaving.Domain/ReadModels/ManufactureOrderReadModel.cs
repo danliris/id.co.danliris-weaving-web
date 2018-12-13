@@ -4,7 +4,7 @@ using System;
 
 namespace Weaving.Domain.ReadModels
 {
-    public class ManufactureOrderReadModel : DanLirisReadModel
+    public class ManufactureOrderReadModel : ReadModelBase
     {
         public ManufactureOrderReadModel(Guid identity) : base(identity)
         {

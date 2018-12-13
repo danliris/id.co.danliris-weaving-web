@@ -1,8 +1,8 @@
-﻿using ExtCore.Events;
+﻿using Infrastructure.Domain.Events;
 
 namespace Weaving.Domain.Events
 {
-    public interface IWeavingEventHandler<TEvent> : IEventHandler<TEvent> where TEvent : IWeavingEvent
+    public interface IWeavingEventHandler<TEvent> : IDomainEventHandler<TEvent> where TEvent : IWeavingEvent
     {
     }
 }

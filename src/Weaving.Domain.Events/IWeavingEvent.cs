@@ -1,6 +1,8 @@
-﻿namespace Weaving.Domain.Events
+﻿using Infrastructure.Domain.Events;
+
+namespace Weaving.Domain.Events
 {
-    public interface IWeavingEvent
+    public interface IWeavingEvent : IDomainEvent
     {
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    [DbContext(typeof(DanlirisStorageContext))]
+    [DbContext(typeof(AppStorageContext))]
     [Migration("20181213083747_Alter_ManufactureOrder")]
     partial class Alter_ManufactureOrder
     {

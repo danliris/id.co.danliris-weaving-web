@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    [DbContext(typeof(DanlirisStorageContext))]
+    [DbContext(typeof(AppStorageContext))]
     [Migration("20181213051321_Initial")]
     partial class Initial
     {

@@ -1,13 +1,15 @@
 ﻿using ExtCore.Data.Entities.Abstractions;
+using Infrastructure.Domain.Events;
 using Moonlay.Domain;
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Domain.ReadModels
 {
-    public abstract class DanLirisReadModel : ReadModel, IEntity, IAuditTrail, ISoftDelete
+    public abstract class ReadModelBase : ReadModel, IEntity, IAuditTrail, ISoftDelete
     {
-        protected DanLirisReadModel(Guid identity)
+        protected ReadModelBase(Guid identity)
         {
             Identity = identity;
         }
@@ -31,4 +33,12 @@ namespace Infrastructure.Domain.ReadModels
         public string DeletedBy { get; set; }
         #endregion
     }
+
+    //public static class ReadModelBaseExt
+    //{
+    //    public static void AddDomainEvent<T, TProperty>(this T model, Expression<Func<T, TProperty>> expression) where T : ReadModelBase
+    //    {
+    //        model.AddDomainEvent(new OnEntityUpdated<T, TProperty>(expression));
+    //    }
+    //}
 }

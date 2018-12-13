@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    [DbContext(typeof(DanlirisStorageContext))]
+    [DbContext(typeof(AppStorageContext))]
     partial class DanlirisStorageContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

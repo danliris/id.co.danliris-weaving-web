@@ -1,4 +1,5 @@
-﻿using Moonlay;
+﻿using Infrastructure.Domain.Events;
+using Moonlay;
 using Moonlay.Domain;
 using System;
 using Weaving.Domain.Entities;
@@ -9,6 +10,8 @@ namespace Weaving.Domain
 {
     public class ManufactureOrder : Entity, IAggregateRoot
     {
+        private bool _Changed = false;
+
         public enum Status
         {
             Draft = 10,
@@ -18,6 +21,15 @@ namespace Weaving.Domain
 
         public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId, string userId)
         {
+            // Validate Mandatory Properties
+            Validator.ThrowIfNull(() => unitId);
+            Validator.ThrowIfNull(() => machineId);
+            Validator.ThrowIfNullOrEmpty(() => yarnCodes);
+            Validator.ThrowIfNullOrEmpty(() => blended);
+            Validator.ThrowIfNullOrEmpty(() => userId);
+
+
+            // Set initial value
             Identity = id;
             OrderDate = orderDate;
             UnitDepartmentId = unitId;
@@ -38,6 +50,8 @@ namespace Weaving.Domain
                 BlendedJson = this.Blended.Serialize(),
                 UserId = this.UserId,
             };
+
+            ReadModel.AddDomainEvent(new OnEntityCreated<ManufactureOrder>(this));
         }
 
         public ManufactureOrder(ManufactureOrderReadModel readModel)
@@ -53,6 +67,8 @@ namespace Weaving.Domain
             this.UnitDepartmentId = new UnitDepartmentId(ReadModel.UnitDepartmentId);
             this.UserId = ReadModel.UserId;
             this.YarnCodes = ReadModel.YarnCodesJson.Deserialize<YarnCodes>();
+
+            _Changed = false;
         }
 
         public ManufactureOrderReadModel ReadModel { get; }
@@ -68,6 +84,8 @@ namespace Weaving.Domain
             {
                 UnitDepartmentId = newUnit;
                 ReadModel.UnitDepartmentId = UnitDepartmentId.Value;
+
+                _Changed = true;
             }
         }
 
@@ -80,6 +98,8 @@ namespace Weaving.Domain
             {
                 YarnCodes = newCodes;
                 ReadModel.YarnCodesJson = YarnCodes.Serialize();
+
+                _Changed = true;
             }
         }
 
@@ -95,6 +115,8 @@ namespace Weaving.Domain
             {
                 Blended = newBlended;
                 ReadModel.BlendedJson = Blended.Serialize();
+
+                _Changed = true;
             }
         }
 
@@ -107,6 +129,8 @@ namespace Weaving.Domain
             {
                 MachineId = newMachine;
                 ReadModel.MachineId = MachineId.Value;
+
+                _Changed = true;
             }
         }
 
@@ -117,6 +141,8 @@ namespace Weaving.Domain
             {
                 State = newState;
                 ReadModel.State = State;
+
+                _Changed = true;
             }
         }
 
@@ -133,7 +159,20 @@ namespace Weaving.Domain
             {
                 UserId = newUser;
                 ReadModel.UserId = UserId;
+
+                _Changed = true;
             }
+        }
+
+        public void MarkChanged()
+        {
+            if (_Changed)
+                ReadModel.AddDomainEvent(new OnEntityUpdated<ManufactureOrder>(this));
+        }
+
+        public void MarkRemoved()
+        {
+            ReadModel.AddDomainEvent(new OnEntityDeleted<ManufactureOrder>(this));
         }
     }
 }

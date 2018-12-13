@@ -5,6 +5,7 @@ using DanLiris.Admin.Web.Schedulers;
 using ExtCore.Data.EntityFramework;
 using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,8 @@ namespace DanLiris.Admin.Web
             );
 
             services.AddExtCore(this.extensionsPath);
+
+            services.AddMediatR();
 
             DesignTimeStorageContextFactory.Initialize(services.BuildServiceProvider());
 

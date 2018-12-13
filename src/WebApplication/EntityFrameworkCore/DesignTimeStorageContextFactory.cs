@@ -2,7 +2,7 @@
 
 namespace DanLiris.Admin.Web
 {
-    public class DesignTimeStorageContextFactory : DesignTimeStorageContextFactoryBase<DanlirisStorageContext>
+    public class DesignTimeStorageContextFactory : DesignTimeStorageContextFactoryBase<AppStorageContext>
     {
     }
 }
