@@ -29,7 +29,7 @@ namespace Infrastructure.Mvc.Filters
 
             response.WriteAsync(JsonConvert.SerializeObject(new
             {
-                message = message,
+                message,
                 success = false,
                 trace = context.Exception.StackTrace
             }));
