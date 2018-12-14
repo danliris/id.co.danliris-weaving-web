@@ -14,6 +14,9 @@ namespace Manufactures.Domain.ValueObjects
 
     public class MaterialIds : ListX<MaterialId>
     {
+        public MaterialIds(IEnumerable<MaterialId> collection) : base(collection)
+        {
+        }
     }
 
 }

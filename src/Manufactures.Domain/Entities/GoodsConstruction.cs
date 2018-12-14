@@ -1,4 +1,5 @@
-﻿using Infrastructure.Domain.ReadModels;
+﻿using Infrastructure.Domain;
+using Infrastructure.Domain.ReadModels;
 using Manufactures.Domain.ValueObjects;
 using System;
 using System.Collections.Generic;

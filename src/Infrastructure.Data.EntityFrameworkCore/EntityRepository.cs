@@ -1,6 +1,5 @@
 ﻿using ExtCore.Data.EntityFramework;
-using Infrastructure.Domain.Events;
-using Infrastructure.Domain.ReadModels;
+using Infrastructure.Domain;
 using Moonlay.Domain;
 using System.Linq;
 using System.Threading.Tasks;
