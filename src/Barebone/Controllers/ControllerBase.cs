@@ -24,6 +24,17 @@ namespace Barebone.Controllers
         public ControllerApiBase(IStorage storage)
         {
             this.Storage = storage;
+            //this.WorkContext = workContext;
+        }
+
+        protected IActionResult Ok<T>(T data, object info = null, string message = null)
+        {
+            return base.Ok(new {
+                apiVersion = "1.0.0",
+                data,
+                info,
+                message
+            });
         }
     }
 }
