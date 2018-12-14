@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Domain.Events;
 using Infrastructure.Domain.ReadModels;
+using Moonlay;
 using Moonlay.Domain;
 using System;
 using System.Linq;
@@ -45,9 +46,14 @@ namespace Infrastructure.Domain
 
         public void MarkModified()
         {
-            _modified = true;
-            if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
-                ReadModel.AddDomainEvent(new OnEntityUpdated<TAggregateRoot>(GetEntity()));
+            if (!this.IsTransient())
+            {
+                Validator.ThrowWhenTrue(() => IsDeleted(), "Entity cannot be modified, it was set as Deleted Entity");
+
+                _modified = true;
+                if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
+                    ReadModel.AddDomainEvent(new OnEntityUpdated<TAggregateRoot>(GetEntity()));
+            }
         }
 
         public virtual bool IsModified()
@@ -60,8 +66,17 @@ namespace Infrastructure.Domain
         public void MarkRemoved()
         {
             _deleted = true;
+
             if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityDeleted<TAggregateRoot>))
                 ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
+
+            // clear updated events
+            if (ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
+            {
+                ReadModel.DomainEvents.Where(o => o is OnEntityUpdated<TAggregateRoot>)
+                    .ToList()
+                    .ForEach(o => ReadModel.RemoveDomainEvent(o));
+            }
         }
 
         public virtual bool IsDeleted()

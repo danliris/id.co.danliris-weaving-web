@@ -1,15 +1,13 @@
-﻿using Moonlay.Domain;
+﻿using Infrastructure.Domain.ReadModels;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Entities
 {
-    public class GoodsConstruction : Entity
+    public class GoodsConstruction : ReadModelBase
     {
-        public GoodsConstruction(Guid identity, List<string> codes)
+        public GoodsConstruction(Guid identity, List<string> codes) : base(identity)
         {
-            Identity = identity;
             Codes = codes;
         }
 

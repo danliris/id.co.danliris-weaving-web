@@ -1,16 +1,9 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using ExtCore.Data.Abstractions;
-using Manufactures.Domain;
+﻿using Infrastructure.Domain.Repositories;
 
 namespace Manufactures.Domain.Repositories
 {
-    public interface IManufactureOrderRepository : IRepository
+    public interface IManufactureOrderRepository : IAggregateRepository<ManufactureOrder>
     {
-        Task Insert(ManufactureOrder order);
-
-        Task Update(ManufactureOrder order);
-
-        IQueryable<ManufactureOrder> Query { get; }
+        
     }
 }

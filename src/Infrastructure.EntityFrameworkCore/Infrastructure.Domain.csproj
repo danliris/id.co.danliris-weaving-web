@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
     <PackageReference Include="ExtCore.Data.Entities.Abstractions" Version="3.3.0" />
     <PackageReference Include="Moonlay.Domain" Version="1.0.4" />
   </ItemGroup>

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ExtCore.Data.EntityFramework" Version="3.3.0" />
+    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

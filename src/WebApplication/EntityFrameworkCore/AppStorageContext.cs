@@ -1,13 +1,12 @@
 ﻿using ExtCore.Data.EntityFramework;
 using ExtCore.Data.EntityFramework.SqlServer;
-using Infrastructure.Domain.Events;
 using Infrastructure.Domain.ReadModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Moonlay.Domain;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,6 +76,15 @@ namespace DanLiris.Admin.Web
             {
                 modified.ModifiedBy = currentUser;
                 modified.ModifiedDate = now;
+
+                if(modified is ISoftDelete)
+                {
+                    if (modified.Deleted.HasValue && modified.Deleted.Value)
+                    {
+                        modified.DeletedBy = currentUser;
+                        modified.DeletedDate = now;
+                    }
+                }
             }
         }
 

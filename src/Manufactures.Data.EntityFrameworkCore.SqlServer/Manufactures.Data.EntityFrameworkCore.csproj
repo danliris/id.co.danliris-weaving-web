@@ -4,12 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="ExtCore.Data.EntityFramework.SqlServer" Version="3.3.0" />
-    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.4" />
-  </ItemGroup>
+
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.Data.EntityFrameworkCore\Infrastructure.Data.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Manufactures.Domain\Manufactures.Domain.csproj" />
   </ItemGroup>
 
