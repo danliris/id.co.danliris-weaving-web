@@ -25,7 +25,10 @@ namespace Manufactures.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var ordersDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).ToList();
+            var ordersDto = _manufactureOrderRepo.Query
+                .OrderByDescending(o => o.AuditTrail.CreatedDate)
+                .Select(o => new ManufactureOrderDto(o))
+                .ToList();
 
             await Task.Yield();
 

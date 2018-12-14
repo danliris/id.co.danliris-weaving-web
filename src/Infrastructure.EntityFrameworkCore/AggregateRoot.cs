@@ -7,7 +7,8 @@ using System.Linq;
 
 namespace Infrastructure.Domain
 {
-    public abstract class AggregateRoot<TAggregateRoot, TReadModel> : Entity, IAggregateRoot where TReadModel : ReadModelBase
+    public abstract class AggregateRoot<TAggregateRoot, TReadModel> : Entity, IAggregateRoot 
+        where TReadModel : ReadModelBase
     {
         protected AggregateRoot(Guid identity)
         {

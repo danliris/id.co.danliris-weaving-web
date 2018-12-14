@@ -4,6 +4,7 @@
 using ExtCore.Data.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.ReadModels;
+using Manufactures.Domain.Entities;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -23,6 +24,19 @@ namespace Manufactures.Data.EntityFrameworkCore
                   etb.ApplySoftDelete();
               }
             );
+
+
+            modelBuilder.Entity<GoodsConstruction>(etb => {
+                etb.ToTable("GoodsConstruction");
+
+                etb.HasKey(e => e.Identity);
+
+                etb.Ignore(p => p.MaterialIds);
+                etb.Property(p => p.MaterialIdsJson).HasMaxLength(500);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
         }
     }
 }

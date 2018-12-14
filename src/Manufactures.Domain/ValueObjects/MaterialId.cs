@@ -1,5 +1,6 @@
 ﻿using Moonlay.Domain;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Manufactures.Domain.ValueObjects
 {
@@ -10,4 +11,9 @@ namespace Manufactures.Domain.ValueObjects
         {
         }
     }
+
+    public class MaterialIds : ListX<MaterialId>
+    {
+    }
+
 }

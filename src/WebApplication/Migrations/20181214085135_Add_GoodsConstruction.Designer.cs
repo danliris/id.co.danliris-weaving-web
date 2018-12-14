@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20181214085135_Add_GoodsConstruction")]
+    partial class Add_GoodsConstruction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,6 +59,9 @@ namespace DanLiris.Admin.Web.Migrations
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CodesJson")
+                        .HasMaxLength(500);
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()

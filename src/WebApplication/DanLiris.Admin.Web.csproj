@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Incomes\Incomes.csproj" />
     <ProjectReference Include="..\Expenses\Expenses.csproj" />
     <ProjectReference Include="..\Balance\Balance.csproj" />
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.CoreMicroservice\Infrastructure.External.DanLirisClient.CoreMicroservice.csproj" />
     <ProjectReference Include="..\Manufactures\Manufactures.csproj" />
   </ItemGroup>
 

@@ -59,7 +59,10 @@ namespace Manufactures.Tests
 
             var yarnCodes = new YarnCodes(new List<string> { "sdfsdf", "sdfds" });
 
-            var construction = new GoodsConstruction(identity: Guid.NewGuid(), codes: new List<string>());
+            var construction = new GoodsConstruction(identity: Guid.NewGuid(), materialIds: new List<MaterialId>())
+            {
+
+            };
 
             var blended = new Blended(new List<float> { 10.5f, 20.23f });
 

@@ -7,39 +7,40 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.EntityFrameworkCore
 {
-    public class EntityRepository<TEntity> : RepositoryBase<TEntity> where TEntity : ReadModelBase
+    public class EntityRepository<TEntity> : RepositoryBase<TEntity> where TEntity : EntityBase<TEntity>
     {
         public virtual IQueryable<TEntity> Query => dbSet;
 
         public Task Insert(TEntity entity)
         {
-            dbSet.Add(entity);
-
-            entity.AddDomainEvent(new OnEntityCreated<TEntity>(entity));
+            if (entity.IsTransient())
+                dbSet.Add(entity);
 
             return Task.CompletedTask;
         }
 
         public Task Remove(TEntity entity)
         {
-            if (entity is ISoftDelete)
-            {
-                entity.Deleted = true;
-                dbSet.Update(entity);
-            }
-            else
-                dbSet.Remove(entity);
+            entity.MarkRemoved();
 
-            entity.AddDomainEvent(new OnEntityDeleted<TEntity>(entity));
+            if (entity.IsDeleted())
+            {
+                if (entity is ISoftDelete)
+                {
+                    entity.Deleted = true;
+                    dbSet.Update(entity);
+                }
+                else
+                    dbSet.Remove(entity);
+            }
 
             return Task.CompletedTask;
         }
 
         public Task Update(TEntity entity)
         {
-            dbSet.Update(entity);
-
-            entity.AddDomainEvent(new OnEntityUpdated<TEntity>(entity));
+            if (entity.IsModified())
+                dbSet.Update(entity);
 
             return Task.CompletedTask;
         }

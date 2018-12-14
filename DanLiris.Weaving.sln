@@ -51,13 +51,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Application", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Domain.Events", "src\Manufactures.Domain.Events\Manufactures.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System Core", "System Core", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain", "src\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain.Events", "src\Infrastructure.Events\Infrastructure.Domain.Events.csproj", "{207AA666-8015-4201-B1D0-A5BEC14B4988}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Data.EntityFrameworkCore", "src\Infrastructure.Data.EntityFrameworkCore\Infrastructure.Data.EntityFrameworkCore.csproj", "{68EF51DE-6038-4203-A785-8FC6918DCDF4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.External.DanLirisClient.CoreMicroservice", "src\Infrastructure.External.DanLirisClient.CoreMicroservice\Infrastructure.External.DanLirisClient.CoreMicroservice.csproj", "{7B5E7573-5843-493A-AC51-85C02EDA7A51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -149,6 +151,10 @@ Global
 		{68EF51DE-6038-4203-A785-8FC6918DCDF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68EF51DE-6038-4203-A785-8FC6918DCDF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68EF51DE-6038-4203-A785-8FC6918DCDF4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B5E7573-5843-493A-AC51-85C02EDA7A51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B5E7573-5843-493A-AC51-85C02EDA7A51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B5E7573-5843-493A-AC51-85C02EDA7A51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B5E7573-5843-493A-AC51-85C02EDA7A51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -181,6 +187,7 @@ Global
 		{E2529D01-2A2E-4D15-9DDB-2A73437B49D2} = {A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}
 		{207AA666-8015-4201-B1D0-A5BEC14B4988} = {A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}
 		{68EF51DE-6038-4203-A785-8FC6918DCDF4} = {A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}
+		{7B5E7573-5843-493A-AC51-85C02EDA7A51} = {A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8093777F-7CB1-4658-B7A0-08077AA5AFD5}

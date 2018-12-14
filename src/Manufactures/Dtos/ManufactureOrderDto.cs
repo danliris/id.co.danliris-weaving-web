@@ -16,10 +16,16 @@ namespace Manufactures.Dtos
             State = order.State;
             UserId = order.UserId;
             Identity = order.Identity;
-            Id = order.Identity.ToString();
+
+            LastModifiedDate = order.AuditTrail.ModifiedDate ?? order.AuditTrail.CreatedDate;
+            LastModifiedBy = order.AuditTrail.ModifiedBy ?? order.AuditTrail.CreatedBy;
         }
 
-        public string Id { get; }
+        public Guid Identity { get; }
+
+        public DateTimeOffset LastModifiedDate { get; }
+
+        public string LastModifiedBy { get; }
 
         public DateTimeOffset OrderDate { get; internal set; }
 
@@ -38,6 +44,5 @@ namespace Manufactures.Dtos
         /// </summary>
         public string UserId { get; internal set; }
 
-        internal Guid Identity { get; }
     }
 }

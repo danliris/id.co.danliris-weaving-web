@@ -5,6 +5,7 @@ using DanLiris.Admin.Web.Schedulers;
 using ExtCore.Data.EntityFramework;
 using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +39,12 @@ namespace DanLiris.Admin.Web
                     options.MigrationsAssembly = typeof(DesignTimeStorageContextFactory).GetTypeInfo().Assembly.FullName;
                 }
             );
+
+            services.Configure<MasterDataSettings>(options =>
+            {
+                options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
+                options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
+            });
 
             services.AddExtCore(this.extensionsPath);
 
