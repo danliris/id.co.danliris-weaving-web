@@ -30,7 +30,7 @@ namespace Infrastructure.Data.EntityFrameworkCore
             return Task.CompletedTask;
         }
 
-        public virtual Task Removed(TAggregate aggregate)
+        public virtual Task Remove(TAggregate aggregate)
         {
             aggregate.MarkRemoved();
 

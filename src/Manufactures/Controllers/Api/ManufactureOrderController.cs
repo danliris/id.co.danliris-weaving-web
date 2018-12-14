@@ -26,11 +26,26 @@ namespace Manufactures.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var orders = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).ToList();
+            var ordersDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).ToList();
 
             await Task.Yield();
 
-            return Ok(orders);
+            return Ok(ordersDto);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var orderId = Guid.Parse(id);
+
+            var orderDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).FirstOrDefault(o => o.Identity == orderId);
+
+            await Task.Yield();
+
+            if (orderDto == null)
+                return NotFound();
+            else
+                return Ok(orderDto);
         }
 
         [HttpPost]
@@ -46,6 +61,7 @@ namespace Manufactures.Controllers
         {
             var orderId = Guid.Parse(id);
             var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
+
             Validator.ThrowIfNull(() => order);
 
             order.SetBlended(form.Blended);
@@ -61,6 +77,19 @@ namespace Manufactures.Controllers
             return Ok(order.Identity);
         }
 
-        
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var orderId = Guid.Parse(id);
+            var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
+
+            Validator.ThrowIfNull(() => order);
+
+            await _manufactureOrderRepo.Remove(order);
+
+            Storage.Save();
+
+            return Ok(order.Identity);
+        }
     }
 }

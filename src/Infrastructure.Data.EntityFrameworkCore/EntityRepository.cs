@@ -20,7 +20,7 @@ namespace Infrastructure.Data.EntityFrameworkCore
             return Task.CompletedTask;
         }
 
-        public Task Removed(TEntity entity)
+        public Task Remove(TEntity entity)
         {
             if (entity is ISoftDelete)
             {

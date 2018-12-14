@@ -65,17 +65,20 @@ namespace Infrastructure.Domain
 
         public void MarkRemoved()
         {
-            _deleted = true;
-
-            if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityDeleted<TAggregateRoot>))
-                ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
-
-            // clear updated events
-            if (ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
+            if (!this.IsTransient())
             {
-                ReadModel.DomainEvents.Where(o => o is OnEntityUpdated<TAggregateRoot>)
-                    .ToList()
-                    .ForEach(o => ReadModel.RemoveDomainEvent(o));
+                _deleted = true;
+
+                if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityDeleted<TAggregateRoot>))
+                    ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
+
+                // clear updated events
+                if (ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
+                {
+                    ReadModel.DomainEvents.Where(o => o is OnEntityUpdated<TAggregateRoot>)
+                        .ToList()
+                        .ForEach(o => ReadModel.RemoveDomainEvent(o));
+                }
             }
         }
 

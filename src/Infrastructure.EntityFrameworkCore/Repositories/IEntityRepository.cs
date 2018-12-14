@@ -10,7 +10,7 @@ namespace Infrastructure.Domain.Repositories
 
         Task Update(TEntity aggregate);
 
-        Task Removed(TEntity aggregate);
+        Task Remove(TEntity aggregate);
 
         IQueryable<TEntity> Query { get; }
     }

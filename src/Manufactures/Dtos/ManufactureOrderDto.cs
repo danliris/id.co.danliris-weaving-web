@@ -15,7 +15,8 @@ namespace Manufactures.Dtos
             MachineId = order.MachineId;
             State = order.State;
             UserId = order.UserId;
-            Id = order.Identity.ToString("N");
+            Identity = order.Identity;
+            Id = order.Identity.ToString();
         }
 
         public string Id { get; }
@@ -37,5 +38,6 @@ namespace Manufactures.Dtos
         /// </summary>
         public string UserId { get; internal set; }
 
+        internal Guid Identity { get; }
     }
 }
