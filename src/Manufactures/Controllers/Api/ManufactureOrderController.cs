@@ -1,12 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
-using Microsoft.AspNetCore.Mvc;
-using Moonlay;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 using Manufactures.Application;
 using Manufactures.Domain.Repositories;
 using Manufactures.Dtos;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Manufactures.Controllers
 {
@@ -62,7 +61,8 @@ namespace Manufactures.Controllers
             var orderId = Guid.Parse(id);
             var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
 
-            Validator.ThrowIfNull(() => order);
+            if (order == null)
+                return NotFound();
 
             order.SetBlended(form.Blended);
             order.SetMachineId(form.MachineId);
@@ -83,7 +83,8 @@ namespace Manufactures.Controllers
             var orderId = Guid.Parse(id);
             var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
 
-            Validator.ThrowIfNull(() => order);
+            if (order == null)
+                return NotFound();
 
             await _manufactureOrderRepo.Remove(order);
 
