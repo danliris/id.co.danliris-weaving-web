@@ -55,7 +55,6 @@ namespace Manufactures.Domain
 
         public ManufactureOrder(ManufactureOrderReadModel readModel) : base(readModel)
         {
-            this.Identity = ReadModel.Identity;
             this.MachineId = new MachineId(ReadModel.MachineId);
             this.Blended = ReadModel.BlendedJson.Deserialize<Blended>();
 

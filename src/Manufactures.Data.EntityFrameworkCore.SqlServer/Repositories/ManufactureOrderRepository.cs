@@ -23,5 +23,12 @@ namespace Manufactures.Domain.Repositories
 
             return Task.CompletedTask;
         }
+
+        public Task Removed(ManufactureOrder order)
+        {
+            order.MarkRemoved();
+
+            return Task.CompletedTask;
+        }
     }
 }

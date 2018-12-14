@@ -35,30 +35,38 @@ namespace Infrastructure.Domain
             return ReadModel;
         }
 
+        protected abstract TAggregateRoot GetEntity();
+
         public IAuditTrail AuditTrail => ReadModel;
 
         public ISoftDelete SoftDelete => ReadModel;
 
         private bool _modified = false;
 
-        public virtual void MarkModified()
+        public void MarkModified()
         {
             _modified = true;
-
             if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
                 ReadModel.AddDomainEvent(new OnEntityUpdated<TAggregateRoot>(GetEntity()));
         }
-
-        protected abstract TAggregateRoot GetEntity();
 
         public virtual bool IsModified()
         {
             return _modified;
         }
 
-        public virtual void MarkRemoved()
+        private bool _deleted = false;
+
+        public void MarkRemoved()
         {
-            ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
+            _deleted = true;
+            if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityDeleted<TAggregateRoot>))
+                ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
+        }
+
+        public virtual bool IsDeleted()
+        {
+            return _deleted;
         }
     }
 }
