@@ -1,6 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using Manufactures.ViewModels.Weaving;
+using Manufactures.ViewModels.Manufacture;
 
 namespace Manufactures.Controllers
 {

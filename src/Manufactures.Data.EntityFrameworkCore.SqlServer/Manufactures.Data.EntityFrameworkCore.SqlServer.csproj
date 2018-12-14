@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="ExtCore.Data.EntityFramework.SqlServer" Version="3.3.0" />
-    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.2" />
+    <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>

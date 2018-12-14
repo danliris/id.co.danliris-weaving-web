@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Moonlay.Domain;
 using System;
 
 namespace Manufactures.Domain.ReadModels

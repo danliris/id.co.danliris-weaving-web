@@ -1,9 +1,7 @@
 ﻿using ExtCore.Data.Entities.Abstractions;
-using Infrastructure.Domain.Events;
 using Moonlay.Domain;
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
 
 namespace Infrastructure.Domain.ReadModels
 {

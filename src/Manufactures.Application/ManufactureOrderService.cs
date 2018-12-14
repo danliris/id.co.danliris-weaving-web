@@ -1,12 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
+using Manufactures.Domain;
+using Manufactures.Domain.Entities;
+using Manufactures.Domain.Repositories;
+using Manufactures.Domain.ValueObjects;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
 using System.Threading.Tasks;
-using Manufactures.Domain.Repositories;
-using Manufactures.Domain;
-using Manufactures.Domain.Entities;
-using Manufactures.Domain.Events;
-using Manufactures.Domain.ValueObjects;
 
 namespace Manufactures.Application
 {
@@ -21,8 +20,6 @@ namespace Manufactures.Application
             _storage = storage;
 
             _orderRepository = _storage.GetRepository<IManufactureOrderRepository>();
-
-            _orderRepository.SetCurrentUser(workContext.CurrentUser);
 
             _workContext = workContext;
         }

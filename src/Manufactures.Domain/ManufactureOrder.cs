@@ -1,18 +1,15 @@
-﻿using Infrastructure.Domain.Events;
-using Moonlay;
-using Moonlay.Domain;
-using System;
+﻿using Infrastructure.Domain;
 using Manufactures.Domain.Entities;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.ReadModels;
 using Manufactures.Domain.ValueObjects;
+using Moonlay;
+using System;
 
 namespace Manufactures.Domain
 {
-    public class ManufactureOrder : Entity, IAggregateRoot
+    public class ManufactureOrder : AggregateRoot<ManufactureOrder, ManufactureOrderReadModel>
     {
-        private bool _Changed = false;
-
         public enum Status
         {
             Draft = 10,
@@ -20,7 +17,7 @@ namespace Manufactures.Domain
             Finished = 30,
         }
 
-        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId, string userId)
+        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId, string userId) : base(id)
         {
             // Validate Mandatory Properties
             Validator.ThrowIfNull(() => unitId);
@@ -29,6 +26,7 @@ namespace Manufactures.Domain
             Validator.ThrowIfNullOrEmpty(() => blended);
             Validator.ThrowIfNullOrEmpty(() => userId);
 
+            this.MarkTransient();
 
             // Set initial value
             Identity = id;
@@ -52,14 +50,11 @@ namespace Manufactures.Domain
                 UserId = this.UserId,
             };
 
-            ReadModel.AddDomainEvent(new OnEntityCreated<ManufactureOrder>(this));
             ReadModel.AddDomainEvent(new OnManufactureOrderPlaced(this.Identity));
         }
 
-        public ManufactureOrder(ManufactureOrderReadModel readModel)
+        public ManufactureOrder(ManufactureOrderReadModel readModel) : base(readModel)
         {
-            this.ReadModel = readModel;
-
             this.Identity = ReadModel.Identity;
             this.MachineId = new MachineId(ReadModel.MachineId);
             this.Blended = ReadModel.BlendedJson.Deserialize<Blended>();
@@ -69,15 +64,12 @@ namespace Manufactures.Domain
             this.UnitDepartmentId = new UnitDepartmentId(ReadModel.UnitDepartmentId);
             this.UserId = ReadModel.UserId;
             this.YarnCodes = ReadModel.YarnCodesJson.Deserialize<YarnCodes>();
-
-            _Changed = false;
         }
-
-        public ManufactureOrderReadModel ReadModel { get; }
 
         public DateTimeOffset OrderDate { get; }
 
         public UnitDepartmentId UnitDepartmentId { get; private set; }
+
         public void SetUnitDepartment(UnitDepartmentId newUnit)
         {
             Validator.ThrowIfNull(() => newUnit);
@@ -87,7 +79,7 @@ namespace Manufactures.Domain
                 UnitDepartmentId = newUnit;
                 ReadModel.UnitDepartmentId = UnitDepartmentId.Value;
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
@@ -101,7 +93,7 @@ namespace Manufactures.Domain
                 YarnCodes = newCodes;
                 ReadModel.YarnCodesJson = YarnCodes.Serialize();
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
@@ -118,7 +110,7 @@ namespace Manufactures.Domain
                 Blended = newBlended;
                 ReadModel.BlendedJson = Blended.Serialize();
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
@@ -132,7 +124,7 @@ namespace Manufactures.Domain
                 MachineId = newMachine;
                 ReadModel.MachineId = MachineId.Value;
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
@@ -144,7 +136,7 @@ namespace Manufactures.Domain
                 State = newState;
                 ReadModel.State = State;
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
@@ -162,19 +154,13 @@ namespace Manufactures.Domain
                 UserId = newUser;
                 ReadModel.UserId = UserId;
 
-                _Changed = true;
+                MarkModified();
             }
         }
 
-        public void MarkChanged()
+        protected override ManufactureOrder GetEntity()
         {
-            if (_Changed)
-                ReadModel.AddDomainEvent(new OnEntityUpdated<ManufactureOrder>(this));
-        }
-
-        public void MarkRemoved()
-        {
-            ReadModel.AddDomainEvent(new OnEntityDeleted<ManufactureOrder>(this));
+            return this;
         }
     }
 }

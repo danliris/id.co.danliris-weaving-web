@@ -7,27 +7,19 @@ namespace Manufactures.Domain.Repositories
 {
     public class ManufactureOrderRepository : RepositoryBase<ManufactureOrderReadModel>, IManufactureOrderRepository
     {
-        public string CurrentUser { get; private set; }
-
         public IQueryable<ManufactureOrder> Query => dbSet.Select(o=> new ManufactureOrder(o));
 
         public Task Insert(ManufactureOrder order)
         {
-            dbSet.Add(order.ReadModel);
+            dbSet.Add(order.GetReadModel());
 
             return Task.CompletedTask;
         }
 
-        public void SetCurrentUser(string userId)
-        {
-            CurrentUser = userId;
-        }
-
         public Task Update(ManufactureOrder order)
         {
-            dbSet.Update(order.ReadModel);
-
-            order.MarkChanged();
+            if (order.IsModified())
+                dbSet.Update(order.GetReadModel());
 
             return Task.CompletedTask;
         }

@@ -3,7 +3,7 @@
 
 using System.Collections.Generic;
 
-namespace Manufactures.ViewModels.Weaving
+namespace Manufactures.ViewModels.Manufacture
 {
     public class IndexViewModel
     {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Infrastructure.Domain.Events;
 using Manufactures.Domain;
 
-namespace Manufactures.Application.EventHandlers
+namespace Manufactures.EventHandlers
 {
     public class OnManufactureOrderCreatedHandler : IDomainEventHandler<OnEntityCreated<ManufactureOrder>>
     {

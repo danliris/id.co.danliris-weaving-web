@@ -3,7 +3,7 @@
 
 using ExtCore.Data.Abstractions;
 
-namespace Manufactures.ViewModels.Weaving
+namespace Manufactures.ViewModels.Manufacture
 {
     public class IndexViewModelFactory
     {

@@ -32,8 +32,6 @@ namespace Manufactures.Tests
 
             var userId = Guid.NewGuid().ToString();
 
-            this.mockOrderRepo.Setup(x => x.SetCurrentUser(userId));
-
             this.mockStorage.Setup(x => x.GetRepository<IManufactureOrderRepository>()).Returns(mockOrderRepo.Object);
 
             this.mockWorkContext = this.mockRepository.Create<IWorkContext>();
