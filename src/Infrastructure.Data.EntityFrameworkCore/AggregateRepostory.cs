@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Infrastructure.Data.EntityFrameworkCore
 {
     public abstract class AggregateRepostory<TAggregate, TReadModel> : RepositoryBase<TReadModel>, IAggregateRepository<TAggregate>
-        where TAggregate : AggregateRoot<TAggregate, TReadModel> 
+        where TAggregate : AggregateRoot<TAggregate, TReadModel>
         where TReadModel : ReadModelBase
     {
         public abstract IQueryable<TAggregate> Query { get; }

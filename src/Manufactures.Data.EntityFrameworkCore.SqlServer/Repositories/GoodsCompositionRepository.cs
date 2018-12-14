@@ -3,7 +3,7 @@ using Manufactures.Domain.Entities;
 
 namespace Manufactures.Domain.Repositories
 {
-    public class GoodsConstructionRepository : EntityRepository<GoodsConstruction>, IGoodsConstructionRepository
+    public class GoodsCompositionRepository : EntityRepository<GoodsComposition>, IGoodsCompositionRepository
     {
         
     }

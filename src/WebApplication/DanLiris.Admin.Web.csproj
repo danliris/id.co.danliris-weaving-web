@@ -6,6 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181214130840_Alter_WeavingOrders_AddCompositionId.cs" />
+    <Compile Remove="Migrations\20181214130840_Alter_WeavingOrders_AddCompositionId.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ExtCore.Data" Version="3.3.0" />
     <PackageReference Include="ExtCore.Data.EntityFramework.SqlServer" Version="3.3.0" />
     <PackageReference Include="ExtCore.Mvc" Version="3.3.0" />

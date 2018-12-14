@@ -37,8 +37,11 @@ namespace Infrastructure.Mvc.Filters
 
                 response.WriteAsync(JsonConvert.SerializeObject(new
                 {
-                    message,
+                    apiVersion = "1.0.0",
                     success = false,
+                    data = new { },
+                    info = new { },
+                    message,
                     trace = context.Exception.StackTrace
                 }));
             }

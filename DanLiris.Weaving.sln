@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Application", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manufactures.Domain.Events", "src\Manufactures.Domain.Events\Manufactures.Domain.Events.csproj", "{B7B43E57-729B-4600-99EF-1B0717DD5E02}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System Core", "System Core", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "System", "System", "{A1AECFB2-265C-4F7A-AA07-D0BE4D1619B5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.Domain", "src\Infrastructure.EntityFrameworkCore\Infrastructure.Domain.csproj", "{E2529D01-2A2E-4D15-9DDB-2A73437B49D2}"
 EndProject

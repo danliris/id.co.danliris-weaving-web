@@ -3,7 +3,7 @@ using Manufactures.Domain.Entities;
 
 namespace Manufactures.Domain.Repositories
 {
-    public interface IGoodsConstructionRepository : IEntityRepository<GoodsConstruction>
+    public interface IGoodsCompositionRepository : IEntityRepository<GoodsComposition>
     {
 
     }

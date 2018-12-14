@@ -8,6 +8,6 @@ namespace Manufactures.Application
 {
     public interface IManufactureOrderService
     {
-        Task<ManufactureOrder> PlacedOrderAsync(DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId);
+        Task<ManufactureOrder> PlacedOrderAsync(DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsComposition construction, Blended blended, MachineId machineId);
     }
 }

@@ -20,13 +20,16 @@ namespace Manufactures.Data.EntityFrameworkCore
                   etb.Property(p => p.BlendedJson).HasMaxLength(255);
                   etb.Property(p => p.YarnCodesJson).HasMaxLength(255);
 
+                  etb.HasOne(p => p.Composition).WithMany().HasForeignKey(k => k.CompositionId);
+
                   etb.ApplyAuditTrail();
                   etb.ApplySoftDelete();
               }
             );
 
 
-            modelBuilder.Entity<GoodsConstruction>(etb => {
+            modelBuilder.Entity<GoodsComposition>(etb =>
+            {
                 etb.ToTable("GoodsConstruction");
 
                 etb.HasKey(e => e.Identity);

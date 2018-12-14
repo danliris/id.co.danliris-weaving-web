@@ -16,7 +16,7 @@ namespace Manufactures.ViewModels.Manufacture
                     orderDate: createViewModel.OrderDate.Date,
                     unitId: new UnitDepartmentId(createViewModel.UnitDepartmentId),
                     yarnCodes: new YarnCodes(createViewModel.YarnCodes),
-                    construction: null,
+                    composition: null,
                     blended: new Blended(createViewModel.Blended),
                     machineId: new MachineId(createViewModel.MachineId),
                     userId: currentUser);

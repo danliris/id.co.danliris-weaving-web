@@ -46,7 +46,7 @@ namespace DanLiris.Admin.Web
                 options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
             });
 
-            services.AddExtCore(this.extensionsPath);
+            services.AddExtCore(this.extensionsPath, includingSubpaths: true);
 
             services.AddMediatR();
 
@@ -54,7 +54,7 @@ namespace DanLiris.Admin.Web
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "My API", Version = "v1" });
+                c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Weaving API", Version = "v1" });
             });
 
         }
@@ -76,7 +76,7 @@ namespace DanLiris.Admin.Web
             // specifying the Swagger JSON endpoint.
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             });
 
             JobManager.Initialize(new DefaultScheduleRegistry());

@@ -4,7 +4,6 @@ using Manufactures.Domain.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,7 +40,7 @@ namespace Manufactures.Controllers
         {
             var orderId = Guid.Parse(id);
 
-            var orderDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).FirstOrDefault(o => o.Identity == orderId);
+            var orderDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).FirstOrDefault(o => o.Id == orderId);
 
             await Task.Yield();
 

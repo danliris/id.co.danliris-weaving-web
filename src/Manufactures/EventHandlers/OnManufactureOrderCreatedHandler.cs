@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Infrastructure.Domain.Events;
+﻿using Infrastructure.Domain.Events;
 using Manufactures.Domain;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Manufactures.EventHandlers
 {

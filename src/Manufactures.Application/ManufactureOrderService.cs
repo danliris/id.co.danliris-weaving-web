@@ -24,13 +24,13 @@ namespace Manufactures.Application
             _workContext = workContext;
         }
 
-        public async Task<ManufactureOrder> PlacedOrderAsync(DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsConstruction construction, Blended blended, MachineId machineId)
+        public async Task<ManufactureOrder> PlacedOrderAsync(DateTime date, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsComposition construction, Blended blended, MachineId machineId)
         {
             var order = new ManufactureOrder(id: Guid.NewGuid(), 
                 orderDate: date, 
                 unitId: unitId, 
                 yarnCodes: yarnCodes, 
-                construction: construction, 
+                composition: construction, 
                 blended: blended, 
                 machineId: machineId,
                 userId: _workContext.CurrentUser);

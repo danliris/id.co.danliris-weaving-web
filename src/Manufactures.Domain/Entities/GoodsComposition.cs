@@ -1,20 +1,17 @@
 ﻿using Infrastructure.Domain;
-using Infrastructure.Domain.ReadModels;
 using Manufactures.Domain.ValueObjects;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manufactures.Domain.Entities
 {
-    public class GoodsConstruction : EntityBase<GoodsConstruction>
+    public class GoodsComposition : EntityBase<GoodsComposition>
     {
-        public GoodsConstruction(Guid identity) : base(identity)
+        public GoodsComposition(Guid identity) : base(identity)
         {
-
         }
 
-        public GoodsConstruction(Guid identity, MaterialIds materialIds) : base(identity)
+        public GoodsComposition(Guid identity, MaterialIds materialIds) : base(identity)
         {
             Identity = identity;
             MaterialIds = materialIds;
@@ -22,9 +19,10 @@ namespace Manufactures.Domain.Entities
 
         [NotMapped]
         public MaterialIds MaterialIds { get; private set; }
+
         public void SetMaterialIds(MaterialIds newMaterialIds)
         {
-            if(newMaterialIds != MaterialIds)
+            if (newMaterialIds != MaterialIds)
             {
                 this.MaterialIds = newMaterialIds;
 
@@ -38,7 +36,7 @@ namespace Manufactures.Domain.Entities
             set => MaterialIds = value.Deserialize<MaterialIds>();
         }
 
-        protected override GoodsConstruction GetEntity()
+        protected override GoodsComposition GetEntity()
         {
             return this;
         }

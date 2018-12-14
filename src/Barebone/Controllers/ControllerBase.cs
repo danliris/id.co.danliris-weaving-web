@@ -31,6 +31,7 @@ namespace Barebone.Controllers
         {
             return base.Ok(new {
                 apiVersion = "1.0.0",
+                success = true,
                 data,
                 info,
                 message
