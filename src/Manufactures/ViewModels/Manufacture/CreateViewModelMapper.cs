@@ -3,7 +3,6 @@
 
 using Manufactures.Domain;
 using Manufactures.Domain.ValueObjects;
-using Manufactures.Dtos;
 using System;
 
 namespace Manufactures.ViewModels.Manufacture
@@ -16,7 +15,7 @@ namespace Manufactures.ViewModels.Manufacture
                     orderDate: createViewModel.OrderDate.Date,
                     unitId: new UnitDepartmentId(createViewModel.UnitDepartmentId),
                     yarnCodes: new YarnCodes(createViewModel.YarnCodes),
-                    composition: null,
+                    compositionId: createViewModel.CompositionId,
                     blended: new Blended(createViewModel.Blended),
                     machineId: new MachineId(createViewModel.MachineId),
                     userId: currentUser);

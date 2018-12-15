@@ -7,10 +7,7 @@ namespace DanLiris.Admin.Web
     {
         public WorkContext()
         {
-            var assembly = typeof(WorkContext).Assembly;
-            var version = FileVersionInfo.GetVersionInfo(assembly.Location);
-
-            ApiVersion = version.FileVersion;
+            ApiVersion = FileVersionInfo.GetVersionInfo(typeof(Startup).Assembly.Location).FileVersion;
         }
 
         public string CurrentUser { get; internal set; }

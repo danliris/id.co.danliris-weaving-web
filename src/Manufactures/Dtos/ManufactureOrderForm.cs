@@ -16,6 +16,8 @@ namespace Manufactures.Dtos
 
         public MachineId MachineId { internal get; set; }
 
+        public GoodsCompositionId CompositionId { internal get; set; }
+
         /// <summary>
         /// Owner
         /// </summary>

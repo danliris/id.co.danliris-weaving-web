@@ -4,6 +4,9 @@
 using ExtCore.Data.Abstractions;
 using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using MediatR;
 
 namespace Barebone.Controllers
 {
@@ -20,13 +23,15 @@ namespace Barebone.Controllers
     [ApiController]
     public abstract class ControllerApiBase : Microsoft.AspNetCore.Mvc.ControllerBase
     {
-        protected IStorage Storage { get; private set; }
-        protected IWebApiContext WorkContext { get; private set; }
+        protected IStorage Storage { get; }
+        protected IWebApiContext WorkContext { get; }
+        protected IMediator Mediator { get; }
 
-        public ControllerApiBase(IStorage storage, IWebApiContext apiContext)
+        public ControllerApiBase(IServiceProvider serviceProvider)
         {
-            this.Storage = storage;
-            this.WorkContext = apiContext;
+            this.Storage = serviceProvider.GetService<IStorage>();
+            this.WorkContext = serviceProvider.GetService<IWebApiContext>();
+            this.Mediator = serviceProvider.GetService<IMediator>();
         }
 
         protected IActionResult Ok<T>(T data, object info = null, string message = null)

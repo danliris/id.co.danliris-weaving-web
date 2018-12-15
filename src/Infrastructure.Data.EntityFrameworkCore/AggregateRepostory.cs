@@ -3,16 +3,31 @@ using Infrastructure.Domain;
 using Infrastructure.Domain.ReadModels;
 using Infrastructure.Domain.Repositories;
 using Moonlay.Domain;
+using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Data.EntityFrameworkCore
 {
-    public abstract class AggregateRepostory<TAggregate, TReadModel> : RepositoryBase<TReadModel>, IAggregateRepository<TAggregate>
+    public abstract class AggregateRepostory<TAggregate, TReadModel> : RepositoryBase<TReadModel>, IAggregateRepository<TAggregate, TReadModel>
         where TAggregate : AggregateRoot<TAggregate, TReadModel>
         where TReadModel : ReadModelBase
     {
-        public abstract IQueryable<TAggregate> Query { get; }
+        public IQueryable<TReadModel> Query => dbSet;
+
+        public List<TAggregate> Find(IQueryable<TReadModel> readModels)
+        {
+            return readModels.Select(o => Map(o)).ToList();
+        }
+
+        public List<TAggregate> Find(Expression<Func<TReadModel, bool>> condition)
+        {
+            return Query.Where(condition).Select(o => Map(o)).ToList();
+        }
+
+        protected abstract TAggregate Map(TReadModel readModel);
 
         public virtual Task Update(TAggregate aggregate)
         {
@@ -36,5 +51,7 @@ namespace Infrastructure.Data.EntityFrameworkCore
 
             return Task.CompletedTask;
         }
+
+        
     }
 }

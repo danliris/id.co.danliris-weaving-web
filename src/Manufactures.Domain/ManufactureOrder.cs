@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Domain;
+using Manufactures.Domain.Commands;
 using Manufactures.Domain.Entities;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.ReadModels;
@@ -17,7 +18,7 @@ namespace Manufactures.Domain
             Finished = 30,
         }
 
-        public ManufactureOrder(Guid id, DateTime orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsComposition composition, Blended blended, MachineId machineId, string userId) : base(id)
+        public ManufactureOrder(Guid id, DateTimeOffset orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsCompositionId compositionId, Blended blended, MachineId machineId, string userId) : base(id)
         {
             // Validate Mandatory Properties
             Validator.ThrowIfNull(() => unitId);
@@ -33,7 +34,7 @@ namespace Manufactures.Domain
             OrderDate = orderDate;
             UnitDepartmentId = unitId;
             YarnCodes = yarnCodes;
-            Composition = composition;
+            CompositionId = compositionId;
             Blended = blended;
             MachineId = machineId;
             UserId = userId;
@@ -48,10 +49,25 @@ namespace Manufactures.Domain
                 OrderDate = this.OrderDate,
                 BlendedJson = this.Blended.Serialize(),
                 UserId = this.UserId,
-                CompositionId = Composition?.Identity
             };
 
+            if (this.CompositionId != null)
+                ReadModel.CompositionId = Guid.Parse(CompositionId.Value);
+
+
             ReadModel.AddDomainEvent(new OnManufactureOrderPlaced(this.Identity));
+        }
+
+        public ManufactureOrder(Guid id, PlaceOrderCommand command) : this(id,
+            orderDate: command.OrderDate,
+            unitId: command.UnitDepartmentId,
+            yarnCodes: command.YarnCodes,
+            compositionId: command.CompositionId,
+            blended: command.Blended,
+            machineId: command.MachineId,
+            userId: command.UserId)
+        {
+
         }
 
         public ManufactureOrder(ManufactureOrderReadModel readModel) : base(readModel)
@@ -64,7 +80,7 @@ namespace Manufactures.Domain
             this.UnitDepartmentId = new UnitDepartmentId(ReadModel.UnitDepartmentId);
             this.UserId = ReadModel.UserId;
             this.YarnCodes = ReadModel.YarnCodesJson.Deserialize<YarnCodes>();
-            this.Composition = ReadModel.Composition;
+            this.CompositionId = ReadModel.CompositionId.HasValue ? new GoodsCompositionId(ReadModel.CompositionId.Value.ToString()) : null;
         }
 
         public DateTimeOffset OrderDate { get; }
@@ -98,7 +114,7 @@ namespace Manufactures.Domain
             }
         }
 
-        public GoodsComposition Composition { get; }
+        public GoodsCompositionId CompositionId { get; }
 
 
         public Blended Blended { get; private set; }

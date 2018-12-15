@@ -1,9 +1,8 @@
-﻿using ExtCore.Data.Abstractions;
-using Infrastructure;
-using Manufactures.Application;
+﻿using Manufactures.Domain.Commands;
 using Manufactures.Domain.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,26 +13,31 @@ namespace Manufactures.Controllers
     [ApiController]
     public class ManufactureOrderController : Barebone.Controllers.ControllerApiBase
     {
-        private readonly IManufactureOrderService _manufactureOrderService;
         private readonly IManufactureOrderRepository _manufactureOrderRepo;
 
-        public ManufactureOrderController(IManufactureOrderService manufactureOrderService, IWebApiContext apiContext, IStorage storage) : base(storage, apiContext)
+        public ManufactureOrderController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            _manufactureOrderService = manufactureOrderService;
             _manufactureOrderRepo = this.Storage.GetRepository<IManufactureOrderRepository>();
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var ordersDto = _manufactureOrderRepo.Query
-                .OrderByDescending(o => o.AuditTrail.CreatedDate)
-                .Select(o => new ManufactureOrderDto(o))
-                .ToList();
+            int page = 0, pageSize = 25;
+            int totalRows = _manufactureOrderRepo.Query.Count();
+
+            var query = _manufactureOrderRepo.Query.Include(o => o.Composition).OrderByDescending(o => o.CreatedDate).Take(pageSize).Skip(page * pageSize);
+
+            var ordersDto = _manufactureOrderRepo.Find(query).Select(o => new ManufactureOrderDto(o)).ToArray();
 
             await Task.Yield();
 
-            return Ok(ordersDto);
+            return Ok(ordersDto, info: new
+            {
+                page,
+                pageSize,
+                count = totalRows
+            });
         }
 
         [HttpGet("{id}")]
@@ -41,7 +45,7 @@ namespace Manufactures.Controllers
         {
             var orderId = Guid.Parse(id);
 
-            var orderDto = _manufactureOrderRepo.Query.Select(o => new ManufactureOrderDto(o)).FirstOrDefault(o => o.Id == orderId);
+            var orderDto = _manufactureOrderRepo.Find(o => o.Identity == orderId).Select(o => new ManufactureOrderDto(o)).FirstOrDefault();
 
             await Task.Yield();
 
@@ -54,7 +58,9 @@ namespace Manufactures.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]ManufactureOrderForm form)
         {
-            var order = await _manufactureOrderService.PlacedOrderAsync(form.OrderDate.Date, form.UnitDepartmentId, form.YarnCodes, null, form.Blended, form.MachineId);
+            var command = new PlaceOrderCommand(form.OrderDate.Date, form.UnitDepartmentId, form.YarnCodes, form.CompositionId, form.Blended, form.MachineId, form.UserId);
+
+            var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
         }
@@ -63,7 +69,7 @@ namespace Manufactures.Controllers
         public async Task<IActionResult> Put(string id, [FromBody]ManufactureOrderForm form)
         {
             var orderId = Guid.Parse(id);
-            var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
+            var order = _manufactureOrderRepo.Find(o => o.Identity == orderId).FirstOrDefault();
 
             if (order == null)
                 return NotFound();
@@ -76,6 +82,7 @@ namespace Manufactures.Controllers
 
             await _manufactureOrderRepo.Update(order);
 
+            // Save Changes
             Storage.Save();
 
             return Ok(order.Identity);
@@ -85,7 +92,7 @@ namespace Manufactures.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var orderId = Guid.Parse(id);
-            var order = _manufactureOrderRepo.Query.FirstOrDefault(o => o.Identity == orderId);
+            var order = _manufactureOrderRepo.Find(o => o.Identity == orderId).FirstOrDefault();
 
             if (order == null)
                 return NotFound();

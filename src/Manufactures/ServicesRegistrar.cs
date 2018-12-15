@@ -1,7 +1,6 @@
 ﻿using ExtCore.Infrastructure.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Manufactures.Application;
 
 namespace Manufactures
 {
@@ -11,7 +10,8 @@ namespace Manufactures
 
         public void Execute(IServiceCollection services, IServiceProvider sp)
         {
-            services.AddTransient<IManufactureOrderService, ManufactureOrderService>();
+            //services.AddTransient<IManufactureOrderService, ManufactureOrderService>();
+
         }
     }
 }

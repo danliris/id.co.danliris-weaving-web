@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.EntityFramework;
 using Infrastructure.Domain;
+using Infrastructure.Domain.Repositories;
 using Moonlay;
 using Moonlay.Domain;
 using System.Linq;
@@ -7,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data.EntityFrameworkCore
 {
-    public class EntityRepository<TEntity> : RepositoryBase<TEntity> where TEntity : EntityBase<TEntity>
+    public class EntityRepository<TEntity> : RepositoryBase<TEntity>, IEntityRepository<TEntity> where TEntity : EntityBase<TEntity>
     {
-        public virtual IQueryable<TEntity> Query => dbSet;
+        public IQueryable<TEntity> Query => dbSet;
 
         public virtual Task Update(TEntity entity)
         {

@@ -26,7 +26,7 @@ namespace Infrastructure.Mvc.Filters
             if(!contentTypes.Any(o=>o == "application/x-www-form-urlencoded"))
             {
                 HttpStatusCode status = HttpStatusCode.InternalServerError;
-                string message = string.Empty;
+                string message = context.Exception.Message;
 
                 // FOR API
                 if (context.Exception is ArgumentNullException)

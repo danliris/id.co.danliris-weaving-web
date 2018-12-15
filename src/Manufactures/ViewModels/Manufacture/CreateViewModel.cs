@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Manufactures.Domain.ValueObjects;
 
 namespace Manufactures.ViewModels.Manufacture
 {
@@ -36,5 +37,8 @@ namespace Manufactures.ViewModels.Manufacture
         [Display(Name = "User")]
         [Required]
         public string UserId { get; set; }
+
+        [Display(Name = "Construction")]
+        public GoodsCompositionId CompositionId { get; set; }
     }
 }
