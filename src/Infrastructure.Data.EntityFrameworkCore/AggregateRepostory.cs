@@ -14,27 +14,15 @@ namespace Infrastructure.Data.EntityFrameworkCore
     {
         public abstract IQueryable<TAggregate> Query { get; }
 
-        public virtual Task Insert(TAggregate aggregate)
+        public virtual Task Update(TAggregate aggregate)
         {
             if (aggregate.IsTransient())
                 dbSet.Add(aggregate.GetReadModel());
 
-            return Task.CompletedTask;
-        }
-
-        public virtual Task Update(TAggregate aggregate)
-        {
-            if (aggregate.IsModified())
+            else if (aggregate.IsModified())
                 dbSet.Update(aggregate.GetReadModel());
 
-            return Task.CompletedTask;
-        }
-
-        public virtual Task Remove(TAggregate aggregate)
-        {
-            aggregate.MarkRemoved();
-
-            if (aggregate.IsDeleted())
+            else if (aggregate.IsRemoved())
             {
                 var readModel = aggregate.GetReadModel();
                 if (readModel is ISoftDelete)

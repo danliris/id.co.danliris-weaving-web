@@ -43,32 +43,23 @@ namespace Infrastructure.Domain
 
         public ISoftDelete SoftDelete => ReadModel;
 
-        private bool _modified = false;
-
-        public void MarkModified()
+        protected override void MarkModified()
         {
             if (!this.IsTransient())
             {
-                Validator.ThrowWhenTrue(() => IsDeleted(), "Entity cannot be modified, it was set as Deleted Entity");
+                Validator.ThrowWhenTrue(() => IsRemoved(), "Entity cannot be modified, it was set as Deleted Entity");
 
-                _modified = true;
+                base.MarkModified();
                 if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityUpdated<TAggregateRoot>))
                     ReadModel.AddDomainEvent(new OnEntityUpdated<TAggregateRoot>(GetEntity()));
             }
         }
 
-        public virtual bool IsModified()
-        {
-            return _modified;
-        }
-
-        private bool _deleted = false;
-
-        public void MarkRemoved()
+        protected override void MarkRemoved()
         {
             if (!this.IsTransient())
             {
-                _deleted = true;
+                base.MarkRemoved();
 
                 if (ReadModel.DomainEvents == null || !ReadModel.DomainEvents.Any(o => o is OnEntityDeleted<TAggregateRoot>))
                     ReadModel.AddDomainEvent(new OnEntityDeleted<TAggregateRoot>(GetEntity()));
@@ -81,11 +72,6 @@ namespace Infrastructure.Domain
                         .ForEach(o => ReadModel.RemoveDomainEvent(o));
                 }
             }
-        }
-
-        public virtual bool IsDeleted()
-        {
-            return _deleted;
         }
     }
 }

@@ -19,15 +19,13 @@ namespace Infrastructure.Domain
 
         public ISoftDelete SoftDelete => this;
 
-        private bool _modified = false;
-
-        public void MarkModified()
+        protected override void MarkModified()
         {
             if (!this.IsTransient())
             {
-                Moonlay.Validator.ThrowWhenTrue(() => IsDeleted(), "Entity cannot be modified, it was set as Deleted Entity");
+                Moonlay.Validator.ThrowWhenTrue(() => IsRemoved(), "Entity cannot be modified, it was set as Deleted Entity");
 
-                _modified = true;
+                base.MarkModified();
                 if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityUpdated<TEntity>))
                     this.AddDomainEvent(new OnEntityUpdated<TEntity>(GetEntity()));
             }
@@ -35,18 +33,11 @@ namespace Infrastructure.Domain
 
         protected abstract TEntity GetEntity();
 
-        public virtual bool IsModified()
-        {
-            return _modified;
-        }
-
-        private bool _deleted = false;
-
-        public void MarkRemoved()
+        protected override void MarkRemoved()
         {
             if (!this.IsTransient())
             {
-                _deleted = true;
+                base.MarkRemoved();
 
                 if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityDeleted<TEntity>))
                     this.AddDomainEvent(new OnEntityDeleted<TEntity>(GetEntity()));
@@ -59,11 +50,6 @@ namespace Infrastructure.Domain
                         .ForEach(o => this.RemoveDomainEvent(o));
                 }
             }
-        }
-
-        public virtual bool IsDeleted()
-        {
-            return _deleted;
         }
     }
 }

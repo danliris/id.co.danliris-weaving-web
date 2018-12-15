@@ -65,7 +65,7 @@ namespace Manufactures.Tests
 
             var machineId = new MachineId(1);
 
-            this.mockOrderRepo.Setup(x => x.Insert(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
+            this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
 
             // Act
             var result = await unitUnderTest.PlacedOrderAsync(date: DateTime.Now, 

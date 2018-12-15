@@ -35,7 +35,7 @@ namespace Manufactures.Application
                 machineId: machineId,
                 userId: _workContext.CurrentUser);
 
-            await _orderRepository.Insert(order);
+            await _orderRepository.Update(order);
 
             _storage.Save();
 

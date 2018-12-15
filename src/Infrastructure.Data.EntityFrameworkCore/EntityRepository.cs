@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.EntityFramework;
 using Infrastructure.Domain;
+using Moonlay;
 using Moonlay.Domain;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,19 +11,15 @@ namespace Infrastructure.Data.EntityFrameworkCore
     {
         public virtual IQueryable<TEntity> Query => dbSet;
 
-        public Task Insert(TEntity entity)
+        public virtual Task Update(TEntity entity)
         {
             if (entity.IsTransient())
                 dbSet.Add(entity);
 
-            return Task.CompletedTask;
-        }
+            else if (entity.IsModified())
+                dbSet.Update(entity);
 
-        public Task Remove(TEntity entity)
-        {
-            entity.MarkRemoved();
-
-            if (entity.IsDeleted())
+            else if (entity.IsRemoved())
             {
                 if (entity is ISoftDelete)
                 {
@@ -32,14 +29,8 @@ namespace Infrastructure.Data.EntityFrameworkCore
                 else
                     dbSet.Remove(entity);
             }
-
-            return Task.CompletedTask;
-        }
-
-        public Task Update(TEntity entity)
-        {
-            if (entity.IsModified())
-                dbSet.Update(entity);
+            else
+                Validator.ThrowWhenTrue(() => true, "Invalid action");
 
             return Task.CompletedTask;
         }

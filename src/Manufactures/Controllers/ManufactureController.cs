@@ -34,7 +34,7 @@ namespace Manufactures.Controllers
             {
                 ManufactureOrder order = new CreateViewModelMapper().Map(createViewModel, _workContext.CurrentUser);
 
-                this.Storage.GetRepository<IManufactureOrderRepository>().Insert(order).Wait();
+                this.Storage.GetRepository<IManufactureOrderRepository>().Update(order).Wait();
 
                 this.Storage.Save();
                 return this.RedirectToAction("index");

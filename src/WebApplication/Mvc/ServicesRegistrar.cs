@@ -1,4 +1,5 @@
-﻿using ExtCore.Infrastructure.Actions;
+﻿using DanLiris.Admin.Web;
+using ExtCore.Infrastructure.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
@@ -11,7 +12,9 @@ namespace Infrastructure
 
         public void Execute(IServiceCollection services, IServiceProvider sp)
         {
-            services.AddSingleton<IWorkContext>(c => new WorkContext() { CurrentUser = "System" });
+            services.AddSingleton(c => new WorkContext() { CurrentUser = "System" });
+            services.AddSingleton<IWebApiContext>(c => c.GetRequiredService<WorkContext>());
+            services.AddSingleton<IWorkContext>(c => c.GetRequiredService<WorkContext>());
         }
     }
 }

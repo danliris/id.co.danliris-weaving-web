@@ -1,4 +1,5 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure;
 using Manufactures.Application;
 using Manufactures.Domain.Repositories;
 using Manufactures.Dtos;
@@ -16,7 +17,7 @@ namespace Manufactures.Controllers
         private readonly IManufactureOrderService _manufactureOrderService;
         private readonly IManufactureOrderRepository _manufactureOrderRepo;
 
-        public ManufactureOrderController(IManufactureOrderService manufactureOrderService, IStorage storage) : base(storage)
+        public ManufactureOrderController(IManufactureOrderService manufactureOrderService, IWebApiContext apiContext, IStorage storage) : base(storage, apiContext)
         {
             _manufactureOrderService = manufactureOrderService;
             _manufactureOrderRepo = this.Storage.GetRepository<IManufactureOrderRepository>();
@@ -89,7 +90,9 @@ namespace Manufactures.Controllers
             if (order == null)
                 return NotFound();
 
-            await _manufactureOrderRepo.Remove(order);
+            order.Remove();
+
+            await _manufactureOrderRepo.Update(order);
 
             Storage.Save();
 

@@ -10,6 +10,13 @@ namespace Infrastructure.Mvc.Filters
 {
     public class GlobalExceptionFilter : IExceptionFilter
     {
+        private readonly IWebApiContext _workContext;
+
+        public GlobalExceptionFilter(IWebApiContext apiContext)
+        {
+            _workContext = apiContext;
+        }
+
         public void OnException(ExceptionContext context)
         {
             StringValues contentTypes = new StringValues();
@@ -37,7 +44,7 @@ namespace Infrastructure.Mvc.Filters
 
                 response.WriteAsync(JsonConvert.SerializeObject(new
                 {
-                    apiVersion = "1.0.0",
+                    apiVersion = _workContext.ApiVersion,
                     success = false,
                     data = new { },
                     info = new { },
