@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Primitives;
 using Moonlay.Domain;
 using Newtonsoft.Json;
-using System;
 using System.Linq;
 using System.Net;
-using FluentValidation.Results;
 
 namespace Infrastructure.Mvc.Filters
 {
