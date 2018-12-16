@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.Commands
+namespace Manufactures.Domain.Orders.Commands
 {
     public class RemoveOrderCommand : ICommand<ManufactureOrder>
     {

@@ -1,5 +1,5 @@
-﻿using Manufactures.Domain;
-using Manufactures.Domain.ValueObjects;
+﻿using Manufactures.Domain.Orders;
+using Manufactures.Domain.Orders.ValueObjects;
 using System;
 
 namespace Manufactures.Dtos
@@ -37,7 +37,7 @@ namespace Manufactures.Dtos
 
         public MachineId MachineId { get; }
 
-        public Domain.ManufactureOrder.Status State { get; }
+        public ManufactureOrder.Status State { get; }
 
         /// <summary>
         /// Owner

@@ -1,7 +1,7 @@
 ﻿using Moonlay.Domain;
 using System.Collections.Generic;
 
-namespace Moonlay.Manufactures.Domain.ValueObjects
+namespace Manufactures.Domain.Orders.ValueObjects
 {
     public class Material : ValueObject
     {

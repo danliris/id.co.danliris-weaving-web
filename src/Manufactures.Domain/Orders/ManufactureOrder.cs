@@ -1,11 +1,11 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
-using Manufactures.Domain.ReadModels;
-using Manufactures.Domain.ValueObjects;
+using Manufactures.Domain.Orders.ReadModels;
+using Manufactures.Domain.Orders.ValueObjects;
 using Moonlay;
 using System;
 
-namespace Manufactures.Domain
+namespace Manufactures.Domain.Orders
 {
     public class ManufactureOrder : AggregateRoot<ManufactureOrder, ManufactureOrderReadModel>
     {

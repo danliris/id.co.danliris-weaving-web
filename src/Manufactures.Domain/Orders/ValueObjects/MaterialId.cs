@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.ValueObjects
+namespace Manufactures.Domain.Orders.ValueObjects
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
     public class MaterialId : SingleValueObject<int>

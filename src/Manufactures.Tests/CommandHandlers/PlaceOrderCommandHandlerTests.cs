@@ -1,10 +1,10 @@
 using ExtCore.Data.Abstractions;
 using FluentAssertions;
-using Manufactures.Domain;
-using Manufactures.Domain.Commands;
-using Manufactures.Domain.Entities;
-using Manufactures.Domain.Repositories;
-using Manufactures.Domain.ValueObjects;
+using Manufactures.Domain.Orders;
+using Manufactures.Domain.Orders.Commands;
+using Manufactures.Domain.Orders.Entities;
+using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Orders.ValueObjects;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -69,7 +69,7 @@ namespace Manufactures.Tests.CommandHandlers
                 OrderDate = DateTime.Now,
                 UnitDepartmentId = unitId,
                 YarnCodes = yarnCodes,
-                CompositionId = compositionId,
+                GoodsCompositionId = compositionId,
                 Blended = blended,
                 MachineId = machineId,
                 UserId = "Test"

@@ -1,11 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Repositories;
+using Manufactures.Domain.Orders.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.Domain.Commands
+namespace Manufactures.Domain.Orders.Commands
 {
     public class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand, ManufactureOrder>
     {
@@ -24,7 +24,7 @@ namespace Manufactures.Domain.Commands
                 orderDate: command.OrderDate,
                 unitId: command.UnitDepartmentId,
                 yarnCodes: command.YarnCodes,
-                compositionId: command.CompositionId,
+                compositionId: command.GoodsCompositionId,
                 blended: command.Blended,
                 machineId: command.MachineId,
                 userId: command.UserId);

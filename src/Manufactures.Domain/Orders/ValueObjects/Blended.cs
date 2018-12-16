@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Manufactures.Domain.ValueObjects
+namespace Manufactures.Domain.Orders.ValueObjects
 {
     public class Blended : ListX<float>
     {

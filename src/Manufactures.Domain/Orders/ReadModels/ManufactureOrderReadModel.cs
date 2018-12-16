@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.Entities;
+using Manufactures.Domain.Orders.Entities;
 using System;
 
-namespace Manufactures.Domain.ReadModels
+namespace Manufactures.Domain.Orders.ReadModels
 {
     public class ManufactureOrderReadModel : ReadModelBase
     {

@@ -1,9 +1,9 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.ValueObjects;
+using Manufactures.Domain.Orders.ValueObjects;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Manufactures.Domain.Entities
+namespace Manufactures.Domain.Orders.Entities
 {
     public class GoodsComposition : EntityBase<GoodsComposition>
     {

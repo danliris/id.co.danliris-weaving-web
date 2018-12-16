@@ -1,7 +1,7 @@
 ﻿using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
-using Manufactures.Domain.Commands;
+using Manufactures.Domain.Orders.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 

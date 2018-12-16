@@ -2,8 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Manufactures.Domain.Entities;
-using Manufactures.Domain.ReadModels;
+using Manufactures.Domain.Orders.Entities;
+using Manufactures.Domain.Orders.ReadModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Data.EntityFrameworkCore

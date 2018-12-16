@@ -1,7 +1,7 @@
 ﻿using Moonlay.Domain;
 using Newtonsoft.Json;
 
-namespace Manufactures.Domain.ValueObjects
+namespace Manufactures.Domain.Orders.ValueObjects
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
     public class MachineId : SingleValueObject<int>

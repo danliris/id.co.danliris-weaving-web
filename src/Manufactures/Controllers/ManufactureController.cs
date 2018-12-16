@@ -1,6 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
-using Manufactures.Domain;
-using Manufactures.Domain.Repositories;
+using Manufactures.Domain.Orders;
+using Manufactures.Domain.Orders.Repositories;
 using Manufactures.ViewModels.Manufacture;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;

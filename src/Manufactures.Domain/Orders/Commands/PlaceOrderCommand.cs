@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.ValueObjects;
+using Manufactures.Domain.Orders.ValueObjects;
 using System;
 
-namespace Manufactures.Domain.Commands
+namespace Manufactures.Domain.Orders.Commands
 {
     public class PlaceOrderCommand : ICommand<ManufactureOrder>
     {
@@ -13,7 +13,7 @@ namespace Manufactures.Domain.Commands
 
         public YarnCodes YarnCodes { get; set; }
 
-        public GoodsCompositionId CompositionId { get; set; }
+        public GoodsCompositionId GoodsCompositionId { get; set; }
 
         public Blended Blended { get; set; }
 

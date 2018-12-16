@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.ReadModels;
+using Manufactures.Domain.Products.ReadModels;
 using System;
 
-namespace Manufactures.Domain
+namespace Manufactures.Domain.Products
 {
     public class ProductComposition : AggregateRoot<ProductComposition, ProductCompositionReadModel>
     {

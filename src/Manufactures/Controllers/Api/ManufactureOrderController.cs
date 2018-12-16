@@ -1,5 +1,5 @@
-﻿using Manufactures.Domain.Commands;
-using Manufactures.Domain.Repositories;
+﻿using Manufactures.Domain.Orders.Commands;
+using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

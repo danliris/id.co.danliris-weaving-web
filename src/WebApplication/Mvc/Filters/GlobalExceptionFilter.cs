@@ -32,24 +32,34 @@ namespace Infrastructure.Mvc.Filters
                 string message = context.Exception.Message;
 
                 // FOR API
-                if (context.Exception is DomainNullException)
+                if (context.Exception is DomainNullException || context.Exception.InnerException is DomainNullException)
                 {
-                    var ex = context.Exception as DomainNullException;
+                    DomainNullException ex;
+                    if (context.Exception is DomainNullException)
+                        ex = context.Exception as DomainNullException;
+                    else
+                        ex = context.Exception.InnerException as DomainNullException;
+
                     context.ModelState.AddModelError(ex.ParamName, ex.Message);
 
-                    info = context.ModelState.Select(o => new { propertyName = o.Key, errors = o.Value.Errors });
+                    info = context.ModelState.Select(o => new { propertyName = o.Key, errors = o.Value.Errors.Select(e => e.ErrorMessage) });
                     message = ex.Message;
                     status = HttpStatusCode.BadRequest;
                 }
-                else if(context.Exception is FluentValidation.ValidationException)
+                else if(context.Exception is FluentValidation.ValidationException || context.Exception.InnerException is FluentValidation.ValidationException)
                 {
-                    var ex = context.Exception as FluentValidation.ValidationException;
+                    FluentValidation.ValidationException ex;
+                    if (context.Exception is FluentValidation.ValidationException)
+                        ex = context.Exception as FluentValidation.ValidationException;
+                    else
+                        ex = context.Exception.InnerException as FluentValidation.ValidationException;
+
                     foreach (var failures in ex.Errors)
                     {
                         context.ModelState.AddModelError(failures.PropertyName, failures.ErrorMessage);
                     }
 
-                    info = context.ModelState.Select(o => new { propertyName = o.Key, errors = o.Value.Errors });
+                    info = context.ModelState.Select(o => new { propertyName = o.Key, errors = o.Value.Errors.Select(e => e.ErrorMessage) });
                     message = ex.Message;
                     status = HttpStatusCode.BadRequest;
                 }

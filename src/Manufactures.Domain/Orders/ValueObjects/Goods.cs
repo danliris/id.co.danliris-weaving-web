@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Moonlay.Manufactures.Domain.ValueObjects
+namespace Manufactures.Domain.Orders.ValueObjects
 {
     public class Goods : ValueObject
     {

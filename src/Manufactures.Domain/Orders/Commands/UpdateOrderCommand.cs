@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.ValueObjects;
+using Manufactures.Domain.Orders.ValueObjects;
 using System;
 
-namespace Manufactures.Domain.Commands
+namespace Manufactures.Domain.Orders.Commands
 {
     public class UpdateOrderCommand : ICommand<ManufactureOrder>
     {

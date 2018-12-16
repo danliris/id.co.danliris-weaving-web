@@ -1,8 +1,7 @@
-﻿using Manufactures.Domain.Events;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.EventHandlers
+namespace Manufactures.Domain.Events
 {
     public class OnManufactureOrderPlacedHandler : IManufactureEventHandler<OnManufactureOrderPlaced>
     {
