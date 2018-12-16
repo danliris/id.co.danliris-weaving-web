@@ -56,34 +56,22 @@ namespace Manufactures.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]ManufactureOrderForm form)
+        public async Task<IActionResult> Post([FromBody]PlaceOrderCommand command)
         {
-            var command = new PlaceOrderCommand(form.OrderDate.Date, form.UnitDepartmentId, form.YarnCodes, form.CompositionId, form.Blended, form.MachineId, form.UserId);
-
             var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]ManufactureOrderForm form)
+        public async Task<IActionResult> Put(string id, [FromBody]UpdateOrderCommand command)
         {
-            var orderId = Guid.Parse(id);
-            var order = _manufactureOrderRepo.Find(o => o.Identity == orderId).FirstOrDefault();
-
-            if (order == null)
+            if (!Guid.TryParse(id, out Guid orderId))
                 return NotFound();
 
-            order.SetBlended(form.Blended);
-            order.SetMachineId(form.MachineId);
-            order.SetUnitDepartment(form.UnitDepartmentId);
-            order.SetUserId(form.UserId);
-            order.SetYarnCodes(form.YarnCodes);
+            command.SetId(orderId);
 
-            await _manufactureOrderRepo.Update(order);
-
-            // Save Changes
-            Storage.Save();
+            var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
         }
@@ -91,17 +79,13 @@ namespace Manufactures.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var orderId = Guid.Parse(id);
-            var order = _manufactureOrderRepo.Find(o => o.Identity == orderId).FirstOrDefault();
-
-            if (order == null)
+            if (!Guid.TryParse(id, out Guid orderId))
                 return NotFound();
 
-            order.Remove();
+            var command = new RemoveOrderCommand();
+            command.SetId(orderId);
 
-            await _manufactureOrderRepo.Update(order);
-
-            Storage.Save();
+            var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
         }

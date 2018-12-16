@@ -43,9 +43,8 @@ namespace DanLiris.Admin.Web
         }
     }
 
-    static class EventDispatcherExtension
+    internal static class EventDispatcherExtension
     {
-
         public static void AuditTrack(this AppStorageContext ctx, IWorkContext workContext)
         {
             if (workContext == null) return;
@@ -77,7 +76,7 @@ namespace DanLiris.Admin.Web
                 modified.ModifiedBy = currentUser;
                 modified.ModifiedDate = now;
 
-                if(modified is ISoftDelete)
+                if (modified is ISoftDelete)
                 {
                     if (modified.Deleted.HasValue && modified.Deleted.Value)
                     {

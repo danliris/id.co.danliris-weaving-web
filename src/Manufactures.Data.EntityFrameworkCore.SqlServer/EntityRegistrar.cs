@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Microsoft.EntityFrameworkCore;
-using Manufactures.Domain.ReadModels;
 using Manufactures.Domain.Entities;
+using Manufactures.Domain.ReadModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -26,7 +26,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                   etb.ApplySoftDelete();
               }
             );
-
 
             modelBuilder.Entity<GoodsComposition>(etb =>
             {

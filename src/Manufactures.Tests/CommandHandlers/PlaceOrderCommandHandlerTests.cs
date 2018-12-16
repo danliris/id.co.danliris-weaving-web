@@ -16,7 +16,7 @@ namespace Manufactures.Tests.CommandHandlers
 {
     public class PlaceOrderCommandHandlerTests : IDisposable
     {
-        private MockRepository mockRepository;
+        private readonly MockRepository mockRepository;
 
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IManufactureOrderRepository> mockOrderRepo;
@@ -32,7 +32,6 @@ namespace Manufactures.Tests.CommandHandlers
             this.mockOrderRepo = this.mockRepository.Create<IManufactureOrderRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IManufactureOrderRepository>()).Returns(mockOrderRepo.Object);
-
         }
 
         public void Dispose()
@@ -56,7 +55,6 @@ namespace Manufactures.Tests.CommandHandlers
 
             var yarnCodes = new YarnCodes(new List<string> { "sdfsdf", "sdfds" });
 
-            
             var construction = new GoodsComposition(identity: Guid.NewGuid(), materialIds: new MaterialIds(new List<MaterialId>()));
             var compositionId = new GoodsCompositionId(construction.Identity.ToString());
 
@@ -66,14 +64,16 @@ namespace Manufactures.Tests.CommandHandlers
 
             this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
 
-
-            PlaceOrderCommand request = new PlaceOrderCommand(orderDate: DateTime.Now,
-                unitId: unitId,
-                yarnCodes: yarnCodes,
-                compositionId: compositionId,
-                blended: blended,
-                machineId: machineId,
-                userId: "Test");
+            PlaceOrderCommand request = new PlaceOrderCommand
+            {
+                OrderDate = DateTime.Now,
+                UnitDepartmentId = unitId,
+                YarnCodes = yarnCodes,
+                CompositionId = compositionId,
+                Blended = blended,
+                MachineId = machineId,
+                UserId = "Test"
+            };
 
             CancellationToken cancellationToken = CancellationToken.None;
 

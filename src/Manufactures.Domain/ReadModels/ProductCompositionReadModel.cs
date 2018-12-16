@@ -1,5 +1,5 @@
-﻿using System;
-using Infrastructure.Domain.ReadModels;
+﻿using Infrastructure.Domain.ReadModels;
+using System;
 
 namespace Manufactures.Domain.ReadModels
 {

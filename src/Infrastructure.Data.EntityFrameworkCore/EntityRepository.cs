@@ -16,10 +16,8 @@ namespace Infrastructure.Data.EntityFrameworkCore
         {
             if (entity.IsTransient())
                 dbSet.Add(entity);
-
             else if (entity.IsModified())
                 dbSet.Update(entity);
-
             else if (entity.IsRemoved())
             {
                 if (entity is ISoftDelete)

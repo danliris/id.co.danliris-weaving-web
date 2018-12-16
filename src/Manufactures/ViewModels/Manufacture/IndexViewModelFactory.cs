@@ -11,7 +11,6 @@ namespace Manufactures.ViewModels.Manufacture
         {
             return new IndexViewModel()
             {
-              
             };
         }
     }

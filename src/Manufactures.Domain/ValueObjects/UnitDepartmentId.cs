@@ -8,7 +8,6 @@ namespace Manufactures.Domain.ValueObjects
     {
         public UnitDepartmentId(int value) : base(value)
         {
-
         }
     }
 }

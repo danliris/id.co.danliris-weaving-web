@@ -13,6 +13,7 @@ namespace Infrastructure.Domain.ReadModels
         }
 
         #region IAuditTrail ISoftDelete
+
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
@@ -29,6 +30,7 @@ namespace Infrastructure.Domain.ReadModels
         public DateTimeOffset? DeletedDate { get; set; }
 
         public string DeletedBy { get; set; }
-        #endregion
+
+        #endregion IAuditTrail ISoftDelete
     }
 }

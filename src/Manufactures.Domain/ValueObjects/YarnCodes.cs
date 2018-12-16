@@ -6,7 +6,6 @@ namespace Manufactures.Domain.ValueObjects
     {
         public YarnCodes(IEnumerable<string> collection) : base(collection)
         {
-
         }
     }
 }

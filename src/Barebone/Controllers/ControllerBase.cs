@@ -3,10 +3,10 @@
 
 using ExtCore.Data.Abstractions;
 using Infrastructure;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Barebone.Controllers
 {
@@ -36,7 +36,8 @@ namespace Barebone.Controllers
 
         protected IActionResult Ok<T>(T data, object info = null, string message = null)
         {
-            return base.Ok(new {
+            return base.Ok(new
+            {
                 apiVersion = this.WorkContext.ApiVersion,
                 success = true,
                 data,

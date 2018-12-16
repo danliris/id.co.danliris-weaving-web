@@ -1,6 +1,6 @@
-﻿using System.Threading;
+﻿using Manufactures.Domain.Events;
+using System.Threading;
 using System.Threading.Tasks;
-using Manufactures.Domain.Events;
 
 namespace Manufactures.EventHandlers
 {

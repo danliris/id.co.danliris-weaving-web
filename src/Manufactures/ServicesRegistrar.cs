@@ -11,7 +11,6 @@ namespace Manufactures
         public void Execute(IServiceCollection services, IServiceProvider sp)
         {
             //services.AddTransient<IManufactureOrderService, ManufactureOrderService>();
-
         }
     }
 }

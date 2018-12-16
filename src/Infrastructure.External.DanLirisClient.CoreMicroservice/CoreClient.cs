@@ -23,7 +23,7 @@ namespace Infrastructure.External.DanLirisClient.CoreMicroservice
 
         protected async Task<string> GetTokenAsync()
         {
-            var response = _http.PostAsync(_settings.TokenEndpoint, 
+            var response = _http.PostAsync(_settings.TokenEndpoint,
                 new StringContent(JsonConvert.SerializeObject(new { username = _settings.Username, password = _settings.Password }), Encoding.UTF8, "application/json"));
 
             dynamic tokenResult = new { };
@@ -35,7 +35,5 @@ namespace Infrastructure.External.DanLirisClient.CoreMicroservice
 
             return tokenResult.accessToken;
         }
-
-        
     }
 }

@@ -8,6 +8,5 @@ namespace Infrastructure.Domain.Commands
 
     public interface ICommandHandler<TComand, TResponse> : IRequestHandler<TComand, TResponse> where TComand : ICommand<TResponse>
     {
-
     }
 }

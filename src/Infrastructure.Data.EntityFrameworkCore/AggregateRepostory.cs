@@ -33,10 +33,8 @@ namespace Infrastructure.Data.EntityFrameworkCore
         {
             if (aggregate.IsTransient())
                 dbSet.Add(aggregate.GetReadModel());
-
             else if (aggregate.IsModified())
                 dbSet.Update(aggregate.GetReadModel());
-
             else if (aggregate.IsRemoved())
             {
                 var readModel = aggregate.GetReadModel();
@@ -51,7 +49,5 @@ namespace Infrastructure.Data.EntityFrameworkCore
 
             return Task.CompletedTask;
         }
-
-        
     }
 }

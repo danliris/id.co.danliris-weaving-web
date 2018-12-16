@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq.Expressions;
-
-namespace Infrastructure.Domain.Events
+﻿namespace Infrastructure.Domain.Events
 {
     public class OnEntityCreated<T> : IDomainEvent
     {

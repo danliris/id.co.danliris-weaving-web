@@ -1,9 +1,9 @@
 ﻿using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
+using Manufactures.Domain.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using Manufactures.Dtos;
 
 namespace Infrastructure.Mvc
 {
@@ -22,7 +22,7 @@ namespace Infrastructure.Mvc
 
             builder.AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<ManufactureOrderFormValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<PlaceOrderCommandValidator>();
             });
         }
     }

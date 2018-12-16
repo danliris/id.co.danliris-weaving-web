@@ -5,15 +5,14 @@ using System;
 
 namespace Manufactures.Domain.Commands
 {
-    public class PlaceOrderCommand : ICommand<ManufactureOrder>
+    public class UpdateOrderCommand : ICommand<ManufactureOrder>
     {
-        public DateTimeOffset OrderDate { get; set; }
+        public void SetId(Guid id) { Id = id; }
+        public Guid Id { get; private set; }
 
         public UnitDepartmentId UnitDepartmentId { get; set; }
 
         public YarnCodes YarnCodes { get; set; }
-
-        public GoodsCompositionId CompositionId { get; set; }
 
         public Blended Blended { get; set; }
 
@@ -22,12 +21,10 @@ namespace Manufactures.Domain.Commands
         public string UserId { get; set; }
     }
 
-    public class PlaceOrderCommandValidator : AbstractValidator<PlaceOrderCommand>
+    public class UpdateOrderCommandValidator : AbstractValidator<UpdateOrderCommand>
     {
-        public PlaceOrderCommandValidator()
+        public UpdateOrderCommandValidator()
         {
-            RuleFor(r => r.OrderDate).NotNull();
-
             RuleFor(r => r.MachineId).NotNull();
 
             RuleFor(r => r.UnitDepartmentId).NotNull();

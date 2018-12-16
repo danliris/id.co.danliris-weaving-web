@@ -1,6 +1,4 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.Commands;
-using Manufactures.Domain.Entities;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.ReadModels;
 using Manufactures.Domain.ValueObjects;
@@ -54,20 +52,7 @@ namespace Manufactures.Domain
             if (this.CompositionId != null)
                 ReadModel.CompositionId = Guid.Parse(CompositionId.Value);
 
-
             ReadModel.AddDomainEvent(new OnManufactureOrderPlaced(this.Identity));
-        }
-
-        public ManufactureOrder(Guid id, PlaceOrderCommand command) : this(id,
-            orderDate: command.OrderDate,
-            unitId: command.UnitDepartmentId,
-            yarnCodes: command.YarnCodes,
-            compositionId: command.CompositionId,
-            blended: command.Blended,
-            machineId: command.MachineId,
-            userId: command.UserId)
-        {
-
         }
 
         public ManufactureOrder(ManufactureOrderReadModel readModel) : base(readModel)
@@ -91,7 +76,7 @@ namespace Manufactures.Domain
         {
             Validator.ThrowIfNull(() => newUnit);
 
-            if(newUnit != UnitDepartmentId)
+            if (newUnit != UnitDepartmentId)
             {
                 UnitDepartmentId = newUnit;
                 ReadModel.UnitDepartmentId = UnitDepartmentId.Value;
@@ -101,6 +86,7 @@ namespace Manufactures.Domain
         }
 
         public YarnCodes YarnCodes { get; private set; }
+
         public void SetYarnCodes(YarnCodes newCodes)
         {
             Validator.ThrowIfNullOrEmpty(() => newCodes);
@@ -116,8 +102,8 @@ namespace Manufactures.Domain
 
         public GoodsCompositionId CompositionId { get; }
 
-
         public Blended Blended { get; private set; }
+
         public void SetBlended(Blended newBlended)
         {
             Validator.ThrowIfNullOrEmpty(() => newBlended);
@@ -132,6 +118,7 @@ namespace Manufactures.Domain
         }
 
         public MachineId MachineId { get; private set; }
+
         public void SetMachineId(MachineId newMachine)
         {
             Validator.ThrowIfNull(() => newMachine);
@@ -146,9 +133,10 @@ namespace Manufactures.Domain
         }
 
         public Status State { get; private set; }
+
         public void SetState(Status newState)
         {
-            if(newState != State)
+            if (newState != State)
             {
                 State = newState;
                 ReadModel.State = State;

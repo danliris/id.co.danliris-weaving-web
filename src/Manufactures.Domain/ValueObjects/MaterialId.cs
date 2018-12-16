@@ -18,5 +18,4 @@ namespace Manufactures.Domain.ValueObjects
         {
         }
     }
-
 }

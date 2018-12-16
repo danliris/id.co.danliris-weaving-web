@@ -18,9 +18,16 @@ namespace Manufactures.Domain.Commands
             _storage = storage;
         }
 
-        public async Task<ManufactureOrder> Handle(PlaceOrderCommand request, CancellationToken cancellationToken)
+        public async Task<ManufactureOrder> Handle(PlaceOrderCommand command, CancellationToken cancellationToken)
         {
-            var order = new ManufactureOrder(id: Guid.NewGuid(), command: request);
+            var order = new ManufactureOrder(id: Guid.NewGuid(),
+                orderDate: command.OrderDate,
+                unitId: command.UnitDepartmentId,
+                yarnCodes: command.YarnCodes,
+                compositionId: command.CompositionId,
+                blended: command.Blended,
+                machineId: command.MachineId,
+                userId: command.UserId);
 
             await _orderRepository.Update(order);
 
