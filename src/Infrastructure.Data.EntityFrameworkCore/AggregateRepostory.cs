@@ -2,6 +2,7 @@
 using Infrastructure.Domain;
 using Infrastructure.Domain.ReadModels;
 using Infrastructure.Domain.Repositories;
+using Moonlay;
 using Moonlay.Domain;
 using System;
 using System.Collections.Generic;
@@ -46,6 +47,8 @@ namespace Infrastructure.Data.EntityFrameworkCore
                 else
                     dbSet.Remove(readModel);
             }
+            else
+                Validator.ThrowWhenTrue(() => true, "Invalid action");
 
             return Task.CompletedTask;
         }

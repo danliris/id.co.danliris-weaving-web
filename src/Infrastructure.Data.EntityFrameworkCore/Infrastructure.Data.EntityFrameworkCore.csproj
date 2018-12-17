@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="EntityRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ExtCore.Data.EntityFramework" Version="3.3.0" />
     <PackageReference Include="Moonlay.ExtCore.EntityFrameworkCore" Version="1.0.5" />
   </ItemGroup>

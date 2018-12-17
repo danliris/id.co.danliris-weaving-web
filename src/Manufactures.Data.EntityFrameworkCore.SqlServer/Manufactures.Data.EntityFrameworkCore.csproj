@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Repositories\GoodsCompositionRepository.cs" />
+  </ItemGroup>
+
 
 
   <ItemGroup>

@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Orders\Repositories\IGoodsCompositionRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Moonlay.Domain" Version="1.0.6.2" />
     <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
   </ItemGroup>
