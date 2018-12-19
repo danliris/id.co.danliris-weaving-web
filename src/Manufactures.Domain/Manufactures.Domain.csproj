@@ -18,4 +18,9 @@
     <ProjectReference Include="..\Manufactures.Domain.Events\Manufactures.Domain.Events.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Orders\Entities\" />
+    <Folder Include="Shared\ValueObjects\" />
+  </ItemGroup>
+
 </Project>

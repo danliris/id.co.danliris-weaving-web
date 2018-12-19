@@ -47,8 +47,6 @@ namespace Infrastructure.Data.EntityFrameworkCore
                 else
                     dbSet.Remove(readModel);
             }
-            else
-                Validator.ThrowWhenTrue(() => true, "Invalid action");
 
             return Task.CompletedTask;
         }

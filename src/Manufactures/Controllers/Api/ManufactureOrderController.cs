@@ -26,7 +26,7 @@ namespace Manufactures.Controllers
             int page = 0, pageSize = 25;
             int totalRows = _manufactureOrderRepo.Query.Count();
 
-            var query = _manufactureOrderRepo.Query.Include(o => o.Composition).OrderByDescending(o => o.CreatedDate).Take(pageSize).Skip(page * pageSize);
+            var query = _manufactureOrderRepo.Query.OrderByDescending(o => o.CreatedDate).Take(pageSize).Skip(page * pageSize);
 
             var ordersDto = _manufactureOrderRepo.Find(query).Select(o => new ManufactureOrderDto(o)).ToArray();
 

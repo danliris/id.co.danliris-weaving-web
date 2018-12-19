@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.Orders.Entities;
 using System;
 
 namespace Manufactures.Domain.Orders.ReadModels
@@ -23,8 +22,6 @@ namespace Manufactures.Domain.Orders.ReadModels
         public string BlendedJson { get; internal set; }
 
         public string UserId { get; internal set; }
-
-        public virtual GoodsComposition Composition { get; internal set; }
 
         public Guid? CompositionId { get; internal set; }
     }

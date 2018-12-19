@@ -2,8 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Manufactures.Domain.Orders.Entities;
+using Manufactures.Domain.Goods.Entities;
 using Manufactures.Domain.Orders.ReadModels;
+using Manufactures.Domain.Products.ReadModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Data.EntityFrameworkCore
@@ -20,12 +21,20 @@ namespace Manufactures.Data.EntityFrameworkCore
                   etb.Property(p => p.BlendedJson).HasMaxLength(255);
                   etb.Property(p => p.YarnCodesJson).HasMaxLength(255);
 
-                  etb.HasOne(p => p.Composition).WithMany().HasForeignKey(k => k.CompositionId);
-
                   etb.ApplyAuditTrail();
                   etb.ApplySoftDelete();
               }
             );
+
+            modelBuilder.Entity<ProductGoodsReadModel>(etb => {
+                etb.ToTable("ProductGoods");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.Compositions).WithOne(p => p.Goods).HasForeignKey(k => k.GoodsId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
             modelBuilder.Entity<GoodsComposition>(etb =>
             {

@@ -2,7 +2,6 @@ using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
-using Manufactures.Domain.Orders.Entities;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;
 using Moq;
@@ -55,8 +54,8 @@ namespace Manufactures.Tests.CommandHandlers
 
             var yarnCodes = new YarnCodes(new List<string> { "sdfsdf", "sdfds" });
 
-            var construction = new GoodsComposition(identity: Guid.NewGuid(), materialIds: new MaterialIds(new List<MaterialId>()));
-            var compositionId = new GoodsCompositionId(construction.Identity.ToString());
+            //var construction = new GoodsComposition(identity: Guid.NewGuid(), materialIds: new MaterialIds(new List<MaterialId>()));
+            var compositionId = new GoodsCompositionId(Guid.NewGuid().ToString());
 
             var blended = new Blended(new List<float> { 10.5f, 20.23f });
 

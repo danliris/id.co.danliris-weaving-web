@@ -1,9 +1,10 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Orders.ValueObjects;
+using Manufactures.Domain.Products.ReadModels;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Manufactures.Domain.Orders.Entities
+namespace Manufactures.Domain.Goods.Entities
 {
     public class GoodsComposition : EntityBase<GoodsComposition>
     {
@@ -35,6 +36,10 @@ namespace Manufactures.Domain.Orders.Entities
             get => MaterialIds.Serialize();
             set => MaterialIds = value.Deserialize<MaterialIds>();
         }
+
+        public ProductGoodsReadModel Goods { get; set; }
+
+        public Guid GoodsId { get; set; }
 
         protected override GoodsComposition GetEntity()
         {

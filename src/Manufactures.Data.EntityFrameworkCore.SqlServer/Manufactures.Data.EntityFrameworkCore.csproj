@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Repositories\GoodsCompositionRepository.cs" />
+    <Compile Remove="Orders\Repositories\GoodsCompositionRepository.cs" />
   </ItemGroup>
 
 
