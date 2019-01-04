@@ -25,12 +25,10 @@ namespace Manufactures.Domain.Orders
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => orderNumber);
             Validator.ThrowIfNull(() => fabricSpecificationId);
-            Validator.ThrowIfNull(() => dateOrdered);
             Validator.ThrowIfNull(() => period);
             Validator.ThrowIfNull(() => composition);
             Validator.ThrowIfNullOrEmpty(() => warpOrigin);
             Validator.ThrowIfNullOrEmpty(() => weftOrigin);
-            Validator.ThrowIfNull(() => wholeGrade);
             Validator.ThrowIfNullOrEmpty(() => yarnType);
             Validator.ThrowIfNull(() => weavingUnit);
             Validator.ThrowIfNullOrEmpty(() => userId);
@@ -128,7 +126,6 @@ namespace Manufactures.Domain.Orders
 
         public void SetWholeGrade(int wholeGrade)
         {
-            Validator.ThrowIfNull(() => wholeGrade);
 
             if (wholeGrade != WholeGrade)
             {
@@ -141,7 +138,6 @@ namespace Manufactures.Domain.Orders
 
         public void SetYarnType(string yarnType)
         {
-            Validator.ThrowIfNull(() => yarnType);
 
             if (yarnType != YarnType)
             {
@@ -219,7 +215,7 @@ namespace Manufactures.Domain.Orders
 
         protected override WeavingOrderDocument GetEntity()
         {
-            throw new NotImplementedException();
+            return this;
         }
     }
 }
