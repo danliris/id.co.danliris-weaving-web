@@ -2,16 +2,17 @@
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
 {
+    [Produces("application/json")]
     [Route("weaving/orders")]
+    [EnableCors("AllowCors")]
     [ApiController]
     public class WeavingOrderDocumentController : ControllerApiBase
     {

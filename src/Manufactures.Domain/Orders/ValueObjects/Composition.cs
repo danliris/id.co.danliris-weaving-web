@@ -22,7 +22,9 @@ namespace Manufactures.Domain.Orders.ValueObjects
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            throw new NotImplementedException();
+            yield return CompositionOfPoly;
+            yield return CompositionOfCotton;
+            yield return OtherComposition;
         }
     }
 }

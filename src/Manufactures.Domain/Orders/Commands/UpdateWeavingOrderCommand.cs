@@ -11,7 +11,7 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public void SetId(Guid id) { Id = id; }
         public Guid Id { get; private set; }
-        public FabricSpecificationId FabricSpecificationId { get; set; }
+        public FabricSpecification FabricSpecification { get; set; }
         public string WarpOrigin { get; set; }
         public string WeftOrigin { get; set; }
         public int WholeGrade { get; set; }
@@ -26,7 +26,7 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public UpdateWeavingOrderCommandValidator()
         {
-            RuleFor(command => command.FabricSpecificationId).NotNull();
+            RuleFor(command => command.FabricSpecification).NotNull();
             RuleFor(command => command.WarpOrigin).NotNull();
             RuleFor(command => command.WeftOrigin).NotNull();
             RuleFor(command => command.WholeGrade).NotNull();

@@ -18,7 +18,8 @@ namespace Manufactures.Domain.Orders.ValueObjects
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            throw new NotImplementedException();
+            yield return Month;
+            yield return Year;
         }
     }
 }

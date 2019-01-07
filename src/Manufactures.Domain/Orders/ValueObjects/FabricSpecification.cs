@@ -5,21 +5,21 @@ using System.Text;
 
 namespace Manufactures.Domain.Orders.ValueObjects
 {
-    public class WeavingUnit : ValueObject
+    public class FabricSpecification : ValueObject
     {
-        public WeavingUnit(Guid id, string name)
+        public FabricSpecification(Guid id, string constructionNumber)
         {
             Id = id;
-            Name = name;
+            ConstructionNumber = constructionNumber;
         }
 
         public Guid Id { get; private set; }
-        public string Name { get; private set; }
+        public string ConstructionNumber { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
-            yield return Name;
+            yield return ConstructionNumber;
         }
     }
 }

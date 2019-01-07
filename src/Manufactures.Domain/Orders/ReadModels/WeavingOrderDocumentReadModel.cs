@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Orders.ReadModels
 {
@@ -17,7 +15,7 @@ namespace Manufactures.Domain.Orders.ReadModels
         public string YarnType { get; internal set; }
         public string Period { get; internal set; }
         public string Composition { get; internal set; }
-        public Guid? FabricSpecificationId { get; internal set; }
+        public string FabricSpecification { get; internal set; }
         public string WeavingUnit { get; internal set; }
         public string UserId { get; internal set; }
     }

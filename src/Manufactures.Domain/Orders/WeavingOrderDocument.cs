@@ -10,7 +10,7 @@ namespace Manufactures.Domain.Orders
     public class WeavingOrderDocument : AggregateRoot<WeavingOrderDocument, WeavingOrderDocumentReadModel>
     {
         public WeavingOrderDocument(Guid id, string orderNumber,
-                                    FabricSpecificationId fabricSpecificationId,
+                                    FabricSpecification fabricSpecification,
                                     DateTimeOffset dateOrdered,
                                     Period period,
                                     Composition composition,
@@ -24,7 +24,7 @@ namespace Manufactures.Domain.Orders
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => orderNumber);
-            Validator.ThrowIfNull(() => fabricSpecificationId);
+            Validator.ThrowIfNull(() => fabricSpecification);
             Validator.ThrowIfNull(() => period);
             Validator.ThrowIfNull(() => composition);
             Validator.ThrowIfNullOrEmpty(() => warpOrigin);
@@ -38,7 +38,7 @@ namespace Manufactures.Domain.Orders
             // Set Initial Value
             Identity = id;
             OrderNumber = orderNumber;
-            FabricSpecificationId = fabricSpecificationId;
+            FabricSpecification = fabricSpecification;
             DateOrdered = dateOrdered;
             WarpOrigin = warpOrigin;
             WeftOrigin = weftOrigin;
@@ -53,20 +53,16 @@ namespace Manufactures.Domain.Orders
             {
                 OrderNumber = this.OrderNumber,
                 DateOrdered = this.DateOrdered,
+                FabricSpecification = this.FabricSpecification.Serialize(),
                 WarpOrigin = this.WarpOrigin,
                 WeftOrigin = this.WeftOrigin,
                 WholeGrade = this.WholeGrade,
                 YarnType = this.YarnType,
                 Period = this.Period.Serialize(),
                 Composition = this.Composition.Serialize(),
-                WeavingUnit = this.Composition.Serialize(),
+                WeavingUnit = this.WeavingUnit.Serialize(),
                 UserId = this.UserId
             };
-
-            if(this.FabricSpecificationId != null)
-            {
-                ReadModel.FabricSpecificationId = FabricSpecificationId.Value;
-            }
 
             ReadModel.AddDomainEvent(new OnWeavingOrderPlaced(this.Identity));
         }
@@ -74,7 +70,7 @@ namespace Manufactures.Domain.Orders
         public WeavingOrderDocument(WeavingOrderDocumentReadModel readModel) : base(readModel)
         {
             this.OrderNumber = ReadModel.OrderNumber;
-            this.FabricSpecificationId = ReadModel.FabricSpecificationId.HasValue ? new FabricSpecificationId(ReadModel.FabricSpecificationId.Value) : null;
+            this.FabricSpecification = ReadModel.FabricSpecification.Deserialize<FabricSpecification>();
             this.DateOrdered = ReadModel.DateOrdered;
             this.WarpOrigin = ReadModel.WarpOrigin;
             this.WeftOrigin = ReadModel.WeftOrigin;
@@ -87,7 +83,7 @@ namespace Manufactures.Domain.Orders
         }
 
         public string OrderNumber { get; private set; }
-        public FabricSpecificationId FabricSpecificationId { get; private set; }
+        public FabricSpecification FabricSpecification { get; private set; }
         public DateTimeOffset DateOrdered { get; private set; }
         public string WarpOrigin { get; private set; }
         public string WeftOrigin { get; private set; }
@@ -148,14 +144,14 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetFabricSpecificationId(FabricSpecificationId fabricSpecificationId)
+        public void SetFabricSpecification(FabricSpecification fabricSpecification)
         {
-            Validator.ThrowIfNull(() => fabricSpecificationId);
+            Validator.ThrowIfNull(() => fabricSpecification);
 
-            if(fabricSpecificationId != FabricSpecificationId)
+            if(fabricSpecification != FabricSpecification)
             {
-                FabricSpecificationId = fabricSpecificationId;
-                ReadModel.FabricSpecificationId = FabricSpecificationId.Value;
+                FabricSpecification = fabricSpecification;
+                ReadModel.FabricSpecification = FabricSpecification.Serialize();
 
                 MarkModified();
             }

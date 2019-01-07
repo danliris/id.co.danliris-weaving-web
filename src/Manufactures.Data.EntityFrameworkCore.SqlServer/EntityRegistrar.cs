@@ -18,6 +18,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("WeavingOrderDocuments");
                 etb.HasKey(e => e.Identity);
 
+                etb.Property(p => p.FabricSpecification).HasMaxLength(255);
                 etb.Property(p => p.Period).HasMaxLength(255);
                 etb.Property(p => p.WeavingUnit).HasMaxLength(255);
                 etb.Property(p => p.Composition).HasMaxLength(255);

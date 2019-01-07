@@ -56,6 +56,15 @@ namespace DanLiris.Admin.Web
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Weaving API", Version = "v1" });
             });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors",
+                   builder => builder.AllowAnyOrigin()
+                                     .AllowAnyMethod()
+                                     .AllowAnyHeader()
+                                     .WithExposedHeaders("Content-Disposition", "api-version", "content-length", "content-md5", "content-type", "date", "request-id", "response-time"));
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

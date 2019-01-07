@@ -1,8 +1,6 @@
 ﻿using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos
 {
@@ -12,7 +10,7 @@ namespace Manufactures.Dtos
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
-            FabricSpecificationId = weavingOrderDocument.FabricSpecificationId;
+            FabricSpecification = weavingOrderDocument.FabricSpecification;
             DateOrdered = weavingOrderDocument.DateOrdered;
             WarpOrigin = weavingOrderDocument.WarpOrigin;
             WeftOrigin = weavingOrderDocument.WeftOrigin;
@@ -26,7 +24,7 @@ namespace Manufactures.Dtos
 
         public Guid Id { get; }
         public string OrderNumber { get; }
-        public FabricSpecificationId FabricSpecificationId { get; }
+        public FabricSpecification FabricSpecification { get; }
         public DateTimeOffset DateOrdered { get; }
         public string WarpOrigin { get; }
         public string WeftOrigin { get; }
