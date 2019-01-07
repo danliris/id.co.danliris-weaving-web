@@ -1,6 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,26 @@ namespace Manufactures.Controllers.Api
         public WeavingOrderDocumentController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
+        }
+        
+        private async Task<string> GetWeavingOrderNumber()
+        {
+            DateTimeOffset now = DateTimeOffset.Now;
+            var today = now.Year.ToString();
+            var month = now.Month.ToString();
+            var orderNumber = (_weavingOrderDocumentRepository.Query.Where(order => order.Period.Deserialize<Period>().Year.Contains(today)).Count() + 1).ToString();
+            orderNumber = orderNumber.PadLeft(4,'0') + "/" + month.PadLeft(2, '0') + "-" + today;
+
+            return await Task.FromResult(orderNumber);
+        }
+
+        [HttpGet]
+        [Route("request-order-number")]
+        public async Task<IActionResult> GetOrderNumber()
+        {
+            var orderNumber = await this.GetWeavingOrderNumber();
+
+            return Ok(orderNumber);
         }
 
         [HttpGet]
@@ -60,6 +81,8 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PlaceWeavingOrderCommand command)
         {
+            command.OrderNumber = await this.GetWeavingOrderNumber();
+
             var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
