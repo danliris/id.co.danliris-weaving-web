@@ -24,7 +24,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
         {
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
                 orderNumber: command.OrderNumber,
-                fabricSpecification: command.FabricSpecification,
+                fabricConstruction: command.FabricConstruction,
                 dateOrdered: command.DateOrdered, period: command.Period,
                 composition: command.Composition, warpOrigin: command.WarpOrigin,
                 weftOrigin: command.WeftOrigin, wholeGrade: command.WholeGrade,

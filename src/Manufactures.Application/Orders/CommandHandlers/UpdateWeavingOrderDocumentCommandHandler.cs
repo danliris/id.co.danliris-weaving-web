@@ -34,7 +34,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + command.Id));
             }
 
-            order.SetFabricSpecification(command.FabricSpecification);
+            order.SetFabricConstruction(command.FabricConstruction);
             order.SetWarpOrigin(command.WarpOrigin);
             order.SetWeftOrigin(command.WeftOrigin);
             order.SetWholeGrade(command.WholeGrade);

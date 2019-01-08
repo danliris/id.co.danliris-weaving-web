@@ -10,7 +10,7 @@ namespace Manufactures.Dtos
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
-            FabricSpecification = weavingOrderDocument.FabricSpecification;
+            FabricConstruction = weavingOrderDocument.FabricConstruction;
             DateOrdered = weavingOrderDocument.DateOrdered;
             WarpOrigin = weavingOrderDocument.WarpOrigin;
             WeftOrigin = weavingOrderDocument.WeftOrigin;
@@ -24,7 +24,7 @@ namespace Manufactures.Dtos
 
         public Guid Id { get; }
         public string OrderNumber { get; }
-        public FabricSpecification FabricSpecification { get; }
+        public FabricConstruction FabricConstruction { get; }
         public DateTimeOffset DateOrdered { get; }
         public string WarpOrigin { get; }
         public string WeftOrigin { get; }

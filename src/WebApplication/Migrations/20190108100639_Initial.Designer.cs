@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20190107041507_update_weavingorderdocument_fabricspecificationdetails")]
-    partial class update_weavingorderdocument_fabricspecificationdetails
+    [Migration("20190108100639_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -133,7 +133,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<string>("FabricSpecification")
+                    b.Property<string>("FabricConstruction")
                         .HasMaxLength(255);
 
                     b.Property<string>("ModifiedBy")
