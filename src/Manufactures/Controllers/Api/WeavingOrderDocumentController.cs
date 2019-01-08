@@ -24,22 +24,11 @@ namespace Manufactures.Controllers.Api
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
         
-        private async Task<string> GetWeavingOrderNumber()
-        {
-            DateTimeOffset now = DateTimeOffset.Now;
-            var today = now.Year.ToString();
-            var month = now.Month.ToString();
-            var orderNumber = (_weavingOrderDocumentRepository.Query.Where(order => order.Period.Deserialize<Period>().Year.Contains(today)).Count() + 1).ToString();
-            orderNumber = orderNumber.PadLeft(4,'0') + "/" + month.PadLeft(2, '0') + "-" + today;
-
-            return await Task.FromResult(orderNumber);
-        }
-
         [HttpGet]
         [Route("request-order-number")]
         public async Task<IActionResult> GetOrderNumber()
         {
-            var orderNumber = await this.GetWeavingOrderNumber();
+            var orderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
 
             return Ok(orderNumber);
         }
@@ -81,7 +70,7 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PlaceWeavingOrderCommand command)
         {
-            command.OrderNumber = await this.GetWeavingOrderNumber();
+            command.OrderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
 
             var order = await Mediator.Send(command);
 
