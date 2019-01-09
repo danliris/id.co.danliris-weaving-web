@@ -131,7 +131,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<string>("FabricConstruction")
+                    b.Property<string>("FabricConstructionDocument")
                         .HasMaxLength(255);
 
                     b.Property<string>("ModifiedBy")

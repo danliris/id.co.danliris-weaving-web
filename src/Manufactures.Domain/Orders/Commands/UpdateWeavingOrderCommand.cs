@@ -2,8 +2,6 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Orders.Commands
 {
@@ -11,7 +9,7 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public void SetId(Guid id) { Id = id; }
         public Guid Id { get; private set; }
-        public FabricConstruction FabricConstruction { get; set; }
+        public FabricConstructionDocument FabricConstructionDocument { get; set; }
         public string WarpOrigin { get; set; }
         public string WeftOrigin { get; set; }
         public int WholeGrade { get; set; }
@@ -26,7 +24,7 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public UpdateWeavingOrderCommandValidator()
         {
-            RuleFor(command => command.FabricConstruction).NotNull();
+            RuleFor(command => command.FabricConstructionDocument).NotNull();
             RuleFor(command => command.WarpOrigin).NotNull();
             RuleFor(command => command.WeftOrigin).NotNull();
             RuleFor(command => command.WholeGrade).NotNull();

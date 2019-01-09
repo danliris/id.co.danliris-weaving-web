@@ -75,7 +75,7 @@ namespace DanLiris.Admin.Web.Migrations
                     YarnType = table.Column<string>(nullable: true),
                     Period = table.Column<string>(maxLength: 255, nullable: true),
                     Composition = table.Column<string>(maxLength: 255, nullable: true),
-                    FabricConstruction = table.Column<string>(maxLength: 255, nullable: true),
+                    FabricConstructionDocument = table.Column<string>(maxLength: 255, nullable: true),
                     WeavingUnit = table.Column<string>(maxLength: 255, nullable: true),
                     UserId = table.Column<string>(nullable: true)
                 },

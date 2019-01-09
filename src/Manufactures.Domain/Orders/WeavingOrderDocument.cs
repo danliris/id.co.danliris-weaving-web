@@ -10,7 +10,7 @@ namespace Manufactures.Domain.Orders
     public class WeavingOrderDocument : AggregateRoot<WeavingOrderDocument, WeavingOrderDocumentReadModel>
     {
         public WeavingOrderDocument(Guid id, string orderNumber,
-                                    FabricConstruction fabricConstruction,
+                                    FabricConstructionDocument fabricConstructionDocument,
                                     DateTimeOffset dateOrdered,
                                     Period period,
                                     Composition composition,
@@ -24,7 +24,7 @@ namespace Manufactures.Domain.Orders
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => orderNumber);
-            Validator.ThrowIfNull(() => fabricConstruction);
+            Validator.ThrowIfNull(() => fabricConstructionDocument);
             Validator.ThrowIfNull(() => period);
             Validator.ThrowIfNull(() => composition);
             Validator.ThrowIfNullOrEmpty(() => warpOrigin);
@@ -38,7 +38,7 @@ namespace Manufactures.Domain.Orders
             // Set Initial Value
             Identity = id;
             OrderNumber = orderNumber;
-            FabricConstruction = fabricConstruction;
+            FabricConstructionDocument = fabricConstructionDocument;
             DateOrdered = dateOrdered;
             WarpOrigin = warpOrigin;
             WeftOrigin = weftOrigin;
@@ -53,7 +53,7 @@ namespace Manufactures.Domain.Orders
             {
                 OrderNumber = this.OrderNumber,
                 DateOrdered = this.DateOrdered,
-                FabricConstruction = this.FabricConstruction.Serialize(),
+                FabricConstructionDocument = this.FabricConstructionDocument.Serialize(),
                 WarpOrigin = this.WarpOrigin,
                 WeftOrigin = this.WeftOrigin,
                 WholeGrade = this.WholeGrade,
@@ -70,7 +70,7 @@ namespace Manufactures.Domain.Orders
         public WeavingOrderDocument(WeavingOrderDocumentReadModel readModel) : base(readModel)
         {
             this.OrderNumber = ReadModel.OrderNumber;
-            this.FabricConstruction = ReadModel.FabricConstruction.Deserialize<FabricConstruction>();
+            this.FabricConstructionDocument = ReadModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
             this.DateOrdered = ReadModel.DateOrdered;
             this.WarpOrigin = ReadModel.WarpOrigin;
             this.WeftOrigin = ReadModel.WeftOrigin;
@@ -83,7 +83,7 @@ namespace Manufactures.Domain.Orders
         }
 
         public string OrderNumber { get; private set; }
-        public FabricConstruction FabricConstruction { get; private set; }
+        public FabricConstructionDocument FabricConstructionDocument { get; private set; }
         public DateTimeOffset DateOrdered { get; private set; }
         public string WarpOrigin { get; private set; }
         public string WeftOrigin { get; private set; }
@@ -144,14 +144,14 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetFabricConstruction(FabricConstruction fabricConstruction)
+        public void SetFabricConstructionDocument(FabricConstructionDocument fabricConstructionDocument)
         {
-            Validator.ThrowIfNull(() => fabricConstruction);
+            Validator.ThrowIfNull(() => fabricConstructionDocument);
 
-            if(fabricConstruction != FabricConstruction)
+            if(fabricConstructionDocument != FabricConstructionDocument)
             {
-                FabricConstruction = fabricConstruction;
-                ReadModel.FabricConstruction = FabricConstruction.Serialize();
+                FabricConstructionDocument = fabricConstructionDocument;
+                ReadModel.FabricConstructionDocument = FabricConstructionDocument.Serialize();
 
                 MarkModified();
             }

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Manufactures.Domain.Orders.ValueObjects
 {
-    public class FabricConstruction : ValueObject
+    public class FabricConstructionDocument : ValueObject
     {
-        public FabricConstruction(Guid id, string constructionNumber)
+        public FabricConstructionDocument(Guid id, string constructionNumber)
         {
             Id = id;
             ConstructionNumber = constructionNumber;

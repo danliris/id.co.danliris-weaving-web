@@ -15,7 +15,7 @@ namespace Manufactures.Domain.Orders.ReadModels
         public string YarnType { get; internal set; }
         public string Period { get; internal set; }
         public string Composition { get; internal set; }
-        public string FabricConstruction { get; internal set; }
+        public string FabricConstructionDocument { get; internal set; }
         public string WeavingUnit { get; internal set; }
         public string UserId { get; internal set; }
     }
