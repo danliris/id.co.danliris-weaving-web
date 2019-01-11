@@ -19,7 +19,6 @@ namespace Manufactures.Dtos
             Period = weavingOrderDocument.Period;
             Composition = weavingOrderDocument.Composition;
             WeavingUnit = weavingOrderDocument.WeavingUnit;
-            UserId = weavingOrderDocument.UserId;
         }
 
         public Guid Id { get; }
@@ -33,6 +32,5 @@ namespace Manufactures.Dtos
         public Period Period { get; }
         public Composition Composition { get; }
         public WeavingUnit WeavingUnit { get; }
-        public string UserId { get; }
     }
 }

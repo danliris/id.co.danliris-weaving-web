@@ -42,7 +42,6 @@ namespace Manufactures.Application.Orders.CommandHandlers
             order.SetPeriod(command.Period);
             order.SetComposition(command.Composition);
             order.SetWeavingUnit(command.WeavingUnit);
-            order.SetUserId(command.UserId);
 
             await _weavingOrderDocumentRepository.Update(order);
 

@@ -148,8 +148,6 @@ namespace DanLiris.Admin.Web.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("UserId");
-
                     b.Property<string>("WarpOrigin");
 
                     b.Property<string>("WeavingUnit")

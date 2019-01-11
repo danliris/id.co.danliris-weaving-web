@@ -18,8 +18,7 @@ namespace Manufactures.Domain.Orders
                                     string weftOrigin,
                                     int wholeGrade,
                                     string yarnType,
-                                    WeavingUnit weavingUnit,
-                                    string userId
+                                    WeavingUnit weavingUnit
                                     ) : base(id)
         {
             // Validate Properties
@@ -31,7 +30,6 @@ namespace Manufactures.Domain.Orders
             Validator.ThrowIfNullOrEmpty(() => weftOrigin);
             Validator.ThrowIfNullOrEmpty(() => yarnType);
             Validator.ThrowIfNull(() => weavingUnit);
-            Validator.ThrowIfNullOrEmpty(() => userId);
 
             this.MarkTransient();
 
@@ -47,7 +45,6 @@ namespace Manufactures.Domain.Orders
             Period = period;
             Composition = composition;
             WeavingUnit = weavingUnit;
-            UserId = userId;
 
             ReadModel = new WeavingOrderDocumentReadModel(Identity)
             {
@@ -60,8 +57,8 @@ namespace Manufactures.Domain.Orders
                 YarnType = this.YarnType,
                 Period = this.Period.Serialize(),
                 Composition = this.Composition.Serialize(),
-                WeavingUnit = this.WeavingUnit.Serialize(),
-                UserId = this.UserId
+                WeavingUnit = this.WeavingUnit.Serialize()
+
             };
 
             ReadModel.AddDomainEvent(new OnWeavingOrderPlaced(this.Identity));
@@ -79,7 +76,6 @@ namespace Manufactures.Domain.Orders
             this.Period = ReadModel.Period.Deserialize<Period>();
             this.Composition = ReadModel.Composition.Deserialize<Composition>();
             this.WeavingUnit = ReadModel.WeavingUnit.Deserialize<WeavingUnit>();
-            this.UserId = ReadModel.UserId;
         }
 
         public string OrderNumber { get; private set; }
@@ -92,7 +88,6 @@ namespace Manufactures.Domain.Orders
         public Period Period { get; private set; }
         public Composition Composition { get; private set; }
         public WeavingUnit WeavingUnit { get; private set; }
-        public string UserId { get; private set; }
         
         public void SetWarpOrigin(string warpOrigin)
         {
@@ -191,19 +186,6 @@ namespace Manufactures.Domain.Orders
             {
                 WeavingUnit = weavingUnit;
                 ReadModel.WeavingUnit = WeavingUnit.Serialize();
-
-                MarkModified();
-            }
-        }
-
-        public void SetUserId(string userId)
-        {
-            Validator.ThrowIfNull(() => userId);
-
-            if(userId != UserId)
-            {
-                UserId = userId;
-                ReadModel.UserId = UserId;
 
                 MarkModified();
             }

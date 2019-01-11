@@ -1,10 +1,10 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Dtos;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,13 +13,13 @@ namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
     [Route("weaving/orders")]
-    [EnableCors("AllowCors")]
     [ApiController]
+    [Authorize]
     public class WeavingOrderDocumentController : ControllerApiBase
     {
         private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
 
-        public WeavingOrderDocumentController(IServiceProvider serviceProvider) : base(serviceProvider)
+        public WeavingOrderDocumentController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
@@ -34,19 +34,18 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
-            int page = 0, pageSize = 25;
             int totalRows = _weavingOrderDocumentRepository.Query.Count();
-            var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(pageSize).Skip(page * pageSize);
-            var weavingOrderDto = _weavingOrderDocumentRepository.Find(query).Select(item => new WeavingOrderDocumentDto(item)).ToArray();
+            var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
+            var weavingOrderDto = _weavingOrderDocumentRepository.Find(query).Select(item => new ListWeavingOrderDocumentDto(item)).ToArray();
 
             await Task.Yield();
 
             return Ok(weavingOrderDto, info: new
             {
                 page,
-                pageSize,
+                size,
                 count = totalRows
             });
         }
@@ -80,7 +79,7 @@ namespace Manufactures.Controllers.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]UpdateWeavingOrderCommand command)
         {
-            if(!Guid.TryParse(id, out Guid orderId))
+            if (!Guid.TryParse(id, out Guid orderId))
             {
                 return NotFound();
             }
@@ -94,7 +93,7 @@ namespace Manufactures.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            if(!Guid.TryParse(id, out Guid orderId))
+            if (!Guid.TryParse(id, out Guid orderId))
             {
                 return NotFound();
             }

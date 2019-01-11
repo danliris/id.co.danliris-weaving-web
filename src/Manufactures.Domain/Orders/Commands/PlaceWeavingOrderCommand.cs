@@ -17,7 +17,6 @@ namespace Manufactures.Domain.Orders.Commands
         public Period Period { get; set; }
         public Composition Composition { get; set; }
         public WeavingUnit WeavingUnit { get; set; }
-        public string UserId { get; set; }
     }
 
     public class WeavingOrderCommandValidator : AbstractValidator<PlaceWeavingOrderCommand>
@@ -34,7 +33,6 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.Period).NotNull();
             RuleFor(command => command.Composition).NotNull();
             RuleFor(command => command.WeavingUnit).NotNull();
-            RuleFor(command => command.UserId).NotNull();
         }
     }
 }

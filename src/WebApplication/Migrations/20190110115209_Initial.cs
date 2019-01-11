@@ -76,8 +76,7 @@ namespace DanLiris.Admin.Web.Migrations
                     Period = table.Column<string>(maxLength: 255, nullable: true),
                     Composition = table.Column<string>(maxLength: 255, nullable: true),
                     FabricConstructionDocument = table.Column<string>(maxLength: 255, nullable: true),
-                    WeavingUnit = table.Column<string>(maxLength: 255, nullable: true),
-                    UserId = table.Column<string>(nullable: true)
+                    WeavingUnit = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {

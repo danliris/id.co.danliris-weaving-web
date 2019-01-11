@@ -17,6 +17,5 @@ namespace Manufactures.Domain.Orders.ReadModels
         public string Composition { get; internal set; }
         public string FabricConstructionDocument { get; internal set; }
         public string WeavingUnit { get; internal set; }
-        public string UserId { get; internal set; }
     }
 }

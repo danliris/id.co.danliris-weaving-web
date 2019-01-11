@@ -28,8 +28,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
                 dateOrdered: command.DateOrdered, period: command.Period,
                 composition: command.Composition, warpOrigin: command.WarpOrigin,
                 weftOrigin: command.WeftOrigin, wholeGrade: command.WholeGrade,
-                yarnType: command.YarnType, weavingUnit: command.WeavingUnit,
-                userId: command.UserId);
+                yarnType: command.YarnType, weavingUnit: command.WeavingUnit);
 
             await _weavingOrderDocumentRepository.Update(order);
 
