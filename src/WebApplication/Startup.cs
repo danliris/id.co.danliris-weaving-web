@@ -5,6 +5,7 @@ using DanLiris.Admin.Web.Schedulers;
 using ExtCore.Data.EntityFramework;
 using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
+using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +13,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace DanLiris.Admin.Web
 {
@@ -33,6 +39,21 @@ namespace DanLiris.Admin.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var secret = configuration.GetValue<string>("SECRET") ?? configuration["SECRET"];
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
+
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false,
+                        ValidateIssuer = false,
+                        ValidateLifetime = false,
+                        IssuerSigningKey = key
+                    };
+                });
+
             services.Configure<StorageContextOptions>(options =>
                 {
                     options.ConnectionString = this.configuration.GetConnectionString("Default");
@@ -55,11 +76,28 @@ namespace DanLiris.Admin.Web
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Weaving API", Version = "v1" });
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", Enumerable.Empty<string>() },
+                });
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowCors",
+                   builder => builder.AllowAnyOrigin()
+                                     .AllowAnyMethod()
+                                     .AllowAnyHeader()
+                                     .WithExposedHeaders("Content-Disposition", "api-version", "content-length", "content-md5", "content-type", "date", "request-id", "response-time"));
             });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+            app.UseCors("AllowCors");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

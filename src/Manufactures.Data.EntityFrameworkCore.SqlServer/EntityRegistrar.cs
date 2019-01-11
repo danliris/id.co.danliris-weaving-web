@@ -13,6 +13,20 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<WeavingOrderDocumentReadModel>(etb =>
+            {
+                etb.ToTable("WeavingOrderDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.FabricConstructionDocument).HasMaxLength(255);
+                etb.Property(p => p.Period).HasMaxLength(255);
+                etb.Property(p => p.WeavingUnit).HasMaxLength(255);
+                etb.Property(p => p.Composition).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<ManufactureOrderReadModel>(etb =>
               {
                   etb.ToTable("Weaving_Orders");
