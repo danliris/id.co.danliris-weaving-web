@@ -3,10 +3,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    public partial class InitialWeaving : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "MaterialTypes",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    Code = table.Column<string>(maxLength: 255, nullable: true),
+                    Name = table.Column<string>(maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MaterialTypes", x => x.Identity);
+                });
+
             migrationBuilder.CreateTable(
                 name: "WeavingOrderDocuments",
                 columns: table => new
@@ -39,6 +60,9 @@ namespace DanLiris.Admin.Web.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "MaterialTypes");
+
             migrationBuilder.DropTable(
                 name: "WeavingOrderDocuments");
         }
