@@ -34,6 +34,7 @@ namespace Manufactures.Application.Materials.CommandHandlers
 
             materialType.SetCode(request.Code);
             materialType.SetName(request.Name);
+            materialType.SetDescription(request.Description);
 
             await _materialTypeRepository.Update(materialType);
 

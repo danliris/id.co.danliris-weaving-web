@@ -8,6 +8,8 @@ namespace Manufactures.Domain.Materials.Commands
     {
         public string Code { get; set; }
         public string Name { get; set; }
+
+        public string Description { get; set; }
     }
 
     public class PlaceMaterialTypeCommandValidator : AbstractValidator<PlaceMaterialTypeCommand>
@@ -16,6 +18,7 @@ namespace Manufactures.Domain.Materials.Commands
         {
             RuleFor(command => command.Code).NotNull();
             RuleFor(command => command.Name).NotNull();
+            RuleFor(command => command.Description).NotNull();
         }
     }
 }

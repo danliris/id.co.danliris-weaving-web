@@ -22,7 +22,7 @@ namespace Manufactures.Application.Materials.CommandHandlers
 
         public async Task<MaterialType> Handle(PlaceMaterialTypeCommand request, CancellationToken cancellationToken)
         {
-            var materialType = new MaterialType(id: Guid.NewGuid(), code: request.Code, name: request.Name);
+            var materialType = new MaterialType(id: Guid.NewGuid(), code: request.Code, name: request.Name, description: request.Description);
 
             await _materialTypeRepository.Update(materialType);
 

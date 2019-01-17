@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialWeaving : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -21,7 +21,8 @@ namespace DanLiris.Admin.Web.Migrations
                     DeletedDate = table.Column<DateTimeOffset>(nullable: true),
                     DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
                     Code = table.Column<string>(maxLength: 255, nullable: true),
-                    Name = table.Column<string>(maxLength: 255, nullable: true)
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    Description = table.Column<string>(maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {

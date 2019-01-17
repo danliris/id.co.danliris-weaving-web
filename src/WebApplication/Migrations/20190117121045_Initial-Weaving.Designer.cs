@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20190116131840_Initial")]
-    partial class Initial
+    [Migration("20190117121045_Initial-Weaving")]
+    partial class InitialWeaving
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,6 +41,9 @@ namespace DanLiris.Admin.Web.Migrations
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(255);
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);

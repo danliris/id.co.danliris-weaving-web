@@ -19,6 +19,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
                 etb.Property(p => p.Code).HasMaxLength(255);
                 etb.Property(p => p.Name).HasMaxLength(255);
+                etb.Property(p => p.Description).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

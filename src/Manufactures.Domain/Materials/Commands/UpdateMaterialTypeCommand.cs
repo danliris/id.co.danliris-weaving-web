@@ -10,6 +10,7 @@ namespace Manufactures.Domain.Materials.Commands
         public Guid Id { get; private set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 
     public class UpdateMaterialTypeCommadValidator : AbstractValidator<UpdateMaterialTypeCommand>
@@ -18,6 +19,7 @@ namespace Manufactures.Domain.Materials.Commands
         {
             RuleFor(command => command.Code).NotNull();
             RuleFor(command => command.Name).NotNull();
+            RuleFor(command => command.Description).NotNull();
         }
     }
 }

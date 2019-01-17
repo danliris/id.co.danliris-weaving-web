@@ -8,21 +8,24 @@ namespace Manufactures.Domain.Materials
 {
     public class MaterialType : AggregateRoot<MaterialType, MaterialTypeReadModel>
     {
-        public MaterialType(Guid id, string code, string name) : base(id)
+        public MaterialType(Guid id, string code, string name, string description) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
             Validator.ThrowIfNullOrEmpty(() => name);
+            Validator.ThrowIfNullOrEmpty(() => description);
 
             this.MarkTransient();
 
             Code = code;
             Name = name;
+            Description = description;
 
             ReadModel = new MaterialTypeReadModel(Identity)
             {
                 Code = this.Code,
-                Name = this.Name
+                Name = this.Name,
+                Description = this.Description
             };
 
             ReadModel.AddDomainEvent(new OnMaterialTypePlace(this.Identity));
@@ -32,10 +35,12 @@ namespace Manufactures.Domain.Materials
         {
             this.Code = readModel.Code;
             this.Name = readModel.Name;
+            this.Description = readModel.Description;
         }
 
         public string Code { get; private set; }
         public string Name { get; private set; }
+        public string Description { get; private set; }
 
         public void SetCode(string code)
         {
@@ -58,6 +63,19 @@ namespace Manufactures.Domain.Materials
             {
                 Name = name;
                 ReadModel.Name = Name;
+
+                MarkModified();
+            }
+        }
+
+        public void SetDescription(string description)
+        {
+            Validator.ThrowIfNullOrEmpty(() => description);
+
+            if (description != Name)
+            {
+                Description = description;
+                ReadModel.Description = Description;
 
                 MarkModified();
             }

@@ -40,6 +40,9 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(255);
+
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
