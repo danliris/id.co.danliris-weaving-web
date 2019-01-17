@@ -58,7 +58,6 @@ namespace Manufactures.Domain.Orders
                 Period = this.Period.Serialize(),
                 Composition = this.Composition.Serialize(),
                 WeavingUnit = this.WeavingUnit.Serialize()
-
             };
 
             ReadModel.AddDomainEvent(new OnWeavingOrderPlaced(this.Identity));
