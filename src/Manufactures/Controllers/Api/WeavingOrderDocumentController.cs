@@ -38,11 +38,11 @@ namespace Manufactures.Controllers.Api
         {
             int totalRows = _weavingOrderDocumentRepository.Query.Count();
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var weavingOrderDto = _weavingOrderDocumentRepository.Find(query).Select(item => new ListWeavingOrderDocumentDto(item)).ToArray();
+            var weavingOrderDocuments = _weavingOrderDocumentRepository.Find(query).Select(item => new ListWeavingOrderDocumentDto(item)).ToArray();
 
             await Task.Yield();
 
-            return Ok(weavingOrderDto, info: new
+            return Ok(weavingOrderDocuments, info: new
             {
                 page,
                 size,

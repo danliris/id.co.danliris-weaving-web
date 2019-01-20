@@ -4,9 +4,7 @@ using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Data.EntityFrameworkCore.Orders.Repositories

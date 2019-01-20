@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
+using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,23 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Constructions");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.ConstructionNumber).HasMaxLength(255);
+                etb.Property(p => p.WovenType).HasMaxLength(255);
+                etb.Property(p => p.WarpType).HasMaxLength(255);
+                etb.Property(p => p.WeftType).HasMaxLength(255);
+
+                etb.HasMany(e => e.Warps).WithOne(p => p.ConstructionDocument)
+                                         .HasForeignKey(k => k.ConstructionDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<MaterialTypeReadModel>(etb =>
             {
                 etb.ToTable("MaterialTypes");
