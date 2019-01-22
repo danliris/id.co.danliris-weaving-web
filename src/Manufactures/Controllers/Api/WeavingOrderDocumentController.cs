@@ -2,10 +2,12 @@
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
+using Manufactures.Helpers.PdfTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,7 +50,13 @@ namespace Manufactures.Controllers.Api
             }
             else
             {
-                return Ok(orderDto);
+                OrderProductionReportPDFTemplate PdfTemplate = new OrderProductionReportPDFTemplate();
+                MemoryStream stream = PdfTemplate.GenerateSOPReportPdf(orderDto);
+
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = $"Laporan SOP Periode {month} Tahun {year}.pdf"
+                };
             }
         }
 
