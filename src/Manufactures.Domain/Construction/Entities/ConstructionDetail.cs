@@ -8,16 +8,29 @@ namespace Manufactures.Domain.Construction.Entities
 {
     public class ConstructionDetail : EntityBase<ConstructionDetail>
     {
+        public ConstructionDetail(Guid id) : base(id)
+        {
+
+        }
+
         public ConstructionDetail(Guid id, 
                                   double quantity,
                                   string information,
-                                  Yarn yarn) : base(id)
+                                  Yarn yarn,
+                                  bool isNew) : base(id)
         {
             // Validate Value
             Validator.ThrowIfNull(() => quantity);
             Validator.ThrowIfNullOrEmpty(() => information);
-
-            this.MarkTransient();
+            
+            if(isNew)
+            {
+                this.MarkTransient();
+            } else
+            {
+                this.MarkModified();
+            }
+            
 
             // Set Value
             Quantity = quantity;

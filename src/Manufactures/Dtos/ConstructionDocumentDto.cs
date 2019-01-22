@@ -1,5 +1,4 @@
 ﻿using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -32,7 +31,7 @@ namespace Manufactures.Dtos
         public string WeftType { get; }
         public double TotalYarn { get; }
         public MaterialType MaterialType { get; }
-        public IReadOnlyCollection<ConstructionDetail> Warps { get; }
-        public IReadOnlyCollection<ConstructionDetail> Wefts { get; }
+        public IReadOnlyCollection<Warp> Warps { get; }
+        public IReadOnlyCollection<Weft> Wefts { get; }
     }
 }

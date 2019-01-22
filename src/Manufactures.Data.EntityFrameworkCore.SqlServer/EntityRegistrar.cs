@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
+using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
@@ -13,9 +14,31 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<WeftEntity>(etb =>
+            {
+                etb.ToTable("Weaving_ConstructionDetailWefts");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Yarn).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<WarpEntity>(etb =>
+            {
+                etb.ToTable("Weaving_ConstructionDetailWarps");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Yarn).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
             {
-                etb.ToTable("Constructions");
+                etb.ToTable("Weaving_Constructions");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.ConstructionNumber).HasMaxLength(255);
@@ -24,7 +47,10 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.WeftType).HasMaxLength(255);
 
                 etb.HasMany(e => e.Warps).WithOne(p => p.ConstructionDocument)
-                                         .HasForeignKey(k => k.ConstructionDocumentId);
+                                         .HasForeignKey(f => f.ConstructionDocumentId);
+
+                etb.HasMany(e => e.Wefts).WithOne(p => p.ConstructionDocument)
+                                         .HasForeignKey(f => f.ConstructionDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -32,7 +58,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<MaterialTypeReadModel>(etb =>
             {
-                etb.ToTable("MaterialTypes");
+                etb.ToTable("Weaving_MaterialTypes");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.Code).HasMaxLength(255);
@@ -45,7 +71,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<WeavingOrderDocumentReadModel>(etb =>
             {
-                etb.ToTable("WeavingOrderDocuments");
+                etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.FabricConstructionDocument).HasMaxLength(255);
