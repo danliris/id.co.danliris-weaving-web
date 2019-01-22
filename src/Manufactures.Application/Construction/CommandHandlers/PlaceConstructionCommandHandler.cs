@@ -1,12 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Data.EntityFrameworkCore.Construction.Repositories;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.Construction.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -34,10 +33,10 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 warpType: request.WarpType,
                                                                 weftType: request.WeftType,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialType: request.MaterialType);
+                                                                materialType: request.MaterialType,
+                                                                warps: request.Warps,
+                                                                wefts:request.Wefts);
 
-            constructionDocument.SetWarps(request.Warps);
-            constructionDocument.SetWefts(request.Wefts);
             await _constructionDocumentRepository.Update(constructionDocument);
             _storage.Save();
 

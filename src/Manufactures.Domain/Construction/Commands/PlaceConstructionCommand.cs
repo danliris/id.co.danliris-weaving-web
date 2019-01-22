@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ValueObjects;
 using System.Collections.Generic;
+using Warp = Manufactures.Domain.Construction.ValueObjects.Warp;
+using Weft = Manufactures.Domain.Construction.ValueObjects.Weft;
 
 namespace Manufactures.Domain.Construction.Commands
 {
@@ -17,8 +18,8 @@ namespace Manufactures.Domain.Construction.Commands
         public string WeftType { get; set; }
         public double TotalYarn { get; set; }
         public MaterialType MaterialType { get; set; }
-        public List<ConstructionDetail> Warps { get; set; }
-        public List<ConstructionDetail> Wefts { get; set; }
+        public List<Warp> Warps { get; set; }
+        public List<Weft> Wefts { get; set; }
     }
 
     public class PlaceConstructionCommandValidator : AbstractValidator<PlaceConstructionCommand>
@@ -33,7 +34,6 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WarpType).NotNull();
             RuleFor(command => command.WeftType).NotNull();
             RuleFor(command => command.TotalYarn).NotNull();
-            RuleFor(command => command.MaterialType).NotNull();
             RuleFor(command => command.Warps).NotNull();
             RuleFor(command => command.Wefts).NotNull();
         }
