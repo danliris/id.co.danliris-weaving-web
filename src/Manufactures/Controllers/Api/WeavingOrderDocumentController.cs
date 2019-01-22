@@ -33,6 +33,25 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
+        [HttpGet("order-report/{month}/{year}")]
+        public async Task<IActionResult> Get(string month, string year)
+        {
+            var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+            var orderDto = _weavingOrderDocumentRepository.Find(query)
+                                                          .Select(item => new WeavingOrderDocumentDto(item))
+                                                          .Where(entity => entity.Period.Month.Contains(month) && entity.Period.Year.Contains(year)).ToArray();
+            await Task.Yield();
+
+            if (orderDto == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(orderDto);
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
