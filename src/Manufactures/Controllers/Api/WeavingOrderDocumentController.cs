@@ -42,7 +42,7 @@ namespace Manufactures.Controllers.Api
                                                           .Where(entity => entity.Period.Month.Contains(month) && entity.Period.Year.Contains(year)).ToArray();
             await Task.Yield();
 
-            if (orderDto == null)
+            if (orderDto.Count() == 0)
             {
                 return NotFound();
             }
