@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace DanLiris.Admin.Web.Migrations
 {
-    public partial class InitialWeavingVersion11 : Migration
+    public partial class Initialweaving11 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -87,7 +87,7 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Weaving_ConstructionDetailWarps",
+                name: "Weaving_ConstructionDetails",
                 columns: table => new
                 {
                     Identity = table.Column<Guid>(nullable: false),
@@ -102,42 +102,14 @@ namespace DanLiris.Admin.Web.Migrations
                     Quantity = table.Column<double>(nullable: false),
                     Information = table.Column<string>(nullable: true),
                     Yarn = table.Column<string>(maxLength: 255, nullable: true),
+                    Detail = table.Column<string>(nullable: true),
                     ConstructionDocumentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weaving_ConstructionDetailWarps", x => x.Identity);
+                    table.PrimaryKey("PK_Weaving_ConstructionDetails", x => x.Identity);
                     table.ForeignKey(
-                        name: "FK_Weaving_ConstructionDetailWarps_Weaving_Constructions_ConstructionDocumentId",
-                        column: x => x.ConstructionDocumentId,
-                        principalTable: "Weaving_Constructions",
-                        principalColumn: "Identity",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Weaving_ConstructionDetailWefts",
-                columns: table => new
-                {
-                    Identity = table.Column<Guid>(nullable: false),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
-                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
-                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
-                    Deleted = table.Column<bool>(nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
-                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
-                    Quantity = table.Column<double>(nullable: false),
-                    Information = table.Column<string>(nullable: true),
-                    Yarn = table.Column<string>(maxLength: 255, nullable: true),
-                    ConstructionDocumentId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Weaving_ConstructionDetailWefts", x => x.Identity);
-                    table.ForeignKey(
-                        name: "FK_Weaving_ConstructionDetailWefts_Weaving_Constructions_ConstructionDocumentId",
+                        name: "FK_Weaving_ConstructionDetails_Weaving_Constructions_ConstructionDocumentId",
                         column: x => x.ConstructionDocumentId,
                         principalTable: "Weaving_Constructions",
                         principalColumn: "Identity",
@@ -145,23 +117,15 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weaving_ConstructionDetailWarps_ConstructionDocumentId",
-                table: "Weaving_ConstructionDetailWarps",
-                column: "ConstructionDocumentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Weaving_ConstructionDetailWefts_ConstructionDocumentId",
-                table: "Weaving_ConstructionDetailWefts",
+                name: "IX_Weaving_ConstructionDetails_ConstructionDocumentId",
+                table: "Weaving_ConstructionDetails",
                 column: "ConstructionDocumentId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Weaving_ConstructionDetailWarps");
-
-            migrationBuilder.DropTable(
-                name: "Weaving_ConstructionDetailWefts");
+                name: "Weaving_ConstructionDetails");
 
             migrationBuilder.DropTable(
                 name: "Weaving_MaterialTypes");
