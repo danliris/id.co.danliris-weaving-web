@@ -21,7 +21,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialType materialType, 
+                                    MaterialTypeId materialType, 
                                     List<ConstructionDetail> constructionDetails) : base(id)
         {
             // Validate Properties
@@ -76,7 +76,7 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialType = new MaterialType(ReadModel.MaterialType);
+            this.MaterialType = new MaterialTypeId(ReadModel.MaterialType);
             this.ConstructionDetails = readModel.ConstructionDetails;
         }
 
@@ -89,7 +89,7 @@ namespace Manufactures.Domain.Construction
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
         [NotMapped]
-        public MaterialType MaterialType { get; private set; }
+        public MaterialTypeId MaterialType { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
         public void SetConstructionDetail(IReadOnlyCollection<ConstructionDetail> constructionDetails)
@@ -100,7 +100,7 @@ namespace Manufactures.Domain.Construction
             MarkModified();
         }
 
-        public void SetMaterialType(MaterialType materialType)
+        public void SetMaterialType(MaterialTypeId materialType)
         {
             Validator.ThrowIfNull(() => materialType);
 
