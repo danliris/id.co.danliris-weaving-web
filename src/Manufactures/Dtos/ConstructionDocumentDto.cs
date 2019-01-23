@@ -59,7 +59,7 @@ namespace Manufactures.Dtos
         public string WarpType { get; }
         public string WeftType { get; }
         public double TotalYarn { get; }
-        public MaterialType MaterialType { get; }
+        public MaterialTypeId MaterialType { get; }
         public IReadOnlyCollection<Warp> Warps { get; }
         public IReadOnlyCollection<Weft> Wefts { get; }
     }
