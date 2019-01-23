@@ -55,7 +55,7 @@ namespace Manufactures.Controllers.Api
 
                 return new FileStreamResult(stream, "application/pdf")
                 {
-                    FileDownloadName = $"Laporan SOP Periode {month} Tahun {year}.pdf"
+                    FileDownloadName = $"Order Production Report {month} {year}.pdf"
                 };
             }
         }
