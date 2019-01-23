@@ -14,14 +14,15 @@ namespace Manufactures.Domain.Construction
     {
         public ConstructionDocument(Guid id,
                                     string constructionNumber,
-                                    int amountOfWarp,
-                                    int amountOfWeft,
-                                    int width,
                                     string wofenType,
                                     string warpType,
                                     string weftType,
+                                    int amountOfWarp,
+                                    int amountOfWeft,
+                                    int width,
                                     double totalYarn,
-                                    MaterialType materialType, List<Warp> warps, List<Weft> wefts) : base(id)
+                                    MaterialType materialType, 
+                                    List<ConstructionDetail> constructionDetails) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -42,25 +43,7 @@ namespace Manufactures.Domain.Construction
             WeftType = weftType;
             TotalYarn = totalYarn;
             MaterialType = materialType;
-            Warps = warps;
-            Wefts = wefts;
-
-            var warpsObj = new List<WarpEntity>();
-            var weftsObj = new List<WeftEntity>();
-
-            foreach (var warp in warps)
-            {
-                var warpObj = new WarpEntity(warp.Id, warp.Quantity, warp.Information, warp.Yarn, true);
-
-                warpsObj.Add(warpObj);
-            }
-
-            foreach (var weft in Wefts)
-            {
-                var weftObj = new WeftEntity(weft.Id, weft.Quantity, weft.Information, weft.Yarn, true);
-
-                weftsObj.Add(weftObj);
-            }
+            ConstructionDetails = constructionDetails;
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {
@@ -72,8 +55,7 @@ namespace Manufactures.Domain.Construction
                 WarpType = this.WarpType,
                 WeftType = this.WeftType,
                 TotalYarn = this.TotalYarn,
-                Warps = warpsObj,
-                Wefts = weftsObj
+                ConstructionDetails = (List<ConstructionDetail>)this.ConstructionDetails
             };
 
             if (this.MaterialType != null)
@@ -95,26 +77,7 @@ namespace Manufactures.Domain.Construction
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
             this.MaterialType = new MaterialType(ReadModel.MaterialType);
-
-            var warps = new List<Warp>();
-            var wefts = new List<Weft>();
-
-            foreach(var warp in readModel.Warps)
-            {
-                var warpObj = new Warp(warp.Identity, warp.Quantity, warp.Information, warp.Yarn.Deserialize<Yarn>());
-
-                warps.Add(warpObj);
-            }
-
-            foreach(var weft in readModel.Wefts)
-            {
-                var weftObj = new Weft(weft.Identity, weft.Quantity, weft.Information, weft.Yarn.Deserialize<Yarn>());
-
-                wefts.Add(weftObj);
-            }
-
-            this.Warps = warps;
-            this.Wefts = wefts;
+            this.ConstructionDetails = readModel.ConstructionDetails;
         }
 
         public string ConstructionNumber { get; private set; }
@@ -127,8 +90,15 @@ namespace Manufactures.Domain.Construction
         public double TotalYarn { get; private set; }
         [NotMapped]
         public MaterialType MaterialType { get; private set; }
-        public IReadOnlyCollection<Warp> Warps { get; private set; }
-        public IReadOnlyCollection<Weft> Wefts { get; private set; }
+        public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
+
+        public void SetConstructionDetail(IReadOnlyCollection<ConstructionDetail> constructionDetails)
+        {
+            ConstructionDetails = constructionDetails;
+            ReadModel.ConstructionDetails = (List<ConstructionDetail>)ConstructionDetails;
+
+            MarkModified();
+        }
 
         public void SetMaterialType(MaterialType materialType)
         {
@@ -141,40 +111,6 @@ namespace Manufactures.Domain.Construction
 
                 MarkModified();
             }
-        }
-
-        public void SetWarps(List<Warp> warps)
-        {
-            Validator.ThrowIfNull(() => warps);
-
-            Warps = warps;
-            var warpEntitys = new List<WarpEntity>();
-
-            foreach (var warp in Warps)
-            {
-                var warpObj = new WarpEntity(warp.Id, warp.Quantity, warp.Information, warp.Yarn, false);
-                warpEntitys.Add(warpObj);
-            }
-
-            ReadModel.Warps = warpEntitys;
-            MarkModified();
-        }
-
-        public void SetWefts(List<Weft> wefts)
-        {
-            Validator.ThrowIfNull(() => wefts);
-
-            Wefts = wefts;
-
-            var weftEntitys = new List<WeftEntity>();
-
-            foreach (var warp in Warps)
-            {
-                var warpObj = new WeftEntity(warp.Id, warp.Quantity, warp.Information, warp.Yarn, false);
-                weftEntitys.Add(warpObj);
-            }
-            ReadModel.Wefts = weftEntitys;
-            MarkModified();
         }
 
         public void SetConstructionNumber(string constructionNumber)

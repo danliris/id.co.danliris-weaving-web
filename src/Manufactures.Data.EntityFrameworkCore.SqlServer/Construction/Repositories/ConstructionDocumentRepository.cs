@@ -1,9 +1,6 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Manufactures.Domain.Construction.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.Construction.Repositories

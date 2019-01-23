@@ -14,22 +14,11 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<WeftEntity>(etb =>
+            modelBuilder.Entity<ConstructionDetail>(etb =>
             {
-                etb.ToTable("Weaving_ConstructionDetailWefts");
+                etb.ToTable("Weaving_ConstructionDetails");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.Yarn).HasMaxLength(255);
-
-                etb.ApplyAuditTrail();
-                etb.ApplySoftDelete();
-            });
-
-            modelBuilder.Entity<WarpEntity>(etb =>
-            {
-                etb.ToTable("Weaving_ConstructionDetailWarps");
-                etb.HasKey(e => e.Identity);
-
+                
                 etb.Property(e => e.Yarn).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();
@@ -46,11 +35,9 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.WarpType).HasMaxLength(255);
                 etb.Property(p => p.WeftType).HasMaxLength(255);
 
-                etb.HasMany(e => e.Warps).WithOne(p => p.ConstructionDocument)
-                                         .HasForeignKey(f => f.ConstructionDocumentId);
-
-                etb.HasMany(e => e.Wefts).WithOne(p => p.ConstructionDocument)
-                                         .HasForeignKey(f => f.ConstructionDocumentId);
+                etb.HasMany(e => e.ConstructionDetails)
+                                  .WithOne(p => p.ConstructionDocument)
+                                  .HasForeignKey(f => f.ConstructionDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

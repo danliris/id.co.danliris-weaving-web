@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,7 +33,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Construction Document: " + request.Id));
             }
-
+            
             constructionDocument.SetConstructionNumber(request.ConstructionNumber);
             constructionDocument.SetAmountOfWarp(request.AmountOfWarp);
             constructionDocument.SetAmountOfWeft(request.AmountOfWeft);
@@ -42,8 +43,43 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocument.SetWeftType(request.WeftType);
             constructionDocument.SetTotalYarn(request.TotalYarn);
             constructionDocument.SetMaterialType(request.MaterialType);
-            constructionDocument.SetWarps(request.Warps);
-            constructionDocument.SetWefts(request.Wefts);
+
+            var constructionDetailsObj = new List<ConstructionDetail>();
+
+            // Update Detail
+            foreach (var detail in request.Warps)
+            {
+                foreach (var constructionDetail in constructionDocument.ConstructionDetails)
+                {
+                    if (detail.Id == constructionDetail.Identity)
+                    {
+                        constructionDetail.SetQuantity(detail.Quantity);
+                        constructionDetail.SetInformation(detail.Information);
+                        constructionDetail.SetYarn(detail.Yarn.Serialize());
+                        constructionDetail.SetDetail(detail.Detail);
+
+                        constructionDetailsObj.Add(constructionDetail);
+                    }
+                }
+            }
+
+            foreach (var detail in request.Wefts)
+            {
+                foreach (var constructionDetail in constructionDocument.ConstructionDetails)
+                {
+                    if (detail.Id == constructionDetail.Identity)
+                    {
+                        constructionDetail.SetQuantity(detail.Quantity);
+                        constructionDetail.SetInformation(detail.Information);
+                        constructionDetail.SetYarn(detail.Yarn.Serialize());
+                        constructionDetail.SetDetail(detail.Detail);
+
+                        constructionDetailsObj.Add(constructionDetail);
+                    }
+                }
+            }
+
+            constructionDocument.SetConstructionDetail(constructionDocument.ConstructionDetails);
 
             await _constructionDocumentRepository.Update(constructionDocument);
             _storage.Save();

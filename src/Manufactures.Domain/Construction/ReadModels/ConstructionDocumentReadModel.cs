@@ -7,11 +7,7 @@ namespace Manufactures.Domain.Construction.ReadModels
 {
     public class ConstructionDocumentReadModel : ReadModelBase
     {
-        public ConstructionDocumentReadModel(Guid identity) : base (identity)
-        {
-            Warps = new List<WarpEntity>();
-            Wefts = new List<WeftEntity>();
-        }
+        public ConstructionDocumentReadModel(Guid identity) : base(identity) { }
 
         public string ConstructionNumber { get; internal set; }
         public int AmountOfWarp { get; internal set; }
@@ -22,7 +18,6 @@ namespace Manufactures.Domain.Construction.ReadModels
         public string WeftType { get; internal set; }
         public double TotalYarn { get; internal set; }
         public Guid MaterialType { get; internal set; }
-        public List<WarpEntity> Warps { get; internal set; }
-        public List<WeftEntity> Wefts { get; internal set; }
+        public List<ConstructionDetail> ConstructionDetails { get; set; }
     }
 }

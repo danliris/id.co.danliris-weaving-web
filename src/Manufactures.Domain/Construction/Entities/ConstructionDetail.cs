@@ -8,41 +8,46 @@ namespace Manufactures.Domain.Construction.Entities
 {
     public class ConstructionDetail : EntityBase<ConstructionDetail>
     {
-        public ConstructionDetail(Guid id) : base(id)
-        {
+        public ConstructionDetail(Guid identity) : base(identity) { }
 
-        }
-
-        public ConstructionDetail(Guid id, 
+        public ConstructionDetail(Guid identity, 
                                   double quantity,
                                   string information,
-                                  Yarn yarn,
-                                  bool isNew) : base(id)
+                                  string yarn,
+                                  string detail) : base(identity)
         {
             // Validate Value
-            Validator.ThrowIfNull(() => quantity);
             Validator.ThrowIfNullOrEmpty(() => information);
-            
-            if(isNew)
-            {
-                this.MarkTransient();
-            } else
-            {
-                this.MarkModified();
-            }
-            
+            Validator.ThrowIfNullOrEmpty(() => detail);
+
+            this.MarkTransient();
 
             // Set Value
+            Identity = identity;
             Quantity = quantity;
             Information = information;
-            Yarn = yarn.Serialize();
+            Yarn = yarn;
+            Detail = detail;
         }
 
         public double Quantity { get; private set; }
         public string Information { get; private set; }
         public string Yarn { get; private set; }
+        public string Detail { get; private set; }
         public ConstructionDocumentReadModel ConstructionDocument { get; set; }
         public Guid ConstructionDocumentId { get; set; }
+
+        public void SetDetail (string detail)
+        {
+            Validator.ThrowIfNullOrEmpty(() => detail);
+
+            if(detail != Detail)
+            {
+                Detail = detail;
+
+                this.MarkModified();
+            }
+        }
 
         public void SetQuantity(double quantity)
         {
@@ -68,13 +73,13 @@ namespace Manufactures.Domain.Construction.Entities
             }
         }
 
-        public void SetYarn(Yarn yarn)
+        public void SetYarn(string yarn)
         {
             Validator.ThrowIfNull(() => yarn);
 
-            if(yarn.Serialize() != Yarn)
+            if(yarn != Yarn)
             {
-                Yarn = yarn.Serialize();
+                Yarn = yarn;
 
                 this.MarkModified();
             }

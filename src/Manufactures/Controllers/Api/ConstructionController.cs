@@ -1,9 +1,11 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using System;
 using System.Linq;
@@ -32,9 +34,7 @@ namespace Manufactures.Controllers.Api
                                                        .OrderByDescending(item => item.CreatedDate)
                                                        .Take(size)
                                                        .Skip(page * size);
-            var constructionDocuments = _constructionDocumentRepository.Find(query)
-                                                                       .Select(item => new ConstructionDocumentDto(item))
-                                                                       .ToArray();
+            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails)).Select(item => new ConstructionDocumentDto(item)).ToArray();
 
             await Task.Yield();
 

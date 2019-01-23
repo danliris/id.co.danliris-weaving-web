@@ -2,8 +2,6 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.ValueObjects;
 using System.Collections.Generic;
-using Warp = Manufactures.Domain.Construction.ValueObjects.Warp;
-using Weft = Manufactures.Domain.Construction.ValueObjects.Weft;
 
 namespace Manufactures.Domain.Construction.Commands
 {

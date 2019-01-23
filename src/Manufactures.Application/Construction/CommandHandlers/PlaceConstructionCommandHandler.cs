@@ -2,8 +2,8 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
+using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Domain.Construction.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -24,6 +24,20 @@ namespace Manufactures.Application.Construction.CommandHandlers
 
         public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, CancellationToken cancellationToken)
         {
+            List<ConstructionDetail> constructionDetails = new List<ConstructionDetail>();
+
+            foreach(var detail in request.Warps)
+            {
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                constructionDetails.Add(constructionDetail);
+            }
+
+            foreach(var detail in request.Wefts)
+            {
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                constructionDetails.Add(constructionDetail);
+            }
+
             var constructionDocument = new ConstructionDocument(id: Guid.NewGuid(),
                                                                 constructionNumber: request.ConstructionNumber,
                                                                 amountOfWarp: request.AmountOfWarp,
@@ -34,8 +48,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 weftType: request.WeftType,
                                                                 totalYarn: request.TotalYarn,
                                                                 materialType: request.MaterialType,
-                                                                warps: request.Warps,
-                                                                wefts:request.Wefts);
+                                                                constructionDetails: constructionDetails);
 
             await _constructionDocumentRepository.Update(constructionDocument);
             _storage.Save();
