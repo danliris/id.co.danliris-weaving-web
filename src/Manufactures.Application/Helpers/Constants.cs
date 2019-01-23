@@ -6,7 +6,7 @@ namespace Manufactures.Application.Helpers
 {
     public class Constants
     {
-        public static string WARP = "PAKAN";
-        public static string WEFT = "LUSI";
+        public static string WARP = "LUSI";
+        public static string WEFT = "PAKAN";
     }
 }
