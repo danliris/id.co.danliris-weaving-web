@@ -30,7 +30,6 @@ namespace Manufactures.Domain.Orders.Commands
                 userId: command.UserId);
 
             await _orderRepository.Update(order);
-
             _storage.Save();
 
             return order;

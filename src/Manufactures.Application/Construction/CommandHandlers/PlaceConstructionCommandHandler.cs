@@ -1,0 +1,59 @@
+﻿using ExtCore.Data.Abstractions;
+using Infrastructure.Domain.Commands;
+using Manufactures.Domain.Construction;
+using Manufactures.Domain.Construction.Commands;
+using Manufactures.Domain.Construction.Entities;
+using Manufactures.Domain.Construction.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Manufactures.Application.Construction.CommandHandlers
+{
+    public class PlaceConstructionCommandHandler : ICommandHandler<PlaceConstructionCommand, ConstructionDocument>
+    {
+        private readonly IStorage _storage;
+        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+
+        public PlaceConstructionCommandHandler(IStorage storage)
+        {
+            _storage = storage;
+            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+        }
+
+        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, CancellationToken cancellationToken)
+        {
+            List<ConstructionDetail> constructionDetails = new List<ConstructionDetail>();
+
+            foreach(var detail in request.Warps)
+            {
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                constructionDetails.Add(constructionDetail);
+            }
+
+            foreach(var detail in request.Wefts)
+            {
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                constructionDetails.Add(constructionDetail);
+            }
+
+            var constructionDocument = new ConstructionDocument(id: Guid.NewGuid(),
+                                                                constructionNumber: request.ConstructionNumber,
+                                                                amountOfWarp: request.AmountOfWarp,
+                                                                amountOfWeft: request.AmountOfWeft,
+                                                                width: request.Width,
+                                                                wofenType: request.WovenType,
+                                                                warpType: request.WarpType,
+                                                                weftType: request.WeftType,
+                                                                totalYarn: request.TotalYarn,
+                                                                materialType: request.MaterialType,
+                                                                constructionDetails: constructionDetails);
+
+            await _constructionDocumentRepository.Update(constructionDocument);
+            _storage.Save();
+
+            return constructionDocument;
+        }
+    }
+}

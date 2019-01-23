@@ -19,6 +19,105 @@ namespace DanLiris.Admin.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("Manufactures.Domain.Construction.Entities.ConstructionDetail", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("ConstructionDocumentId");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("Detail");
+
+                    b.Property<string>("Information");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<double>("Quantity");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<string>("Yarn")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Identity");
+
+                    b.HasIndex("ConstructionDocumentId");
+
+                    b.ToTable("Weaving_ConstructionDetails");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.Construction.ReadModels.ConstructionDocumentReadModel", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AmountOfWarp");
+
+                    b.Property<int>("AmountOfWeft");
+
+                    b.Property<string>("ConstructionNumber")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<Guid>("MaterialType");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<double>("TotalYarn");
+
+                    b.Property<string>("WarpType")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("WeftType")
+                        .HasMaxLength(255);
+
+                    b.Property<int>("Width");
+
+                    b.Property<string>("WovenType")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Identity");
+
+                    b.ToTable("Weaving_Constructions");
+                });
+
             modelBuilder.Entity("Manufactures.Domain.Materials.ReadModels.MaterialTypeReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
@@ -57,7 +156,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("MaterialTypes");
+                    b.ToTable("Weaving_MaterialTypes");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Orders.ReadModels.WeavingOrderDocumentReadModel", b =>
@@ -113,7 +212,15 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("WeavingOrderDocuments");
+                    b.ToTable("Weaving_OrderDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.Construction.Entities.ConstructionDetail", b =>
+                {
+                    b.HasOne("Manufactures.Domain.Construction.ReadModels.ConstructionDocumentReadModel", "ConstructionDocument")
+                        .WithMany("ConstructionDetails")
+                        .HasForeignKey("ConstructionDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
