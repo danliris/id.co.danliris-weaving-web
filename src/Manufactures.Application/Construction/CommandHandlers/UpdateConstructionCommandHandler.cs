@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
@@ -25,38 +26,44 @@ namespace Manufactures.Application.Construction.CommandHandlers
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, CancellationToken cancellationToken)
+        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, 
+                                                       CancellationToken cancellationToken)
         {
-            var constructionDocument = _constructionDocumentRepository.Find(Entity => Entity.Identity == request.Id).FirstOrDefault();
+            var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity == request.Id)
+                                                                       .FirstOrDefault();
 
-            if (constructionDocument == null)
+            if (constructionDocuments == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Construction Document: " + request.Id));
             }
             
-            constructionDocument.SetConstructionNumber(request.ConstructionNumber);
-            constructionDocument.SetAmountOfWarp(request.AmountOfWarp);
-            constructionDocument.SetAmountOfWeft(request.AmountOfWeft);
-            constructionDocument.SetWidth(request.Width);
-            constructionDocument.SetWovenType(request.WovenType);
-            constructionDocument.SetWarpType(request.WarpType);
-            constructionDocument.SetWeftType(request.WeftType);
-            constructionDocument.SetTotalYarn(request.TotalYarn);
-            constructionDocument.SetMaterialType(request.MaterialType);
+            constructionDocuments.SetConstructionNumber(request.ConstructionNumber);
+            constructionDocuments.SetAmountOfWarp(request.AmountOfWarp);
+            constructionDocuments.SetAmountOfWeft(request.AmountOfWeft);
+            constructionDocuments.SetWidth(request.Width);
+            constructionDocuments.SetWovenType(request.WovenType);
+            constructionDocuments.SetWarpType(request.WarpType);
+            constructionDocuments.SetWeftType(request.WeftType);
+            constructionDocuments.SetTotalYarn(request.TotalYarn);
+            constructionDocuments.SetMaterialType(request.MaterialType);
 
             var constructionDetailsObj = new List<ConstructionDetail>();
 
             // Update Detail
             foreach (var detail in request.Warps)
             {
-                foreach (var constructionDetail in constructionDocument.ConstructionDetails)
+                foreach (var constructionDetail in constructionDocuments.ConstructionDetails)
                 {
                     if (detail.Id == constructionDetail.Identity)
                     {
                         constructionDetail.SetQuantity(detail.Quantity);
                         constructionDetail.SetInformation(detail.Information);
                         constructionDetail.SetYarn(detail.Yarn.Serialize());
-                        constructionDetail.SetDetail(detail.Detail);
+
+                        if(!detail.Detail.Contains(Constants.WARP))
+                        {
+                            constructionDetail.SetDetail(Constants.WARP);
+                        }
 
                         constructionDetailsObj.Add(constructionDetail);
                     }
@@ -65,26 +72,30 @@ namespace Manufactures.Application.Construction.CommandHandlers
 
             foreach (var detail in request.Wefts)
             {
-                foreach (var constructionDetail in constructionDocument.ConstructionDetails)
+                foreach (var constructionDetail in constructionDocuments.ConstructionDetails)
                 {
                     if (detail.Id == constructionDetail.Identity)
                     {
                         constructionDetail.SetQuantity(detail.Quantity);
                         constructionDetail.SetInformation(detail.Information);
                         constructionDetail.SetYarn(detail.Yarn.Serialize());
-                        constructionDetail.SetDetail(detail.Detail);
+
+                        if (!detail.Detail.Contains(Constants.WEFT))
+                        {
+                            constructionDetail.SetDetail(Constants.WEFT);
+                        }
 
                         constructionDetailsObj.Add(constructionDetail);
                     }
                 }
             }
+            
+            constructionDocuments.SetConstructionDetail(constructionDetailsObj);
 
-            constructionDocument.SetConstructionDetail(constructionDocument.ConstructionDetails);
-
-            await _constructionDocumentRepository.Update(constructionDocument);
+            await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 
-            return constructionDocument;
+            return constructionDocuments;
         }
     }
 }

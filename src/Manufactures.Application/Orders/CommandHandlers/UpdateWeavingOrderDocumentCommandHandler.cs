@@ -22,9 +22,11 @@ namespace Manufactures.Application.Orders.CommandHandlers
         }
 
 
-        public async Task<WeavingOrderDocument> Handle(UpdateWeavingOrderCommand command, CancellationToken cancellationToken)
+        public async Task<WeavingOrderDocument> Handle(UpdateWeavingOrderCommand command, 
+                                                       CancellationToken cancellationToken)
         {
-            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id).FirstOrDefault();
+            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id)
+                                                       .FirstOrDefault();
 
             if(order == null)
             {

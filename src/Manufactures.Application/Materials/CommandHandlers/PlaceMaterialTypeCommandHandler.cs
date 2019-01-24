@@ -9,7 +9,7 @@ using Manufactures.Domain.Materials.Repositories;
 
 namespace Manufactures.Application.Materials.CommandHandlers
 {
-    public class PlaceMaterialTypeCommandHandler : ICommandHandler<PlaceMaterialTypeCommand, MaterialType>
+    public class PlaceMaterialTypeCommandHandler : ICommandHandler<PlaceMaterialTypeCommand, MaterialTypeDocument>
     {
         private readonly IStorage _storage;
         private readonly IMaterialTypeRepository _materialTypeRepository;
@@ -20,9 +20,13 @@ namespace Manufactures.Application.Materials.CommandHandlers
             _materialTypeRepository = storage.GetRepository<IMaterialTypeRepository>();
         }
 
-        public async Task<MaterialType> Handle(PlaceMaterialTypeCommand request, CancellationToken cancellationToken)
+        public async Task<MaterialTypeDocument> Handle(PlaceMaterialTypeCommand request, 
+                                               CancellationToken cancellationToken)
         {
-            var materialType = new MaterialType(id: Guid.NewGuid(), code: request.Code, name: request.Name, description: request.Description);
+            var materialType = new MaterialTypeDocument(id: Guid.NewGuid(), 
+                                                code: request.Code, 
+                                                name: request.Name, 
+                                                description: request.Description);
 
             await _materialTypeRepository.Update(materialType);
 

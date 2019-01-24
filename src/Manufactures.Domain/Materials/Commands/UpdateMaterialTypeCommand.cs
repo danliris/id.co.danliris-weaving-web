@@ -4,7 +4,7 @@ using System;
 
 namespace Manufactures.Domain.Materials.Commands
 {
-    public class UpdateMaterialTypeCommand : ICommand<MaterialType>
+    public class UpdateMaterialTypeCommand : ICommand<MaterialTypeDocument>
     {
         public void SetId(Guid id) { Id = id; }
         public Guid Id { get; private set; }

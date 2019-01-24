@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Materials.CommandHandlers
 {
-    public class RemoveMaterialTypeCommandHandler : ICommandHandler<RemoveMaterialTypeCommand, MaterialType>
+    public class RemoveMaterialTypeCommandHandler : ICommandHandler<RemoveMaterialTypeCommand, MaterialTypeDocument>
     {
         private readonly IStorage _storage;
         private readonly IMaterialTypeRepository _materialTypeRepository;
@@ -21,9 +21,11 @@ namespace Manufactures.Application.Materials.CommandHandlers
             _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
         }
 
-        public async Task<MaterialType> Handle(RemoveMaterialTypeCommand request, CancellationToken cancellationToken)
+        public async Task<MaterialTypeDocument> Handle(RemoveMaterialTypeCommand request, 
+                                               CancellationToken cancellationToken)
         {
-            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id).FirstOrDefault();
+            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id)
+                                                      .FirstOrDefault();
 
             if (materialType == null)
             {

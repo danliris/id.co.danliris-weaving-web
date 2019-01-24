@@ -7,7 +7,8 @@ namespace Manufactures.Domain.Orders.ValueObjects
 {
     public class FabricConstructionDocument : ValueObject
     {
-        public FabricConstructionDocument(Guid id, string constructionNumber)
+        public FabricConstructionDocument(Guid id, 
+                                          string constructionNumber)
         {
             Id = id;
             ConstructionNumber = constructionNumber;

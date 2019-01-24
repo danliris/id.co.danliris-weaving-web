@@ -18,8 +18,7 @@ namespace Manufactures.Domain.Orders
                                     string weftOrigin,
                                     int wholeGrade,
                                     string yarnType,
-                                    WeavingUnit weavingUnit
-                                    ) : base(id)
+                                    WeavingUnit weavingUnit) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => orderNumber);

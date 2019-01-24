@@ -4,7 +4,7 @@ using Manufactures.Domain.Materials;
 
 namespace Manufactures.Domain.Materials.Commands
 {
-    public class PlaceMaterialTypeCommand : ICommand<MaterialType>
+    public class PlaceMaterialTypeCommand : ICommand<MaterialTypeDocument>
     {
         public string Code { get; set; }
         public string Name { get; set; }
