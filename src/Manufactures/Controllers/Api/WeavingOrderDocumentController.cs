@@ -1,11 +1,15 @@
 ﻿using Barebone.Controllers;
+using Infrastructure;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,8 +61,22 @@ namespace Manufactures.Controllers.Api
         {
             int totalRows = _weavingOrderDocumentRepository.Query.Count();
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var weavingOrderDocuments = _weavingOrderDocumentRepository.Find(query).Select(item => new ListWeavingOrderDocumentDto(item)).ToArray();
+            var weavingOrderDocuments = _weavingOrderDocumentRepository.Find(query)
+                                                                       .Select(item => new ListWeavingOrderDocumentDto(item));
 
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                weavingOrderDocuments = weavingOrderDocuments.Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                                                              entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToArray();
+            }
+
+            if(!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(orderDictionary.Keys.ToString());
+                weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
+            }
+            
             await Task.Yield();
 
             return Ok(weavingOrderDocuments, info: new

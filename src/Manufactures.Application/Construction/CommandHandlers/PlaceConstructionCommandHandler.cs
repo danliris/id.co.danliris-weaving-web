@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
@@ -28,12 +29,14 @@ namespace Manufactures.Application.Construction.CommandHandlers
 
             foreach(var detail in request.Warps)
             {
+                detail.SetDetail(Constants.WARP);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
                 constructionDetails.Add(constructionDetail);
             }
 
             foreach(var detail in request.Wefts)
             {
+                detail.SetDetail(Constants.WEFT);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
                 constructionDetails.Add(constructionDetail);
             }
