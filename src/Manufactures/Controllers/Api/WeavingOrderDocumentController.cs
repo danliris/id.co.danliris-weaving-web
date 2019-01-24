@@ -84,15 +84,23 @@ namespace Manufactures.Controllers.Api
                                             .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
                                                              entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
                                                              entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.DateOrdered.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                                                             entity.DateOrdered.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
                                             .ToArray();
             }
 
             if(!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(orderDictionary.Keys.ToString());
-                weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
+                var key = orderDictionary.Keys.ToString().First().ToString().ToUpper() + orderDictionary.Keys.ToString().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(key);
+
+                if(orderDictionary.Values.Contains("dsc"))
+                {
+                    weavingOrderDocuments = weavingOrderDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                } else
+                {
+                    weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
+                }
             }
 
             int totalRows = weavingOrderDocuments.Count();
