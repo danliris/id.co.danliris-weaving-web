@@ -12,6 +12,7 @@ namespace Manufactures.Dtos
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
+            DateOrdered = weavingOrderDocument.DateOrdered;
             ConstructionNumber = weavingOrderDocument.FabricConstructionDocument.ConstructionNumber;
             Composition = weavingOrderDocument.Composition;
             WeavingUnit = weavingOrderDocument.WeavingUnit;
