@@ -225,7 +225,7 @@ namespace Manufactures.Helpers.PdfTemplates
 
             //Add Table (3rd Row Table)
             PdfPTable footerTable = new PdfPTable(2);
-            float[] footerTableWidths = new float[] { 10f, 25f };
+            float[] footerTableWidths = new float[] { 13f, 26f };
             footerTable.SetWidths(footerTableWidths);
             footerTable.WidthPercentage = 100;
 
@@ -236,38 +236,154 @@ namespace Manufactures.Helpers.PdfTemplates
 
             //Add Cell (3rd Row Table)
             PdfPCell footerCellFirst = new PdfPCell();
+            footerCellFirst.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellFirst.Border = Rectangle.NO_BORDER;
+
             PdfPCell footerCellSecond = new PdfPCell();
+            footerCellSecond.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellSecond.Border = Rectangle.NO_BORDER;
+
             PdfPCell footerCellSignHead = new PdfPCell();
+            footerCellSignHead.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellSignHead.Border = Rectangle.NO_BORDER;
+
             PdfPCell footerCellSignProduction = new PdfPCell();
+            footerCellSignProduction.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellSignProduction.Border = Rectangle.NO_BORDER;
+
             PdfPCell footerCellSignPPIC = new PdfPCell();
+            footerCellSignPPIC.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellSignPPIC.Border = Rectangle.NO_BORDER;
+
+            PdfPCell footerCellEmpty = new PdfPCell();
+            footerCellEmpty.HorizontalAlignment = Element.ALIGN_CENTER;
+            footerCellEmpty.Border = Rectangle.NO_BORDER;
 
             //Fill Cell with Content (3rd Row Table)
-            footerCellFirst.HorizontalAlignment = Element.ALIGN_CENTER;
-            footerCellSecond.HorizontalAlignment = Element.ALIGN_CENTER;
-            footerCellSignHead.HorizontalAlignment = Element.ALIGN_CENTER;
-            footerCellSignProduction.HorizontalAlignment = Element.ALIGN_CENTER;
-            footerCellSignPPIC.HorizontalAlignment = Element.ALIGN_CENTER;
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
 
             footerCellFirst.Phrase = new Phrase("Mengetahui,", normal_font);
-            footerCellSignPPIC.Border = Rectangle.NO_BORDER;
             footerTable.AddCell(footerCellFirst);
 
             footerCellSecond.Phrase = new Phrase("Dibuat Oleh,", normal_font);
-            footerCellSignPPIC.Border = Rectangle.NO_BORDER;
             footerTable.AddCell(footerCellSecond);
 
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
+            footerCellEmpty.Phrase = new Phrase("", normal_font);
+            footerTable.AddCell(footerCellEmpty);
+
             //Atur Sesuai Form
-            footerCellSignHead.Phrase = new Phrase("(....................)", normal_font);
-            footerCellSignHead.Border = Rectangle.NO_BORDER;
+            footerCellSignHead.Phrase = new Phrase("(....................................)", normal_font);
             footerTableSign.AddCell(footerCellSignHead);
 
-            footerCellSignProduction.Phrase = new Phrase("(....................)", normal_font);
-            footerCellSignProduction.Border = Rectangle.NO_BORDER;
+            footerCellSignProduction.Phrase = new Phrase("(....................................)", normal_font);
             footerTableSign.AddCell(footerCellSignProduction);
 
-            footerCellSignPPIC.Phrase = new Phrase("(....................)", normal_font);
-            footerCellSignPPIC.Border = Rectangle.NO_BORDER;
+            footerCellSignPPIC.Phrase = new Phrase("(....................................)", normal_font);
             footerTableSign.AddCell(footerCellSignPPIC);
+
+            footerCellSignHead.Phrase = new Phrase("KEPALA BAGIAN", normal_font);
+            footerTableSign.AddCell(footerCellSignHead);
+
+            footerCellSignProduction.Phrase = new Phrase("MAINTENANCE/ PRODUKSI", normal_font);
+            footerTableSign.AddCell(footerCellSignProduction);
+
+            footerCellSignPPIC.Phrase = new Phrase("PPIC WEAVING", normal_font);
+            footerTableSign.AddCell(footerCellSignPPIC);
+
+            document.Add(footerTable);
+            document.Add(footerTableSign);
 
             #endregion Footer
 
