@@ -67,7 +67,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
-            int totalRows = _weavingOrderDocumentRepository.Query.Count();
+            
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
             var weavingOrderDocuments = _weavingOrderDocumentRepository.Find(query)
                                                                        .Select(item => new ListWeavingOrderDocumentDto(item));
@@ -84,7 +84,9 @@ namespace Manufactures.Controllers.Api
                 System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(orderDictionary.Keys.ToString());
                 weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
             }
-            
+
+            int totalRows = weavingOrderDocuments.Count();
+
             await Task.Yield();
 
             return Ok(weavingOrderDocuments, info: new
