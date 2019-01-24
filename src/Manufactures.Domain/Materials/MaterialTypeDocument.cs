@@ -6,9 +6,9 @@ using System;
 
 namespace Manufactures.Domain.Materials
 {
-    public class MaterialType : AggregateRoot<MaterialType, MaterialTypeReadModel>
+    public class MaterialTypeDocument : AggregateRoot<MaterialTypeDocument, MaterialTypeReadModel>
     {
-        public MaterialType(Guid id, 
+        public MaterialTypeDocument(Guid id, 
                             string code, 
                             string name, 
                             string description) : base(id)
@@ -34,7 +34,7 @@ namespace Manufactures.Domain.Materials
             ReadModel.AddDomainEvent(new OnMaterialTypePlace(this.Identity));
         }
 
-        public MaterialType(MaterialTypeReadModel readModel) : base(readModel)
+        public MaterialTypeDocument(MaterialTypeReadModel readModel) : base(readModel)
         {
             this.Code = readModel.Code;
             this.Name = readModel.Name;
@@ -84,7 +84,7 @@ namespace Manufactures.Domain.Materials
             }
         }
 
-        protected override MaterialType GetEntity()
+        protected override MaterialTypeDocument GetEntity()
         {
             return this;
         }
