@@ -67,7 +67,9 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 weavingOrderDocuments = weavingOrderDocuments.Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
-                                                                              entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToArray();
+                                                                              entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                                                              entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                                              entity.DateOrdered.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToArray();
             }
 
             if(!order.Contains("{}"))
