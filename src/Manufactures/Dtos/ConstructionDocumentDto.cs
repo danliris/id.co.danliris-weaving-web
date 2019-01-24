@@ -11,6 +11,7 @@ namespace Manufactures.Dtos
         public ConstructionDocumentDto(ConstructionDocument constructionDocument)
         {
             Id = constructionDocument.Identity;
+            ConstructionNumber = constructionDocument.ConstructionNumber;
             AmountOfWarp = constructionDocument.AmountOfWarp;
             AmountofWeft = constructionDocument.AmountOfWeft;
             Width = constructionDocument.Width;
@@ -52,6 +53,7 @@ namespace Manufactures.Dtos
         }
 
         public Guid Id { get; }
+        public string ConstructionNumber { get; }
         public int AmountOfWarp { get; }
         public int AmountofWeft { get; }
         public int Width { get; }
