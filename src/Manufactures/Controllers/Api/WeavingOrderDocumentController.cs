@@ -86,12 +86,12 @@ namespace Manufactures.Controllers.Api
                 var key = orderDictionary.Keys.ToString().First().ToString().ToUpper() + orderDictionary.Keys.ToString().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(key);
 
-                if(orderDictionary.Values.Contains("dsc"))
-                {
-                    weavingOrderDocuments = weavingOrderDocuments.OrderByDescending(x => prop.GetValue(x, null));
-                } else
+                if(orderDictionary.Values.Contains("asc"))
                 {
                     weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
+                } else
+                {
+                    weavingOrderDocuments = weavingOrderDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
