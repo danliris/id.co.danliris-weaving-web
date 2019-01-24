@@ -1,5 +1,4 @@
 ﻿using Barebone.Controllers;
-using Infrastructure;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
@@ -9,7 +8,6 @@ using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -73,11 +71,10 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 weavingOrderDocuments = weavingOrderDocuments
-                                            .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
-                                                             entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                            .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                             entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                                              entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.DateOrdered.LocalDateTime.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                                            .ToArray();
+                                                             entity.DateOrdered.LocalDateTime.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if(!order.Contains("{}"))
@@ -96,6 +93,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
+            weavingOrderDocuments = weavingOrderDocuments.ToArray();
             int totalRows = weavingOrderDocuments.Count();
 
             await Task.Yield();
