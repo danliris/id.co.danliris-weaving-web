@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
@@ -22,19 +23,34 @@ namespace Manufactures.Application.Construction.CommandHandlers
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, CancellationToken cancellationToken)
+        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, 
+                                                       CancellationToken cancellationToken)
         {
             List<ConstructionDetail> constructionDetails = new List<ConstructionDetail>();
 
             foreach(var detail in request.Warps)
             {
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                detail.SetDetail(Constants.WARP);
+
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
+                                                                               detail.Quantity, 
+                                                                               detail.Information, 
+                                                                               detail.Yarn.Serialize(), 
+                                                                               detail.Detail);
+
                 constructionDetails.Add(constructionDetail);
             }
 
             foreach(var detail in request.Wefts)
             {
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), detail.Quantity, detail.Information, detail.Yarn.Serialize(), detail.Detail);
+                detail.SetDetail(Constants.WEFT);
+
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
+                                                                               detail.Quantity, 
+                                                                               detail.Information, 
+                                                                               detail.Yarn.Serialize(), 
+                                                                               detail.Detail);
+
                 constructionDetails.Add(constructionDetail);
             }
 

@@ -20,15 +20,20 @@ namespace Manufactures.Application.Orders.CommandHandlers
             _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
 
-        public async Task<WeavingOrderDocument> Handle(PlaceWeavingOrderCommand command, CancellationToken cancellationToken)
+        public async Task<WeavingOrderDocument> Handle(PlaceWeavingOrderCommand command, 
+                                                       CancellationToken cancellationToken)
         {
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
-                orderNumber: command.OrderNumber,
-                fabricConstructionDocument: command.FabricConstructionDocument,
-                dateOrdered: command.DateOrdered, period: command.Period,
-                composition: command.Composition, warpOrigin: command.WarpOrigin,
-                weftOrigin: command.WeftOrigin, wholeGrade: command.WholeGrade,
-                yarnType: command.YarnType, weavingUnit: command.WeavingUnit);
+                                                 orderNumber: command.OrderNumber,
+                                                 fabricConstructionDocument: command.FabricConstructionDocument,
+                                                 dateOrdered: command.DateOrdered, 
+                                                 period: command.Period,
+                                                 composition: command.Composition, 
+                                                 warpOrigin: command.WarpOrigin,
+                                                 weftOrigin: command.WeftOrigin, 
+                                                 wholeGrade: command.WholeGrade,
+                                                 yarnType: command.YarnType, 
+                                                 weavingUnit: command.WeavingUnit);
 
             await _weavingOrderDocumentRepository.Update(order);
 

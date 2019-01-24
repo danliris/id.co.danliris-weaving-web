@@ -21,9 +21,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(RemoveConstructionCommand request, CancellationToken cancellationToken)
+        public async Task<ConstructionDocument> Handle(RemoveConstructionCommand request, 
+                                                       CancellationToken cancellationToken)
         {
-            var constructionDocument = _constructionDocumentRepository.Find(entity => entity.Identity == request.Id).FirstOrDefault();
+            var constructionDocument = _constructionDocumentRepository.Find(entity => entity.Identity == request.Id)
+                                                                      .FirstOrDefault();
 
             if(constructionDocument == null)
             {

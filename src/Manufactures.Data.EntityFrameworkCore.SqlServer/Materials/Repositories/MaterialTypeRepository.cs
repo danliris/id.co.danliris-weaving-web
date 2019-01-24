@@ -5,11 +5,11 @@ using Manufactures.Domain.Materials.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.Materials.Repositories
 {
-    public class MaterialTypeRepository : AggregateRepostory<MaterialType, MaterialTypeReadModel>, IMaterialTypeRepository
+    public class MaterialTypeRepository : AggregateRepostory<MaterialTypeDocument, MaterialTypeReadModel>, IMaterialTypeRepository
     {
-        protected override MaterialType Map(MaterialTypeReadModel readModel)
+        protected override MaterialTypeDocument Map(MaterialTypeReadModel readModel)
         {
-            return new MaterialType(readModel);
+            return new MaterialTypeDocument(readModel);
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Materials.CommandHandlers
 {
-    public class UpdateMaterialTypeCommandHandler : ICommandHandler<UpdateMaterialTypeCommand, MaterialType>
+    public class UpdateMaterialTypeCommandHandler : ICommandHandler<UpdateMaterialTypeCommand, MaterialTypeDocument>
     {
         private readonly IStorage _storage;
         private readonly IMaterialTypeRepository _materialTypeRepository;
@@ -23,9 +23,11 @@ namespace Manufactures.Application.Materials.CommandHandlers
         }
 
 
-        public async Task<MaterialType> Handle(UpdateMaterialTypeCommand request, CancellationToken cancellationToken)
+        public async Task<MaterialTypeDocument> Handle(UpdateMaterialTypeCommand request, 
+                                               CancellationToken cancellationToken)
         {
-            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id).FirstOrDefault();
+            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id)
+                                                      .FirstOrDefault();
 
             if (materialType == null)
             {

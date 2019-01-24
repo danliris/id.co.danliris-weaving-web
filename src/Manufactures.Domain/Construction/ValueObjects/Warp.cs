@@ -25,6 +25,11 @@ namespace Manufactures.Domain.Construction.ValueObjects
         public Yarn Yarn { get; private set; }
         public string Detail { get; private set; }
 
+        public void SetDetail(string detail)
+        {
+            this.Detail = detail;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;

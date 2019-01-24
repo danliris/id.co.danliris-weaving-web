@@ -5,7 +5,7 @@ namespace Manufactures.Dtos
 {
     public class MaterialTypeDto
     {
-        public MaterialTypeDto(MaterialType materialType)
+        public MaterialTypeDto(MaterialTypeDocument materialType)
         {
             Id = materialType.Identity;
             Code = materialType.Code;
