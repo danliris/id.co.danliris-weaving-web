@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,12 +31,36 @@ namespace Manufactures.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
-            int totalRows = _constructionDocumentRepository.Query.Count();
             var query = _constructionDocumentRepository.Query
                                                        .OrderByDescending(item => item.CreatedDate)
                                                        .Take(size)
                                                        .Skip(page * size);
-            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails)).Select(item => new ConstructionDocumentDto(item)).ToArray();
+            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails)).Select(item => new ConstructionDocumentDto(item));
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                constructionDocuments = constructionDocuments.Where(entity => entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var keys = orderDictionary.Keys;
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(ConstructionDocumentDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    constructionDocuments = constructionDocuments.OrderBy(x => prop.GetValue(x, null));
+                }
+                else
+                {
+                    constructionDocuments = constructionDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                }
+            }
+
+            constructionDocuments = constructionDocuments.ToArray();
+            int totalRows = constructionDocuments.Count();
 
             await Task.Yield();
 

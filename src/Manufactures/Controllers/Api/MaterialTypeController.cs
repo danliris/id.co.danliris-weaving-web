@@ -5,7 +5,9 @@ using Manufactures.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,13 +29,39 @@ namespace Manufactures.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
-            int totalRows = _materialTypeRepository.Query.Count();
             var query = _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var materialTypeDto = _materialTypeRepository.Find(query).Select(item => new MaterialTypeDto(item)).ToArray();
+            var materialTypeDocuments = _materialTypeRepository.Find(query).Select(item => new MaterialTypeDto(item));
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                materialTypeDocuments = materialTypeDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                             entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                             entity.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var keys = orderDictionary.Keys;
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(MaterialTypeDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    materialTypeDocuments = materialTypeDocuments.OrderBy(x => prop.GetValue(x, null));
+                }
+                else
+                {
+                    materialTypeDocuments = materialTypeDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                }
+            }
+
+            materialTypeDocuments = materialTypeDocuments.ToArray();
+            int totalRows = materialTypeDocuments.Count();
 
             await Task.Yield();
 
-            return Ok(materialTypeDto, info: new
+            return Ok(materialTypeDocuments, info: new
             {
                 page,
                 size,

@@ -1,5 +1,4 @@
 ﻿using Barebone.Controllers;
-using Infrastructure;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
@@ -11,7 +10,6 @@ using Newtonsoft.Json;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -81,17 +79,17 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 weavingOrderDocuments = weavingOrderDocuments
-                                            .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
-                                                             entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                            .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                             entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                                              entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.DateOrdered.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                                            .ToArray();
+                                                             entity.DateOrdered.LocalDateTime.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if(!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.ToString().First().ToString().ToUpper() + orderDictionary.Keys.ToString().Substring(1);
+                var keys = orderDictionary.Keys;
+                var key = orderDictionary.Keys.First().Substring(0,1).ToUpper() + orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(key);
 
                 if(orderDictionary.Values.Contains("asc"))
@@ -103,6 +101,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
+            weavingOrderDocuments = weavingOrderDocuments.ToArray();
             int totalRows = weavingOrderDocuments.Count();
 
             await Task.Yield();
