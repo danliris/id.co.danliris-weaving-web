@@ -8,7 +8,10 @@ namespace Manufactures.Domain.Materials
 {
     public class MaterialType : AggregateRoot<MaterialType, MaterialTypeReadModel>
     {
-        public MaterialType(Guid id, string code, string name, string description) : base(id)
+        public MaterialType(Guid id, 
+                            string code, 
+                            string name, 
+                            string description) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);

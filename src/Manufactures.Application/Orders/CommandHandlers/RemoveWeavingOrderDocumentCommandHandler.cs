@@ -21,9 +21,11 @@ namespace Manufactures.Application.Orders.CommandHandlers
             _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
 
-        public async Task<WeavingOrderDocument> Handle(RemoveWeavingOrderCommand command, CancellationToken cancellationToken)
+        public async Task<WeavingOrderDocument> Handle(RemoveWeavingOrderCommand command, 
+                                                       CancellationToken cancellationToken)
         {
-            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id).FirstOrDefault();
+            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id)
+                                                       .FirstOrDefault();
 
             if (order == null)
             {

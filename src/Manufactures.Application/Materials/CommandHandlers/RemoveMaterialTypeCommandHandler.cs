@@ -21,9 +21,11 @@ namespace Manufactures.Application.Materials.CommandHandlers
             _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
         }
 
-        public async Task<MaterialType> Handle(RemoveMaterialTypeCommand request, CancellationToken cancellationToken)
+        public async Task<MaterialType> Handle(RemoveMaterialTypeCommand request, 
+                                               CancellationToken cancellationToken)
         {
-            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id).FirstOrDefault();
+            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id)
+                                                      .FirstOrDefault();
 
             if (materialType == null)
             {

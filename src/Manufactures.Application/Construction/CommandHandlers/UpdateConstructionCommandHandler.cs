@@ -26,9 +26,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, CancellationToken cancellationToken)
+        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, 
+                                                       CancellationToken cancellationToken)
         {
-            var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity == request.Id).FirstOrDefault();
+            var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity == request.Id)
+                                                                       .FirstOrDefault();
 
             if (constructionDocuments == null)
             {
@@ -87,7 +89,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                     }
                 }
             }
-
+            
             constructionDocuments.SetConstructionDetail(constructionDetailsObj);
 
             await _constructionDocumentRepository.Update(constructionDocuments);
