@@ -57,19 +57,27 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 0, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            
-            var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
+            var query = _weavingOrderDocumentRepository.Query
+                                                       .OrderByDescending(item => item.CreatedDate)
+                                                       .Take(size)
+                                                       .Skip(page * size);
             var weavingOrderDocuments = _weavingOrderDocumentRepository.Find(query)
                                                                        .Select(item => new ListWeavingOrderDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                weavingOrderDocuments = weavingOrderDocuments.Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
-                                                                              entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
-                                                                              entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                                              entity.DateOrdered.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToArray();
+                weavingOrderDocuments = weavingOrderDocuments
+                                            .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                                             entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) || 
+                                                             entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                             entity.DateOrdered.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                                            .ToArray();
             }
 
             if(!order.Contains("{}"))
@@ -95,7 +103,10 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string id)
         {
             var orderId = Guid.Parse(id);
-            var orderDto = _weavingOrderDocumentRepository.Find(item => item.Identity == orderId).Select(item => new WeavingOrderDocumentDto(item)).FirstOrDefault();
+            var orderDto = _weavingOrderDocumentRepository.Find(item => item.Identity == orderId)
+                                                          .Select(item => new WeavingOrderDocumentDto(item))
+                                                          .FirstOrDefault();
+
             await Task.Yield();
 
             if (orderId == null)
