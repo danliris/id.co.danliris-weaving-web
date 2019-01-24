@@ -19,10 +19,10 @@ namespace Manufactures.Data.EntityFrameworkCore.Orders.Repositories
         public async Task<string> GetWeavingOrderNumber()
         {
             DateTimeOffset now = DateTimeOffset.Now;
-            var today = now.Year.ToString();
+            var year = now.Year.ToString();
             var month = now.Month.ToString();
-            var orderNumber = (this.dbSet.Where(order => order.Period.Deserialize<Period>().Year.Contains(today)).Count() + 1).ToString();
-            orderNumber = orderNumber.PadLeft(4, '0') + "/" + month.PadLeft(2, '0') + "-" + today;
+            var orderNumber = (this.dbSet.Where(order => order.Period.Deserialize<Period>().Year.Contains(year)).Count() + 1).ToString();
+            orderNumber = orderNumber.PadLeft(4, '0') + "/" + month.PadLeft(2, '0') + "-" + year;
 
             return await Task.FromResult(orderNumber);
         }
