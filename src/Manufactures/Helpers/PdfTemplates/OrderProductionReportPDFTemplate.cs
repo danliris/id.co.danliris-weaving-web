@@ -51,13 +51,15 @@ namespace Manufactures.Helpers.PdfTemplates
             PdfPCell cellSubHeader = new PdfPCell() { Border = Rectangle.NO_BORDER };
 
             //Fill Cell with Content
-            cellSubHeader.Phrase = new Phrase("Unit :", normal_font);
+            cellSubHeader.Phrase = new Phrase("Unit : ", normal_font);
             cellSubHeader.HorizontalAlignment = Element.ALIGN_LEFT;
             subHeaderTable.AddCell(cellSubHeader);
             //Empty Content
             cellSubHeader.Phrase = new Phrase("", normal_font);
             subHeaderTable.AddCell(cellSubHeader);
 
+            //---------------------------------------------------------------------------------//
+            //Add Element to Table
             document.Add(headerTable);
             document.Add(subHeaderTable);
 
