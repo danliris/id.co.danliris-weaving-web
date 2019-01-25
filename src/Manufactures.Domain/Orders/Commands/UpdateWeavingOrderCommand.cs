@@ -23,14 +23,19 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public UpdateWeavingOrderCommandValidator()
         {
-            RuleFor(command => command.FabricConstructionDocument).NotNull();
+            RuleFor(command => command.FabricConstructionDocument.Id).NotNull();
+            RuleFor(command => command.FabricConstructionDocument.ConstructionNumber).NotNull();
             RuleFor(command => command.WarpOrigin).NotNull();
             RuleFor(command => command.WeftOrigin).NotNull();
             RuleFor(command => command.WholeGrade).NotNull();
             RuleFor(command => command.YarnType).NotNull();
-            RuleFor(command => command.Period).NotNull();
-            RuleFor(command => command.Composition).NotNull();
-            RuleFor(command => command.WeavingUnit).NotNull();
+            RuleFor(command => command.Period.Month).NotNull();
+            RuleFor(command => command.Period.Year).NotNull();
+            RuleFor(command => command.Composition.CompositionOfPoly).NotNull();
+            RuleFor(command => command.Composition.CompositionOfCotton).NotNull();
+            RuleFor(command => command.Composition.OtherComposition).NotNull();
+            RuleFor(command => command.WeavingUnit._id).NotNull();
+            RuleFor(command => command.WeavingUnit.Name).NotNull();
         }
     }
 }

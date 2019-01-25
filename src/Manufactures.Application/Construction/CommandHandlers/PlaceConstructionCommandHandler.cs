@@ -5,6 +5,7 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -26,6 +27,12 @@ namespace Manufactures.Application.Construction.CommandHandlers
         public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, 
                                                        CancellationToken cancellationToken)
         {
+            // Check Available construction number if has defined
+            if (await _constructionDocumentRepository.IsAvailableConstructionNumber(request.ConstructionNumber))
+            {
+                throw Validator.ErrorValidation(("ConstructionNumber", "Construction Number " + request.ConstructionNumber + " has Available"));
+            }
+            
             List<ConstructionDetail> constructionDetails = new List<ConstructionDetail>();
 
             foreach(var detail in request.Warps)
