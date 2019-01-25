@@ -1,10 +1,11 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Dtos;
 using Manufactures.Helpers.PdfTemplates;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;888
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -27,7 +28,7 @@ namespace Manufactures.Controllers.Api
         {
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
-        
+
         [HttpGet]
         [Route("request-order-number")]
         public async Task<IActionResult> GetOrderNumber()
@@ -37,13 +38,16 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-report/{month}/{year}")]
-        public async Task<IActionResult> Get(string month, string year)
+        [HttpGet("order-report/{month}/{year}/{id}")]
+        public async Task<IActionResult> Get(string month, string year, string _id)
         {
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var orderDto = _weavingOrderDocumentRepository.Find(query)
                                                           .Select(item => new WeavingOrderDocumentDto(item))
-                                                          .Where(entity => entity.Period.Month.Contains(month) && entity.Period.Year.Contains(year)).ToArray();
+                                                          .Where(entity => entity.Period.Month.Contains(month) && 
+                                                                           entity.Period.Year.Contains(year) && 
+                                                                           entity.WeavingUnit._id.Equals(_id))
+                                                          .ToArray();
             await Task.Yield();
 
             if (orderDto.Length == 0)
