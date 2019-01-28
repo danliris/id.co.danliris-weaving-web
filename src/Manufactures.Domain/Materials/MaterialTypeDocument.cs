@@ -75,7 +75,7 @@ namespace Manufactures.Domain.Materials
         {
             Validator.ThrowIfNullOrEmpty(() => description);
 
-            if (description != Name)
+            if (description != Description)
             {
                 Description = description;
                 ReadModel.Description = Description;
