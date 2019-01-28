@@ -33,9 +33,9 @@ namespace Manufactures.Application.Materials.CommandHandlers
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
             }
 
-            var hasExistingCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code)).Count() >= 1;
+            var hasExistingCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code)).Count() > 1;
 
-            if(hasExistingCode)
+            if(hasExistingCode && materialType.Code != request.Code)
             {
                 throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }
