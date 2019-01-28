@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/ring-numbers")]
+    [Route("weaving/rings")]
     [ApiController]
     [Authorize]
-    class RingDocumentController : ControllerApiBase
+    public class RingDocumentController : ControllerApiBase
     {
         private readonly IRingRepository _ringRepository;
 
