@@ -1,6 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.repositories;
+using Manufactures.Domain.Rings.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -36,14 +35,13 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 ringDocuments = ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                                                              entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                              entity.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var keys = orderDictionary.Keys;
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(RingDocumentDto).GetProperty(key);
 
@@ -90,9 +88,9 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]CreateRingDocumentCommand command)
         {
-            var materialType = await Mediator.Send(command);
+            var ringDocument = await Mediator.Send(command);
 
-            return Ok(materialType.Identity);
+            return Ok(ringDocument.Identity);
         }
 
         [HttpPut("{id}")]
@@ -104,9 +102,9 @@ namespace Manufactures.Controllers.Api
             }
 
             command.SetId(Identity);
-            var order = await Mediator.Send(command);
+            var ringDocument = await Mediator.Send(command);
 
-            return Ok(order.Identity);
+            return Ok(ringDocument.Identity);
         }
 
         [HttpDelete("{id}")]
@@ -120,9 +118,9 @@ namespace Manufactures.Controllers.Api
             var command = new RemoveRingDocumentCommand();
             command.SetId(Identity);
 
-            var order = await Mediator.Send(command);
+            var ringDocument = await Mediator.Send(command);
 
-            return Ok(order.Identity);
+            return Ok(ringDocument.Identity);
         }
     }
 }

@@ -7,6 +7,8 @@ using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Rings.ReadModels;
+using Manufactures.Domain.Suppliers.ReadModels;
+using Manufactures.Domain.Yarns.ReadModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Data.EntityFrameworkCore
@@ -15,6 +17,37 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<YarnDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_YarnDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Code).HasMaxLength(255);
+                etb.Property(p => p.Name).HasMaxLength(255);
+                etb.Property(p => p.Description).HasMaxLength(255);
+                etb.Property(p => p.Tags).HasMaxLength(255);
+                etb.Property(p => p.CoreCurrency).HasMaxLength(255);
+                etb.Property(p => p.CoreUom).HasMaxLength(255);
+                etb.Property(p => p.MaterialTypeDocument).HasMaxLength(255);
+                etb.Property(p => p.RingDocument).HasMaxLength(255);
+                etb.Property(p => p.SupplierDocument).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<WeavingSupplierDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_SupplierDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Code).HasMaxLength(255);
+                etb.Property(p => p.Name).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
             modelBuilder.Entity<RingDocumentReadModel>(etb =>
             {

@@ -42,7 +42,6 @@ namespace Manufactures.Controllers.Api
             if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var keys = orderDictionary.Keys;
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(MaterialTypeDto).GetProperty(key);
 
@@ -103,9 +102,9 @@ namespace Manufactures.Controllers.Api
             }
 
             command.SetId(Identity);
-            var order = await Mediator.Send(command);
+            var materialType = await Mediator.Send(command);
 
-            return Ok(order.Identity);
+            return Ok(materialType.Identity);
         }
 
         [HttpDelete("{id}")]
@@ -119,9 +118,9 @@ namespace Manufactures.Controllers.Api
             var command = new RemoveMaterialTypeCommand();
             command.SetId(Identity);
 
-            var order = await Mediator.Send(command);
+            var materialType = await Mediator.Send(command);
 
-            return Ok(order.Identity);
+            return Ok(materialType.Identity);
         }
     }
 }

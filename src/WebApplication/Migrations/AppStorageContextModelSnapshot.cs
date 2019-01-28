@@ -256,6 +256,46 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_RingDocuments");
                 });
 
+            modelBuilder.Entity("Manufactures.Domain.Suppliers.ReadModels.WeavingSupplierDocumentReadModel", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Code")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("CoreSupplierId");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(255);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("Identity");
+
+                    b.ToTable("Weaving_SupplierDocuments");
+                });
+
             modelBuilder.Entity("Manufactures.Domain.Construction.Entities.ConstructionDetail", b =>
                 {
                     b.HasOne("Manufactures.Domain.Construction.ReadModels.ConstructionDocumentReadModel", "ConstructionDocument")

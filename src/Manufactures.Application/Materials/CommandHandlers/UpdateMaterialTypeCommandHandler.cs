@@ -28,9 +28,16 @@ namespace Manufactures.Application.Materials.CommandHandlers
             var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id)
                                                       .FirstOrDefault();
 
-            if (materialType == null)
+            if(materialType == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
+            }
+
+            var hasExistingCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code)).Count() >= 1;
+
+            if(hasExistingCode)
+            {
+                throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }
 
             materialType.SetCode(request.Code);
