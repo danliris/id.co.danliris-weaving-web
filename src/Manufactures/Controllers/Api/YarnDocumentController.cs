@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/yarn-document")]
+    [Route("weaving/yarns")]
     [ApiController]
     [Authorize]
     public class YarnDocumentController : ControllerApiBase
