@@ -5,19 +5,19 @@ namespace Manufactures.Domain.Yarns.ValueObjects
 {
     public class UomValueObject : ValueObject
     {
-        public UomValueObject(string code, string name)
+        public UomValueObject(string code, string unit)
         {
             Code = code;
-            Name = name;
+            Unit = unit;
         }
 
         public string Code { get; private set; }
-        public string Name { get; private set; }
+        public string Unit { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Code;
-            yield return Name;
+            yield return Unit;
         }
     }
 }

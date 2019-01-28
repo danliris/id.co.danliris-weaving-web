@@ -1,7 +1,5 @@
 ﻿using Manufactures.Domain.Yarns;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos
 {
@@ -12,7 +10,7 @@ namespace Manufactures.Dtos
             Id = document.Identity;
             Code = document.Code;
             Name = document.Name;
-            Uom = document.CoreUom.Name;
+            Uom = document.CoreUom.Unit;
             Currency = document.CoreCurrency.Name;
             Price = document.Price;
         }
@@ -23,7 +21,5 @@ namespace Manufactures.Dtos
         public string Uom { get; }
         public string Currency { get; }
         public double Price { get; }
-
-        //Code, nama, satuan, mata uang, harga barang
     }
 }
