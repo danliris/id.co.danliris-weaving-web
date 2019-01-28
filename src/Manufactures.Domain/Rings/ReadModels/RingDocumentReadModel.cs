@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Rings.ReadModels
 {

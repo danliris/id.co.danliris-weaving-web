@@ -24,16 +24,16 @@ namespace Manufactures.Domain.Construction.Commands
     {
         public PlaceConstructionCommandValidator()
         {
-            RuleFor(command => command.ConstructionNumber).NotNull();
-            RuleFor(command => command.AmountOfWarp).NotNull();
-            RuleFor(command => command.AmountOfWeft).NotNull();
-            RuleFor(command => command.Width).NotNull();
-            RuleFor(command => command.WovenType).NotNull();
-            RuleFor(command => command.WarpType).NotNull();
-            RuleFor(command => command.WeftType).NotNull();
-            RuleFor(command => command.TotalYarn).NotNull();
-            RuleFor(command => command.Warps).NotNull();
-            RuleFor(command => command.Wefts).NotNull();
+            RuleFor(command => command.ConstructionNumber).NotEmpty();
+            RuleFor(command => command.AmountOfWarp).NotEmpty();
+            RuleFor(command => command.AmountOfWeft).NotEmpty();
+            RuleFor(command => command.Width).NotEmpty();
+            RuleFor(command => command.WovenType).NotEmpty();
+            RuleFor(command => command.WarpType).NotEmpty();
+            RuleFor(command => command.WeftType).NotEmpty();
+            RuleFor(command => command.TotalYarn).NotEmpty();
+            RuleFor(command => command.Warps).NotEmpty();
+            RuleFor(command => command.Wefts).NotEmpty();
         }
     }
 }

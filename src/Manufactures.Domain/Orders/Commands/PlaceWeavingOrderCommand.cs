@@ -23,16 +23,21 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public WeavingOrderCommandValidator()
         {
-            RuleFor(command => command.OrderNumber).NotNull();
-            RuleFor(command => command.FabricConstructionDocument).NotNull();
-            RuleFor(command => command.DateOrdered).NotNull();
-            RuleFor(command => command.WarpOrigin).NotNull();
-            RuleFor(command => command.WeftOrigin).NotNull();
-            RuleFor(command => command.WholeGrade).NotNull();
-            RuleFor(command => command.YarnType).NotNull();
-            RuleFor(command => command.Period).NotNull();
-            RuleFor(command => command.Composition).NotNull();
-            RuleFor(command => command.WeavingUnit).NotNull();
+            RuleFor(command => command.OrderNumber).NotEmpty();
+            RuleFor(command => command.FabricConstructionDocument.Id).NotEmpty();
+            RuleFor(command => command.FabricConstructionDocument.ConstructionNumber).NotEmpty();
+            RuleFor(command => command.DateOrdered).NotEmpty();
+            RuleFor(command => command.WarpOrigin).NotEmpty();
+            RuleFor(command => command.WeftOrigin).NotEmpty();
+            RuleFor(command => command.WholeGrade).NotEmpty();
+            RuleFor(command => command.YarnType).NotEmpty();
+            RuleFor(command => command.Period.Month).NotEmpty();
+            RuleFor(command => command.Period.Year).NotEmpty();
+            RuleFor(command => command.Composition.CompositionOfPoly).NotEmpty();
+            RuleFor(command => command.Composition.CompositionOfCotton).NotEmpty();
+            RuleFor(command => command.Composition.OtherComposition).NotEmpty();
+            RuleFor(command => command.WeavingUnit._id).NotEmpty();
+            RuleFor(command => command.WeavingUnit.Name).NotEmpty();
         }
     }
 }

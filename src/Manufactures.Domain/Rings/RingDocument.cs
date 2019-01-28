@@ -3,8 +3,6 @@ using Manufactures.Domain.Events;
 using Manufactures.Domain.Rings.ReadModels;
 using Moonlay;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Rings
 {
@@ -79,7 +77,7 @@ namespace Manufactures.Domain.Rings
         {
             Validator.ThrowIfNullOrEmpty(() => description);
 
-            if (description != Name)
+            if (description != Description)
             {
                 Description = description;
                 ReadModel.Description = Description;

@@ -1,7 +1,9 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
 using Manufactures.Domain.Rings;
 using Manufactures.Domain.Rings.ReadModels;
-using Manufactures.Domain.Rings.repositories;
+using Manufactures.Domain.Rings.Repositories;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Manufactures.Data.EntityFrameworkCore.Rings.Repositories
 {

@@ -17,9 +17,9 @@ namespace Manufactures.Domain.Materials.Commands
     {
         public UpdateMaterialTypeCommadValidator()
         {
-            RuleFor(command => command.Code).NotNull();
-            RuleFor(command => command.Name).NotNull();
-            RuleFor(command => command.Description).NotNull();
+            RuleFor(command => command.Code).NotEmpty();
+            RuleFor(command => command.Name).NotEmpty();
+            RuleFor(command => command.Description).NotEmpty();
         }
     }
 }
