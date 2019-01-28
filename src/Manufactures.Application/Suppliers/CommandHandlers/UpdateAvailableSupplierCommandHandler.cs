@@ -32,7 +32,7 @@ namespace Manufactures.Application.Suppliers.CommandHandlers
 
             var hasExsistingCode = _weavingSupplierRepository.Find(supplier => supplier.Code.Equals(request.Code)).Count() >= 1;
 
-            if(hasExsistingCode)
+            if(hasExsistingCode && supplierDocument.Code != request.Code)
             {
                 throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }

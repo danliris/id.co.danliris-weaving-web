@@ -26,35 +26,35 @@ namespace Manufactures.Application.Yarns.CommandHandlers
 
         public async Task<YarnDocument> Handle(UpdateExsistingYarnCommand request, CancellationToken cancellationToken)
         {
-            var exsistingYarn = _yarnDocumentRepository.Find(yarn => yarn.Identity == request.Id).FirstOrDefault();
+            var yarnDocument = _yarnDocumentRepository.Find(yarn => yarn.Identity == request.Id).FirstOrDefault();
 
-            if(exsistingYarn == null)
+            if(yarnDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
             }
 
             var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code)).Count() >= 1;
 
-            if (exsistingCode)
+            if (exsistingCode && yarnDocument.Code != request.Code)
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
 
-            exsistingYarn.SetCode(request.Code);
-            exsistingYarn.SetName(request.Name);
-            exsistingYarn.SetDescription(request.Description);
-            exsistingYarn.SetTags(request.Tags);
-            exsistingYarn.SetCurrency(request.CoreCurrency);
-            exsistingYarn.SetUom(request.CoreUom);
-            exsistingYarn.SetMaterialTypeDocument(request.MaterialTypeDocument);
-            exsistingYarn.SetRingDocument(request.RingDocument);
-            exsistingYarn.SetSupplierDocument(request.SupplierDocument);
-            exsistingYarn.SetPrice(request.Price);
+            yarnDocument.SetCode(request.Code);
+            yarnDocument.SetName(request.Name);
+            yarnDocument.SetDescription(request.Description);
+            yarnDocument.SetTags(request.Tags);
+            yarnDocument.SetCurrency(request.CoreCurrency);
+            yarnDocument.SetUom(request.CoreUom);
+            yarnDocument.SetMaterialTypeDocument(request.MaterialTypeDocument);
+            yarnDocument.SetRingDocument(request.RingDocument);
+            yarnDocument.SetSupplierDocument(request.SupplierDocument);
+            yarnDocument.SetPrice(request.Price);
 
-            await _yarnDocumentRepository.Update(exsistingYarn);
+            await _yarnDocumentRepository.Update(yarnDocument);
             _storage.Save();
 
-            return exsistingYarn;
+            return yarnDocument;
         }
     }
 }

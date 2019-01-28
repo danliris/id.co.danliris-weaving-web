@@ -32,7 +32,7 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
             var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code)).Count() >= 1; 
 
-            if(hasRingDocument)
+            if(hasRingDocument &&  ringDocument.Code != request.Code)
             {
                 throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }
