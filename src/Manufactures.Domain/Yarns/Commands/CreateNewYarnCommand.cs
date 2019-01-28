@@ -31,7 +31,7 @@ namespace Manufactures.Domain.Yarns.Commands
             RuleFor(command => command.CoreCurrency.Name).NotEmpty();
 
             RuleFor(command => command.CoreUom.Code).NotEmpty();
-            RuleFor(command => command.CoreUom.Name).NotEmpty();
+            RuleFor(command => command.CoreUom.Unit).NotEmpty();
 
             RuleFor(command => command.MaterialTypeDocument.Code).NotEmpty();
             RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();

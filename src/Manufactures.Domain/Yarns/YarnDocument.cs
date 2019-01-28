@@ -176,14 +176,14 @@ namespace Manufactures.Domain.Yarns
                 indexDiffence++;
             }
 
-            if (CoreUom.Name != uom.Name)
+            if (CoreUom.Unit != uom.Unit)
             {
                 indexDiffence++;
             }
 
             if (indexDiffence > 0)
             {
-                CoreUom = new UomValueObject(uom.Code, uom.Name);
+                CoreUom = new UomValueObject(uom.Code, uom.Unit);
                 ReadModel.CoreUom = CoreUom.Serialize();
 
                 MarkModified();
