@@ -220,14 +220,14 @@ namespace Manufactures.Domain.Yarns
                 indexDiffence++;
             }
 
-            if (RingDocument.Name != document.Name)
+            if (RingDocument.Number != document.Number)
             {
                 indexDiffence++;
             }
 
             if (indexDiffence > 0)
             {
-                RingDocument = new RingDocumentValueObject(document.Code, document.Name);
+                RingDocument = new RingDocumentValueObject(document.Code, document.Number);
                 ReadModel.RingDocument = RingDocument.Serialize();
 
                 MarkModified();

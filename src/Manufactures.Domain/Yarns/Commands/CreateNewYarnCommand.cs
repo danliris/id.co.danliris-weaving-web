@@ -36,7 +36,7 @@ namespace Manufactures.Domain.Yarns.Commands
             RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();
 
             RuleFor(command => command.RingDocument.Code).NotEmpty();
-            RuleFor(command => command.RingDocument.Name).NotEmpty();
+            RuleFor(command => command.RingDocument.Number).NotEmpty();
 
             RuleFor(command => command.Price).NotEmpty();
         }
