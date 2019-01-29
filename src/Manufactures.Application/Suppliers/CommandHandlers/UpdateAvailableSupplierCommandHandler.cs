@@ -38,7 +38,7 @@ namespace Manufactures.Application.Suppliers.CommandHandlers
             }
 
             supplierDocument.SetCode(request.Code);
-            supplierDocument.SetCode(request.Name);
+            supplierDocument.SetName(request.Name);
             supplierDocument.SetCoreSupplierId(request.CoreSupplierId);
 
             await _weavingSupplierRepository.Update(supplierDocument);
