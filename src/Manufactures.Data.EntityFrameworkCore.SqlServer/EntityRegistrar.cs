@@ -31,7 +31,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.CoreUom).HasMaxLength(255);
                 etb.Property(p => p.MaterialTypeDocument).HasMaxLength(255);
                 etb.Property(p => p.RingDocument).HasMaxLength(255);
-                etb.Property(p => p.SupplierDocument).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

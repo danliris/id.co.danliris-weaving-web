@@ -14,7 +14,6 @@ namespace Manufactures.Domain.Yarns.Commands
         public UomValueObject CoreUom { get; set; }
         public MaterialTypeDocumentValueObject MaterialTypeDocument { get; set; }
         public RingDocumentValueObject RingDocument { get; set; }
-        public SupplierDocumentValueObject SupplierDocument { get; set; }
         public double Price { get; set; }
     }
 
@@ -38,9 +37,6 @@ namespace Manufactures.Domain.Yarns.Commands
 
             RuleFor(command => command.RingDocument.Code).NotEmpty();
             RuleFor(command => command.RingDocument.Name).NotEmpty();
-
-            RuleFor(command => command.SupplierDocument.Code).NotEmpty();
-            RuleFor(command => command.SupplierDocument.Name).NotEmpty();
 
             RuleFor(command => command.Price).NotEmpty();
         }
