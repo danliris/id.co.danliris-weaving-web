@@ -5,19 +5,19 @@ namespace Manufactures.Domain.Yarns.ValueObjects
 {
     public class RingDocumentValueObject : ValueObject
     {
-        public RingDocumentValueObject(string code, string name)
+        public RingDocumentValueObject(string code, string number)
         {
             Code = code;
-            Name = name;
+            Number = number;
         }
 
         public string Code { get; private set; }
-        public string Name { get; private set; }
+        public string Number { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Code;
-            yield return Name;
+            yield return Number;
         }
     }
 }
