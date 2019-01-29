@@ -2,7 +2,7 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Rings;
 using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.repositories;
+using Manufactures.Domain.Rings.Repositories;
 using Moonlay;
 using System.Linq;
 using System.Threading;
@@ -27,7 +27,7 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
             if (ringDocument == null)
             {
-                throw Validator.ErrorValidation(("Id", "Invalid Ring Document: " + request.Id));
+                throw Validator.ErrorValidation(("Id", "Invalid Ring Id: " + request.Id));
             }
 
             ringDocument.Remove();

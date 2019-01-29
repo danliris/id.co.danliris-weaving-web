@@ -2,10 +2,9 @@
 using Manufactures.Domain.Rings.ReadModels;
 using System.Threading.Tasks;
 
-namespace Manufactures.Domain.Rings.repositories
+namespace Manufactures.Domain.Rings.Repositories
 {
     public interface IRingRepository : IAggregateRepository<RingDocument, RingDocumentReadModel>
     {
-        Task<bool> isAvailableRingCode(string code);
     }
 }

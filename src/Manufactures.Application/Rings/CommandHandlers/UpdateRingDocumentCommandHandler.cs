@@ -1,14 +1,10 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Rings;
 using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.repositories;
+using Manufactures.Domain.Rings.Repositories;
 using Moonlay;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,11 +27,18 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
             if(ringDocument == null)
             {
-                throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
+                throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
+            }
+
+            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code)).Count() >= 1; 
+
+            if(hasRingDocument &&  ringDocument.Code != request.Code)
+            {
+                throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }
 
             ringDocument.SetCode(request.Code);
-            ringDocument.SetName(request.Name);
+            ringDocument.SetName(request.Number);
             ringDocument.SetDescription(request.Description);
 
             await _ringRepository.Update(ringDocument);

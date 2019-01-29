@@ -9,7 +9,7 @@ namespace Manufactures.Domain.Rings.Commands
         public void SetId(Guid id) { Id = id; }
         public Guid Id { get; private set; }
         public string Code { get; set; }
-        public string Name { get; set; }
+        public string Number { get; set; }
         public string Description { get; set; }
     }
 
@@ -17,9 +17,9 @@ namespace Manufactures.Domain.Rings.Commands
     {
         public UpdateRingDocumentCommandValidator()
         {
-            RuleFor(command => command.Code).NotNull();
-            RuleFor(command => command.Name).NotNull();
-            RuleFor(command => command.Description).NotNull();
+            RuleFor(command => command.Code).NotEmpty();
+            RuleFor(command => command.Number).NotEmpty();
+            RuleFor(command => command.Description).NotEmpty();
         }
     }
 }

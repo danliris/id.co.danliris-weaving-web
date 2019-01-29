@@ -19,11 +19,11 @@ namespace Manufactures.Controllers.Api
     [Route("weaving/orders")]
     [ApiController]
     [Authorize]
-    public class WeavingOrderDocumentController : ControllerApiBase
+    public class OrderDocumentController : ControllerApiBase
     {
         private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
 
-        public WeavingOrderDocumentController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public OrderDocumentController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
@@ -37,15 +37,15 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-report/{month}/{year}/{id}")]
-        public async Task<IActionResult> Get(string month, string year, string _id)
+        [HttpGet("order-report/{month}/{year}/{unitCode}")]
+        public async Task<IActionResult> Get(string month, string year, string unitCode)
         {
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var orderDto = _weavingOrderDocumentRepository.Find(query)
                                                           .Select(item => new WeavingOrderDocumentDto(item))
-                                                          .Where(entity => entity.Period.Month.Contains(month) && 
-                                                                           entity.Period.Year.Contains(year) && 
-                                                                           entity.WeavingUnit._id.Equals(_id))
+                                                          .Where(entity => entity.Period.Month.Contains(month) &&
+                                                                           entity.Period.Year.Contains(year) &&
+                                                                           entity.WeavingUnit.Code.Equals(unitCode))
                                                           .ToArray();
             await Task.Yield();
 
@@ -66,10 +66,10 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, 
-                                             int size = 25, 
-                                             string order = "{}", 
-                                             string keyword = null, 
+        public async Task<IActionResult> Get(int page = 0,
+                                             int size = 25,
+                                             string order = "{}",
+                                             string keyword = null,
                                              string filter = "{}")
         {
             var query = _weavingOrderDocumentRepository.Query
@@ -88,17 +88,17 @@ namespace Manufactures.Controllers.Api
                                                              entity.DateOrdered.LocalDateTime.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
-            if(!order.Contains("{}"))
+            if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var keys = orderDictionary.Keys;
-                var key = orderDictionary.Keys.First().Substring(0,1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(ListWeavingOrderDocumentDto).GetProperty(key);
 
-                if(orderDictionary.Values.Contains("asc"))
+                if (orderDictionary.Values.Contains("asc"))
                 {
                     weavingOrderDocuments = weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
-                } else
+                }
+                else
                 {
                     weavingOrderDocuments = weavingOrderDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
@@ -130,7 +130,8 @@ namespace Manufactures.Controllers.Api
             if (orderId == null)
             {
                 return NotFound();
-            } else
+            }
+            else
             {
                 return Ok(orderDto);
             }

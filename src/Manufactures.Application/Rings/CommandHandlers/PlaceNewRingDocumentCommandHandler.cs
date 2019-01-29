@@ -2,8 +2,10 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Rings;
 using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.repositories;
+using Manufactures.Domain.Rings.Repositories;
+using Moonlay;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -22,15 +24,17 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
         public async Task<RingDocument> Handle(CreateRingDocumentCommand request, CancellationToken cancellationToken)
         {
+            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code)).Count() >= 1;
+
             // Check if has same ring code
-            if(await _ringRepository.isAvailableRingCode(request.Code))
+            if(hasRingDocument)
             {
-                throw new ArgumentException("Code with " + request.Code + " has define before, check for availble code");
+                throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
 
             var ringDocument = new RingDocument(identity: Guid.NewGuid(),
                                                 code: request.Code,
-                                                name: request.Name,
+                                                number: request.Number,
                                                 description: request.Description);
 
             await _ringRepository.Update(ringDocument);
