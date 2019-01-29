@@ -5,9 +5,7 @@ using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,8 +39,7 @@ namespace Manufactures.Application.Yarns.CommandHandlers
                                            request.CoreCurrency, 
                                            request.CoreUom, 
                                            request.MaterialTypeDocument, 
-                                           request.RingDocument, 
-                                           request.SupplierDocument, 
+                                           request.RingDocument,
                                            request.Price);
 
             await _yarnDocumentRepository.Update(newYarn);

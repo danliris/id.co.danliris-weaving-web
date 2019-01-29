@@ -18,7 +18,6 @@ namespace Manufactures.Domain.Yarns
                             UomValueObject coreUom,
                             MaterialTypeDocumentValueObject materialTypeDocument,
                             RingDocumentValueObject ringDocument,
-                            SupplierDocumentValueObject supplier,
                             double price) : base(id)
         {
             // Validate Properties
@@ -30,7 +29,6 @@ namespace Manufactures.Domain.Yarns
             Validator.ThrowIfNull(() => coreUom);
             Validator.ThrowIfNull(() => materialTypeDocument);
             Validator.ThrowIfNull(() => ringDocument);
-            Validator.ThrowIfNull(() => supplier);
 
             this.MarkTransient();
 
@@ -43,7 +41,6 @@ namespace Manufactures.Domain.Yarns
             CoreUom = coreUom;
             MaterialTypeDocument = materialTypeDocument;
             RingDocument = ringDocument;
-            SupplierDocument = supplier;
             Price = price;
 
             ReadModel = new YarnDocumentReadModel(Identity)
@@ -56,7 +53,6 @@ namespace Manufactures.Domain.Yarns
                 CoreUom = this.CoreUom.Serialize(),
                 MaterialTypeDocument = this.MaterialTypeDocument.Serialize(),
                 RingDocument = this.RingDocument.Serialize(),
-                SupplierDocument = this.SupplierDocument.Serialize(),
                 Price = this.Price
             };
 
@@ -73,7 +69,6 @@ namespace Manufactures.Domain.Yarns
             this.CoreUom = readModel.CoreUom.Deserialize<UomValueObject>();
             this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeDocumentValueObject>();
             this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
-            this.SupplierDocument = readModel.SupplierDocument.Deserialize<SupplierDocumentValueObject>();
             this.Price = readModel.Price;
         }
 
@@ -85,7 +80,6 @@ namespace Manufactures.Domain.Yarns
         public UomValueObject CoreUom { get; private set; }
         public MaterialTypeDocumentValueObject MaterialTypeDocument { get; private set; }
         public RingDocumentValueObject RingDocument { get; private set; }
-        public SupplierDocumentValueObject SupplierDocument { get; private set; }
         public double Price { get; private set; }
 
         public void SetCode(string code)
@@ -235,31 +229,6 @@ namespace Manufactures.Domain.Yarns
             {
                 RingDocument = new RingDocumentValueObject(document.Code, document.Name);
                 ReadModel.RingDocument = RingDocument.Serialize();
-
-                MarkModified();
-            }
-        }
-
-        public void SetSupplierDocument(SupplierDocumentValueObject document)
-        {
-            Validator.ThrowIfNull(() => document);
-            int indexDiffence = 0;
-
-
-            if (SupplierDocument.Code != document.Code)
-            {
-                indexDiffence++;
-            }
-
-            if (SupplierDocument.Name != document.Name)
-            {
-                indexDiffence++;
-            }
-
-            if (indexDiffence > 0)
-            {
-                SupplierDocument = new SupplierDocumentValueObject(document.Code, document.Name);
-                ReadModel.SupplierDocument = SupplierDocument.Serialize();
 
                 MarkModified();
             }
