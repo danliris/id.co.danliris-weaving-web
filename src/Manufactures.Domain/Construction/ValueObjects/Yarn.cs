@@ -1,26 +1,27 @@
 ﻿using Moonlay.Domain;
+using System;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.ValueObjects
 {
     public class Yarn : ValueObject
     {
-        public Yarn(string id,
+        public Yarn(Guid id,
                     string code,
                     string name)
         {
-            _id = id;
+            Id = id;
             Code  = code;
             Name = name;
         }
 
-        public string _id { get; private set; }
+        public Guid Id { get; private set; }
         public string Code { get; private set; }
         public string Name { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return _id;
+            yield return Id;
             yield return Code;
             yield return Name;
         }
