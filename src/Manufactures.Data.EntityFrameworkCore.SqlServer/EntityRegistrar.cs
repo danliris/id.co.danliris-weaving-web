@@ -55,7 +55,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.Code).HasMaxLength(255);
-                etb.Property(p => p.Name).HasMaxLength(255);
+                etb.Property(p => p.Number).HasMaxLength(255);
                 etb.Property(p => p.Description).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();

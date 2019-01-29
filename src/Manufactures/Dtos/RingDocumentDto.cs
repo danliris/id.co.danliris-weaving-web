@@ -9,13 +9,13 @@ namespace Manufactures.Dtos
         {
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
-            Name = ringDocument.Name;
+            Number = ringDocument.Number;
             Description = ringDocument.Description;
         }
 
         public Guid Id { get; private set; }
         public string Code { get; private set; }
-        public string Name { get; private set; }
+        public string Number { get; private set; }
         public string Description { get; private set; }
     }
 }

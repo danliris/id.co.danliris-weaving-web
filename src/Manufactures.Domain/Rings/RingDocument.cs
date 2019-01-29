@@ -10,12 +10,12 @@ namespace Manufactures.Domain.Rings
     {
         public RingDocument(Guid identity,
                             string code,
-                            string name,
+                            string number,
                             string description) : base(identity)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
+            Validator.ThrowIfNullOrEmpty(() => number);
             Validator.ThrowIfNullOrEmpty(() => description);
 
             this.MarkTransient();
@@ -23,13 +23,13 @@ namespace Manufactures.Domain.Rings
             // Set properties
             Identity = identity;
             Code = code;
-            Name = name;
+            Number = number;
             Description = description;
 
             ReadModel = new RingDocumentReadModel(Identity)
             {
                 Code = this.Code,
-                Name = this.Name,
+                Number = this.Number,
                 Description = this.Description
             };
 
@@ -39,12 +39,12 @@ namespace Manufactures.Domain.Rings
         public RingDocument(RingDocumentReadModel readModel) : base(readModel)
         {
             this.Code = readModel.Code;
-            this.Name = readModel.Name;
+            this.Number = readModel.Number;
             this.Description = readModel.Description;
         }
 
         public string Code { get; private set; }
-        public string Name { get; private set; }
+        public string Number { get; private set; }
         public string Description { get; private set; }
 
         public void SetCode(string code)
@@ -60,14 +60,14 @@ namespace Manufactures.Domain.Rings
             }
         }
 
-        public void SetName(string name)
+        public void SetName(string number)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
+            Validator.ThrowIfNullOrEmpty(() => number);
 
-            if (name != Name)
+            if (number != Number)
             {
-                Name = name;
-                ReadModel.Name = Name;
+                Number = number;
+                ReadModel.Number = Number;
 
                 MarkModified();
             }

@@ -34,7 +34,7 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
             var ringDocument = new RingDocument(identity: Guid.NewGuid(),
                                                 code: request.Code,
-                                                name: request.Name,
+                                                number: request.Number,
                                                 description: request.Description);
 
             await _ringRepository.Update(ringDocument);

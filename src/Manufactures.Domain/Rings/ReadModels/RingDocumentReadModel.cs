@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Rings.ReadModels
         public RingDocumentReadModel(Guid identity) : base(identity) { }
 
         public string Code { get; internal set; }
-        public string Name { get; internal set; }
+        public string Number { get; internal set; }
         public string Description { get; internal set; }
     }
 }
