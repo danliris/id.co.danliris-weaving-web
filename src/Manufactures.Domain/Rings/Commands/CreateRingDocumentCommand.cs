@@ -6,7 +6,7 @@ namespace Manufactures.Domain.Rings.Commands
     public class CreateRingDocumentCommand : ICommand<RingDocument>
     {
         public string Code { get; set; }
-        public string Name { get; set; }
+        public string Number { get; set; }
 
         public string Description { get; set; }
     }
@@ -16,7 +16,7 @@ namespace Manufactures.Domain.Rings.Commands
         public CreateRingDocumentCommandValidator()
         {
             RuleFor(command => command.Code).NotEmpty();
-            RuleFor(command => command.Name).NotEmpty();
+            RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.Description).NotEmpty();
         }
     }

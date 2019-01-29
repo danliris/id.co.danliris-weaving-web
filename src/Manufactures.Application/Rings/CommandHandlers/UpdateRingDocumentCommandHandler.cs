@@ -38,7 +38,7 @@ namespace Manufactures.Application.Rings.CommandHandlers
             }
 
             ringDocument.SetCode(request.Code);
-            ringDocument.SetName(request.Name);
+            ringDocument.SetName(request.Number);
             ringDocument.SetDescription(request.Description);
 
             await _ringRepository.Update(ringDocument);
