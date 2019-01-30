@@ -4,10 +4,7 @@ using Manufactures.Domain.Yarns;
 using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,28 +24,25 @@ namespace Manufactures.Application.Yarns.CommandHandlers
         public async Task<YarnDocument> Handle(UpdateExsistingYarnCommand request, CancellationToken cancellationToken)
         {
             var yarnDocument = _yarnDocumentRepository.Find(yarn => yarn.Identity == request.Id).FirstOrDefault();
+            var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code) && 
+                                                                     yarn.Deleted.Equals(false)).Count() >= 1;
 
-            if(yarnDocument == null)
+            if (yarnDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
             }
-
-            var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code)).Count() >= 1;
-
-            if (exsistingCode && yarnDocument.Code != request.Code)
+            
+            // Check has exsisting code
+            if (exsistingCode && !yarnDocument.Code.Equals(request.Code))
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
 
             yarnDocument.SetCode(request.Code);
             yarnDocument.SetName(request.Name);
-            yarnDocument.SetDescription(request.Description);
             yarnDocument.SetTags(request.Tags);
-            yarnDocument.SetCurrency(request.CoreCurrency);
-            yarnDocument.SetUom(request.CoreUom);
             yarnDocument.SetMaterialTypeDocument(request.MaterialTypeDocument);
             yarnDocument.SetRingDocument(request.RingDocument);
-            yarnDocument.SetPrice(request.Price);
 
             await _yarnDocumentRepository.Update(yarnDocument);
             _storage.Save();

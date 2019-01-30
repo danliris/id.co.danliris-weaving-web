@@ -24,7 +24,8 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
         public async Task<RingDocument> Handle(CreateRingDocumentCommand request, CancellationToken cancellationToken)
         {
-            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code)).Count() >= 1;
+            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code) && 
+                                                               ring.Deleted.Equals(false)).Count() >= 1;
 
             // Check if has same ring code
             if(hasRingDocument)

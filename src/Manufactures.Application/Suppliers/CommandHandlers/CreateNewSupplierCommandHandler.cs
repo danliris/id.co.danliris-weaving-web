@@ -24,8 +24,10 @@ namespace Manufactures.Application.Suppliers.CommandHandlers
 
         public async Task<WeavingSupplierDocument> Handle(PlaceNewSupplierCommand request, CancellationToken cancellationToken)
         {
-            var hasSupplier = _weavingSupplierRepository.Find(supplier => supplier.Code.Equals(request.Code)).Count() >= 1;
+            var hasSupplier = _weavingSupplierRepository.Find(supplier => supplier.Code.Equals(request.Code) && 
+                                                                          supplier.Deleted.Equals(false)).Count() >= 1;
 
+            // Check for exsisting supplier
             if(hasSupplier)
             {
                 throw Validator.ErrorValidation(("Supplier with Code", request.Code + " has available"));

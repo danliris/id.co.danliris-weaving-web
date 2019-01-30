@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20190129135956_weaving-version-1.1.3.2")]
+    partial class weavingversion1132
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,6 +306,12 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<string>("Code")
                         .HasMaxLength(255);
 
+                    b.Property<string>("CoreCurrency")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("CoreUom")
+                        .HasMaxLength(255);
+
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(32);
@@ -317,6 +325,9 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(255);
+
                     b.Property<string>("MaterialTypeDocument")
                         .HasMaxLength(255);
 
@@ -327,6 +338,8 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("Name")
                         .HasMaxLength(255);
+
+                    b.Property<double>("Price");
 
                     b.Property<string>("RingDocument")
                         .HasMaxLength(255);

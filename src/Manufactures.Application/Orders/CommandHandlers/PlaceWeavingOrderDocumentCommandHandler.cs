@@ -27,7 +27,8 @@ namespace Manufactures.Application.Orders.CommandHandlers
                                                        CancellationToken cancellationToken)
         {
             // Checking for same order number
-            var isHasSameOrderNumber = _weavingOrderDocumentRepository.Find(entity => entity.OrderNumber.Equals(command.OrderNumber)).Count() >= 1;
+            var isHasSameOrderNumber = _weavingOrderDocumentRepository.Find(entity => entity.OrderNumber.Equals(command.OrderNumber) &&
+                                                                                      entity.Deleted.Equals(false)).Count() >= 1;
 
             if (isHasSameOrderNumber)
             {

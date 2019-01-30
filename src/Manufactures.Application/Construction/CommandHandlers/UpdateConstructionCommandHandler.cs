@@ -29,14 +29,26 @@ namespace Manufactures.Application.Construction.CommandHandlers
         public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, 
                                                        CancellationToken cancellationToken)
         {
-            var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity == request.Id)
+            var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity.Equals(request.Id))
                                                                        .FirstOrDefault();
 
+            var exsistingConstructionNumber = _constructionDocumentRepository
+                    .Find(construction => construction.ConstructionNumber.Equals(request.ConstructionNumber) &&
+                                          construction.Deleted.Equals(false))
+                    .Count() > 1;
+
+            // Check Available construction document
             if (constructionDocuments == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Construction Document: " + request.Id));
             }
-            
+
+            // Check Available construction number if has defined
+            if (exsistingConstructionNumber && !constructionDocuments.ConstructionNumber.Equals(request.ConstructionNumber))
+            {
+                throw Validator.ErrorValidation(("ConstructionNumber", "Construction Number " + request.ConstructionNumber + " has Available"));
+            }
+
             constructionDocuments.SetConstructionNumber(request.ConstructionNumber);
             constructionDocuments.SetAmountOfWarp(request.AmountOfWarp);
             constructionDocuments.SetAmountOfWeft(request.AmountOfWeft);
@@ -60,7 +72,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                         constructionDetail.SetInformation(detail.Information);
                         constructionDetail.SetYarn(detail.Yarn.Serialize());
 
-                        if(!detail.Detail.Contains(Constants.WARP))
+                        if(!detail.Detail.Equals(Constants.WARP))
                         {
                             constructionDetail.SetDetail(Constants.WARP);
                         }
@@ -80,7 +92,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                         constructionDetail.SetInformation(detail.Information);
                         constructionDetail.SetYarn(detail.Yarn.Serialize());
 
-                        if (!detail.Detail.Contains(Constants.WEFT))
+                        if (!detail.Detail.Equals(Constants.WEFT))
                         {
                             constructionDetail.SetDetail(Constants.WEFT);
                         }
