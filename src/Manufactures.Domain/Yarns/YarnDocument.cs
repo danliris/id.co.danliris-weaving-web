@@ -26,7 +26,7 @@ namespace Manufactures.Domain.Yarns
             this.MarkTransient();
 
             Identity = id;
-            Code = Code;
+            Code = code;
             Name = name;
             Tags = tags;
             MaterialTypeDocument = materialTypeDocument;
