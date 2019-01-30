@@ -25,10 +25,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
                 etb.Property(p => p.Code).HasMaxLength(255);
                 etb.Property(p => p.Name).HasMaxLength(255);
-                etb.Property(p => p.Description).HasMaxLength(255);
                 etb.Property(p => p.Tags).HasMaxLength(255);
-                etb.Property(p => p.CoreCurrency).HasMaxLength(255);
-                etb.Property(p => p.CoreUom).HasMaxLength(255);
                 etb.Property(p => p.MaterialTypeDocument).HasMaxLength(255);
                 etb.Property(p => p.RingDocument).HasMaxLength(255);
 

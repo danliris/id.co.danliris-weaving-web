@@ -12,21 +12,14 @@ namespace Manufactures.Domain.Yarns
         public YarnDocument(Guid id,
                             string code,
                             string name,
-                            string description,
                             string tags,
-                            CurrencyValueObject coreCurrency,
-                            UomValueObject coreUom,
                             MaterialTypeDocumentValueObject materialTypeDocument,
-                            RingDocumentValueObject ringDocument,
-                            double price) : base(id)
+                            RingDocumentValueObject ringDocument) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
             Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => description);
             Validator.ThrowIfNullOrEmpty(() => tags);
-            Validator.ThrowIfNull(() => coreCurrency);
-            Validator.ThrowIfNull(() => coreUom);
             Validator.ThrowIfNull(() => materialTypeDocument);
             Validator.ThrowIfNull(() => ringDocument);
 
@@ -35,25 +28,17 @@ namespace Manufactures.Domain.Yarns
             Identity = id;
             Code = Code;
             Name = name;
-            Description = description;
             Tags = tags;
-            CoreCurrency = coreCurrency;
-            CoreUom = coreUom;
             MaterialTypeDocument = materialTypeDocument;
             RingDocument = ringDocument;
-            Price = price;
 
             ReadModel = new YarnDocumentReadModel(Identity)
             {
                 Code = this.Code,
                 Name = this.Name,
-                Description = this.Description,
                 Tags = this.Tags,
-                CoreCurrency = this.CoreCurrency.Serialize(),
-                CoreUom = this.CoreUom.Serialize(),
                 MaterialTypeDocument = this.MaterialTypeDocument.Serialize(),
-                RingDocument = this.RingDocument.Serialize(),
-                Price = this.Price
+                RingDocument = this.RingDocument.Serialize()
             };
 
             ReadModel.AddDomainEvent(new OnYarnAddDocument(this.Identity));
@@ -63,24 +48,16 @@ namespace Manufactures.Domain.Yarns
         {
             this.Code = readModel.Code;
             this.Name = readModel.Name;
-            this.Description = readModel.Description;
             this.Tags = readModel.Tags;
-            this.CoreCurrency = readModel.CoreCurrency.Deserialize<CurrencyValueObject>();
-            this.CoreUom = readModel.CoreUom.Deserialize<UomValueObject>();
             this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeDocumentValueObject>();
             this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
-            this.Price = readModel.Price;
         }
 
         public string Code { get; private set; }
         public string Name { get; private set; }
-        public string Description { get; private set; }
         public string Tags { get; private set; }
-        public CurrencyValueObject CoreCurrency { get; private set; }
-        public UomValueObject CoreUom { get; private set; }
         public MaterialTypeDocumentValueObject MaterialTypeDocument { get; private set; }
         public RingDocumentValueObject RingDocument { get; private set; }
-        public double Price { get; private set; }
 
         public void SetCode(string code)
         {
@@ -108,19 +85,6 @@ namespace Manufactures.Domain.Yarns
             }
         }
 
-        public void SetDescription(string description)
-        {
-            Validator.ThrowIfNullOrEmpty(() => description);
-
-            if (Description != description)
-            {
-                Description = description;
-                ReadModel.Description = Description;
-
-                MarkModified();
-            }
-        }
-
         public void SetTags(string tags)
         {
             Validator.ThrowIfNullOrEmpty(() => tags);
@@ -129,56 +93,6 @@ namespace Manufactures.Domain.Yarns
             {
                 Tags = tags;
                 ReadModel.Tags = Tags;
-
-                MarkModified();
-            }
-        }
-
-        public void SetCurrency(CurrencyValueObject currency)
-        {
-            Validator.ThrowIfNull(() => currency);
-            int indexDiffence = 0;
-
-
-            if (CoreCurrency.Code != currency.Code)
-            {
-                indexDiffence++;
-            }
-
-            if (CoreCurrency.Name != currency.Name)
-            {
-                indexDiffence++;
-            }
-
-            if (indexDiffence > 0)
-            {
-                CoreCurrency = new CurrencyValueObject(currency.Code, currency.Name);
-                ReadModel.CoreCurrency = CoreCurrency.Serialize();
-
-                MarkModified();
-            }
-        }
-
-        public void SetUom(UomValueObject uom)
-        {
-            Validator.ThrowIfNull(() => uom);
-            int indexDiffence = 0;
-
-
-            if (CoreUom.Code != uom.Code)
-            {
-                indexDiffence++;
-            }
-
-            if (CoreUom.Unit != uom.Unit)
-            {
-                indexDiffence++;
-            }
-
-            if (indexDiffence > 0)
-            {
-                CoreUom = new UomValueObject(uom.Code, uom.Unit);
-                ReadModel.CoreUom = CoreUom.Serialize();
 
                 MarkModified();
             }
@@ -229,17 +143,6 @@ namespace Manufactures.Domain.Yarns
             {
                 RingDocument = new RingDocumentValueObject(document.Code, document.Number);
                 ReadModel.RingDocument = RingDocument.Serialize();
-
-                MarkModified();
-            }
-        }
-
-        public void SetPrice(double price)
-        {
-            if(Price != price)
-            {
-                Price = price;
-                ReadModel.Price = Price;
 
                 MarkModified();
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
@@ -24,8 +25,10 @@ namespace Manufactures.Application.Materials.CommandHandlers
         public async Task<MaterialTypeDocument> Handle(PlaceMaterialTypeCommand request,
                                                CancellationToken cancellationToken)
         {
+            var exsistingMaterialCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code) &&
+                                                                                 material.Deleted.Equals(false)).Count() > 1;
             // Check if has same material code
-            if (await _materialTypeRepository.ChekAvailableMaterialCode(request.Code))
+            if (exsistingMaterialCode)
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }

@@ -25,21 +25,23 @@ namespace Manufactures.Application.Materials.CommandHandlers
         public async Task<MaterialTypeDocument> Handle(UpdateMaterialTypeCommand request, 
                                                CancellationToken cancellationToken)
         {
-            var materialType = _materialTypeRepository.Find(entity => entity.Identity == request.Id)
+            var materialType = _materialTypeRepository.Find(entity => entity.Identity.Equals(request.Id))
                                                       .FirstOrDefault();
+            var exsistingMaterialCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code) &&
+                                                                                 material.Deleted.Equals(false)).Count() > 1;
 
-            if(materialType == null)
+            // Check if material does't exsist
+            if (materialType == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
             }
 
-            var hasExistingCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code)).Count() > 1;
-
-            if(hasExistingCode && materialType.Code != request.Code)
+            // Check if has same material code
+            if (exsistingMaterialCode && !materialType.Code.Equals(request.Code))
             {
-                throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
+                throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
-
+            
             materialType.SetCode(request.Code);
             materialType.SetName(request.Name);
             materialType.SetDescription(request.Description);

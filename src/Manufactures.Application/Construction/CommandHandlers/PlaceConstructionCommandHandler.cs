@@ -8,6 +8,7 @@ using Manufactures.Domain.Construction.Repositories;
 using Moonlay;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -28,7 +29,12 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                        CancellationToken cancellationToken)
         {
             // Check Available construction number if has defined
-            if (await _constructionDocumentRepository.IsAvailableConstructionNumber(request.ConstructionNumber))
+            var exsistingConstructionNumber = _constructionDocumentRepository
+                    .Find(construction => construction.ConstructionNumber.Equals(request.ConstructionNumber) && 
+                                          construction.Deleted.Equals(false))
+                    .Count() > 1;
+            
+            if (exsistingConstructionNumber)
             {
                 throw Validator.ErrorValidation(("ConstructionNumber", "Construction Number " + request.ConstructionNumber + " has Available"));
             }

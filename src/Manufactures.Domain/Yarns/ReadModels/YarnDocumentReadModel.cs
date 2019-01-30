@@ -9,12 +9,8 @@ namespace Manufactures.Domain.Yarns.ReadModels
 
         public string Code { get; internal set; }
         public string Name { get; internal set; }
-        public string Description { get; internal set; }
         public string Tags { get; internal set; }
-        public string CoreCurrency { get; internal set; }
-        public string CoreUom { get; internal set; }
         public string MaterialTypeDocument { get; internal set; }
         public string RingDocument { get; internal set; }
-        public double Price { get; internal set; }
     }
 }

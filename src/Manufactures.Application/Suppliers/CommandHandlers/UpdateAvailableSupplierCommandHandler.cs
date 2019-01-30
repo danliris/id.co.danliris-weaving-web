@@ -24,15 +24,16 @@ namespace Manufactures.Application.Suppliers.CommandHandlers
         public async Task<WeavingSupplierDocument> Handle(UpdateExsistingSupplierCommand request, CancellationToken cancellationToken)
         {
             var supplierDocument = _weavingSupplierRepository.Find(supplier => supplier.Identity.Equals(request.Id)).FirstOrDefault();
+            var hasExsistingCode = _weavingSupplierRepository.Find(supplier => supplier.Code.Equals(request.Code) &&
+                                                                               supplier.Deleted.Equals(false)).Count() >= 1;
 
-            if(supplierDocument == null)
+            if (supplierDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
             }
 
-            var hasExsistingCode = _weavingSupplierRepository.Find(supplier => supplier.Code.Equals(request.Code)).Count() >= 1;
-
-            if(hasExsistingCode && supplierDocument.Code != request.Code)
+            // Check exsisting supplier code
+            if(hasExsistingCode && !supplierDocument.Code.Equals(request.Code))
             {
                 throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }
