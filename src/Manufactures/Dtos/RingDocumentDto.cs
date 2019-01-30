@@ -15,7 +15,7 @@ namespace Manufactures.Dtos
 
         public Guid Id { get; private set; }
         public string Code { get; private set; }
-        public string Number { get; private set; }
+        public int Number { get; private set; }
         public string Description { get; private set; }
     }
 }

@@ -10,12 +10,11 @@ namespace Manufactures.Domain.Rings
     {
         public RingDocument(Guid identity,
                             string code,
-                            string number,
+                            int number,
                             string description) : base(identity)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => number);
             Validator.ThrowIfNullOrEmpty(() => description);
 
             this.MarkTransient();
@@ -44,7 +43,7 @@ namespace Manufactures.Domain.Rings
         }
 
         public string Code { get; private set; }
-        public string Number { get; private set; }
+        public int Number { get; private set; }
         public string Description { get; private set; }
 
         public void SetCode(string code)
@@ -60,10 +59,8 @@ namespace Manufactures.Domain.Rings
             }
         }
 
-        public void SetName(string number)
+        public void SetName(int number)
         {
-            Validator.ThrowIfNullOrEmpty(() => number);
-
             if (number != Number)
             {
                 Number = number;

@@ -34,9 +34,7 @@ namespace Manufactures.Controllers.Api
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                ringDocuments = ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                              entity.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                              entity.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                ringDocuments = ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
