@@ -15,7 +15,6 @@ namespace Manufactures.Domain.Yarns.ReadModels
         public string CoreUom { get; internal set; }
         public string MaterialTypeDocument { get; internal set; }
         public string RingDocument { get; internal set; }
-        public string SupplierDocument { get; internal set; }
         public double Price { get; internal set; }
     }
 }

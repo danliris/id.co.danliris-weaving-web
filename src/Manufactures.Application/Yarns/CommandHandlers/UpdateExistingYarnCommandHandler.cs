@@ -48,7 +48,6 @@ namespace Manufactures.Application.Yarns.CommandHandlers
             yarnDocument.SetUom(request.CoreUom);
             yarnDocument.SetMaterialTypeDocument(request.MaterialTypeDocument);
             yarnDocument.SetRingDocument(request.RingDocument);
-            yarnDocument.SetSupplierDocument(request.SupplierDocument);
             yarnDocument.SetPrice(request.Price);
 
             await _yarnDocumentRepository.Update(yarnDocument);

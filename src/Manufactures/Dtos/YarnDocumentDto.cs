@@ -17,7 +17,6 @@ namespace Manufactures.Dtos
             CoreUom = document.CoreUom;
             MaterialTypeDocument = document.MaterialTypeDocument;
             RingDocument = document.RingDocument;
-            SupplierDocument = document.SupplierDocument;
             Price = document.Price;
         }
 
@@ -30,7 +29,6 @@ namespace Manufactures.Dtos
         public UomValueObject CoreUom { get; }
         public MaterialTypeDocumentValueObject MaterialTypeDocument { get; }
         public RingDocumentValueObject RingDocument { get; }
-        public SupplierDocumentValueObject SupplierDocument { get; }
         public double Price { get; }
     }
 }
