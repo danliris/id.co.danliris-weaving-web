@@ -109,6 +109,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.Period).HasMaxLength(255);
                 etb.Property(p => p.WeavingUnit).HasMaxLength(255);
                 etb.Property(p => p.Composition).HasMaxLength(255);
+                etb.Property(p => p.OrderStatus).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
@@ -34,7 +35,9 @@ namespace Manufactures.Application.Orders.CommandHandlers
             {
                 command.OrderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
             }
-            
+
+            command.OrderStatus = Constants.ONORDER;
+
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
                                                  orderNumber: command.OrderNumber,
                                                  fabricConstructionDocument: command.FabricConstructionDocument,
@@ -45,7 +48,8 @@ namespace Manufactures.Application.Orders.CommandHandlers
                                                  weftOrigin: command.WeftOrigin, 
                                                  wholeGrade: command.WholeGrade,
                                                  yarnType: command.YarnType, 
-                                                 weavingUnit: command.WeavingUnit);
+                                                 weavingUnit: command.WeavingUnit,
+                                                 orderStatus: command.OrderStatus);
             
             await _weavingOrderDocumentRepository.Update(order);
 
