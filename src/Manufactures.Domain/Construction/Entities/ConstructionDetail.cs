@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Construction.ReadModels;
-using Manufactures.Domain.Construction.ValueObjects;
 using Moonlay;
 using System;
 
