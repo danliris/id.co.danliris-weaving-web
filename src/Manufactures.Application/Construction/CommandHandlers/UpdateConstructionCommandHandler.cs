@@ -83,7 +83,29 @@ namespace Manufactures.Application.Construction.CommandHandlers
                     constructionDocuments.AddConstructionDetail(constructionDetail);
                 }
             }
-            
+
+            foreach (var weft in request.Wefts)
+            {
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Id)).FirstOrDefault();
+                var detail = constructionDocuments.ConstructionDetails.ToList()
+                                .Where(o => o.Detail.Equals(Constants.WEFT) && o.Yarn.Identity == yarnDocument.Identity).FirstOrDefault();
+
+                if (detail != null)
+                {
+                    detail.SetQuantity(weft.Quantity);
+                    detail.SetInformation(weft.Information);
+                }
+                else
+                {
+                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                   weft.Quantity,
+                                                                                   weft.Information,
+                                                                                   yarnDocument,
+                                                                                   Constants.WEFT);
+                    constructionDocuments.AddConstructionDetail(constructionDetail);
+                }
+            }
+
             await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 
