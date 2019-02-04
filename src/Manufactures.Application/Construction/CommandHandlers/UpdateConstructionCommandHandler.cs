@@ -61,8 +61,6 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetTotalYarn(request.TotalYarn);
             constructionDocuments.SetMaterialType(request.MaterialType);
 
-            var updateConstructionDetail = new List<ConstructionDetail>();
-
             // Update Detail
             foreach (var warp in request.Warps)
             {
@@ -74,7 +72,6 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     detail.SetQuantity(warp.Quantity);
                     detail.SetInformation(warp.Information);
-                    updateConstructionDetail.Add(detail);
                 }
                 else
                 {
@@ -86,8 +83,6 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                                        yarnDocument,
                                                                                        Constants.WARP);
                         constructionDocuments.AddConstructionDetail(constructionDetail);
-
-                        updateConstructionDetail.Add(constructionDetail);
                     }
                 }
             }
@@ -102,7 +97,6 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     detail.SetQuantity(weft.Quantity);
                     detail.SetInformation(weft.Information);
-                    updateConstructionDetail.Add(detail);
                 }
                 else
                 {
@@ -114,14 +108,20 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                                        yarnDocument,
                                                                                        Constants.WEFT);
                         constructionDocuments.AddConstructionDetail(constructionDetail);
-                        updateConstructionDetail.Add(constructionDetail);
                     }
                 }
             }
 
-            if(updateConstructionDetail.Count > 1)
+            // Update exsisting & remove if not has inside request & exsisting data
+            foreach(var detail in constructionDocuments.ConstructionDetails)
             {
-                constructionDocuments.UpdateConstructionDetail(updateConstructionDetail);
+                var countIndetailWarp = request.Warps.Where(o => o.Yarn.Id.Equals(detail.Yarn.Identity)).Count();
+                var countIndetailWeft = request.Wefts.Where(o => o.Yarn.Id.Equals(detail.Yarn.Identity)).Count();
+
+                if(countIndetailWarp == 0 && countIndetailWeft == 0)
+                {
+                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                }
             }
             
             await _constructionDocumentRepository.Update(constructionDocuments);
