@@ -4,6 +4,7 @@ using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Yarns;
 using Moonlay;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manufactures.Domain.Construction.Entities
 {
@@ -34,6 +35,7 @@ namespace Manufactures.Domain.Construction.Entities
 
         public double Quantity { get; private set; }
         public string Information { get; private set; }
+        [NotMapped]
         public YarnDocument Yarn { get; private set; }
         public string Detail { get; private set; }
         public ConstructionDocumentReadModel ConstructionDocument { get; set; }
