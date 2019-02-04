@@ -10,7 +10,7 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
-using MediatR;
+using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 
 namespace Manufactures.Application.Construction.CommandHandlers
@@ -19,14 +19,16 @@ namespace Manufactures.Application.Construction.CommandHandlers
     {
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IYarnDocumentRepository _yarnDocumentRepository;
 
         public UpdateConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request, 
+        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             var constructionDocuments = _constructionDocumentRepository.Find(Entity => Entity.Identity.Equals(request.Id))
@@ -59,51 +61,29 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetTotalYarn(request.TotalYarn);
             constructionDocuments.SetMaterialType(request.MaterialType);
 
-            var constructionDetailsObj = new List<ConstructionDetail>();
-
             // Update Detail
-            foreach (var detail in request.Warps)
+            foreach (var warp in request.Warps)
             {
-                foreach (var constructionDetail in constructionDocuments.ConstructionDetails)
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Id)).FirstOrDefault();
+                var detail = constructionDocuments.ConstructionDetails.ToList()
+                                .Where(o => o.Detail.Equals(Constants.WARP) && o.Yarn.Identity == yarnDocument.Identity).FirstOrDefault();
+
+                if(detail != null)
                 {
-                    if (detail.Id == constructionDetail.Identity)
-                    {
-                        constructionDetail.SetQuantity(detail.Quantity);
-                        constructionDetail.SetInformation(detail.Information);
-                        constructionDetail.SetYarn(detail.Yarn.Serialize());
-
-                        if(!detail.Detail.Equals(Constants.WARP))
-                        {
-                            constructionDetail.SetDetail(Constants.WARP);
-                        }
-
-                        constructionDetailsObj.Add(constructionDetail);
-                    }
+                    detail.SetQuantity(warp.Quantity);
+                    detail.SetInformation(warp.Information);
                 }
-            }
-
-            foreach (var detail in request.Wefts)
-            {
-                foreach (var constructionDetail in constructionDocuments.ConstructionDetails)
+                else
                 {
-                    if (detail.Id == constructionDetail.Identity)
-                    {
-                        constructionDetail.SetQuantity(detail.Quantity);
-                        constructionDetail.SetInformation(detail.Information);
-                        constructionDetail.SetYarn(detail.Yarn.Serialize());
-
-                        if (!detail.Detail.Equals(Constants.WEFT))
-                        {
-                            constructionDetail.SetDetail(Constants.WEFT);
-                        }
-
-                        constructionDetailsObj.Add(constructionDetail);
-                    }
+                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
+                                                                                   warp.Quantity, 
+                                                                                   warp.Information, 
+                                                                                   yarnDocument, 
+                                                                                   Constants.WARP);
+                    constructionDocuments.AddConstructionDetail(constructionDetail);
                 }
             }
             
-            constructionDocuments.SetConstructionDetail(constructionDetailsObj);
-
             await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 
