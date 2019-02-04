@@ -1,7 +1,10 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Construction.ReadModels;
+using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Yarns;
 using Moonlay;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Manufactures.Domain.Construction.Entities
 {
@@ -12,12 +15,13 @@ namespace Manufactures.Domain.Construction.Entities
         public ConstructionDetail(Guid identity, 
                                   double quantity,
                                   string information,
-                                  string yarn,
+                                  YarnDocument yarn,
                                   string detail) : base(identity)
         {
             // Validate Value
             Validator.ThrowIfNullOrEmpty(() => information);
             Validator.ThrowIfNullOrEmpty(() => detail);
+            Validator.ThrowIfNull(() => yarn);
 
             this.MarkTransient();
 
@@ -31,7 +35,8 @@ namespace Manufactures.Domain.Construction.Entities
 
         public double Quantity { get; private set; }
         public string Information { get; private set; }
-        public string Yarn { get; private set; }
+        [NotMapped]
+        public YarnDocument Yarn { get; private set; }
         public string Detail { get; private set; }
         public ConstructionDocumentReadModel ConstructionDocument { get; set; }
         public Guid ConstructionDocumentId { get; set; }
@@ -72,15 +77,15 @@ namespace Manufactures.Domain.Construction.Entities
             }
         }
 
-        public void SetYarn(string yarn)
+        public void SetYarn(YarnDocument yarn)
         {
             Validator.ThrowIfNull(() => yarn);
 
-            if(yarn != Yarn)
+            if(yarn.Code != Yarn.Code)
             {
                 Yarn = yarn;
-
-                this.MarkModified();
+                
+                MarkModified();
             }
         }
 

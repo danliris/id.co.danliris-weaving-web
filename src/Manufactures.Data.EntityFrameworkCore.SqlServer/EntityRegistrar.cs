@@ -63,8 +63,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_ConstructionDetails");
                 etb.HasKey(e => e.Identity);
                 
-                etb.Property(e => e.Yarn).HasMaxLength(255);
-
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });

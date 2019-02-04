@@ -7,5 +7,6 @@
 
         // Status on Manufacture Order
         public static string ONORDER = "OPEN-ORDER";
+        public static string ONESTIMATED = "ESTIMATED-PRODUCTION";
     }
 }

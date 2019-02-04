@@ -28,20 +28,26 @@ namespace Manufactures.Dtos
             {
                 if (constructionDetail.Detail.Contains(Constants.WARP))
                 {
+                    var yarn = new Yarn(constructionDetail.Yarn.Identity, 
+                                        constructionDetail.Yarn.Code, 
+                                        constructionDetail.Yarn.Name);
                     var warpObj = new Warp(constructionDetail.Identity, 
                                            constructionDetail.Quantity, 
-                                           constructionDetail.Information, 
-                                           constructionDetail.Yarn.Deserialize<Yarn>(), 
+                                           constructionDetail.Information,
+                                           yarn, 
                                            constructionDetail.Detail);
                     warps.Add(warpObj);
 
                 }
                 else if (constructionDetail.Detail.Contains(Constants.WEFT))
                 {
+                    var weft = new Yarn(constructionDetail.Yarn.Identity,
+                                        constructionDetail.Yarn.Code,
+                                        constructionDetail.Yarn.Name);
                     var weftObj = new Weft(constructionDetail.Identity,
                                            constructionDetail.Quantity,
                                            constructionDetail.Information,
-                                           constructionDetail.Yarn.Deserialize<Yarn>(),
+                                           weft,
                                            constructionDetail.Detail);
 
                     wefts.Add(weftObj);
