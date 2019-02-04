@@ -97,7 +97,7 @@ namespace Manufactures.Domain.Construction
             var exsistingDetail = ConstructionDetails.Any(detail => !detail.Yarn.Code.Equals(constructionDetail.Yarn.Code) &&
                                                                     !detail.Detail.Equals(constructionDetail.Detail));
 
-            if(exsistingDetail)
+            if (exsistingDetail)
             {
                 var listConstructionDetail = ConstructionDetails.ToList();
 
@@ -106,7 +106,8 @@ namespace Manufactures.Domain.Construction
                 ConstructionDetails = listConstructionDetail;
 
                 ReadModel.ConstructionDetails = ConstructionDetails.ToList();
-            } else
+            }
+            else
             {
                 Validator.ErrorValidation(("Error Detail " + constructionDetail.Detail,
                                            "Already Exsist! " + constructionDetail.Yarn.Name));

@@ -64,29 +64,32 @@ namespace Manufactures.Application.Construction.CommandHandlers
             // Update Detail
             foreach (var warp in request.Warps)
             {
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Id)).FirstOrDefault();
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
                                 .Where(o => o.Detail.Equals(Constants.WARP) && o.Yarn.Identity == yarnDocument.Identity).FirstOrDefault();
 
-                if(detail != null)
+                if (detail != null)
                 {
                     detail.SetQuantity(warp.Quantity);
                     detail.SetInformation(warp.Information);
                 }
                 else
                 {
-                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
-                                                                                   warp.Quantity, 
-                                                                                   warp.Information, 
-                                                                                   yarnDocument, 
-                                                                                   Constants.WARP);
-                    constructionDocuments.AddConstructionDetail(constructionDetail);
+                    if (yarnDocument != null)
+                    {
+                        ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                       warp.Quantity,
+                                                                                       warp.Information,
+                                                                                       yarnDocument,
+                                                                                       Constants.WARP);
+                        constructionDocuments.AddConstructionDetail(constructionDetail);
+                    }
                 }
             }
 
             foreach (var weft in request.Wefts)
             {
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Id)).FirstOrDefault();
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
                                 .Where(o => o.Detail.Equals(Constants.WEFT) && o.Yarn.Identity == yarnDocument.Identity).FirstOrDefault();
 
@@ -97,15 +100,30 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 }
                 else
                 {
-                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                                   weft.Quantity,
-                                                                                   weft.Information,
-                                                                                   yarnDocument,
-                                                                                   Constants.WEFT);
-                    constructionDocuments.AddConstructionDetail(constructionDetail);
+                    if (yarnDocument != null)
+                    {
+                        ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                       weft.Quantity,
+                                                                                       weft.Information,
+                                                                                       yarnDocument,
+                                                                                       Constants.WEFT);
+                        constructionDocuments.AddConstructionDetail(constructionDetail);
+                    }
                 }
             }
 
+            // Update exsisting & remove if not has inside request & exsisting data
+            foreach(var detail in constructionDocuments.ConstructionDetails)
+            {
+                var countIndetailWarp = request.Warps.Where(o => o.Yarn.Id.Equals(detail.Yarn.Identity)).Count();
+                var countIndetailWeft = request.Wefts.Where(o => o.Yarn.Id.Equals(detail.Yarn.Identity)).Count();
+
+                if(countIndetailWarp == 0 && countIndetailWeft == 0)
+                {
+                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                }
+            }
+            
             await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 
