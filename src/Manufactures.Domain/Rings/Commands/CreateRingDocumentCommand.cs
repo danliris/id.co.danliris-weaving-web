@@ -6,7 +6,7 @@ namespace Manufactures.Domain.Rings.Commands
     public class CreateRingDocumentCommand : ICommand<RingDocument>
     {
         public string Code { get; set; }
-        public string Number { get; set; }
+        public int Number { get; set; }
 
         public string Description { get; set; }
     }

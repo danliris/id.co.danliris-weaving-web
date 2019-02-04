@@ -5,9 +5,10 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,48 +18,27 @@ namespace Manufactures.Application.Construction.CommandHandlers
     {
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IYarnDocumentRepository _yarnDocumentRepository;
 
         public PlaceConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request, 
+        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             // Check Available construction number if has defined
-            if (await _constructionDocumentRepository.IsAvailableConstructionNumber(request.ConstructionNumber))
+            var exsistingConstructionNumber = _constructionDocumentRepository
+                    .Find(construction => construction.ConstructionNumber.Equals(request.ConstructionNumber) &&
+                                          construction.Deleted.Equals(false))
+                    .Count() > 1;
+
+            if (exsistingConstructionNumber)
             {
-                throw Validator.ErrorValidation(("ConstructionNumber", "Construction Number " + request.ConstructionNumber + " has Available"));
-            }
-            
-            List<ConstructionDetail> constructionDetails = new List<ConstructionDetail>();
-
-            foreach(var detail in request.Warps)
-            {
-                detail.SetDetail(Constants.WARP);
-
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
-                                                                               detail.Quantity, 
-                                                                               detail.Information, 
-                                                                               detail.Yarn.Serialize(), 
-                                                                               detail.Detail);
-
-                constructionDetails.Add(constructionDetail);
-            }
-
-            foreach(var detail in request.Wefts)
-            {
-                detail.SetDetail(Constants.WEFT);
-
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(), 
-                                                                               detail.Quantity, 
-                                                                               detail.Information, 
-                                                                               detail.Yarn.Serialize(), 
-                                                                               detail.Detail);
-
-                constructionDetails.Add(constructionDetail);
+                Validator.ErrorValidation(("constructionNumber", request.ConstructionNumber + " Has available!"));
             }
 
             var constructionDocument = new ConstructionDocument(id: Guid.NewGuid(),
@@ -70,9 +50,36 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 warpType: request.WarpType,
                                                                 weftType: request.WeftType,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialType: request.MaterialType,
-                                                                constructionDetails: constructionDetails);
+                                                                materialType: request.MaterialType);
 
+            foreach (var detail in request.Warps)
+            {
+                detail.SetDetail(Constants.WARP);
+
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                               detail.Quantity,
+                                                                                               detail.Information,
+                                                                                               yarnDocument,
+                                                                                               detail.Detail);
+
+                constructionDocument.AddConstructionDetail(constructionDetail);
+            }
+
+            foreach (var detail in request.Wefts)
+            {
+                detail.SetDetail(Constants.WEFT);
+
+                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                               detail.Quantity,
+                                                                               detail.Information,
+                                                                               yarnDocument,
+                                                                               detail.Detail);
+
+                constructionDocument.AddConstructionDetail(constructionDetail);
+            }
+            
             await _constructionDocumentRepository.Update(constructionDocument);
             _storage.Save();
 

@@ -23,16 +23,18 @@ namespace Manufactures.Application.Rings.CommandHandlers
 
         public async Task<RingDocument> Handle(UpdateRingDocumentCommand request, CancellationToken cancellationToken)
         {
-            var ringDocument = _ringRepository.Find(entity => entity.Identity == request.Id).FirstOrDefault();
+            var ringDocument = _ringRepository.Find(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
 
             if(ringDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
             }
 
-            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code)).Count() >= 1; 
+            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code) && 
+                                                               ring.Deleted.Equals(false)).Count() >= 1; 
 
-            if(hasRingDocument &&  ringDocument.Code != request.Code)
+            // Check for exsisting ring code
+            if(hasRingDocument && !ringDocument.Code.Equals(request.Code))
             {
                 throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
             }

@@ -29,7 +29,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
             var query = _yarnDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var yarns = _yarnDocumentRepository.Find(query).Select(item => new ListYarnDocumentDto(item));
+            var yarns = _yarnDocumentRepository.Find(query).Select(item => new YarnDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -41,7 +41,7 @@ namespace Manufactures.Controllers.Api
             {
                 Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(ListYarnDocumentDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(YarnDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {

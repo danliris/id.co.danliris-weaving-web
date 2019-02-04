@@ -24,8 +24,10 @@ namespace Manufactures.Application.Yarns.CommandHandlers
 
         public async Task<YarnDocument> Handle(CreateNewYarnCommand request, CancellationToken cancellationToken)
         {
-            var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code)).Count() >= 1;
+            var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code) && 
+                                                                     yarn.Deleted.Equals(false)).Count() >= 1;
 
+            // Check if has exsisting code
             if(exsistingCode)
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
@@ -33,14 +35,10 @@ namespace Manufactures.Application.Yarns.CommandHandlers
 
             var newYarn = new YarnDocument(Guid.NewGuid(), 
                                            request.Code, 
-                                           request.Name, 
-                                           request.Description, 
+                                           request.Name,
                                            request.Tags,
-                                           request.CoreCurrency, 
-                                           request.CoreUom, 
                                            request.MaterialTypeDocument, 
-                                           request.RingDocument,
-                                           request.Price);
+                                           request.RingDocument);
 
             await _yarnDocumentRepository.Update(newYarn);
             _storage.Save();

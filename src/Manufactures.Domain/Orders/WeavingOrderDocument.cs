@@ -18,7 +18,8 @@ namespace Manufactures.Domain.Orders
                                     string weftOrigin,
                                     int wholeGrade,
                                     string yarnType,
-                                    WeavingUnit weavingUnit) : base(id)
+                                    WeavingUnit weavingUnit, 
+                                    string orderStatus) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => orderNumber);
@@ -29,6 +30,7 @@ namespace Manufactures.Domain.Orders
             Validator.ThrowIfNullOrEmpty(() => weftOrigin);
             Validator.ThrowIfNullOrEmpty(() => yarnType);
             Validator.ThrowIfNull(() => weavingUnit);
+            Validator.ThrowIfNullOrEmpty(() => orderStatus);
 
             this.MarkTransient();
 
@@ -44,6 +46,7 @@ namespace Manufactures.Domain.Orders
             Period = period;
             Composition = composition;
             WeavingUnit = weavingUnit;
+            OrderStatus = orderStatus;
 
             ReadModel = new WeavingOrderDocumentReadModel(Identity)
             {
@@ -56,7 +59,8 @@ namespace Manufactures.Domain.Orders
                 YarnType = this.YarnType,
                 Period = this.Period.Serialize(),
                 Composition = this.Composition.Serialize(),
-                WeavingUnit = this.WeavingUnit.Serialize()
+                WeavingUnit = this.WeavingUnit.Serialize(),
+                OrderStatus = this.OrderStatus
             };
 
             ReadModel.AddDomainEvent(new OnWeavingOrderPlaced(this.Identity));
@@ -64,16 +68,17 @@ namespace Manufactures.Domain.Orders
 
         public WeavingOrderDocument(WeavingOrderDocumentReadModel readModel) : base(readModel)
         {
-            this.OrderNumber = ReadModel.OrderNumber;
-            this.FabricConstructionDocument = ReadModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
-            this.DateOrdered = ReadModel.DateOrdered;
-            this.WarpOrigin = ReadModel.WarpOrigin;
-            this.WeftOrigin = ReadModel.WeftOrigin;
-            this.WholeGrade = ReadModel.WholeGrade;
-            this.YarnType = ReadModel.YarnType;
-            this.Period = ReadModel.Period.Deserialize<Period>();
-            this.Composition = ReadModel.Composition.Deserialize<Composition>();
-            this.WeavingUnit = ReadModel.WeavingUnit.Deserialize<WeavingUnit>();
+            this.OrderNumber = readModel.OrderNumber;
+            this.FabricConstructionDocument = readModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
+            this.DateOrdered = readModel.DateOrdered;
+            this.WarpOrigin = readModel.WarpOrigin;
+            this.WeftOrigin = readModel.WeftOrigin;
+            this.WholeGrade = readModel.WholeGrade;
+            this.YarnType = readModel.YarnType;
+            this.Period = readModel.Period.Deserialize<Period>();
+            this.Composition = readModel.Composition.Deserialize<Composition>();
+            this.WeavingUnit = readModel.WeavingUnit.Deserialize<WeavingUnit>();
+            this.OrderStatus = readModel.OrderStatus;
         }
 
         public string OrderNumber { get; private set; }
@@ -86,7 +91,21 @@ namespace Manufactures.Domain.Orders
         public Period Period { get; private set; }
         public Composition Composition { get; private set; }
         public WeavingUnit WeavingUnit { get; private set; }
-        
+        public string OrderStatus { get; private set; }
+
+        public void SetOrderStatus(string orderStatus)
+        {
+            Validator.ThrowIfNullOrEmpty(() => orderStatus);
+
+            if(OrderStatus != orderStatus)
+            {
+                OrderStatus = orderStatus;
+                ReadModel.OrderStatus = OrderStatus;
+
+                MarkModified();
+            }
+        }
+
         public void SetWarpOrigin(string warpOrigin)
         {
             Validator.ThrowIfNull(() => warpOrigin);

@@ -7,6 +7,7 @@ using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Manufactures.Domain.Construction
 {
@@ -21,8 +22,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeId materialType, 
-                                    List<ConstructionDetail> constructionDetails) : base(id)
+                                    MaterialTypeId materialType) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -43,7 +43,7 @@ namespace Manufactures.Domain.Construction
             WeftType = weftType;
             TotalYarn = totalYarn;
             MaterialType = materialType;
-            ConstructionDetails = constructionDetails;
+            ConstructionDetails = new List<ConstructionDetail>().AsReadOnly();
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {
@@ -55,7 +55,7 @@ namespace Manufactures.Domain.Construction
                 WarpType = this.WarpType,
                 WeftType = this.WeftType,
                 TotalYarn = this.TotalYarn,
-                ConstructionDetails = (List<ConstructionDetail>)this.ConstructionDetails
+                ConstructionDetails = this.ConstructionDetails.ToList()
             };
 
             if (this.MaterialType != null)
@@ -92,12 +92,25 @@ namespace Manufactures.Domain.Construction
         public MaterialTypeId MaterialType { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
-        public void SetConstructionDetail(IReadOnlyCollection<ConstructionDetail> constructionDetails)
+        public void AddConstructionDetail(ConstructionDetail constructionDetail)
         {
-            ConstructionDetails = constructionDetails;
-            ReadModel.ConstructionDetails = (List<ConstructionDetail>)ConstructionDetails;
+            var exsistingDetail = ConstructionDetails.Any(detail => !detail.Yarn.Code.Equals(constructionDetail.Yarn.Code) &&
+                                                                    !detail.Detail.Equals(constructionDetail.Detail));
 
-            MarkModified();
+            if(exsistingDetail)
+            {
+                var listConstructionDetail = ConstructionDetails.ToList();
+
+                listConstructionDetail.Add(constructionDetail);
+
+                ConstructionDetails = listConstructionDetail;
+
+                ReadModel.ConstructionDetails = ConstructionDetails.ToList();
+            } else
+            {
+                Validator.ErrorValidation(("Error Detail " + constructionDetail.Detail,
+                                           "Already Exsist! " + constructionDetail.Yarn.Name));
+            }
         }
 
         public void SetMaterialType(MaterialTypeId materialType)

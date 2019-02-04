@@ -17,6 +17,7 @@ namespace Manufactures.Domain.Orders.Commands
         public Period Period { get; set; }
         public Composition Composition { get; set; }
         public WeavingUnit WeavingUnit { get; set; }
+        public string OrderStatus { get; set; }
     }
 
     public class UpdateWeavingOrderCommandValidator : AbstractValidator<UpdateWeavingOrderCommand>
