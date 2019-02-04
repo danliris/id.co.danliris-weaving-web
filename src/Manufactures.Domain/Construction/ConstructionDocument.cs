@@ -92,6 +92,12 @@ namespace Manufactures.Domain.Construction
         public MaterialTypeId MaterialType { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
+        public void UpdateConstructionDetail(List<ConstructionDetail> constructionDetails)
+        {
+            ConstructionDetails = constructionDetails;
+            ReadModel.ConstructionDetails = constructionDetails;
+        }
+
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
         {
             var exsistingDetail = ConstructionDetails.Any(detail => !detail.Yarn.Code.Equals(constructionDetail.Yarn.Code) &&
