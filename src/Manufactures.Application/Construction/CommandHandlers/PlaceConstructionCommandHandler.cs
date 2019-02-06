@@ -51,7 +51,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 warpType: request.WarpType,
                                                                 weftType: request.WeftType,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialTypeId: request.MaterialTypeId);
+                                                                materialType: request.MaterialType);
 
             foreach (var detail in request.Warps)
             {

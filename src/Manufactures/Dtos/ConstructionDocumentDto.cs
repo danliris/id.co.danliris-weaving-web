@@ -1,6 +1,7 @@
 ﻿using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Yarns.ValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -13,13 +14,13 @@ namespace Manufactures.Dtos
             Id = constructionDocument.Identity;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             AmountOfWarp = constructionDocument.AmountOfWarp;
-            AmountofWeft = constructionDocument.AmountOfWeft;
+            AmountOfWeft = constructionDocument.AmountOfWeft;
             Width = constructionDocument.Width;
             WovenType = constructionDocument.WovenType;
             WarpType = constructionDocument.WarpType;
             WeftType = constructionDocument.WeftType;
             TotalYarn = constructionDocument.TotalYarn;
-            MaterialTypeId = constructionDocument.MaterialTypeId;
+            MaterialTypeId = constructionDocument.MaterialType;
 
             var warps = new List<Warp>();
             var wefts = new List<Weft>();
@@ -55,13 +56,13 @@ namespace Manufactures.Dtos
         public Guid Id { get; }
         public string ConstructionNumber { get; }
         public int AmountOfWarp { get; }
-        public int AmountofWeft { get; }
+        public int AmountOfWeft { get; }
         public int Width { get; }
         public string WovenType { get; }
         public string WarpType { get; }
         public string WeftType { get; }
         public double TotalYarn { get; }
-        public MaterialTypeId MaterialTypeId { get; }
+        public MaterialTypeDocumentValueObject MaterialTypeId { get; }
         public IReadOnlyCollection<Warp> Warps { get; }
         public IReadOnlyCollection<Weft> Wefts { get; }
     }

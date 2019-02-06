@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Yarns.ValueObjects;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.Commands
@@ -15,7 +16,7 @@ namespace Manufactures.Domain.Construction.Commands
         public string WarpType { get; set; }
         public string WeftType { get; set; }
         public double TotalYarn { get; set; }
-        public MaterialTypeId MaterialTypeId { get; set; }
+        public MaterialTypeDocumentValueObject MaterialType { get; set; }
         public List<Warp> Warps { get; set; }
         public List<Weft> Wefts { get; set; }
     }
