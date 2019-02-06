@@ -58,12 +58,12 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            constructionDocuments = constructionDocuments.ToArray();
-            int totalRows = constructionDocuments.Count();
+            var constructionDocumentsResult = constructionDocuments.ToArray();
+            int totalRows = constructionDocumentsResult.Count();
 
             await Task.Yield();
 
-            return Ok(constructionDocuments, info: new
+            return Ok(constructionDocumentsResult, info: new
             {
                 page,
                 size,
@@ -75,7 +75,9 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string id)
         {
             var Id = Guid.Parse(id);
-            var constructionDocument = _constructionDocumentRepository.Find(item => item.Identity == Id)
+            var query = _constructionDocumentRepository.Query;
+            var constructionDocument = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
+                                                                      .Where(o => o.Identity == Id)
                                                                       .Select(item => new ConstructionDocumentDto(item))
                                                                       .FirstOrDefault();
             await Task.Yield();

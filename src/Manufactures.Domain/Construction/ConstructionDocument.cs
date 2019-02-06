@@ -43,7 +43,7 @@ namespace Manufactures.Domain.Construction
             WeftType = weftType;
             TotalYarn = totalYarn;
             MaterialType = materialType;
-            ConstructionDetails = new List<ConstructionDetail>().AsReadOnly();
+            ConstructionDetails = new List<ConstructionDetail>();
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {
@@ -94,24 +94,13 @@ namespace Manufactures.Domain.Construction
 
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
         {
-            var exsistingDetail = ConstructionDetails.Any(detail => !detail.Yarn.Code.Equals(constructionDetail.Yarn.Code) &&
-                                                                    !detail.Detail.Equals(constructionDetail.Detail));
+            var listConstructionDetail = ConstructionDetails.ToList();
 
-            if (exsistingDetail)
-            {
-                var listConstructionDetail = ConstructionDetails.ToList();
+            listConstructionDetail.Add(constructionDetail);
 
-                listConstructionDetail.Add(constructionDetail);
+            ConstructionDetails = listConstructionDetail;
 
-                ConstructionDetails = listConstructionDetail;
-
-                ReadModel.ConstructionDetails = ConstructionDetails.ToList();
-            }
-            else
-            {
-                Validator.ErrorValidation(("Error Detail " + constructionDetail.Detail,
-                                           "Already Exsist! " + constructionDetail.Yarn.Name));
-            }
+            ReadModel.ConstructionDetails = ConstructionDetails.ToList();
         }
 
         public void SetMaterialType(MaterialTypeId materialType)
@@ -142,8 +131,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetAmountOfWarp(int amountOfWarp)
         {
-            Validator.ThrowIfNull(() => amountOfWarp);
-
             if (amountOfWarp != AmountOfWarp)
             {
                 AmountOfWarp = amountOfWarp;
@@ -155,8 +142,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetAmountOfWeft(int amountOfWeft)
         {
-            Validator.ThrowIfNull(() => amountOfWeft);
-
             if (amountOfWeft != AmountOfWeft)
             {
                 AmountOfWeft = amountOfWeft;
@@ -168,8 +153,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetWidth(int width)
         {
-            Validator.ThrowIfNull(() => width);
-
             if (width != Width)
             {
                 Width = width;
@@ -220,8 +203,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetTotalYarn(double totalYarn)
         {
-            Validator.ThrowIfNull(() => totalYarn);
-
             if (totalYarn != TotalYarn)
             {
                 TotalYarn = totalYarn;

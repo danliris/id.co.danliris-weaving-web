@@ -5,6 +5,7 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
@@ -57,10 +58,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WARP);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                                detail.Quantity,
                                                                                                detail.Information,
-                                                                                               yarnDocument,
+                                                                                               yarn,
                                                                                                detail.Detail);
 
                 constructionDocument.AddConstructionDetail(constructionDetail);
@@ -71,12 +73,12 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WEFT);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                detail.Quantity,
                                                                                detail.Information,
-                                                                               yarnDocument,
+                                                                               yarn,
                                                                                detail.Detail);
-
                 constructionDocument.AddConstructionDetail(constructionDetail);
             }
             
