@@ -19,7 +19,7 @@ namespace Manufactures.Dtos
             WarpType = constructionDocument.WarpType;
             WeftType = constructionDocument.WeftType;
             TotalYarn = constructionDocument.TotalYarn;
-            MaterialType = constructionDocument.MaterialType;
+            MaterialTypeId = constructionDocument.MaterialTypeId;
 
             var warps = new List<Warp>();
             var wefts = new List<Weft>();
@@ -61,7 +61,7 @@ namespace Manufactures.Dtos
         public string WarpType { get; }
         public string WeftType { get; }
         public double TotalYarn { get; }
-        public MaterialTypeId MaterialType { get; }
+        public MaterialTypeId MaterialTypeId { get; }
         public IReadOnlyCollection<Warp> Warps { get; }
         public IReadOnlyCollection<Weft> Wefts { get; }
     }
