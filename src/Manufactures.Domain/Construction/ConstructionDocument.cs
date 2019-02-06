@@ -88,7 +88,6 @@ namespace Manufactures.Domain.Construction
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
-        [NotMapped]
         public MaterialTypeId MaterialTypeId { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
