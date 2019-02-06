@@ -3,6 +3,7 @@ using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.Yarns.ValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
@@ -22,7 +23,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeId materialTypeId) : base(id)
+                                    MaterialTypeDocumentValueObject materialType) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -42,7 +43,7 @@ namespace Manufactures.Domain.Construction
             WarpType = warpType;
             WeftType = weftType;
             TotalYarn = totalYarn;
-            MaterialTypeId = materialTypeId;
+            MaterialType = materialType;
             ConstructionDetails = new List<ConstructionDetail>();
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
@@ -55,13 +56,9 @@ namespace Manufactures.Domain.Construction
                 WarpType = this.WarpType,
                 WeftType = this.WeftType,
                 TotalYarn = this.TotalYarn,
+                MaterialType = this.MaterialType.Serialize(),
                 ConstructionDetails = this.ConstructionDetails.ToList()
             };
-
-            if (this.MaterialTypeId != null)
-            {
-                ReadModel.MaterialType = MaterialTypeId.Value;
-            }
 
             ReadModel.AddDomainEvent(new OnConstructionPlaced(this.Identity));
         }
@@ -76,7 +73,7 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialTypeId = new MaterialTypeId(ReadModel.MaterialType);
+            this.MaterialType = ReadModel.MaterialType.Deserialize<MaterialTypeDocumentValueObject>();
             this.ConstructionDetails = readModel.ConstructionDetails;
         }
 
@@ -88,7 +85,7 @@ namespace Manufactures.Domain.Construction
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
-        public MaterialTypeId MaterialTypeId { get; private set; }
+        public MaterialTypeDocumentValueObject MaterialType { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
@@ -102,14 +99,14 @@ namespace Manufactures.Domain.Construction
             ReadModel.ConstructionDetails = ConstructionDetails.ToList();
         }
 
-        public void SetMaterialType(MaterialTypeId materialType)
+        public void SetMaterialType(MaterialTypeDocumentValueObject materialType)
         {
             Validator.ThrowIfNull(() => materialType);
 
-            if (materialType != MaterialTypeId)
+            if (materialType != MaterialType)
             {
-                MaterialTypeId = materialType;
-                ReadModel.MaterialType = MaterialTypeId.Value;
+                MaterialType = materialType;
+                ReadModel.MaterialType = MaterialType.Serialize();
 
                 MarkModified();
             }
