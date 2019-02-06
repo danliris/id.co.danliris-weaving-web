@@ -22,7 +22,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeId materialType) : base(id)
+                                    MaterialTypeId materialTypeId) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -42,7 +42,7 @@ namespace Manufactures.Domain.Construction
             WarpType = warpType;
             WeftType = weftType;
             TotalYarn = totalYarn;
-            MaterialType = materialType;
+            MaterialTypeId = materialTypeId;
             ConstructionDetails = new List<ConstructionDetail>();
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
@@ -58,9 +58,9 @@ namespace Manufactures.Domain.Construction
                 ConstructionDetails = this.ConstructionDetails.ToList()
             };
 
-            if (this.MaterialType != null)
+            if (this.MaterialTypeId != null)
             {
-                ReadModel.MaterialType = MaterialType.Value;
+                ReadModel.MaterialType = MaterialTypeId.Value;
             }
 
             ReadModel.AddDomainEvent(new OnConstructionPlaced(this.Identity));
@@ -76,7 +76,7 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialType = new MaterialTypeId(ReadModel.MaterialType);
+            this.MaterialTypeId = new MaterialTypeId(ReadModel.MaterialType);
             this.ConstructionDetails = readModel.ConstructionDetails;
         }
 
@@ -89,7 +89,7 @@ namespace Manufactures.Domain.Construction
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
         [NotMapped]
-        public MaterialTypeId MaterialType { get; private set; }
+        public MaterialTypeId MaterialTypeId { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
@@ -107,10 +107,10 @@ namespace Manufactures.Domain.Construction
         {
             Validator.ThrowIfNull(() => materialType);
 
-            if (materialType != MaterialType)
+            if (materialType != MaterialTypeId)
             {
-                MaterialType = materialType;
-                ReadModel.MaterialType = MaterialType.Value;
+                MaterialTypeId = materialType;
+                ReadModel.MaterialType = MaterialTypeId.Value;
 
                 MarkModified();
             }

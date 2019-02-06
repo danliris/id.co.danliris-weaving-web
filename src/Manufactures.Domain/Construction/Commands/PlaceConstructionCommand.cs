@@ -15,7 +15,7 @@ namespace Manufactures.Domain.Construction.Commands
         public string WarpType { get; set; }
         public string WeftType { get; set; }
         public double TotalYarn { get; set; }
-        public MaterialTypeId MaterialType { get; set; }
+        public MaterialTypeId MaterialTypeId { get; set; }
         public List<Warp> Warps { get; set; }
         public List<Weft> Wefts { get; set; }
     }
