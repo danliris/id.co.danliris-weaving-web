@@ -13,12 +13,12 @@ namespace Manufactures.Domain.Construction.Commands
         public int AmountOfWeft { get; set; }
         public int Width { get; set; }
         public string WovenType { get; set; }
-        public string WarpType { get; set; }
-        public string WeftType { get; set; }
+        public string WarpTypeForm { get; set; }
+        public string WeftTypeForm { get; set; }
         public double TotalYarn { get; set; }
-        public MaterialTypeDocumentValueObject MaterialType { get; set; }
-        public List<Warp> Warps { get; set; }
-        public List<Weft> Wefts { get; set; }
+        public MaterialTypeDocument MaterialTypeDocument { get; set; }
+        public List<Warp> ItemsWarp { get; set; }
+        public List<Weft> ItemsWeft { get; set; }
     }
 
     public class PlaceConstructionCommandValidator : AbstractValidator<PlaceConstructionCommand>
@@ -30,11 +30,11 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.AmountOfWeft).NotEmpty();
             RuleFor(command => command.Width).NotEmpty();
             RuleFor(command => command.WovenType).NotEmpty();
-            RuleFor(command => command.WarpType).NotEmpty();
-            RuleFor(command => command.WeftType).NotEmpty();
+            RuleFor(command => command.WarpTypeForm).NotEmpty();
+            RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
-            RuleFor(command => command.Warps).NotEmpty();
-            RuleFor(command => command.Wefts).NotEmpty();
+            RuleFor(command => command.ItemsWarp).NotEmpty();
+            RuleFor(command => command.ItemsWeft).NotEmpty();
         }
     }
 }

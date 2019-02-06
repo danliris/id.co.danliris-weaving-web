@@ -48,12 +48,12 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 amountOfWeft: request.AmountOfWeft,
                                                                 width: request.Width,
                                                                 wofenType: request.WovenType,
-                                                                warpType: request.WarpType,
-                                                                weftType: request.WeftType,
+                                                                warpType: request.WarpTypeForm,
+                                                                weftType: request.WeftTypeForm,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialType: request.MaterialType);
+                                                                materialTypeDocument: request.MaterialTypeDocument);
 
-            foreach (var detail in request.Warps)
+            foreach (var detail in request.ItemsWarp)
             {
                 detail.SetDetail(Constants.WARP);
 
@@ -68,7 +68,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 constructionDocument.AddConstructionDetail(constructionDetail);
             }
 
-            foreach (var detail in request.Wefts)
+            foreach (var detail in request.ItemsWeft)
             {
                 detail.SetDetail(Constants.WEFT);
 
