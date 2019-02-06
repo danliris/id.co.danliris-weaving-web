@@ -3,6 +3,7 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Dtos;
+using Manufactures.Dtos.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -78,7 +79,7 @@ namespace Manufactures.Controllers.Api
             var query = _constructionDocumentRepository.Query;
             var constructionDocument = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
                                                                       .Where(o => o.Identity == Id)
-                                                                      .Select(item => new ConstructionDocumentDto(item))
+                                                                      .Select(item => new ConstructionByIdDto(item))
                                                                       .FirstOrDefault();
             await Task.Yield();
 
