@@ -1,9 +1,5 @@
-﻿using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Yarns.ValueObjects;
+﻿using Manufactures.Domain.Construction;
 using System;
-using System.Collections.Generic;
 
 namespace Manufactures.Dtos
 {
@@ -14,12 +10,12 @@ namespace Manufactures.Dtos
             Id = constructionDocument.Identity;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             TotalYarn = constructionDocument.TotalYarn;
-            Date = constructionDocument.Date;
+            Date = constructionDocument.Date.ToString("MMMM dd, yyyy");
         }
 
         public Guid Id { get; }
         public string ConstructionNumber { get; }
-        public DateTimeOffset Date { get; }
+        public string Date { get; }
         public double TotalYarn { get; }
         
     }
