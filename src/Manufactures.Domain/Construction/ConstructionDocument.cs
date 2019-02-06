@@ -43,7 +43,7 @@ namespace Manufactures.Domain.Construction
             WeftType = weftType;
             TotalYarn = totalYarn;
             MaterialType = materialType;
-            ConstructionDetails = new List<ConstructionDetail>().AsReadOnly();
+            ConstructionDetails = new List<ConstructionDetail>();
 
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {

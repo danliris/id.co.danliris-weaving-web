@@ -52,6 +52,9 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 totalYarn: request.TotalYarn,
                                                                 materialType: request.MaterialType);
 
+            await _constructionDocumentRepository.Update(constructionDocument);
+            _storage.Save();
+
             foreach (var detail in request.Warps)
             {
                 detail.SetDetail(Constants.WARP);
