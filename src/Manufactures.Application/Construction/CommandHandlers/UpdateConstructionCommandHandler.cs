@@ -58,10 +58,10 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetAmountOfWeft(request.AmountOfWeft);
             constructionDocuments.SetWidth(request.Width);
             constructionDocuments.SetWovenType(request.WovenType);
-            constructionDocuments.SetWarpType(request.WarpType);
-            constructionDocuments.SetWeftType(request.WeftType);
+            constructionDocuments.SetWarpType(request.WarpTypeForm);
+            constructionDocuments.SetWeftType(request.WeftTypeForm);
             constructionDocuments.SetTotalYarn(request.TotalYarn);
-            constructionDocuments.SetMaterialType(request.MaterialType);
+            constructionDocuments.SetMaterialType(request.MaterialTypeDocument);
 
             // Update Detail
             foreach (var warp in request.ItemsWarp)
