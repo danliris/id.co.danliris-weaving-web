@@ -1,7 +1,7 @@
 ﻿using Manufactures.Domain.Construction;
 using System;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Dtos.Construction
 {
     public class ConstructionDocumentDto
     {

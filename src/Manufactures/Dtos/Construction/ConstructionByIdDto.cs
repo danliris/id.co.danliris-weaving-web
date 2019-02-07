@@ -3,7 +3,6 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.Construction
 {

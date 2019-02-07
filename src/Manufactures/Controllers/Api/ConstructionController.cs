@@ -1,8 +1,6 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Dtos;
 using Manufactures.Dtos.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
