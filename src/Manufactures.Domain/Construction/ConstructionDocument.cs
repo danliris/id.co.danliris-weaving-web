@@ -3,11 +3,9 @@ using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Events;
-using Manufactures.Domain.Yarns.ValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Manufactures.Domain.Construction
