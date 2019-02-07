@@ -64,7 +64,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetMaterialType(request.MaterialType);
 
             // Update Detail
-            foreach (var warp in request.Warps)
+            foreach (var warp in request.ItemsWarp)
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
@@ -90,7 +90,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 }
             }
 
-            foreach (var weft in request.Wefts)
+            foreach (var weft in request.ItemsWeft)
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
@@ -119,8 +119,8 @@ namespace Manufactures.Application.Construction.CommandHandlers
             // Update exsisting & remove if not has inside request & exsisting data
             foreach(var detail in constructionDocuments.ConstructionDetails)
             {
-                var countIndetailWarp = request.Warps.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
-                var countIndetailWeft = request.Wefts.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+                var countIndetailWarp = request.ItemsWarp.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+                var countIndetailWeft = request.ItemsWeft.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
 
                 if(countIndetailWarp == 0 && countIndetailWeft == 0)
                 {

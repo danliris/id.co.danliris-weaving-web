@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Yarns.ValueObjects;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.Commands

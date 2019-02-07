@@ -22,8 +22,8 @@ namespace Manufactures.Domain.Construction.Commands
         public string WeftType { get; set; }
         public double TotalYarn { get; set; }
         public MaterialTypeDocument MaterialType { get; set; }
-        public List<Warp> Warps { get; set; }
-        public List<Weft> Wefts { get; set; }
+        public List<Warp> ItemsWarp { get; set; }
+        public List<Weft> ItemsWeft { get; set; }
     }
 
     public class UpdateConstructionCommandValidator : AbstractValidator<UpdateConstructionCommand>
@@ -39,8 +39,8 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WeftType).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
             RuleFor(command => command.MaterialType).NotEmpty();
-            RuleFor(command => command.Warps).NotEmpty();
-            RuleFor(command => command.Wefts).NotEmpty();
+            RuleFor(command => command.ItemsWarp).NotEmpty();
+            RuleFor(command => command.ItemsWeft).NotEmpty();
         }
     }
 }
