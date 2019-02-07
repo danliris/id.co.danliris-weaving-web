@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Yarns;
 using Moonlay;
 using System;
 
@@ -14,7 +13,7 @@ namespace Manufactures.Domain.Construction.Entities
         public ConstructionDetail(Guid identity, 
                                   double quantity,
                                   string information,
-                                  YarnDocument yarn,
+                                  Yarn yarn,
                                   string detail) : base(identity)
         {
             // Validate Value
@@ -28,13 +27,13 @@ namespace Manufactures.Domain.Construction.Entities
             Identity = identity;
             Quantity = quantity;
             Information = information;
-            Yarn = yarn;
+            Yarn = yarn.Serialize();
             Detail = detail;
         }
 
         public double Quantity { get; private set; }
         public string Information { get; private set; }
-        public YarnDocument Yarn { get; private set; }
+        public string Yarn { get; private set; }
         public string Detail { get; private set; }
         public ConstructionDocumentReadModel ConstructionDocument { get; set; }
         public Guid ConstructionDocumentId { get; set; }
@@ -53,8 +52,6 @@ namespace Manufactures.Domain.Construction.Entities
 
         public void SetQuantity(double quantity)
         {
-            Validator.ThrowIfNull(() => quantity);
-
             if(quantity != Quantity)
             {
                 Quantity = quantity;
@@ -75,13 +72,13 @@ namespace Manufactures.Domain.Construction.Entities
             }
         }
 
-        public void SetYarn(YarnDocument yarn)
+        public void SetYarn(Yarn yarn)
         {
             Validator.ThrowIfNull(() => yarn);
 
-            if(yarn.Code != Yarn.Code)
+            if(yarn.Code != Yarn.Deserialize<Yarn>().Code)
             {
-                Yarn = yarn;
+                Yarn = yarn.Serialize();
                 
                 MarkModified();
             }

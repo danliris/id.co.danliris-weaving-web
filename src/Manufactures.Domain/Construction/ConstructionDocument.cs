@@ -6,13 +6,24 @@ using Manufactures.Domain.Events;
 using Moonlay;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Manufactures.Domain.Construction
 {
     public class ConstructionDocument : AggregateRoot<ConstructionDocument, ConstructionDocumentReadModel>
     {
+        public string ConstructionNumber { get; private set; }
+        public DateTimeOffset Date { get; private set; }
+        public int AmountOfWarp { get; private set; }
+        public int AmountOfWeft { get; private set; }
+        public int Width { get; private set; }
+        public string WovenType { get; private set; }
+        public string WarpType { get; private set; }
+        public string WeftType { get; private set; }
+        public double TotalYarn { get; private set; }
+        public MaterialTypeDocument MaterialType { get; private set; }
+        public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
+
         public ConstructionDocument(Guid id,
                                     string constructionNumber,
                                     string wofenType,
@@ -22,7 +33,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeId materialType) : base(id)
+                                    MaterialTypeDocument materialTypeDocument) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -42,9 +53,9 @@ namespace Manufactures.Domain.Construction
             WarpType = warpType;
             WeftType = weftType;
             TotalYarn = totalYarn;
-            MaterialType = materialType;
-            ConstructionDetails = new List<ConstructionDetail>().AsReadOnly();
-
+            MaterialType = materialTypeDocument;
+            ConstructionDetails = new List<ConstructionDetail>();
+            
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {
                 ConstructionNumber = this.ConstructionNumber,
@@ -55,13 +66,9 @@ namespace Manufactures.Domain.Construction
                 WarpType = this.WarpType,
                 WeftType = this.WeftType,
                 TotalYarn = this.TotalYarn,
+                MaterialType = this.MaterialType.Serialize(),
                 ConstructionDetails = this.ConstructionDetails.ToList()
             };
-
-            if (this.MaterialType != null)
-            {
-                ReadModel.MaterialType = MaterialType.Value;
-            }
 
             ReadModel.AddDomainEvent(new OnConstructionPlaced(this.Identity));
         }
@@ -76,51 +83,30 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialType = new MaterialTypeId(ReadModel.MaterialType);
+            this.MaterialType = ReadModel.MaterialType.Deserialize<MaterialTypeDocument>();
             this.ConstructionDetails = readModel.ConstructionDetails;
+            this.Date = readModel.CreatedDate;
         }
-
-        public string ConstructionNumber { get; private set; }
-        public int AmountOfWarp { get; private set; }
-        public int AmountOfWeft { get; private set; }
-        public int Width { get; private set; }
-        public string WovenType { get; private set; }
-        public string WarpType { get; private set; }
-        public string WeftType { get; private set; }
-        public double TotalYarn { get; private set; }
-        [NotMapped]
-        public MaterialTypeId MaterialType { get; private set; }
-        public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
-
+        
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
         {
-            var exsistingDetail = ConstructionDetails.Any(detail => !detail.Yarn.Code.Equals(constructionDetail.Yarn.Code) &&
-                                                                    !detail.Detail.Equals(constructionDetail.Detail));
+            var listConstructionDetail = ConstructionDetails.ToList();
 
-            if(exsistingDetail)
-            {
-                var listConstructionDetail = ConstructionDetails.ToList();
+            listConstructionDetail.Add(constructionDetail);
 
-                listConstructionDetail.Add(constructionDetail);
+            ConstructionDetails = listConstructionDetail;
 
-                ConstructionDetails = listConstructionDetail;
-
-                ReadModel.ConstructionDetails = ConstructionDetails.ToList();
-            } else
-            {
-                Validator.ErrorValidation(("Error Detail " + constructionDetail.Detail,
-                                           "Already Exsist! " + constructionDetail.Yarn.Name));
-            }
+            ReadModel.ConstructionDetails = ConstructionDetails.ToList();
         }
 
-        public void SetMaterialType(MaterialTypeId materialType)
+        public void SetMaterialType(MaterialTypeDocument materialType)
         {
             Validator.ThrowIfNull(() => materialType);
 
             if (materialType != MaterialType)
             {
                 MaterialType = materialType;
-                ReadModel.MaterialType = MaterialType.Value;
+                ReadModel.MaterialType = MaterialType.Serialize();
 
                 MarkModified();
             }
@@ -141,8 +127,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetAmountOfWarp(int amountOfWarp)
         {
-            Validator.ThrowIfNull(() => amountOfWarp);
-
             if (amountOfWarp != AmountOfWarp)
             {
                 AmountOfWarp = amountOfWarp;
@@ -154,8 +138,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetAmountOfWeft(int amountOfWeft)
         {
-            Validator.ThrowIfNull(() => amountOfWeft);
-
             if (amountOfWeft != AmountOfWeft)
             {
                 AmountOfWeft = amountOfWeft;
@@ -167,8 +149,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetWidth(int width)
         {
-            Validator.ThrowIfNull(() => width);
-
             if (width != Width)
             {
                 Width = width;
@@ -219,8 +199,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetTotalYarn(double totalYarn)
         {
-            Validator.ThrowIfNull(() => totalYarn);
-
             if (totalYarn != TotalYarn)
             {
                 TotalYarn = totalYarn;

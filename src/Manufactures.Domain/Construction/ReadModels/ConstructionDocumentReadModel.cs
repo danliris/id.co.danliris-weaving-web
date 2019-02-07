@@ -17,7 +17,7 @@ namespace Manufactures.Domain.Construction.ReadModels
         public string WarpType { get; internal set; }
         public string WeftType { get; internal set; }
         public double TotalYarn { get; internal set; }
-        public Guid MaterialType { get; internal set; }
+        public string MaterialType { get; internal set; }
         public List<ConstructionDetail> ConstructionDetails { get; set; }
     }
 }

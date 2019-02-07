@@ -1,8 +1,7 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Dtos;
+using Manufactures.Dtos.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -58,12 +57,12 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            constructionDocuments = constructionDocuments.ToArray();
-            int totalRows = constructionDocuments.Count();
+            var constructionDocumentsResult = constructionDocuments.ToArray();
+            int totalRows = constructionDocumentsResult.Count();
 
             await Task.Yield();
 
-            return Ok(constructionDocuments, info: new
+            return Ok(constructionDocumentsResult, info: new
             {
                 page,
                 size,
@@ -75,8 +74,10 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string id)
         {
             var Id = Guid.Parse(id);
-            var constructionDocument = _constructionDocumentRepository.Find(item => item.Identity == Id)
-                                                                      .Select(item => new ConstructionDocumentDto(item))
+            var query = _constructionDocumentRepository.Query;
+            var constructionDocument = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
+                                                                      .Where(o => o.Identity == Id)
+                                                                      .Select(item => new ConstructionByIdDto(item))
                                                                       .FirstOrDefault();
             await Task.Yield();
 

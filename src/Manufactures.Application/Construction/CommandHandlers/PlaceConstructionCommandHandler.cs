@@ -5,6 +5,7 @@ using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
@@ -47,36 +48,37 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 amountOfWeft: request.AmountOfWeft,
                                                                 width: request.Width,
                                                                 wofenType: request.WovenType,
-                                                                warpType: request.WarpType,
-                                                                weftType: request.WeftType,
+                                                                warpType: request.WarpTypeForm,
+                                                                weftType: request.WeftTypeForm,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialType: request.MaterialType);
+                                                                materialTypeDocument: request.MaterialTypeDocument);
 
-            foreach (var detail in request.Warps)
+            foreach (var detail in request.ItemsWarp)
             {
                 detail.SetDetail(Constants.WARP);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                                detail.Quantity,
                                                                                                detail.Information,
-                                                                                               yarnDocument,
+                                                                                               yarn,
                                                                                                detail.Detail);
 
                 constructionDocument.AddConstructionDetail(constructionDetail);
             }
 
-            foreach (var detail in request.Wefts)
+            foreach (var detail in request.ItemsWeft)
             {
                 detail.SetDetail(Constants.WEFT);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                detail.Quantity,
                                                                                detail.Information,
-                                                                               yarnDocument,
+                                                                               yarn,
                                                                                detail.Detail);
-
                 constructionDocument.AddConstructionDetail(constructionDetail);
             }
             
