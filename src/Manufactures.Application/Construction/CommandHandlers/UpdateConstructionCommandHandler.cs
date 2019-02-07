@@ -63,6 +63,23 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetTotalYarn(request.TotalYarn);
             constructionDocuments.SetMaterialType(request.MaterialTypeDocument);
 
+            // Update exsisting & remove if not has inside request & exsisting data
+            foreach (var detail in constructionDocuments.ConstructionDetails)
+            {
+                var countIndetailWarp = request.ItemsWarp.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+                var countIndetailWeft = request.ItemsWeft.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+
+                if (countIndetailWarp == 0 && detail.Detail == Constants.WARP)
+                {
+                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                }
+
+                if (countIndetailWeft == 0 && detail.Detail == Constants.WEFT)
+                {
+                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                }
+            }
+
             // Update Detail
             foreach (var warp in request.ItemsWarp)
             {
@@ -116,18 +133,6 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 }
             }
 
-            // Update exsisting & remove if not has inside request & exsisting data
-            foreach(var detail in constructionDocuments.ConstructionDetails)
-            {
-                var countIndetailWarp = request.ItemsWarp.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
-                var countIndetailWeft = request.ItemsWeft.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
-
-                if(countIndetailWarp == 0 && countIndetailWeft == 0)
-                {
-                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
-                }
-            }
-            
             await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 
