@@ -48,7 +48,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
             }
 
             // Check Available construction number if has defined
-            if (exsistingConstructionNumber && !constructionDocuments.ConstructionNumber.Equals(request.ConstructionNumber))
+            if (exsistingConstructionNumber && !constructionDocuments.Identity.Equals(request.Id))
             {
                 throw Validator.ErrorValidation(("ConstructionNumber", "Construction Number " + request.ConstructionNumber + " has Available"));
             }
