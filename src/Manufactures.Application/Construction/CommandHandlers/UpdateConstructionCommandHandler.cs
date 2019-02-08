@@ -93,7 +93,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                             o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
                                                   .FirstOrDefault();
 
-                if (detail.Identity != null)
+                if (detail != null)
                 {
                     detail.SetQuantity(warp.Quantity);
                     detail.SetInformation(warp.Information);
@@ -121,7 +121,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                             o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
                                                   .FirstOrDefault();
 
-                if (detail.Identity != null)
+                if (detail != null)
                 {
                     detail.SetQuantity(weft.Quantity);
                     detail.SetInformation(weft.Information);

@@ -46,7 +46,7 @@ namespace Manufactures.Domain.Construction.Entities
             {
                 Detail = detail;
 
-                this.MarkModified();
+                MarkModified();
             }
         }
 
@@ -56,7 +56,7 @@ namespace Manufactures.Domain.Construction.Entities
             {
                 Quantity = quantity;
 
-                this.MarkModified();
+                MarkModified();
             }
         }
 
@@ -68,7 +68,7 @@ namespace Manufactures.Domain.Construction.Entities
             {
                 Information = information;
 
-                this.MarkModified();
+                MarkModified();
             }
         }
 
