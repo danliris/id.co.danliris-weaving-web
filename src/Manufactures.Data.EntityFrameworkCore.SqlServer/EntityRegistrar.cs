@@ -4,6 +4,8 @@
 using ExtCore.Data.EntityFramework;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ReadModels;
+using Manufactures.Domain.Estimations.Productions.Entities;
+using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Rings.ReadModels;
@@ -17,6 +19,33 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<EstimationProduct>(etb =>
+            {
+                etb.ToTable("Weaving_EstimationDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.OrderDocument).HasMaxLength(2000);
+                etb.Property(e => e.ProductGrade).HasMaxLength(2000);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<EstimatedProductionDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_EstimationProductDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Period).HasMaxLength(255);
+                etb.Property(e => e.Unit).HasMaxLength(255);
+
+                etb.HasMany(e => e.EstimationProducts)
+                    .WithOne(e => e.EstimatedProductionDocument)
+                    .HasForeignKey(e => e.EstimatedProductionDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
             modelBuilder.Entity<YarnDocumentReadModel>(etb =>
             {
@@ -62,7 +91,7 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_ConstructionDetails");
                 etb.HasKey(e => e.Identity);
-                
+
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
