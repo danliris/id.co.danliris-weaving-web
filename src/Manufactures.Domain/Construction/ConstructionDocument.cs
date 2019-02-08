@@ -88,6 +88,12 @@ namespace Manufactures.Domain.Construction
             this.Date = readModel.CreatedDate;
         }
         
+        public void UpdateConstructionDetail (List<ConstructionDetail> value)
+        {
+            ConstructionDetails = value;
+            ReadModel.ConstructionDetails = ConstructionDetails.ToList();
+        }
+
         public void AddConstructionDetail(ConstructionDetail constructionDetail)
         {
             var listConstructionDetail = ConstructionDetails.ToList();

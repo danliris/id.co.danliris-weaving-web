@@ -66,17 +66,21 @@ namespace Manufactures.Application.Construction.CommandHandlers
             // Update exsisting & remove if not has inside request & exsisting data
             foreach (var detail in constructionDocuments.ConstructionDetails)
             {
-                var countIndetailWarp = request.ItemsWarp.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
-                var countIndetailWeft = request.ItemsWeft.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+                var countIndetailWarp = request.ItemsWarp.Where(o => o.Id == detail.Identity).Count();
+                var countIndetailWeft = request.ItemsWeft.Where(o => o.Id == detail.Identity).Count();
 
                 if (countIndetailWarp == 0 && detail.Detail == Constants.WARP)
                 {
-                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                    var list = constructionDocuments.ConstructionDetails.ToList();
+                    list.Remove(detail);
+                    constructionDocuments.UpdateConstructionDetail(list);
                 }
 
                 if (countIndetailWeft == 0 && detail.Detail == Constants.WEFT)
                 {
-                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                    var list = constructionDocuments.ConstructionDetails.ToList();
+                    list.Remove(detail);
+                    constructionDocuments.UpdateConstructionDetail(list);
                 }
             }
 
@@ -85,9 +89,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
-                                .Where(o => o.Detail.Equals(Constants.WARP) && o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity).FirstOrDefault();
+                                .Where(o => o.Detail.Equals(Constants.WARP) && 
+                                            o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
+                                                  .FirstOrDefault();
 
-                if (detail != null)
+                if (detail.Identity != null)
                 {
                     detail.SetQuantity(warp.Quantity);
                     detail.SetInformation(warp.Information);
@@ -111,9 +117,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Yarn.Id)).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
-                                .Where(o => o.Detail.Equals(Constants.WEFT) && o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity).FirstOrDefault();
+                                .Where(o => o.Detail.Equals(Constants.WEFT) && 
+                                            o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
+                                                  .FirstOrDefault();
 
-                if (detail != null)
+                if (detail.Identity != null)
                 {
                     detail.SetQuantity(weft.Quantity);
                     detail.SetInformation(weft.Information);
