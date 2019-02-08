@@ -8,22 +8,30 @@ namespace Manufactures.Domain.Construction.ValueObjects
     {
         public Yarn(Guid id,
                     string code,
-                    string name)
+                    string name,
+                    string materialCode,
+                    string ringCode)
         {
             Id = id;
             Code  = code;
             Name = name;
+            MaterialCode = materialCode;
+            RingCode = ringCode;
         }
 
         public Guid Id { get; private set; }
         public string Code { get; private set; }
         public string Name { get; private set; }
+        public string MaterialCode { get; private set; }
+        public string RingCode { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
             yield return Code;
             yield return Name;
+            yield return MaterialCode;
+            yield return RingCode;
         }
     }
 }

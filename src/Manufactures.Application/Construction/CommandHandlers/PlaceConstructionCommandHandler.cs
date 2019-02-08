@@ -58,7 +58,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WARP);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                                detail.Quantity,
                                                                                                detail.Information,
@@ -73,7 +73,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WEFT);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
+                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
                 ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                detail.Quantity,
                                                                                detail.Information,

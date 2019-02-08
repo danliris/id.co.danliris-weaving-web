@@ -102,7 +102,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     if (yarnDocument != null)
                     {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
+                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
                         ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                        warp.Quantity,
                                                                                        warp.Information,
@@ -130,7 +130,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     if (yarnDocument != null)
                     {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
+                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
                         ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                        weft.Quantity,
                                                                                        weft.Information,
