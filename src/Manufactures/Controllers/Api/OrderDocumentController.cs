@@ -132,8 +132,6 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PlaceWeavingOrderCommand command)
         {
-            command.OrderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
-
             var order = await Mediator.Send(command);
 
             return Ok(order.Identity);
