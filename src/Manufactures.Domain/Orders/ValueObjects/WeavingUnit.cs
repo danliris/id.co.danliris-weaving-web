@@ -5,9 +5,9 @@ namespace Manufactures.Domain.Orders.ValueObjects
 {
     public class WeavingUnit : ValueObject
     {
-        public WeavingUnit(string id, string code, string name)
+        public WeavingUnit(string _id, string code, string name)
         {
-            _id = id;
+            this._id = _id;
             Code = code;
             Name = name;
         }
