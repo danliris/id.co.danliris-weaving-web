@@ -27,19 +27,13 @@ namespace Manufactures.Application.Orders.CommandHandlers
         public async Task<WeavingOrderDocument> Handle(PlaceWeavingOrderCommand command, 
                                                        CancellationToken cancellationToken)
         {
-            // Checking for same order number
-            var isHasSameOrderNumber = _weavingOrderDocumentRepository.Find(entity => entity.OrderNumber.Equals(command.OrderNumber) &&
-                                                                                      entity.Deleted.Equals(false)).Count() >= 1;
-
-            if (isHasSameOrderNumber)
-            {
-                command.OrderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
-            }
+            // Get Order Number from auto generate
+            var orderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
 
             command.OrderStatus = Constants.ONORDER;
 
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
-                                                 orderNumber: command.OrderNumber,
+                                                 orderNumber: orderNumber,
                                                  fabricConstructionDocument: command.FabricConstructionDocument,
                                                  dateOrdered: command.DateOrdered, 
                                                  period: command.Period,

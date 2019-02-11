@@ -7,7 +7,6 @@ namespace Manufactures.Domain.Orders.Commands
 {
     public class PlaceWeavingOrderCommand : ICommand<WeavingOrderDocument>
     {
-        public string OrderNumber { get; set; }
         public FabricConstructionDocument FabricConstructionDocument { get; set; }
         public DateTimeOffset DateOrdered { get; set; }
         public string WarpOrigin { get; set; }
@@ -24,7 +23,6 @@ namespace Manufactures.Domain.Orders.Commands
     {
         public WeavingOrderCommandValidator()
         {
-            RuleFor(command => command.OrderNumber).NotEmpty();
             RuleFor(command => command.FabricConstructionDocument.Id).NotEmpty();
             RuleFor(command => command.FabricConstructionDocument.ConstructionNumber).NotEmpty();
             RuleFor(command => command.DateOrdered).NotEmpty();
