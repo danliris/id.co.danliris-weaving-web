@@ -2,6 +2,7 @@
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
+using Manufactures.Dtos.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -114,7 +115,7 @@ namespace Manufactures.Controllers.Api
         {
             var orderId = Guid.Parse(id);
             var orderDto = _weavingOrderDocumentRepository.Find(item => item.Identity == orderId)
-                                                          .Select(item => new WeavingOrderDocumentDto(item))
+                                                          .Select(item => new WeavingOrderById(item))
                                                           .FirstOrDefault();
 
             await Task.Yield();
