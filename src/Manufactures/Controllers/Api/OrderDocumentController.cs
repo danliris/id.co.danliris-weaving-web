@@ -35,7 +35,7 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-report/{month}/{year}/{unitCode}")]
+        [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}")]
         public async Task<IActionResult> Get(string month, string year, string unitCode)
         {
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
