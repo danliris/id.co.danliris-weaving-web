@@ -1,6 +1,7 @@
 ﻿using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.GlobalValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace Manufactures.Dtos.Construction
     {
         public Guid Id { get; }
         public string ConstructionNumber { get; }
-        public MaterialTypeDocument MaterialTypeDocument { get; }
+        public MaterialTypeValueObject MaterialTypeDocument { get; }
         public string WovenType { get; }
         public int AmountOfWarp { get; }
         public int AmountOfWeft { get; }
