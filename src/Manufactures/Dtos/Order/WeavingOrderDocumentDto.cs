@@ -1,4 +1,5 @@
-﻿using Manufactures.Domain.Orders;
+﻿using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
 

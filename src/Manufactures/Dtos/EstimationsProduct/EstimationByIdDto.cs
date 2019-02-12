@@ -1,5 +1,6 @@
 ﻿using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
 using System.Collections.Generic;

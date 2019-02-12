@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
 

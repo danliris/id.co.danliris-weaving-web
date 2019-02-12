@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.ValueObjects;
 using Moonlay;
