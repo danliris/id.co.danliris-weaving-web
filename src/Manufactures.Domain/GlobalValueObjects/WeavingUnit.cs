@@ -1,8 +1,8 @@
 ﻿using Moonlay.Domain;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.Orders.ValueObjects
-{
+namespace Manufactures.Domain.GlobalValueObjects
+{ 
     public class WeavingUnit : ValueObject
     {
         public WeavingUnit(string _id, string code, string name)

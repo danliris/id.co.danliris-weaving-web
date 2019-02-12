@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
