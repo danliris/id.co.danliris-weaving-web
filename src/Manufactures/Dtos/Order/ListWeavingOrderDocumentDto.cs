@@ -1,10 +1,8 @@
 ﻿using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Dtos.Order
 {
     public class ListWeavingOrderDocumentDto
     {

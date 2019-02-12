@@ -3,23 +3,28 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.Construction.ValueObjects
+namespace Manufactures.Domain.GlobalValueObjects
 {
-    public class MaterialTypeDocument : ValueObject
+    public class MaterialTypeValueObject : ValueObject
     {
         public Guid Id { get; private set; }
         public string Code { get; private set; }
+        public string Name { get; private set; }
 
-        public MaterialTypeDocument(Guid id, string code)
+        public MaterialTypeValueObject(Guid id, 
+                                       string code,
+                                       string name)
         {
             Id = id;
             Code = code;
+            Name = name;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
             yield return Code;
+            yield return Name;
         }
     }
 }

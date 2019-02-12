@@ -3,6 +3,7 @@ using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace Manufactures.Domain.Construction
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
-        public MaterialTypeDocument MaterialType { get; private set; }
+        public MaterialTypeValueObject MaterialType { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
 
         public ConstructionDocument(Guid id,
@@ -33,7 +34,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeDocument materialTypeDocument) : base(id)
+                                    MaterialTypeValueObject materialTypeDocument) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => constructionNumber);
@@ -83,7 +84,7 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialType = ReadModel.MaterialType.Deserialize<MaterialTypeDocument>();
+            this.MaterialType = ReadModel.MaterialType.Deserialize<MaterialTypeValueObject>();
             this.ConstructionDetails = readModel.ConstructionDetails;
             this.Date = readModel.CreatedDate;
         }
@@ -105,7 +106,7 @@ namespace Manufactures.Domain.Construction
             ReadModel.ConstructionDetails = ConstructionDetails.ToList();
         }
 
-        public void SetMaterialType(MaterialTypeDocument materialType)
+        public void SetMaterialType(MaterialTypeValueObject materialType)
         {
             Validator.ThrowIfNull(() => materialType);
 

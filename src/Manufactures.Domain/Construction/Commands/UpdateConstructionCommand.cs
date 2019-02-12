@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.GlobalValueObjects;
 using System;
 using System.Collections.Generic;
 using Warp = Manufactures.Domain.Construction.ValueObjects.Warp;
@@ -20,7 +20,7 @@ namespace Manufactures.Domain.Construction.Commands
         public string WarpTypeForm { get; set; }
         public string WeftTypeForm { get; set; }
         public double TotalYarn { get; set; }
-        public MaterialTypeDocument MaterialTypeDocument { get; set; }
+        public MaterialTypeValueObject MaterialTypeDocument { get; set; }
         public List<Warp> ItemsWarp { get; set; }
         public List<Weft> ItemsWeft { get; set; }
     }
@@ -37,7 +37,11 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WarpTypeForm).NotEmpty();
             RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument).NotEmpty();
+
+            RuleFor(command => command.MaterialTypeDocument.Id).NotEmpty();
+            RuleFor(command => command.MaterialTypeDocument.Code).NotEmpty();
+            RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();
+
             RuleFor(command => command.ItemsWarp).NotEmpty();
             RuleFor(command => command.ItemsWeft).NotEmpty();
         }

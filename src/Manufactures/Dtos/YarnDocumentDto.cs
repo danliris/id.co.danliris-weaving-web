@@ -1,4 +1,5 @@
-﻿using Manufactures.Domain.Yarns;
+﻿using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Yarns;
 using Manufactures.Domain.Yarns.ValueObjects;
 using System;
 
@@ -20,7 +21,7 @@ namespace Manufactures.Dtos
         public string Code { get; }
         public string Name { get; }
         public string Tags { get; }
-        public MaterialTypeDocumentValueObject MaterialTypeDocument { get; }
+        public MaterialTypeValueObject MaterialTypeDocument { get; }
         public RingDocumentValueObject RingDocument { get; }
     }
 }

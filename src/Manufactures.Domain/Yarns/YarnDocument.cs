@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Yarns.ReadModels;
 using Manufactures.Domain.Yarns.ValueObjects;
 using Moonlay;
@@ -13,7 +14,7 @@ namespace Manufactures.Domain.Yarns
                             string code,
                             string name,
                             string tags,
-                            MaterialTypeDocumentValueObject materialTypeDocument,
+                            MaterialTypeValueObject materialTypeDocument,
                             RingDocumentValueObject ringDocument) : base(id)
         {
             // Validate Properties
@@ -49,14 +50,14 @@ namespace Manufactures.Domain.Yarns
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Tags = readModel.Tags;
-            this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeDocumentValueObject>();
+            this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeValueObject>();
             this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
         }
 
         public string Code { get; private set; }
         public string Name { get; private set; }
         public string Tags { get; private set; }
-        public MaterialTypeDocumentValueObject MaterialTypeDocument { get; private set; }
+        public MaterialTypeValueObject MaterialTypeDocument { get; private set; }
         public RingDocumentValueObject RingDocument { get; private set; }
 
         public void SetCode(string code)
@@ -98,7 +99,7 @@ namespace Manufactures.Domain.Yarns
             }
         }
 
-        public void SetMaterialTypeDocument(MaterialTypeDocumentValueObject document)
+        public void SetMaterialTypeDocument(MaterialTypeValueObject document)
         {
             Validator.ThrowIfNull(() => document);
             int indexDiffence = 0;
@@ -116,7 +117,7 @@ namespace Manufactures.Domain.Yarns
 
             if (indexDiffence > 0)
             {
-                MaterialTypeDocument = new MaterialTypeDocumentValueObject(document.Code, document.Name);
+                MaterialTypeDocument = new MaterialTypeValueObject(document.Id, document.Code, document.Name);
                 ReadModel.MaterialTypeDocument = MaterialTypeDocument.Serialize();
 
                 MarkModified();
