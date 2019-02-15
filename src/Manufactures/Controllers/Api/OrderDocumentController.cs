@@ -1,10 +1,12 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos;
 using Manufactures.Dtos.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -21,10 +23,12 @@ namespace Manufactures.Controllers.Api
     public class OrderDocumentController : ControllerApiBase
     {
         private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
+        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
 
         public OrderDocumentController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
+            _constructionDocumentRepository = this.Storage.GetRepository<IConstructionDocumentRepository>();
         }
 
         [HttpGet]
@@ -46,15 +50,32 @@ namespace Manufactures.Controllers.Api
                                                                            entity.Period.Year.Contains(year) &&
                                                                            entity.WeavingUnit.Code.Equals(unitCode))
                                                           .ToArray();
+            
+            var resultData = new List<OrderBySearchDto>();
+            foreach (var order in orderDto)
+            {
+                var constructionDocument = _constructionDocumentRepository.Find(e => e.Identity.Equals(order.FabricConstructionDocument.Id)).FirstOrDefault();
+
+                if (constructionDocument == null)
+                {
+                    throw Validator.ErrorValidation(("Construction Document", "Construction Document with Identity " + order.FabricConstructionDocument.Id + " Not Found"));
+                }
+
+                var newOrder = new OrderBySearchDto(order, constructionDocument);
+
+                resultData.Add(newOrder);
+                await Task.Yield();
+            }
+
             await Task.Yield();
 
-            if (orderDto.Length == 0)
+            if (resultData.Count == 0)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(orderDto);
+                return Ok(resultData);
             }
         }
 
