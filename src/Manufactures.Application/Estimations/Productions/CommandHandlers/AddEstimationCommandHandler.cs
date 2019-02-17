@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.Commands;
@@ -57,9 +58,12 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                 var newProduct = new EstimationProduct(Guid.NewGuid(), order, productGrade, product.TotalGramEstimation);
 
                 estimatedProductionDocument.AddEstimationProduct(newProduct);
+                existingOrder.SetOrderStatus(Constants.ONESTIMATED);
+                await _weavingOrderDocumentRepository.Update(existingOrder);
             }
 
             await _estimationProductRepository.Update(estimatedProductionDocument);
+           
             _storage.Save();
 
             return estimatedProductionDocument;

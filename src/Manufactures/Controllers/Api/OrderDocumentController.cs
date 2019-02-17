@@ -50,7 +50,7 @@ namespace Manufactures.Controllers.Api
                                                                            entity.Period.Year.Contains(year) &&
                                                                            entity.WeavingUnit.Code.Equals(unitCode))
                                                           .ToArray();
-            
+
             foreach (var order in orderDto)
             {
                 var constructionDocument = _constructionDocumentRepository.Find(e => e.Identity.Equals(order.FabricConstructionDocument.Id))
