@@ -9,6 +9,7 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
     public class EstimationProduct : EntityBase<EstimationProduct>
     {
         public string OrderDocument { get; private set; }
+        public double TotalGramEstimation { get; private set; }
         public string ProductGrade { get; private set; }
         public EstimatedProductionDocumentReadModel EstimatedProductionDocument { get; set; }
         public Guid EstimatedProductionDocumentId { get; set; }
@@ -19,11 +20,13 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
 
         public EstimationProduct(Guid identity,
                                  OrderDocumentValueObject orderDocument,
-                                 ProductGrade productGrade) : base(identity)
+                                 ProductGrade productGrade, 
+                                 double totalGramEstimation) : base(identity)
         {
             Identity = identity;
             OrderDocument = orderDocument.Serialize();
             ProductGrade = productGrade.Serialize();
+            TotalGramEstimation = totalGramEstimation;
         }
 
         public void SetProductGrade(ProductGrade productGrade)
@@ -33,6 +36,15 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
             ProductGrade = productGrade.Serialize();
 
             MarkModified();
+        }
+        public void SetTotalGramEstimation(double value)
+        {
+            if (TotalGramEstimation != value)
+            {
+                TotalGramEstimation = value;
+
+                MarkModified();
+            }
         }
 
         protected override EstimationProduct GetEntity()

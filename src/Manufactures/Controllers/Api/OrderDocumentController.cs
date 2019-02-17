@@ -43,22 +43,23 @@ namespace Manufactures.Controllers.Api
         [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}")]
         public async Task<IActionResult> Get(string month, string year, string unitCode)
         {
+            var resultData = new List<OrderBySearchDto>();
             var query = _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var orderDto = _weavingOrderDocumentRepository.Find(query)
-                                                          .Select(item => new WeavingOrderDocumentDto(item))
                                                           .Where(entity => entity.Period.Month.Contains(month) &&
                                                                            entity.Period.Year.Contains(year) &&
                                                                            entity.WeavingUnit.Code.Equals(unitCode))
                                                           .ToArray();
             
-            var resultData = new List<OrderBySearchDto>();
             foreach (var order in orderDto)
             {
-                var constructionDocument = _constructionDocumentRepository.Find(e => e.Identity.Equals(order.FabricConstructionDocument.Id)).FirstOrDefault();
+                var constructionDocument = _constructionDocumentRepository.Find(e => e.Identity.Equals(order.FabricConstructionDocument.Id))
+                                                                          .FirstOrDefault();
 
                 if (constructionDocument == null)
                 {
-                    throw Validator.ErrorValidation(("Construction Document", "Construction Document with Identity " + order.FabricConstructionDocument.Id + " Not Found"));
+                    throw Validator.ErrorValidation(("Construction Document", 
+                                                     "Invalid Construction Document with Order Identity " + order.Identity + " Not Found"));
                 }
 
                 var newOrder = new OrderBySearchDto(order, constructionDocument);
@@ -66,8 +67,6 @@ namespace Manufactures.Controllers.Api
                 resultData.Add(newOrder);
                 await Task.Yield();
             }
-
-            await Task.Yield();
 
             if (resultData.Count == 0)
             {

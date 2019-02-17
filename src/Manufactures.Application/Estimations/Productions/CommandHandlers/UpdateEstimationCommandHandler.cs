@@ -40,11 +40,12 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                 Validator.ErrorValidation(("Estimation Document", "Unavailable exsisting Estimation Document with Id " + request.Id));
             }
 
-            exsistingEstimation.SetTotalEstimationOrder(request.TotalEstimationOrder);
-
             foreach(var product in exsistingEstimation.EstimationProducts)
             {
-                product.SetProductGrade(product.ProductGrade.Deserialize<ProductGrade>());
+                var requestProduct = request.EstimationProducts.Where(e => e.OrderNumber.Equals(product.OrderDocument.Deserialize<OrderDocumentValueObject>().OrderNumber)).FirstOrDefault();
+                var productGrade = new ProductGrade(requestProduct.GradeA, requestProduct.GradeB, requestProduct.GradeC, requestProduct.GradeD);
+                product.SetProductGrade(productGrade);
+                product.SetTotalGramEstimation(requestProduct.TotalGramEstimation);
             }
 
             await _estimationProductRepository.Update(exsistingEstimation);
