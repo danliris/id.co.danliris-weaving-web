@@ -11,9 +11,10 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
         public string OrderDocument { get; private set; }
         public double TotalGramEstimation { get; private set; }
         public string ProductGrade { get; private set; }
-        public EstimatedProductionDocumentReadModel EstimatedProductionDocument { get; set; }
-        public Guid EstimatedProductionDocumentId { get; set; }
 
+        public Guid EstimatedProductionDocumentId { get; set; }
+        public EstimatedProductionDocumentReadModel EstimatedProductionDocument { get; set; }
+        
         public EstimationProduct(Guid identity) : base(identity)
         {
         }

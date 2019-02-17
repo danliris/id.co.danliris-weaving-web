@@ -3,29 +3,29 @@ using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.Order
 {
     public class OrderBySearchDto
     {
-        public Guid Id { get; set; }
-        public string OrderNumber { get; set; }
-        public ConstructionDocumentValueObject FabricConstructionDocument { get; set; }
-        public DateTimeOffset DateOrdered { get; set; }
-        public string WarpOrigin { get; set; }
-        public string WeftOrigin { get; set; }
-        public int WholeGrade { get; set; }
-        public string YarnType { get; set; }
-        public Period Period { get; set; }
-        public Composition Composition { get; set; }
-        public WeavingUnit WeavingUnit { get; set; }
+        public Guid Id { get; private set; }
+        public string OrderNumber { get; private set; }
+        public string OrderStatus { get; private set; }
+        public ConstructionDocumentValueObject FabricConstructionDocument { get; private set; }
+        public DateTimeOffset DateOrdered { get; private set; }
+        public string WarpOrigin { get; private set; }
+        public string WeftOrigin { get; private set; }
+        public int WholeGrade { get; private set; }
+        public string YarnType { get; private set; }
+        public Period Period { get; private set; }
+        public Composition Composition { get; private set; }
+        public WeavingUnit WeavingUnit { get; private set; }
 
         public OrderBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
+            OrderStatus = weavingOrderDocument.OrderStatus;
             var construction = new ConstructionDocumentValueObject(constructionDocument.Identity, 
                                                                    constructionDocument.ConstructionNumber, 
                                                                    constructionDocument.TotalYarn);

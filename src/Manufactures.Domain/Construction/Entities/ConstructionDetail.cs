@@ -8,9 +8,17 @@ namespace Manufactures.Domain.Construction.Entities
 {
     public class ConstructionDetail : EntityBase<ConstructionDetail>
     {
+        public double Quantity { get; private set; }
+        public string Information { get; private set; }
+        public string Yarn { get; private set; }
+        public string Detail { get; private set; }
+
+        public Guid ConstructionDocumentId { get; set; }
+        public ConstructionDocumentReadModel ConstructionDocument { get; set; }
+
         public ConstructionDetail(Guid identity) : base(identity) { }
 
-        public ConstructionDetail(Guid identity, 
+        public ConstructionDetail(Guid identity,
                                   double quantity,
                                   string information,
                                   Yarn yarn,
@@ -31,18 +39,11 @@ namespace Manufactures.Domain.Construction.Entities
             Detail = detail;
         }
 
-        public double Quantity { get; private set; }
-        public string Information { get; private set; }
-        public string Yarn { get; private set; }
-        public string Detail { get; private set; }
-        public ConstructionDocumentReadModel ConstructionDocument { get; set; }
-        public Guid ConstructionDocumentId { get; set; }
-
-        public void SetDetail (string detail)
+        public void SetDetail(string detail)
         {
             Validator.ThrowIfNullOrEmpty(() => detail);
 
-            if(detail != Detail)
+            if (detail != Detail)
             {
                 Detail = detail;
 
@@ -52,7 +53,7 @@ namespace Manufactures.Domain.Construction.Entities
 
         public void SetQuantity(double quantity)
         {
-            if(quantity != Quantity)
+            if (quantity != Quantity)
             {
                 Quantity = quantity;
 
@@ -64,7 +65,7 @@ namespace Manufactures.Domain.Construction.Entities
         {
             Validator.ThrowIfNullOrEmpty(() => information);
 
-            if(information != Information)
+            if (information != Information)
             {
                 Information = information;
 
@@ -76,10 +77,10 @@ namespace Manufactures.Domain.Construction.Entities
         {
             Validator.ThrowIfNull(() => yarn);
 
-            if(yarn.Code != Yarn.Deserialize<Yarn>().Code)
+            if (yarn.Code != Yarn.Deserialize<Yarn>().Code)
             {
                 Yarn = yarn.Serialize();
-                
+
                 MarkModified();
             }
         }
