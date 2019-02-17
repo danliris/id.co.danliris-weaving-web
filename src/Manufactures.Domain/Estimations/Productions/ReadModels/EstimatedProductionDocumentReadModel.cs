@@ -14,6 +14,5 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
         public string Period { get; internal set; }
         public string Unit { get; internal set; }
         public List<EstimationProduct> EstimationProducts { get; internal set; }
-        public double TotalEstimationOrder { get; internal set; }
     }
 }

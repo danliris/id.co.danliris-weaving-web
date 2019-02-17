@@ -22,9 +22,9 @@ namespace Manufactures.Dtos.Order
         public Composition Composition { get; set; }
         public WeavingUnit WeavingUnit { get; set; }
 
-        public OrderBySearchDto(WeavingOrderDocumentDto weavingOrderDocument, ConstructionDocument constructionDocument)
+        public OrderBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument)
         {
-            Id = weavingOrderDocument.Id;
+            Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
             var construction = new ConstructionDocumentValueObject(constructionDocument.Identity, 
                                                                    constructionDocument.ConstructionNumber, 

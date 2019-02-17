@@ -16,6 +16,9 @@ namespace Manufactures.Domain.Estimations.Productions.ValueObjects
         public string OrderNumber { get; private set; }
         public int OrderTotal { get; private set; }
 
+        // Calculation from totalyarn * TotalOrder From SOP
+        public double TotalGramEstimation { get; private set; }
+
         // Product Grade
         public int GradeA { get; private set; }
         public int GradeB { get; private set; }
@@ -72,6 +75,7 @@ namespace Manufactures.Domain.Estimations.Productions.ValueObjects
             yield return DateOrdered;
             yield return OrderNumber;
             yield return ConstructionNumber;
+            yield return TotalGramEstimation;
             yield return AmountTotal;
             yield return OrderTotal;
             yield return GradeA;

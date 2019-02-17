@@ -38,7 +38,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
             var estimationNumber = _estimationProductRepository.Find(o => o.Period.Deserialize<Period>().Year.Contains(year)).Count() + 1.ToString();
             estimationNumber = estimationNumber.PadLeft(4, '0') + "/" + month.PadLeft(2, '0') + "-" + year;
 
-            var estimatedProductionDocument = new EstimatedProductionDocument(Guid.NewGuid(), estimationNumber, request.Period, request.Unit, request.TotalEstimationOrder);
+            var estimatedProductionDocument = new EstimatedProductionDocument(Guid.NewGuid(), estimationNumber, request.Period, request.Unit);
 
             foreach(var product in request.EstimationProducts)
             {
@@ -54,7 +54,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                                                          existingOrder.WholeGrade, 
                                                          constructionDocument,
                                                          existingOrder.DateOrdered);
-                var newProduct = new EstimationProduct(Guid.NewGuid(), order, productGrade);
+                var newProduct = new EstimationProduct(Guid.NewGuid(), order, productGrade, product.TotalGramEstimation);
 
                 estimatedProductionDocument.AddEstimationProduct(newProduct);
             }
