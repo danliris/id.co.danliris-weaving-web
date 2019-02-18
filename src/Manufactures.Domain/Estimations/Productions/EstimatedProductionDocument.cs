@@ -3,7 +3,6 @@ using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Orders.ValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
@@ -27,6 +26,8 @@ namespace Manufactures.Domain.Estimations.Productions
             Validator.ThrowIfNullOrEmpty(() => estimatedNumber);
             Validator.ThrowIfNull(() => period);
             Validator.ThrowIfNull(() => unit);
+
+            this.MarkTransient();
 
             Identity = id;
             EstimatedNumber = estimatedNumber;
@@ -63,6 +64,8 @@ namespace Manufactures.Domain.Estimations.Productions
                 list.Add(estimationProduct);
                 EstimationProducts = list;
                 ReadModel.EstimationProducts = EstimationProducts.ToList();
+
+                MarkModified();
             }
             else
             {
