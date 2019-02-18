@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net;
 
 namespace Barebone.Controllers
 {
@@ -42,7 +43,8 @@ namespace Barebone.Controllers
                 success = true,
                 data,
                 info,
-                message
+                message,
+                statusCode = HttpStatusCode.OK
             });
         }
     }
