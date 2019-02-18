@@ -11,7 +11,7 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
     {
         public Period Period { get; set; }
         public WeavingUnit Unit { get; set; }
-        public List<EstimationProductValueObject> EstimationProducts { get; private set; }
+        public List<EstimationProductValueObject> EstimationProducts { get; set; }
     }
 
     public class AddNewEstimationCommandValidator : AbstractValidator<AddNewEstimationCommand>

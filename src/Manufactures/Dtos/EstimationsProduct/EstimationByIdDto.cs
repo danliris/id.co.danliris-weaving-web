@@ -21,22 +21,23 @@ namespace Manufactures.Dtos.EstimationsProduct
             EstimatedNumber = document.EstimatedNumber;
             Period = document.Period;
             Unit = document.Unit;
+            EstimationItems = new List<EstimationProductValueObject>();
 
-            foreach(var product in document.EstimationProducts)
+            foreach (var product in document.EstimationProducts)
             {
-                var obj = new EstimationProductValueObject();
+                
                 var order = product.OrderDocument.Deserialize<OrderDocumentValueObject>();
                 var productGrade = product.ProductGrade.Deserialize<ProductGrade>();
-
-                obj.SetConstructionNumber(order.Construction.ConstructionNumber);
-                obj.SetAmountTotal(order.Construction.TotalYarn);
-                obj.SetDateOrdered(order.DateOrdered);
-                obj.SetOrderNumber(order.OrderNumber);
-                obj.SetOrderTotal(order.AllGrade);
-                obj.SetGradeA(productGrade.GradeA);
-                obj.SetGradeB(productGrade.GradeB);
-                obj.SetGradeC(productGrade.GradeC);
-                obj.SetGradeD(productGrade.GradeD);
+                var obj = new EstimationProductValueObject(order.Construction.ConstructionNumber,
+                                                           order.Construction.TotalYarn,
+                                                           order.DateOrdered,
+                                                           order.OrderNumber,
+                                                           order.AllGrade,
+                                                           product.TotalGramEstimation,
+                                                           productGrade.GradeA,
+                                                           productGrade.GradeB,
+                                                           productGrade.GradeC,
+                                                           productGrade.GradeD);
 
                 EstimationItems.Add(obj);
             }
