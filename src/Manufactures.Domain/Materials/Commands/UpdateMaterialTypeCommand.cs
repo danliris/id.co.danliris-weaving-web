@@ -19,7 +19,6 @@ namespace Manufactures.Domain.Materials.Commands
         {
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Name).NotEmpty();
-            RuleFor(command => command.Description).NotEmpty();
         }
     }
 }
