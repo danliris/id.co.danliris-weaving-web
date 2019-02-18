@@ -19,7 +19,6 @@ namespace Manufactures.Domain.Rings.Commands
         {
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Number).NotEmpty();
-            RuleFor(command => command.Description).NotEmpty();
         }
     }
 }
