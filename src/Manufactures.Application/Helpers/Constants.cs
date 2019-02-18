@@ -2,6 +2,7 @@
 {
     public class Constants
     {
+        // Type Of Yarn
         public static string WARP = "LUSI";
         public static string WEFT = "PAKAN";
 
