@@ -20,7 +20,6 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
     {
         public UpdateEstimationProductCommandValidator()
         {
-            RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.Period).NotEmpty();
             RuleFor(command => command.Unit).NotEmpty();
         }
