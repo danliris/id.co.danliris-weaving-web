@@ -2,7 +2,6 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Orders.ValueObjects;
 using System;
 using System.Collections.Generic;
 

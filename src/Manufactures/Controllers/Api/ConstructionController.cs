@@ -22,38 +22,52 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
 
-        public ConstructionController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public ConstructionController(IServiceProvider serviceProvider, 
+                                      IWorkContext workContext) : base(serviceProvider)
         {
-            _constructionDocumentRepository = this.Storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = 
+                this.Storage.GetRepository<IConstructionDocumentRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 1, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            var query = _constructionDocumentRepository.Query
-                                                       .OrderByDescending(item => item.CreatedDate)
-                                                       .Take(size)
-                                                       .Skip(page * size);
-            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails)).Select(item => new ConstructionDocumentDto(item));
+            page = page - 1;
+            var query = 
+                _constructionDocumentRepository.Query.OrderByDescending(item => item.CreatedDate)
+                                                     .Take(size)
+                                                     .Skip(page * size);
+            var constructionDocuments = 
+                _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
+                                               .Select(item => new ConstructionDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                constructionDocuments = constructionDocuments.Where(entity => entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                constructionDocuments = 
+                    constructionDocuments.Where(entity => entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                Dictionary<string, string> orderDictionary = 
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(ConstructionDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    constructionDocuments = constructionDocuments.OrderBy(x => prop.GetValue(x, null));
+                    constructionDocuments = 
+                        constructionDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    constructionDocuments = constructionDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                    constructionDocuments = 
+                        constructionDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
@@ -75,10 +89,11 @@ namespace Manufactures.Controllers.Api
         {
             var Id = Guid.Parse(id);
             var query = _constructionDocumentRepository.Query;
-            var constructionDocument = _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
-                                                                      .Where(o => o.Identity == Id)
-                                                                      .Select(item => new ConstructionByIdDto(item))
-                                                                      .FirstOrDefault();
+            var constructionDocument = 
+                _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
+                                               .Where(o => o.Identity == Id)
+                                               .Select(item => new ConstructionByIdDto(item))
+                                               .FirstOrDefault();
             await Task.Yield();
 
             if (Id == null)
@@ -100,7 +115,8 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateConstructionCommand command)
+        public async Task<IActionResult> Put(string id, 
+                                             [FromBody]UpdateConstructionCommand command)
         {
             if (!Guid.TryParse(id, out Guid documentId))
             {

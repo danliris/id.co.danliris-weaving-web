@@ -23,38 +23,52 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IEstimationProductRepository _estimationProductRepository;
 
-        public EstimationController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public EstimationController(IServiceProvider serviceProvider, 
+                                    IWorkContext workContext) : base(serviceProvider)
         {
-            _estimationProductRepository = this.Storage.GetRepository<IEstimationProductRepository>();
+            _estimationProductRepository = 
+                this.Storage.GetRepository<IEstimationProductRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 1, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            var query = _estimationProductRepository.Query
-                                                       .OrderByDescending(item => item.CreatedDate)
-                                                       .Take(size)
-                                                       .Skip(page * size);
-            var estimationDocument = _estimationProductRepository.Find(query.Include(p => p.EstimationProducts)).Select(item => new ListEstimationDto(item));
+            page = page - 1;
+            var query = 
+                _estimationProductRepository.Query.OrderByDescending(item => item.CreatedDate)
+                                                  .Take(size)
+                                                  .Skip(page * size);
+            var estimationDocument = 
+                _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
+                                            .Select(item => new ListEstimationDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                estimationDocument = estimationDocument.Where(entity => entity.EstimationNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                estimationDocument = 
+                    estimationDocument.Where(entity => entity.EstimationNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                Dictionary<string, string> orderDictionary = 
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                          orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(ListEstimationDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    estimationDocument = estimationDocument.OrderBy(x => prop.GetValue(x, null));
+                    estimationDocument = 
+                        estimationDocument.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    estimationDocument = estimationDocument.OrderByDescending(x => prop.GetValue(x, null));
+                    estimationDocument = 
+                        estimationDocument.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
@@ -76,10 +90,11 @@ namespace Manufactures.Controllers.Api
         {
             var Id = Guid.Parse(id);
             var query = _estimationProductRepository.Query;
-            var estimationDocument = _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
-                                                                      .Where(o => o.Identity == Id)
-                                                                      .Select(item => new EstimationByIdDto(item))
-                                                                      .FirstOrDefault();
+            var estimationDocument = 
+                _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
+                                            .Where(o => o.Identity == Id)
+                                            .Select(item => new EstimationByIdDto(item))
+                                            .FirstOrDefault();
             await Task.Yield();
 
             if (Id == null)
@@ -101,7 +116,8 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateEstimationProductCommand command)
+        public async Task<IActionResult> Put(string id, 
+                                             [FromBody]UpdateEstimationProductCommand command)
         {
             if (!Guid.TryParse(id, out Guid documentId))
             {

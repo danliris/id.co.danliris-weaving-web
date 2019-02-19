@@ -21,26 +21,41 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IRingRepository _ringRepository;
 
-        public RingDocumentController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public RingDocumentController(IServiceProvider serviceProvider, 
+                                      IWorkContext workContext) : base(serviceProvider)
         {
-            _ringRepository = this.Storage.GetRepository<IRingRepository>();
+            _ringRepository = 
+                this.Storage.GetRepository<IRingRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 1, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            var query = _ringRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var ringDocuments = _ringRepository.Find(query).Select(item => new RingDocumentDto(item));
+            page = page - 1;
+            var query = 
+                _ringRepository.Query.OrderByDescending(item => item.CreatedDate)
+                                     .Take(size)
+                                     .Skip(page * size);
+            var ringDocuments = 
+                _ringRepository.Find(query)
+                               .Select(item => new RingDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                ringDocuments = ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                ringDocuments = 
+                    ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                Dictionary<string, string> orderDictionary = 
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                          orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(RingDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
@@ -70,7 +85,9 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string id)
         {
             var Identity = Guid.Parse(id);
-            var ringDocuments = _ringRepository.Find(item => item.Identity == Identity).Select(item => new RingDocumentDto(item)).FirstOrDefault();
+            var ringDocuments = 
+                _ringRepository.Find(item => item.Identity == Identity)
+                               .Select(item => new RingDocumentDto(item)).FirstOrDefault();
             await Task.Yield();
 
             if (ringDocuments == null)
@@ -92,7 +109,8 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateRingDocumentCommand command)
+        public async Task<IActionResult> Put(string id, 
+                                             [FromBody]UpdateRingDocumentCommand command)
         {
             if (!Guid.TryParse(id, out Guid Identity))
             {
