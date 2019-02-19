@@ -4,6 +4,7 @@ using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,27 +21,42 @@ namespace Manufactures.Controllers.Api
     {
         public readonly IYarnDocumentRepository _yarnDocumentRepository;
 
-        public YarnDocumentController(IServiceProvider serviceProvider) : base(serviceProvider)
+        public YarnDocumentController(IServiceProvider serviceProvider,
+                                      IWorkContext workContext) : base(serviceProvider)
         {
-            _yarnDocumentRepository = this.Storage.GetRepository<IYarnDocumentRepository>();
+            _yarnDocumentRepository = 
+                this.Storage.GetRepository<IYarnDocumentRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 1, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            var query = _yarnDocumentRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var yarns = _yarnDocumentRepository.Find(query).Select(item => new YarnDocumentDto(item));
+            page = page - 1;
+            var query = 
+                _yarnDocumentRepository.Query.OrderByDescending(item => item.CreatedDate)
+                                             .Take(size)
+                                             .Skip(page * size);
+            var yarns = 
+                _yarnDocumentRepository.Find(query)
+                                       .Select(item => new YarnDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                yarns = yarns.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                              entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                yarns = 
+                    yarns.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                          entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
+                Dictionary<string, string> orderDictionary = 
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                          orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(YarnDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
@@ -70,7 +86,10 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string id)
         {
             var Identity = Guid.Parse(id);
-            var yarn = _yarnDocumentRepository.Find(item => item.Identity == Identity).Select(item => new YarnDocumentDto(item)).FirstOrDefault();
+            var yarn = 
+                _yarnDocumentRepository.Find(item => item.Identity == Identity)
+                                       .Select(item => new YarnDocumentDto(item))
+                                       .FirstOrDefault();
             await Task.Yield();
 
             if (yarn == null)
@@ -92,7 +111,8 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateExsistingYarnCommand command)
+        public async Task<IActionResult> Put(string id, 
+                                             [FromBody]UpdateExsistingYarnCommand command)
         {
             if (!Guid.TryParse(id, out Guid Identity))
             {
