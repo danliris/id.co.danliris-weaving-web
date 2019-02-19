@@ -78,7 +78,7 @@ namespace Manufactures.Controllers.Api
             {
                 page,
                 size,
-                count = totalRows
+                total = totalRows
             });
         }
 
