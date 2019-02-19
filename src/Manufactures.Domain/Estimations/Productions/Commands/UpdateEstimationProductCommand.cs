@@ -13,7 +13,7 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         public Guid Id { get; private set; }
         public Period Period { get; set; }
         public WeavingUnit Unit { get; set; }
-        public List<EstimationProductValueObject> EstimationProducts { get; private set; }
+        public List<EstimationProductValueObject> EstimationProducts { get; set; }
     }
 
     public class UpdateEstimationProductCommandValidator : AbstractValidator<UpdateEstimationProductCommand>
