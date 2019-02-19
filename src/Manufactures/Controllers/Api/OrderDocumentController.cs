@@ -1,4 +1,5 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
@@ -45,10 +46,11 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}")]
+        [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}/status/{status}")]
         public async Task<IActionResult> Get(string month,
                                              string year,
-                                             string unitCode)
+                                             string unitCode,
+                                             string status)
         {
             var resultData = new List<OrderBySearchDto>();
             var query =
@@ -60,6 +62,11 @@ namespace Manufactures.Controllers.Api
                                                  entity.Period.Year.Contains(year) &&
                                                  entity.WeavingUnit.Code.Equals(unitCode))
                     .ToArray();
+
+            if (status.Equals(Constants.ONORDER))
+            {
+                orderDto = orderDto.Where(e => e.OrderStatus == Constants.ONORDER).ToArray();
+            }
 
             foreach (var order in orderDto)
             {
@@ -79,8 +86,9 @@ namespace Manufactures.Controllers.Api
                 var newOrder = new OrderBySearchDto(order, constructionDocument);
 
                 resultData.Add(newOrder);
-                await Task.Yield();
             }
+            
+            await Task.Yield();
 
             if (resultData.Count == 0)
             {

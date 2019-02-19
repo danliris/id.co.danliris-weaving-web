@@ -33,11 +33,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
 
         public async Task<EstimatedProductionDocument> Handle(AddNewEstimationCommand request, CancellationToken cancellationToken)
         {
-            DateTimeOffset now = DateTimeOffset.Now;
-            var year = now.Year.ToString();
-            var month = now.Month.ToString();
-            var estimationNumber = _estimationProductRepository.Find(o => o.Period.Deserialize<Period>().Year.Contains(year)).Count() + 1.ToString();
-            estimationNumber = estimationNumber.PadLeft(4, '0') + "/" + month.PadLeft(2, '0') + "-" + year;
+            var estimationNumber = await _estimationProductRepository.GetEstimationNumber();
 
             var estimatedProductionDocument = new EstimatedProductionDocument(Guid.NewGuid(), estimationNumber, request.Period, request.Unit);
 
