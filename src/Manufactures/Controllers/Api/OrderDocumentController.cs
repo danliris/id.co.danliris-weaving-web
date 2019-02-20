@@ -90,14 +90,7 @@ namespace Manufactures.Controllers.Api
             
             await Task.Yield();
 
-            if (resultData.Count == 0)
-            {
-                return NotFound();
-            }
-            else
-            {
-                return Ok(resultData);
-            }
+            return Ok(resultData);
         }
 
         [HttpGet]
