@@ -166,7 +166,7 @@ namespace Manufactures.Controllers.Api
 
             if (orderId == null)
             {
-                return NotFound();
+                return NoContent();
             }
             else
             {

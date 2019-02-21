@@ -10,6 +10,7 @@ namespace Manufactures.Domain.Rings.Commands
         public Guid Id { get; private set; }
         public string Code { get; set; }
         public int Number { get; set; }
+        public string RingType { get; set; }
         public string Description { get; set; }
     }
 
@@ -19,6 +20,7 @@ namespace Manufactures.Domain.Rings.Commands
         {
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Number).NotEmpty();
+            RuleFor(command => command.RingType).NotEmpty();
         }
     }
 }

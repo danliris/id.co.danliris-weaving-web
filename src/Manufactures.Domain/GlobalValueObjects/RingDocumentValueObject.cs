@@ -1,19 +1,19 @@
 ﻿using Moonlay.Domain;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.Yarns.ValueObjects
+namespace Manufactures.Domain.GlobalValueObjects 
 {
     public class RingDocumentValueObject : ValueObject
     {
-        public RingDocumentValueObject(string code, string number)
+        public string Code { get; private set; }
+        public int Number { get; private set; }
+
+        public RingDocumentValueObject(string code, int number)
         {
             Code = code;
             Number = number;
         }
-
-        public string Code { get; private set; }
-        public string Number { get; private set; }
-
+        
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Code;

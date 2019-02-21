@@ -22,7 +22,7 @@ namespace Manufactures.Application.Materials.CommandHandlers
         }
 
 
-        public async Task<MaterialTypeDocument> Handle(UpdateMaterialTypeCommand request, 
+        public async Task<MaterialTypeDocument> Handle(UpdateMaterialTypeCommand request,
                                                CancellationToken cancellationToken)
         {
             var materialType = _materialTypeRepository.Find(entity => entity.Identity.Equals(request.Id))
@@ -41,10 +41,39 @@ namespace Manufactures.Application.Materials.CommandHandlers
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
-            
+
             materialType.SetCode(request.Code);
             materialType.SetName(request.Name);
             materialType.SetDescription(request.Description);
+
+            if (request.RingDocuments.Count > 0)
+            {
+                if (materialType.RingDocuments.Count > 0)
+                {
+                    foreach (var exsistingRingDocument in materialType.RingDocuments)
+                    {
+                        var removeDocument = request.RingDocuments.ToList().Where(o => o.Code == exsistingRingDocument.Code && o.Number == exsistingRingDocument.Number).FirstOrDefault();
+
+                        if(removeDocument == null)
+                        {
+                            materialType.RemoveRingNumber(exsistingRingDocument);
+                        }
+                    }
+
+                }
+
+                foreach (var ringDocument in request.RingDocuments)
+                {
+                    var exsistingDocument = materialType.RingDocuments.ToList().Where(o => o.Code == ringDocument.Code && o.Number == ringDocument.Number).FirstOrDefault();
+
+                    if (exsistingDocument == null)
+                    {
+                        materialType.SetRingNumber(ringDocument);
+                    }
+
+                }
+
+            }
 
             await _materialTypeRepository.Update(materialType);
 
