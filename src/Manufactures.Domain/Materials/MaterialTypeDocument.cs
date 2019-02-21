@@ -1,13 +1,22 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Materials.ReadModels;
 using Moonlay;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Manufactures.Domain.Materials
 {
     public class MaterialTypeDocument : AggregateRoot<MaterialTypeDocument, MaterialTypeReadModel>
     {
+
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public IReadOnlyCollection<RingDocumentValueObject> RingDocuments { get; private set; }
+
         public MaterialTypeDocument(Guid id, 
                             string code, 
                             string name, 
@@ -16,7 +25,6 @@ namespace Manufactures.Domain.Materials
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
             Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => description);
 
             this.MarkTransient();
 
@@ -39,11 +47,24 @@ namespace Manufactures.Domain.Materials
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Description = readModel.Description;
+            this.RingDocuments = readModel.RingDocuments.Deserialize<List<RingDocumentValueObject>>();
         }
 
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
+        public void SetRingNumber(RingDocumentValueObject value)
+        {
+            var list = RingDocuments.ToList();
+            list.Add(value);
+            RingDocuments = list;
+            ReadModel.RingDocuments = RingDocuments.Serialize();
+        }
+
+        public void RemoveRingNumber(RingDocumentValueObject  value)
+        {
+            var list = RingDocuments.ToList();
+            list.Remove(value);
+            RingDocuments = list;
+            ReadModel.RingDocuments = RingDocuments.Serialize();
+        }
 
         public void SetCode(string code)
         {
