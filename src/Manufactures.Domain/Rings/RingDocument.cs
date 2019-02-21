@@ -8,6 +8,10 @@ namespace Manufactures.Domain.Rings
 {
     public class RingDocument : AggregateRoot<RingDocument, RingDocumentReadModel>
     {
+        public string Code { get; private set; }
+        public int Number { get; private set; }
+        public string Description { get; private set; }
+
         public RingDocument(Guid identity,
                             string code,
                             int number,
@@ -15,7 +19,6 @@ namespace Manufactures.Domain.Rings
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => description);
 
             this.MarkTransient();
 
@@ -41,10 +44,6 @@ namespace Manufactures.Domain.Rings
             this.Number = readModel.Number;
             this.Description = readModel.Description;
         }
-
-        public string Code { get; private set; }
-        public int Number { get; private set; }
-        public string Description { get; private set; }
 
         public void SetCode(string code)
         {
