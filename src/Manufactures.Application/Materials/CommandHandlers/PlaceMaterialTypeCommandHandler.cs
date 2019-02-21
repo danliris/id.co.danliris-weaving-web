@@ -38,6 +38,14 @@ namespace Manufactures.Application.Materials.CommandHandlers
                                                 name: request.Name,
                                                 description: request.Description);
 
+            if(request.RingDocuments.Count > 0)
+            {
+                foreach(var ringDocument in request.RingDocuments)
+                {
+                    materialType.SetRingNumber(ringDocument);
+                }
+            }
+
             await _materialTypeRepository.Update(materialType);
 
             _storage.Save();

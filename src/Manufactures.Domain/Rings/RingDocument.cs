@@ -10,15 +10,18 @@ namespace Manufactures.Domain.Rings
     {
         public string Code { get; private set; }
         public int Number { get; private set; }
+        public string RingType { get; private set; }
         public string Description { get; private set; }
 
         public RingDocument(Guid identity,
                             string code,
                             int number,
+                            string ringType,
                             string description) : base(identity)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
+            Validator.ThrowIfNullOrEmpty(() => RingType);
 
             this.MarkTransient();
 
@@ -27,11 +30,13 @@ namespace Manufactures.Domain.Rings
             Code = code;
             Number = number;
             Description = description;
+            RingType = ringType;
 
             ReadModel = new RingDocumentReadModel(Identity)
             {
                 Code = this.Code,
                 Number = this.Number,
+                RingType = this.RingType,
                 Description = this.Description
             };
 
@@ -43,6 +48,7 @@ namespace Manufactures.Domain.Rings
             this.Code = readModel.Code;
             this.Number = readModel.Number;
             this.Description = readModel.Description;
+            this.RingType = readModel.RingType;
         }
 
         public void SetCode(string code)
@@ -58,12 +64,23 @@ namespace Manufactures.Domain.Rings
             }
         }
 
-        public void SetName(int number)
+        public void SetNumber(int number)
         {
             if (number != Number)
             {
                 Number = number;
                 ReadModel.Number = Number;
+
+                MarkModified();
+            }
+        }
+
+        public void SetRingType (string value)
+        {
+            if(RingType != value)
+            {
+                RingType = value;
+                ReadModel.RingType = RingType;
 
                 MarkModified();
             }

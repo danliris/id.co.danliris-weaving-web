@@ -21,26 +21,35 @@ namespace Manufactures.Application.Rings.CommandHandlers
             _ringRepository = storage.GetRepository<IRingRepository>();
         }
 
-        public async Task<RingDocument> Handle(UpdateRingDocumentCommand request, CancellationToken cancellationToken)
+        public async Task<RingDocument> Handle(UpdateRingDocumentCommand request, 
+                                               CancellationToken cancellationToken)
         {
-            var ringDocument = _ringRepository.Find(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
+            var ringDocument = 
+                _ringRepository.Find(entity => entity.Identity.Equals(request.Id))
+                                                              .FirstOrDefault();
 
             if(ringDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
             }
 
-            var hasRingDocument = _ringRepository.Find(ring => ring.Code.Equals(request.Code) && 
-                                                               ring.Deleted.Equals(false)).Count() >= 1; 
+            var hasRingDocument = 
+                _ringRepository.Find(ring => ring.Code.Equals(request.Code) &&
+                                              ring.Code.Equals(request.Number) &&
+                                              ring.Deleted.Equals(false)).Count() > 1; 
 
             // Check for exsisting ring code
             if(hasRingDocument && !ringDocument.Code.Equals(request.Code))
             {
-                throw Validator.ErrorValidation(("Code", "This Code: " + request.Code + " has available"));
+                throw Validator.ErrorValidation(("Code & Number",
+                                                "Code with " + request.Code +
+                                                " And Number " + request.Number +
+                                                " has available"));
             }
 
             ringDocument.SetCode(request.Code);
-            ringDocument.SetName(request.Number);
+            ringDocument.SetNumber(request.Number);
+            ringDocument.SetRingType(request.RingType);
             ringDocument.SetDescription(request.Description);
 
             await _ringRepository.Update(ringDocument);

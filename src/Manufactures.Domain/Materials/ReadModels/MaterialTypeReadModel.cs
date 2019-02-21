@@ -10,5 +10,6 @@ namespace Manufactures.Domain.Materials.ReadModels
         public string Code { get; internal set; }
         public string Name { get; internal set; }
         public string Description { get; internal set; }
+        public string RingDocuments { get; internal set; }
     }
 }

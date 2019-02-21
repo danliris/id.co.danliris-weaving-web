@@ -2,7 +2,6 @@
 using Manufactures.Domain.Events;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Yarns.ReadModels;
-using Manufactures.Domain.Yarns.ValueObjects;
 using Moonlay;
 using System;
 
@@ -10,6 +9,12 @@ namespace Manufactures.Domain.Yarns
 {
     public class YarnDocument : AggregateRoot<YarnDocument, YarnDocumentReadModel>
     {
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string Tags { get; private set; }
+        public MaterialTypeValueObject MaterialTypeDocument { get; private set; }
+        public RingDocumentValueObject RingDocument { get; private set; }
+
         public YarnDocument(Guid id,
                             string code,
                             string name,
@@ -53,13 +58,7 @@ namespace Manufactures.Domain.Yarns
             this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeValueObject>();
             this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
         }
-
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string Tags { get; private set; }
-        public MaterialTypeValueObject MaterialTypeDocument { get; private set; }
-        public RingDocumentValueObject RingDocument { get; private set; }
-
+        
         public void SetCode(string code)
         {
             Validator.ThrowIfNullOrEmpty(() => code);
