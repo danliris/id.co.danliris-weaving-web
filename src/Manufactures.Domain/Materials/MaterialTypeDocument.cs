@@ -47,7 +47,10 @@ namespace Manufactures.Domain.Materials
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Description = readModel.Description;
-            this.RingDocuments = readModel.RingDocuments.Deserialize<List<RingDocumentValueObject>>();
+            this.RingDocuments = 
+                String.IsNullOrEmpty(readModel.RingDocuments) ? 
+                    new List<RingDocumentValueObject>() : readModel.RingDocuments
+                                                                   .Deserialize<List<RingDocumentValueObject>>();
         }
 
         public void SetRingNumber(RingDocumentValueObject value)

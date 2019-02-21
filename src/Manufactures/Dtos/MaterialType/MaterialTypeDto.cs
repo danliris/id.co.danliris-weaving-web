@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Dtos.MaterialType
 {
     public class MaterialTypeDto
     {
