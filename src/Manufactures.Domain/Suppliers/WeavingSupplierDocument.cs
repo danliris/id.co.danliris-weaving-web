@@ -1,12 +1,11 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Suppliers.ReadModels;
+using Moonlay;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Manufactures.Domain.Suppliers
 {
-    public class WeavingSupplierDocument : AggregateRoot<WeavingSupplierDocument, WeavingSupplierDocumentReadModel>, IValidatableObject
+    public class WeavingSupplierDocument : AggregateRoot<WeavingSupplierDocument, WeavingSupplierDocumentReadModel>
     {
         public string Code { get; private set; }
         public string Name { get; private set; }
@@ -17,6 +16,9 @@ namespace Manufactures.Domain.Suppliers
                                        string name,
                                        string coreSupplierId) : base(id)
         {
+            Validator.ThrowIfNullOrEmpty(() => code);
+            Validator.ThrowIfNullOrEmpty(() => name);
+            Validator.ThrowIfNullOrEmpty(() => coreSupplierId);
             this.MarkTransient();
 
             // Set Properties
@@ -43,7 +45,9 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCode(string code)
         {
-            if(code != Code)
+            Validator.ThrowIfNullOrEmpty(() => code);
+
+            if (code != Code)
             {
                 Code = code;
                 ReadModel.Code = Code;
@@ -54,7 +58,9 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetName(string name)
         {
-            if(name != Name)
+            Validator.ThrowIfNullOrEmpty(() => name);
+
+            if (name != Name)
             {
                 Name = name;
                 ReadModel.Name = Name;
@@ -65,7 +71,9 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCoreSupplierId(string id)
         {
-            if(id != CoreSupplierId)
+            Validator.ThrowIfNullOrEmpty(() => id);
+
+            if (id != CoreSupplierId)
             {
                 CoreSupplierId = id;
                 ReadModel.CoreSupplierId = CoreSupplierId;
@@ -77,11 +85,6 @@ namespace Manufactures.Domain.Suppliers
         protected override WeavingSupplierDocument GetEntity()
         {
             return this;
-        }
-
-        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-        {
-            return new List<ValidationResult>();
         }
     }
 }
