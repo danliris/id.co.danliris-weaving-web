@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Machines\Commands\" />
     <Folder Include="Orders\Entities\" />
     <Folder Include="Shared\ValueObjects\" />
   </ItemGroup>

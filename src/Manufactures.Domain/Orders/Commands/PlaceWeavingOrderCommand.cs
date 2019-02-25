@@ -15,7 +15,8 @@ namespace Manufactures.Domain.Orders.Commands
         public int WholeGrade { get; set; }
         public string YarnType { get; set; }
         public Period Period { get; set; }
-        public Composition Composition { get; set; }
+        public Composition WarpComposition { get; set; }
+        public Composition WeftComposition { get; set; }
         public WeavingUnit WeavingUnit { get; set; }
         public string OrderStatus { get; set; }
     }
@@ -33,9 +34,12 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.YarnType).NotEmpty();
             RuleFor(command => command.Period.Month).NotEmpty();
             RuleFor(command => command.Period.Year).NotEmpty();
-            RuleFor(command => command.Composition.CompositionOfPoly).NotEmpty();
-            RuleFor(command => command.Composition.CompositionOfCotton).NotEmpty();
-            RuleFor(command => command.Composition.OtherComposition).NotEmpty();
+            RuleFor(command => command.WarpComposition.CompositionOfPoly).NotEmpty();
+            RuleFor(command => command.WarpComposition.CompositionOfCotton).NotEmpty();
+            RuleFor(command => command.WarpComposition.OtherComposition).NotEmpty();
+            RuleFor(command => command.WeftComposition.CompositionOfPoly).NotEmpty();
+            RuleFor(command => command.WeftComposition.CompositionOfCotton).NotEmpty();
+            RuleFor(command => command.WeftComposition.OtherComposition).NotEmpty();
             RuleFor(command => command.WeavingUnit._id).NotEmpty();
             RuleFor(command => command.WeavingUnit.Name).NotEmpty();
         }

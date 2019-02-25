@@ -9,6 +9,18 @@ namespace Manufactures.Dtos.Order
 {
     public class WeavingOrderById
     {
+        public Guid Id { get; }
+        public string OrderNumber { get; }
+        public ConstructionById FabricConstructionDocument { get; }
+        public DateTimeOffset DateOrdered { get; }
+        public string WarpOrigin { get; }
+        public string WeftOrigin { get; }
+        public int WholeGrade { get; }
+        public Period Period { get; }
+        public Composition WarpComposition { get; }
+        public Composition WeftComposition { get; }
+        public WeavingUnit WeavingUnit { get; }
+
         public WeavingOrderById(WeavingOrderDocument weavingOrderDocument)
         {
             Id = weavingOrderDocument.Identity;
@@ -21,19 +33,9 @@ namespace Manufactures.Dtos.Order
             WeftOrigin = weavingOrderDocument.WeftOrigin;
             WholeGrade = weavingOrderDocument.WholeGrade;
             Period = weavingOrderDocument.Period;
-            Composition = weavingOrderDocument.Composition;
+            WarpComposition = weavingOrderDocument.WarpComposition;
+            WeftComposition = weavingOrderDocument.WeftComposition;
             WeavingUnit = weavingOrderDocument.WeavingUnit;
         }
-
-        public Guid Id { get; }
-        public string OrderNumber { get; }
-        public ConstructionById FabricConstructionDocument { get; }
-        public DateTimeOffset DateOrdered { get; }
-        public string WarpOrigin { get; }
-        public string WeftOrigin { get; }
-        public int WholeGrade { get; }
-        public Period Period { get; }
-        public Composition Composition { get; }
-        public WeavingUnit WeavingUnit { get; }
     }
 }
