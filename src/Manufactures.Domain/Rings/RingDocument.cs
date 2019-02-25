@@ -66,6 +66,7 @@ namespace Manufactures.Domain.Rings
 
         public void SetNumber(int number)
         {
+
             if (number != Number)
             {
                 Number = number;
@@ -77,7 +78,9 @@ namespace Manufactures.Domain.Rings
 
         public void SetRingType (string value)
         {
-            if(RingType != value)
+            Validator.ThrowIfNullOrEmpty(() => value);
+
+            if (RingType != value)
             {
                 RingType = value;
                 ReadModel.RingType = RingType;
@@ -88,8 +91,6 @@ namespace Manufactures.Domain.Rings
 
         public void SetDescription(string description)
         {
-            Validator.ThrowIfNullOrEmpty(() => description);
-
             if (description != Description)
             {
                 Description = description;
