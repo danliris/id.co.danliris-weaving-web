@@ -32,21 +32,7 @@ namespace Manufactures.Application.Rings.CommandHandlers
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
             }
-
-            var hasRingDocument = 
-                _ringRepository.Find(ring => ring.Code.Equals(request.Code) &&
-                                              ring.Code.Equals(request.Number) &&
-                                              ring.Deleted.Equals(false)).Count() > 1; 
-
-            // Check for exsisting ring code
-            if(hasRingDocument && !ringDocument.Code.Equals(request.Code))
-            {
-                throw Validator.ErrorValidation(("Code & Number",
-                                                "Code with " + request.Code +
-                                                " And Number " + request.Number +
-                                                " has available"));
-            }
-
+            
             ringDocument.SetCode(request.Code);
             ringDocument.SetNumber(request.Number);
             ringDocument.SetRingType(request.RingType);

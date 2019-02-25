@@ -39,7 +39,8 @@ namespace Manufactures.Application.Orders.CommandHandlers
             order.SetWholeGrade(command.WholeGrade);
             order.SetYarnType(command.YarnType);
             order.SetPeriod(command.Period);
-            order.SetComposition(command.Composition);
+            order.SetWarpComposition(command.WarpComposition);
+            order.SetWeftComposition(command.WeftComposition);
             order.SetWeavingUnit(command.WeavingUnit);
 
             await _weavingOrderDocumentRepository.Update(order);

@@ -1,22 +1,22 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Suppliers.ReadModels;
-using Moonlay;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Manufactures.Domain.Suppliers
 {
-    public class WeavingSupplierDocument : AggregateRoot<WeavingSupplierDocument, WeavingSupplierDocumentReadModel>
+    public class WeavingSupplierDocument : AggregateRoot<WeavingSupplierDocument, WeavingSupplierDocumentReadModel>, IValidatableObject
     {
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string CoreSupplierId { get; private set; }
+
         public WeavingSupplierDocument(Guid id, 
                                        string code,
                                        string name,
                                        string coreSupplierId) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => coreSupplierId);
-
             this.MarkTransient();
 
             // Set Properties
@@ -31,8 +31,6 @@ namespace Manufactures.Domain.Suppliers
                 Name = this.Name,
                 CoreSupplierId = this.CoreSupplierId
             };
-
-
         }
 
         public WeavingSupplierDocument(WeavingSupplierDocumentReadModel readModel) : base(readModel)
@@ -42,14 +40,9 @@ namespace Manufactures.Domain.Suppliers
             this.CoreSupplierId = readModel.CoreSupplierId;
         }
 
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string CoreSupplierId { get; private set; }
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
             if(code != Code)
             {
                 Code = code;
@@ -61,8 +54,6 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetName(string name)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
-
             if(name != Name)
             {
                 Name = name;
@@ -74,8 +65,6 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCoreSupplierId(string id)
         {
-            Validator.ThrowIfNullOrEmpty(() => id);
-
             if(id != CoreSupplierId)
             {
                 CoreSupplierId = id;
@@ -88,6 +77,11 @@ namespace Manufactures.Domain.Suppliers
         protected override WeavingSupplierDocument GetEntity()
         {
             return this;
+        }
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            return new List<ValidationResult>();
         }
     }
 }
