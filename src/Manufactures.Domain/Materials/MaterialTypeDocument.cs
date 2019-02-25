@@ -31,6 +31,7 @@ namespace Manufactures.Domain.Materials
             Code = code;
             Name = name;
             Description = description;
+            RingDocuments = new List<RingDocumentValueObject>();
 
             ReadModel = new MaterialTypeReadModel(Identity)
             {
