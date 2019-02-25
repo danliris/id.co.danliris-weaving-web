@@ -21,7 +21,7 @@ namespace Manufactures.Domain.Rings
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => RingType);
+            Validator.ThrowIfNullOrEmpty(() => ringType);
 
             this.MarkTransient();
 
