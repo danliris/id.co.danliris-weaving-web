@@ -153,10 +153,10 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var orderId = Guid.Parse(id);
+            var orderId = Guid.Parse(Id);
             var orderDto = 
                 _weavingOrderDocumentRepository.Find(item => item.Identity == orderId)
                                                .Select(item => new WeavingOrderById(item))
@@ -182,11 +182,11 @@ namespace Manufactures.Controllers.Api
             return Ok(order.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
                                              [FromBody]UpdateWeavingOrderCommand command)
         {
-            if (!Guid.TryParse(id, out Guid orderId))
+            if (!Guid.TryParse(Id, out Guid orderId))
             {
                 return NotFound();
             }
@@ -197,10 +197,10 @@ namespace Manufactures.Controllers.Api
             return Ok(order.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid orderId))
+            if (!Guid.TryParse(Id, out Guid orderId))
             {
                 return NotFound();
             }

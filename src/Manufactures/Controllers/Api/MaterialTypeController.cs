@@ -84,10 +84,10 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var Identity = Guid.Parse(id);
+            var Identity = Guid.Parse(Id);
             var materialTypeDto = 
                 _materialTypeRepository.Find(item => item.Identity == Identity)
                                        .Select(item => new MaterialTypeDto(item)).FirstOrDefault();
@@ -111,11 +111,11 @@ namespace Manufactures.Controllers.Api
             return Ok(materialType.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
                                              [FromBody]UpdateMaterialTypeCommand command)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }
@@ -126,10 +126,10 @@ namespace Manufactures.Controllers.Api
             return Ok(materialType.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }
