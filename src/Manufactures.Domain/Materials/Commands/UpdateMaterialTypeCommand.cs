@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Materials.Commands
 {
     public class UpdateMaterialTypeCommand : ICommand<MaterialTypeDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
         public string Code { get; set; }
         public string Name { get; set; }

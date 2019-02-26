@@ -10,7 +10,6 @@ namespace Manufactures.Domain.Construction.Commands
 {
     public class UpdateConstructionCommand : ICommand<ConstructionDocument>
     {
-        public void SetId(Guid id) { Id = id; }
         public Guid Id { get; private set; }
         public string ConstructionNumber { get; set; }
         public int AmountOfWarp { get; set; }
@@ -23,6 +22,11 @@ namespace Manufactures.Domain.Construction.Commands
         public MaterialTypeValueObject MaterialTypeDocument { get; set; }
         public List<Warp> ItemsWarp { get; set; }
         public List<Weft> ItemsWeft { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 
     public class UpdateConstructionCommandValidator : AbstractValidator<UpdateConstructionCommand>

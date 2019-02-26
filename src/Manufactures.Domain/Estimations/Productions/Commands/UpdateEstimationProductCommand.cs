@@ -9,7 +9,7 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
 {
     public class UpdateEstimationProductCommand : ICommand<EstimatedProductionDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
         public Period Period { get; set; }
         public WeavingUnit Unit { get; set; }

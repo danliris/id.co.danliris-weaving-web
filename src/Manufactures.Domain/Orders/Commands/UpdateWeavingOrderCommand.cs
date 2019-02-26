@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Orders.Commands
 {
     public class UpdateWeavingOrderCommand : ICommand<WeavingOrderDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
         public FabricConstructionDocument FabricConstructionDocument { get; set; }
         public string WarpOrigin { get; set; }
