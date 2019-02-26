@@ -2,6 +2,7 @@
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -9,17 +10,40 @@ namespace Manufactures.Dtos.Construction
 {
     public class ConstructionByIdDto
     {
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
+
+        [JsonProperty(PropertyName = "MaterialTypeDocument")]
         public MaterialTypeValueObject MaterialTypeDocument { get; }
+
+        [JsonProperty(PropertyName = "WovenType")]
         public string WovenType { get; }
+
+        [JsonProperty(PropertyName = "AmountOfWarp")]
         public int AmountOfWarp { get; }
+
+        [JsonProperty(PropertyName = "AmountOfWeft")]
         public int AmountOfWeft { get; }
+
+        [JsonProperty(PropertyName = "Width")]
         public int Width { get; }
+
+        [JsonProperty(PropertyName = "WarpTypeForm")]
         public string WarpTypeForm { get; }
+
+        [JsonProperty(PropertyName = "WeftTypeForm")]
         public string WeftTypeForm { get; }
+
+        [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
+
+        [JsonProperty(PropertyName = "ItemsWarp")]
         public IReadOnlyCollection<Warp> ItemsWarp { get; }
+
+        [JsonProperty(PropertyName = "ItemsWeft")]
         public IReadOnlyCollection<Weft> ItemsWeft { get; }
 
 

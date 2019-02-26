@@ -1,6 +1,7 @@
 ﻿using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -8,10 +9,19 @@ namespace Manufactures.Dtos.EstimationsProduct
 {
     public class EstimationByIdDto
     {
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "EstimatedNumber")]
         public string EstimatedNumber { get; }
+
+        [JsonProperty(PropertyName = "Period")]
         public Period Period { get; }
+
+        [JsonProperty(PropertyName = "Unit")]
         public WeavingUnit Unit { get; }
+
+        [JsonProperty(PropertyName = "EstimationProducts")]
         public List<EstimationProductValueObject> EstimationProducts { get; }
 
         public EstimationByIdDto(EstimatedProductionDocument document)
