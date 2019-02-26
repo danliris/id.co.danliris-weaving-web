@@ -1,21 +1,23 @@
 ﻿using Moonlay.Domain;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.GlobalValueObjects
 {
     public class Period : ValueObject
     {
+        [JsonProperty(PropertyName = "Month")]
+        public string Month { get; private set; }
+
+        [JsonProperty(PropertyName = "Year")]
+        public string Year { get; private set; }
+
         public Period(string month, string year)
         {
             Month = month;
             Year = year;
         }
-
-        public string Month { get; private set; }
-        public string Year { get; private set; }
-
+        
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Month;

@@ -1,4 +1,5 @@
 ﻿using Moonlay.Domain;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -6,6 +7,21 @@ namespace Manufactures.Domain.Construction.ValueObjects
 {
     public class Warp : ValueObject
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; private set; }
+
+        [JsonProperty(PropertyName = "Quantity")]
+        public double Quantity { get; private set; }
+
+        [JsonProperty(PropertyName = "Information")]
+        public string Information { get; private set; }
+
+        [JsonProperty(PropertyName = "Yarn")]
+        public Yarn Yarn { get; private set; }
+
+        [JsonProperty(PropertyName = "Detail")]
+        public string Detail { get; private set; }
+
         public Warp(Guid id,
                     double quantity,
                     string information,
@@ -18,12 +34,6 @@ namespace Manufactures.Domain.Construction.ValueObjects
             this.Yarn = yarn;
             this.Detail = detail;
         }
-
-        public Guid Id { get; private set; }
-        public double Quantity { get; private set; }
-        public string Information { get; private set; }
-        public Yarn Yarn { get; private set; }
-        public string Detail { get; private set; }
 
         public void SetDetail(string detail)
         {
