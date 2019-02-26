@@ -5,7 +5,7 @@ namespace Manufactures.Domain.Materials.Commands
 {
     public class RemoveMaterialTypeCommand : ICommand<MaterialTypeDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
     }
 }

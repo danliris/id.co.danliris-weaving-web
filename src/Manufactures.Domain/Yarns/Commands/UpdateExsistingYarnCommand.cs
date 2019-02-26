@@ -1,14 +1,13 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Yarns.ValueObjects;
 using System;
 
 namespace Manufactures.Domain.Yarns.Commands
 {
     public class UpdateExsistingYarnCommand : ICommand<YarnDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
         public string Code { get; set; }
         public string Name { get; set; }

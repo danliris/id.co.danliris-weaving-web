@@ -6,7 +6,7 @@ namespace Manufactures.Domain.Yarns.Commands
 
     public class RemoveExsistingYarnCommand : ICommand<YarnDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        public void SetId(Guid Id) { this.Id = Id; }
         public Guid Id { get; private set; }
     }
 }
