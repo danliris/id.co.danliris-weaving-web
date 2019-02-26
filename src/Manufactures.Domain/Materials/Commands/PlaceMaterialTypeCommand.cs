@@ -1,16 +1,23 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Materials;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.Materials.Commands
 {
     public class PlaceMaterialTypeCommand : ICommand<MaterialTypeDocument>
     {
+        [JsonProperty(PropertyName = "Code")]
         public string Code { get; set; }
+
+        [JsonProperty(PropertyName = "Name")]
         public string Name { get; set; }
+
+        [JsonProperty(PropertyName = "RingDocuments")]
         public List<RingDocumentValueObject> RingDocuments { get; set; }
+
+        [JsonProperty(PropertyName = "Description")]
         public string Description { get; set; }
     }
 

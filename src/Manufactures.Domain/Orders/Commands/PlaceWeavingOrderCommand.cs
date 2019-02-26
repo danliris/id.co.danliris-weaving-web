@@ -2,22 +2,44 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ValueObjects;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Domain.Orders.Commands
 {
     public class PlaceWeavingOrderCommand : ICommand<WeavingOrderDocument>
     {
+        [JsonProperty(PropertyName = "FabricConstructionDocument")]
         public FabricConstructionDocument FabricConstructionDocument { get; set; }
+
+        [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; set; }
+
+        [JsonProperty(PropertyName = "WarpOrigin")]
         public string WarpOrigin { get; set; }
+
+        [JsonProperty(PropertyName = "WeftOrigin")]
         public string WeftOrigin { get; set; }
+
+        [JsonProperty(PropertyName = "WholeGrade")]
         public int WholeGrade { get; set; }
+
+        [JsonProperty(PropertyName = "YarnType")]
         public string YarnType { get; set; }
+
+        [JsonProperty(PropertyName = "Period")]
         public Period Period { get; set; }
+
+        [JsonProperty(PropertyName = "WarpComposition")]
         public Composition WarpComposition { get; set; }
+
+        [JsonProperty(PropertyName = "WeftComposition")]
         public Composition WeftComposition { get; set; }
+
+        [JsonProperty(PropertyName = "WeavingUnit")]
         public WeavingUnit WeavingUnit { get; set; }
+
+        [JsonProperty(PropertyName = "OrderStatus")]
         public string OrderStatus { get; set; }
     }
 
