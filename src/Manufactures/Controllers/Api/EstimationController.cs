@@ -85,19 +85,19 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var Id = Guid.Parse(id);
+            var Identity = Guid.Parse(Id);
             var query = _estimationProductRepository.Query;
             var estimationDocument = 
                 _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
-                                            .Where(o => o.Identity == Id)
+                                            .Where(o => o.Identity == Identity)
                                             .Select(item => new EstimationByIdDto(item))
                                             .FirstOrDefault();
             await Task.Yield();
 
-            if (Id == null)
+            if (Identity == null)
             {
                 return NotFound();
             }
@@ -115,11 +115,11 @@ namespace Manufactures.Controllers.Api
             return Ok(newEstimationDocument.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
                                              [FromBody]UpdateEstimationProductCommand command)
         {
-            if (!Guid.TryParse(id, out Guid documentId))
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
@@ -130,10 +130,10 @@ namespace Manufactures.Controllers.Api
             return Ok(updateEstimationDocument.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid documentId))
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }

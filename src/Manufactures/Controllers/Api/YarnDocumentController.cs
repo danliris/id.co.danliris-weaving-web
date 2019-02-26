@@ -82,10 +82,10 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var Identity = Guid.Parse(id);
+            var Identity = Guid.Parse(Id);
             var yarn = 
                 _yarnDocumentRepository.Find(item => item.Identity == Identity)
                                        .Select(item => new YarnDocumentDto(item))
@@ -110,11 +110,11 @@ namespace Manufactures.Controllers.Api
             return Ok(yarnDocument.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
                                              [FromBody]UpdateExsistingYarnCommand command)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }
@@ -125,10 +125,10 @@ namespace Manufactures.Controllers.Api
             return Ok(yarnDocument.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }

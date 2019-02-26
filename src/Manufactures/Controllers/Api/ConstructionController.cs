@@ -84,19 +84,19 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var Id = Guid.Parse(id);
+            var Identity = Guid.Parse(Id);
             var query = _constructionDocumentRepository.Query;
             var constructionDocument = 
                 _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
-                                               .Where(o => o.Identity == Id)
+                                               .Where(o => o.Identity == Identity)
                                                .Select(item => new ConstructionByIdDto(item))
                                                .FirstOrDefault();
             await Task.Yield();
 
-            if (Id == null)
+            if (Identity == null)
             {
                 return NotFound();
             }
@@ -114,11 +114,11 @@ namespace Manufactures.Controllers.Api
             return Ok(newConstructionDocument.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, 
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
                                              [FromBody]UpdateConstructionCommand command)
         {
-            if (!Guid.TryParse(id, out Guid documentId))
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
@@ -129,10 +129,10 @@ namespace Manufactures.Controllers.Api
             return Ok(updateConstructionDocument.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid documentId))
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
