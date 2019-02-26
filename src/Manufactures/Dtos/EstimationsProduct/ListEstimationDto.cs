@@ -1,14 +1,18 @@
 ﻿using Manufactures.Domain.Estimations.Productions;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.EstimationsProduct
 {
     public class ListEstimationDto
     {
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "EstimationNumber")]
         public string EstimationNumber { get; }
+
+        [JsonProperty(PropertyName = "DateEstimated")]
         public string DateEstimated { get; }
 
         public ListEstimationDto(EstimatedProductionDocument document)
