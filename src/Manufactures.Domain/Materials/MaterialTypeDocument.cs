@@ -98,8 +98,6 @@ namespace Manufactures.Domain.Materials
 
         public void SetDescription(string description)
         {
-            Validator.ThrowIfNullOrEmpty(() => description);
-
             if (description != Description)
             {
                 Description = description;
