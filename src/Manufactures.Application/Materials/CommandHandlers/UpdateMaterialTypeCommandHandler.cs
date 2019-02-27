@@ -48,31 +48,25 @@ namespace Manufactures.Application.Materials.CommandHandlers
 
             if (request.RingDocuments.Count > 0)
             {
-                if (materialType.RingDocuments.Count > 0)
+                foreach(var exsistingRing in materialType.RingDocuments)
                 {
-                    foreach (var exsistingRingDocument in materialType.RingDocuments)
+                    var requestRing = request.RingDocuments.Where(e => e.Code.Equals(exsistingRing.Code) && e.Number.Equals(exsistingRing.Number)).FirstOrDefault();
+
+                    if(requestRing == null)
                     {
-                        var removeDocument = request.RingDocuments.ToList().Where(o => o.Code == exsistingRingDocument.Code && o.Number == exsistingRingDocument.Number).FirstOrDefault();
-
-                        if(removeDocument == null)
-                        {
-                            materialType.RemoveRingNumber(exsistingRingDocument);
-                        }
+                        materialType.RemoveRingNumber(exsistingRing);
                     }
-
                 }
 
-                foreach (var ringDocument in request.RingDocuments)
+                foreach (var requestRing in request.RingDocuments)
                 {
-                    var exsistingDocument = materialType.RingDocuments.ToList().Where(o => o.Code == ringDocument.Code && o.Number == ringDocument.Number).FirstOrDefault();
+                    var exsistingRing = materialType.RingDocuments.Where(e => e.Code.Equals(requestRing.Code) && e.Number.Equals(requestRing.Number)).FirstOrDefault();
 
-                    if (exsistingDocument == null)
+                    if (exsistingRing == null)
                     {
-                        materialType.SetRingNumber(ringDocument);
+                        materialType.SetRingNumber(requestRing);
                     }
-
                 }
-
             }
 
             await _materialTypeRepository.Update(materialType);
