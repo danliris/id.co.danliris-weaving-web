@@ -17,9 +17,9 @@ namespace Manufactures.Domain.Materials
         public string Description { get; private set; }
         public IReadOnlyCollection<RingDocumentValueObject> RingDocuments { get; private set; }
 
-        public MaterialTypeDocument(Guid id, 
-                            string code, 
-                            string name, 
+        public MaterialTypeDocument(Guid id,
+                            string code,
+                            string name,
                             string description) : base(id)
         {
             // Validate Properties
@@ -48,14 +48,16 @@ namespace Manufactures.Domain.Materials
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Description = readModel.Description;
-            this.RingDocuments = 
-                String.IsNullOrEmpty(readModel.RingDocuments) ? 
+            this.RingDocuments =
+                String.IsNullOrEmpty(readModel.RingDocuments) ?
                     new List<RingDocumentValueObject>() : readModel.RingDocuments
                                                                    .Deserialize<List<RingDocumentValueObject>>();
         }
 
         public void SetRingNumber(RingDocumentValueObject value)
         {
+            Validator.ThrowIfNullOrEmpty(() => value.Code);
+
             var list = RingDocuments.ToList();
             list.Add(value);
             RingDocuments = list;
@@ -64,7 +66,7 @@ namespace Manufactures.Domain.Materials
             MarkModified();
         }
 
-        public void RemoveRingNumber(RingDocumentValueObject  value)
+        public void RemoveRingNumber(RingDocumentValueObject value)
         {
             var list = RingDocuments.ToList();
             list.Remove(value);
