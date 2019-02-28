@@ -60,6 +60,8 @@ namespace Manufactures.Domain.Materials
             list.Add(value);
             RingDocuments = list;
             ReadModel.RingDocuments = RingDocuments.Serialize();
+
+            MarkModified();
         }
 
         public void RemoveRingNumber(RingDocumentValueObject  value)
@@ -68,6 +70,8 @@ namespace Manufactures.Domain.Materials
             list.Remove(value);
             RingDocuments = list;
             ReadModel.RingDocuments = RingDocuments.Serialize();
+
+            MarkModified();
         }
 
         public void SetCode(string code)
