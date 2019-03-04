@@ -25,7 +25,7 @@ namespace Manufactures.Domain.Suppliers.Commands
         }
     }
 
-    public class UpdateExsistingSupplierCommandValidator : AbstractValidator<WeavingSupplierDocument>
+    public class UpdateExsistingSupplierCommandValidator : AbstractValidator<UpdateExsistingSupplierCommand>
     {
         public UpdateExsistingSupplierCommandValidator()
         {

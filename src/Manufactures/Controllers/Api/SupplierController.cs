@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Suppliers.Commands;
 using Manufactures.Domain.Suppliers.Repositories;
-using Manufactures.Dtos;
+using Manufactures.Dtos.WeavingSupplier;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -21,43 +21,43 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IWeavingSupplierRepository _weavingSupplierRepository;
 
-        public SupplierController(IServiceProvider serviceProvider, 
+        public SupplierController(IServiceProvider serviceProvider,
                                   IWorkContext workContext) : base(serviceProvider)
         {
-            _weavingSupplierRepository = 
+            _weavingSupplierRepository =
                 this.Storage.GetRepository<IWeavingSupplierRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 1, 
-                                             int size = 25, 
-                                             string order = "{}", 
-                                             string keyword = null, 
+        public async Task<IActionResult> Get(int page = 1,
+                                             int size = 25,
+                                             string order = "{}",
+                                             string keyword = null,
                                              string filter = "{}")
         {
             page = page - 1;
-            var query = 
+            var query =
                 _weavingSupplierRepository.Query.OrderByDescending(item => item.CreatedDate)
                                                 .Take(size)
                                                 .Skip(page * size);
-            var suppliers = 
+            var suppliers =
                 _weavingSupplierRepository.Find(query)
-                                          .Select(item => new SupplierDto(item));
+                                          .Select(item => new SupplierListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                suppliers = 
+                suppliers =
                     suppliers.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                               entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = 
+                Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(SupplierDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(SupplierListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -86,9 +86,9 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var supplier = 
+            var supplier =
                 _weavingSupplierRepository.Find(item => item.Identity == Identity)
-                                          .Select(item => new SupplierDto(item))
+                                          .Select(item => new SupplierDocumentDto(item))
                                           .FirstOrDefault();
             await Task.Yield();
 
@@ -111,7 +111,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id, 
+        public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdateExsistingSupplierCommand command)
         {
             if (!Guid.TryParse(Id, out Guid Identity))

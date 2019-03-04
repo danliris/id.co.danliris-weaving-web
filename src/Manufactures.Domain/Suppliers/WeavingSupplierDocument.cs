@@ -11,21 +11,18 @@ namespace Manufactures.Domain.Suppliers
         public string Name { get; private set; }
         public string CoreSupplierId { get; private set; }
 
-        public WeavingSupplierDocument(Guid id, 
+        public WeavingSupplierDocument(Guid id,
                                        string code,
                                        string name,
                                        string coreSupplierId) : base(id)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => coreSupplierId);
-            this.MarkTransient();
-
             // Set Properties
             Identity = id;
             Code = code;
             Name = name;
             CoreSupplierId = coreSupplierId;
+
+            this.MarkTransient();
 
             ReadModel = new WeavingSupplierDocumentReadModel(Identity)
             {
@@ -45,8 +42,6 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
             if (code != Code)
             {
                 Code = code;
@@ -58,8 +53,6 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetName(string name)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
-
             if (name != Name)
             {
                 Name = name;
@@ -71,8 +64,6 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCoreSupplierId(string id)
         {
-            Validator.ThrowIfNullOrEmpty(() => id);
-
             if (id != CoreSupplierId)
             {
                 CoreSupplierId = id;
