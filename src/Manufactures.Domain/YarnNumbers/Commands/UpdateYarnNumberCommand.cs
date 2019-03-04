@@ -2,6 +2,7 @@
 using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 
 namespace Manufactures.Domain.YarnNumbers.Commands
 {
@@ -12,7 +13,7 @@ namespace Manufactures.Domain.YarnNumbers.Commands
 
         [JsonProperty(PropertyName = "Code")]
         public string Code { get; set; }
-
+        
         [JsonProperty(PropertyName = "Number")]
         public int Number { get; set; }
 
@@ -33,7 +34,7 @@ namespace Manufactures.Domain.YarnNumbers.Commands
         public UpdateYarnNumberCommandValidator()
         {
             RuleFor(command => command.Code).NotEmpty();
-            RuleFor(command => command.Number).NotEmpty().NotNull();
+            RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.RingType).NotEmpty();
         }
     }
