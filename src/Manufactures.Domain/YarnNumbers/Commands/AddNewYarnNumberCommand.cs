@@ -24,7 +24,7 @@ namespace Manufactures.Domain.YarnNumbers.Commands
         public AddNewYarnNumberCommandValidator()
         {
             RuleFor(command => command.Code).NotEmpty();
-            RuleFor(command => command.Number).NotEmpty();
+            RuleFor(command => command.Number).NotEmpty().NotNull();
             RuleFor(command => command.RingType).NotEmpty();
         }
     }
