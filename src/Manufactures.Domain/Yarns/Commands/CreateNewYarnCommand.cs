@@ -7,7 +7,7 @@ namespace Manufactures.Domain.Yarns.Commands
 {
     public class CreateNewYarnCommand : ICommand<YarnDocument>
     {
-        [JsonProperty(PropertyName = "Id")]
+        [JsonProperty(PropertyName = "Code")]
         public string Code { get; set; }
 
         [JsonProperty(PropertyName = "Name")]
