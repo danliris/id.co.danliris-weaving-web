@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Manufactures.Dtos.MaterialType
 {
-    public class MaterialTypeDto
+    public class MaterialTypeDocumentDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -24,7 +24,7 @@ namespace Manufactures.Dtos.MaterialType
         [JsonProperty(PropertyName = "Description")]
         public string Description { get; private set; }
 
-        public MaterialTypeDto(MaterialTypeDocument materialType)
+        public MaterialTypeDocumentDto(MaterialTypeDocument materialType)
         {
             Id = materialType.Identity;
             Code = materialType.Code;
@@ -32,6 +32,5 @@ namespace Manufactures.Dtos.MaterialType
             RingDocuments = materialType.RingDocuments.ToList();
             Description = materialType.Description;
          }
-
     }
 }
