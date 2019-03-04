@@ -87,16 +87,20 @@ namespace Manufactures.Domain.Orders
         public WeavingOrderDocument(WeavingOrderDocumentReadModel readModel) : base(readModel)
         {
             this.OrderNumber = readModel.OrderNumber;
-            this.FabricConstructionDocument = readModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
+            this.FabricConstructionDocument = 
+                readModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
             this.DateOrdered = readModel.DateOrdered;
             this.WarpOrigin = readModel.WarpOrigin;
             this.WeftOrigin = readModel.WeftOrigin;
             this.WholeGrade = readModel.WholeGrade;
             this.YarnType = readModel.YarnType;
             this.Period = readModel.Period.Deserialize<Period>();
-            this.WarpComposition = readModel.WarpComposition.Deserialize<Composition>();
-            this.WeftComposition = readModel.WeftComposition.Deserialize<Composition>();
-            this.WeavingUnit = readModel.WeavingUnit.Deserialize<WeavingUnit>();
+            this.WarpComposition = 
+                readModel.WarpComposition.Deserialize<Composition>();
+            this.WeftComposition = 
+                readModel.WeftComposition.Deserialize<Composition>();
+            this.WeavingUnit = 
+                readModel.WeavingUnit.Deserialize<WeavingUnit>();
             this.OrderStatus = readModel.OrderStatus;
         }
 
