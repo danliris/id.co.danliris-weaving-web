@@ -41,7 +41,7 @@ namespace Manufactures.Controllers.Api
                                              .Take(size)
                                              .Skip(page * size);
             var materialTypeDocuments = 
-                _materialTypeRepository.Find(query).Select(item => new MaterialTypeDto(item));
+                _materialTypeRepository.Find(query).Select(item => new MaterialTypeListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -56,7 +56,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(MaterialTypeDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(MaterialTypeListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -89,7 +89,7 @@ namespace Manufactures.Controllers.Api
             var Identity = Guid.Parse(Id);
             var materialTypeDto = 
                 _materialTypeRepository.Find(item => item.Identity == Identity)
-                                       .Select(item => new MaterialTypeDto(item)).FirstOrDefault();
+                                       .Select(item => new MaterialTypeDocumentDto(item)).FirstOrDefault();
             await Task.Yield();
 
             if (materialTypeDto == null)
