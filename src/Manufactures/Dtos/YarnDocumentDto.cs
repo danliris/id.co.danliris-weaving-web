@@ -23,7 +23,7 @@ namespace Manufactures.Dtos
         public MaterialTypeValueObject MaterialTypeDocument { get; }
 
         [JsonProperty(PropertyName = "RingDocument")]
-        public RingDocumentValueObject RingDocument { get; }
+        public YarnNumberValueObject RingDocument { get; }
 
         public YarnDocumentDto(YarnDocument document)
         {

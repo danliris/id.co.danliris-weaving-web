@@ -20,7 +20,7 @@ namespace Manufactures.Domain.Yarns.Commands
         public MaterialTypeValueObject MaterialTypeDocument { get; set; }
 
         [JsonProperty(PropertyName = "RingDocument")]
-        public RingDocumentValueObject RingDocument { get; set; }
+        public YarnNumberValueObject RingDocument { get; set; }
     }
 
     public class CreateNewYarnCommandValidator : AbstractValidator<CreateNewYarnCommand>

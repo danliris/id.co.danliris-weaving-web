@@ -15,23 +15,20 @@ namespace Manufactures.Domain.Materials
         public string Code { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
-        public IReadOnlyCollection<RingDocumentValueObject> RingDocuments { get; private set; }
+        public IReadOnlyCollection<YarnNumberValueObject> RingDocuments { get; private set; }
 
         public MaterialTypeDocument(Guid id,
                             string code,
                             string name,
                             string description) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
-
-            this.MarkTransient();
-
+            Identity = id;
             Code = code;
             Name = name;
             Description = description;
-            RingDocuments = new List<RingDocumentValueObject>();
+            RingDocuments = new List<YarnNumberValueObject>();
+
+            this.MarkTransient();
 
             ReadModel = new MaterialTypeReadModel(Identity)
             {
@@ -50,11 +47,11 @@ namespace Manufactures.Domain.Materials
             this.Description = readModel.Description;
             this.RingDocuments =
                 String.IsNullOrEmpty(readModel.RingDocuments) ?
-                    new List<RingDocumentValueObject>() : readModel.RingDocuments
-                                                                   .Deserialize<List<RingDocumentValueObject>>();
+                    new List<YarnNumberValueObject>() : readModel.RingDocuments
+                                                                   .Deserialize<List<YarnNumberValueObject>>();
         }
 
-        public void SetRingNumber(RingDocumentValueObject value)
+        public void SetRingNumber(YarnNumberValueObject value)
         {
             Validator.ThrowIfNullOrEmpty(() => value.Code);
 
@@ -66,8 +63,10 @@ namespace Manufactures.Domain.Materials
             MarkModified();
         }
 
-        public void RemoveRingNumber(RingDocumentValueObject value)
+        public void RemoveRingNumber(YarnNumberValueObject value)
         {
+            Validator.ThrowIfNullOrEmpty(() => value.Code);
+
             var list = RingDocuments.ToList();
             list.Remove(value);
             RingDocuments = list;
@@ -78,8 +77,6 @@ namespace Manufactures.Domain.Materials
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
             if (code != Code)
             {
                 Code = code;
@@ -91,8 +88,6 @@ namespace Manufactures.Domain.Materials
 
         public void SetName(string name)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
-
             if (name != Name)
             {
                 Name = name;

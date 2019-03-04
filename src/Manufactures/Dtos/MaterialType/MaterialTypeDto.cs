@@ -19,7 +19,7 @@ namespace Manufactures.Dtos.MaterialType
         public string Name { get; private set; }
 
         [JsonProperty(PropertyName = "RingDocuments")]
-        public List<RingDocumentValueObject> RingDocuments { get; private set; }
+        public List<YarnNumberValueObject> RingDocuments { get; private set; }
 
         [JsonProperty(PropertyName = "Description")]
         public string Description { get; private set; }
