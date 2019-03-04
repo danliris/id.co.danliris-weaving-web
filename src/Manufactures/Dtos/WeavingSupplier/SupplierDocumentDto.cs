@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Dtos.WeavingSupplier
 {
-    public class SupplierDto
+    public class SupplierDocumentDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -18,7 +18,7 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "CoreSupplierId")]
         public string CoreSupplierId { get; private set; }
 
-        public SupplierDto(WeavingSupplierDocument weavingSupplierDocument)
+        public SupplierDocumentDto(WeavingSupplierDocument weavingSupplierDocument)
         {
             Id = weavingSupplierDocument.Identity;
             Code = weavingSupplierDocument.Code;
