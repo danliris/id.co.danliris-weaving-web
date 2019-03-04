@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.Machines.ValueObjects
+namespace Manufactures.Domain.GlobalValueObjects
 {
     public class CoreAccountValueObject : ValueObject
     {

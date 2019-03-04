@@ -7,7 +7,8 @@ using System;
 
 namespace Manufactures.Domain.Machines
 {
-    public class MachineDocument : AggregateRoot<MachineDocument, MachineDocumentReadModel>
+    public class MachineDocument : AggregateRoot<MachineDocument, 
+                                   MachineDocumentReadModel>
     {
         public string MachineNumber { get; private set; }
         public string Location { get; private set; }
@@ -45,12 +46,16 @@ namespace Manufactures.Domain.Machines
             };
         }
 
-        public MachineDocument(MachineDocumentReadModel readModel): base(readModel)
+        public MachineDocument(MachineDocumentReadModel readModel): 
+            base(readModel)
         {
             this.MachineNumber = readModel.MachineNumber;
             this.Location = readModel.Location;
-            this.MachineType = readModel.MachineType.Deserialize<MachineTypeValueObject>();
-            this.Unit = readModel.Unit.Deserialize<WeavingUnit>();
+            this.MachineType = 
+                readModel.MachineType
+                         .Deserialize<MachineTypeValueObject>();
+            this.Unit = 
+                readModel.Unit.Deserialize<WeavingUnit>();
         }
 
         public void SetLocation(string value)
@@ -69,6 +74,7 @@ namespace Manufactures.Domain.Machines
         public void SetMachineType(MachineTypeValueObject value)
         {
             Validator.ThrowIfNullOrEmpty(() => value.Name);
+            Validator.ThrowIfNullOrEmpty(() => value.Unit);
 
             if (!MachineType.Name.Equals(value.Name))
             {

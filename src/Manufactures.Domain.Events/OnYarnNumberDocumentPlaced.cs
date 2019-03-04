@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Events
 {
-    public class OnRingDocumentPlaced : IManufactureEvent
+    public class OnYarnNumberDocumentPlaced : IManufactureEvent
     {
-        public OnRingDocumentPlaced(Guid identity)
+        public OnYarnNumberDocumentPlaced(Guid identity)
         {
             Identity = identity;
         }

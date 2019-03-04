@@ -1,15 +1,11 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
-using System;
 
-namespace Manufactures.Domain.Rings.Commands
-{
-    public class UpdateRingDocumentCommand : ICommand<RingDocument>
+namespace Manufactures.Domain.YarnNumbers.Commands
+{ 
+    public class AddNewYarnNumberCommand : ICommand<YarnNumberDocument>
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
-
         [JsonProperty(PropertyName = "Code")]
         public string Code { get; set; }
 
@@ -21,16 +17,11 @@ namespace Manufactures.Domain.Rings.Commands
 
         [JsonProperty(PropertyName = "Description")]
         public string Description { get; set; }
-
-        public void SetId(Guid Id)
-        {
-            this.Id = Id;
-        }
     }
 
-    public class UpdateRingDocumentCommandValidator : AbstractValidator<UpdateRingDocumentCommand>
+    public class AddNewYarnNumberCommandValidator : AbstractValidator<AddNewYarnNumberCommand>
     {
-        public UpdateRingDocumentCommandValidator()
+        public AddNewYarnNumberCommandValidator()
         {
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Number).NotEmpty();

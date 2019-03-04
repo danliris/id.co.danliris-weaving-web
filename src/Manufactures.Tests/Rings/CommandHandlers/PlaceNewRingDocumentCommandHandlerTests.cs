@@ -1,7 +1,7 @@
 using ExtCore.Data.Abstractions;
-using Manufactures.Application.Rings.CommandHandlers;
-using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.Repositories;
+using Manufactures.Application.YarnNumbers.CommandHandlers;
+using Manufactures.Domain.YarnNumbers.Commands;
+using Manufactures.Domain.YarnNumbers.Repositories;
 using Moq;
 using System;
 using System.Threading.Tasks;
@@ -13,17 +13,17 @@ namespace Manufactures.Tests.Rings.CommandHandlers
     {
         private MockRepository mockRepository;
         private Mock<IStorage> mockStorage;
-        private Mock<IRingRepository> mockRingRepo;
+        private Mock<IYarnNumberRepository> mockRingRepo;
 
         public PlaceNewRingDocumentCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
             this.mockStorage = this.mockRepository.Create<IStorage>();
-            this.mockRingRepo = this.mockRepository.Create<IRingRepository>();
+            this.mockRingRepo = this.mockRepository.Create<IYarnNumberRepository>();
 
             //Setup
             this.mockStorage.Setup(x => x.Save());
-            this.mockStorage.Setup(x => x.GetRepository<IRingRepository>()).Returns(mockRingRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IYarnNumberRepository>()).Returns(mockRingRepo.Object);
         }
 
         public void Dispose()
@@ -31,9 +31,9 @@ namespace Manufactures.Tests.Rings.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private PlaceNewRingDocumentCommandHandler CreatePlaceNewRingDocumentCommandHandler()
+        private AddNewYarnNumberCommandHandler CreatePlaceNewRingDocumentCommandHandler()
         {
-            return new PlaceNewRingDocumentCommandHandler(
+            return new AddNewYarnNumberCommandHandler(
                 this.mockStorage.Object);
         }
 
@@ -42,7 +42,7 @@ namespace Manufactures.Tests.Rings.CommandHandlers
         {
             // Arrange
             var unitUnderTest = this.CreatePlaceNewRingDocumentCommandHandler();
-            CreateRingDocumentCommand request = new CreateRingDocumentCommand
+            AddNewYarnNumberCommand request = new AddNewYarnNumberCommand
             {
                 Code = "unit-test-01",
                 Number = 80,
