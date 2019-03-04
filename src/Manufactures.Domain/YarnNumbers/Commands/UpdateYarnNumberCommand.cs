@@ -33,7 +33,8 @@ namespace Manufactures.Domain.YarnNumbers.Commands
         public UpdateYarnNumberCommandValidator()
         {
             RuleFor(command => command.Code).NotEmpty();
-            RuleFor(command => command.Number).NotEmpty().NotNull();
+            RuleFor(command => command.Number).NotNull();
+            RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.RingType).NotEmpty();
         }
     }
