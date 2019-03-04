@@ -13,14 +13,14 @@ namespace Manufactures.Domain.Yarns
         public string Name { get; private set; }
         public string Tags { get; private set; }
         public MaterialTypeValueObject MaterialTypeDocument { get; private set; }
-        public RingDocumentValueObject RingDocument { get; private set; }
+        public YarnNumberValueObject RingDocument { get; private set; }
 
         public YarnDocument(Guid id,
                             string code,
                             string name,
                             string tags,
                             MaterialTypeValueObject materialTypeDocument,
-                            RingDocumentValueObject ringDocument) : base(id)
+                            YarnNumberValueObject ringDocument) : base(id)
         {
             // Validate Properties
             Validator.ThrowIfNullOrEmpty(() => code);
@@ -56,7 +56,7 @@ namespace Manufactures.Domain.Yarns
             this.Name = readModel.Name;
             this.Tags = readModel.Tags;
             this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeValueObject>();
-            this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
+            this.RingDocument = readModel.RingDocument.Deserialize<YarnNumberValueObject>();
         }
         
         public void SetCode(string code)
@@ -123,7 +123,7 @@ namespace Manufactures.Domain.Yarns
             }
         }
 
-        public void SetRingDocument(RingDocumentValueObject document)
+        public void SetRingDocument(YarnNumberValueObject document)
         {
             Validator.ThrowIfNull(() => document);
             int indexDiffence = 0;
@@ -141,7 +141,7 @@ namespace Manufactures.Domain.Yarns
 
             if (indexDiffence > 0)
             {
-                RingDocument = new RingDocumentValueObject(document.Code, document.Number);
+                RingDocument = new YarnNumberValueObject(document.Id, document.Code, document.Number);
                 ReadModel.RingDocument = RingDocument.Serialize();
 
                 MarkModified();

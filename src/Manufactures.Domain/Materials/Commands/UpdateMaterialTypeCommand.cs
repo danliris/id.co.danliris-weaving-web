@@ -19,7 +19,7 @@ namespace Manufactures.Domain.Materials.Commands
         public string Name { get; set; }
 
         [JsonProperty(PropertyName = "RingDocuments")]
-        public List<RingDocumentValueObject> RingDocuments { get; set; }
+        public List<YarnNumberValueObject> RingDocuments { get; set; }
 
         [JsonProperty(PropertyName = "Description")]
         public string Description { get; set; }
