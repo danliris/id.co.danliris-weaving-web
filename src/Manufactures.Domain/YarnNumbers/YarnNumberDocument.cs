@@ -1,30 +1,24 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
-using Manufactures.Domain.Rings.ReadModels;
+using Manufactures.Domain.YarnNumbers.ReadModels;
 using Moonlay;
 using System;
 
-namespace Manufactures.Domain.Rings
+namespace Manufactures.Domain.YarnNumbers
 {
-    public class RingDocument : AggregateRoot<RingDocument, RingDocumentReadModel>
+    public class YarnNumberDocument : AggregateRoot<YarnNumberDocument, YarnNumberDocumentReadModel>
     {
         public string Code { get; private set; }
         public int Number { get; private set; }
         public string RingType { get; private set; }
         public string Description { get; private set; }
 
-        public RingDocument(Guid identity,
+        public YarnNumberDocument(Guid identity,
                             string code,
                             int number,
                             string ringType,
                             string description) : base(identity)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => ringType);
-
-            this.MarkTransient();
-
             // Set properties
             Identity = identity;
             Code = code;
@@ -32,7 +26,9 @@ namespace Manufactures.Domain.Rings
             Description = description;
             RingType = ringType;
 
-            ReadModel = new RingDocumentReadModel(Identity)
+            this.MarkTransient();
+
+            ReadModel = new YarnNumberDocumentReadModel(Identity)
             {
                 Code = this.Code,
                 Number = this.Number,
@@ -40,10 +36,10 @@ namespace Manufactures.Domain.Rings
                 Description = this.Description
             };
 
-            ReadModel.AddDomainEvent(new OnRingDocumentPlaced(this.Identity));
+            ReadModel.AddDomainEvent(new OnYarnNumberDocumentPlaced(this.Identity));
         }
 
-        public RingDocument(RingDocumentReadModel readModel) : base(readModel)
+        public YarnNumberDocument(YarnNumberDocumentReadModel readModel) : base(readModel)
         {
             this.Code = readModel.Code;
             this.Number = readModel.Number;
@@ -53,8 +49,6 @@ namespace Manufactures.Domain.Rings
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
             if (code != Code)
             {
                 Code = code;
@@ -66,7 +60,6 @@ namespace Manufactures.Domain.Rings
 
         public void SetNumber(int number)
         {
-
             if (number != Number)
             {
                 Number = number;
@@ -76,10 +69,8 @@ namespace Manufactures.Domain.Rings
             }
         }
 
-        public void SetRingType (string value)
+        public void SetRingType(string value)
         {
-            Validator.ThrowIfNullOrEmpty(() => value);
-
             if (RingType != value)
             {
                 RingType = value;
@@ -100,7 +91,7 @@ namespace Manufactures.Domain.Rings
             }
         }
 
-        protected override RingDocument GetEntity()
+        protected override YarnNumberDocument GetEntity()
         {
             return this;
         }

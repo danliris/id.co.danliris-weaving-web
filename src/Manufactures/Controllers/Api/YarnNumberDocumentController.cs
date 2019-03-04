@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Rings.Commands;
-using Manufactures.Domain.Rings.Repositories;
-using Manufactures.Dtos;
+using Manufactures.Domain.YarnNumbers.Commands;
+using Manufactures.Domain.YarnNumbers.Repositories;
+using Manufactures.Dtos.YarnNumber;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -14,18 +14,18 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/rings")]
+    [Route("weaving/yarn-numbers")]
     [ApiController]
     [Authorize]
-    public class RingDocumentController : ControllerApiBase
+    public class YarnNumberDocumentController : ControllerApiBase
     {
-        private readonly IRingRepository _ringRepository;
+        private readonly IYarnNumberRepository _ringRepository;
 
-        public RingDocumentController(IServiceProvider serviceProvider, 
+        public YarnNumberDocumentController(IServiceProvider serviceProvider, 
                                       IWorkContext workContext) : base(serviceProvider)
         {
             _ringRepository = 
-                this.Storage.GetRepository<IRingRepository>();
+                this.Storage.GetRepository<IYarnNumberRepository>();
         }
 
         [HttpGet]
@@ -42,7 +42,7 @@ namespace Manufactures.Controllers.Api
                                      .Skip(page * size);
             var ringDocuments = 
                 _ringRepository.Find(query)
-                               .Select(item => new RingDocumentDto(item));
+                               .Select(item => new YarnNumberListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -56,7 +56,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(RingDocumentDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(YarnNumberListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -87,7 +87,7 @@ namespace Manufactures.Controllers.Api
             var Identity = Guid.Parse(Id);
             var ringDocuments = 
                 _ringRepository.Find(item => item.Identity == Identity)
-                               .Select(item => new RingDocumentDto(item)).FirstOrDefault();
+                               .Select(item => new YarnNumberDocumentDto(item)).FirstOrDefault();
             await Task.Yield();
 
             if (ringDocuments == null)
@@ -101,7 +101,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]CreateRingDocumentCommand command)
+        public async Task<IActionResult> Post([FromBody]AddNewYarnNumberCommand command)
         {
             var ringDocument = await Mediator.Send(command);
 
@@ -110,7 +110,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id, 
-                                             [FromBody]UpdateRingDocumentCommand command)
+                                             [FromBody]UpdateYarnNumberCommand command)
         {
             if (!Guid.TryParse(Id, out Guid Identity))
             {
@@ -131,7 +131,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            var command = new RemoveRingDocumentCommand();
+            var command = new RemoveYarnNumberCommand();
             command.SetId(Identity);
 
             var ringDocument = await Mediator.Send(command);

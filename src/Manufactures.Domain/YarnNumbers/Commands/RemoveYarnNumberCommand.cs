@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Domain.Rings.Commands
+namespace Manufactures.Domain.YarnNumbers.Commands
 {
-    public class RemoveRingDocumentCommand : ICommand<RingDocument>
+    public class RemoveYarnNumberCommand : ICommand<YarnNumberDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }

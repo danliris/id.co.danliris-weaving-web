@@ -1,10 +1,10 @@
-﻿using Manufactures.Domain.Rings;
+﻿using Manufactures.Domain.YarnNumbers;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Dtos.YarnNumber
 {
-    public class RingDocumentDto
+    public class YarnNumberDocumentDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -21,7 +21,7 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "Description")]
         public string Description { get; private set; }
 
-        public RingDocumentDto(RingDocument ringDocument)
+        public YarnNumberDocumentDto(YarnNumberDocument ringDocument)
         {
             Id = ringDocument.Identity;
             Code = ringDocument.Code;

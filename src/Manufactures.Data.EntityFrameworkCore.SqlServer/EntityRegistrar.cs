@@ -8,7 +8,7 @@ using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
-using Manufactures.Domain.Rings.ReadModels;
+using Manufactures.Domain.YarnNumbers.ReadModels;
 using Manufactures.Domain.Suppliers.ReadModels;
 using Manufactures.Domain.Yarns.ReadModels;
 using Microsoft.EntityFrameworkCore;
@@ -74,7 +74,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<RingDocumentReadModel>(etb =>
+            modelBuilder.Entity<YarnNumberDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_RingDocuments");
                 etb.HasKey(e => e.Identity);
