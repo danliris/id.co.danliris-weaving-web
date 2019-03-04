@@ -67,6 +67,12 @@ namespace Manufactures.Application.Materials.CommandHandlers
                         materialType.SetRingNumber(requestRing);
                     }
                 }
+            } else
+            {
+                foreach (var exsistingRing in materialType.RingDocuments)
+                {
+                    materialType.RemoveRingNumber(exsistingRing);
+                }
             }
 
             await _materialTypeRepository.Update(materialType);
