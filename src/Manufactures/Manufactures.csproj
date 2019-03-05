@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Barebone\Barebone.csproj" />
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.CoreMicroservice\Infrastructure.External.DanLirisClient.CoreMicroservice.csproj" />
     <ProjectReference Include="..\Manufactures.Application\Manufactures.Application.csproj" />
   </ItemGroup>
 

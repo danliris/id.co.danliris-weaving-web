@@ -1,4 +1,5 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Domain.Machines.Commands;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Dtos.Machine;
 using Microsoft.AspNetCore.Authorization;
@@ -18,7 +19,7 @@ namespace Manufactures.Controllers.Api
     public class MachineDocumentController : ControllerApiBase
     {
         private readonly IMachineRepository _machineRepository;
-        
+
         public MachineDocumentController(IServiceProvider serviceProvider) 
             : base(serviceProvider)
         {
@@ -45,7 +46,9 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 machine =
-                    machine.Where(entity => entity.Location.Contains(keyword, 
+                    machine.Where(entity => entity.MachineNumber.Contains(keyword,
+                                                                          StringComparison.OrdinalIgnoreCase) ||
+                                            entity.Location.Contains(keyword, 
                                                                      StringComparison.OrdinalIgnoreCase));
             }
 
@@ -78,6 +81,66 @@ namespace Manufactures.Controllers.Api
                 size,
                 total = totalRows
             });
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
+        {
+            var Identity = Guid.Parse(Id);
+            var machine =
+                _machineRepository.Find(item => item.Identity == Identity)
+                                  .FirstOrDefault();
+
+            await Task.Yield();
+
+            if (machine == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var result = new MachineDocumentDto(machine);
+                return Ok(result);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]AddNewMachineCommand command)
+        {
+            var machine = await Mediator.Send(command);
+
+            return Ok(machine.Identity);
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdateExistingMachineCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            command.SetId(Identity);
+            var machine = await Mediator.Send(command);
+
+            return Ok(machine.Identity);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (!Guid.TryParse(Id, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            var command = new RemoveExistingMachineCommand();
+            command.SetId(Identity);
+
+            var machine = await Mediator.Send(command);
+
+            return Ok(machine.Identity);
         }
     }
 }

@@ -2,7 +2,6 @@
 using ExtCore.Infrastructure.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using Moonlay.ExtCore.Mvc.Abstractions;
-using FluentValidation.AspNetCore;
 using System;
 using Microsoft.AspNetCore.Mvc;
 

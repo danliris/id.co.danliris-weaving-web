@@ -9,12 +9,16 @@ namespace Manufactures.Dtos.Machine
         [JsonProperty(propertyName: "Id")]
         public Guid Id { get; }
 
+        [JsonProperty(propertyName: "MachineNumber")]
+        public string MachineNumber { get; }
+
         [JsonProperty(propertyName: "Location")]
         public string Location { get; }
 
         public MachineListDto(MachineDocument document)
         {
             Id = document.Identity;
+            MachineNumber = document.MachineNumber;
             Location = document.Location;
         }
     }
