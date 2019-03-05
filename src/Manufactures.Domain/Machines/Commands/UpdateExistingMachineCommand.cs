@@ -21,6 +21,11 @@ namespace Manufactures.Domain.Machines.Commands
 
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public string WeavingUnitId { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 
     public class UpdateExistingMachineCommandValidator : AbstractValidator<UpdateExistingMachineCommand>
