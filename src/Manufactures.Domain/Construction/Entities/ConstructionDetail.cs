@@ -21,7 +21,7 @@ namespace Manufactures.Domain.Construction.Entities
         public ConstructionDetail(Guid identity,
                                   double quantity,
                                   string information,
-                                  Yarn yarn,
+                                  YarnValueObject yarn,
                                   string detail) : base(identity)
         {
             // Validate Value
@@ -73,11 +73,11 @@ namespace Manufactures.Domain.Construction.Entities
             }
         }
 
-        public void SetYarn(Yarn yarn)
+        public void SetYarn(YarnValueObject yarn)
         {
             Validator.ThrowIfNull(() => yarn);
 
-            if (yarn.Code != Yarn.Deserialize<Yarn>().Code)
+            if (yarn.Code != Yarn.Deserialize<YarnValueObject>().Code)
             {
                 Yarn = yarn.Serialize();
 

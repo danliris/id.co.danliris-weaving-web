@@ -71,7 +71,7 @@ namespace Manufactures.Dtos.Construction
                     var warpObj = new Warp(constructionDetail.Identity,
                                            constructionDetail.Quantity,
                                            constructionDetail.Information,
-                                           constructionDetail.Yarn.Deserialize<Yarn>(),
+                                           constructionDetail.Yarn.Deserialize<YarnValueObject>(),
                                            constructionDetail.Detail);
                     warps.Add(warpObj);
 
@@ -81,7 +81,7 @@ namespace Manufactures.Dtos.Construction
                     var weftObj = new Weft(constructionDetail.Identity,
                                            constructionDetail.Quantity,
                                            constructionDetail.Information,
-                                           constructionDetail.Yarn.Deserialize<Yarn>(),
+                                           constructionDetail.Yarn.Deserialize<YarnValueObject>(),
                                            constructionDetail.Detail);
 
                     wefts.Add(weftObj);

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.ValueObjects
 {
-    public class Yarn : ValueObject
+    public class YarnValueObject : ValueObject
     {
-        public Yarn(Guid id,
+        public YarnValueObject(Guid id,
                     string code,
                     string name,
                     string materialCode,

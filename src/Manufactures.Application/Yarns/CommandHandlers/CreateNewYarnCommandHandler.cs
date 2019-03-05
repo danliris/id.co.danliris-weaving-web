@@ -37,8 +37,8 @@ namespace Manufactures.Application.Yarns.CommandHandlers
                                            request.Code, 
                                            request.Name,
                                            request.Tags,
-                                           request.MaterialTypeDocument, 
-                                           request.RingDocument);
+                                           request.MaterialTypeId, 
+                                           request.YarnNumberId);
 
             await _yarnDocumentRepository.Update(newYarn);
             _storage.Save();

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -8,23 +8,23 @@ namespace Manufactures.Domain.Yarns.Commands
 {
     public class UpdateExsistingYarnCommand : ICommand<YarnDocument>
     {
-        [JsonProperty(PropertyName = "Id")]
+        [JsonProperty]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "Code")]
+        [JsonProperty]
         public string Code { get; set; }
 
-        [JsonProperty(PropertyName = "Name")]
+        [JsonProperty]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName = "Tags")]
+        [JsonProperty]
         public string Tags { get; set; }
 
-        [JsonProperty(PropertyName = "MaterialTypeDocument")]
-        public MaterialTypeValueObject MaterialTypeDocument { get; set; }
+        [JsonProperty]
+        public MaterialTypeId MaterialTypeId { get; set; }
 
-        [JsonProperty(PropertyName = "RingDocument")]
-        public YarnNumberValueObject RingDocument { get; set; }
+        [JsonProperty]
+        public YarnNumberId YarnNumberId { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -39,13 +39,8 @@ namespace Manufactures.Domain.Yarns.Commands
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Name).NotEmpty();
             RuleFor(command => command.Tags).NotEmpty();
-
-            RuleFor(command => command.MaterialTypeDocument.Id).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument.Code).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();
-
-            RuleFor(command => command.RingDocument.Code).NotEmpty();
-            RuleFor(command => command.RingDocument.Number).NotEmpty();
+            RuleFor(command => command.MaterialTypeId).NotEmpty();
+            RuleFor(command => command.YarnNumberId).NotEmpty();
         }
     }
 }

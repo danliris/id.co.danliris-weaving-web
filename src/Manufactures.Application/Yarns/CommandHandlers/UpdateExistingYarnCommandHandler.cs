@@ -41,8 +41,8 @@ namespace Manufactures.Application.Yarns.CommandHandlers
             yarnDocument.SetCode(request.Code);
             yarnDocument.SetName(request.Name);
             yarnDocument.SetTags(request.Tags);
-            yarnDocument.SetMaterialTypeDocument(request.MaterialTypeDocument);
-            yarnDocument.SetRingDocument(request.RingDocument);
+            yarnDocument.SetMaterialTypeId(request.MaterialTypeId);
+            yarnDocument.SetYarnNumberId(request.YarnNumberId);
 
             await _yarnDocumentRepository.Update(yarnDocument);
             _storage.Save();
