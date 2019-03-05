@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
+using System;
 
 namespace Manufactures.Domain.Machines.Commands
 {
-    public class AddNewMachineCommand : ICommand<MachineDocument>
+    public class UpdateExistingMachineCommand : ICommand<MachineDocument>
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; set; }
+
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; set; }
 
@@ -19,10 +23,11 @@ namespace Manufactures.Domain.Machines.Commands
         public string WeavingUnitId { get; set; }
     }
 
-    public class AddNewMachineCommandValidator : AbstractValidator<AddNewMachineCommand>
+    public class UpdateExistingMachineCommandValidator : AbstractValidator<UpdateExistingMachineCommand>
     {
-        public AddNewMachineCommandValidator()
+        public UpdateExistingMachineCommandValidator()
         {
+            RuleFor(r => r.Id).NotEmpty();
             RuleFor(r => r.MachineNumber).NotEmpty();
             RuleFor(r => r.Location).NotEmpty();
             RuleFor(r => r.MachineTypeId).NotEmpty();

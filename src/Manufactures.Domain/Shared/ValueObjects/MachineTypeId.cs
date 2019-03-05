@@ -5,9 +5,8 @@ using System;
 namespace Manufactures.Domain.Shared.ValueObjects
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class MaterialTypeId : SingleValueObject<Guid>
+    public class MachineTypeId : SingleValueObject<Guid>
     {
-        public MaterialTypeId(Guid id) : base(id) { }
-
+        public MachineTypeId(Guid id): base(id) { }
     }
 }

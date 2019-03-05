@@ -10,8 +10,8 @@ namespace Manufactures.Domain.Machines.ReadModels
         public MachineDocumentReadModel(Guid identity) : base(identity) { }
         
         public string MachineNumber { get; internal set; }
-        public string Unit { get; internal set; }
-        public string MachineType { get; internal set; }
+        public Guid? WeavingUnitId { get; internal set; }
+        public Guid? MachineTypeId { get; internal set; }
         public string Location { get; internal set; }
     }
 }
