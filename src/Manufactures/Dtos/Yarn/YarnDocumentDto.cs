@@ -19,10 +19,10 @@ namespace Manufactures.Dtos.Yarn
         [JsonProperty(propertyName: "Tags")]
         public string Tags { get; }
 
-        [JsonProperty(propertyName: "MaterialTypeDocument")]
+        [JsonProperty(propertyName: "MaterialTypeId")]
         public MaterialTypeValueObject MaterialTypeDocument { get; }
 
-        [JsonProperty(propertyName: "YarnNumberDocument")]
+        [JsonProperty(propertyName: "YarnNumberId")]
         public YarnNumberValueObject YarnNumberDocument { get; }
 
         public YarnDocumentDto(YarnDocument yarn, 
