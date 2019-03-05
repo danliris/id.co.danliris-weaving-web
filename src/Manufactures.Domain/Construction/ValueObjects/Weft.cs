@@ -17,7 +17,7 @@ namespace Manufactures.Domain.Construction.ValueObjects
         public string Information { get; private set; }
 
         [JsonProperty(PropertyName = "Yarn")]
-        public Yarn Yarn { get; private set; }
+        public YarnValueObject Yarn { get; private set; }
 
         [JsonProperty(PropertyName = "Detail")]
         public string Detail { get; private set; }
@@ -25,7 +25,7 @@ namespace Manufactures.Domain.Construction.ValueObjects
         public Weft(Guid id,
                     double quantity,
                     string information,
-                    Yarn yarn,
+                    YarnValueObject yarn,
                     string detail)
         {
             this.Id = id;

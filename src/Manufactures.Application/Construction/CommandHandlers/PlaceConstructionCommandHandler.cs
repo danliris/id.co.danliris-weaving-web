@@ -6,6 +6,8 @@ using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Materials.Repositories;
+using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
@@ -20,12 +22,16 @@ namespace Manufactures.Application.Construction.CommandHandlers
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
+        public readonly IMaterialTypeRepository _materialTypeRepository;
+        public readonly IYarnNumberRepository _yarnNumberRepository;
 
         public PlaceConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
             _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
+            _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
+            _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request,
@@ -58,14 +64,24 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WARP);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                                               detail.Quantity,
-                                                                                               detail.Information,
-                                                                                               yarn,
-                                                                                               detail.Detail);
+                var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == yarnDocument.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumberDocument = _yarnNumberRepository.Find(o => o.Identity == yarnDocument.YarnNumberId.Value).FirstOrDefault();
 
-                constructionDocument.AddConstructionDetail(constructionDetail);
+
+                if(yarnDocument == null || materialTypeDocument == null || yarnNumberDocument == null)
+                {
+
+                } else
+                {
+                    var yarn = new YarnValueObject(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, materialTypeDocument.Code, yarnNumberDocument.Code);
+                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                                   detail.Quantity,
+                                                                                                   detail.Information,
+                                                                                                   yarn,
+                                                                                                   detail.Detail);
+
+                    constructionDocument.AddConstructionDetail(constructionDetail);
+                }
             }
 
             foreach (var detail in request.ItemsWeft)
@@ -73,13 +89,23 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 detail.SetDetail(Constants.WEFT);
 
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                               detail.Quantity,
-                                                                               detail.Information,
-                                                                               yarn,
-                                                                               detail.Detail);
-                constructionDocument.AddConstructionDetail(constructionDetail);
+                var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == yarnDocument.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumberDocument = _yarnNumberRepository.Find(o => o.Identity == yarnDocument.YarnNumberId.Value).FirstOrDefault();
+
+                if (yarnDocument == null || materialTypeDocument == null || yarnNumberDocument == null)
+                {
+
+                }
+                else
+                {
+                    var yarn = new YarnValueObject(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, materialTypeDocument.Code, yarnNumberDocument.Code);
+                    ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
+                                                                                   detail.Quantity,
+                                                                                   detail.Information,
+                                                                                   yarn,
+                                                                                   detail.Detail);
+                    constructionDocument.AddConstructionDetail(constructionDetail);
+                }
             }
             
             await _constructionDocumentRepository.Update(constructionDocument);

@@ -10,6 +10,8 @@ using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Materials.Repositories;
+using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
@@ -21,12 +23,16 @@ namespace Manufactures.Application.Construction.CommandHandlers
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
+        public readonly IMaterialTypeRepository _materialTypeRepository;
+        public readonly IYarnNumberRepository _yarnNumberRepository;
 
         public UpdateConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
             _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
+            _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
+            _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request,
@@ -88,9 +94,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             foreach (var warp in request.ItemsWarp)
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Yarn.Id)).FirstOrDefault();
+                var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == yarnDocument.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumberDocument = _yarnNumberRepository.Find(o => o.Identity == yarnDocument.YarnNumberId.Value).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
                                 .Where(o => o.Detail.Equals(Constants.WARP) && 
-                                            o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
+                                            o.Yarn.Deserialize<YarnValueObject>().Id == yarnDocument.Identity)
                                                   .FirstOrDefault();
 
                 if (detail != null)
@@ -102,7 +110,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     if (yarnDocument != null)
                     {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
+                        var yarn = new YarnValueObject(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, materialTypeDocument.Code, yarnNumberDocument.Code);
                         ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                        warp.Quantity,
                                                                                        warp.Information,
@@ -116,9 +124,11 @@ namespace Manufactures.Application.Construction.CommandHandlers
             foreach (var weft in request.ItemsWeft)
             {
                 var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Yarn.Id)).FirstOrDefault();
+                var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == yarnDocument.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumberDocument = _yarnNumberRepository.Find(o => o.Identity == yarnDocument.YarnNumberId.Value).FirstOrDefault();
                 var detail = constructionDocuments.ConstructionDetails.ToList()
                                 .Where(o => o.Detail.Equals(Constants.WEFT) && 
-                                            o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity)
+                                            o.Yarn.Deserialize<YarnValueObject>().Id == yarnDocument.Identity)
                                                   .FirstOrDefault();
 
                 if (detail != null)
@@ -130,7 +140,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                 {
                     if (yarnDocument != null)
                     {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, yarnDocument.MaterialTypeDocument.Code, yarnDocument.RingDocument.Code);
+                        var yarn = new YarnValueObject(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name, materialTypeDocument.Code, yarnNumberDocument.Code);
                         ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
                                                                                        weft.Quantity,
                                                                                        weft.Information,

@@ -36,11 +36,11 @@ namespace Manufactures.Dtos.Construction
                 {
                     if (indexCount == 0)
                     {
-                        YarnType = detail.Yarn.Deserialize<Yarn>().Code;
+                        YarnType = detail.Yarn.Deserialize<YarnValueObject>().Code;
                         indexCount++;
                     } else
                     {
-                        YarnType = YarnType + "x" + detail.Yarn.Deserialize<Yarn>().Code;
+                        YarnType = YarnType + "x" + detail.Yarn.Deserialize<YarnValueObject>().Code;
                         indexCount++;
                     }
                 }
