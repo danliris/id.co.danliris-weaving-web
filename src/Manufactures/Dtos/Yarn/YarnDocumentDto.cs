@@ -7,22 +7,22 @@ namespace Manufactures.Dtos.Yarn
 {
     public class YarnDocumentDto
     {
-        [JsonProperty]
+        [JsonProperty(propertyName: "Id")]
         public Guid Id { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Code")]
         public string Code { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Name")]
         public string Name { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Tags")]
         public string Tags { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "MaterialTypeDocument")]
         public MaterialTypeValueObject MaterialTypeDocument { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "YarnNumberDocument")]
         public YarnNumberValueObject YarnNumberDocument { get; }
 
         public YarnDocumentDto(YarnDocument yarn, 

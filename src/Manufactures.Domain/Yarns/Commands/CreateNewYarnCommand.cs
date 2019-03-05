@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 
@@ -8,19 +7,19 @@ namespace Manufactures.Domain.Yarns.Commands
 {
     public class CreateNewYarnCommand : ICommand<YarnDocument>
     {
-        [JsonProperty]
+        [JsonProperty(propertyName: "Code")]
         public string Code { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Name")]
         public string Name { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Tags")]
         public string Tags { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "MaterialTypeId")]
         public MaterialTypeId MaterialTypeId { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "YarnNumberId")]
         public YarnNumberId YarnNumberId { get; set; }
     }
 
