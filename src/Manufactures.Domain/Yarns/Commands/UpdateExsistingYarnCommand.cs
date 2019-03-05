@@ -8,22 +8,22 @@ namespace Manufactures.Domain.Yarns.Commands
 {
     public class UpdateExsistingYarnCommand : ICommand<YarnDocument>
     {
-        [JsonProperty]
+        [JsonProperty(propertyName: "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Code")]
         public string Code { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Name")]
         public string Name { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Tags")]
         public string Tags { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "MaterialTypeId")]
         public MaterialTypeId MaterialTypeId { get; set; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "YarnNumberId")]
         public YarnNumberId YarnNumberId { get; set; }
 
         public void SetId(Guid Id)

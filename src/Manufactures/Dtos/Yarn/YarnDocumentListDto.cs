@@ -8,13 +8,13 @@ namespace Manufactures.Dtos.Yarn
 {
     public class YarnDocumentListDto
     {
-        [JsonProperty]
+        [JsonProperty(propertyName: "Id")]
         public Guid Id { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Code")]
         public string Code { get; }
 
-        [JsonProperty]
+        [JsonProperty(propertyName: "Name")]
         public string Name { get; }
 
         public YarnDocumentListDto(YarnDocument document)
