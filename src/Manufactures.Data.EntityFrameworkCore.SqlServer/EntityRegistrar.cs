@@ -12,6 +12,7 @@ using Manufactures.Domain.YarnNumbers.ReadModels;
 using Manufactures.Domain.Suppliers.ReadModels;
 using Manufactures.Domain.Yarns.ReadModels;
 using Microsoft.EntityFrameworkCore;
+using Manufactures.Domain.Machines.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -19,6 +20,18 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<MachineDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_MachineDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.MachineNumber).HasMaxLength(255);
+                etb.Property(e => e.Location).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<EstimationProduct>(etb =>
             {
                 etb.ToTable("Weaving_EstimationDetails");

@@ -21,10 +21,10 @@ namespace Manufactures.Domain.Yarns.Commands
         public string Tags { get; set; }
 
         [JsonProperty(propertyName: "MaterialTypeId")]
-        public MaterialTypeId MaterialTypeId { get; set; }
+        public string MaterialTypeId { get; set; }
 
         [JsonProperty(propertyName: "YarnNumberId")]
-        public YarnNumberId YarnNumberId { get; set; }
+        public string YarnNumberId { get; set; }
 
         public void SetId(Guid Id)
         {

@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 
 namespace Manufactures.Domain.Yarns.Commands
@@ -17,10 +16,10 @@ namespace Manufactures.Domain.Yarns.Commands
         public string Tags { get; set; }
 
         [JsonProperty(propertyName: "MaterialTypeId")]
-        public MaterialTypeId MaterialTypeId { get; set; }
+        public string MaterialTypeId { get; set; }
 
         [JsonProperty(propertyName: "YarnNumberId")]
-        public YarnNumberId YarnNumberId { get; set; }
+        public string YarnNumberId { get; set; }
     }
 
     public class CreateNewYarnCommandValidator : AbstractValidator<CreateNewYarnCommand>

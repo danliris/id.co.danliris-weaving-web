@@ -1,8 +1,6 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Machines.ReadModels;
-using Manufactures.Domain.Machines.ValueObjects;
-using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 
 namespace Manufactures.Domain.Machines
@@ -12,37 +10,29 @@ namespace Manufactures.Domain.Machines
     {
         public string MachineNumber { get; private set; }
         public string Location { get; private set; }
-        public MachineTypeValueObject MachineType { get; private set; }
-        public WeavingUnit Unit { get; private set; }
+        public MachineTypeId MachineTypeId { get; private set; }
+        public WeavingUnitId WeavingUnitId { get; private set; }
 
         public MachineDocument(Guid identity,
                                string machineNumber,
                                string location,
-                               MachineTypeValueObject machineType,
-                               WeavingUnit unit) : base(identity)
+                               MachineTypeId machineTypeId,
+                               WeavingUnitId weavingUnitId) : base(identity)
         {
-            Validator.ThrowIfNullOrEmpty(() => machineNumber);
-            Validator.ThrowIfNullOrEmpty(() => location);
-            Validator.ThrowIfNullOrEmpty(() => machineType.Name);
-            Validator.ThrowIfNullOrEmpty(() => machineType.Unit);
-            Validator.ThrowIfNullOrEmpty(() => unit._id);
-            Validator.ThrowIfNullOrEmpty(() => unit.Code);
-            Validator.ThrowIfNullOrEmpty(() => unit.Name);
-
-            this.MarkTransient();
-
             Identity = identity;
             MachineNumber = machineNumber;
             Location = location;
-            MachineType = MachineType;
-            Unit = unit;
+            MachineTypeId = machineTypeId;
+            WeavingUnitId = weavingUnitId;
 
+            this.MarkTransient();
+            
             ReadModel = new MachineDocumentReadModel(Identity)
             {
                 MachineNumber = this.MachineNumber,
                 Location = this.Location,
-                MachineType = this.MachineType.Serialize(),
-                Unit = this.Unit.Serialize()
+                MachineTypeId = this.MachineTypeId.Value,
+                WeavingUnitId = this.WeavingUnitId.Value
             };
         }
 
@@ -51,17 +41,16 @@ namespace Manufactures.Domain.Machines
         {
             this.MachineNumber = readModel.MachineNumber;
             this.Location = readModel.Location;
-            this.MachineType = 
-                readModel.MachineType
-                         .Deserialize<MachineTypeValueObject>();
-            this.Unit = 
-                readModel.Unit.Deserialize<WeavingUnit>();
+            this.MachineTypeId =
+                readModel.MachineTypeId.HasValue ? 
+                    new MachineTypeId(readModel.MachineTypeId.Value) : null;
+            this.WeavingUnitId =
+                readModel.WeavingUnitId.HasValue ? 
+                    new WeavingUnitId(readModel.WeavingUnitId.Value) : null;
         }
 
         public void SetLocation(string value)
         {
-            Validator.ThrowIfNullOrEmpty(() => value);
-
             if(!Location.Equals(value))
             {
                 Location = value;
@@ -71,30 +60,23 @@ namespace Manufactures.Domain.Machines
             }
         }
 
-        public void SetMachineType(MachineTypeValueObject value)
+        public void SetMachineTypeId(MachineTypeId value)
         {
-            Validator.ThrowIfNullOrEmpty(() => value.Name);
-            Validator.ThrowIfNullOrEmpty(() => value.Unit);
-
-            if (!MachineType.Name.Equals(value.Name))
+            if (MachineTypeId != value)
             {
-                MachineType = value;
-                ReadModel.MachineType = MachineType.Serialize();
+                MachineTypeId = value;
+                ReadModel.MachineTypeId = MachineTypeId.Value;
 
                 MarkModified();
             }
         }
 
-        public void SetUnit(WeavingUnit value)
+        public void SetWeavingUnitId(WeavingUnitId value)
         {
-            Validator.ThrowIfNullOrEmpty(() => value._id);
-            Validator.ThrowIfNullOrEmpty(() => value.Code);
-            Validator.ThrowIfNullOrEmpty(() => value.Name);
-
-            if(!value._id.Equals(value._id))
+            if(WeavingUnitId != value)
             {
-                Unit = value;
-                ReadModel.Unit = Unit.Serialize();
+                WeavingUnitId = value;
+                ReadModel.WeavingUnitId = WeavingUnitId.Value;
 
                 MarkModified();
             }
