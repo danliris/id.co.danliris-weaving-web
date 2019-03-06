@@ -1,10 +1,8 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.Construction.Entities;
-using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Events;
-using Manufactures.Domain.GlobalValueObjects;
-using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,8 +20,9 @@ namespace Manufactures.Domain.Construction
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
-        public MaterialTypeValueObject MaterialType { get; private set; }
-        public IReadOnlyCollection<ConstructionDetail> ConstructionDetails { get; private set; }
+        public MaterialTypeId MaterialTypeId { get; private set; }
+        public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
+        public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }
 
         public ConstructionDocument(Guid id,
                                     string constructionNumber,
@@ -34,16 +33,8 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeValueObject materialTypeDocument) : base(id)
+                                    MaterialTypeId materialTypeId) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => constructionNumber);
-            Validator.ThrowIfNullOrEmpty(() => wofenType);
-            Validator.ThrowIfNullOrEmpty(() => warpType);
-            Validator.ThrowIfNullOrEmpty(() => weftType);
-
-            this.MarkTransient();
-
             // Set Properties
             Identity = id;
             ConstructionNumber = constructionNumber;
@@ -54,21 +45,25 @@ namespace Manufactures.Domain.Construction
             WarpType = warpType;
             WeftType = weftType;
             TotalYarn = totalYarn;
-            MaterialType = materialTypeDocument;
-            ConstructionDetails = new List<ConstructionDetail>();
-            
+            MaterialTypeId = materialTypeId;
+            ListOfWarp = new List<ConstructionDetail>();
+            ListOfWeft = new List<ConstructionDetail>();
+
+            this.MarkTransient();
+
             ReadModel = new ConstructionDocumentReadModel(Identity)
             {
-                ConstructionNumber = this.ConstructionNumber,
-                AmountOfWarp = this.AmountOfWarp,
-                AmountOfWeft = this.AmountOfWeft,
-                Width = this.Width,
-                WovenType = this.WovenType,
-                WarpType = this.WarpType,
-                WeftType = this.WeftType,
-                TotalYarn = this.TotalYarn,
-                MaterialType = this.MaterialType.Serialize(),
-                ConstructionDetails = this.ConstructionDetails.ToList()
+                ConstructionNumber = ConstructionNumber,
+                AmountOfWarp = AmountOfWarp,
+                AmountOfWeft = AmountOfWeft,
+                Width = Width,
+                WovenType = WovenType,
+                WarpType = WarpType,
+                WeftType = WeftType,
+                TotalYarn = TotalYarn,
+                MaterialTypeId = materialTypeId.Value,
+                ListOfWarp = ListOfWarp.Serialize(),
+                ListOfWeft = ListOfWeft.Serialize()
             };
 
             ReadModel.AddDomainEvent(new OnConstructionPlaced(this.Identity));
@@ -84,36 +79,65 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialType = ReadModel.MaterialType.Deserialize<MaterialTypeValueObject>();
-            this.ConstructionDetails = readModel.ConstructionDetails;
+            this.MaterialTypeId = ReadModel.MaterialTypeId.HasValue ? new MaterialTypeId(readModel.MaterialTypeId.Value) : null;
+            this.ListOfWarp = !String.IsNullOrEmpty(readModel.ListOfWarp) ? readModel.ListOfWarp.Deserialize<List<ConstructionDetail>>() : null;
+            this.ListOfWeft = !String.IsNullOrEmpty(readModel.ListOfWeft) ? readModel.ListOfWeft.Deserialize<List<ConstructionDetail>>() : null;
             this.Date = readModel.CreatedDate;
         }
-        
-        public void UpdateConstructionDetail (List<ConstructionDetail> value)
+
+        public void RemoveWarp(ConstructionDetail value)
         {
-            ConstructionDetails = value;
-            ReadModel.ConstructionDetails = ConstructionDetails.ToList();
+            var warps = ListOfWarp.ToList();
+            warps.Remove(value);
+            ListOfWarp = warps;
+            ReadModel.ListOfWarp = ListOfWarp.Serialize();
+
+            MarkModified();
         }
 
-        public void AddConstructionDetail(ConstructionDetail constructionDetail)
+        public void RemoveWeft(ConstructionDetail value)
         {
-            var listConstructionDetail = ConstructionDetails.ToList();
+            var wefts = ListOfWeft.ToList();
+            wefts.Remove(value);
+            ListOfWeft = wefts;
+            ReadModel.ListOfWeft = ListOfWeft.Serialize();
 
-            listConstructionDetail.Add(constructionDetail);
-
-            ConstructionDetails = listConstructionDetail;
-
-            ReadModel.ConstructionDetails = ConstructionDetails.ToList();
+            MarkModified();
         }
 
-        public void SetMaterialType(MaterialTypeValueObject materialType)
+        public void AddWarp(ConstructionDetail value)
         {
-            Validator.ThrowIfNull(() => materialType);
-
-            if (materialType != MaterialType)
+            if(!ListOfWarp.Any(o => o.YarnId == value.YarnId))
             {
-                MaterialType = materialType;
-                ReadModel.MaterialType = MaterialType.Serialize();
+                var warps = ListOfWarp.ToList();
+                warps.Add(value);
+                ListOfWarp = warps;
+                ReadModel.ListOfWarp = ListOfWarp.Serialize();
+
+                MarkModified();
+            }
+        }
+
+        public void AddWeft(ConstructionDetail value)
+        {
+            if (!ListOfWeft.Any(o => o.YarnId == value.YarnId))
+            {
+                var wefts = ListOfWeft.ToList();
+                wefts.Add(value);
+                ListOfWeft = wefts;
+                ReadModel.ListOfWeft = ListOfWeft.Serialize();
+
+                MarkModified();
+            }
+        }
+
+
+        public void SetMaterialTypeId(MaterialTypeId value)
+        {
+            if (MaterialTypeId != value)
+            {
+                MaterialTypeId = value;
+                ReadModel.MaterialTypeId = MaterialTypeId.Value;
 
                 MarkModified();
             }
@@ -121,8 +145,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetConstructionNumber(string constructionNumber)
         {
-            Validator.ThrowIfNullOrEmpty(() => constructionNumber);
-
             if (constructionNumber != ConstructionNumber)
             {
                 ConstructionNumber = constructionNumber;
@@ -167,8 +189,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetWovenType(string wovenType)
         {
-            Validator.ThrowIfNullOrEmpty(() => wovenType);
-
             if (wovenType != WovenType)
             {
                 WovenType = wovenType;
@@ -180,8 +200,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetWarpType(string warpType)
         {
-            Validator.ThrowIfNullOrEmpty(() => warpType);
-
             if (warpType != WarpType)
             {
                 WarpType = warpType;
@@ -193,8 +211,6 @@ namespace Manufactures.Domain.Construction
 
         public void SetWeftType(string weftType)
         {
-            Validator.ThrowIfNullOrEmpty(() => weftType);
-
             if (weftType != WeftType)
             {
                 WeftType = weftType;

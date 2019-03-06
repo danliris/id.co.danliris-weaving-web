@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Manufactures.Domain.Construction.Entities;
+using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.Construction.ReadModels;
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
@@ -98,15 +98,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<ConstructionDetail>(etb =>
-            {
-                etb.ToTable("Weaving_ConstructionDetails");
-                etb.HasKey(e => e.Identity);
-
-                etb.ApplyAuditTrail();
-                etb.ApplySoftDelete();
-            });
-
             modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_Constructions");
@@ -116,10 +107,8 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.WovenType).HasMaxLength(255);
                 etb.Property(p => p.WarpType).HasMaxLength(255);
                 etb.Property(p => p.WeftType).HasMaxLength(255);
-
-                etb.HasMany(e => e.ConstructionDetails)
-                                  .WithOne(p => p.ConstructionDocument)
-                                  .HasForeignKey(f => f.ConstructionDocumentId);
+                etb.Property(p => p.ListOfWarp).HasMaxLength(20000);
+                etb.Property(p => p.ListOfWeft).HasMaxLength(20000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

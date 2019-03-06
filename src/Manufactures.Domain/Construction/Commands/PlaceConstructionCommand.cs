@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -33,14 +32,14 @@ namespace Manufactures.Domain.Construction.Commands
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; set; }
 
-        [JsonProperty(PropertyName = "MaterialTypeDocument")]
-        public MaterialTypeValueObject MaterialTypeDocument { get; set; }
+        [JsonProperty(PropertyName = "MaterialTypeId")]
+        public string MaterialTypeId { get; set; }
 
         [JsonProperty(PropertyName = "ItemsWarp")]
-        public List<Warp> ItemsWarp { get; set; }
+        public List<ConstructionDetail> ItemsWarp { get; set; }
 
         [JsonProperty(PropertyName = "ItemsWeft")]
-        public List<Weft> ItemsWeft { get; set; }
+        public List<ConstructionDetail> ItemsWeft { get; set; }
     }
 
     public class PlaceConstructionCommandValidator : AbstractValidator<PlaceConstructionCommand>
@@ -55,13 +54,7 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WarpTypeForm).NotEmpty();
             RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
-
-            RuleFor(command => command.MaterialTypeDocument.Id).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument.Code).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();
-
-            RuleFor(command => command.ItemsWarp).NotEmpty();
-            RuleFor(command => command.ItemsWeft).NotEmpty();
+            RuleFor(command => command.MaterialTypeId).NotEmpty();
         }
     }
 }

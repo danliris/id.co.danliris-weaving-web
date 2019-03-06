@@ -46,8 +46,8 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 materialTypeDocuments = 
-                    materialTypeDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                          entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                    materialTypeDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                                          entity.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))

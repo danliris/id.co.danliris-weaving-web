@@ -1,10 +1,14 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Construction.Commands;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Materials.Repositories;
+using Manufactures.Domain.YarnNumbers.Repositories;
+using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Dtos.Construction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -21,12 +25,21 @@ namespace Manufactures.Controllers.Api
     public class ConstructionController : ControllerApiBase
     {
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IMaterialTypeRepository _materialTypeRepository;
+        private readonly IYarnDocumentRepository _yarnDocumentRepository;
+        private readonly IYarnNumberRepository _yarnNumberRepository;
 
         public ConstructionController(IServiceProvider serviceProvider, 
                                       IWorkContext workContext) : base(serviceProvider)
         {
             _constructionDocumentRepository = 
                 this.Storage.GetRepository<IConstructionDocumentRepository>();
+            _materialTypeRepository =
+                this.Storage.GetRepository<IMaterialTypeRepository>();
+            _yarnDocumentRepository =
+                this.Storage.GetRepository<IYarnDocumentRepository>();
+            _yarnNumberRepository =
+                this.Storage.GetRepository<IYarnNumberRepository>();
         }
 
         [HttpGet]
@@ -42,7 +55,7 @@ namespace Manufactures.Controllers.Api
                                                      .Take(size)
                                                      .Skip(page * size);
             var constructionDocuments = 
-                _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
+                _constructionDocumentRepository.Find(query)
                                                .Select(item => new ConstructionDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
@@ -88,21 +101,53 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var query = _constructionDocumentRepository.Query;
-            var constructionDocument = 
-                _constructionDocumentRepository.Find(query.Include(p => p.ConstructionDetails))
-                                               .Where(o => o.Identity == Identity)
-                                               .Select(item => new ConstructionByIdDto(item))
+            var constructionDocument =
+                _constructionDocumentRepository.Find(o => o.Identity == Identity)
                                                .FirstOrDefault();
+            var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == constructionDocument.MaterialTypeId.Value)
+                                                      .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
+                                                      .FirstOrDefault();
+
+            var result = new ConstructionByIdDto(constructionDocument, 
+                                                 materialTypeDocument);
+            
+            foreach(var detail in constructionDocument.ListOfWarp)
+            {
+                var yarn = _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value).FirstOrDefault();
+                var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
+
+                var yarnValueObject = new YarnValueObject(yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
+
+                var warp = new Warp(detail.Quantity, detail.Information, yarnValueObject);
+
+                result.AddWarp(warp);
+                await Task.Yield();
+            }
+
+            foreach(var detail in constructionDocument.ListOfWeft)
+            {
+                var yarn = _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value).FirstOrDefault();
+                var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
+                var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
+
+                var yarnValueObject = new YarnValueObject(yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
+
+                var weft = new Weft(detail.Quantity, detail.Information, yarnValueObject);
+
+                result.AddWeft(weft);
+                await Task.Yield();
+            }
+
             await Task.Yield();
 
-            if (Identity == null)
+            if (constructionDocument == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(constructionDocument);
+                return Ok(result);
             }
         }
 
