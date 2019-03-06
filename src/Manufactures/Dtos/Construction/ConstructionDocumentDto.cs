@@ -19,32 +19,12 @@ namespace Manufactures.Dtos.Construction
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
-        [JsonProperty(PropertyName = "YarnType")]
-        public string YarnType { get; }
-
         public ConstructionDocumentDto(ConstructionDocument constructionDocument)
         {
             Id = constructionDocument.Identity;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             TotalYarn = constructionDocument.TotalYarn;
             Date = constructionDocument.Date.ToString("MMMM dd, yyyy");
-
-            if (constructionDocument.ConstructionDetails.Count != 0)
-            {
-                var indexCount = 0;
-                foreach (var detail in constructionDocument.ConstructionDetails)
-                {
-                    if (indexCount == 0)
-                    {
-                        YarnType = detail.Yarn.Deserialize<YarnValueObject>().Code;
-                        indexCount++;
-                    } else
-                    {
-                        YarnType = YarnType + "x" + detail.Yarn.Deserialize<YarnValueObject>().Code;
-                        indexCount++;
-                    }
-                }
-            }
         }
     }
 }

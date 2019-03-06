@@ -1,8 +1,6 @@
 ﻿using Manufactures.Domain.Yarns;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.Yarn
 {
