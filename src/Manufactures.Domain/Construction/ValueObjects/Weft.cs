@@ -8,15 +8,15 @@ namespace Manufactures.Domain.Construction.ValueObjects
 {
     public class Weft : ValueObject
     {
+        [JsonProperty(PropertyName = "Yarn")]
+        public YarnValueObject Yarn { get; private set; }
+
         [JsonProperty(PropertyName = "Quantity")]
         public double Quantity { get; private set; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
-
-        [JsonProperty(PropertyName = "Yarn")]
-        public YarnValueObject Yarn { get; private set; }
-
+        
         public Weft(double quantity,
                     string information,
                     YarnValueObject yarn)

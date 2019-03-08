@@ -117,7 +117,7 @@ namespace Manufactures.Controllers.Api
                 var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
                 var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
 
-                var yarnValueObject = new YarnValueObject(yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
+                var yarnValueObject = new YarnValueObject(yarn.Identity, yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
 
                 var warp = new Warp(detail.Quantity, detail.Information, yarnValueObject);
 
@@ -131,7 +131,7 @@ namespace Manufactures.Controllers.Api
                 var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
                 var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
 
-                var yarnValueObject = new YarnValueObject(yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
+                var yarnValueObject = new YarnValueObject(yarn.Identity, yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
 
                 var weft = new Weft(detail.Quantity, detail.Information, yarnValueObject);
 
