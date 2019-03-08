@@ -37,17 +37,18 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query = 
-                _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                             .Take(size)
-                                             .Skip(page * size);
+                _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
             var materialTypeDocuments = 
                 _materialTypeRepository.Find(query).Select(item => new MaterialTypeListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                materialTypeDocuments = 
-                    materialTypeDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                                          entity.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+               materialTypeDocuments = 
+                    materialTypeDocuments
+                        .Where(entity => entity.Code.Contains(keyword, 
+                                                              StringComparison.CurrentCultureIgnoreCase) ||
+                                         entity.Name.Contains(keyword, 
+                                                              StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -70,8 +71,9 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            materialTypeDocuments = materialTypeDocuments.ToArray();
+            materialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
             int totalRows = materialTypeDocuments.Count();
+            page = page + 1;
 
             await Task.Yield();
 
@@ -89,7 +91,8 @@ namespace Manufactures.Controllers.Api
             var Identity = Guid.Parse(Id);
             var materialTypeDto = 
                 _materialTypeRepository.Find(item => item.Identity == Identity)
-                                       .Select(item => new MaterialTypeDocumentDto(item)).FirstOrDefault();
+                                       .Select(item => new MaterialTypeDocumentDto(item))
+                                       .FirstOrDefault();
             await Task.Yield();
 
             if (materialTypeDto == null)

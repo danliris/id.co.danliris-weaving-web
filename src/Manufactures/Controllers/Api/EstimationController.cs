@@ -39,9 +39,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query = 
-                _estimationProductRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                                  .Take(size)
-                                                  .Skip(page * size);
+                _estimationProductRepository.Query.OrderByDescending(item => item.CreatedDate);
             var estimationDocument = 
                 _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
                                             .Select(item => new ListEstimationDto(item));
@@ -49,7 +47,9 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 estimationDocument = 
-                    estimationDocument.Where(entity => entity.EstimationNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                    estimationDocument
+                        .Where(entity => entity.EstimationNumber.Contains(keyword, 
+                                                                          StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -72,12 +72,14 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            var constructionDocumentsResult = estimationDocument.ToArray();
-            int totalRows = constructionDocumentsResult.Count();
+            estimationDocument = 
+                estimationDocument.Skip(page * size).Take(size);
+            int totalRows = estimationDocument.Count();
+            page = page + 1;
 
             await Task.Yield();
 
-            return Ok(constructionDocumentsResult, info: new
+            return Ok(estimationDocument, info: new
             {
                 page,
                 size,

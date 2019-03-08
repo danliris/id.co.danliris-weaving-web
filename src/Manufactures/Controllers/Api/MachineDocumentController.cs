@@ -36,9 +36,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query =
-                _machineRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                             .Take(size)
-                                             .Skip(page * size);
+                _machineRepository.Query.OrderByDescending(item => item.CreatedDate);
             var machine =
                 _machineRepository.Find(query)
                                        .Select(item => new MachineListDto(item));
@@ -70,8 +68,9 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            machine = machine.ToArray();
+            machine = machine.Skip(page * size).Take(size);
             int totalRows = machine.Count();
+            page = page + 1;
 
             await Task.Yield();
 

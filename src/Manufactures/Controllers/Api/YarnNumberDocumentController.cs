@@ -36,10 +36,8 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             page = page - 1;
-            var query = 
-                _ringRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                     .Take(size)
-                                     .Skip(page * size);
+            var query =
+                _ringRepository.Query.OrderByDescending(item => item.CreatedDate);
             var ringDocuments = 
                 _ringRepository.Find(query)
                                .Select(item => new YarnNumberListDto(item));
@@ -68,8 +66,9 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            ringDocuments = ringDocuments.ToArray();
+            ringDocuments = ringDocuments.Take(size).Skip(page * size);
             int totalRows = ringDocuments.Count();
+            page = page + 1;
 
             await Task.Yield();
 

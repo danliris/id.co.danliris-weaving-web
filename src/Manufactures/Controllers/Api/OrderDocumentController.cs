@@ -102,9 +102,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query = 
-                _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                                     .Take(size)
-                                                     .Skip(page * size);
+                _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var weavingOrderDocuments = 
                 _weavingOrderDocumentRepository.Find(query)
                                                .Select(item => new ListWeavingOrderDocumentDto(item));
@@ -113,10 +111,15 @@ namespace Manufactures.Controllers.Api
             {
                 weavingOrderDocuments = 
                     weavingOrderDocuments
-                        .Where(entity => entity.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                         entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                         entity.WeavingUnit.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                         entity.DateOrdered.LocalDateTime.ToString("dd MMMM yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                        .Where(entity => entity.OrderNumber.Contains(keyword, 
+                                                                     StringComparison.OrdinalIgnoreCase) ||
+                                         entity.ConstructionNumber.Contains(keyword,
+                                                                            StringComparison.OrdinalIgnoreCase) ||
+                                         entity.WeavingUnit.Name.Contains(keyword, 
+                                                                          StringComparison.OrdinalIgnoreCase) ||
+                                         entity.DateOrdered.LocalDateTime
+                                                           .ToString("dd MMMM yyyy")
+                                                           .Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -140,8 +143,10 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            weavingOrderDocuments = weavingOrderDocuments.ToArray();
+            weavingOrderDocuments = 
+                weavingOrderDocuments.Take(size).Skip(page * size);
             int totalRows = weavingOrderDocuments.Count();
+            page = page + 1;
 
             await Task.Yield();
 
