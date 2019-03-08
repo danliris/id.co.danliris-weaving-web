@@ -37,7 +37,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                        CancellationToken cancellationToken)
         {
             var query = _constructionDocumentRepository.Query;
-            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(o => o.ListOfWarp)).Where(Entity => Entity.Identity.Equals(request.Id))
+            var constructionDocuments = _constructionDocumentRepository.Find(query).Where(Entity => Entity.Identity.Equals(request.Id))
                                                                        .FirstOrDefault();
 
             var exsistingConstructionNumber = _constructionDocumentRepository
