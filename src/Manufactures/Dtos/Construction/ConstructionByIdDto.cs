@@ -1,5 +1,4 @@
-﻿using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction;
+﻿using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
 using Newtonsoft.Json;
@@ -17,7 +16,7 @@ namespace Manufactures.Dtos.Construction
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
-        [JsonProperty(PropertyName = "MaterialTypeDocument")]
+        [JsonProperty(PropertyName = "MaterialTypeId")]
         public MaterialTypeValueObject MaterialTypeDocument { get; }
 
         [JsonProperty(PropertyName = "WovenType")]
