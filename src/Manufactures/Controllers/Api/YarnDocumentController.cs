@@ -50,14 +50,33 @@ namespace Manufactures.Controllers.Api
                                              .Take(size)
                                              .Skip(page * size);
             var yarns =
-                _yarnDocumentRepository.Find(query)
-                                       .Select(item => new YarnDocumentListDto(item));
+                _yarnDocumentRepository.Find(query);
+
+            var results = new List<YarnDocumentListDto>();
+
+            foreach(var yarn in yarns)
+            {
+
+                var materialType = 
+                    _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value)
+                                           .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
+                                           .FirstOrDefault();
+                var yarnNumber = 
+                    _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
+                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number))
+                                         .FirstOrDefault();
+
+                var data = new YarnDocumentListDto(yarn, materialType, yarnNumber);
+
+                results.Add(data);
+            }
+            
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                yarns =
-                    yarns.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                          entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                results =
+                    results.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                          entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!order.Contains("{}"))
@@ -70,20 +89,20 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    yarns = yarns.OrderBy(x => prop.GetValue(x, null));
+                    results = results.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    yarns = yarns.OrderByDescending(x => prop.GetValue(x, null));
+                    results = results.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            yarns = yarns.ToArray();
-            int totalRows = yarns.Count();
+            results = results.ToList();
+            int totalRows = results.Count();
 
             await Task.Yield();
 
-            return Ok(yarns, info: new
+            return Ok(results, info: new
             {
                 page,
                 size,
