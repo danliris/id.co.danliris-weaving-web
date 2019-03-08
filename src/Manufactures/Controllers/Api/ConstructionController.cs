@@ -51,9 +51,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query = 
-                _constructionDocumentRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                                     .Take(size)
-                                                     .Skip(page * size);
+                _constructionDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var constructionDocuments = 
                 _constructionDocumentRepository.Find(query)
                                                .Select(item => new ConstructionDocumentDto(item));
@@ -61,7 +59,9 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 constructionDocuments = 
-                    constructionDocuments.Where(entity => entity.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                    constructionDocuments
+                        .Where(entity => entity.ConstructionNumber.Contains(keyword, 
+                                                                            StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -84,12 +84,14 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            var constructionDocumentsResult = constructionDocuments.ToArray();
-            int totalRows = constructionDocumentsResult.Count();
+            constructionDocuments =
+                constructionDocuments.Skip(page * size).Take(size);
+            int totalRows = constructionDocuments.Count();
+            page = page + 1;
 
             await Task.Yield();
 
-            return Ok(constructionDocumentsResult, info: new
+            return Ok(constructionDocuments, info: new
             {
                 page,
                 size,
@@ -104,22 +106,37 @@ namespace Manufactures.Controllers.Api
             var constructionDocument =
                 _constructionDocumentRepository.Find(o => o.Identity == Identity)
                                                .FirstOrDefault();
-            var materialTypeDocument = _materialTypeRepository.Find(o => o.Identity == constructionDocument.MaterialTypeId.Value)
-                                                      .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
-                                                      .FirstOrDefault();
+            var materialTypeDocument = 
+                _materialTypeRepository.Find(o => o.Identity == constructionDocument.MaterialTypeId.Value)
+                                       .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
+                                       .FirstOrDefault();
 
             var result = new ConstructionByIdDto(constructionDocument, 
                                                  materialTypeDocument);
             
             foreach(var detail in constructionDocument.ListOfWarp)
             {
-                var yarn = _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value).FirstOrDefault();
-                var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
-                var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
+                var yarn = 
+                    _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value)
+                                           .FirstOrDefault();
+                var materialType = 
+                    _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value)
+                                           .FirstOrDefault();
+                var yarnNumber = 
+                    _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
+                                         .FirstOrDefault();
 
-                var yarnValueObject = new YarnValueObject(yarn.Identity, yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
+                var yarnValueObject = 
+                    new YarnValueObject(yarn.Identity, 
+                                        yarn.Code, 
+                                        yarn.Name, 
+                                        materialType.Code, 
+                                        yarnNumber.Code);
 
-                var warp = new Warp(detail.Quantity, detail.Information, yarnValueObject);
+                var warp = 
+                    new Warp(detail.Quantity, 
+                             detail.Information, 
+                             yarnValueObject);
 
                 result.AddWarp(warp);
                 await Task.Yield();

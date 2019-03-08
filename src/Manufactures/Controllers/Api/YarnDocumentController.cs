@@ -46,9 +46,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query =
-                _yarnDocumentRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                             .Take(size)
-                                             .Skip(page * size);
+                _yarnDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var yarns =
                 _yarnDocumentRepository.Find(query);
 
@@ -97,8 +95,9 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            results = results.ToList();
+            results = results.Take(size).Skip(page * size).ToList();
             int totalRows = results.Count();
+            page = page + 1;
 
             await Task.Yield();
 

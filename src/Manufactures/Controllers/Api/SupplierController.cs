@@ -37,9 +37,7 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query =
-                _weavingSupplierRepository.Query.OrderByDescending(item => item.CreatedDate)
-                                                .Take(size)
-                                                .Skip(page * size);
+                _weavingSupplierRepository.Query.OrderByDescending(item => item.CreatedDate);
             var suppliers =
                 _weavingSupplierRepository.Find(query)
                                           .Select(item => new SupplierListDto(item));
@@ -47,8 +45,10 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 suppliers =
-                    suppliers.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                              entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                    suppliers.Where(entity => entity.Code.Contains(keyword, 
+                                                                   StringComparison.OrdinalIgnoreCase) ||
+                                              entity.Name.Contains(keyword, 
+                                                                   StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -69,8 +69,9 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            suppliers = suppliers.ToArray();
+            suppliers = suppliers.Take(size).Skip(page * size);
             int totalRows = suppliers.Count();
+            page = page + 1;
 
             await Task.Yield();
 

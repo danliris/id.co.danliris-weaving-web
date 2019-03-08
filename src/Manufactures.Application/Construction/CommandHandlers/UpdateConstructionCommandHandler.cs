@@ -10,7 +10,6 @@ using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using Manufactures.Domain.Shared.ValueObjects;
 
