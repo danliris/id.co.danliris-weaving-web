@@ -132,9 +132,8 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(p => p.FabricConstructionDocument).HasMaxLength(255);
+                etb.Property(p => p.ConstructionId).HasMaxLength(255);
                 etb.Property(p => p.Period).HasMaxLength(255);
-                etb.Property(p => p.WeavingUnit).HasMaxLength(255);
                 etb.Property(p => p.WarpComposition).HasMaxLength(255);
                 etb.Property(p => p.WeftComposition).HasMaxLength(255);
                 etb.Property(p => p.OrderStatus).HasMaxLength(255);

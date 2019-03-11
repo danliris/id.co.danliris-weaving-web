@@ -1,6 +1,6 @@
-﻿using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Orders;
+﻿using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -27,17 +27,18 @@ namespace Manufactures.Dtos.Order
         public Composition WeftComposition { get; }
 
         [JsonProperty(PropertyName = "WeavingUnit")]
-        public WeavingUnit WeavingUnit { get; }
+        public UnitId UnitId { get; }
 
-        public ListWeavingOrderDocumentDto(WeavingOrderDocument weavingOrderDocument)
+        public ListWeavingOrderDocumentDto(WeavingOrderDocument weavingOrderDocument, 
+                                           FabricConstructionDocument fabricConstruction)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
             DateOrdered = weavingOrderDocument.DateOrdered;
-            ConstructionNumber = weavingOrderDocument.FabricConstructionDocument.ConstructionNumber;
+            ConstructionNumber = fabricConstruction.ConstructionNumber;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
-            WeavingUnit = weavingOrderDocument.WeavingUnit;
+            UnitId = weavingOrderDocument.UnitId;
         }
     }
 }

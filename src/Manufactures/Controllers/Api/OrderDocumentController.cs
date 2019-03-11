@@ -3,6 +3,8 @@ using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Orders.ValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Dtos.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +51,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}/status/{status}")]
         public async Task<IActionResult> Get(string month,
                                              string year,
-                                             string unitCode,
+                                             int unitCode,
                                              string status)
         {
             var resultData = new List<OrderBySearchDto>();
@@ -60,7 +62,7 @@ namespace Manufactures.Controllers.Api
                 _weavingOrderDocumentRepository
                     .Find(query).Where(entity => entity.Period.Month.Contains(month) &&
                                                  entity.Period.Year.Contains(year) &&
-                                                 entity.WeavingUnit.Code.Equals(unitCode))
+                                                 entity.UnitId.Value.Equals(unitCode))
                     .ToArray();
 
             if (status.Equals(Constants.ONORDER))
@@ -72,7 +74,7 @@ namespace Manufactures.Controllers.Api
             {
                 var constructionDocument = 
                     _constructionDocumentRepository
-                        .Find(e => e.Identity.Equals(order.FabricConstructionDocument.Id))
+                        .Find(e => e.Identity.Equals(order.ConstructionId.Value))
                         .FirstOrDefault();
 
                 if (constructionDocument == null)
@@ -104,22 +106,36 @@ namespace Manufactures.Controllers.Api
             var query = 
                 _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var weavingOrderDocuments = 
-                _weavingOrderDocumentRepository.Find(query)
-                                               .Select(item => new ListWeavingOrderDocumentDto(item));
+                _weavingOrderDocumentRepository.Find(query);
+
+            var resultData = new List<ListWeavingOrderDocumentDto>();
+
+            foreach(var weavingOrder in weavingOrderDocuments)
+            {
+                var construction =
+                    _constructionDocumentRepository.Find(o => o.Identity == weavingOrder.ConstructionId.Value).FirstOrDefault();
+
+                var orderData = 
+                    new ListWeavingOrderDocumentDto(weavingOrder, 
+                                                    new FabricConstructionDocument(construction.Identity, construction.ConstructionNumber));
+
+                resultData.Add(orderData);
+            }
+
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                weavingOrderDocuments = 
-                    weavingOrderDocuments
-                        .Where(entity => entity.OrderNumber.Contains(keyword, 
+                resultData =
+                    resultData
+                        .Where(entity => entity.OrderNumber.Contains(keyword,
                                                                      StringComparison.OrdinalIgnoreCase) ||
                                          entity.ConstructionNumber.Contains(keyword,
                                                                             StringComparison.OrdinalIgnoreCase) ||
-                                         entity.WeavingUnit.Name.Contains(keyword, 
+                                         entity.UnitId.Value.ToString().Contains(keyword,
                                                                           StringComparison.OrdinalIgnoreCase) ||
                                          entity.DateOrdered.LocalDateTime
                                                            .ToString("dd MMMM yyyy")
-                                                           .Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                                                           .Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!order.Contains("{}"))
@@ -133,19 +149,19 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    weavingOrderDocuments = 
-                        weavingOrderDocuments.OrderBy(x => prop.GetValue(x, null));
+                    resultData =
+                        resultData.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    weavingOrderDocuments = 
-                        weavingOrderDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                    resultData =
+                        resultData.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            weavingOrderDocuments = 
-                weavingOrderDocuments.Take(size).Skip(page * size);
-            int totalRows = weavingOrderDocuments.Count();
+            resultData =
+                resultData.Take(size).Skip(page * size).ToList();
+            int totalRows = resultData.Count();
             page = page + 1;
 
             await Task.Yield();
@@ -162,10 +178,16 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var orderId = Guid.Parse(Id);
-            var orderDto = 
+            var order = 
                 _weavingOrderDocumentRepository.Find(item => item.Identity == orderId)
-                                               .Select(item => new WeavingOrderById(item))
                                                .FirstOrDefault();
+            var construction =
+                _constructionDocumentRepository.Find(item => item.Identity == order.ConstructionId.Value)
+                                               .FirstOrDefault();
+            var orderDto = new WeavingOrderDocumentDto(order, 
+                                                       new UnitId(order.UnitId.Value), 
+                                                       new FabricConstructionDocument(construction.Identity, 
+                                                                                      construction.ConstructionNumber));
 
             await Task.Yield();
 

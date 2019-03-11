@@ -3,6 +3,7 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System.Linq;
 using System.Threading;
@@ -33,7 +34,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + command.Id));
             }
 
-            order.SetFabricConstructionDocument(command.FabricConstructionDocument);
+            order.SetFabricConstructionDocument(new ConstructionId(command.FabricConstructionDocument.Id));
             order.SetWarpOrigin(command.WarpOrigin);
             order.SetWeftOrigin(command.WeftOrigin);
             order.SetWholeGrade(command.WholeGrade);
@@ -41,7 +42,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
             order.SetPeriod(command.Period);
             order.SetWarpComposition(command.WarpComposition);
             order.SetWeftComposition(command.WeftComposition);
-            order.SetWeavingUnit(command.WeavingUnit);
+            order.SetWeavingUnit(new UnitId(command.WeavingUnit.Id));
 
             await _weavingOrderDocumentRepository.Update(order);
 

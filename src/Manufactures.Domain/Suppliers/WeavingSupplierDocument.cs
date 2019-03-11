@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Suppliers.ReadModels;
-using Moonlay;
 using System;
 
 namespace Manufactures.Domain.Suppliers
