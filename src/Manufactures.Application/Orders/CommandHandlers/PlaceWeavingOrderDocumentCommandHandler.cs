@@ -1,13 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,11 +28,12 @@ namespace Manufactures.Application.Orders.CommandHandlers
             // Get Order Number from auto generate
             var orderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
 
-            command.OrderStatus = Constants.ONORDER;
+            //Set status
+            var orderStatus = Constants.ONORDER;
 
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
                                                  orderNumber: orderNumber,
-                                                 fabricConstructionDocument: command.FabricConstructionDocument,
+                                                 constructionId: new ConstructionId(command.FabricConstructionDocument.Id),
                                                  dateOrdered: command.DateOrdered, 
                                                  period: command.Period,
                                                  warpComposition: command.WarpComposition,
@@ -43,8 +42,8 @@ namespace Manufactures.Application.Orders.CommandHandlers
                                                  weftOrigin: command.WeftOrigin, 
                                                  wholeGrade: command.WholeGrade,
                                                  yarnType: command.YarnType, 
-                                                 weavingUnit: command.WeavingUnit,
-                                                 orderStatus: command.OrderStatus);
+                                                 unitId: new UnitId(command.WeavingUnit.Id),
+                                                 orderStatus: orderStatus);
             
             await _weavingOrderDocumentRepository.Update(order);
 

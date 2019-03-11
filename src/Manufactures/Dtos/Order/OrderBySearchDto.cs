@@ -2,6 +2,7 @@
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -46,7 +47,7 @@ namespace Manufactures.Dtos.Order
         public Composition WeftComposition { get; private set; }
 
         [JsonProperty(PropertyName = "WeavingUnit")]
-        public WeavingUnit WeavingUnit { get; private set; }
+        public UnitId UnitId { get; private set; }
 
         public OrderBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument)
         {
@@ -65,7 +66,7 @@ namespace Manufactures.Dtos.Order
             Period = weavingOrderDocument.Period;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
-            WeavingUnit = weavingOrderDocument.WeavingUnit;
+            UnitId = weavingOrderDocument.UnitId;
         }
     }
 }
