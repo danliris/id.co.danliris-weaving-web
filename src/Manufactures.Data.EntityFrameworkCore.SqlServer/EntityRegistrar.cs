@@ -50,7 +50,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(e => e.Period).HasMaxLength(255);
-                etb.Property(e => e.Unit).HasMaxLength(255);
 
                 etb.HasMany(e => e.EstimationProducts)
                     .WithOne(e => e.EstimatedProductionDocument)

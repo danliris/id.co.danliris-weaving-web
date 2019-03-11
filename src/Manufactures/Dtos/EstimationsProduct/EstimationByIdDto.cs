@@ -1,6 +1,7 @@
 ﻿using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace Manufactures.Dtos.EstimationsProduct
         public Period Period { get; }
 
         [JsonProperty(PropertyName = "Unit")]
-        public WeavingUnit Unit { get; }
+        public UnitId Unit { get; }
 
         [JsonProperty(PropertyName = "EstimationProducts")]
         public List<EstimationProductValueObject> EstimationProducts { get; }
@@ -29,7 +30,7 @@ namespace Manufactures.Dtos.EstimationsProduct
             Id = document.Identity;
             EstimatedNumber = document.EstimatedNumber;
             Period = document.Period;
-            Unit = document.Unit;
+            Unit = document.UnitId;
             EstimationProducts = new List<EstimationProductValueObject>();
 
             foreach (var product in document.EstimationProducts)

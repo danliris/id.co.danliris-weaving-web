@@ -12,7 +12,7 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
         }
         public string EstimatedNumber { get; internal set; }
         public string Period { get; internal set; }
-        public string Unit { get; internal set; }
+        public int? UnitId { get; internal set; }
         public List<EstimationProduct> EstimationProducts { get; internal set; }
     }
 }

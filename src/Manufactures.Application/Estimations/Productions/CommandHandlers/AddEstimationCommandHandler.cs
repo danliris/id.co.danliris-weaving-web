@@ -7,8 +7,8 @@ using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Linq;
 using System.Threading;
@@ -35,7 +35,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
         {
             var estimationNumber = await _estimationProductRepository.GetEstimationNumber();
 
-            var estimatedProductionDocument = new EstimatedProductionDocument(Guid.NewGuid(), estimationNumber, request.Period, request.Unit);
+            var estimatedProductionDocument = new EstimatedProductionDocument(Guid.NewGuid(), estimationNumber, request.Period, new UnitId(request.Unit.Id));
 
             foreach(var product in request.EstimationProducts)
             {

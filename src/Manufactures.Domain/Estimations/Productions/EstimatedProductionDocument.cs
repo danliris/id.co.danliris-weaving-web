@@ -3,6 +3,7 @@ using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
@@ -14,32 +15,28 @@ namespace Manufactures.Domain.Estimations.Productions
     {
         public string EstimatedNumber { get; private set; }
         public Period Period { get; private set; }
-        public WeavingUnit Unit { get; private set; }
+        public UnitId UnitId { get; private set; }
         public DateTimeOffset Date { get; private set; }
         public IReadOnlyCollection<EstimationProduct> EstimationProducts { get; private set; }
 
         public EstimatedProductionDocument(Guid id,
                                            string estimatedNumber,
                                            Period period,
-                                           WeavingUnit unit) : base(id)
+                                           UnitId unitId) : base(id)
         {
-            Validator.ThrowIfNullOrEmpty(() => estimatedNumber);
-            Validator.ThrowIfNull(() => period);
-            Validator.ThrowIfNull(() => unit);
-
-            this.MarkTransient();
-
             Identity = id;
             EstimatedNumber = estimatedNumber;
             Period = period;
-            Unit = unit;
+            UnitId = unitId;
             EstimationProducts = new List<EstimationProduct>();
+
+            this.MarkTransient();
 
             ReadModel = new EstimatedProductionDocumentReadModel(Identity)
             {
                 EstimatedNumber = this.EstimatedNumber,
                 Period = this.Period.Serialize(),
-                Unit = this.Unit.Serialize(),
+                UnitId = this.UnitId.Value,
                 EstimationProducts = this.EstimationProducts.ToList()
             };
         }
@@ -48,7 +45,7 @@ namespace Manufactures.Domain.Estimations.Productions
         {
             this.EstimatedNumber = readModel.EstimatedNumber;
             this.Period = readModel.Period.Deserialize<Period>();
-            this.Unit = readModel.Unit.Deserialize<WeavingUnit>();
+            this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
             this.EstimationProducts = readModel.EstimationProducts;
             this.Date = readModel.CreatedDate;
         }
