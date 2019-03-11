@@ -85,6 +85,36 @@ namespace Manufactures.Domain.Construction
             this.Date = readModel.CreatedDate;
         }
 
+        public void UpdateWarp(ConstructionDetail value)
+        {
+            foreach (var warp in ListOfWarp)
+            {
+                if (warp.YarnId == value.YarnId)
+                {
+
+                    warp.SetQuantity(value.Quantity);
+                    warp.SetInformation(value.Information);
+
+                    MarkModified();
+                }
+            }
+        }
+
+        public void UpdateWeft(ConstructionDetail value)
+        {
+            foreach(var weft in ListOfWeft)
+            {
+                if(weft.YarnId == value.YarnId)
+                {
+
+                    weft.SetQuantity(value.Quantity);
+                    weft.SetInformation(value.Information);
+
+                    MarkModified();
+                }
+            }
+        }
+
         public void RemoveWarp(ConstructionDetail value)
         {
             var warps = ListOfWarp.ToList();
@@ -107,7 +137,7 @@ namespace Manufactures.Domain.Construction
 
         public void AddWarp(ConstructionDetail value)
         {
-            if(!ListOfWarp.Any(o => o.YarnId == value.YarnId))
+            if (!ListOfWarp.Any(o => o.YarnId == value.YarnId))
             {
                 var warps = ListOfWarp.ToList();
                 warps.Add(value);

@@ -69,33 +69,61 @@ namespace Manufactures.Application.Construction.CommandHandlers
             // Update exsisting & remove if not has inside request & exsisting data
             foreach (var warp in constructionDocuments.ListOfWarp)
             {
-                var countIndetailWarp = request.ItemsWarp.Where(o => o.YarnId == warp.YarnId).Count();
+                var removedWarp = request.ItemsWarp.Where(o => o.YarnId == warp.YarnId).FirstOrDefault();
 
-                if (countIndetailWarp == 0)
+                if (removedWarp == null)
                 {
                     constructionDocuments.RemoveWarp(warp);
                 }
             }
 
+            foreach (var requestWarp in request.ItemsWarp)
+            {
+
+                var existingWarp = constructionDocuments.ListOfWarp.Where(o => o.YarnId == requestWarp.YarnId).FirstOrDefault();
+
+                if (existingWarp == null)
+                {
+
+                    constructionDocuments.AddWarp(requestWarp);
+                }
+                else
+                {
+
+                    if (existingWarp.YarnId == requestWarp.YarnId)
+                    {
+                        constructionDocuments.UpdateWarp(requestWarp);
+                    }
+                }
+            }
+
             foreach (var weft in constructionDocuments.ListOfWeft)
             {
-                var countIndetailWeft = request.ItemsWeft.Where(o => o.YarnId == weft.YarnId).Count();
+                var removedWarp = request.ItemsWarp.Where(o => o.YarnId == weft.YarnId).FirstOrDefault();
 
-                if (countIndetailWeft == 0)
+                if (removedWarp == null)
                 {
                     constructionDocuments.RemoveWeft(weft);
                 }
             }
 
-            // Update Detail
-            foreach (var warp in request.ItemsWarp)
+            foreach (var requestweft in request.ItemsWeft)
             {
-                constructionDocuments.AddWarp(warp);
-            }
+                var existingWeft = constructionDocuments.ListOfWeft.Where(o => o.YarnId == requestweft.YarnId).FirstOrDefault();
 
-            foreach (var weft in request.ItemsWeft)
-            {
-                constructionDocuments.AddWeft(weft);
+                if (existingWeft == null)
+                {
+
+                    constructionDocuments.AddWeft(requestweft);
+                }
+                else
+                {
+                    
+                    if (existingWeft.YarnId == requestweft.YarnId)
+                    {
+                        constructionDocuments.UpdateWeft(requestweft);
+                    }
+                }
             }
 
             await _constructionDocumentRepository.Update(constructionDocuments);
