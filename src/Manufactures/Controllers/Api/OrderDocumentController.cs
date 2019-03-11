@@ -166,7 +166,7 @@ namespace Manufactures.Controllers.Api
 
             await Task.Yield();
 
-            return Ok(weavingOrderDocuments, info: new
+            return Ok(resultData, info: new
             {
                 page,
                 size,
