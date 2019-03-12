@@ -1,14 +1,17 @@
-﻿using Moonlay;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.GlobalValueObjects
 {
     public class ConstructionDocumentValueObject
     {
+        [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; }
+
+        [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
+
+        [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
         public ConstructionDocumentValueObject(Guid identity,
