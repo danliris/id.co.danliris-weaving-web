@@ -13,7 +13,7 @@ namespace Manufactures.Domain.Orders.Commands
         public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "FabricConstructionDocument")]
-        public FabricConstructionDocument FabricConstructionDocument { get; set; }
+        public FabricConstructionCommand FabricConstructionDocument { get; set; }
 
         [JsonProperty(PropertyName = "WarpOrigin")]
         public string WarpOrigin { get; set; }
@@ -64,7 +64,6 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.WeftComposition.CompositionOfCotton).NotEmpty();
             RuleFor(command => command.WeftComposition.OtherComposition).NotEmpty();
             RuleFor(command => command.WeavingUnit.Id).NotEmpty();
-            RuleFor(command => command.WeavingUnit.Name).NotEmpty();
         }
     }
 }

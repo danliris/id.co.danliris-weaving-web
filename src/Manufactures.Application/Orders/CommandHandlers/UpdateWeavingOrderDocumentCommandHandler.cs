@@ -5,6 +5,7 @@ using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + command.Id));
             }
 
-            order.SetFabricConstructionDocument(new ConstructionId(command.FabricConstructionDocument.Id));
+            order.SetFabricConstructionDocument(new ConstructionId(Guid.Parse(command.FabricConstructionDocument.Id)));
             order.SetWarpOrigin(command.WarpOrigin);
             order.SetWeftOrigin(command.WeftOrigin);
             order.SetWholeGrade(command.WholeGrade);

@@ -33,7 +33,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
 
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
                                                  orderNumber: orderNumber,
-                                                 constructionId: new ConstructionId(command.FabricConstructionDocument.Id),
+                                                 constructionId: new ConstructionId(Guid.Parse(command.FabricConstructionDocument.Id)),
                                                  dateOrdered: command.DateOrdered, 
                                                  period: command.Period,
                                                  warpComposition: command.WarpComposition,

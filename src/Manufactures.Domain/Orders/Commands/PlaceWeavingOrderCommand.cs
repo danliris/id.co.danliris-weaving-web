@@ -10,7 +10,7 @@ namespace Manufactures.Domain.Orders.Commands
     public class PlaceWeavingOrderCommand : ICommand<WeavingOrderDocument>
     {
         [JsonProperty(PropertyName = "FabricConstructionDocument")]
-        public FabricConstructionDocument FabricConstructionDocument { get; set; }
+        public FabricConstructionCommand FabricConstructionDocument { get; set; }
 
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; set; }
@@ -60,7 +60,6 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.WeftComposition.CompositionOfCotton).NotEmpty();
             RuleFor(command => command.WeftComposition.OtherComposition).NotEmpty();
             RuleFor(command => command.WeavingUnit.Id).NotEmpty();
-            RuleFor(command => command.WeavingUnit.Name).NotEmpty();
         }
     }
 }
