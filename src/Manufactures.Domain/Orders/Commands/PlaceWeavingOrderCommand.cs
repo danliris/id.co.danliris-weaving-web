@@ -53,12 +53,6 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.YarnType).NotEmpty();
             RuleFor(command => command.Period.Month).NotEmpty();
             RuleFor(command => command.Period.Year).NotEmpty();
-            RuleFor(command => command.WarpComposition.CompositionOfPoly).NotEmpty();
-            RuleFor(command => command.WarpComposition.CompositionOfCotton).NotEmpty();
-            RuleFor(command => command.WarpComposition.OtherComposition).NotEmpty();
-            RuleFor(command => command.WeftComposition.CompositionOfPoly).NotEmpty();
-            RuleFor(command => command.WeftComposition.CompositionOfCotton).NotEmpty();
-            RuleFor(command => command.WeftComposition.OtherComposition).NotEmpty();
             RuleFor(command => command.WeavingUnit.Id).NotEmpty();
         }
     }
