@@ -86,7 +86,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<YarnNumberDocumentReadModel>(etb =>
             {
-                etb.ToTable("Weaving_RingDocuments");
+                etb.ToTable("Weaving_YarnNumberDocuments");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.Code).HasMaxLength(255);
@@ -99,7 +99,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
             {
-                etb.ToTable("Weaving_Constructions");
+                etb.ToTable("Weaving_ConstructionDocuments");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.ConstructionNumber).HasMaxLength(255);
@@ -115,7 +115,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<MaterialTypeReadModel>(etb =>
             {
-                etb.ToTable("Weaving_MaterialTypes");
+                etb.ToTable("Weaving_MaterialTypeDocument");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.Code).HasMaxLength(255);
