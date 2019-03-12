@@ -48,10 +48,10 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-by-period/{month}/{year}/unit/{unitCode}/status/{status}")]
+        [HttpGet("order-by-period/{month}/{year}/unit/{unitId}/status/{status}")]
         public async Task<IActionResult> Get(string month,
                                              string year,
-                                             int unitCode,
+                                             int unitId,
                                              string status)
         {
             var resultData = new List<OrderBySearchDto>();
@@ -62,7 +62,7 @@ namespace Manufactures.Controllers.Api
                 _weavingOrderDocumentRepository
                     .Find(query).Where(entity => entity.Period.Month.Contains(month) &&
                                                  entity.Period.Year.Contains(year) &&
-                                                 entity.UnitId.Value.Equals(unitCode))
+                                                 entity.UnitId.Value.Equals(unitId))
                     .ToArray();
 
             if (status.Equals(Constants.ONORDER))
