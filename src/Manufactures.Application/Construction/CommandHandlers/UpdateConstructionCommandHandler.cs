@@ -99,9 +99,9 @@ namespace Manufactures.Application.Construction.CommandHandlers
 
             foreach (var weft in constructionDocuments.ListOfWeft)
             {
-                var removedWarp = request.ItemsWarp.Where(o => o.YarnId == weft.YarnId).FirstOrDefault();
+                var removedWeft = request.ItemsWeft.Where(o => o.YarnId == weft.YarnId).FirstOrDefault();
 
-                if (removedWarp == null)
+                if (removedWeft == null)
                 {
                     constructionDocuments.RemoveWeft(weft);
                 }
