@@ -76,7 +76,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("Weaving_Constructions");
+                    b.ToTable("Weaving_ConstructionDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
@@ -244,7 +244,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("Weaving_MaterialTypes");
+                    b.ToTable("Weaving_MaterialTypeDocument");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Orders.ReadModels.WeavingOrderDocumentReadModel", b =>
@@ -388,7 +388,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("Weaving_RingDocuments");
+                    b.ToTable("Weaving_YarnNumberDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Yarns.ReadModels.YarnDocumentReadModel", b =>
