@@ -50,7 +50,6 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.AmountOfWarp).NotEmpty();
             RuleFor(command => command.AmountOfWeft).NotEmpty();
             RuleFor(command => command.Width).NotEmpty();
-            RuleFor(command => command.WovenType).NotEmpty();
             RuleFor(command => command.WarpTypeForm).NotEmpty();
             RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
