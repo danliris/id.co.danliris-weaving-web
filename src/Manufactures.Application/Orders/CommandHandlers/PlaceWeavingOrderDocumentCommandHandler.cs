@@ -1,13 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,29 +25,25 @@ namespace Manufactures.Application.Orders.CommandHandlers
         public async Task<WeavingOrderDocument> Handle(PlaceWeavingOrderCommand command, 
                                                        CancellationToken cancellationToken)
         {
-            // Checking for same order number
-            var isHasSameOrderNumber = _weavingOrderDocumentRepository.Find(entity => entity.OrderNumber.Equals(command.OrderNumber) &&
-                                                                                      entity.Deleted.Equals(false)).Count() >= 1;
+            // Get Order Number from auto generate
+            var orderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
 
-            if (isHasSameOrderNumber)
-            {
-                command.OrderNumber = await _weavingOrderDocumentRepository.GetWeavingOrderNumber();
-            }
-
-            command.OrderStatus = Constants.ONORDER;
+            //Set status
+            var orderStatus = Constants.ONORDER;
 
             var order = new WeavingOrderDocument(id: Guid.NewGuid(),
-                                                 orderNumber: command.OrderNumber,
-                                                 fabricConstructionDocument: command.FabricConstructionDocument,
+                                                 orderNumber: orderNumber,
+                                                 constructionId: new ConstructionId(Guid.Parse(command.FabricConstructionDocument.Id)),
                                                  dateOrdered: command.DateOrdered, 
                                                  period: command.Period,
-                                                 composition: command.Composition, 
+                                                 warpComposition: command.WarpComposition,
+                                                 weftComposition: command.WeftComposition,
                                                  warpOrigin: command.WarpOrigin,
                                                  weftOrigin: command.WeftOrigin, 
                                                  wholeGrade: command.WholeGrade,
                                                  yarnType: command.YarnType, 
-                                                 weavingUnit: command.WeavingUnit,
-                                                 orderStatus: command.OrderStatus);
+                                                 unitId: new UnitId(command.WeavingUnit.Id),
+                                                 orderStatus: orderStatus);
             
             await _weavingOrderDocumentRepository.Update(order);
 

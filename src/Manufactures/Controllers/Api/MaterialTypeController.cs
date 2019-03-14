@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Materials.Commands;
 using Manufactures.Domain.Materials.Repositories;
-using Manufactures.Dtos;
+using Manufactures.Dtos.MaterialType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -21,42 +21,59 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IMaterialTypeRepository _materialTypeRepository;
 
-        public MaterialTypeController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public MaterialTypeController(IServiceProvider serviceProvider, 
+                                      IWorkContext workContext) : base(serviceProvider)
         {
-            _materialTypeRepository = this.Storage.GetRepository<IMaterialTypeRepository>();
+            _materialTypeRepository = 
+                this.Storage.GetRepository<IMaterialTypeRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 0, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
+        public async Task<IActionResult> Get(int page = 1, 
+                                             int size = 25, 
+                                             string order = "{}", 
+                                             string keyword = null, 
+                                             string filter = "{}")
         {
-            var query = _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate).Take(size).Skip(page * size);
-            var materialTypeDocuments = _materialTypeRepository.Find(query).Select(item => new MaterialTypeDto(item));
+            page = page - 1;
+            var query = 
+                _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
+            var materialTypeDocuments = 
+                _materialTypeRepository.Find(query).Select(item => new MaterialTypeListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                materialTypeDocuments = materialTypeDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                             entity.Description.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+               materialTypeDocuments = 
+                    materialTypeDocuments
+                        .Where(entity => entity.Code.Contains(keyword, 
+                                                              StringComparison.CurrentCultureIgnoreCase) ||
+                                         entity.Name.Contains(keyword, 
+                                                              StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(MaterialTypeDto).GetProperty(key);
+                Dictionary<string, string> orderDictionary = 
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(MaterialTypeListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    materialTypeDocuments = materialTypeDocuments.OrderBy(x => prop.GetValue(x, null));
+                    materialTypeDocuments = 
+                        materialTypeDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    materialTypeDocuments = materialTypeDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                    materialTypeDocuments = 
+                        materialTypeDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            materialTypeDocuments = materialTypeDocuments.ToArray();
+            materialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
             int totalRows = materialTypeDocuments.Count();
+            page = page + 1;
 
             await Task.Yield();
 
@@ -64,15 +81,18 @@ namespace Manufactures.Controllers.Api
             {
                 page,
                 size,
-                count = totalRows
+                total = totalRows
             });
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
         {
-            var Identity = Guid.Parse(id);
-            var materialTypeDto = _materialTypeRepository.Find(item => item.Identity == Identity).Select(item => new MaterialTypeDto(item)).FirstOrDefault();
+            var Identity = Guid.Parse(Id);
+            var materialTypeDto = 
+                _materialTypeRepository.Find(item => item.Identity == Identity)
+                                       .Select(item => new MaterialTypeDocumentDto(item))
+                                       .FirstOrDefault();
             await Task.Yield();
 
             if (materialTypeDto == null)
@@ -93,10 +113,11 @@ namespace Manufactures.Controllers.Api
             return Ok(materialType.Identity);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateMaterialTypeCommand command)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id, 
+                                             [FromBody]UpdateMaterialTypeCommand command)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }
@@ -107,10 +128,10 @@ namespace Manufactures.Controllers.Api
             return Ok(materialType.Identity);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
         {
-            if (!Guid.TryParse(id, out Guid Identity))
+            if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
             }

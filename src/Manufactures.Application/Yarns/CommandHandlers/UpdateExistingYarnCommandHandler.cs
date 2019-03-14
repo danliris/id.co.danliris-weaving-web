@@ -1,9 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Yarns;
 using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,8 +43,8 @@ namespace Manufactures.Application.Yarns.CommandHandlers
             yarnDocument.SetCode(request.Code);
             yarnDocument.SetName(request.Name);
             yarnDocument.SetTags(request.Tags);
-            yarnDocument.SetMaterialTypeDocument(request.MaterialTypeDocument);
-            yarnDocument.SetRingDocument(request.RingDocument);
+            yarnDocument.SetMaterialTypeId(new MaterialTypeId(Guid.Parse(request.MaterialTypeId)));
+            yarnDocument.SetYarnNumberId(new YarnNumberId(Guid.Parse(request.YarnNumberId)));
 
             await _yarnDocumentRepository.Update(yarnDocument);
             _storage.Save();

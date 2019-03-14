@@ -1,11 +1,14 @@
 ﻿using Infrastructure.Domain.Commands;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Domain.Suppliers.Commands
 {
     public class RemoveSupplierCommand : ICommand<WeavingSupplierDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
+
+        public void SetId(Guid Id) { this.Id = Id; }
     }
 }

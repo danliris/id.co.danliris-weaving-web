@@ -1,7 +1,5 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.Construction.Entities;
 using System;
-using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.ReadModels
 {
@@ -17,7 +15,8 @@ namespace Manufactures.Domain.Construction.ReadModels
         public string WarpType { get; internal set; }
         public string WeftType { get; internal set; }
         public double TotalYarn { get; internal set; }
-        public string MaterialType { get; internal set; }
-        public List<ConstructionDetail> ConstructionDetails { get; set; }
+        public Guid? MaterialTypeId { get; internal set; }
+        public string ListOfWarp { get; set; }
+        public string ListOfWeft { get; set; }
     }
 }

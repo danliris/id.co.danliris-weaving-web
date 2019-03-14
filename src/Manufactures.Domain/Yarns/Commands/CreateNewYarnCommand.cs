@@ -1,16 +1,25 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Yarns.ValueObjects;
+using Newtonsoft.Json;
 
 namespace Manufactures.Domain.Yarns.Commands
 {
     public class CreateNewYarnCommand : ICommand<YarnDocument>
     {
+        [JsonProperty(propertyName: "Code")]
         public string Code { get; set; }
+
+        [JsonProperty(propertyName: "Name")]
         public string Name { get; set; }
+
+        [JsonProperty(propertyName: "Tags")]
         public string Tags { get; set; }
-        public MaterialTypeDocumentValueObject MaterialTypeDocument { get; set; }
-        public RingDocumentValueObject RingDocument { get; set; }
+
+        [JsonProperty(propertyName: "MaterialTypeId")]
+        public string MaterialTypeId { get; set; }
+
+        [JsonProperty(propertyName: "YarnNumberId")]
+        public string YarnNumberId { get; set; }
     }
 
     public class CreateNewYarnCommandValidator : AbstractValidator<CreateNewYarnCommand>
@@ -20,12 +29,8 @@ namespace Manufactures.Domain.Yarns.Commands
             RuleFor(command => command.Code).NotEmpty();
             RuleFor(command => command.Name).NotEmpty();
             RuleFor(command => command.Tags).NotEmpty();
-
-            RuleFor(command => command.MaterialTypeDocument.Code).NotEmpty();
-            RuleFor(command => command.MaterialTypeDocument.Name).NotEmpty();
-
-            RuleFor(command => command.RingDocument.Code).NotEmpty();
-            RuleFor(command => command.RingDocument.Number).NotEmpty();
+            RuleFor(command => command.MaterialTypeId).NotEmpty();
+            RuleFor(command => command.YarnNumberId).NotEmpty();
         }
     }
 }

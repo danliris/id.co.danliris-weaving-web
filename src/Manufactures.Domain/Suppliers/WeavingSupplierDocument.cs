@@ -1,29 +1,27 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Suppliers.ReadModels;
-using Moonlay;
 using System;
 
 namespace Manufactures.Domain.Suppliers
 {
     public class WeavingSupplierDocument : AggregateRoot<WeavingSupplierDocument, WeavingSupplierDocumentReadModel>
     {
-        public WeavingSupplierDocument(Guid id, 
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string CoreSupplierId { get; private set; }
+
+        public WeavingSupplierDocument(Guid id,
                                        string code,
                                        string name,
                                        string coreSupplierId) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => coreSupplierId);
-
-            this.MarkTransient();
-
             // Set Properties
             Identity = id;
             Code = code;
             Name = name;
             CoreSupplierId = coreSupplierId;
+
+            this.MarkTransient();
 
             ReadModel = new WeavingSupplierDocumentReadModel(Identity)
             {
@@ -31,8 +29,6 @@ namespace Manufactures.Domain.Suppliers
                 Name = this.Name,
                 CoreSupplierId = this.CoreSupplierId
             };
-
-
         }
 
         public WeavingSupplierDocument(WeavingSupplierDocumentReadModel readModel) : base(readModel)
@@ -42,15 +38,10 @@ namespace Manufactures.Domain.Suppliers
             this.CoreSupplierId = readModel.CoreSupplierId;
         }
 
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string CoreSupplierId { get; private set; }
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
-            if(code != Code)
+            if (code != Code)
             {
                 Code = code;
                 ReadModel.Code = Code;
@@ -61,9 +52,7 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetName(string name)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
-
-            if(name != Name)
+            if (name != Name)
             {
                 Name = name;
                 ReadModel.Name = Name;
@@ -74,9 +63,7 @@ namespace Manufactures.Domain.Suppliers
 
         public void SetCoreSupplierId(string id)
         {
-            Validator.ThrowIfNullOrEmpty(() => id);
-
-            if(id != CoreSupplierId)
+            if (id != CoreSupplierId)
             {
                 CoreSupplierId = id;
                 ReadModel.CoreSupplierId = CoreSupplierId;

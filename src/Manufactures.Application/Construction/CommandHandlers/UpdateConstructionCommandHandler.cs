@@ -4,15 +4,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.Materials.Repositories;
+using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 
 namespace Manufactures.Application.Construction.CommandHandlers
 {
@@ -21,19 +20,23 @@ namespace Manufactures.Application.Construction.CommandHandlers
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
+        public readonly IMaterialTypeRepository _materialTypeRepository;
+        public readonly IYarnNumberRepository _yarnNumberRepository;
 
         public UpdateConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
             _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
+            _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
+            _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             var query = _constructionDocumentRepository.Query;
-            var constructionDocuments = _constructionDocumentRepository.Find(query.Include(o => o.ConstructionDetails)).Where(Entity => Entity.Identity.Equals(request.Id))
+            var constructionDocuments = _constructionDocumentRepository.Find(query).Where(Entity => Entity.Identity.Equals(request.Id))
                                                                        .FirstOrDefault();
 
             var exsistingConstructionNumber = _constructionDocumentRepository
@@ -58,76 +61,71 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetAmountOfWeft(request.AmountOfWeft);
             constructionDocuments.SetWidth(request.Width);
             constructionDocuments.SetWovenType(request.WovenType);
-            constructionDocuments.SetWarpType(request.WarpType);
-            constructionDocuments.SetWeftType(request.WeftType);
+            constructionDocuments.SetWarpType(request.WarpTypeForm);
+            constructionDocuments.SetWeftType(request.WeftTypeForm);
             constructionDocuments.SetTotalYarn(request.TotalYarn);
-            constructionDocuments.SetMaterialType(request.MaterialType);
-
-            // Update Detail
-            foreach (var warp in request.Warps)
-            {
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(warp.Yarn.Id)).FirstOrDefault();
-                var detail = constructionDocuments.ConstructionDetails.ToList()
-                                .Where(o => o.Detail.Equals(Constants.WARP) && o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity).FirstOrDefault();
-
-                if (detail != null)
-                {
-                    detail.SetQuantity(warp.Quantity);
-                    detail.SetInformation(warp.Information);
-                }
-                else
-                {
-                    if (yarnDocument != null)
-                    {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
-                        ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                                       warp.Quantity,
-                                                                                       warp.Information,
-                                                                                       yarn,
-                                                                                       Constants.WARP);
-                        constructionDocuments.AddConstructionDetail(constructionDetail);
-                    }
-                }
-            }
-
-            foreach (var weft in request.Wefts)
-            {
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(weft.Yarn.Id)).FirstOrDefault();
-                var detail = constructionDocuments.ConstructionDetails.ToList()
-                                .Where(o => o.Detail.Equals(Constants.WEFT) && o.Yarn.Deserialize<Yarn>().Id == yarnDocument.Identity).FirstOrDefault();
-
-                if (detail != null)
-                {
-                    detail.SetQuantity(weft.Quantity);
-                    detail.SetInformation(weft.Information);
-                }
-                else
-                {
-                    if (yarnDocument != null)
-                    {
-                        var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
-                        ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                                       weft.Quantity,
-                                                                                       weft.Information,
-                                                                                       yarn,
-                                                                                       Constants.WEFT);
-                        constructionDocuments.AddConstructionDetail(constructionDetail);
-                    }
-                }
-            }
+            constructionDocuments.SetMaterialTypeId(new MaterialTypeId(Guid.Parse(request.MaterialTypeId)));
 
             // Update exsisting & remove if not has inside request & exsisting data
-            foreach(var detail in constructionDocuments.ConstructionDetails)
+            foreach (var warp in constructionDocuments.ListOfWarp)
             {
-                var countIndetailWarp = request.Warps.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
-                var countIndetailWeft = request.Wefts.Where(o => o.Yarn.Id.Equals(detail.Yarn.Deserialize<Yarn>().Id)).Count();
+                var removedWarp = request.ItemsWarp.Where(o => o.YarnId == warp.YarnId).FirstOrDefault();
 
-                if(countIndetailWarp == 0 && countIndetailWeft == 0)
+                if (removedWarp == null)
                 {
-                    constructionDocuments.ConstructionDetails.ToList().Remove(detail);
+                    constructionDocuments.RemoveWarp(warp);
                 }
             }
-            
+
+            foreach (var requestWarp in request.ItemsWarp)
+            {
+
+                var existingWarp = constructionDocuments.ListOfWarp.Where(o => o.YarnId == requestWarp.YarnId).FirstOrDefault();
+
+                if (existingWarp == null)
+                {
+
+                    constructionDocuments.AddWarp(requestWarp);
+                }
+                else
+                {
+
+                    if (existingWarp.YarnId == requestWarp.YarnId)
+                    {
+                        constructionDocuments.UpdateWarp(requestWarp);
+                    }
+                }
+            }
+
+            foreach (var weft in constructionDocuments.ListOfWeft)
+            {
+                var removedWeft = request.ItemsWeft.Where(o => o.YarnId == weft.YarnId).FirstOrDefault();
+
+                if (removedWeft == null)
+                {
+                    constructionDocuments.RemoveWeft(weft);
+                }
+            }
+
+            foreach (var requestweft in request.ItemsWeft)
+            {
+                var existingWeft = constructionDocuments.ListOfWeft.Where(o => o.YarnId == requestweft.YarnId).FirstOrDefault();
+
+                if (existingWeft == null)
+                {
+
+                    constructionDocuments.AddWeft(requestweft);
+                }
+                else
+                {
+                    
+                    if (existingWeft.YarnId == requestweft.YarnId)
+                    {
+                        constructionDocuments.UpdateWeft(requestweft);
+                    }
+                }
+            }
+
             await _constructionDocumentRepository.Update(constructionDocuments);
             _storage.Save();
 

@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Domain.Commands;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Domain.Yarns.Commands
@@ -6,7 +7,12 @@ namespace Manufactures.Domain.Yarns.Commands
 
     public class RemoveExsistingYarnCommand : ICommand<YarnDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 }

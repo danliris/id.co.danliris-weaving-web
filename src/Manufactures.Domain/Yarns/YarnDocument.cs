@@ -1,7 +1,8 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Yarns.ReadModels;
-using Manufactures.Domain.Yarns.ValueObjects;
 using Moonlay;
 using System;
 
@@ -9,36 +10,35 @@ namespace Manufactures.Domain.Yarns
 {
     public class YarnDocument : AggregateRoot<YarnDocument, YarnDocumentReadModel>
     {
+        public string Code { get; private set; }
+        public string Name { get; private set; }
+        public string Tags { get; private set; }
+        public MaterialTypeId MaterialTypeId { get; private set; }
+        public YarnNumberId YarnNumberId { get; private set; }
+
         public YarnDocument(Guid id,
                             string code,
                             string name,
                             string tags,
-                            MaterialTypeDocumentValueObject materialTypeDocument,
-                            RingDocumentValueObject ringDocument) : base(id)
+                            MaterialTypeId materialTypeId,
+                            YarnNumberId yarnNumberId) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => code);
-            Validator.ThrowIfNullOrEmpty(() => name);
-            Validator.ThrowIfNullOrEmpty(() => tags);
-            Validator.ThrowIfNull(() => materialTypeDocument);
-            Validator.ThrowIfNull(() => ringDocument);
-
-            this.MarkTransient();
-
             Identity = id;
             Code = code;
             Name = name;
             Tags = tags;
-            MaterialTypeDocument = materialTypeDocument;
-            RingDocument = ringDocument;
+            MaterialTypeId = materialTypeId;
+            YarnNumberId = yarnNumberId;
+
+            this.MarkTransient();
 
             ReadModel = new YarnDocumentReadModel(Identity)
             {
                 Code = this.Code,
                 Name = this.Name,
                 Tags = this.Tags,
-                MaterialTypeDocument = this.MaterialTypeDocument.Serialize(),
-                RingDocument = this.RingDocument.Serialize()
+                MaterialTypeId = this.MaterialTypeId.Value,
+                YarnNumberId = this.YarnNumberId.Value
             };
 
             ReadModel.AddDomainEvent(new OnYarnAddDocument(this.Identity));
@@ -49,20 +49,16 @@ namespace Manufactures.Domain.Yarns
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Tags = readModel.Tags;
-            this.MaterialTypeDocument = readModel.MaterialTypeDocument.Deserialize<MaterialTypeDocumentValueObject>();
-            this.RingDocument = readModel.RingDocument.Deserialize<RingDocumentValueObject>();
+            this.MaterialTypeId = 
+                readModel.MaterialTypeId.HasValue ? 
+                    new MaterialTypeId(readModel.MaterialTypeId.Value) : null;
+            this.YarnNumberId = 
+                readModel.YarnNumberId.HasValue ? 
+                    new YarnNumberId(readModel.YarnNumberId.Value) : null;
         }
-
-        public string Code { get; private set; }
-        public string Name { get; private set; }
-        public string Tags { get; private set; }
-        public MaterialTypeDocumentValueObject MaterialTypeDocument { get; private set; }
-        public RingDocumentValueObject RingDocument { get; private set; }
 
         public void SetCode(string code)
         {
-            Validator.ThrowIfNullOrEmpty(() => code);
-
             if (Code != code)
             {
                 Code = code;
@@ -74,8 +70,6 @@ namespace Manufactures.Domain.Yarns
 
         public void SetName(string name)
         {
-            Validator.ThrowIfNullOrEmpty(() => name);
-
             if (Name != name)
             {
                 Name = name;
@@ -87,8 +81,6 @@ namespace Manufactures.Domain.Yarns
 
         public void SetTags(string tags)
         {
-            Validator.ThrowIfNullOrEmpty(() => tags);
-
             if (Tags != tags)
             {
                 Tags = tags;
@@ -98,51 +90,23 @@ namespace Manufactures.Domain.Yarns
             }
         }
 
-        public void SetMaterialTypeDocument(MaterialTypeDocumentValueObject document)
+        public void SetMaterialTypeId(MaterialTypeId value)
         {
-            Validator.ThrowIfNull(() => document);
-            int indexDiffence = 0;
-
-
-            if (MaterialTypeDocument.Code != document.Code)
+            if(MaterialTypeId != value)
             {
-                indexDiffence++;
-            }
-
-            if (MaterialTypeDocument.Name != document.Name)
-            {
-                indexDiffence++;
-            }
-
-            if (indexDiffence > 0)
-            {
-                MaterialTypeDocument = new MaterialTypeDocumentValueObject(document.Code, document.Name);
-                ReadModel.MaterialTypeDocument = MaterialTypeDocument.Serialize();
+                MaterialTypeId = value;
+                ReadModel.MaterialTypeId = MaterialTypeId.Value;
 
                 MarkModified();
             }
         }
 
-        public void SetRingDocument(RingDocumentValueObject document)
+        public void SetYarnNumberId(YarnNumberId value)
         {
-            Validator.ThrowIfNull(() => document);
-            int indexDiffence = 0;
-
-
-            if (RingDocument.Code != document.Code)
+            if(YarnNumberId != value)
             {
-                indexDiffence++;
-            }
-
-            if (RingDocument.Number != document.Number)
-            {
-                indexDiffence++;
-            }
-
-            if (indexDiffence > 0)
-            {
-                RingDocument = new RingDocumentValueObject(document.Code, document.Number);
-                ReadModel.RingDocument = RingDocument.Serialize();
+                YarnNumberId = value;
+                ReadModel.YarnNumberId = YarnNumberId.Value;
 
                 MarkModified();
             }

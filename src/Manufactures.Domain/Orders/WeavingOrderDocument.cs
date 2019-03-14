@@ -1,65 +1,71 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.ValueObjects;
-using Moonlay;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 
 namespace Manufactures.Domain.Orders
 {
     public class WeavingOrderDocument : AggregateRoot<WeavingOrderDocument, WeavingOrderDocumentReadModel>
     {
+        public string OrderNumber { get; private set; }
+        public ConstructionId ConstructionId { get; private set; }
+        public DateTimeOffset DateOrdered { get; private set; }
+        public string WarpOrigin { get; private set; }
+        public string WeftOrigin { get; private set; }
+        public int WholeGrade { get; private set; }
+        public string YarnType { get; private set; }
+        public Period Period { get; private set; }
+        public Composition WarpComposition { get; private set; }
+        public Composition WeftComposition { get; private set; }
+        public UnitId UnitId { get; private set; }
+        public string OrderStatus { get; private set; }
+
         public WeavingOrderDocument(Guid id, string orderNumber,
-                                    FabricConstructionDocument fabricConstructionDocument,
+                                    ConstructionId constructionId,
                                     DateTimeOffset dateOrdered,
                                     Period period,
-                                    Composition composition,
+                                    Composition warpComposition,
+                                    Composition weftComposition,
                                     string warpOrigin,
                                     string weftOrigin,
                                     int wholeGrade,
                                     string yarnType,
-                                    WeavingUnit weavingUnit, 
+                                    UnitId unitId,
                                     string orderStatus) : base(id)
         {
-            // Validate Properties
-            Validator.ThrowIfNullOrEmpty(() => orderNumber);
-            Validator.ThrowIfNull(() => fabricConstructionDocument);
-            Validator.ThrowIfNull(() => period);
-            Validator.ThrowIfNull(() => composition);
-            Validator.ThrowIfNullOrEmpty(() => warpOrigin);
-            Validator.ThrowIfNullOrEmpty(() => weftOrigin);
-            Validator.ThrowIfNullOrEmpty(() => yarnType);
-            Validator.ThrowIfNull(() => weavingUnit);
-            Validator.ThrowIfNullOrEmpty(() => orderStatus);
-
-            this.MarkTransient();
-
             // Set Initial Value
             Identity = id;
             OrderNumber = orderNumber;
-            FabricConstructionDocument = fabricConstructionDocument;
+            ConstructionId = constructionId;
             DateOrdered = dateOrdered;
             WarpOrigin = warpOrigin;
             WeftOrigin = weftOrigin;
             WholeGrade = wholeGrade;
             YarnType = yarnType;
             Period = period;
-            Composition = composition;
-            WeavingUnit = weavingUnit;
+            WarpComposition = warpComposition;
+            WeftComposition = weftComposition;
+            UnitId = unitId;
             OrderStatus = orderStatus;
+
+            this.MarkTransient();
 
             ReadModel = new WeavingOrderDocumentReadModel(Identity)
             {
                 OrderNumber = this.OrderNumber,
                 DateOrdered = this.DateOrdered,
-                FabricConstructionDocument = this.FabricConstructionDocument.Serialize(),
+                ConstructionId = this.ConstructionId.Value,
                 WarpOrigin = this.WarpOrigin,
                 WeftOrigin = this.WeftOrigin,
                 WholeGrade = this.WholeGrade,
                 YarnType = this.YarnType,
                 Period = this.Period.Serialize(),
-                Composition = this.Composition.Serialize(),
-                WeavingUnit = this.WeavingUnit.Serialize(),
+                WarpComposition = this.WarpComposition.Serialize(),
+                WeftComposition = this.WeftComposition.Serialize(),
+                UnitId = this.UnitId.Value,
                 OrderStatus = this.OrderStatus
             };
 
@@ -69,36 +75,29 @@ namespace Manufactures.Domain.Orders
         public WeavingOrderDocument(WeavingOrderDocumentReadModel readModel) : base(readModel)
         {
             this.OrderNumber = readModel.OrderNumber;
-            this.FabricConstructionDocument = readModel.FabricConstructionDocument.Deserialize<FabricConstructionDocument>();
+            this.ConstructionId =
+                readModel.ConstructionId.HasValue ? new ConstructionId(readModel.ConstructionId.Value) : null;
             this.DateOrdered = readModel.DateOrdered;
             this.WarpOrigin = readModel.WarpOrigin;
             this.WeftOrigin = readModel.WeftOrigin;
             this.WholeGrade = readModel.WholeGrade;
             this.YarnType = readModel.YarnType;
             this.Period = readModel.Period.Deserialize<Period>();
-            this.Composition = readModel.Composition.Deserialize<Composition>();
-            this.WeavingUnit = readModel.WeavingUnit.Deserialize<WeavingUnit>();
+            this.WarpComposition =
+                readModel.WarpComposition.Deserialize<Composition>();
+            this.WeftComposition =
+                readModel.WeftComposition.Deserialize<Composition>();
+            this.UnitId =
+                readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
             this.OrderStatus = readModel.OrderStatus;
         }
 
-        public string OrderNumber { get; private set; }
-        public FabricConstructionDocument FabricConstructionDocument { get; private set; }
-        public DateTimeOffset DateOrdered { get; private set; }
-        public string WarpOrigin { get; private set; }
-        public string WeftOrigin { get; private set; }
-        public int WholeGrade { get; private set; }
-        public string YarnType { get; private set; }
-        public Period Period { get; private set; }
-        public Composition Composition { get; private set; }
-        public WeavingUnit WeavingUnit { get; private set; }
-        public string OrderStatus { get; private set; }
-
         public void SetOrderStatus(string orderStatus)
         {
-            Validator.ThrowIfNullOrEmpty(() => orderStatus);
 
-            if(OrderStatus != orderStatus)
+            if (OrderStatus != orderStatus)
             {
+
                 OrderStatus = orderStatus;
                 ReadModel.OrderStatus = OrderStatus;
 
@@ -108,10 +107,10 @@ namespace Manufactures.Domain.Orders
 
         public void SetWarpOrigin(string warpOrigin)
         {
-            Validator.ThrowIfNull(() => warpOrigin);
 
             if (warpOrigin != WarpOrigin)
             {
+
                 WarpOrigin = warpOrigin;
                 ReadModel.WarpOrigin = WarpOrigin;
 
@@ -121,10 +120,10 @@ namespace Manufactures.Domain.Orders
 
         public void SetWeftOrigin(string weftOrigin)
         {
-            Validator.ThrowIfNull(() => weftOrigin);
 
-            if(weftOrigin != WeftOrigin)
+            if (weftOrigin != WeftOrigin)
             {
+
                 WeftOrigin = weftOrigin;
                 ReadModel.WeftOrigin = WeftOrigin;
 
@@ -156,14 +155,13 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetFabricConstructionDocument(FabricConstructionDocument fabricConstructionDocument)
+        public void SetFabricConstructionDocument(ConstructionId constructionId)
         {
-            Validator.ThrowIfNull(() => fabricConstructionDocument);
 
-            if(fabricConstructionDocument != FabricConstructionDocument)
+            if (constructionId != ConstructionId)
             {
-                FabricConstructionDocument = fabricConstructionDocument;
-                ReadModel.FabricConstructionDocument = FabricConstructionDocument.Serialize();
+                ConstructionId = constructionId;
+                ReadModel.ConstructionId = ConstructionId.Value;
 
                 MarkModified();
             }
@@ -171,10 +169,10 @@ namespace Manufactures.Domain.Orders
 
         public void SetPeriod(Period period)
         {
-            Validator.ThrowIfNull(() => period);
 
             if (period != Period)
             {
+
                 Period = period;
                 ReadModel.Period = Period.Serialize();
 
@@ -182,27 +180,40 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetComposition(Composition composition)
+        public void SetWarpComposition(Composition composition)
         {
-            Validator.ThrowIfNull(() => composition);
 
-            if (composition != Composition)
+            if (composition != WarpComposition)
             {
-                Composition = composition;
-                ReadModel.Composition = Composition.Serialize();
+
+                WarpComposition = composition;
+                ReadModel.WarpComposition = WarpComposition.Serialize();
 
                 MarkModified();
             }
         }
 
-        public void SetWeavingUnit(WeavingUnit weavingUnit)
+        public void SetWeftComposition(Composition composition)
         {
-            Validator.ThrowIfNull(() => weavingUnit);
 
-            if(weavingUnit != WeavingUnit)
+            if (composition != WeftComposition)
             {
-                WeavingUnit = weavingUnit;
-                ReadModel.WeavingUnit = WeavingUnit.Serialize();
+
+                WeftComposition = composition;
+                ReadModel.WeftComposition = WeftComposition.Serialize();
+
+                MarkModified();
+            }
+        }
+
+        public void SetWeavingUnit(UnitId value)
+        {
+
+            if (UnitId != value)
+            {
+
+                UnitId = value;
+                ReadModel.UnitId = value.Value;
 
                 MarkModified();
             }

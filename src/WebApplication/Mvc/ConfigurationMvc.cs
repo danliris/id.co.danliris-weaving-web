@@ -1,4 +1,6 @@
-﻿using ExtCore.Mvc.Infrastructure.Actions;
+﻿using DanLiris.Admin.Web;
+using DanLiris.Admin.Web.Utils;
+using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
 using Manufactures.Domain.Orders.Commands;
@@ -18,11 +20,13 @@ namespace Infrastructure.Mvc
                 c.Filters.Add<TransactionDbFilter>();
 
                 c.Filters.Add<GlobalExceptionFilter>();
+                c.Filters.Add(typeof(ValidateModelStateAttribute));
             });
 
             builder.AddFluentValidation(fv =>
             {
                 fv.RegisterValidatorsFromAssemblyContaining<PlaceOrderCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }
     }

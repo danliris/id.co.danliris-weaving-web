@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Yarns;
 using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
@@ -33,12 +34,12 @@ namespace Manufactures.Application.Yarns.CommandHandlers
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
 
-            var newYarn = new YarnDocument(Guid.NewGuid(), 
-                                           request.Code, 
+            var newYarn = new YarnDocument(Guid.NewGuid(),
+                                           request.Code,
                                            request.Name,
                                            request.Tags,
-                                           request.MaterialTypeDocument, 
-                                           request.RingDocument);
+                                           new MaterialTypeId(Guid.Parse(request.MaterialTypeId)),
+                                           new YarnNumberId(Guid.Parse(request.YarnNumberId)));
 
             await _yarnDocumentRepository.Update(newYarn);
             _storage.Save();

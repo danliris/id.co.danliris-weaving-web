@@ -1,24 +1,45 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Yarns.ValueObjects;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.Construction.Commands
 {
     public class PlaceConstructionCommand : ICommand<ConstructionDocument>
     {
+        [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; set; }
+
+        [JsonProperty(PropertyName = "AmountOfWarp")]
         public int AmountOfWarp { get; set; }
+
+        [JsonProperty(PropertyName = "AmountOfWeft")]
         public int AmountOfWeft { get; set; }
+
+        [JsonProperty(PropertyName = "Width")]
         public int Width { get; set; }
+
+        [JsonProperty(PropertyName = "WovenType")]
         public string WovenType { get; set; }
+
+        [JsonProperty(PropertyName = "WarpTypeForm")]
         public string WarpTypeForm { get; set; }
+
+        [JsonProperty(PropertyName = "WeftTypeForm")]
         public string WeftTypeForm { get; set; }
+
+        [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; set; }
-        public MaterialTypeDocument MaterialTypeDocument { get; set; }
-        public List<Warp> ItemsWarp { get; set; }
-        public List<Weft> ItemsWeft { get; set; }
+
+        [JsonProperty(PropertyName = "MaterialTypeId")]
+        public string MaterialTypeId { get; set; }
+
+        [JsonProperty(PropertyName = "ItemsWarp")]
+        public List<ConstructionDetail> ItemsWarp { get; set; }
+
+        [JsonProperty(PropertyName = "ItemsWeft")]
+        public List<ConstructionDetail> ItemsWeft { get; set; }
     }
 
     public class PlaceConstructionCommandValidator : AbstractValidator<PlaceConstructionCommand>
@@ -33,8 +54,7 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WarpTypeForm).NotEmpty();
             RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
-            RuleFor(command => command.ItemsWarp).NotEmpty();
-            RuleFor(command => command.ItemsWeft).NotEmpty();
+            RuleFor(command => command.MaterialTypeId).NotEmpty();
         }
     }
 }

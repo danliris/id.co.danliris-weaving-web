@@ -1,31 +1,27 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Application.Helpers;
 using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Entities;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Manufactures.Domain.Shared.ValueObjects;
 
 namespace Manufactures.Application.Construction.CommandHandlers
 {
-    public class PlaceConstructionCommandHandler : ICommandHandler<PlaceConstructionCommand, ConstructionDocument>
+    public class PlaceConstructionCommandHandler : ICommandHandler<PlaceConstructionCommand,
+                                                                   ConstructionDocument>
     {
         private readonly IStorage _storage;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
-        private readonly IYarnDocumentRepository _yarnDocumentRepository;
 
         public PlaceConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
             _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
-            _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request,
@@ -51,37 +47,26 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 warpType: request.WarpTypeForm,
                                                                 weftType: request.WeftTypeForm,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialTypeDocument: request.MaterialTypeDocument);
+                                                                materialTypeId: new MaterialTypeId(Guid.Parse(request.MaterialTypeId)));
 
-            foreach (var detail in request.ItemsWarp)
+
+            if (request.ItemsWarp.Count > 0)
             {
-                detail.SetDetail(Constants.WARP);
-
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                                               detail.Quantity,
-                                                                                               detail.Information,
-                                                                                               yarn,
-                                                                                               detail.Detail);
-
-                constructionDocument.AddConstructionDetail(constructionDetail);
+                foreach (var warp in request.ItemsWarp)
+                {
+                    constructionDocument.AddWarp(warp);
+                }
             }
 
-            foreach (var detail in request.ItemsWeft)
+            if (request.ItemsWeft.Count > 0)
             {
-                detail.SetDetail(Constants.WEFT);
-
-                var yarnDocument = _yarnDocumentRepository.Find(o => o.Identity.Equals(detail.Yarn.Id)).FirstOrDefault();
-                var yarn = new Yarn(yarnDocument.Identity, yarnDocument.Code, yarnDocument.Name);
-                ConstructionDetail constructionDetail = new ConstructionDetail(Guid.NewGuid(),
-                                                                               detail.Quantity,
-                                                                               detail.Information,
-                                                                               yarn,
-                                                                               detail.Detail);
-                constructionDocument.AddConstructionDetail(constructionDetail);
+                foreach (var weft in request.ItemsWeft)
+                {
+                    constructionDocument.AddWeft(weft);
+                }
             }
-            
+
+
             await _constructionDocumentRepository.Update(constructionDocument);
             _storage.Save();
 

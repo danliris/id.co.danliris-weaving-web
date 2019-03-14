@@ -1,28 +1,54 @@
-﻿using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction;
+﻿using Manufactures.Domain.Construction;
 using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.GlobalValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Manufactures.Dtos.Construction
 {
     public class ConstructionByIdDto
     {
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
-        public MaterialTypeDocument MaterialTypeDocument { get; }
+
+        [JsonProperty(PropertyName = "MaterialTypeId")]
+        public MaterialTypeValueObject MaterialTypeDocument { get; }
+
+        [JsonProperty(PropertyName = "WovenType")]
         public string WovenType { get; }
+
+        [JsonProperty(PropertyName = "AmountOfWarp")]
         public int AmountOfWarp { get; }
+
+        [JsonProperty(PropertyName = "AmountOfWeft")]
         public int AmountOfWeft { get; }
+
+        [JsonProperty(PropertyName = "Width")]
         public int Width { get; }
+
+        [JsonProperty(PropertyName = "WarpTypeForm")]
         public string WarpTypeForm { get; }
+
+        [JsonProperty(PropertyName = "WeftTypeForm")]
         public string WeftTypeForm { get; }
+
+        [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
-        public IReadOnlyCollection<Warp> ItemsWarp { get; }
-        public IReadOnlyCollection<Weft> ItemsWeft { get; }
+
+        [JsonProperty(PropertyName = "ItemsWarp")]
+        public IReadOnlyCollection<Warp> ItemsWarp { get; private set; }
+
+        [JsonProperty(PropertyName = "ItemsWeft")]
+        public IReadOnlyCollection<Weft> ItemsWeft { get; private set; }
 
 
-        public ConstructionByIdDto(ConstructionDocument document)
+        public ConstructionByIdDto(ConstructionDocument document, 
+                                   MaterialTypeValueObject materialType)
         {
             Id = document.Identity;
             ConstructionNumber = document.ConstructionNumber;
@@ -33,40 +59,25 @@ namespace Manufactures.Dtos.Construction
             WarpTypeForm = document.WarpType;
             WeftTypeForm = document.WeftType;
             TotalYarn = document.TotalYarn;
-            MaterialTypeDocument = document.MaterialType;
-
-
-            var warps = new List<Warp>();
-            var wefts = new List<Weft>();
-
-            foreach (var constructionDetail in document.ConstructionDetails)
-            {
-                if (constructionDetail.Detail.Contains(Constants.WARP))
-                {
-                    var warpObj = new Warp(constructionDetail.Identity,
-                                           constructionDetail.Quantity,
-                                           constructionDetail.Information,
-                                           constructionDetail.Yarn.Deserialize<Yarn>(),
-                                           constructionDetail.Detail);
-                    warps.Add(warpObj);
-
-                }
-                else if (constructionDetail.Detail.Contains(Constants.WEFT))
-                {
-                    var weftObj = new Weft(constructionDetail.Identity,
-                                           constructionDetail.Quantity,
-                                           constructionDetail.Information,
-                                           constructionDetail.Yarn.Deserialize<Yarn>(),
-                                           constructionDetail.Detail);
-
-                    wefts.Add(weftObj);
-                }
-            }
-
-            this.ItemsWarp = warps;
-            this.ItemsWeft = wefts;
+            MaterialTypeDocument = materialType;
+            
+            ItemsWarp = new List<Warp>();
+            ItemsWeft = new List<Weft>();
         }
 
+        public void AddWarp(Warp value)
+        {
+            var list = ItemsWarp.ToList();
+            list.Add(value);
+            ItemsWarp = list;
+        }
+
+        public void AddWeft(Weft value)
+        {
+            var list = ItemsWeft.ToList();
+            list.Add(value);
+            ItemsWeft = list;
+        }
 
     }
 }
