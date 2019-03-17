@@ -36,8 +36,8 @@ namespace Manufactures.Domain.Construction.Commands
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; set; }
 
-        [JsonProperty(PropertyName = "MaterialTypeId")]
-        public string MaterialTypeId { get; set; }
+        [JsonProperty(PropertyName = "MaterialTypeName")]
+        public string MaterialTypeName { get; set; }
 
         [JsonProperty(PropertyName = "ItemsWarp")]
         public List<ConstructionDetail> ItemsWarp { get; set; }
@@ -62,7 +62,7 @@ namespace Manufactures.Domain.Construction.Commands
             RuleFor(command => command.WarpTypeForm).NotEmpty();
             RuleFor(command => command.WeftTypeForm).NotEmpty();
             RuleFor(command => command.TotalYarn).NotEmpty();
-            RuleFor(command => command.MaterialTypeId).NotEmpty();
+            RuleFor(command => command.MaterialTypeName).NotEmpty();
         }
     }
 }

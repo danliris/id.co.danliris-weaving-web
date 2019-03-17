@@ -50,7 +50,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<string>("ListOfWeft")
                         .HasMaxLength(20000);
 
-                    b.Property<Guid?>("MaterialTypeId");
+                    b.Property<string>("MaterialTypeName");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);

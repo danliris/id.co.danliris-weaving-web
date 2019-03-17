@@ -55,6 +55,7 @@ namespace Manufactures.Tests.Rings.CommandHandlers
             //    cancellationToken);
 
             // Assert
+            await Task.Yield();
             Assert.True(false);
         }
     }

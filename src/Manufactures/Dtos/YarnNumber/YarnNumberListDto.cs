@@ -17,11 +17,15 @@ namespace Manufactures.Dtos.YarnNumber
         [JsonProperty(PropertyName = "Number")]
         public int Number { get; }
 
+        [JsonProperty(PropertyName = "RingType")]
+        public string RingType { get; }
+
         public YarnNumberListDto(YarnNumberDocument ringDocument)
         {
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
             Number = ringDocument.Number;
+            RingType = ringDocument.RingType;
         }
     }
 }

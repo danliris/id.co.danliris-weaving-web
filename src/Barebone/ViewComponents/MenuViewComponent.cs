@@ -11,6 +11,7 @@ namespace Barebone.ViewComponents
     {
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            await Task.Yield();
             return this.View(new MenuViewModelFactory().Create());
         }
     }
