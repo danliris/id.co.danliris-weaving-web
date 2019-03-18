@@ -20,7 +20,7 @@ namespace Manufactures.Domain.Construction
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
-        public MaterialTypeId MaterialTypeId { get; private set; }
+        public string MaterialTypeName { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }
 
@@ -33,7 +33,7 @@ namespace Manufactures.Domain.Construction
                                     int amountOfWeft,
                                     int width,
                                     double totalYarn,
-                                    MaterialTypeId materialTypeId) : base(id)
+                                    string materialTypeName) : base(id)
         {
             // Set Properties
             Identity = id;
@@ -45,7 +45,7 @@ namespace Manufactures.Domain.Construction
             WarpType = warpType;
             WeftType = weftType;
             TotalYarn = totalYarn;
-            MaterialTypeId = materialTypeId;
+            MaterialTypeName = materialTypeName;
             ListOfWarp = new List<ConstructionDetail>();
             ListOfWeft = new List<ConstructionDetail>();
 
@@ -61,7 +61,7 @@ namespace Manufactures.Domain.Construction
                 WarpType = WarpType,
                 WeftType = WeftType,
                 TotalYarn = TotalYarn,
-                MaterialTypeId = materialTypeId.Value,
+                MaterialTypeName = materialTypeName,
                 ListOfWarp = ListOfWarp.Serialize(),
                 ListOfWeft = ListOfWeft.Serialize()
             };
@@ -79,7 +79,7 @@ namespace Manufactures.Domain.Construction
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialTypeId = ReadModel.MaterialTypeId.HasValue ? new MaterialTypeId(readModel.MaterialTypeId.Value) : null;
+            this.MaterialTypeName = readModel.MaterialTypeName;
             this.ListOfWarp = !String.IsNullOrEmpty(readModel.ListOfWarp) ? readModel.ListOfWarp.Deserialize<List<ConstructionDetail>>() : null;
             this.ListOfWeft = !String.IsNullOrEmpty(readModel.ListOfWeft) ? readModel.ListOfWeft.Deserialize<List<ConstructionDetail>>() : null;
             this.Date = readModel.CreatedDate;
@@ -162,12 +162,12 @@ namespace Manufactures.Domain.Construction
         }
 
 
-        public void SetMaterialTypeId(MaterialTypeId value)
+        public void SetMaterialTypeName(string value)
         {
-            if (MaterialTypeId != value)
+            if (MaterialTypeName != value)
             {
-                MaterialTypeId = value;
-                ReadModel.MaterialTypeId = MaterialTypeId.Value;
+                MaterialTypeName = value;
+                ReadModel.MaterialTypeName = MaterialTypeName;
 
                 MarkModified();
             }

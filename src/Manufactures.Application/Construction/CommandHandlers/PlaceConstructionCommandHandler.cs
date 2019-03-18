@@ -47,7 +47,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
                                                                 warpType: request.WarpTypeForm,
                                                                 weftType: request.WeftTypeForm,
                                                                 totalYarn: request.TotalYarn,
-                                                                materialTypeId: new MaterialTypeId(Guid.Parse(request.MaterialTypeId)));
+                                                                materialTypeName: request.MaterialTypeName);
 
 
             if (request.ItemsWarp.Count > 0)

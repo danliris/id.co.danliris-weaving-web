@@ -21,7 +21,7 @@ namespace Infrastructure.Mvc.Filters
         {
             StringValues contentTypes = new StringValues();
             context.HttpContext.Request.Headers.TryGetValue("Content-Type", out contentTypes);
-            object info = null, data = null;
+            object info = null, data = null, errors = null;
 
             // FOR API
             if (!contentTypes.Any(o => o == "application/x-www-form-urlencoded"))
@@ -56,7 +56,7 @@ namespace Infrastructure.Mvc.Filters
                     {
                         context.ModelState.AddModelError(failures.PropertyName, failures.ErrorMessage);
                     }
-
+                    errors = context.ModelState.ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(e => e.ErrorMessage).FirstOrDefault());
                     info = context.ModelState.Select(o => new { propertyName = o.Key, errors = o.Value.Errors.Select(e => e.ErrorMessage) });
                     message = ex.Message;
                     status = HttpStatusCode.BadRequest;
@@ -74,6 +74,7 @@ namespace Infrastructure.Mvc.Filters
                     success = false,
                     data,
                     info,
+                    error = errors,
                     message,
                     trace = context.Exception.StackTrace
                 }));
