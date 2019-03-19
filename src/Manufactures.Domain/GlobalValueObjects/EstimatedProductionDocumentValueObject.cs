@@ -7,27 +7,23 @@ namespace Manufactures.Domain.GlobalValueObjects
 {
     public class EstimatedProductionDocumentValueObject
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Identity { get; }
-
         [JsonProperty(PropertyName = "GradeA")]
-        public double GradeA { get; }
+        public int GradeA { get; }
 
         [JsonProperty(PropertyName = "GradeB")]
-        public double GradeB { get; }
+        public int GradeB { get; }
 
         [JsonProperty(PropertyName = "GradeC")]
-        public double GradeC { get; }
+        public int GradeC { get; }
 
         [JsonProperty(PropertyName = "GradeD")]
-        public double GradeD { get; }
+        public int GradeD { get; }
 
         [JsonProperty(PropertyName = "WholeGrade")]
-        public double WholeGrade { get; }
+        public int WholeGrade { get; }
 
-        public EstimatedProductionDocumentValueObject(Guid identity, double gradeA, double gradeB, double gradeC, double gradeD, double wholeGrade)
+        public EstimatedProductionDocumentValueObject(int gradeA, int gradeB, int gradeC, int gradeD, int wholeGrade)
         {
-            Identity = identity;
             GradeA = gradeA;
             GradeB = gradeB;
             GradeC = gradeC;

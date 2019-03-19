@@ -1,5 +1,6 @@
 ﻿using Manufactures.Domain.Construction;
 using Manufactures.Domain.Estimations.Productions;
+using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
@@ -8,11 +9,16 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using ConstructionDocument = Manufactures.Domain.Construction.ConstructionDocument;
 
 namespace Manufactures.Dtos.Order
 {
-    public class OrderReportBySearch
+    public class OrderReportBySearchDto
     {
+        //private WeavingOrderDocument order;
+        //private ConstructionDocument constructionDocument;
+        //private List<EstimatedProductionDocument> estimationDocument;
+
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
@@ -31,9 +37,6 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; private set; }
 
-        //[JsonProperty(PropertyName = "YarnType")]
-        //public string YarnType { get; private set; }
-
         [JsonProperty(PropertyName = "WarpComposition")]
         public Composition WarpComposition { get; private set; }
 
@@ -46,16 +49,16 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "YarnNumber")]
         public string YarnNumber { get; private set; }
 
-        //[JsonProperty(PropertyName = "WarpOrigin")]
-        //public string WarpOrigin { get; private set; }
+        //[JsonProperty(PropertyName = "WarpType")]
+        //public string WarpType { get; private set; }
 
-        //[JsonProperty(PropertyName = "WeftOrigin")]
-        //public string WeftOrigin { get; private set; }
+        //[JsonProperty(PropertyName = "WeftType")]
+        //public string WeftType{ get; private set; }
 
         [JsonProperty(PropertyName = "EstimatedProductionDocument")]
         public EstimatedProductionDocumentValueObject EstimatedProductionDocument { get; private set; }
 
-        public OrderReportBySearch(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, EstimatedProductionDocument estimatedProduction)
+        public OrderReportBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
@@ -63,7 +66,6 @@ namespace Manufactures.Dtos.Order
             Period = weavingOrderDocument.Period;
             UnitId = weavingOrderDocument.UnitId;
             DateOrdered = weavingOrderDocument.DateOrdered;
-            //YarnType = weavingOrderDocument.YarnType;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
             //WarpOrigin = weavingOrderDocument.WarpOrigin;
@@ -74,12 +76,18 @@ namespace Manufactures.Dtos.Order
                                                                     constructionDocument.AmountOfWeft,
                                                                     constructionDocument.TotalYarn);
             FabricConstructionDocument = construction;
-            foreach (var item in estimatedProduction.EstimationProducts)
+            YarnNumber = yarnNumber;
+            foreach (var item in estimationDocument)
             {
-                //var query = item
+                foreach (var datum in item.EstimationProducts)
+                {
+                    if (datum.OrderDocument.Deserialize<OrderDocumentValueObject>().OrderNumber.Equals(weavingOrderDocument.OrderNumber))
+                    {
+                        var productGrade = datum.ProductGrade.Deserialize<ProductGrade>();
+                        EstimatedProductionDocument = new EstimatedProductionDocumentValueObject(productGrade.GradeA, productGrade.GradeB, productGrade.GradeC, productGrade.GradeD, weavingOrderDocument.WholeGrade);
+                    }
+                }
             }
-            //var estimatedproduction = new EstimatedProductionDocumentValueObject(estimatedProduction.Identity, estimatedProduction.GradeA, estimatedProduction.GradeB, estimatedProduction.GradeC, estimatedProduction.GradeD, estimatedProduction.WholeGrade);
-            //EstimatedProductionDocument = estimatedproduction;
         }
     }
 }

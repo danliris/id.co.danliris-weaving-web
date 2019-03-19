@@ -12,6 +12,7 @@
         public static string FILAMENT = "Filament";
 
         // Status on Manufacture Order
+        public static string ALL = "ALL";
         public static string ONORDER = "OPEN-ORDER";
         public static string ONESTIMATED = "ESTIMATED-PRODUCTION";
     }

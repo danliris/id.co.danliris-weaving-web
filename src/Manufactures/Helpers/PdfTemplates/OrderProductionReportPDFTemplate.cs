@@ -2,6 +2,7 @@
 using iTextSharp.text.pdf;
 using Manufactures.Domain.Orders;
 using Manufactures.Dtos;
+using Manufactures.Dtos.Order;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +12,7 @@ namespace Manufactures.Helpers.PdfTemplates
 {
     public class OrderProductionReportPDFTemplate
     {
-        public MemoryStream GenerateSOPReportPdf(WeavingOrderDocumentDto[] weavingModel)
+        public MemoryStream GenerateSOPReportPdf(OrderReportBySearchDto[] weavingModel)
         {
             const int MARGIN = 16;
 

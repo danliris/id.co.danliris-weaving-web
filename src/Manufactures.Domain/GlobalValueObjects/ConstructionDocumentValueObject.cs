@@ -11,11 +11,19 @@ namespace Manufactures.Domain.GlobalValueObjects
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
+        [JsonProperty(PropertyName = "AmountOfWarp")]
+        public int AmountOfWarp { get; }
+
+        [JsonProperty(PropertyName = "AmountOfWeft")]
+        public int AmountOfWeft { get; }
+
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
         public ConstructionDocumentValueObject(Guid identity,
                                                string constructionNumber,
+                                               int amountOfWarp,
+                                               int amountOfWeft,
                                                double totalYarn)
         {
             Identity = identity;

@@ -56,6 +56,8 @@ namespace Manufactures.Dtos.Order
             OrderStatus = weavingOrderDocument.OrderStatus;
             var construction = new ConstructionDocumentValueObject(constructionDocument.Identity, 
                                                                    constructionDocument.ConstructionNumber, 
+                                                                   constructionDocument.AmountOfWarp,
+                                                                   constructionDocument.AmountOfWeft,
                                                                    constructionDocument.TotalYarn);
             FabricConstructionDocument = construction;
             DateOrdered = weavingOrderDocument.DateOrdered;
