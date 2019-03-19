@@ -61,7 +61,7 @@ namespace Manufactures.Controllers.Api
                                            .FirstOrDefault();
                 var yarnNumber = 
                     _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
-                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number))
+                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
                                          .FirstOrDefault();
 
                 var data = new YarnDocumentListDto(yarn, materialType, yarnNumber);
@@ -122,7 +122,7 @@ namespace Manufactures.Controllers.Api
                                        .FirstOrDefault();
             var yarnNumberDocument =
                 _yarnNumberRepository.Find(item => item.Identity == yarn.YarnNumberId.Value)
-                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number))
+                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
                                      .FirstOrDefault();
             await Task.Yield();
 

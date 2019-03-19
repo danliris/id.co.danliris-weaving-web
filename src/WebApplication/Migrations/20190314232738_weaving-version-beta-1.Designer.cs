@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20190312090608_weaving-version-beta-1")]
+    [Migration("20190314232738_weaving-version-beta-1")]
     partial class weavingversionbeta1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -52,7 +52,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<string>("ListOfWeft")
                         .HasMaxLength(20000);
 
-                    b.Property<Guid?>("MaterialTypeId");
+                    b.Property<string>("MaterialTypeName");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);

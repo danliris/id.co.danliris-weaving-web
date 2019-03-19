@@ -106,13 +106,8 @@ namespace Manufactures.Controllers.Api
             var constructionDocument =
                 _constructionDocumentRepository.Find(o => o.Identity == Identity)
                                                .FirstOrDefault();
-            var materialTypeDocument = 
-                _materialTypeRepository.Find(o => o.Identity == constructionDocument.MaterialTypeId.Value)
-                                       .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
-                                       .FirstOrDefault();
 
-            var result = new ConstructionByIdDto(constructionDocument, 
-                                                 materialTypeDocument);
+            var result = new ConstructionByIdDto(constructionDocument);
             
             foreach(var detail in constructionDocument.ListOfWarp)
             {

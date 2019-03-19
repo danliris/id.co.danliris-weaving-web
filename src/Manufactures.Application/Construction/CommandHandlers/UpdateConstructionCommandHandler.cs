@@ -64,7 +64,7 @@ namespace Manufactures.Application.Construction.CommandHandlers
             constructionDocuments.SetWarpType(request.WarpTypeForm);
             constructionDocuments.SetWeftType(request.WeftTypeForm);
             constructionDocuments.SetTotalYarn(request.TotalYarn);
-            constructionDocuments.SetMaterialTypeId(new MaterialTypeId(Guid.Parse(request.MaterialTypeId)));
+            constructionDocuments.SetMaterialTypeName(request.MaterialTypeName);
 
             // Update exsisting & remove if not has inside request & exsisting data
             foreach (var warp in constructionDocuments.ListOfWarp)

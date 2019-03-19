@@ -16,8 +16,8 @@ namespace Manufactures.Dtos.Construction
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
-        [JsonProperty(PropertyName = "MaterialTypeId")]
-        public MaterialTypeValueObject MaterialTypeDocument { get; }
+        [JsonProperty(PropertyName = "MaterialTypeName")]
+        public string MaterialTypeName { get; }
 
         [JsonProperty(PropertyName = "WovenType")]
         public string WovenType { get; }
@@ -47,8 +47,7 @@ namespace Manufactures.Dtos.Construction
         public IReadOnlyCollection<Weft> ItemsWeft { get; private set; }
 
 
-        public ConstructionByIdDto(ConstructionDocument document, 
-                                   MaterialTypeValueObject materialType)
+        public ConstructionByIdDto(ConstructionDocument document)
         {
             Id = document.Identity;
             ConstructionNumber = document.ConstructionNumber;
@@ -59,7 +58,7 @@ namespace Manufactures.Dtos.Construction
             WarpTypeForm = document.WarpType;
             WeftTypeForm = document.WeftType;
             TotalYarn = document.TotalYarn;
-            MaterialTypeDocument = materialType;
+            MaterialTypeName = document.MaterialTypeName;
             
             ItemsWarp = new List<Warp>();
             ItemsWeft = new List<Weft>();
