@@ -12,7 +12,7 @@ namespace Manufactures.Helpers.PdfTemplates
 {
     public class OrderProductionReportPDFTemplate
     {
-        public MemoryStream GenerateSOPReportPdf(OrderReportBySearchDto[] weavingModel)
+        public MemoryStream GenerateSOPReportPdf(List<OrderReportBySearchDto> weavingModel)
         {
             const int MARGIN = 16;
 
@@ -69,8 +69,8 @@ namespace Manufactures.Helpers.PdfTemplates
             #region Body
 
             //Body (1st Row Table)
-            PdfPTable bodyTableFirst = new PdfPTable(8);
-            float[] bodyTableFirstWidths = new float[] { 4f, 10f, 16f, 8f, 15f, 20f, 8f, 15f };
+            PdfPTable bodyTableFirst = new PdfPTable(9);
+            float[] bodyTableFirstWidths = new float[] { 4f, 10f, 16f, 8f, 15f, 15f, 20f, 8f, 15f };
             bodyTableFirst.SetWidths(bodyTableFirstWidths);
             bodyTableFirst.WidthPercentage = 100;
 
@@ -78,8 +78,9 @@ namespace Manufactures.Helpers.PdfTemplates
             PdfPCell bodyCellFirstNumber = new PdfPCell();
             PdfPCell bodyCellFirstDate = new PdfPCell();
             PdfPCell bodyCellFirstConstructionNumber = new PdfPCell();
-            PdfPCell bodyCellFirstMaterialType = new PdfPCell();
-            PdfPCell bodyCellFirstBlended = new PdfPCell();
+            PdfPCell bodyCellFirstYarnType = new PdfPCell();
+            PdfPCell bodyCellFirstWarpBlended = new PdfPCell();
+            PdfPCell bodyCellFirstWeftBlended = new PdfPCell();
             PdfPCell bodyCellFirstEstimatedProduction = new PdfPCell();
             PdfPCell bodyCellFirstTotal = new PdfPCell();
             PdfPCell bodyCellFirstWoven = new PdfPCell();
@@ -89,8 +90,9 @@ namespace Manufactures.Helpers.PdfTemplates
             bodyCellFirstNumber.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellFirstDate.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellFirstConstructionNumber.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellFirstMaterialType.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellFirstBlended.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellFirstYarnType.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellFirstWarpBlended.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellFirstWeftBlended.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellFirstEstimatedProduction.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellFirstTotal.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellFirstWoven.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -107,12 +109,15 @@ namespace Manufactures.Helpers.PdfTemplates
             bodyCellFirstConstructionNumber.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER;
             bodyTableFirst.AddCell(bodyCellFirstConstructionNumber);
 
-            bodyCellFirstMaterialType.Phrase = new Phrase("No. Benang", bold_font);
-            bodyCellFirstMaterialType.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER;
-            bodyTableFirst.AddCell(bodyCellFirstMaterialType);
+            bodyCellFirstYarnType.Phrase = new Phrase("No. Benang", bold_font);
+            bodyCellFirstYarnType.Border = Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.TOP_BORDER;
+            bodyTableFirst.AddCell(bodyCellFirstYarnType);
 
-            bodyCellFirstBlended.Phrase = new Phrase("Blended (%)", bold_font);
-            bodyTableFirst.AddCell(bodyCellFirstBlended);
+            bodyCellFirstWarpBlended.Phrase = new Phrase("Komposisi Lusi(%)", bold_font);
+            bodyTableFirst.AddCell(bodyCellFirstWarpBlended);
+
+            bodyCellFirstWeftBlended.Phrase = new Phrase("Komposisi Pakan(%)", bold_font);
+            bodyTableFirst.AddCell(bodyCellFirstWeftBlended);
 
             bodyCellFirstEstimatedProduction.Phrase = new Phrase("Estimasi Produksi", bold_font);
             bodyTableFirst.AddCell(bodyCellFirstEstimatedProduction);
@@ -125,8 +130,8 @@ namespace Manufactures.Helpers.PdfTemplates
             bodyTableFirst.AddCell(bodyCellFirstWoven);
 
             //Body (2nd Row Table)
-            PdfPTable bodyTableSecond = new PdfPTable(15);
-            float[] bodyTableSecondWidths = new float[] { 4f, 10f, 16f, 8f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 8f, 5f, 5f, 5f };
+            PdfPTable bodyTableSecond = new PdfPTable(18);
+            float[] bodyTableSecondWidths = new float[] { 4f, 10f, 16f, 8f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 8f, 5f, 5f, 5f };
             bodyTableSecond.SetWidths(bodyTableSecondWidths);
             bodyTableSecond.WidthPercentage = 100;
 
@@ -134,10 +139,13 @@ namespace Manufactures.Helpers.PdfTemplates
             PdfPCell bodyCellSecondNumber = new PdfPCell();
             PdfPCell bodyCellSecondDate = new PdfPCell();
             PdfPCell bodyCellSecondConstructionNumber = new PdfPCell();
-            PdfPCell bodyCellSecondMaterialType = new PdfPCell();
-            PdfPCell bodyCellSecondBlendedPoly = new PdfPCell();
-            PdfPCell bodyCellSecondBlendedCotton = new PdfPCell();
-            PdfPCell bodyCellSecondBlendedOther = new PdfPCell();
+            PdfPCell bodyCellSecondYarnType = new PdfPCell();
+            PdfPCell bodyCellSecondWarpBlendedPoly = new PdfPCell();
+            PdfPCell bodyCellSecondWarpBlendedCotton = new PdfPCell();
+            PdfPCell bodyCellSecondWarpBlendedOther = new PdfPCell();
+            PdfPCell bodyCellSecondWeftBlendedPoly = new PdfPCell();
+            PdfPCell bodyCellSecondWeftBlendedCotton = new PdfPCell();
+            PdfPCell bodyCellSecondWeftBlendedOther = new PdfPCell();
             PdfPCell bodyCellSecondEstimatedProductionA = new PdfPCell();
             PdfPCell bodyCellSecondEstimatedProductionB = new PdfPCell();
             PdfPCell bodyCellSecondEstimatedProductionC = new PdfPCell();
@@ -151,10 +159,13 @@ namespace Manufactures.Helpers.PdfTemplates
             bodyCellSecondNumber.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellSecondDate.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellSecondConstructionNumber.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellSecondMaterialType.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellSecondBlendedPoly.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellSecondBlendedCotton.HorizontalAlignment = Element.ALIGN_CENTER;
-            bodyCellSecondBlendedOther.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondYarnType.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWarpBlendedPoly.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWarpBlendedCotton.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWarpBlendedOther.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWeftBlendedPoly.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWeftBlendedCotton.HorizontalAlignment = Element.ALIGN_CENTER;
+            bodyCellSecondWeftBlendedOther.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellSecondEstimatedProductionA.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellSecondEstimatedProductionB.HorizontalAlignment = Element.ALIGN_CENTER;
             bodyCellSecondEstimatedProductionC.HorizontalAlignment = Element.ALIGN_CENTER;
@@ -179,19 +190,28 @@ namespace Manufactures.Helpers.PdfTemplates
             //bodyCellFirst.Border = Rectangle.NO_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.BOTTOM_BORDER;
             bodyTableSecond.AddCell(bodyCellSecondConstructionNumber);
 
-            bodyCellSecondMaterialType.Phrase = new Phrase("", normal_font);
-            bodyCellSecondMaterialType.Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;
+            bodyCellSecondYarnType.Phrase = new Phrase("", normal_font);
+            bodyCellSecondYarnType.Border = Rectangle.BOTTOM_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER;
             //bodyCellFirst.Border = Rectangle.NO_BORDER | Rectangle.LEFT_BORDER | Rectangle.RIGHT_BORDER | Rectangle.BOTTOM_BORDER;
-            bodyTableSecond.AddCell(bodyCellSecondMaterialType);
+            bodyTableSecond.AddCell(bodyCellSecondYarnType);
 
-            bodyCellSecondBlendedPoly.Phrase = new Phrase("Poly", bold_font);
-            bodyTableSecond.AddCell(bodyCellSecondBlendedPoly);
+            bodyCellSecondWarpBlendedPoly.Phrase = new Phrase("Poly", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWarpBlendedPoly);
 
-            bodyCellSecondBlendedCotton.Phrase = new Phrase("Cotton", bold_font);
-            bodyTableSecond.AddCell(bodyCellSecondBlendedCotton);
+            bodyCellSecondWarpBlendedCotton.Phrase = new Phrase("Cotton", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWarpBlendedCotton);
 
-            bodyCellSecondBlendedOther.Phrase = new Phrase("Lainnya", bold_font);
-            bodyTableSecond.AddCell(bodyCellSecondBlendedOther);
+            bodyCellSecondWarpBlendedOther.Phrase = new Phrase("Lainnya", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWarpBlendedOther);
+
+            bodyCellSecondWeftBlendedPoly.Phrase = new Phrase("Poly", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWeftBlendedPoly);
+
+            bodyCellSecondWeftBlendedCotton.Phrase = new Phrase("Cotton", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWeftBlendedCotton);
+
+            bodyCellSecondWeftBlendedOther.Phrase = new Phrase("Lainnya", bold_font);
+            bodyTableSecond.AddCell(bodyCellSecondWeftBlendedOther);
 
             bodyCellSecondEstimatedProductionA.Phrase = new Phrase("Grade A", bold_font);
             bodyTableSecond.AddCell(bodyCellSecondEstimatedProductionA);
@@ -202,7 +222,7 @@ namespace Manufactures.Helpers.PdfTemplates
             bodyCellSecondEstimatedProductionC.Phrase = new Phrase("Grade C", bold_font);
             bodyTableSecond.AddCell(bodyCellSecondEstimatedProductionC);
 
-            bodyCellSecondEstimatedProductionAval.Phrase = new Phrase("Aval", bold_font);
+            bodyCellSecondEstimatedProductionAval.Phrase = new Phrase("Grade D", bold_font);
             bodyTableSecond.AddCell(bodyCellSecondEstimatedProductionAval);
 
             bodyCellSecondTotal.Phrase = new Phrase("", bold_font);

@@ -20,6 +20,7 @@ using Manufactures.Domain.Estimations.Productions.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
+using Manufactures.Helpers.PdfTemplates;
 
 namespace Manufactures.Controllers.Api
 {
@@ -67,6 +68,9 @@ namespace Manufactures.Controllers.Api
                                              int unitId,
                                              string status)
         {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/pdf") > 0;
+
             var resultData = new List<OrderReportBySearchDto>();
             var query =
                 _weavingOrderDocumentRepository
@@ -169,7 +173,19 @@ namespace Manufactures.Controllers.Api
 
             await Task.Yield();
 
-            return Ok(resultData);
+            if (index.Equals(true))
+            {
+                OrderProductionReportPDFTemplate pdfTemplate = new OrderProductionReportPDFTemplate();
+                MemoryStream stream = pdfTemplate.GenerateSOPReportPdf(resultData);
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = string.Format("Laporan Surat Order Produksi.pdf")
+                };
+            }
+            else
+            {
+                return Ok(resultData);
+            }
         }
 
         [HttpGet]
