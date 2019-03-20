@@ -242,6 +242,13 @@ namespace Manufactures.Helpers.PdfTemplates
             document.Add(bodyTableFirst);
             document.Add(bodyTableSecond);
 
+            foreach (var item in weavingModel)
+            {
+
+                bodyCellSecondDate.Phrase = new Phrase(item.DateOrdered.ToString(), bold_font);
+                bodyTableSecond.AddCell(bodyCellSecondDate);
+            }
+
             #endregion Body
 
             #region Footer
