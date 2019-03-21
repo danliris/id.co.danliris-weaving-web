@@ -244,7 +244,6 @@ namespace Manufactures.Helpers.PdfTemplates
 
             foreach (var item in weavingModel)
             {
-
                 bodyCellSecondDate.Phrase = new Phrase(item.DateOrdered.ToString(), bold_font);
                 bodyTableSecond.AddCell(bodyCellSecondDate);
             }

@@ -175,8 +175,8 @@ namespace Manufactures.Controllers.Api
 
             if (index.Equals(true))
             {
-                OrderProductionReportPDFTemplate pdfTemplate = new OrderProductionReportPDFTemplate();
-                MemoryStream stream = pdfTemplate.GenerateSOPReportPdf(resultData);
+                OrderProductionPDFTemplate pdfTemplate = new OrderProductionPDFTemplate(resultData);
+                MemoryStream stream = pdfTemplate.GeneratePdfTemplate();
                 return new FileStreamResult(stream, "application/pdf")
                 {
                     FileDownloadName = string.Format("Laporan Surat Order Produksi.pdf")
