@@ -7,6 +7,7 @@ using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Dtos.Yarn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -95,7 +96,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            results = results.Take(size).Skip(page * size).ToList();
+            results = results.Skip(page * size).Take(page).ToList();
             int totalRows = results.Count();
             page = page + 1;
 
@@ -152,6 +153,15 @@ namespace Manufactures.Controllers.Api
             if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
+            }
+
+            var existingCode =
+                _yarnDocumentRepository.Find(o => o.Code.Equals(command.Code) &&
+                                                  o.Deleted.Equals(false)).Count >= 1;
+
+            if(existingCode)
+            {
+                throw Validator.ErrorValidation(("Code", "Code with " + command.Code + " has available"));
             }
 
             command.SetId(Identity);
