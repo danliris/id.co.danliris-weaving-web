@@ -26,18 +26,10 @@ namespace Manufactures.Application.Yarns.CommandHandlers
         public async Task<YarnDocument> Handle(UpdateExsistingYarnCommand request, CancellationToken cancellationToken)
         {
             var yarnDocument = _yarnDocumentRepository.Find(yarn => yarn.Identity == request.Id).FirstOrDefault();
-            var exsistingCode = _yarnDocumentRepository.Find(yarn => yarn.Code.Equals(request.Code) && 
-                                                                     yarn.Deleted.Equals(false)).Count() >= 1;
 
             if (yarnDocument == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid ring Id: " + request.Id));
-            }
-            
-            // Check has exsisting code
-            if (exsistingCode && !yarnDocument.Code.Equals(request.Code))
-            {
-                throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
 
             yarnDocument.SetCode(request.Code);

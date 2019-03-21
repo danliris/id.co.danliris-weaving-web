@@ -66,7 +66,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            ringDocuments = ringDocuments.Take(size).Skip(page * size);
+            ringDocuments = ringDocuments.Skip(page * size).Take(page);
             int totalRows = ringDocuments.Count();
             page = page + 1;
 
