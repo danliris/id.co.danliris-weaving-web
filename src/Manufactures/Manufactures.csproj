@@ -13,9 +13,5 @@
   <ItemGroup>
     <EmbeddedResource Include="Views\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Dtos\MachineType\" />
-  </ItemGroup>
   
 </Project>
