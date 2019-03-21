@@ -1,4 +1,5 @@
-﻿using Moonlay.Domain;
+﻿using Manufactures.Domain.MachineTypes;
+using Moonlay.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,29 +11,29 @@ namespace Manufactures.Domain.Machines.ValueObjects
         [JsonProperty(PropertyName="Id")]
         public Guid Id { get; }
 
-        [JsonProperty(PropertyName = "Name")]
-        public string Name { get; }
+        [JsonProperty(PropertyName = "TypeName")]
+        public string TypeName { get; }
 
-        [JsonProperty(PropertyName = "SpeedStandard")]
-        public int SpeedStandard { get; }
+        [JsonProperty(PropertyName = "Speed")]
+        public int Speed { get; }
 
-        [JsonProperty(PropertyName = "Unit")]
-        public string Unit { get; }
+        [JsonProperty(PropertyName = "MachineUnit")]
+        public string MachineUnit { get; }
 
-        public MachineTypeValueObject(Guid id, string name, int speedStandard, string unit)
+        public MachineTypeValueObject(MachineTypeDocument machineType)
         {
-            Id = id;
-            Name = name;
-            SpeedStandard = speedStandard;
-            Unit = unit;
+            Id = machineType.Identity;
+            TypeName = machineType.TypeName;
+            Speed = machineType.Speed;
+            MachineUnit = machineType.MachineUnit;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
-            yield return Name;
-            yield return SpeedStandard;
-            yield return Unit;
+            yield return TypeName;
+            yield return Speed;
+            yield return MachineUnit;
         }
     }
 }
