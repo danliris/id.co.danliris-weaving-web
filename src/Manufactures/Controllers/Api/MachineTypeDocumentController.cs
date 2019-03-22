@@ -39,7 +39,7 @@ namespace Manufactures.Controllers.Api
                 _machineTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
             var machineType =
                 _machineTypeRepository.Find(query)
-                                       .Select(item => new MachineTypeListDto(item));
+                                       .Select(item => new MachineTypeDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -54,7 +54,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(MachineTypeListDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(MachineTypeDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
