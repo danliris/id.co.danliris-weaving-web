@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Helpers.PdfTemplates;
+using Manufactures.Dtos;
 
 namespace Manufactures.Controllers.Api
 {
@@ -62,15 +63,16 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-by-period/{month}/{year}/unit/{unitId}/status/{status}")]
+        [HttpGet("order-by-period/{month}/{year}/unit-name/{unit}/unit-id/{unitId}/status/{status}")]
         public async Task<IActionResult> Get(string month,
                                              string year,
+                                             string unit,
                                              int unitId,
                                              string status)
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
-
+            
             var resultData = new List<OrderReportBySearchDto>();
             var query =
                 _weavingOrderDocumentRepository
@@ -166,7 +168,7 @@ namespace Manufactures.Controllers.Api
                                                      " Not Found"));
                 }
 
-                var newOrder = new OrderReportBySearchDto(order, constructionDocument, estimationDocument, yarnNumber);
+                var newOrder = new OrderReportBySearchDto(order, constructionDocument, estimationDocument, yarnNumber, unit);
 
                 resultData.Add(newOrder);
             }

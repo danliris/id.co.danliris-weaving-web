@@ -1,5 +1,6 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Manufactures.Dtos;
 using Manufactures.Dtos.Order;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ namespace Manufactures.Helpers.PdfTemplates
         const int MARGIN = 16;
         const string TITLE = "DAFTAR LAPORAN SURAT PERINTAH PRODUKSI";
         const string UNIT = "Unit";
+        const string SPLITTER = " : ";
+        const string EMPTY_SPOT = " ";
         const string NUMBER = "No.";
         const string DATE_ORDERED = "Tanggal SPP";
         const string CONSTRUCTION = "Konstruksi";
@@ -47,7 +50,6 @@ namespace Manufactures.Helpers.PdfTemplates
         #region Font
 
         private static readonly Font title_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 10);
-        private static readonly Font header_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 18);
         private static readonly Font normal_font = FontFactory.GetFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
         private static readonly Font bold_font = FontFactory.GetFont(BaseFont.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.NOT_EMBEDDED, 8);
 
@@ -58,6 +60,7 @@ namespace Manufactures.Helpers.PdfTemplates
         private readonly PdfPTable Title;
         private readonly PdfPTable Header;
         private readonly PdfPTable Body;
+        private readonly PdfPTable BodyFooter;
         private readonly PdfPTable Footer;
 
         #endregion
@@ -66,7 +69,7 @@ namespace Manufactures.Helpers.PdfTemplates
         {
             //#region Header
 
-            //List<string> headerLeft = new List<string> { UNIT };
+            //List<string> headerData = new List<string> { UNIT };
 
             //#endregion
 
@@ -77,29 +80,32 @@ namespace Manufactures.Helpers.PdfTemplates
             List<List<string>> bodyData = new List<List<string>>
             {
                 reportModel.Select(x => x.DateOrdered.ToString()).ToList(),
-                reportModel.Select(x=>x.FabricConstructionDocument.ConstructionNumber).ToList(),
-                reportModel.Select(x=>x.YarnNumber).ToList(),
-                reportModel.Select(x=>x.WarpComposition.CompositionOfPoly.ToString()).ToList(),
-                reportModel.Select(x=>x.WarpComposition.CompositionOfCotton.ToString()).ToList(),
-                reportModel.Select(x=>x.WarpComposition.OtherComposition.ToString()).ToList(),
-                reportModel.Select(x=>x.WeftComposition.CompositionOfPoly.ToString()).ToList(),
-                reportModel.Select(x=>x.WeftComposition.CompositionOfCotton.ToString()).ToList(),
-                reportModel.Select(x=>x.WeftComposition.OtherComposition.ToString()).ToList(),
-                reportModel.Select(x=>x.EstimatedProductionDocument.GradeA.ToString()).ToList(),
-                reportModel.Select(x=>x.EstimatedProductionDocument.GradeB.ToString()).ToList(),
-                reportModel.Select(x=>x.EstimatedProductionDocument.GradeC.ToString()).ToList(),
-                reportModel.Select(x=>x.EstimatedProductionDocument.GradeD.ToString()).ToList(),
-                reportModel.Select(x=>x.EstimatedProductionDocument.WholeGrade.ToString()).ToList(),
-                reportModel.Select(x=>x.FabricConstructionDocument.AmountOfWarp.ToString()).ToList(),
-                reportModel.Select(x=>x.FabricConstructionDocument.AmountOfWeft.ToString()).ToList(),
-                reportModel.Select(x=>x.FabricConstructionDocument.TotalYarn.ToString()).ToList()
+                reportModel.Select(x => x.FabricConstructionDocument.ConstructionNumber).ToList(),
+                reportModel.Select(x => x.YarnNumber).ToList(),
+                reportModel.Select(x => x.WarpComposition.CompositionOfPoly.ToString()).ToList(),
+                reportModel.Select(x => x.WarpComposition.CompositionOfCotton.ToString()).ToList(),
+                reportModel.Select(x => x.WarpComposition.OtherComposition.ToString()).ToList(),
+                reportModel.Select(x => x.WeftComposition.CompositionOfPoly.ToString()).ToList(),
+                reportModel.Select(x => x.WeftComposition.CompositionOfCotton.ToString()).ToList(),
+                reportModel.Select(x => x.WeftComposition.OtherComposition.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionDocument.GradeA.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionDocument.GradeB.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionDocument.GradeC.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionDocument.GradeD.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionDocument.WholeGrade.ToString()).ToList(),
+                reportModel.Select(x => x.FabricConstructionDocument.AmountOfWarp.ToString()).ToList(),
+                reportModel.Select(x => x.FabricConstructionDocument.AmountOfWeft.ToString()).ToList(),
+                reportModel.Select(x => x.FabricConstructionDocument.TotalYarn.ToString()).ToList()
             };
+
+            string unitName = reportModel.Select(u => u.WeavingUnitName).FirstOrDefault();
 
             #endregion
 
             this.Title = GetTitle();
-            this.Header = GetHeader();
+            this.Header = GetHeader(unitName);
             this.Body = GetBody(bodyColumn, bodyData);
+            this.BodyFooter = this.GetBodyFooter();
             this.Footer = GetFooter();
         }
 
@@ -121,19 +127,46 @@ namespace Manufactures.Helpers.PdfTemplates
             return title;
         }
 
-        private PdfPTable GetHeader()
+        private PdfPTable GetHeader(string headerData)
         {
-            PdfPTable header = new PdfPTable(2)
-            {
-                WidthPercentage = 100
-            };
-            PdfPCell cellHeader = new PdfPCell()
+            PdfPTable header = new PdfPTable(4);
+            float[] headerTableWidths = new float[] { 1f, 1f, 3f, 34f };
+            header.SetWidths(headerTableWidths);
+            header.WidthPercentage = 100;
+            PdfPCell cellHeader1 = new PdfPCell()
             {
                 Border = Rectangle.NO_BORDER,
-                HorizontalAlignment = Element.ALIGN_LEFT
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                PaddingBottom = 10f
             };
-            cellHeader.Phrase = new Phrase(UNIT, header_font);
-            header.AddCell(cellHeader);
+            cellHeader1.Phrase = new Phrase(UNIT, normal_font);
+            header.AddCell(cellHeader1);
+
+            PdfPCell cellHeader2 = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                PaddingBottom = 10f
+            };
+            cellHeader2.Phrase = new Phrase(SPLITTER, normal_font);
+            header.AddCell(cellHeader2);
+
+            PdfPCell cellHeader3 = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                PaddingBottom = 10f
+            };
+            cellHeader3.Phrase = new Phrase(headerData, normal_font);
+            header.AddCell(cellHeader3);
+
+            PdfPCell cellHeader4 = new PdfPCell()
+            {
+                Border = Rectangle.NO_BORDER,
+                PaddingBottom = 10f
+            };
+            cellHeader4.Phrase = new Phrase(EMPTY_SPOT, normal_font);
+            header.AddCell(cellHeader4);
 
             return header;
         }
@@ -173,6 +206,42 @@ namespace Manufactures.Helpers.PdfTemplates
             return bodyTable;
         }
 
+        private PdfPTable GetBodyFooter()
+        {
+            PdfPTable bodyFooterTable = new PdfPTable(2);
+            bodyFooterTable.SetWidths(new float[] { 1f, 2f });
+            bodyFooterTable.WidthPercentage = 100;
+
+            PdfPTable subBodyFooterTable = new PdfPTable(1);
+            subBodyFooterTable.WidthPercentage = 100;
+            subBodyFooterTable.HorizontalAlignment = Element.ALIGN_CENTER;
+
+            PdfPCell bodyFooterCell = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+            bodyFooterCell.PaddingTop = 10f;
+            PdfPCell subBodyFooterCell = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+            PdfPCell emptyCell = new PdfPCell() { Border = Rectangle.NO_BORDER, FixedHeight = 15f };
+            emptyCell.Phrase = new Phrase(string.Empty, normal_font);
+
+            subBodyFooterCell.Phrase = new Phrase(KNOWING, normal_font);
+            subBodyFooterTable.AddCell(subBodyFooterCell);
+            bodyFooterCell.AddElement(subBodyFooterTable);
+
+            bodyFooterTable.AddCell(bodyFooterCell);
+
+            bodyFooterCell = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
+            subBodyFooterTable = new PdfPTable(1);
+            subBodyFooterTable.WidthPercentage = 100;
+            subBodyFooterTable.HorizontalAlignment = Element.ALIGN_CENTER;
+
+            subBodyFooterCell.Phrase = new Phrase(MADE_BY, normal_font);
+            subBodyFooterTable.AddCell(subBodyFooterCell);
+            bodyFooterCell.AddElement(subBodyFooterTable);
+
+            bodyFooterTable.AddCell(bodyFooterCell);
+
+            return bodyFooterTable;
+        }
+
         private PdfPTable GetFooter()
         {
             PdfPTable footerTable = new PdfPTable(3);
@@ -186,12 +255,8 @@ namespace Manufactures.Helpers.PdfTemplates
             PdfPCell footerCell = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
             PdfPCell subFooterCell = new PdfPCell() { Border = Rectangle.NO_BORDER, HorizontalAlignment = Element.ALIGN_CENTER };
             PdfPCell emptyCell = new PdfPCell() { Border = Rectangle.NO_BORDER, FixedHeight = 15f };
-            //PdfPCell emptyCellReceiver = new PdfPCell() { Border = Rectangle.NO_BORDER, FixedHeight = 10f };
             emptyCell.Phrase = new Phrase(string.Empty, normal_font);
 
-            //subFooterTable.AddCell(emptyCellReceiver);
-            subFooterCell.Phrase = new Phrase(KNOWING, normal_font);
-            subFooterTable.AddCell(subFooterCell);
             subFooterTable.AddCell(emptyCell);
             subFooterTable.AddCell(emptyCell);
             subFooterCell.Phrase = new Phrase(BLANK_SPOT, normal_font);
@@ -209,7 +274,6 @@ namespace Manufactures.Helpers.PdfTemplates
 
             subFooterTable.AddCell(emptyCell);
             subFooterTable.AddCell(emptyCell);
-            subFooterTable.AddCell(emptyCell);
             subFooterCell.Phrase = new Phrase(BLANK_SPOT, normal_font);
             subFooterTable.AddCell(subFooterCell);
             subFooterCell.Phrase = new Phrase(MAINTENANCE_PRODUCTION, normal_font);
@@ -223,8 +287,6 @@ namespace Manufactures.Helpers.PdfTemplates
             subFooterTable.WidthPercentage = 100;
             subFooterTable.HorizontalAlignment = Element.ALIGN_CENTER;
 
-            subFooterCell.Phrase = new Phrase(MADE_BY, normal_font);
-            subFooterTable.AddCell(subFooterCell);
             subFooterTable.AddCell(emptyCell);
             subFooterTable.AddCell(emptyCell);
             subFooterCell.Phrase = new Phrase(BLANK_SPOT, normal_font);
@@ -238,7 +300,6 @@ namespace Manufactures.Helpers.PdfTemplates
             return footerTable;
         }
 
-
         public MemoryStream GeneratePdfTemplate()
         {
 
@@ -250,6 +311,7 @@ namespace Manufactures.Helpers.PdfTemplates
             document.Add(Title);
             document.Add(Header);
             document.Add(Body);
+            document.Add(BodyFooter);
             document.Add(Footer);
 
             document.Close();

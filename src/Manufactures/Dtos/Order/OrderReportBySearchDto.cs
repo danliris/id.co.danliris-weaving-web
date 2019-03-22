@@ -31,8 +31,8 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "Period")]
         public Period Period { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnit")]
-        public UnitId UnitId { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnitName")]
+        public string WeavingUnitName { get; private set; }
 
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; private set; }
@@ -58,13 +58,13 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "EstimatedProductionDocument")]
         public EstimatedProductionDocumentValueObject EstimatedProductionDocument { get; private set; }
 
-        public OrderReportBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber)
+        public OrderReportBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber, string unit)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
             OrderStatus = weavingOrderDocument.OrderStatus;
             Period = weavingOrderDocument.Period;
-            UnitId = weavingOrderDocument.UnitId;
+            WeavingUnitName = unit;
             DateOrdered = weavingOrderDocument.DateOrdered;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
