@@ -1,13 +1,14 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
+using System;
 
 namespace Manufactures.Domain.MachineTypes.Commands
 {
     public class UpdateExistingMachineTypeCommand : ICommand<MachineTypeDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public string Id { get; private set; }
+        public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "TypeName")]
         public string TypeName { get; set; }
@@ -18,7 +19,7 @@ namespace Manufactures.Domain.MachineTypes.Commands
         [JsonProperty(PropertyName = "MachineUnit")]
         public string MachineUnit { get; set; }
 
-        public void SetId(string Id)
+        public void SetId(Guid Id)
         {
             this.Id = Id;
         }
