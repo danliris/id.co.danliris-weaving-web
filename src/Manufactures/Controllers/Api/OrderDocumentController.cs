@@ -12,9 +12,16 @@ using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Domain.Estimations.Productions.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Manufactures.Domain.Materials.Repositories;
+using Manufactures.Domain.Yarns.Repositories;
+using Manufactures.Helpers.PdfTemplates;
+using Manufactures.Dtos;
 
 namespace Manufactures.Controllers.Api
 {
@@ -28,6 +35,10 @@ namespace Manufactures.Controllers.Api
                                                _weavingOrderDocumentRepository;
         private readonly IConstructionDocumentRepository
                                                _constructionDocumentRepository;
+        private readonly IEstimationProductRepository
+                                               _estimationProductRepository;
+        private readonly IYarnDocumentRepository
+                                               _yarnDocumentRepository;
 
         public OrderDocumentController(IServiceProvider serviceProvider,
                                        IWorkContext workContext) : base(serviceProvider)
@@ -36,6 +47,10 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IConstructionDocumentRepository>();
+            _estimationProductRepository =
+                this.Storage.GetRepository<IEstimationProductRepository>();
+            _yarnDocumentRepository =
+                this.Storage.GetRepository<IYarnDocumentRepository>();
         }
 
         [HttpGet]
@@ -48,51 +63,131 @@ namespace Manufactures.Controllers.Api
             return Ok(orderNumber);
         }
 
-        [HttpGet("order-by-period/{month}/{year}/unit/{unitId}/status/{status}")]
+        [HttpGet("order-by-period/{month}/{year}/unit-name/{unit}/unit-id/{unitId}/status/{status}")]
         public async Task<IActionResult> Get(string month,
                                              string year,
+                                             string unit,
                                              int unitId,
                                              string status)
         {
-            var resultData = new List<OrderBySearchDto>();
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/pdf") > 0;
+            
+            var resultData = new List<OrderReportBySearchDto>();
             var query =
                 _weavingOrderDocumentRepository
                     .Query.OrderByDescending(item => item.CreatedDate);
             var orderDto =
                 _weavingOrderDocumentRepository
-                    .Find(query).Where(entity => entity.Period.Month.Contains(month) &&
-                                                 entity.Period.Year.Contains(year) &&
-                                                 entity.UnitId.Value.Equals(unitId))
-                    .ToArray();
+                    .Find(query).Where(entity => entity.Period.Month == (month) &&
+                                                 entity.Period.Year == (year) &&
+                                                 entity.UnitId.Value == (unitId));
 
             if (status.Equals(Constants.ONORDER))
             {
-                orderDto = orderDto.Where(e => e.OrderStatus == Constants.ONORDER).ToArray();
+                orderDto = orderDto.Where(e => e.OrderStatus == Constants.ONORDER).ToList();
+            }
+
+            if (status.Equals(Constants.ALL))
+            {
+                orderDto = orderDto.Where(e => e.OrderStatus != "").ToList();
             }
 
             foreach (var order in orderDto)
             {
-                var constructionDocument = 
+                var constructionDocument =
                     _constructionDocumentRepository
                         .Find(e => e.Identity.Equals(order.ConstructionId.Value))
                         .FirstOrDefault();
 
+                var estimationQuery =
+                _estimationProductRepository.Query.OrderByDescending(item => item.CreatedDate);
+                var estimationDocument =
+                    _estimationProductRepository.Find(estimationQuery.Include(p => p.EstimationProducts))
+                                                .Where(v => v.Period.Month.Equals(order.Period.Month) && v.Period.Year.Equals(order.Period.Year) && v.UnitId.Value.Equals(order.UnitId.Value)).ToList();
+
+                var warpMaterials = new List<string>();
+                foreach (var item in constructionDocument.ListOfWarp)
+                {
+                    var material = _yarnDocumentRepository.Find(o => o.Identity == item.YarnId.Value).FirstOrDefault();
+                    if (material != null)
+                    {
+                        if (!warpMaterials.Contains(material.Name))
+                        {
+                            warpMaterials.Add(material.Name);
+                        }
+                    }
+                }
+
+                var weftMaterials = new List<string>();
+                foreach (var item in constructionDocument.ListOfWarp)
+                {
+                    var material = _yarnDocumentRepository.Find(o => o.Identity == item.YarnId.Value).FirstOrDefault();
+                    if (material != null)
+                    {
+                        if (!weftMaterials.Contains(material.Name))
+                        {
+                            weftMaterials.Add(material.Name);
+                        }
+                    }
+                }
+
+                var warpType = "";
+                foreach (var item in warpMaterials)
+                {
+                    if (warpType == "")
+                    {
+                        warpType = item;
+                    }
+                    else
+                    {
+                        warpType = warpType + item;
+                    }
+                }
+
+                var weftType = "";
+                foreach (var item in weftMaterials)
+                {
+                    if (weftType == "")
+                    {
+                        weftType = item;
+                    }
+                    else
+                    {
+                        weftType = item + item;
+                    }
+                }
+
+                var yarnNumber = warpType + "X" + weftType;
+
                 if (constructionDocument == null)
                 {
                     throw Validator.ErrorValidation(("Construction Document",
-                                                     "Invalid Construction Document with Order Identity " + 
-                                                     order.Identity + 
+                                                     "Invalid Construction Document with Order Identity " +
+                                                     order.Identity +
                                                      " Not Found"));
                 }
 
-                var newOrder = new OrderBySearchDto(order, constructionDocument);
+                var newOrder = new OrderReportBySearchDto(order, constructionDocument, estimationDocument, yarnNumber, unit);
 
                 resultData.Add(newOrder);
             }
-            
+
             await Task.Yield();
 
-            return Ok(resultData);
+            if (index.Equals(true))
+            {
+                OrderProductionPDFTemplate pdfTemplate = new OrderProductionPDFTemplate(resultData);
+                MemoryStream stream = pdfTemplate.GeneratePdfTemplate();
+                return new FileStreamResult(stream, "application/pdf")
+                {
+                    FileDownloadName = string.Format("Laporan Surat Order Produksi.pdf")
+                };
+            }
+            else
+            {
+                return Ok(resultData);
+            }
         }
 
         [HttpGet]
@@ -103,20 +198,20 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             page = page - 1;
-            var query = 
+            var query =
                 _weavingOrderDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var weavingOrderDocuments = 
+            var weavingOrderDocuments =
                 _weavingOrderDocumentRepository.Find(query);
 
             var resultData = new List<ListWeavingOrderDocumentDto>();
 
-            foreach(var weavingOrder in weavingOrderDocuments)
+            foreach (var weavingOrder in weavingOrderDocuments)
             {
                 var construction =
                     _constructionDocumentRepository.Find(o => o.Identity == weavingOrder.ConstructionId.Value).FirstOrDefault();
 
-                var orderData = 
-                    new ListWeavingOrderDocumentDto(weavingOrder, 
+                var orderData =
+                    new ListWeavingOrderDocumentDto(weavingOrder,
                                                     new FabricConstructionDocument(construction.Identity, construction.ConstructionNumber));
 
                 resultData.Add(orderData);
@@ -140,11 +235,11 @@ namespace Manufactures.Controllers.Api
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = 
+                Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = 
+                System.Reflection.PropertyInfo prop =
                     typeof(ListWeavingOrderDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
@@ -178,15 +273,15 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var orderId = Guid.Parse(Id);
-            var order = 
+            var order =
                 _weavingOrderDocumentRepository.Find(item => item.Identity == orderId)
                                                .FirstOrDefault();
             var construction =
                 _constructionDocumentRepository.Find(item => item.Identity == order.ConstructionId.Value)
                                                .FirstOrDefault();
-            var orderDto = new WeavingOrderDocumentDto(order, 
-                                                       new UnitId(order.UnitId.Value), 
-                                                       new FabricConstructionDocument(construction.Identity, 
+            var orderDto = new WeavingOrderDocumentDto(order,
+                                                       new UnitId(order.UnitId.Value),
+                                                       new FabricConstructionDocument(construction.Identity,
                                                                                       construction.ConstructionNumber));
 
             await Task.Yield();
@@ -210,7 +305,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id, 
+        public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdateWeavingOrderCommand command)
         {
             if (!Guid.TryParse(Id, out Guid orderId))
