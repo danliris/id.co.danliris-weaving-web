@@ -160,7 +160,7 @@ namespace Manufactures.Controllers.Api
             }
 
             resultData =
-                resultData.Skip(page * size).Take(page).ToList();
+                resultData.Skip(page * size).Take(size).ToList();
             int totalRows = resultData.Count();
             page = page + 1;
 
