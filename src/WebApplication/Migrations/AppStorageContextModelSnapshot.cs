@@ -197,7 +197,7 @@ namespace DanLiris.Admin.Web.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<Guid?>("WeavingUnitId");
+                    b.Property<int?>("WeavingUnitId");
 
                     b.HasKey("Identity");
 

@@ -11,13 +11,13 @@ namespace Manufactures.Domain.Machines
         public string MachineNumber { get; private set; }
         public string Location { get; private set; }
         public MachineTypeId MachineTypeId { get; private set; }
-        public WeavingUnitId WeavingUnitId { get; private set; }
+        public UnitId WeavingUnitId { get; private set; }
 
         public MachineDocument(Guid identity,
                                string machineNumber,
                                string location,
                                MachineTypeId machineTypeId,
-                               WeavingUnitId weavingUnitId) : base(identity)
+                               UnitId weavingUnitId) : base(identity)
         {
             Identity = identity;
             MachineNumber = machineNumber;
@@ -46,7 +46,7 @@ namespace Manufactures.Domain.Machines
                     new MachineTypeId(readModel.MachineTypeId.Value) : null;
             this.WeavingUnitId =
                 readModel.WeavingUnitId.HasValue ? 
-                    new WeavingUnitId(readModel.WeavingUnitId.Value) : null;
+                    new UnitId(readModel.WeavingUnitId.Value) : null;
         }
 
         public void SetLocation(string value)
@@ -71,7 +71,7 @@ namespace Manufactures.Domain.Machines
             }
         }
 
-        public void SetWeavingUnitId(WeavingUnitId value)
+        public void SetWeavingUnitId(UnitId value)
         {
             if(WeavingUnitId != value)
             {

@@ -51,7 +51,7 @@ namespace Manufactures.Application.Machines.CommandHandlers
 
             existingMachine.SetLocation(request.Location);
             existingMachine.SetMachineTypeId(new MachineTypeId(Guid.Parse(request.MachineTypeId)));
-            existingMachine.SetWeavingUnitId(new WeavingUnitId(Guid.Parse(request.WeavingUnitId)));
+            existingMachine.SetWeavingUnitId(new UnitId(int.Parse(request.WeavingUnitId)));
 
             await _machineRepository.Update(existingMachine);
 
