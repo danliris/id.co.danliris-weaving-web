@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20190321232604_weaving-version-beta-1.1")]
-    partial class weavingversionbeta11
+    [Migration("20190325002847_Initial-Weaving")]
+    partial class InitialWeaving
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -199,7 +199,7 @@ namespace DanLiris.Admin.Web.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<Guid?>("WeavingUnitId");
+                    b.Property<int?>("WeavingUnitId");
 
                     b.HasKey("Identity");
 
