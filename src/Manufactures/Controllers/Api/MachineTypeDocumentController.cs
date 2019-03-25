@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/machine-Types")]
+    [Route("weaving/machine-types")]
     [ApiController]
     [Authorize]
     public class MachineTypeDocumentController : ControllerApiBase
@@ -118,7 +118,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            command.SetId(Id);
+            command.SetId(Identity);
             var machineType = await Mediator.Send(command);
 
             return Ok(machineType.Identity);
