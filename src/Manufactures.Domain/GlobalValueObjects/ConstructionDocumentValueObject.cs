@@ -28,6 +28,8 @@ namespace Manufactures.Domain.GlobalValueObjects
         {
             Identity = identity;
             ConstructionNumber = constructionNumber;
+            AmountOfWarp = amountOfWarp;
+            AmountOfWeft = amountOfWeft;
             TotalYarn = totalYarn;
         }
     }
