@@ -24,20 +24,20 @@ namespace Manufactures.Helpers.PdfTemplates
         const string DATE_ORDERED = "Tanggal SPP";
         const string CONSTRUCTION = "Konstruksi";
         const string YARN_NUMBER = "No. Benang";
-        const string BLENDED_WARP_POLY = "Lusi Poly(%)";
-        const string BLENDED_WARP_COTTON = "Lusi Cotton(%)";
-        const string BLENDED_WARP_OTHERS = "Lusi Lainnya(%)";
-        const string BLENDED_WEFT_POLY = "Pakan Poly(%)";
-        const string BLENDED_WEFT_COTTON = "Pakan Cotton(%)";
-        const string BLENDED_WEFT_OTHERS = "Pakan Lainnya(%)";
+        const string BLENDED_WARP_POLY = "Lusi" + "\n" + "Poly(%)";
+        const string BLENDED_WARP_COTTON = "Lusi" + "\n" + "Cotton(%)";
+        const string BLENDED_WARP_OTHERS = "Lusi" + "\n" + "Lainnya(%)";
+        const string BLENDED_WEFT_POLY = "Pakan" + "\n" + "Poly(%)";
+        const string BLENDED_WEFT_COTTON = "Pakan" + "\n" + "Cotton(%)";
+        const string BLENDED_WEFT_OTHERS = "Pakan" + "\n" + "Lainnya(%)";
         const string ESTIMATED_GRADE_A = "Grade A";
         const string ESTIMATED_GRADE_B = "Grade B";
         const string ESTIMATED_GRADE_C = "Grade C";
         const string ESTIMATED_GRADE_D = "Grade D";
         const string WHOLE_GRADE = "Total ALL";
-        const string FABRIC_CONSTRUCTION_WARP = "Kebutuhan Lusi";
-        const string FABRIC_CONSTRUCTION_WEFT = "Kebutuhan Pakan";
-        const string FABRIC_CONSTRUCTION_TOTAL_YARN = "Total Kebutuhan";
+        const string FABRIC_CONSTRUCTION_WARP = "Kebutuhan" + "\n" + "Lusi";
+        const string FABRIC_CONSTRUCTION_WEFT = "Kebutuhan" + "\n" + "Pakan";
+        const string FABRIC_CONSTRUCTION_TOTAL_YARN = "Total" + "\n" + "Kebutuhan";
         const string KNOWING = "Mengetahui,";
         const string MADE_BY = "Dibuat Oleh,";
         const string BLANK_SPOT = "(....................................)";
@@ -79,7 +79,7 @@ namespace Manufactures.Helpers.PdfTemplates
 
             List<List<string>> bodyData = new List<List<string>>
             {
-                reportModel.Select(x => x.DateOrdered.ToString()).ToList(),
+                reportModel.Select(x => x.DateOrdered.Date.ToString("dd/MM/yyyy")).ToList(),
                 reportModel.Select(x => x.FabricConstructionDocument.ConstructionNumber).ToList(),
                 reportModel.Select(x => x.YarnNumber).ToList(),
                 reportModel.Select(x => x.WarpComposition.CompositionOfPoly.ToString()).ToList(),
@@ -174,11 +174,11 @@ namespace Manufactures.Helpers.PdfTemplates
         private PdfPTable GetBody(List<string> bodyColumn, List<List<string>> bodyData)
         {
             PdfPTable bodyTable = new PdfPTable(18);
-            float[] bodyTableWidths = new float[] { 4f, 10f, 16f, 8f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 5f, 8f, 5f, 5f, 5f };
+            float[] bodyTableWidths = new float[] { 3f, 7f, 12f, 8f, 7f, 7f, 7f, 7f, 7f, 7f, 5f, 5f, 5f, 5f, 6f, 7f, 7f, 7f };
             bodyTable.SetWidths(bodyTableWidths);
             bodyTable.WidthPercentage = 100;
 
-            PdfPCell bodyCell = new PdfPCell() { Border = Rectangle.BOX, HorizontalAlignment = Element.ALIGN_CENTER };
+            PdfPCell bodyCell = new PdfPCell() { Border = Rectangle.BOX, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE };
             PdfPCell emptyCell = new PdfPCell() { Border = Rectangle.BOX, FixedHeight = 15f };
             emptyCell.Phrase = new Phrase(string.Empty, normal_font);
 
