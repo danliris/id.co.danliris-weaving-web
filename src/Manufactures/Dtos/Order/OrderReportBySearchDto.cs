@@ -15,9 +15,6 @@ namespace Manufactures.Dtos.Order
 {
     public class OrderReportBySearchDto
     {
-        //private WeavingOrderDocument order;
-        //private ConstructionDocument constructionDocument;
-        //private List<EstimatedProductionDocument> estimationDocument;
 
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -49,11 +46,8 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "YarnNumber")]
         public string YarnNumber { get; private set; }
 
-        //[JsonProperty(PropertyName = "WarpType")]
-        //public string WarpType { get; private set; }
-
-        //[JsonProperty(PropertyName = "WeftType")]
-        //public string WeftType{ get; private set; }
+        [JsonProperty(PropertyName = "WholeGrade")]
+        public int WholeGrade { get; private set; }
 
         [JsonProperty(PropertyName = "EstimatedProductionDocument")]
         public EstimatedProductionDocumentValueObject EstimatedProductionDocument { get; private set; }
@@ -64,12 +58,12 @@ namespace Manufactures.Dtos.Order
             OrderNumber = weavingOrderDocument.OrderNumber;
             OrderStatus = weavingOrderDocument.OrderStatus;
             Period = weavingOrderDocument.Period;
+            WholeGrade = weavingOrderDocument.WholeGrade;
             WeavingUnitName = unit;
             DateOrdered = weavingOrderDocument.DateOrdered;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
-            //WarpOrigin = weavingOrderDocument.WarpOrigin;
-            //WeftOrigin = weavingOrderDocument.WeftOrigin
+
             var construction = new ConstructionDocumentValueObject(constructionDocument.Identity,
                                                                     constructionDocument.ConstructionNumber,
                                                                     constructionDocument.AmountOfWarp,
