@@ -18,10 +18,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Helpers.PdfTemplates;
-using Manufactures.Dtos;
 
 namespace Manufactures.Controllers.Api
 {
