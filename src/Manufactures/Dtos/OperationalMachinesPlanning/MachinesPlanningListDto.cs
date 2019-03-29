@@ -19,7 +19,7 @@ namespace Manufactures.Dtos.OperationalMachinesPlanning
         [JsonProperty(PropertyName = "BlokKaizen")]
         public string BlokKaizen { get; }
 
-        [JsonProperty(PropertyName = "Machine")]
+        [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
         public MachinesPlanningListDto(MachinesPlanningDocument document,
