@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/engines-planning")]
+    [Route("weaving/machines-planning")]
     [ApiController]
     [Authorize]
     public class MachinesPlanningController : ControllerApiBase
