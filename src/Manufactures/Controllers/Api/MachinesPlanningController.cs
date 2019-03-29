@@ -47,15 +47,28 @@ namespace Manufactures.Controllers.Api
             var query =
                 _machinesPlanningRepository.Query.OrderByDescending(item => item.CreatedDate);
             var machinesPlanning =
-                _machinesPlanningRepository.Find(query)
-                               .Select(item => new MachinesPlanningListDto(item));
+                _machinesPlanningRepository.Find(query);
+
+            var machineDtos = new List<MachinesPlanningListDto>();
+
+            foreach(var machinePlanning in machinesPlanning)
+            {
+                var manufacturingMachine = _machineRepository.Find(item => item.Identity == machinePlanning.MachineId.Value).FirstOrDefault();
+                var manufacturingMachineType = _machineTypeRepository.Find(item => item.Identity == manufacturingMachine.MachineTypeId.Value).FirstOrDefault();
+
+                var machine = new ManufactureMachine(manufacturingMachine, manufacturingMachineType);
+                var machineDto = new MachinesPlanningListDto(machinePlanning, machine);
+
+                machineDtos.Add(machineDto);
+            }
+            
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                machinesPlanning =
-                    machinesPlanning.Where(entity => entity.Area.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                machineDtos =
+                    machineDtos.Where(entity => entity.Area.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                                     entity.Blok.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                    entity.BlokKaizen.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                                                    entity.BlokKaizen.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!order.Contains("{}"))
@@ -68,21 +81,21 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    machinesPlanning = machinesPlanning.OrderBy(x => prop.GetValue(x, null));
+                    machineDtos = machineDtos.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    machinesPlanning = machinesPlanning.OrderByDescending(x => prop.GetValue(x, null));
+                    machineDtos = machineDtos.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            machinesPlanning = machinesPlanning.Skip(page * size).Take(size);
-            int totalRows = machinesPlanning.Count();
+            machineDtos = machineDtos.Skip(page * size).Take(size).ToList();
+            int totalRows = machineDtos.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(machinesPlanning, info: new
+            return Ok(machineDtos, info: new
             {
                 page,
                 size,
