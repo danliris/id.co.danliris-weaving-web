@@ -1,14 +1,11 @@
-﻿using Manufactures.Domain.Construction;
-using Manufactures.Domain.Estimations.Productions;
+﻿using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
-using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using ConstructionDocument = Manufactures.Domain.Construction.ConstructionDocument;
 
 namespace Manufactures.Dtos.Order
