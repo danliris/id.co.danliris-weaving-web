@@ -1,4 +1,5 @@
 ﻿using Manufactures.Domain.OperationalMachinesPlanning;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -18,12 +19,17 @@ namespace Manufactures.Dtos.OperationalMachinesPlanning
         [JsonProperty(PropertyName = "BlokKaizen")]
         public string BlokKaizen { get; }
 
-        public MachinesPlanningListDto(MachinesPlanningDocument document)
+        [JsonProperty(PropertyName = "MachineNumber")]
+        public string MachineNumber { get; }
+
+        public MachinesPlanningListDto(MachinesPlanningDocument document,
+                                       ManufactureMachine machine)
         {
             Id = document.Identity;
             Area = document.Area;
             Blok = document.Blok;
             BlokKaizen = document.BlokKaizen;
+            MachineNumber = machine.MachineNumber;
         }
     }
 }
