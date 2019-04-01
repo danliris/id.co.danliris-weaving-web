@@ -118,13 +118,13 @@ namespace Manufactures.Controllers.Api
 
             await Task.Yield();
 
-            if (machinePlanning == null)
+            if (resultDto == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(machinePlanning);
+                return Ok(resultDto);
             }
         }
 
