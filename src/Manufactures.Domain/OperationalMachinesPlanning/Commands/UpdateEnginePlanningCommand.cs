@@ -27,10 +27,10 @@ namespace Manufactures.Domain.OperationalMachinesPlanning.Commands
         public Guid MachineId { get; set; }
 
         [JsonProperty(PropertyName = "UserMaintenanceId")]
-        public int UserMaintenanceId { get; set; }
+        public string UserMaintenanceId { get; set; }
 
         [JsonProperty(PropertyName = "UserOperatorId")]
-        public int UserOperatorId { get; set; }
+        public string UserOperatorId { get; set; }
 
         public void SetId(Guid identity)
         {

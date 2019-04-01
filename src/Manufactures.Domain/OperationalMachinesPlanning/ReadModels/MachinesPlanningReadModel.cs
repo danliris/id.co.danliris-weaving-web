@@ -10,8 +10,8 @@ namespace Manufactures.Domain.OperationalMachinesPlanning.ReadModels
         public string BlokKaizen { get; internal set; }
         public int? UnitDepartementId { get; internal set; }
         public Guid? MachineId { get; internal set; }
-        public int? UserMaintenanceId { get; internal set; }
-        public int? UserOperatorId { get; internal set; }
+        public string UserMaintenanceId { get; internal set; }
+        public string UserOperatorId { get; internal set; }
 
         public MachinesPlanningReadModel(Guid identity) : base(identity) { }
     }
