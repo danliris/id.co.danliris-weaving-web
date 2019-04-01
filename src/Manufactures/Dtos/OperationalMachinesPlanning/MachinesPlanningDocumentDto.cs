@@ -39,6 +39,9 @@ namespace Manufactures.Dtos.OperationalMachinesPlanning
             Blok = document.Blok;
             BlokKaizen = document.BlokKaizen;
             Machine = machine;
+            UnitDepartementId = document.UnitDepartementId;
+            UserMaintenanceId = document.UserMaintenanceId;
+            UserOperatorId = document.UserOperatorId;
         }
     }
 }
