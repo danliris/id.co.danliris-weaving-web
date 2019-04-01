@@ -7,7 +7,7 @@ using System;
 namespace Manufactures.Domain.OperationalMachinesPlanning
 {
     public class MachinesPlanningDocument : AggregateRoot<MachinesPlanningDocument,
-                                                        MachinesPlanningReadModel>
+                                                          MachinesPlanningReadModel>
     {
         public string Area { get; internal set; }
         public string Blok { get; internal set; }
@@ -58,8 +58,8 @@ namespace Manufactures.Domain.OperationalMachinesPlanning
             this.BlokKaizen = readModel.BlokKaizen;
             this.UnitDepartementId = readModel.UnitDepartementId.HasValue ? new UnitId(readModel.UnitDepartementId.Value) : null;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
-            this.UserMaintenanceId = readModel.UserMaintenanceId.HasValue ? new UserId(readModel.UserMaintenanceId.Value) : null;
-            this.UserOperatorId = readModel.UserOperatorId.HasValue ? new UserId(readModel.UserOperatorId.Value) : null;
+            this.UserMaintenanceId = new UserId(readModel.UserMaintenanceId);
+            this.UserOperatorId = new UserId(readModel.UserOperatorId);
         }
 
         public void ChangeArea(string value)
@@ -117,7 +117,7 @@ namespace Manufactures.Domain.OperationalMachinesPlanning
             }
         }
 
-        public void ChangeUserMaintenanceId(int value)
+        public void ChangeUserMaintenanceId(string value)
         {
             if (UserMaintenanceId.Value != value)
             {
@@ -128,7 +128,7 @@ namespace Manufactures.Domain.OperationalMachinesPlanning
             }
         }
 
-        public void ChangeUserOperatorId(int value)
+        public void ChangeUserOperatorId(string value)
         {
             if (UserOperatorId.Value != value)
             {

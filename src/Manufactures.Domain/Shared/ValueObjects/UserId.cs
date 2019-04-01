@@ -4,8 +4,8 @@ using Newtonsoft.Json;
 namespace Manufactures.Domain.Shared.ValueObjects
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class UserId : SingleValueObject<int>
+    public class UserId : SingleValueObject<string>
     {
-        public UserId(int id) : base(id) { }
+        public UserId(string id) : base(id) { }
     }
 }
