@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.MachineTypes.ReadModels;
 using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
+using Manufactures.Domain.DailyOperations.Entities;
+using Manufactures.Domain.DailyOperations.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -21,6 +23,34 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<DailyOperationMachineDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationMachineDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.OrderDocument).HasMaxLength(2000);
+                etb.Property(e => e.DOMTime).HasMaxLength(2000);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationMachineDocumentReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationMachineDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Information).HasMaxLength(255);
+
+                etb.HasMany(e => e.DailyOperationMachineDetails)
+                    .WithOne(e => e.DailyOperationMachineDocument)
+                    .HasForeignKey(e => e.DailyOperationMachineDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<MachinesPlanningReadModel>(etb =>
             {
                 etb.ToTable("Weaving_MachinesPlanningDocuments");
