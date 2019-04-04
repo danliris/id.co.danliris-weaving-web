@@ -7,6 +7,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Dtos.OperationalMachinesPlanning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -51,24 +52,29 @@ namespace Manufactures.Controllers.Api
 
             var machineDtos = new List<MachinesPlanningListDto>();
 
-            foreach(var machinePlanning in machinesPlanning)
+            foreach (var machinePlanning in machinesPlanning)
             {
-                var manufacturingMachine = _machineRepository.Find(item => item.Identity == machinePlanning.MachineId.Value).FirstOrDefault();
-                var manufacturingMachineType = _machineTypeRepository.Find(item => item.Identity == manufacturingMachine.MachineTypeId.Value).FirstOrDefault();
+                var manufacturingMachine = 
+                    _machineRepository.Find(item => item.Identity == machinePlanning.MachineId.Value)
+                                      .FirstOrDefault();
+                var manufacturingMachineType = 
+                    _machineTypeRepository.Find(item => item.Identity == manufacturingMachine.MachineTypeId.Value)
+                                          .FirstOrDefault();
 
                 var machine = new ManufactureMachine(manufacturingMachine, manufacturingMachineType);
                 var machineDto = new MachinesPlanningListDto(machinePlanning, machine);
 
                 machineDtos.Add(machineDto);
             }
-            
+
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 machineDtos =
                     machineDtos.Where(entity => entity.Area.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                    entity.Blok.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                                    entity.BlokKaizen.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+                                                entity.Blok.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                entity.BlokKaizen.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                               .ToList();
             }
 
             if (!order.Contains("{}"))
@@ -110,8 +116,12 @@ namespace Manufactures.Controllers.Api
             var machinePlanning =
                 _machinesPlanningRepository.Find(item => item.Identity == Identity).FirstOrDefault();
 
-            var manufacturingMachine = _machineRepository.Find(item => item.Identity == machinePlanning.MachineId.Value).FirstOrDefault();
-            var manufacturingMachineType = _machineTypeRepository.Find(item => item.Identity == manufacturingMachine.MachineTypeId.Value).FirstOrDefault();
+            var manufacturingMachine = 
+                _machineRepository.Find(item => item.Identity == machinePlanning.MachineId.Value)
+                                  .FirstOrDefault();
+            var manufacturingMachineType = 
+                _machineTypeRepository.Find(item => item.Identity == manufacturingMachine.MachineTypeId.Value)
+                                      .FirstOrDefault();
 
             var machine = new ManufactureMachine(manufacturingMachine, manufacturingMachineType);
             var resultDto = new MachinesPlanningDocumentDto(machinePlanning, machine);
@@ -132,6 +142,14 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Post([FromBody]AddNewEnginePlanningCommand command)
         {
             var machinePlanning = await Mediator.Send(command);
+            var existingMachinePlanning = 
+                _machinesPlanningRepository.Find(o => o.MachineId == command.MachineId && o.Blok == command.Blok)
+                                           .FirstOrDefault();
+
+            if (existingMachinePlanning != null)
+            {
+                throw Validator.ErrorValidation(("MachineId", "Has available machine planning on same blok"));
+            }
 
             return Ok(machinePlanning.Identity);
         }
@@ -143,6 +161,15 @@ namespace Manufactures.Controllers.Api
             if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
+            }
+
+            var existingMachinePlanning = 
+                _machinesPlanningRepository.Find(o => o.MachineId == command.MachineId && o.Blok == command.Blok)
+                                           .FirstOrDefault();
+
+            if (existingMachinePlanning != null)
+            {
+                throw Validator.ErrorValidation(("MachineId", "Has available machine planning on same blok"));
             }
 
             command.SetId(Identity);

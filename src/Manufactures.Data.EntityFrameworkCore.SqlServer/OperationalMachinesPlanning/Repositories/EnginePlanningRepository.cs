@@ -3,7 +3,7 @@ using Manufactures.Domain.OperationalMachinesPlanning;
 using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
 using Manufactures.Domain.OperationalMachinesPlanning.Repositories;
 
-namespace Manufactures.Data.EntityFrameworkCore.OperationalEnginePlanning.Repositories
+namespace Manufactures.Data.EntityFrameworkCore.OperationalMachinesPlanning.Repositories
 {
     public class EnginePlanningRepository : AggregateRepostory<MachinesPlanningDocument, MachinesPlanningReadModel>, IMachinesPlanningRepository
     {
