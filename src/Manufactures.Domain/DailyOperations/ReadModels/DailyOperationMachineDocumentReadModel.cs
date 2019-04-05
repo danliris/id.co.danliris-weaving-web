@@ -12,8 +12,7 @@ namespace Manufactures.Domain.DailyOperations.ReadModels
         public DailyOperationMachineDocumentReadModel(Guid identity) : base(identity)
         {
         }
-        public DateTimeOffset Time { get; internal set; }
-        public string Information { get; internal set; }
+        public DateTimeOffset DateOperated { get; internal set; }
         public Guid? MachineId { get; internal set; }
         public int? UnitId { get; internal set; }
         public List<DailyOperationMachineDetail> DailyOperationMachineDetails { get; internal set; }

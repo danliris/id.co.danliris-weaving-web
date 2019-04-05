@@ -10,17 +10,14 @@ namespace Manufactures.Domain.DailyOperations
 {
     public class DailyOperationMachineDocument : AggregateRoot<DailyOperationMachineDocument, DailyOperationMachineDocumentReadModel>
     {
-        public DateTimeOffset Time { get; private set; }
-        public string Information { get; private set; }
+        public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
         public IReadOnlyCollection<DailyOperationMachineDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationMachineDocument(Guid id, DateTimeOffset time, string information, MachineId machineId, UnitId unitId) :base(id)
+        public DailyOperationMachineDocument(Guid id, MachineId machineId, UnitId unitId) :base(id)
         {
             Identity = id;
-            Time = time;
-            Information = information;
             MachineId = machineId;
             UnitId = unitId;
             DailyOperationMachineDetails = new List<DailyOperationMachineDetail>();
@@ -29,8 +26,6 @@ namespace Manufactures.Domain.DailyOperations
 
             ReadModel = new DailyOperationMachineDocumentReadModel(Identity)
             {
-                Time = this.Time,
-                Information = this.Information,
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
                 DailyOperationMachineDetails = this.DailyOperationMachineDetails.ToList()
@@ -39,8 +34,7 @@ namespace Manufactures.Domain.DailyOperations
 
         public DailyOperationMachineDocument(DailyOperationMachineDocumentReadModel readModel) : base(readModel)
         {
-            this.Time = readModel.Time;
-            this.Information = readModel.Information;
+            this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
             this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
@@ -88,28 +82,6 @@ namespace Manufactures.Domain.DailyOperations
 
                 MarkModified();
             }
-        }
-
-        public void SetInformation(string value)
-        {
-            if (value != Information)
-            {
-                Information = value;
-                ReadModel.Information = Information;
-
-                MarkModified();
-            }
-        }
-
-        public void SetTime(DateTimeOffset value)
-        {
-            if(value != Time)
-            {
-                Time = value;
-                ReadModel.Time = Time;
-
-                MarkModified();
-            } 
         }
 
         protected override DailyOperationMachineDocument GetEntity()
