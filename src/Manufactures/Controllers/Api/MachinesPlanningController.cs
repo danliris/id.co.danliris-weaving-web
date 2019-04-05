@@ -141,15 +141,16 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]AddNewEnginePlanningCommand command)
         {
-            var machinePlanning = await Mediator.Send(command);
             var existingMachinePlanning = 
-                _machinesPlanningRepository.Find(o => o.MachineId == command.MachineId && o.Blok == command.Blok)
+                _machinesPlanningRepository.Find(o => o.MachineId.Equals(command.MachineId) && o.Blok.Equals(command.Blok))
                                            .FirstOrDefault();
 
             if (existingMachinePlanning != null)
             {
                 throw Validator.ErrorValidation(("MachineId", "Has available machine planning on same blok"));
             }
+
+            var machinePlanning = await Mediator.Send(command);
 
             return Ok(machinePlanning.Identity);
         }

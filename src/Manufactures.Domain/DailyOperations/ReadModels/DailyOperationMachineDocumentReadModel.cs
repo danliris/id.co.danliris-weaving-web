@@ -1,9 +1,7 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using Manufactures.Domain.DailyOperations.Entities;
-using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.ReadModels
 {
