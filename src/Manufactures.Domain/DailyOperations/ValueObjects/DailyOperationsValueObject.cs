@@ -1,4 +1,5 @@
-﻿using Moonlay.Domain;
+﻿using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,9 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
 {
     public class DailyOperationsValueObject : ValueObject
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; private set; }
+
         [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset DateOperated { get; private set; }
 
@@ -21,10 +25,10 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
         public string OrderNumber { get; private set; }
 
         [JsonProperty(PropertyName = "WarpOrigin")]
-        public string WarpOrigin { get; private set; }
+        public List<Origin> WarpOrigin { get; private set; }
 
         [JsonProperty(PropertyName = "WeftOrigin")]
-        public string WeftOrigin { get; private set; }
+        public List<Origin> WeftOrigin { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
@@ -34,6 +38,9 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
 
         [JsonProperty(PropertyName = "DOMTime")]
         public DOMTimeValueObject DOMTime { get; private set; }
+
+        [JsonProperty(PropertyName = "BeamNumber")]
+        public string BeamNumber { get; private set; }
 
         [JsonProperty(PropertyName = "BeamOperator")]
         public string BeamOperator { get; private set; }
@@ -53,7 +60,7 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
 
-        public DailyOperationsValueObject(DateTimeOffset dateOperated, string machineId, int unitId, string orderNumber, string warpOrigin, string weftOrigin, string constructionNumber, string shift, DOMTimeValueObject dOMTime, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information)
+        public DailyOperationsValueObject(DateTimeOffset dateOperated, string machineId, int unitId, string orderNumber, List<Origin> warpOrigin, List<Origin> weftOrigin, string constructionNumber, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information)
         {
             DateOperated = dateOperated;
             MachineId = machineId;
@@ -63,7 +70,8 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
             WeftOrigin = weftOrigin;
             ConstructionNumber = constructionNumber;
             Shift = shift;
-            DOMTime = dOMTime;
+            DOMTime = domTime;
+            BeamNumber = beamNumber;
             BeamOperator = beamOperator;
             LoomGroup = loomGroup;
             SizingNumber = sizingNumber;
@@ -83,6 +91,7 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
             yield return ConstructionNumber;
             yield return Shift;
             yield return DOMTime;
+            yield return BeamNumber;
             yield return BeamOperator;
             yield return LoomGroup;
             yield return SizingNumber;

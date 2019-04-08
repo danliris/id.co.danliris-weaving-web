@@ -7,20 +7,20 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
 {
     public class DOMTimeValueObject : ValueObject
     {
-        public DOMTimeValueObject(DateTimeOffset replace, DateTimeOffset resume, DateTimeOffset difference)
+        public DOMTimeValueObject(DateTimeOffset pause, DateTimeOffset resume, DateTimeOffset difference)
         {
-            Replace = replace;
+            Pause = pause;
             Resume = resume;
             Difference = difference;
         }
         
-        public DateTimeOffset Replace { get; set; }
+        public DateTimeOffset Pause { get; set; }
         public DateTimeOffset Resume { get; set; }
         public DateTimeOffset Difference { get; set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Replace;
+            yield return Pause;
             yield return Resume;
             yield return Difference;
         }

@@ -14,12 +14,15 @@ namespace Manufactures.Domain.DailyOperations.Entities
         public Guid OrderDocumentId { get; private set; }
         public string Shift { get; private set; }
         public string DOMTime { get; private set; }
+        public string BeamNumber { get; private set; }
         public string BeamOperator { get; private set; }
         public string LoomGroup { get; private set; }
         public string SizingNumber { get; private set; }
         public string SizingOperator { get; private set; }
         public string SizingGroup { get; private set; }
         public string Information { get; private set; }
+        public List<Origin> WarpsOrigin { get; private set; }
+        public List<Origin> WeftsOrigin { get; private set; }
 
         public Guid DailyOperationMachineDocumentId { get; set; }
         public DailyOperationMachineDocumentReadModel DailyOperationMachineDocument { get; set; }
@@ -28,18 +31,21 @@ namespace Manufactures.Domain.DailyOperations.Entities
         {
         }
 
-        public DailyOperationMachineDetail(Guid identity, OrderDocumentId orderDocumentId, string shift, DOMTimeValueObject domTime, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information) : base(identity)
+        public DailyOperationMachineDetail(Guid identity, OrderDocumentId orderDocumentId, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information, List<Origin> warpOrigin, List<Origin> weftOrigin) : base(identity)
         {
             Identity = identity;
             OrderDocumentId = orderDocumentId.Value;
             Shift = shift;
             DOMTime = domTime.Serialize();
+            BeamNumber = beamNumber;
             BeamOperator = beamOperator;
             LoomGroup = loomGroup;
             SizingNumber = sizingNumber;
             SizingOperator = sizingOperator;
             SizingGroup = sizingGroup;
             Information = information;
+            WarpsOrigin = warpOrigin;
+            WeftsOrigin = weftOrigin;
         }
 
         public void SetOrderDocumentId(OrderDocumentId orderDocumentId)
@@ -60,6 +66,13 @@ namespace Manufactures.Domain.DailyOperations.Entities
             Validator.ThrowIfNull(() => domTime);
 
             DOMTime = domTime.Serialize();
+
+            MarkModified();
+        }
+
+        public void SetBeamNumber(string beamNumber)
+        {
+            Validator.ThrowIfNull(() => beamNumber);
 
             MarkModified();
         }
@@ -95,6 +108,27 @@ namespace Manufactures.Domain.DailyOperations.Entities
         public void SetSizingGroup(string sizingGroup)
         {
             Validator.ThrowIfNull(() => sizingGroup);
+
+            MarkModified();
+        }
+
+        public void SetInformation(string information)
+        {
+            Validator.ThrowIfNull(() => information);
+
+            MarkModified();
+        }
+
+        public void SetWarpOrigin(Origin warpOrigin)
+        {
+            Validator.ThrowIfNull(() => warpOrigin);
+
+            MarkModified();
+        }
+
+        public void SetWeftOrigin(Origin weftOrigin)
+        {
+            Validator.ThrowIfNull(() => weftOrigin);
 
             MarkModified();
         }

@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Domain.Commands;
 using Manufactures.Domain.DailyOperations.Entities;
+using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -20,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Commands
         public UnitId UnitId { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationMachineDetail> DailyOperationMachineDetails { get; set; }
+        public List<DailyOperationsValueObject> DailyOperationMachineDetails { get; set; }
 
         public void SetId(Guid Id)
         {
