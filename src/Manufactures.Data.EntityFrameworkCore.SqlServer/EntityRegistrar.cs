@@ -29,8 +29,15 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationMachineDetails");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(e => e.OrderDocument).HasMaxLength(2000);
+                etb.Property(e => e.Shift).HasMaxLength(255);
                 etb.Property(e => e.DOMTime).HasMaxLength(2000);
+                etb.Property(e => e.BeamNumber).HasMaxLength(255);
+                etb.Property(e => e.BeamOperator).HasMaxLength(2000);
+                etb.Property(e => e.LoomGroup).HasMaxLength(2000);
+                etb.Property(e => e.SizingGroup).HasMaxLength(255);
+                etb.Property(e => e.SizingOperator).HasMaxLength(2000);
+                etb.Property(e => e.SizingGroup).HasMaxLength(255);
+                etb.Property(e => e.Information).HasMaxLength(2000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -40,8 +47,6 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_DailyOperationMachineDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.Information).HasMaxLength(255);
 
                 etb.HasMany(e => e.DailyOperationMachineDetails)
                     .WithOne(e => e.DailyOperationMachineDocument)
