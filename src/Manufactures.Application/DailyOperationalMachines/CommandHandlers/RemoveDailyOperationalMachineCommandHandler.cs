@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
-    public class RemoveDailyOperationalMachineCommandHandler : ICommandHandler<RemoveDailyOperationCommand, DailyOperationMachineDocument>
+    public class RemoveDailyOperationalMachineCommandHandler : ICommandHandler<RemoveDailyOperationalMachineCommand, DailyOperationalMachineDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationalMachineRepository _dailyOperationalDocumentRepository;
@@ -22,7 +22,7 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
             _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationalMachineRepository>();
         }
 
-        public async Task<DailyOperationMachineDocument> Handle(RemoveDailyOperationCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationalMachineDocument> Handle(RemoveDailyOperationalMachineCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
             var existingOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();

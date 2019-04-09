@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.ValueObjects
 {
-    public class DailyOperationsValueObject : ValueObject
+    public class DailyOperationalMachinesValueObject : ValueObject
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -60,7 +60,7 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
 
-        public DailyOperationsValueObject(DateTimeOffset dateOperated, string machineId, int unitId, string orderNumber, List<Origin> warpOrigin, List<Origin> weftOrigin, string constructionNumber, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information)
+        public DailyOperationalMachinesValueObject(DateTimeOffset dateOperated, string machineId, int unitId, string orderNumber, List<Origin> warpOrigin, List<Origin> weftOrigin, string constructionNumber, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information)
         {
             DateOperated = dateOperated;
             MachineId = machineId;

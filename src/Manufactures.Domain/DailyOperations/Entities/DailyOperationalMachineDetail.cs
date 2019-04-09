@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Entities
 {
-    public class DailyOperationMachineDetail : EntityBase<DailyOperationMachineDetail>
+    public class DailyOperationalMachineDetail : EntityBase<DailyOperationalMachineDetail>
     {
         public Guid OrderDocumentId { get; private set; }
         public string Shift { get; private set; }
@@ -25,13 +25,13 @@ namespace Manufactures.Domain.DailyOperations.Entities
         public List<Origin> WeftsOrigin { get; private set; }
 
         public Guid DailyOperationMachineDocumentId { get; set; }
-        public DailyOperationMachineDocumentReadModel DailyOperationMachineDocument { get; set; }
+        public DailyOperationalMachineDocumentReadModel DailyOperationMachineDocument { get; set; }
 
-        public DailyOperationMachineDetail(Guid identity) : base(identity)
+        public DailyOperationalMachineDetail(Guid identity) : base(identity)
         {
         }
 
-        public DailyOperationMachineDetail(Guid identity, OrderDocumentId orderDocumentId, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information, List<Origin> warpOrigin, List<Origin> weftOrigin) : base(identity)
+        public DailyOperationalMachineDetail(Guid identity, OrderDocumentId orderDocumentId, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information, List<Origin> warpOrigin, List<Origin> weftOrigin) : base(identity)
         {
             Identity = identity;
             OrderDocumentId = orderDocumentId.Value;
@@ -133,7 +133,7 @@ namespace Manufactures.Domain.DailyOperations.Entities
             MarkModified();
         }
 
-        protected override DailyOperationMachineDetail GetEntity()
+        protected override DailyOperationalMachineDetail GetEntity()
         {
             return this;
         }

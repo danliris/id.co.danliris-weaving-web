@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperationalMachines.Repositories
 {
-    public class DailyOperationalMachineRepository : AggregateRepostory<DailyOperationMachineDocument, DailyOperationMachineDocumentReadModel>, IDailyOperationalMachineRepository
+    public class DailyOperationalMachineRepository : AggregateRepostory<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>, IDailyOperationalMachineRepository
     {
-        protected override DailyOperationMachineDocument Map(DailyOperationMachineDocumentReadModel readModel)
+        protected override DailyOperationalMachineDocument Map(DailyOperationalMachineDocumentReadModel readModel)
         {
-            return new DailyOperationMachineDocument(readModel);
+            return new DailyOperationalMachineDocument(readModel);
         }
     }
 }

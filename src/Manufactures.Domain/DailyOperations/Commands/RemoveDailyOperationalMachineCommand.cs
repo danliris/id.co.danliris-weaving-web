@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Commands
 {
-    public class RemoveDailyOperationCommand : ICommand<DailyOperationMachineDocument>
+    public class RemoveDailyOperationalMachineCommand : ICommand<DailyOperationalMachineDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }

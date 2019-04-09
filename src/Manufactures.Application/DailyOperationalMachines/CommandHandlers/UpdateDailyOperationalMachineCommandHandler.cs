@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
-    public class UpdateDailyOperationalMachineCommandHandler : ICommandHandler<UpdateDailyOperationCommand, DailyOperationMachineDocument>
+    public class UpdateDailyOperationalMachineCommandHandler : ICommandHandler<UpdateDailyOperationalMachineCommand, DailyOperationalMachineDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationalMachineRepository _dailyOperationalDocumentRepository;
@@ -29,12 +29,12 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
         {
             _storage = storage;
             _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationalMachineRepository>();
-            _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
-            _machineRepository = _storage.GetRepository<IMachineRepository>();
+            //_weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
+            //_constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            //_machineRepository = _storage.GetRepository<IMachineRepository>();
         }
 
-        public async Task<DailyOperationMachineDocument> Handle(UpdateDailyOperationCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationalMachineDocument> Handle(UpdateDailyOperationalMachineCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
             var existingOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();

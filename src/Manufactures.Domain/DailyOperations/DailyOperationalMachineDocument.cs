@@ -8,23 +8,23 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations
 {
-    public class DailyOperationMachineDocument : AggregateRoot<DailyOperationMachineDocument, DailyOperationMachineDocumentReadModel>
+    public class DailyOperationalMachineDocument : AggregateRoot<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>
     {
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
-        public IReadOnlyCollection<DailyOperationMachineDetail> DailyOperationMachineDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationMachineDocument(Guid id, MachineId machineId, UnitId unitId) :base(id)
+        public DailyOperationalMachineDocument(Guid id, MachineId machineId, UnitId unitId) :base(id)
         {
             Identity = id;
             MachineId = machineId;
             UnitId = unitId;
-            DailyOperationMachineDetails = new List<DailyOperationMachineDetail>();
+            DailyOperationMachineDetails = new List<DailyOperationalMachineDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationMachineDocumentReadModel(Identity)
+            ReadModel = new DailyOperationalMachineDocumentReadModel(Identity)
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
@@ -32,7 +32,7 @@ namespace Manufactures.Domain.DailyOperations
             };
         }
 
-        public DailyOperationMachineDocument(DailyOperationMachineDocumentReadModel readModel) : base(readModel)
+        public DailyOperationalMachineDocument(DailyOperationalMachineDocumentReadModel readModel) : base(readModel)
         {
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
@@ -40,7 +40,7 @@ namespace Manufactures.Domain.DailyOperations
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
         }
 
-        public void AddDailyOperationMachineDetail(DailyOperationMachineDetail dailyOperationMachineDetail)
+        public void AddDailyOperationMachineDetail(DailyOperationalMachineDetail dailyOperationMachineDetail)
         {
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
@@ -84,7 +84,7 @@ namespace Manufactures.Domain.DailyOperations
             }
         }
 
-        protected override DailyOperationMachineDocument GetEntity()
+        protected override DailyOperationalMachineDocument GetEntity()
         {
             return this;
         }

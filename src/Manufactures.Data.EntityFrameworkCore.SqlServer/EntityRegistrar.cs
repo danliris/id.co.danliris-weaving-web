@@ -24,7 +24,7 @@ namespace Manufactures.Data.EntityFrameworkCore
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<DailyOperationMachineDetail>(etb =>
+            modelBuilder.Entity<DailyOperationalMachineDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationMachineDetails");
                 etb.HasKey(e => e.Identity);
@@ -43,7 +43,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationMachineDocumentReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationalMachineDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationMachineDocuments");
                 etb.HasKey(e => e.Identity);

@@ -5,14 +5,14 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.ReadModels
 {
-    public class DailyOperationMachineDocumentReadModel : ReadModelBase
+    public class DailyOperationalMachineDocumentReadModel : ReadModelBase
     {
-        public DailyOperationMachineDocumentReadModel(Guid identity) : base(identity)
+        public DailyOperationalMachineDocumentReadModel(Guid identity) : base(identity)
         {
         }
         public DateTimeOffset DateOperated { get; internal set; }
         public Guid? MachineId { get; internal set; }
         public int? UnitId { get; internal set; }
-        public List<DailyOperationMachineDetail> DailyOperationMachineDetails { get; internal set; }
+        public List<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; internal set; }
     }
 }

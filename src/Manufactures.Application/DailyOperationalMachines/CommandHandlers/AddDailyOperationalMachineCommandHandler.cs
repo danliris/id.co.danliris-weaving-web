@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
-    public class AddDailyOperationalMachineCommandHandler : ICommandHandler<AddNewDailyOperationCommand, DailyOperationMachineDocument>
+    public class AddDailyOperationalMachineCommandHandler : ICommandHandler<AddNewDailyOperationalMachineCommand, DailyOperationalMachineDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationalMachineRepository _dailyOperationalDocumentRepository;
@@ -35,16 +35,16 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
             _machineRepository = _storage.GetRepository<IMachineRepository>();
         }
 
-        public async Task<DailyOperationMachineDocument> Handle(AddNewDailyOperationCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationalMachineDocument> Handle(AddNewDailyOperationalMachineCommand request, CancellationToken cancellationToken)
         {
-            var dailyOperationMachineDocument = new DailyOperationMachineDocument(Guid.NewGuid(), request.MachineId, request.UnitId);
-            var listOfDailyOperationDetail = new List<DailyOperationMachineDetail>();
+            var dailyOperationMachineDocument = new DailyOperationalMachineDocument(Guid.NewGuid(), request.MachineId, request.UnitId);
+            var listOfDailyOperationDetail = new List<DailyOperationalMachineDetail>();
 
             foreach (var operation in request.DailyOperationMachineDetails)
             {
                 var existingOrderDocument = _weavingOrderDocumentRepository.Find(o => o.OrderNumber.Equals(operation.OrderNumber)).FirstOrDefault();
                 var existingConstructionDocument = _constructionDocumentRepository.Find(o => o.Identity.Equals(existingOrderDocument.ConstructionId)).FirstOrDefault();
-                var newOperation = new DailyOperationMachineDetail(Guid.NewGuid(), new OrderDocumentId(existingOrderDocument.Identity), operation.Shift, operation.DOMTime, operation.BeamNumber, operation.BeamOperator, operation.LoomGroup, operation.SizingNumber, operation.SizingOperator, operation.SizingGroup, operation.Information, operation.WarpOrigin, operation.WeftOrigin);
+                var newOperation = new DailyOperationalMachineDetail(Guid.NewGuid(), new OrderDocumentId(existingOrderDocument.Identity), operation.Shift, operation.DOMTime, operation.BeamNumber, operation.BeamOperator, operation.LoomGroup, operation.SizingNumber, operation.SizingOperator, operation.SizingGroup, operation.Information, operation.WarpOrigin, operation.WeftOrigin);
                 dailyOperationMachineDocument.AddDailyOperationMachineDetail(newOperation);
             }
             await _dailyOperationalDocumentRepository.Update(dailyOperationMachineDocument);

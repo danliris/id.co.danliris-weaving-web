@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Repositories
 {
-    public interface IDailyOperationalMachineRepository : IAggregateRepository<DailyOperationMachineDocument, DailyOperationMachineDocumentReadModel>
+    public interface IDailyOperationalMachineRepository : IAggregateRepository<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>
     {
     }
 }
