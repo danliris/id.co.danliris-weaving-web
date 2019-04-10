@@ -46,17 +46,19 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 
             foreach (var operation in existingOperation.DailyOperationMachineDetails)
             {
-                var updateOperation = request.DailyOperationMachineDetails.Where(e => e.Id.Equals(operation.Identity)).FirstOrDefault();
+                var updateOperation = request.DailyOperationMachineDetails.Where(e => e.Identity.Equals(operation.Identity)).FirstOrDefault();
                 if(updateOperation != null)
                 {
-                    operation.SetShift(updateOperation.Shift);
-                    operation.SetBeamNumber(updateOperation.BeamNumber);
-                    operation.SetBeamOperator(updateOperation.BeamOperator);
+                    operation.SetOrderDocumentId(updateOperation.OrderDocument.Identity);
+                    operation.SetBeamDocumentId(updateOperation.BeamDocument.Identity);
+                    operation.SetDomTime(updateOperation.DOMTime);
+                    operation.SetShiftDocumentId(updateOperation.ShiftDocument.Identity);
+                    operation.SetBeamOperatorDocumentId(updateOperation.BeamOperatorDocument.Identity);
+                    operation.SetSizingOperatorDocumentId(updateOperation.SizingOperatorDocument.Identity);
                     operation.SetLoomGroup(updateOperation.LoomGroup);
-                    operation.SetSizingNumber(updateOperation.SizingNumber);
-                    operation.SetSizingOperator(updateOperation.SizingOperator);
                     operation.SetSizingGroup(updateOperation.SizingGroup);
                     operation.SetInformation(updateOperation.Information);
+                    operation.SetDetailStatus(updateOperation.DetailStatus);
                 }
             }
             

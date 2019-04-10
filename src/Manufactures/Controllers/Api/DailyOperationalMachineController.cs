@@ -1,6 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.DailyOperations.Repositories;
+using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos.DailyOperationalMachine;
@@ -58,9 +59,12 @@ namespace Manufactures.Controllers.Api
 
                 foreach (var detail in dailyOperation.DailyOperationMachineDetails)
                 {
-                    var orderDocument = _weavingOrderDocumentRepository.Find(d => d.Identity.Equals(detail.OrderDocumentId)).FirstOrDefault();
-                    var constructionDocument = _constructionDocumentRepository.Find(c => c.Identity.Equals(orderDocument.ConstructionId)).FirstOrDefault();
+                    var getOrder = _weavingOrderDocumentRepository.Find(d => d.Identity.Equals(detail.OrderDocumentId)).FirstOrDefault();
+                    var constructionDocument = _constructionDocumentRepository.Find(c => c.Identity.Equals(getOrder.ConstructionId)).FirstOrDefault();
 
+                    var orderDocument = new OrderDocumentValueObject(getOrder.OrderNumber, constructionDocument.ConstructionNumber, getOrder.WarpOrigin, getOrder.WeftOrigin);
+
+                    var detailDto = new DailyOperationalMachineDetailsValueObject(detail.Identity, orderDocument, detail.DOMTime.Deserialize<DOMTimeValueObject>(), detail.LoomGroup, detail.SizingGroup, detail.Information, detail.DetailStatus);
                     dto.ConstructionNumber = constructionDocument.ConstructionNumber;
                 }
 

@@ -13,13 +13,15 @@ namespace Manufactures.Domain.DailyOperations
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
+        public string Status { get; private set; }
         public IReadOnlyCollection<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationalMachineDocument(Guid id, MachineId machineId, UnitId unitId) :base(id)
+        public DailyOperationalMachineDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
         {
             Identity = id;
             MachineId = machineId;
             UnitId = unitId;
+            Status = status;
             DailyOperationMachineDetails = new List<DailyOperationalMachineDetail>();
 
             this.MarkTransient();
@@ -28,6 +30,7 @@ namespace Manufactures.Domain.DailyOperations
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
+                Status = this.Status,
                 DailyOperationMachineDetails = this.DailyOperationMachineDetails.ToList()
             };
         }
@@ -37,6 +40,7 @@ namespace Manufactures.Domain.DailyOperations
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
             this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
+            this.Status = readModel.Status; 
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
         }
 
@@ -82,6 +86,14 @@ namespace Manufactures.Domain.DailyOperations
 
                 MarkModified();
             }
+        }
+
+        public void SetStatus(string value)
+        {
+            Status = value;
+            ReadModel.Status = Status;
+
+            MarkModified();
         }
 
         protected override DailyOperationalMachineDocument GetEntity()

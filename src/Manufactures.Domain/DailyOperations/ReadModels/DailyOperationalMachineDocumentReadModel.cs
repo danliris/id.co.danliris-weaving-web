@@ -13,6 +13,7 @@ namespace Manufactures.Domain.DailyOperations.ReadModels
         public DateTimeOffset DateOperated { get; internal set; }
         public Guid? MachineId { get; internal set; }
         public int? UnitId { get; internal set; }
+        public string Status { get; internal set; }
         public List<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; internal set; }
     }
 }

@@ -11,18 +11,18 @@ namespace Manufactures.Domain.DailyOperations.Entities
 {
     public class DailyOperationalMachineDetail : EntityBase<DailyOperationalMachineDetail>
     {
-        public Guid OrderDocumentId { get; private set; }
-        public string Shift { get; private set; }
+        public Guid? OrderDocumentId { get; private set; }
+        public string WarpsOrigin { get; private set; }
+        public string WeftsOrigin { get; private set; }
+        public Guid? BeamDocumentId { get; private set; }
         public string DOMTime { get; private set; }
-        public string BeamNumber { get; private set; }
-        public string BeamOperator { get; private set; }
+        public Guid? ShiftDocumentId { get; private set; }
+        public Guid? BeamOperatorDocumentId { get; private set; }
+        public Guid? SizingOperatorDocumentId { get; private set; }
         public string LoomGroup { get; private set; }
-        public string SizingNumber { get; private set; }
-        public string SizingOperator { get; private set; }
         public string SizingGroup { get; private set; }
         public string Information { get; private set; }
-        public List<Origin> WarpsOrigin { get; private set; }
-        public List<Origin> WeftsOrigin { get; private set; }
+        public string DetailStatus { get; private set; }
 
         public Guid DailyOperationMachineDocumentId { get; set; }
         public DailyOperationalMachineDocumentReadModel DailyOperationMachineDocument { get; set; }
@@ -31,36 +31,51 @@ namespace Manufactures.Domain.DailyOperations.Entities
         {
         }
 
-        public DailyOperationalMachineDetail(Guid identity, OrderDocumentId orderDocumentId, string shift, DOMTimeValueObject domTime, string beamNumber, string beamOperator, string loomGroup, string sizingNumber, string sizingOperator, string sizingGroup, string information, List<Origin> warpOrigin, List<Origin> weftOrigin) : base(identity)
+        public DailyOperationalMachineDetail(Guid identity, Guid orderDocumentId, List<Origin> warpsOrigin, List<Origin> weftsOrigin, Guid beamDocumentId, DOMTimeValueObject domTime, Guid shiftDocumentId, Guid beamOperatorDocumentId, Guid sizingOperatorDocumentId, string loomGroup, string sizingGroup, string information, string detailStatus) : base(identity)
         {
             Identity = identity;
-            OrderDocumentId = orderDocumentId.Value;
-            Shift = shift;
+            OrderDocumentId = orderDocumentId;
+            WarpsOrigin = warpsOrigin.Serialize();
+            WeftsOrigin = weftsOrigin.Serialize();
+            BeamDocumentId = beamDocumentId;
             DOMTime = domTime.Serialize();
-            BeamNumber = beamNumber;
-            BeamOperator = beamOperator;
+            ShiftDocumentId = shiftDocumentId;
+            BeamOperatorDocumentId = beamOperatorDocumentId;
+            SizingOperatorDocumentId = sizingOperatorDocumentId;
             LoomGroup = loomGroup;
-            SizingNumber = sizingNumber;
-            SizingOperator = sizingOperator;
             SizingGroup = sizingGroup;
             Information = information;
-            WarpsOrigin = warpOrigin;
-            WeftsOrigin = weftOrigin;
+            DetailStatus = detailStatus;
         }
 
-        public void SetOrderDocumentId(OrderDocumentId orderDocumentId)
+        public void SetOrderDocumentId(Guid orderDocumentId)
         {
             Validator.ThrowIfNull(() => orderDocumentId);
 
             MarkModified();
         }
 
-        public void SetShift(string shift)
+        public void SetWarpOrigin(Origin warpOrigin)
         {
-            Validator.ThrowIfNull(() => shift);
+            Validator.ThrowIfNull(() => warpOrigin);
 
             MarkModified();
         }
+
+        public void SetWeftOrigin(Origin weftOrigin)
+        {
+            Validator.ThrowIfNull(() => weftOrigin);
+
+            MarkModified();
+        }
+
+        public void SetBeamDocumentId(Guid beamDocumentId)
+        {
+            Validator.ThrowIfNull(() => beamDocumentId);
+
+            MarkModified();
+        }
+
         public void SetDomTime(DOMTimeValueObject domTime)
         {
             Validator.ThrowIfNull(() => domTime);
@@ -70,16 +85,23 @@ namespace Manufactures.Domain.DailyOperations.Entities
             MarkModified();
         }
 
-        public void SetBeamNumber(string beamNumber)
+        public void SetShiftDocumentId(Guid shiftDocumentId)
         {
-            Validator.ThrowIfNull(() => beamNumber);
+            Validator.ThrowIfNull(() => shiftDocumentId);
 
             MarkModified();
         }
 
-        public void SetBeamOperator(string beamOperator)
+        public void SetBeamOperatorDocumentId(Guid beamOperatorDocumentId)
         {
-            Validator.ThrowIfNull(() => beamOperator);
+            Validator.ThrowIfNull(() => beamOperatorDocumentId);
+
+            MarkModified();
+        }
+
+        public void SetSizingOperatorDocumentId(Guid sizingOperatorDocumentId)
+        {
+            Validator.ThrowIfNull(() => sizingOperatorDocumentId);
 
             MarkModified();
         }
@@ -87,20 +109,6 @@ namespace Manufactures.Domain.DailyOperations.Entities
         public void SetLoomGroup(string loomGroup)
         {
             Validator.ThrowIfNull(() => loomGroup);
-
-            MarkModified();
-        }
-
-        public void SetSizingNumber(string sizingNumber)
-        {
-            Validator.ThrowIfNull(() => sizingNumber);
-
-            MarkModified();
-        }
-
-        public void SetSizingOperator(string sizingOperator)
-        {
-            Validator.ThrowIfNull(() => sizingOperator);
 
             MarkModified();
         }
@@ -119,16 +127,9 @@ namespace Manufactures.Domain.DailyOperations.Entities
             MarkModified();
         }
 
-        public void SetWarpOrigin(Origin warpOrigin)
+        public void SetDetailStatus(string detailStatus)
         {
-            Validator.ThrowIfNull(() => warpOrigin);
-
-            MarkModified();
-        }
-
-        public void SetWeftOrigin(Origin weftOrigin)
-        {
-            Validator.ThrowIfNull(() => weftOrigin);
+            Validator.ThrowIfNull(() => detailStatus);
 
             MarkModified();
         }

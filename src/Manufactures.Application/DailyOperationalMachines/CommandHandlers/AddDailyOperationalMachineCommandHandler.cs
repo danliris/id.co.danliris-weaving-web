@@ -37,14 +37,20 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 
         public async Task<DailyOperationalMachineDocument> Handle(AddNewDailyOperationalMachineCommand request, CancellationToken cancellationToken)
         {
-            var dailyOperationMachineDocument = new DailyOperationalMachineDocument(Guid.NewGuid(), request.MachineId, request.UnitId);
+            var dailyOperationMachineDocument = new DailyOperationalMachineDocument(Guid.NewGuid(), request.MachineId, request.UnitId, request.Status);
             var listOfDailyOperationDetail = new List<DailyOperationalMachineDetail>();
 
             foreach (var operation in request.DailyOperationMachineDetails)
             {
-                var existingOrderDocument = _weavingOrderDocumentRepository.Find(o => o.OrderNumber.Equals(operation.OrderNumber)).FirstOrDefault();
+                var existingOrderDocument = _weavingOrderDocumentRepository.Find(o => o.Identity.Equals(operation.OrderDocument.Identity)).FirstOrDefault();
                 var existingConstructionDocument = _constructionDocumentRepository.Find(o => o.Identity.Equals(existingOrderDocument.ConstructionId)).FirstOrDefault();
-                var newOperation = new DailyOperationalMachineDetail(Guid.NewGuid(), new OrderDocumentId(existingOrderDocument.Identity), operation.Shift, operation.DOMTime, operation.BeamNumber, operation.BeamOperator, operation.LoomGroup, operation.SizingNumber, operation.SizingOperator, operation.SizingGroup, operation.Information, operation.WarpOrigin, operation.WeftOrigin);
+
+                var warpsOrigin = new List<Origin>();
+                warpsOrigin.Add(new Origin(operation.OrderDocument.WarpOrigin));
+                var weftsOrigin = new List<Origin>();
+                weftsOrigin.Add(new Origin(operation.OrderDocument.WeftOrigin));
+
+                var newOperation = new DailyOperationalMachineDetail(Guid.NewGuid(), existingOrderDocument.Identity, warpsOrigin, weftsOrigin, operation.BeamDocument.Identity, operation.DOMTime, operation.ShiftDocument.Identity, operation.BeamOperatorDocument.Identity, operation.SizingOperatorDocument.Identity, operation.LoomGroup, operation.SizingGroup, operation.Information, operation.DetailStatus);
                 dailyOperationMachineDocument.AddDailyOperationMachineDetail(newOperation);
             }
             await _dailyOperationalDocumentRepository.Update(dailyOperationMachineDocument);
