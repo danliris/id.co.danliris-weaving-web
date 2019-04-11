@@ -1,4 +1,5 @@
 ﻿using Moonlay.Domain;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,24 +8,26 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
 {
     public class DOMTimeValueObject : ValueObject
     {
-        public DOMTimeValueObject(DateTimeOffset stop, DateTimeOffset remove, DateTimeOffset install, DateTimeOffset difference)
+        [JsonProperty(PropertyName = "Pause")]
+        public DateTimeOffset Pause { get; set; }
+
+        [JsonProperty(PropertyName = "Resume")]
+        public DateTimeOffset Resume { get; set; }
+
+        [JsonProperty(PropertyName = "Difference")]
+        public DateTimeOffset Difference { get; set; }
+
+        public DOMTimeValueObject(DateTimeOffset pause, DateTimeOffset resume, DateTimeOffset difference)
         {
-            Stop = stop;
-            Remove = remove;
-            Install = install;
+            Pause = pause;
+            Resume = resume;
             Difference = difference;
         }
 
-        public DateTimeOffset Stop { get; set; }
-        public DateTimeOffset Remove { get; set; }
-        public DateTimeOffset Install { get; set; }
-        public DateTimeOffset Difference { get; set; }
-
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Stop;
-            yield return Remove;
-            yield return Install;
+            yield return Pause;
+            yield return Resume;
             yield return Difference;
         }
     }
