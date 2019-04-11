@@ -22,6 +22,7 @@
     <Folder Include="DailyOperations\Commands\" />
     <Folder Include="DailyOperations\Repositories\" />
     <Folder Include="Orders\Entities\" />
+    <Folder Include="Shifts\Commands\" />
   </ItemGroup>
 
 </Project>

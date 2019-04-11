@@ -10,7 +10,10 @@ namespace Manufactures.Domain.Shifts
         public string StartTime { get; private set; }
         public string EndTime { get; private set; }
 
-        public ShiftDocument(Guid identity, string name, string startTime, string endTime) : base(identity)
+        public ShiftDocument(Guid identity, 
+                             string name, 
+                             string startTime, 
+                             string endTime) : base(identity)
         {
             Identity = identity;
             Name = name;
