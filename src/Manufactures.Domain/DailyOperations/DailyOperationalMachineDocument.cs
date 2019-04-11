@@ -8,45 +8,43 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations
 {
-    public class DailyOperationMachineDocument : AggregateRoot<DailyOperationMachineDocument, DailyOperationMachineDocumentReadModel>
+    public class DailyOperationalMachineDocument : AggregateRoot<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>
     {
-        public DateTimeOffset Time { get; private set; }
-        public string Information { get; private set; }
+        public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
-        public IReadOnlyCollection<DailyOperationMachineDetail> DailyOperationMachineDetails { get; private set; }
+        public string Status { get; private set; }
+        public IReadOnlyCollection<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationMachineDocument(Guid id, DateTimeOffset time, string information, MachineId machineId, UnitId unitId) :base(id)
+        public DailyOperationalMachineDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
         {
             Identity = id;
-            Time = time;
-            Information = information;
             MachineId = machineId;
             UnitId = unitId;
-            DailyOperationMachineDetails = new List<DailyOperationMachineDetail>();
+            Status = status;
+            DailyOperationMachineDetails = new List<DailyOperationalMachineDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationMachineDocumentReadModel(Identity)
+            ReadModel = new DailyOperationalMachineDocumentReadModel(Identity)
             {
-                Time = this.Time,
-                Information = this.Information,
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
+                Status = this.Status,
                 DailyOperationMachineDetails = this.DailyOperationMachineDetails.ToList()
             };
         }
 
-        public DailyOperationMachineDocument(DailyOperationMachineDocumentReadModel readModel) : base(readModel)
+        public DailyOperationalMachineDocument(DailyOperationalMachineDocumentReadModel readModel) : base(readModel)
         {
-            this.Time = readModel.Time;
-            this.Information = readModel.Information;
+            this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
             this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
+            this.Status = readModel.Status; 
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
         }
 
-        public void AddDailyOperationMachineDetail(DailyOperationMachineDetail dailyOperationMachineDetail)
+        public void AddDailyOperationMachineDetail(DailyOperationalMachineDetail dailyOperationMachineDetail)
         {
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
@@ -90,29 +88,15 @@ namespace Manufactures.Domain.DailyOperations
             }
         }
 
-        public void SetInformation(string value)
+        public void SetStatus(string value)
         {
-            if (value != Information)
-            {
-                Information = value;
-                ReadModel.Information = Information;
+            Status = value;
+            ReadModel.Status = Status;
 
-                MarkModified();
-            }
+            MarkModified();
         }
 
-        public void SetTime(DateTimeOffset value)
-        {
-            if(value != Time)
-            {
-                Time = value;
-                ReadModel.Time = Time;
-
-                MarkModified();
-            } 
-        }
-
-        protected override DailyOperationMachineDocument GetEntity()
+        protected override DailyOperationalMachineDocument GetEntity()
         {
             return this;
         }

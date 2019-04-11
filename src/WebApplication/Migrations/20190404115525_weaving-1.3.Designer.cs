@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20190329105748_weaving-1.1")]
-    partial class weaving11
+    [Migration("20190404115525_weaving-1.3")]
+    partial class weaving13
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -79,6 +79,93 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasKey("Identity");
 
                     b.ToTable("Weaving_ConstructionDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Entities.DailyOperationMachineDetail", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Beam");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<string>("DOMTime")
+                        .HasMaxLength(2000);
+
+                    b.Property<Guid>("DailyOperationMachineDocumentId");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<string>("OrderDocument")
+                        .HasMaxLength(2000);
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<string>("Shift");
+
+                    b.HasKey("Identity");
+
+                    b.HasIndex("DailyOperationMachineDocumentId");
+
+                    b.ToTable("Weaving_DailyOperationMachineDetails");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.ReadModels.DailyOperationMachineDocumentReadModel", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("Information")
+                        .HasMaxLength(255);
+
+                    b.Property<Guid?>("MachineIdValueObject");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<DateTimeOffset>("Time");
+
+                    b.Property<int?>("UnitId");
+
+                    b.HasKey("Identity");
+
+                    b.ToTable("Weaving_DailyOperationMachineDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
@@ -329,9 +416,9 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<int?>("UnitDepartementId");
 
-                    b.Property<int?>("UserMaintenanceId");
+                    b.Property<string>("UserMaintenanceId");
 
-                    b.Property<int?>("UserOperatorId");
+                    b.Property<string>("UserOperatorId");
 
                     b.HasKey("Identity");
 
@@ -525,6 +612,14 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasKey("Identity");
 
                     b.ToTable("Weaving_YarnDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Entities.DailyOperationMachineDetail", b =>
+                {
+                    b.HasOne("Manufactures.Domain.DailyOperations.ReadModels.DailyOperationMachineDocumentReadModel", "DailyOperationMachineDocument")
+                        .WithMany("DailyOperationMachineDetails")
+                        .HasForeignKey("DailyOperationMachineDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
