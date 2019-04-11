@@ -35,7 +35,7 @@ namespace Manufactures.Dtos
 
         public Blended Blended { get; }
 
-        public MachineId MachineId { get; }
+        public MachineIdValueObject MachineId { get; }
 
         public ManufactureOrder.Status State { get; }
 

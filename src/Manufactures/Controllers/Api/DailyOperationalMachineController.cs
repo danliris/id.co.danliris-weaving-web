@@ -1,5 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.DailyOperations.Commands;
 using Manufactures.Domain.DailyOperations.Repositories;
 using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Machines.Repositories;
@@ -112,6 +113,66 @@ namespace Manufactures.Controllers.Api
                 size,
                 total = totalRows
             });
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> Get(string Id)
+        {
+            var Identity = Guid.Parse(Id);
+            var query = _dailyOperationalDocumentRepository.Query;
+            var dailyOperationalMachineDocument =
+                _dailyOperationalDocumentRepository.Find(query.Include(p => p.DailyOperationMachineDetails))
+                                            .Where(o => o.Identity == Identity)
+                                            .FirstOrDefault();
+            await Task.Yield();
+
+            if (Identity == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(dailyOperationalMachineDocument);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationalMachineCommand command)
+        {
+            var newDailyOperationalMachineDocument = await Mediator.Send(command);
+
+            return Ok(newDailyOperationalMachineDocument.Identity);
+        }
+
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdateDailyOperationalMachineCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+
+            command.SetId(documentId);
+            var updateDailyOperationalMachineDocument = await Mediator.Send(command);
+
+            return Ok(updateDailyOperationalMachineDocument.Identity);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+
+            var command = new RemoveDailyOperationalMachineCommand();
+            command.SetId(documentId);
+
+            var deletedDailyOperationalMachineDocument = await Mediator.Send(command);
+
+            return Ok(deletedDailyOperationalMachineDocument.Identity);
         }
     }
 }

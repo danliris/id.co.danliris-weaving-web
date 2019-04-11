@@ -16,7 +16,7 @@ namespace Manufactures.Domain.Orders
             Finished = 30,
         }
 
-        public ManufactureOrder(Guid id, DateTimeOffset orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsCompositionId compositionId, Blended blended, MachineId machineId, string userId) : base(id)
+        public ManufactureOrder(Guid id, DateTimeOffset orderDate, UnitDepartmentId unitId, YarnCodes yarnCodes, GoodsCompositionId compositionId, Blended blended, MachineIdValueObject machineId, string userId) : base(id)
         {
             // Validate Mandatory Properties
             Validator.ThrowIfNull(() => unitId);
@@ -57,7 +57,7 @@ namespace Manufactures.Domain.Orders
 
         public ManufactureOrder(ManufactureOrderReadModel readModel) : base(readModel)
         {
-            this.MachineId = new MachineId(ReadModel.MachineId);
+            this.MachineId = new MachineIdValueObject(ReadModel.MachineId);
             this.Blended = ReadModel.BlendedJson.Deserialize<Blended>();
 
             this.OrderDate = ReadModel.OrderDate;
@@ -117,9 +117,9 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public MachineId MachineId { get; private set; }
+        public MachineIdValueObject MachineId { get; private set; }
 
-        public void SetMachineId(MachineId newMachine)
+        public void SetMachineId(MachineIdValueObject newMachine)
         {
             Validator.ThrowIfNull(() => newMachine);
 

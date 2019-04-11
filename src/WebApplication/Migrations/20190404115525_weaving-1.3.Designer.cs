@@ -148,7 +148,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<string>("Information")
                         .HasMaxLength(255);
 
-                    b.Property<Guid?>("MachineId");
+                    b.Property<Guid?>("MachineIdValueObject");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
@@ -403,7 +403,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<Guid?>("MachineId");
+                    b.Property<Guid?>("MachineIdValueObject");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
