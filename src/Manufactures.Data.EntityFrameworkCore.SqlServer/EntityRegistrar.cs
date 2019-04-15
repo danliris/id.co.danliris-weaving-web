@@ -16,6 +16,8 @@ using Manufactures.Domain.MachineTypes.ReadModels;
 using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
 using Manufactures.Domain.DailyOperations.Entities;
 using Manufactures.Domain.DailyOperations.ReadModels;
+using Manufactures.Domain.Shifts.ReadModels;
+using Manufactures.Domain.Operators.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -23,8 +25,29 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OperatorReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_OperatorDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Assignment).HasMaxLength(255);
+                etb.Property(e => e.Type).HasMaxLength(255);
+                etb.Property(e => e.Group).HasMaxLength(255);
 
-            modelBuilder.Entity<DailyOperationalMachineDetail>(etb =>
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<ShiftReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_ShiftDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Name).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+                modelBuilder.Entity<DailyOperationalMachineDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationMachineDetails");
                 etb.HasKey(e => e.Identity);
