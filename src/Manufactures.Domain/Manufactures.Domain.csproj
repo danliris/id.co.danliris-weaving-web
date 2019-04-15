@@ -20,7 +20,6 @@
 
   <ItemGroup>
     <Folder Include="Orders\Entities\" />
-    <Folder Include="Shifts\Commands\" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,6 @@ namespace Manufactures.Domain.Shared.Commands
         public string MongoId { get; private set; }
 
         [JsonProperty(propertyName: "Id")]
-        public int Id { get; private set; }
+        public int? Id { get; private set; }
     }
 }

@@ -50,10 +50,8 @@ namespace Manufactures.Domain.Shifts
 
         public void SetStartTime(string value)
         {
-            var startTime = DateTimeOffset.Parse(StartTime);
-            var valueTime = DateTimeOffset.Parse(value);
 
-            if(startTime.Hour != valueTime.Hour)
+            if(StartTime != value)
             {
                 StartTime = value;
                 ReadModel.StartTime = StartTime;
@@ -67,7 +65,7 @@ namespace Manufactures.Domain.Shifts
             var endTime = DateTimeOffset.Parse(EndTime);
             var valueTime = DateTimeOffset.Parse(value);
 
-            if (endTime.Hour != valueTime.Hour)
+            if (EndTime != value)
             {
                 EndTime = value;
                 ReadModel.EndTime = EndTime;
