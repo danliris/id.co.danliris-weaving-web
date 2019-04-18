@@ -29,6 +29,7 @@ namespace Manufactures.Controllers.Api
             _OperatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
         }
+
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
                                              int size = 25,
