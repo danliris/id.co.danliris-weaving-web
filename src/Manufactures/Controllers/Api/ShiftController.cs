@@ -114,8 +114,7 @@ namespace Manufactures.Controllers.Api
             var existingOperator =
                 _shiftRepository
                     .Query
-                    .Where(o => o.Name
-                    .Equals(command.Name))
+                    .Where(o => o.Name.Equals(command.Name))
                     .FirstOrDefault();
 
             if (existingOperator != null)

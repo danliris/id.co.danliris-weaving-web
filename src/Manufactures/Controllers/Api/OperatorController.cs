@@ -118,14 +118,17 @@ namespace Manufactures.Controllers.Api
             var existingOperator = 
                 _OperatorRepository
                     .Query
-                    .Where(o => o.CoreAccount.Deserialize<CoreAccount>()
-                    .MongoId
-                    .Equals(mongodbId))
+                    .Where(o => o.CoreAccount
+                                 .Deserialize<CoreAccount>()
+                                 .MongoId.Equals(mongodbId) && 
+                                o.Group.Equals(command.Group))
                     .FirstOrDefault();
 
             if(existingOperator != null)
             {
-                throw Validator.ErrorValidation(("Id", "Has existing account operator"));
+                throw Validator
+                    .ErrorValidation(("Id", 
+                                      "Has existing account operator with same Group"));
             }
 
             var operatorDocument = await Mediator.Send(command);
