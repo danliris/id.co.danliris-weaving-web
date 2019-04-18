@@ -29,11 +29,13 @@ namespace Manufactures.Application.Operators.CommandHandlers
             var coreAccount = 
                 new CoreAccount(request.CoreAccount.MongoId, 
                                 request.CoreAccount.Id.HasValue ? 
-                                    request.CoreAccount.Id.Value : 0);
+                                    request.CoreAccount.Id.Value : 0, 
+                                request.CoreAccount.Name);
             var newOperator = 
-                new OperatorDocument(Guid.NewGuid(), 
-                                     coreAccount, 
-                                     request.Group, 
+                new OperatorDocument(Guid.NewGuid(),
+                                     coreAccount,
+                                     new UnitId(request.UnitId.Id),
+                                     request.Group,
                                      request.Assignment,
                                      request.Type);
 

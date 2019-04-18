@@ -7,16 +7,19 @@ namespace Manufactures.Domain.Shared.ValueObjects
     {
         public string MongoId { get; private set; }
         public int Id { get; private set; }
-        
-        public CoreAccount(string mongoId)
+        public string Name { get; private set; }
+
+        public CoreAccount(string mongoId, string name)
         {
             MongoId = mongoId;
+            Name = name;
         }
 
-        public CoreAccount(string mongoId, int id)
+        public CoreAccount(string mongoId, int id, string name)
         {
             MongoId = mongoId;
             Id = id;
+            Name = name;
         }
 
         protected override IEnumerable<object> GetAtomicValues()

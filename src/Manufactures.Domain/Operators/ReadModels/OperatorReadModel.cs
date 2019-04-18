@@ -12,5 +12,6 @@ namespace Manufactures.Domain.Operators.ReadModels
         public string Group { get; internal set; }
         public string Assignment { get; internal set; }
         public string Type { get; internal set; }
+        public int? UnitId { get; internal set; }
     }
 }

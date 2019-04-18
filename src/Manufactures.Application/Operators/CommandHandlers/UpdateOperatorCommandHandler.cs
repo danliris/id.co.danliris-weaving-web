@@ -29,12 +29,14 @@ namespace Manufactures.Application.Operators.CommandHandlers
             var coreAccount =
                 new CoreAccount(request.CoreAccount.MongoId,
                                 request.CoreAccount.Id.HasValue ?
-                                    request.CoreAccount.Id.Value : 0);
+                                    request.CoreAccount.Id.Value : 0, 
+                                request.CoreAccount.Name);
 
             var existingOperator = 
                 _operatorRepository.Find(o => o.Identity.Equals(request.Id))
                                    .FirstOrDefault();
 
+            existingOperator.SetUnitId(new UnitId(request.UnitId.Id));
             existingOperator.SetCoreAccount(coreAccount);
             existingOperator.SetAssignment(request.Assignment);
             existingOperator.SetGroup(request.Group);

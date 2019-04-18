@@ -9,5 +9,8 @@ namespace Manufactures.Domain.Shared.Commands
 
         [JsonProperty(propertyName: "Id")]
         public int? Id { get; private set; }
+
+        [JsonProperty(propertyName: "Name")]
+        public string Name { get; private set; }
     }
 }
