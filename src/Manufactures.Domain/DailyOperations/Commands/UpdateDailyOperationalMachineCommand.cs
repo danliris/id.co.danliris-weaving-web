@@ -27,7 +27,7 @@ namespace Manufactures.Domain.DailyOperations.Commands
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationalMachineDetailsValueObject> DailyOperationMachineDetails { get; set; }
+        public List<DailyOperationMachineDetailCommand> DailyOperationMachineDetails { get; set; }
 
         public void SetId(Guid Id)
         {

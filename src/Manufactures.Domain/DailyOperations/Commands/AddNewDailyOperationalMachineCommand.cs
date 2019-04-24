@@ -1,11 +1,9 @@
-﻿using Infrastructure.Domain.Commands;
-using Manufactures.Domain.DailyOperations.ValueObjects;
+﻿using FluentValidation;
+using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Commands
 {
@@ -24,6 +22,18 @@ namespace Manufactures.Domain.DailyOperations.Commands
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationalMachineDetailsValueObject> DailyOperationMachineDetails { get; set; }
+        public List<DailyOperationMachineDetailCommand> DailyOperationMachineDetails { get; set; }
+    }
+
+    public class AddNewDailyOperationalMachineCommandValidator 
+        : AbstractValidator<AddNewDailyOperationalMachineCommand>
+    {
+        public AddNewDailyOperationalMachineCommandValidator()
+        {
+            RuleFor(command => command.DateOperated).NotEmpty();
+            RuleFor(command => command.MachineId.Value).NotEmpty();
+            RuleFor(command => command.UnitId.Value).NotEmpty();
+            RuleFor(command => command.Status).NotEmpty();
+        }
     }
 }

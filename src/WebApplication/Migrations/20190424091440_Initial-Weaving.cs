@@ -38,6 +38,29 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Weaving_DailyOperationMachineDocuments",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    DateOperated = table.Column<DateTimeOffset>(nullable: false),
+                    MachineId = table.Column<Guid>(nullable: true),
+                    UnitId = table.Column<int>(nullable: true),
+                    Status = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_DailyOperationMachineDocuments", x => x.Identity);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Weaving_EstimationProductDocuments",
                 columns: table => new
                 {
@@ -80,6 +103,32 @@ namespace DanLiris.Admin.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Weaving_MachineDocuments", x => x.Identity);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Weaving_MachinesPlanningDocuments",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    Area = table.Column<string>(maxLength: 255, nullable: true),
+                    Blok = table.Column<string>(maxLength: 255, nullable: true),
+                    BlokKaizen = table.Column<string>(maxLength: 255, nullable: true),
+                    UnitDepartementId = table.Column<int>(nullable: true),
+                    MachineId = table.Column<Guid>(nullable: true),
+                    UserMaintenanceId = table.Column<string>(nullable: true),
+                    UserOperatorId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_MachinesPlanningDocuments", x => x.Identity);
                 });
 
             migrationBuilder.CreateTable(
@@ -128,6 +177,30 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Weaving_OperatorDocuments",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    CoreAccount = table.Column<string>(nullable: true),
+                    Group = table.Column<string>(maxLength: 255, nullable: true),
+                    Assignment = table.Column<string>(maxLength: 255, nullable: true),
+                    Type = table.Column<string>(maxLength: 255, nullable: true),
+                    UnitId = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_OperatorDocuments", x => x.Identity);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Weaving_OrderDocuments",
                 columns: table => new
                 {
@@ -156,6 +229,28 @@ namespace DanLiris.Admin.Web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Weaving_OrderDocuments", x => x.Identity);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Weaving_ShiftDocuments",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    Name = table.Column<string>(maxLength: 255, nullable: true),
+                    StartTime = table.Column<string>(nullable: true),
+                    EndTime = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_ShiftDocuments", x => x.Identity);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,6 +323,42 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Weaving_DailyOperationMachineDetails",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    OrderDocumentId = table.Column<Guid>(nullable: true),
+                    WarpsOrigin = table.Column<string>(nullable: true),
+                    WeftsOrigin = table.Column<string>(nullable: true),
+                    BeamDocumentId = table.Column<Guid>(nullable: true),
+                    DOMTime = table.Column<string>(nullable: true),
+                    ShiftDocumentId = table.Column<Guid>(nullable: true),
+                    BeamOperatorDocumentId = table.Column<Guid>(nullable: true),
+                    SizingOperatorDocumentId = table.Column<Guid>(nullable: true),
+                    Information = table.Column<string>(maxLength: 2000, nullable: true),
+                    DetailStatus = table.Column<string>(maxLength: 255, nullable: true),
+                    DailyOperationMachineDocumentId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_DailyOperationMachineDetails", x => x.Identity);
+                    table.ForeignKey(
+                        name: "FK_Weaving_DailyOperationMachineDetails_Weaving_DailyOperationMachineDocuments_DailyOperationMachineDocumentId",
+                        column: x => x.DailyOperationMachineDocumentId,
+                        principalTable: "Weaving_DailyOperationMachineDocuments",
+                        principalColumn: "Identity",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Weaving_EstimationDetails",
                 columns: table => new
                 {
@@ -257,6 +388,11 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Weaving_DailyOperationMachineDetails_DailyOperationMachineDocumentId",
+                table: "Weaving_DailyOperationMachineDetails",
+                column: "DailyOperationMachineDocumentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Weaving_EstimationDetails_EstimatedProductionDocumentId",
                 table: "Weaving_EstimationDetails",
                 column: "EstimatedProductionDocumentId");
@@ -268,10 +404,16 @@ namespace DanLiris.Admin.Web.Migrations
                 name: "Weaving_ConstructionDocuments");
 
             migrationBuilder.DropTable(
+                name: "Weaving_DailyOperationMachineDetails");
+
+            migrationBuilder.DropTable(
                 name: "Weaving_EstimationDetails");
 
             migrationBuilder.DropTable(
                 name: "Weaving_MachineDocuments");
+
+            migrationBuilder.DropTable(
+                name: "Weaving_MachinesPlanningDocuments");
 
             migrationBuilder.DropTable(
                 name: "Weaving_MachineTypeDocuments");
@@ -280,7 +422,13 @@ namespace DanLiris.Admin.Web.Migrations
                 name: "Weaving_MaterialTypeDocument");
 
             migrationBuilder.DropTable(
+                name: "Weaving_OperatorDocuments");
+
+            migrationBuilder.DropTable(
                 name: "Weaving_OrderDocuments");
+
+            migrationBuilder.DropTable(
+                name: "Weaving_ShiftDocuments");
 
             migrationBuilder.DropTable(
                 name: "Weaving_SupplierDocuments");
@@ -290,6 +438,9 @@ namespace DanLiris.Admin.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "Weaving_YarnNumberDocuments");
+
+            migrationBuilder.DropTable(
+                name: "Weaving_DailyOperationMachineDocuments");
 
             migrationBuilder.DropTable(
                 name: "Weaving_EstimationProductDocuments");
