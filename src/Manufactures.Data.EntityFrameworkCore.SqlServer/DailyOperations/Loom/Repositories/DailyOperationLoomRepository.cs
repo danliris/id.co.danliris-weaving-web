@@ -3,9 +3,9 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 
-namespace Manufactures.Data.EntityFrameworkCore.DailyOperationalMachines.Repositories
+namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Loom.Repositories
 {
-    public class DailyOperationalMachineRepository : AggregateRepostory<DailyOperationalLoomDocument, DailyOperationalMachineLoomReadModel>, IDailyOperationalLoomRepository
+    public class DailyOperationLoomRepository : AggregateRepostory<DailyOperationalLoomDocument, DailyOperationalMachineLoomReadModel>, IDailyOperationalLoomRepository
     {
         protected override DailyOperationalLoomDocument Map(DailyOperationalMachineLoomReadModel readModel)
         {
