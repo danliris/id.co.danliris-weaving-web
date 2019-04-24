@@ -14,8 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.MachineTypes.ReadModels;
 using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
-using Manufactures.Domain.DailyOperations.Entities;
-using Manufactures.Domain.DailyOperations.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Operators.ReadModels;
 
@@ -47,7 +47,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-                modelBuilder.Entity<DailyOperationalMachineDetail>(etb =>
+                modelBuilder.Entity<DailyOperationalLoomDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationMachineDetails");
                 etb.HasKey(e => e.Identity);
@@ -59,7 +59,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationalMachineDocumentReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationalMachineLoomReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationMachineDocuments");
                 etb.HasKey(e => e.Identity);

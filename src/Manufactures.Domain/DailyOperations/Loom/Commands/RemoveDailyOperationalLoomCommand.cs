@@ -1,12 +1,10 @@
 ﻿using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Commands
+namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class RemoveDailyOperationalMachineCommand : ICommand<DailyOperationalMachineDocument>
+    public class RemoveDailyOperationalLoomCommand : ICommand<DailyOperationalLoomDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }

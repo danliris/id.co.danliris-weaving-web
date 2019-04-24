@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Domain.DailyOperations.Commands;
-using Manufactures.Domain.DailyOperations.Repositories;
+using Manufactures.Domain.DailyOperations.Loom.Commands;
+using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos.DailyOperationalMachine;
@@ -23,7 +23,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationalMachineController : ControllerApiBase
     {
-        private readonly IDailyOperationalMachineRepository 
+        private readonly IDailyOperationalLoomRepository 
             _dailyOperationalDocumentRepository;
         private readonly IWeavingOrderDocumentRepository 
             _weavingOrderDocumentRepository;
@@ -37,7 +37,7 @@ namespace Manufactures.Controllers.Api
             : base(serviceProvider)
         {
             _dailyOperationalDocumentRepository = 
-                this.Storage.GetRepository<IDailyOperationalMachineRepository>();
+                this.Storage.GetRepository<IDailyOperationalLoomRepository>();
             _weavingOrderDocumentRepository = 
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
@@ -178,7 +178,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationalMachineCommand command)
+        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationalLoomCommand command)
         {
             var newDailyOperationalMachineDocument = await Mediator.Send(command);
 
@@ -187,7 +187,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDailyOperationalMachineCommand command)
+                                             [FromBody]UpdateDailyOperationalLoomCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -208,7 +208,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            var command = new RemoveDailyOperationalMachineCommand();
+            var command = new RemoveDailyOperationalLoomCommand();
             command.SetId(documentId);
 
             var deletedDailyOperationalMachineDocument = await Mediator.Send(command);

@@ -1,16 +1,14 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.DailyOperations.ReadModels;
-using Manufactures.Domain.DailyOperations.ValueObjects;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
-using Moonlay;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Entities
+namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
-    public class DailyOperationalMachineDetail
-        : EntityBase<DailyOperationalMachineDetail>
+    public class DailyOperationalLoomDetail
+        : EntityBase<DailyOperationalLoomDetail>
     {
         public Guid? OrderDocumentId { get; private set; }
         public string WarpsOrigin { get; private set; }
@@ -24,18 +22,18 @@ namespace Manufactures.Domain.DailyOperations.Entities
         public string DetailStatus { get; private set; }
 
         public Guid DailyOperationMachineDocumentId { get; set; }
-        public DailyOperationalMachineDocumentReadModel DailyOperationMachineDocument { get; set; }
+        public DailyOperationalMachineLoomReadModel DailyOperationMachineDocument { get; set; }
 
-        public DailyOperationalMachineDetail(Guid identity) : base(identity)
+        public DailyOperationalLoomDetail(Guid identity) : base(identity)
         {
         }
 
-        public DailyOperationalMachineDetail(Guid identity,
+        public DailyOperationalLoomDetail(Guid identity,
                                              OrderId orderDocumentId,
                                              List<Origin> warpsOrigin,
                                              List<Origin> weftsOrigin,
                                              BeamId beamDocumentId,
-                                             DOMTimeValueObject domTime,
+                                             DailyOperationLoomTimeValueObject domTime,
                                              ShiftId shiftDocumentId,
                                              OperatorId beamOperatorDocumentId,
                                              OperatorId sizingOperatorDocumentId,
@@ -85,7 +83,7 @@ namespace Manufactures.Domain.DailyOperations.Entities
             }
         }
 
-        public void SetDomTime(DOMTimeValueObject value)
+        public void SetDomTime(DailyOperationLoomTimeValueObject value)
         {
             DOMTime = value.Serialize();
             MarkModified();
@@ -130,7 +128,7 @@ namespace Manufactures.Domain.DailyOperations.Entities
             MarkModified();
         }
 
-        protected override DailyOperationalMachineDetail GetEntity()
+        protected override DailyOperationalLoomDetail GetEntity()
         {
             return this;
         }

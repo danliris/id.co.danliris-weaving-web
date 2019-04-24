@@ -1,23 +1,18 @@
-﻿using Manufactures.Domain.DailyOperations.Commands;
+﻿using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Moonlay.Domain;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.DailyOperations.ValueObjects
+namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
 {
-    public class DOMTimeValueObject : ValueObject
+    public class DailyOperationLoomTimeValueObject : ValueObject
     {
-        [JsonProperty(PropertyName = "Pause")]
         public DateTimeOffset Pause { get; set; }
-
-        [JsonProperty(PropertyName = "Resume")]
         public DateTimeOffset Resume { get; set; }
-
-        [JsonProperty(PropertyName = "Difference")]
         public int Difference { get; set; }
 
-        public DOMTimeValueObject(DateTimeOffset pause, 
+
+        public DailyOperationLoomTimeValueObject(DateTimeOffset pause, 
                                   DateTimeOffset resume, 
                                   DateTimeOffset difference)
         {
@@ -26,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
             Difference = pause.Subtract(resume).Hours;
         }
 
-        public DOMTimeValueObject(DailyOperationMachineTimeCommand dailyOperationMachine)
+        public DailyOperationLoomTimeValueObject(DailyOperationLoomTimeCommand dailyOperationMachine)
         {
             Pause = dailyOperationMachine.Pause;
             Resume = dailyOperationMachine.Resume;

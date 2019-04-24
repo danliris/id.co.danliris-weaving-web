@@ -1,32 +1,32 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.DailyOperations.Entities;
-using Manufactures.Domain.DailyOperations.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Domain.DailyOperations
+namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationalMachineDocument : AggregateRoot<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>
+    public class DailyOperationalLoomDocument : AggregateRoot<DailyOperationalLoomDocument, DailyOperationalMachineLoomReadModel>
     {
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
         public string Status { get; private set; }
-        public IReadOnlyCollection<DailyOperationalMachineDetail> DailyOperationMachineDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationalLoomDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationalMachineDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
+        public DailyOperationalLoomDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
         {
             Identity = id;
             MachineId = machineId;
             UnitId = unitId;
             Status = status;
-            DailyOperationMachineDetails = new List<DailyOperationalMachineDetail>();
+            DailyOperationMachineDetails = new List<DailyOperationalLoomDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationalMachineDocumentReadModel(Identity)
+            ReadModel = new DailyOperationalMachineLoomReadModel(Identity)
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
@@ -35,7 +35,7 @@ namespace Manufactures.Domain.DailyOperations
             };
         }
 
-        public DailyOperationalMachineDocument(DailyOperationalMachineDocumentReadModel readModel) : base(readModel)
+        public DailyOperationalLoomDocument(DailyOperationalMachineLoomReadModel readModel) : base(readModel)
         {
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
@@ -44,7 +44,7 @@ namespace Manufactures.Domain.DailyOperations
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
         }
 
-        public void AddDailyOperationMachineDetail(DailyOperationalMachineDetail dailyOperationMachineDetail)
+        public void AddDailyOperationMachineDetail(DailyOperationalLoomDetail dailyOperationMachineDetail)
         {
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
@@ -96,7 +96,7 @@ namespace Manufactures.Domain.DailyOperations
             MarkModified();
         }
 
-        protected override DailyOperationalMachineDocument GetEntity()
+        protected override DailyOperationalLoomDocument GetEntity()
         {
             return this;
         }

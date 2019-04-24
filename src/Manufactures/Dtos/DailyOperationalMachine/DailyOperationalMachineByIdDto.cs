@@ -1,11 +1,10 @@
-﻿using Manufactures.Domain.DailyOperations;
-using Manufactures.Domain.DailyOperations.ValueObjects;
+﻿using Manufactures.Domain.DailyOperations.Loom;
+using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Dtos.Machine;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.DailyOperationalMachine
 {
@@ -27,16 +26,16 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationalMachineDetails")]
-        public List<DailyOperationalMachineDetailsValueObject> DailyOperationalMachineDetails { get; set; }
+        public List<DailyOperationalLoomDetailsValueObject> DailyOperationalMachineDetails { get; set; }
 
-        public DailyOperationalMachineByIdDto(DailyOperationalMachineDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
+        public DailyOperationalMachineByIdDto(DailyOperationalLoomDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
         {
             Id = document.Identity;
             DateOperated = document.DateOperated;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
             Status = document.Status;
-            DailyOperationalMachineDetails = new List<DailyOperationalMachineDetailsValueObject>();
+            DailyOperationalMachineDetails = new List<DailyOperationalLoomDetailsValueObject>();
         }
     }
 }

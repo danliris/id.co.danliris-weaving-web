@@ -1,15 +1,12 @@
 ﻿using Infrastructure.Domain.Commands;
-using Manufactures.Domain.DailyOperations.Entities;
-using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Commands
+namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class UpdateDailyOperationalMachineCommand : ICommand<DailyOperationalMachineDocument>
+    public class UpdateDailyOperationalLoomCommand : ICommand<DailyOperationalLoomDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -27,7 +24,7 @@ namespace Manufactures.Domain.DailyOperations.Commands
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationMachineDetailCommand> DailyOperationMachineDetails { get; set; }
+        public List<DailyOperationLoomDetailCommand> DailyOperationMachineDetails { get; set; }
 
         public void SetId(Guid Id)
         {

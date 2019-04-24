@@ -1,12 +1,11 @@
-﻿using Manufactures.Domain.DailyOperations.ValueObjects;
-using Manufactures.Domain.Shared.ValueObjects;
+﻿using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.DailyOperations.Commands
+namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class DailyOperationMachineDetailCommand
+    public class DailyOperationLoomDetailCommand
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; set; }
@@ -20,7 +19,7 @@ namespace Manufactures.Domain.DailyOperations.Commands
 
         //From DOM Time
         [JsonProperty(PropertyName = "DOMTime")]
-        public DailyOperationMachineTimeCommand DOMTime { get; private set; }
+        public DailyOperationLoomTimeCommand DOMTime { get; private set; }
 
         ////Self Properties (Details)
         [JsonProperty(PropertyName = "ShiftId")]
