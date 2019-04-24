@@ -26,6 +26,7 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         [JsonProperty(PropertyName = "Status")]
         public string Status { get; set; }
 
+        [JsonProperty(PropertyName = "DailyOperationalMachineDetails")]
         public List<DailyOperationalMachineDetailsValueObject> DailyOperationalMachineDetails { get; set; }
 
         public DailyOperationalMachineByIdDto(DailyOperationalMachineDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)

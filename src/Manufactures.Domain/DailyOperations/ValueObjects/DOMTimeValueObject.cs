@@ -1,8 +1,8 @@
-﻿using Moonlay.Domain;
+﻿using Manufactures.Domain.DailyOperations.Commands;
+using Moonlay.Domain;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.ValueObjects
 {
@@ -15,13 +15,25 @@ namespace Manufactures.Domain.DailyOperations.ValueObjects
         public DateTimeOffset Resume { get; set; }
 
         [JsonProperty(PropertyName = "Difference")]
-        public DateTimeOffset Difference { get; set; }
+        public int Difference { get; set; }
 
-        public DOMTimeValueObject(DateTimeOffset pause, DateTimeOffset resume, DateTimeOffset difference)
+        public DOMTimeValueObject(DateTimeOffset pause, 
+                                  DateTimeOffset resume, 
+                                  DateTimeOffset difference)
         {
             Pause = pause;
             Resume = resume;
-            Difference = difference;
+            Difference = pause.Subtract(resume).Hours;
+        }
+
+        public DOMTimeValueObject(DailyOperationMachineTimeCommand dailyOperationMachine)
+        {
+            Pause = dailyOperationMachine.Pause;
+            Resume = dailyOperationMachine.Resume;
+            Difference = 
+                dailyOperationMachine.Pause
+                                    .Subtract(dailyOperationMachine.Resume)
+                                    .Hours;
         }
 
         protected override IEnumerable<object> GetAtomicValues()

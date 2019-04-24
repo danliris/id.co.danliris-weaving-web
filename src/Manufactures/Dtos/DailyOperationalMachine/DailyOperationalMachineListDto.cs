@@ -2,8 +2,6 @@
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.DailyOperationalMachine
 {
@@ -15,21 +13,28 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset DateOperated { get; }
 
+        [JsonProperty(PropertyName = "OrderNumber")]
+        public string OrderNumber { get; }
+
         [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
-        public string MachineNumber { get; set; }
+        public string MachineNumber { get; }
 
-        [JsonProperty(PropertyName = "ConstructionNumber")]
-        public string ConstructionNumber { get; set; }
+        [JsonProperty(PropertyName = "StatusOperation")]
+        public string Status { get; }
 
-        public DailyOperationalMachineListDto(DailyOperationalMachineDocument document, string machineNumber)
+        public DailyOperationalMachineListDto(DailyOperationalMachineDocument document,
+                                              string orderNumber,
+                                              string machineNumber)
         {
             Id = document.Identity;
             DateOperated = document.DateOperated;
+            OrderNumber = orderNumber;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
+            Status = document.Status;
         }
     }
 }

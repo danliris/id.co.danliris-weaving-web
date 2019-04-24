@@ -2,6 +2,12 @@
 {
     public class Constants
     {
+        // Daily Operation Status
+        public static string PROCESS = "Memproses";
+        public static string STOP = "Berhenti";
+        public static string RESUME = "Melanjutkan";
+        public static string FINISH = "Selesai";
+
         // Type Of Yarn
         public static string WARP = "LUSI";
         public static string WEFT = "PAKAN";

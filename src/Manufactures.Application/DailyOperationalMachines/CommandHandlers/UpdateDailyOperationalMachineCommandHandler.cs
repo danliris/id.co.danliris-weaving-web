@@ -3,7 +3,9 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.DailyOperations;
 using Manufactures.Domain.DailyOperations.Commands;
+using Manufactures.Domain.DailyOperations.Entities;
 using Manufactures.Domain.DailyOperations.Repositories;
+using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -29,43 +31,38 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
         {
             _storage = storage;
             _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationalMachineRepository>();
-            //_weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
-            //_constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
-            //_machineRepository = _storage.GetRepository<IMachineRepository>();
         }
 
         public async Task<DailyOperationalMachineDocument> Handle(UpdateDailyOperationalMachineCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
-            var existingOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
+            var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
 
-            //if (existingOperation == null)
-            //{
-            //    Validator.ErrorValidation(("Daily Production Document", "Unavailable existing Daily Production Document with Id " + request.Id));
-            //}
-
-            foreach (var operation in existingOperation.DailyOperationMachineDetails)
+            foreach(var operationDetail in request.DailyOperationMachineDetails)
             {
-                var updateOperation = request.DailyOperationMachineDetails.Where(e => e.Identity.Equals(operation.Identity)).FirstOrDefault();
-                if(updateOperation != null)
+                if(operationDetail.Identity == null)
                 {
-                    operation.SetOrderDocumentId(updateOperation.OrderDocument.Identity);
-                    operation.SetBeamDocumentId(updateOperation.BeamDocument.Identity);
-                    operation.SetDomTime(updateOperation.DOMTime);
-                    operation.SetShiftDocumentId(updateOperation.ShiftDocument.Identity);
-                    operation.SetBeamOperatorDocumentId(updateOperation.BeamOperatorDocument.Identity);
-                    operation.SetSizingOperatorDocumentId(updateOperation.SizingOperatorDocument.Identity);
-                    operation.SetLoomGroup(updateOperation.LoomGroup);
-                    operation.SetSizingGroup(updateOperation.SizingGroup);
-                    operation.SetInformation(updateOperation.Information);
-                    operation.SetDetailStatus(updateOperation.DetailStatus);
+                    var newOperation =
+                        new DailyOperationalMachineDetail(Guid.NewGuid(),
+                                                          operationDetail.OrderDocumentId,
+                                                          operationDetail.WarpsOrigin,
+                                                          operationDetail.WeftsOrigin,
+                                                          operationDetail.BeamId,
+                                                          new DOMTimeValueObject(operationDetail.DOMTime),
+                                                                                 operationDetail.ShiftId,
+                                                                                 operationDetail.BeamOperatorId,
+                                                                                 operationDetail.SizingOperatorId,
+                                                                                 operationDetail.Information,
+                                                                                 operationDetail.DetailStatus);
+
+                    existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
                 }
             }
             
-            await _dailyOperationalDocumentRepository.Update(existingOperation);
+            await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
             _storage.Save();
 
-            return existingOperation;
+            return existingDailyOperation;
         }
     }
 }

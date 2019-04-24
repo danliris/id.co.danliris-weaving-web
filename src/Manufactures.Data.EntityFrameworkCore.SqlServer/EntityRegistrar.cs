@@ -51,9 +51,7 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_DailyOperationMachineDetails");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.LoomGroup).HasMaxLength(255);
-                etb.Property(e => e.SizingGroup).HasMaxLength(255);
+                
                 etb.Property(e => e.Information).HasMaxLength(2000);
                 etb.Property(e => e.DetailStatus).HasMaxLength(255);
 

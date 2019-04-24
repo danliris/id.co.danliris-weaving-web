@@ -2,7 +2,6 @@
 using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.DailyOperations.Commands;
 using Manufactures.Domain.DailyOperations.Repositories;
-using Manufactures.Domain.DailyOperations.ValueObjects;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Dtos.DailyOperationalMachine;
@@ -14,7 +13,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -25,17 +23,27 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationalMachineController : ControllerApiBase
     {
-        private readonly IDailyOperationalMachineRepository _dailyOperationalDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
-        private readonly IMachineRepository _machineRepository;
+        private readonly IDailyOperationalMachineRepository 
+            _dailyOperationalDocumentRepository;
+        private readonly IWeavingOrderDocumentRepository 
+            _weavingOrderDocumentRepository;
+        private readonly IConstructionDocumentRepository 
+            _constructionDocumentRepository;
+        private readonly IMachineRepository 
+            _machineRepository;
 
-        public DailyOperationalMachineController(IServiceProvider serviceProvider, IWorkContext workContext) : base(serviceProvider)
+        public DailyOperationalMachineController(IServiceProvider serviceProvider, 
+                                                 IWorkContext workContext) 
+            : base(serviceProvider)
         {
-            _dailyOperationalDocumentRepository = this.Storage.GetRepository<IDailyOperationalMachineRepository>();
-            _weavingOrderDocumentRepository = this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
-            _constructionDocumentRepository = this.Storage.GetRepository<IConstructionDocumentRepository>();
-            _machineRepository = this.Storage.GetRepository<IMachineRepository>();
+            _dailyOperationalDocumentRepository = 
+                this.Storage.GetRepository<IDailyOperationalMachineRepository>();
+            _weavingOrderDocumentRepository = 
+                this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
+            _constructionDocumentRepository =
+                this.Storage.GetRepository<IConstructionDocumentRepository>();
+            _machineRepository = 
+                this.Storage.GetRepository<IMachineRepository>();
         }
 
         [HttpGet]
@@ -47,56 +55,85 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var domQuery =
-                _dailyOperationalDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .OrderByDescending(item => item.CreatedDate);
             var dailyOperationalMachineDocuments =
-                _dailyOperationalDocumentRepository.Find(domQuery.Include(d => d.DailyOperationMachineDetails));
+                _dailyOperationalDocumentRepository
+                    .Find(domQuery.Include(d => d.DailyOperationMachineDetails));
 
             var resultDto = new List<DailyOperationalMachineListDto>();
 
             foreach (var dailyOperation in dailyOperationalMachineDocuments)
             {
-                var machineDocument = _machineRepository.Find(d => d.Identity.Equals(dailyOperation.MachineId.Value)).FirstOrDefault();
-                var dto = new DailyOperationalMachineListDto(dailyOperation, machineDocument.MachineNumber);
+                var orderNumber = "";
+                var machineDocument = 
+                    await _machineRepository
+                        .Query
+                        .Where(d => d.Identity.Equals(dailyOperation.MachineId.Value))
+                        .FirstOrDefaultAsync();
 
                 foreach (var detail in dailyOperation.DailyOperationMachineDetails)
                 {
-                    var getOrder = _weavingOrderDocumentRepository.Find(d => d.Identity.Equals(detail.OrderDocumentId)).FirstOrDefault();
-                    var constructionDocument = _constructionDocumentRepository.Find(c => c.Identity.Equals(getOrder.ConstructionId)).FirstOrDefault();
-
-                    var orderDocument = new OrderDocumentValueObject(getOrder.OrderNumber, constructionDocument.ConstructionNumber, getOrder.WarpOrigin, getOrder.WeftOrigin);
-
-                    var detailDto = new DailyOperationalMachineDetailsValueObject(detail.Identity, orderDocument, detail.DOMTime.Deserialize<DOMTimeValueObject>(), detail.LoomGroup, detail.SizingGroup, detail.Information, detail.DetailStatus);
-                    dto.ConstructionNumber = constructionDocument.ConstructionNumber;
+                    var orderDocument = 
+                        await _weavingOrderDocumentRepository
+                            .Query
+                            .Where(o => o.Identity.Equals(detail.OrderDocumentId.Value))
+                            .FirstOrDefaultAsync();
+                    
+                    if(orderNumber == "")
+                    {
+                        orderNumber = orderDocument.OrderNumber;
+                    }
                 }
+
+                var dto = 
+                    new DailyOperationalMachineListDto(dailyOperation, 
+                                                       orderNumber,
+                                                       machineDocument.MachineNumber);
 
                 resultDto.Add(dto);
             }
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                resultDto =
-                    resultDto
-                        .Where(entity => entity.MachineNumber.Contains(keyword,
-                                                                          StringComparison.OrdinalIgnoreCase)).ToList();
+                resultDto = 
+                    resultDto.Where(entity => entity
+                                                .OrderNumber
+                                                .Contains(keyword,
+                                                          StringComparison
+                                                            .OrdinalIgnoreCase) || 
+                                              entity
+                                                .MachineNumber
+                                                .Contains(keyword, 
+                                                          StringComparison
+                                                            .OrdinalIgnoreCase))
+                             .ToList();
             }
 
             if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                          orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(DailyOperationalMachineListDto).GetProperty(key);
+                var key = 
+                    orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                    orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = 
+                    typeof(DailyOperationalMachineListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
                     resultDto =
-                        resultDto.OrderBy(x => prop.GetValue(x, null)).ToList();
+                        resultDto
+                            .OrderBy(x => prop.GetValue(x, null))
+                            .ToList();
                 }
                 else
                 {
                     resultDto =
-                        resultDto.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                        resultDto
+                            .OrderByDescending(x => prop.GetValue(x, null))
+                            .ToList();
                 }
             }
 
@@ -120,10 +157,14 @@ namespace Manufactures.Controllers.Api
         {
             var Identity = Guid.Parse(Id);
             var query = _dailyOperationalDocumentRepository.Query;
-            var dailyOperationalMachineDocument =
-                _dailyOperationalDocumentRepository.Find(query.Include(p => p.DailyOperationMachineDetails))
-                                            .Where(o => o.Identity == Identity)
-                                            .FirstOrDefault();
+            var dailyOperationalMachineDocument = 
+                _dailyOperationalDocumentRepository
+                    .Find(query.Include(p => p.DailyOperationMachineDetails))
+                    .Where(o => o.Identity == Identity)
+                    .FirstOrDefault();
+
+
+
             await Task.Yield();
 
             if (Identity == null)
