@@ -1,12 +1,9 @@
-﻿using Manufactures.Domain.DailyOperations.ValueObjects;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Commands
+namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class DailyOperationMachineTimeCommand
+    public class DailyOperationLoomTimeCommand
     {
         [JsonProperty(PropertyName = "Pause")]
         public DateTimeOffset Pause { get; set; }

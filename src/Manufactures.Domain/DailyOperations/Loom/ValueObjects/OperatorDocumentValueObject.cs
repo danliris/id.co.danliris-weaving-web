@@ -1,17 +1,12 @@
 ﻿using Moonlay.Domain;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.ValueObjects
+namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
 {
     public class OperatorDocumentValueObject : ValueObject
     {
-        [JsonProperty(PropertyName = "Identity")]
         public Guid Identity { get; set; }
-
-        [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; set; }
 
         public OperatorDocumentValueObject(Guid identity, string operatorName)

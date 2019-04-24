@@ -1,18 +1,15 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
-using Manufactures.Domain.DailyOperations;
-using Manufactures.Domain.DailyOperations.ReadModels;
-using Manufactures.Domain.DailyOperations.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Manufactures.Domain.DailyOperations.Loom;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperationalMachines.Repositories
 {
-    public class DailyOperationalMachineRepository : AggregateRepostory<DailyOperationalMachineDocument, DailyOperationalMachineDocumentReadModel>, IDailyOperationalMachineRepository
+    public class DailyOperationalMachineRepository : AggregateRepostory<DailyOperationalLoomDocument, DailyOperationalMachineLoomReadModel>, IDailyOperationalLoomRepository
     {
-        protected override DailyOperationalMachineDocument Map(DailyOperationalMachineDocumentReadModel readModel)
+        protected override DailyOperationalLoomDocument Map(DailyOperationalMachineLoomReadModel readModel)
         {
-            return new DailyOperationalMachineDocument(readModel);
+            return new DailyOperationalLoomDocument(readModel);
         }
     }
 }

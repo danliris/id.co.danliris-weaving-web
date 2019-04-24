@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.DailyOperations.Commands
+namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class AddNewDailyOperationalMachineCommand : ICommand<DailyOperationalMachineDocument>
+    public class AddNewDailyOperationalLoomCommand : ICommand<DailyOperationalLoomDocument>
     {
         [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset DateOperated { get; private set; }
@@ -22,11 +22,11 @@ namespace Manufactures.Domain.DailyOperations.Commands
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationMachineDetailCommand> DailyOperationMachineDetails { get; set; }
+        public List<DailyOperationLoomDetailCommand> DailyOperationMachineDetails { get; set; }
     }
 
     public class AddNewDailyOperationalMachineCommandValidator 
-        : AbstractValidator<AddNewDailyOperationalMachineCommand>
+        : AbstractValidator<AddNewDailyOperationalLoomCommand>
     {
         public AddNewDailyOperationalMachineCommandValidator()
         {

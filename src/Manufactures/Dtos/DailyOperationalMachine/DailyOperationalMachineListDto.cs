@@ -1,4 +1,4 @@
-﻿using Manufactures.Domain.DailyOperations;
+﻿using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -25,7 +25,7 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         [JsonProperty(PropertyName = "StatusOperation")]
         public string Status { get; }
 
-        public DailyOperationalMachineListDto(DailyOperationalMachineDocument document,
+        public DailyOperationalMachineListDto(DailyOperationalLoomDocument document,
                                               string orderNumber,
                                               string machineNumber)
         {
