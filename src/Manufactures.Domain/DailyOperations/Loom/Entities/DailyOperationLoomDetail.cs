@@ -22,7 +22,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         public string DetailStatus { get; private set; }
 
         public Guid DailyOperationLoomDocumentId { get; set; }
-        public DailyOperationMachineLoomReadModel DailyOperationLoomDocument { get; set; }
+        public DailyOperationLoomReadModel DailyOperationLoomDocument { get; set; }
 
         public DailyOperationLoomDetail(Guid identity) : base(identity)
         {

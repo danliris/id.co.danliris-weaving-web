@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
 {
-    public class DailyOperationMachineLoomReadModel : ReadModelBase
+    public class DailyOperationLoomReadModel : ReadModelBase
     {
-        public DailyOperationMachineLoomReadModel(Guid identity) : base(identity)
+        public DailyOperationLoomReadModel(Guid identity) : base(identity)
         {
         }
         public DateTimeOffset DateOperated { get; internal set; }
