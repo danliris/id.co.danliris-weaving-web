@@ -8,25 +8,25 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationalLoomDocument : AggregateRoot<DailyOperationalLoomDocument, DailyOperationalMachineLoomReadModel>
+    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationMachineLoomReadModel>
     {
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
         public string Status { get; private set; }
-        public IReadOnlyCollection<DailyOperationalLoomDetail> DailyOperationMachineDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationalLoomDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
+        public DailyOperationLoomDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
         {
             Identity = id;
             MachineId = machineId;
             UnitId = unitId;
             Status = status;
-            DailyOperationMachineDetails = new List<DailyOperationalLoomDetail>();
+            DailyOperationMachineDetails = new List<DailyOperationLoomDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationalMachineLoomReadModel(Identity)
+            ReadModel = new DailyOperationMachineLoomReadModel(Identity)
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
@@ -35,7 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             };
         }
 
-        public DailyOperationalLoomDocument(DailyOperationalMachineLoomReadModel readModel) : base(readModel)
+        public DailyOperationLoomDocument(DailyOperationMachineLoomReadModel readModel) : base(readModel)
         {
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
@@ -44,7 +44,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
         }
 
-        public void AddDailyOperationMachineDetail(DailyOperationalLoomDetail dailyOperationMachineDetail)
+        public void AddDailyOperationMachineDetail(DailyOperationLoomDetail dailyOperationMachineDetail)
         {
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
@@ -96,7 +96,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             MarkModified();
         }
 
-        protected override DailyOperationalLoomDocument GetEntity()
+        protected override DailyOperationLoomDocument GetEntity()
         {
             return this;
         }

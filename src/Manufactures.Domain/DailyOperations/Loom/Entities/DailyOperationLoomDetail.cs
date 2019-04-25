@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
-    public class DailyOperationalLoomDetail
-        : EntityBase<DailyOperationalLoomDetail>
+    public class DailyOperationLoomDetail
+        : EntityBase<DailyOperationLoomDetail>
     {
         public Guid? OrderDocumentId { get; private set; }
         public string WarpsOrigin { get; private set; }
@@ -22,13 +22,13 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         public string DetailStatus { get; private set; }
 
         public Guid DailyOperationMachineDocumentId { get; set; }
-        public DailyOperationalMachineLoomReadModel DailyOperationMachineDocument { get; set; }
+        public DailyOperationMachineLoomReadModel DailyOperationMachineDocument { get; set; }
 
-        public DailyOperationalLoomDetail(Guid identity) : base(identity)
+        public DailyOperationLoomDetail(Guid identity) : base(identity)
         {
         }
 
-        public DailyOperationalLoomDetail(Guid identity,
+        public DailyOperationLoomDetail(Guid identity,
                                              OrderId orderDocumentId,
                                              List<Origin> warpsOrigin,
                                              List<Origin> weftsOrigin,
@@ -128,7 +128,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             MarkModified();
         }
 
-        protected override DailyOperationalLoomDetail GetEntity()
+        protected override DailyOperationLoomDetail GetEntity()
         {
             return this;
         }

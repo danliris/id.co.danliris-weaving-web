@@ -23,7 +23,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationalMachineController : ControllerApiBase
     {
-        private readonly IDailyOperationalLoomRepository 
+        private readonly IDailyOperationLoomRepository 
             _dailyOperationalDocumentRepository;
         private readonly IWeavingOrderDocumentRepository 
             _weavingOrderDocumentRepository;
@@ -37,7 +37,7 @@ namespace Manufactures.Controllers.Api
             : base(serviceProvider)
         {
             _dailyOperationalDocumentRepository = 
-                this.Storage.GetRepository<IDailyOperationalLoomRepository>();
+                this.Storage.GetRepository<IDailyOperationLoomRepository>();
             _weavingOrderDocumentRepository = 
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
@@ -178,7 +178,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationalLoomCommand command)
+        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationLoomCommand command)
         {
             var newDailyOperationalMachineDocument = await Mediator.Send(command);
 
@@ -187,7 +187,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDailyOperationalLoomCommand command)
+                                             [FromBody]UpdateDailyOperationLoomCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -208,7 +208,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            var command = new RemoveDailyOperationalLoomCommand();
+            var command = new RemoveDailyOperationLoomCommand();
             command.SetId(documentId);
 
             var deletedDailyOperationalMachineDocument = await Mediator.Send(command);

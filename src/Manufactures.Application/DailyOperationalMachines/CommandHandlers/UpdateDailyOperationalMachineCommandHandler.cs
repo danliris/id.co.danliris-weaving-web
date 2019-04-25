@@ -16,10 +16,10 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
-    public class UpdateDailyOperationalMachineCommandHandler : ICommandHandler<UpdateDailyOperationalLoomCommand, DailyOperationalLoomDocument>
+    public class UpdateDailyOperationalMachineCommandHandler : ICommandHandler<UpdateDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationalLoomRepository _dailyOperationalDocumentRepository;
+        private readonly IDailyOperationLoomRepository _dailyOperationalDocumentRepository;
         private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
         private readonly IMachineRepository _machineRepository;
@@ -27,10 +27,10 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
         public UpdateDailyOperationalMachineCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationalLoomRepository>();
+            _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
         }
 
-        public async Task<DailyOperationalLoomDocument> Handle(UpdateDailyOperationalLoomCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationLoomDocument> Handle(UpdateDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
             var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
@@ -40,7 +40,7 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
                 if(operationDetail.Identity == null)
                 {
                     var newOperation =
-                        new DailyOperationalLoomDetail(Guid.NewGuid(),
+                        new DailyOperationLoomDetail(Guid.NewGuid(),
                                                           operationDetail.OrderDocumentId,
                                                           operationDetail.WarpsOrigin,
                                                           operationDetail.WeftsOrigin,

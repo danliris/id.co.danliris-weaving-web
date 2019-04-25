@@ -4,7 +4,7 @@ using System;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class RemoveDailyOperationalLoomCommand : ICommand<DailyOperationalLoomDocument>
+    public class RemoveDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
