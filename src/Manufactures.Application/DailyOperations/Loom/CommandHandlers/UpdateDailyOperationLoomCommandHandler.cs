@@ -1,30 +1,26 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
-using Manufactures.Domain.Machines.Repositories;
-using Manufactures.Domain.Orders.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
+namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
-    public class UpdateDailyOperationalMachineCommandHandler : ICommandHandler<UpdateDailyOperationLoomCommand, DailyOperationLoomDocument>
+    public class UpdateDailyOperationLoomCommandHandler 
+        : ICommandHandler<UpdateDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationLoomRepository _dailyOperationalDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
-        private readonly IMachineRepository _machineRepository;
+        private readonly IDailyOperationLoomRepository 
+            _dailyOperationalDocumentRepository;
 
-        public UpdateDailyOperationalMachineCommandHandler(IStorage storage)
+        public UpdateDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
@@ -32,8 +28,8 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 
         public async Task<DailyOperationLoomDocument> Handle(UpdateDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
-            var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
+            var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).FirstOrDefault();
 
             foreach(var operationDetail in request.DailyOperationMachineDetails)
             {
