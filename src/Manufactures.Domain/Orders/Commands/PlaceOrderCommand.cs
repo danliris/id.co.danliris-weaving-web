@@ -17,7 +17,7 @@ namespace Manufactures.Domain.Orders.Commands
 
         public Blended Blended { get; set; }
 
-        public MachineId MachineId { get; set; }
+        public MachineIdValueObject MachineId { get; set; }
 
         public string UserId { get; set; }
     }

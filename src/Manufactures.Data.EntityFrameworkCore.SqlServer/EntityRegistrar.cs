@@ -14,6 +14,10 @@ using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.MachineTypes.ReadModels;
 using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Shifts.ReadModels;
+using Manufactures.Domain.Operators.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -21,6 +25,53 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<OperatorReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_OperatorDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Assignment).HasMaxLength(255);
+                etb.Property(e => e.Type).HasMaxLength(255);
+                etb.Property(e => e.Group).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<ShiftReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_ShiftDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Name).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+                modelBuilder.Entity<DailyOperationLoomDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationMachineDetails");
+                etb.HasKey(e => e.Identity);
+                
+                etb.Property(e => e.Information).HasMaxLength(2000);
+                etb.Property(e => e.DetailStatus).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationMachineLoomReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationMachineDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.DailyOperationMachineDetails)
+                    .WithOne(e => e.DailyOperationMachineDocument)
+                    .HasForeignKey(e => e.DailyOperationMachineDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<MachinesPlanningReadModel>(etb =>
             {
                 etb.ToTable("Weaving_MachinesPlanningDocuments");
