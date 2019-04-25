@@ -1,4 +1,5 @@
-﻿using Moonlay.Domain;
+﻿using Manufactures.Domain.DailyOperations.Sizing.Commands;
+using Moonlay.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,6 +19,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             Pause = pause;
             Resume = resume;
             Doff = doff;
+        }
+
+        public DailyOperationSizingProductionTimeValueObject(DailyOperationSizingProductionTimeCommand dailyOperationSizingProduction)
+        {
+            Start = dailyOperationSizingProduction.Start;
+            Pause = dailyOperationSizingProduction.Pause;
+            Resume = dailyOperationSizingProduction.Resume;
+            Doff = dailyOperationSizingProduction.Doff;
         }
 
         protected override IEnumerable<object> GetAtomicValues()

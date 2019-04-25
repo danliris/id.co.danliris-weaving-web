@@ -29,8 +29,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, BeamId beamDocumentId, ConstructionId constructionDocumentId, int pis, string visco, DailyOperationSizingProductionTimeValueObject productionTime, DailyOperationSizingBeamTimeValueObject beamTime, int brokenBeam, int troubledMachine, double counter, ShiftId shiftDocumentId, string information, Guid dailyOperationSizingDocumentId) : base(identity)
+        public DailyOperationSizingDetail(Guid identity, BeamId beamDocumentId, ConstructionId constructionDocumentId, int pis, string visco, DailyOperationSizingProductionTimeValueObject productionTime, DailyOperationSizingBeamTimeValueObject beamTime, int brokenBeam, int troubledMachine, double counter, ShiftId shiftDocumentId, string information) : base(identity)
         {
+            Identity = identity;
             BeamDocumentId = beamDocumentId.Value;
             ConstructionDocumentId = constructionDocumentId.Value;
             PIS = pis;
