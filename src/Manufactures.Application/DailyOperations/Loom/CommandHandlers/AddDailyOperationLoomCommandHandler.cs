@@ -10,9 +10,9 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
+namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
-    public class AddDailyOperationalMachineCommandHandler
+    public class AddDailyOperationLoomCommandHandler
         : ICommandHandler<AddNewDailyOperationLoomCommand, 
                           DailyOperationLoomDocument>
     {
@@ -20,7 +20,7 @@ namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
         private readonly IDailyOperationLoomRepository 
             _dailyOperationalDocumentRepository;
 
-        public AddDailyOperationalMachineCommandHandler(IStorage storage)
+        public AddDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationalDocumentRepository = 
