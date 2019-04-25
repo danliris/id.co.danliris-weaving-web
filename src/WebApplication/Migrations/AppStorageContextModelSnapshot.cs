@@ -79,7 +79,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_ConstructionDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Entities.DailyOperationalMachineDetail", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomDetail", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -96,7 +96,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("DOMTime");
 
-                    b.Property<Guid>("DailyOperationMachineDocumentId");
+                    b.Property<Guid>("DailyOperationLoomDocumentId");
 
                     b.Property<bool?>("Deleted");
 
@@ -132,12 +132,12 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.HasIndex("DailyOperationMachineDocumentId");
+                    b.HasIndex("DailyOperationLoomDocumentId");
 
-                    b.ToTable("Weaving_DailyOperationMachineDetails");
+                    b.ToTable("Weaving_DailyOperationLoomDetails");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.ReadModels.DailyOperationalMachineDocumentReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationMachineLoomReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -174,7 +174,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("Weaving_DailyOperationMachineDocuments");
+                    b.ToTable("Weaving_DailyOperationLoomDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
@@ -707,11 +707,11 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_YarnDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Entities.DailyOperationalMachineDetail", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomDetail", b =>
                 {
-                    b.HasOne("Manufactures.Domain.DailyOperations.ReadModels.DailyOperationalMachineDocumentReadModel", "DailyOperationMachineDocument")
-                        .WithMany("DailyOperationMachineDetails")
-                        .HasForeignKey("DailyOperationMachineDocumentId")
+                    b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationMachineLoomReadModel", "DailyOperationLoomDocument")
+                        .WithMany("DailyOperationLoomDetails")
+                        .HasForeignKey("DailyOperationLoomDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

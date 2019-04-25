@@ -21,8 +21,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         public string Information { get; private set; }
         public string DetailStatus { get; private set; }
 
-        public Guid DailyOperationMachineDocumentId { get; set; }
-        public DailyOperationMachineLoomReadModel DailyOperationMachineDocument { get; set; }
+        public Guid DailyOperationLoomDocumentId { get; set; }
+        public DailyOperationMachineLoomReadModel DailyOperationLoomDocument { get; set; }
 
         public DailyOperationLoomDetail(Guid identity) : base(identity)
         {
