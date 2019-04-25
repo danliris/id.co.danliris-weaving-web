@@ -4,7 +4,7 @@ using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Dtos.DailyOperationalMachine;
+using Manufactures.Dtos.DailyOperations.Loom;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,10 +18,10 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/daily-operational-machine")]
+    [Route("weaving/daily-operations-loom")]
     [ApiController]
     [Authorize]
-    public class DailyOperationalMachineController : ControllerApiBase
+    public class DailyOperationLoomController : ControllerApiBase
     {
         private readonly IDailyOperationLoomRepository 
             _dailyOperationalDocumentRepository;
@@ -32,7 +32,7 @@ namespace Manufactures.Controllers.Api
         private readonly IMachineRepository 
             _machineRepository;
 
-        public DailyOperationalMachineController(IServiceProvider serviceProvider, 
+        public DailyOperationLoomController(IServiceProvider serviceProvider, 
                                                  IWorkContext workContext) 
             : base(serviceProvider)
         {
@@ -62,7 +62,7 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationalDocumentRepository
                     .Find(domQuery.Include(d => d.DailyOperationMachineDetails));
 
-            var resultDto = new List<DailyOperationalMachineListDto>();
+            var resultDto = new List<DailyOperationLoomListDto>();
 
             foreach (var dailyOperation in dailyOperationalMachineDocuments)
             {
@@ -88,7 +88,7 @@ namespace Manufactures.Controllers.Api
                 }
 
                 var dto = 
-                    new DailyOperationalMachineListDto(dailyOperation, 
+                    new DailyOperationLoomListDto(dailyOperation, 
                                                        orderNumber,
                                                        machineDocument.MachineNumber);
 
@@ -119,7 +119,7 @@ namespace Manufactures.Controllers.Api
                     orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                     orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = 
-                    typeof(DailyOperationalMachineListDto).GetProperty(key);
+                    typeof(DailyOperationLoomListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {

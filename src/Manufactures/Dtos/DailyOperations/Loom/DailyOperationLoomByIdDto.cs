@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Dtos.DailyOperationalMachine
+namespace Manufactures.Dtos.DailyOperations.Loom
 {
-    public class DailyOperationalMachineByIdDto
+    public class DailyOperationLoomByIdDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -28,7 +28,7 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         [JsonProperty(PropertyName = "DailyOperationalMachineDetails")]
         public List<DailyOperationLoomDetailsValueObject> DailyOperationalMachineDetails { get; set; }
 
-        public DailyOperationalMachineByIdDto(DailyOperationLoomDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
+        public DailyOperationLoomByIdDto(DailyOperationLoomDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
         {
             Id = document.Identity;
             DateOperated = document.DateOperated;
