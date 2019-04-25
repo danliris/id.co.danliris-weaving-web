@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationMachineLoomReadModel>
+    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
     {
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
@@ -26,7 +26,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationMachineLoomReadModel(Identity)
+            ReadModel = new DailyOperationLoomReadModel(Identity)
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
@@ -35,7 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             };
         }
 
-        public DailyOperationLoomDocument(DailyOperationMachineLoomReadModel readModel) : base(readModel)
+        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
         {
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;

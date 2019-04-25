@@ -5,9 +5,9 @@ using Manufactures.Domain.DailyOperations.Loom.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Loom.Repositories
 {
-    public class DailyOperationLoomRepository : AggregateRepostory<DailyOperationLoomDocument, DailyOperationMachineLoomReadModel>, IDailyOperationLoomRepository
+    public class DailyOperationLoomRepository : AggregateRepostory<DailyOperationLoomDocument, DailyOperationLoomReadModel>, IDailyOperationLoomRepository
     {
-        protected override DailyOperationLoomDocument Map(DailyOperationMachineLoomReadModel readModel)
+        protected override DailyOperationLoomDocument Map(DailyOperationLoomReadModel readModel)
         {
             return new DailyOperationLoomDocument(readModel);
         }
