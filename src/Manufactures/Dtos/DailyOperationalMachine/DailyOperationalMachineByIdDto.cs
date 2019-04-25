@@ -26,16 +26,16 @@ namespace Manufactures.Dtos.DailyOperationalMachine
         public string Status { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationalMachineDetails")]
-        public List<DailyOperationalLoomDetailsValueObject> DailyOperationalMachineDetails { get; set; }
+        public List<DailyOperationLoomDetailsValueObject> DailyOperationalMachineDetails { get; set; }
 
-        public DailyOperationalMachineByIdDto(DailyOperationalLoomDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
+        public DailyOperationalMachineByIdDto(DailyOperationLoomDocument document, MachineDocumentDto machineNumber, OrderDocumentValueObject order)
         {
             Id = document.Identity;
             DateOperated = document.DateOperated;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
             Status = document.Status;
-            DailyOperationalMachineDetails = new List<DailyOperationalLoomDetailsValueObject>();
+            DailyOperationalMachineDetails = new List<DailyOperationLoomDetailsValueObject>();
         }
     }
 }

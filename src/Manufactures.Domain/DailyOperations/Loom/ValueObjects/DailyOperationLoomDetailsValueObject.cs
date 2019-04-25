@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
 {
-    public class DailyOperationalLoomDetailsValueObject : ValueObject
+    public class DailyOperationLoomDetailsValueObject : ValueObject
     {
         public Guid Identity { get; private set; }
         public OrderDocumentValueObject OrderDocument { get; private set; }
@@ -18,7 +18,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
         public string Information { get; private set; }
         public string DetailStatus { get; private set; }
 
-        public DailyOperationalLoomDetailsValueObject(Guid identity, OrderDocumentValueObject orderDocument, 
+        public DailyOperationLoomDetailsValueObject(Guid identity, OrderDocumentValueObject orderDocument, 
             //BeamDocumentValueObject beamDocument, 
             DailyOperationLoomTimeValueObject domTime, 
             //ShiftDocumentValueObject shiftDocument, OperatorDocumentValueObject beamOperatorDocument, OperatorDocumentValueObject sizingOperatorDocument, 

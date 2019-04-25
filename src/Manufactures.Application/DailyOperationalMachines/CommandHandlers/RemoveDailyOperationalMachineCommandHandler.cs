@@ -11,18 +11,18 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
-    public class RemoveDailyOperationalMachineCommandHandler : ICommandHandler<RemoveDailyOperationalLoomCommand, DailyOperationalLoomDocument>
+    public class RemoveDailyOperationalMachineCommandHandler : ICommandHandler<RemoveDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationalLoomRepository _dailyOperationalDocumentRepository;
+        private readonly IDailyOperationLoomRepository _dailyOperationalDocumentRepository;
 
         public RemoveDailyOperationalMachineCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationalLoomRepository>();
+            _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
         }
 
-        public async Task<DailyOperationalLoomDocument> Handle(RemoveDailyOperationalLoomCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationLoomDocument> Handle(RemoveDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails);
             var existingOperation = _dailyOperationalDocumentRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();

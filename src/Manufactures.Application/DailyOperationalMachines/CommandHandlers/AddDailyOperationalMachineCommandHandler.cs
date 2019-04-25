@@ -13,35 +13,35 @@ using System.Threading.Tasks;
 namespace Manufactures.Application.DailyOperationalMachines.CommandHandlers
 {
     public class AddDailyOperationalMachineCommandHandler
-        : ICommandHandler<AddNewDailyOperationalLoomCommand, 
-                          DailyOperationalLoomDocument>
+        : ICommandHandler<AddNewDailyOperationLoomCommand, 
+                          DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationalLoomRepository 
+        private readonly IDailyOperationLoomRepository 
             _dailyOperationalDocumentRepository;
 
         public AddDailyOperationalMachineCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationalDocumentRepository = 
-                _storage.GetRepository<IDailyOperationalLoomRepository>();
+                _storage.GetRepository<IDailyOperationLoomRepository>();
         }
 
-        public async Task<DailyOperationalLoomDocument> 
-            Handle(AddNewDailyOperationalLoomCommand request, 
+        public async Task<DailyOperationLoomDocument> 
+            Handle(AddNewDailyOperationLoomCommand request, 
                    CancellationToken cancellationToken)
         {
             var dailyOperationMachineDocument = 
-                new DailyOperationalLoomDocument(Guid.NewGuid(),
+                new DailyOperationLoomDocument(Guid.NewGuid(),
                                                     request.MachineId, 
                                                     request.UnitId, 
                                                     request.Status);
-            var listOfDailyOperationDetail = new List<DailyOperationalLoomDetail>();
+            var listOfDailyOperationDetail = new List<DailyOperationLoomDetail>();
 
             foreach (var operationDetail in request.DailyOperationMachineDetails)
             {
                 var newOperation = 
-                    new DailyOperationalLoomDetail(Guid.NewGuid(),
+                    new DailyOperationLoomDetail(Guid.NewGuid(),
                                                       operationDetail.OrderDocumentId,
                                                       operationDetail.WarpsOrigin,
                                                       operationDetail.WeftsOrigin, 

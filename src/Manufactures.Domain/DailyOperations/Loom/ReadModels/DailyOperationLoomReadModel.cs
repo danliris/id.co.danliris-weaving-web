@@ -5,15 +5,15 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
 {
-    public class DailyOperationalMachineLoomReadModel : ReadModelBase
+    public class DailyOperationMachineLoomReadModel : ReadModelBase
     {
-        public DailyOperationalMachineLoomReadModel(Guid identity) : base(identity)
+        public DailyOperationMachineLoomReadModel(Guid identity) : base(identity)
         {
         }
         public DateTimeOffset DateOperated { get; internal set; }
         public Guid? MachineId { get; internal set; }
         public int? UnitId { get; internal set; }
         public string Status { get; internal set; }
-        public List<DailyOperationalLoomDetail> DailyOperationMachineDetails { get; internal set; }
+        public List<DailyOperationLoomDetail> DailyOperationMachineDetails { get; internal set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Infrastructure.Domain.Commands;
+﻿using FluentValidation;
+using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -6,11 +7,8 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class UpdateDailyOperationalLoomCommand : ICommand<DailyOperationalLoomDocument>
+    public class AddNewDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
-
         [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset DateOperated { get; private set; }
 
@@ -25,10 +23,17 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
         public List<DailyOperationLoomDetailCommand> DailyOperationMachineDetails { get; set; }
+    }
 
-        public void SetId(Guid Id)
+    public class AddNewDailyOperationalMachineCommandValidator 
+        : AbstractValidator<AddNewDailyOperationLoomCommand>
+    {
+        public AddNewDailyOperationalMachineCommandValidator()
         {
-            this.Id = Id;
+            RuleFor(command => command.DateOperated).NotEmpty();
+            RuleFor(command => command.MachineId.Value).NotEmpty();
+            RuleFor(command => command.UnitId.Value).NotEmpty();
+            RuleFor(command => command.Status).NotEmpty();
         }
     }
 }

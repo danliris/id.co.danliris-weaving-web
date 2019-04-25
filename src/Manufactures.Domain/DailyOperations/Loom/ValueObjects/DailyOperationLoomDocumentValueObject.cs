@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
 {
-    public class DailyOperationalLoomDocumentValueObject : ValueObject
+    public class DailyOperationLoomDocumentValueObject : ValueObject
     {
         public Guid Id { get; private set; }
         public DateTimeOffset DateOperated { get; private set; }
@@ -12,7 +12,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
         public int UnitId { get; private set; }
         public string Status { get; private set; }
        
-        public IReadOnlyCollection<DailyOperationalLoomDetailsValueObject> DailyOperationMachineDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationLoomDetailsValueObject> DailyOperationMachineDetails { get; private set; }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
