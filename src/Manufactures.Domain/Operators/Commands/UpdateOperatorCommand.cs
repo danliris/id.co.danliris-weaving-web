@@ -20,7 +20,7 @@ namespace Manufactures.Domain.Operators.Commands
         [JsonProperty(propertyName: "Group")]
         public string Group { get; set; }
 
-        [JsonProperty(propertyName: "Id")]
+        [JsonProperty(propertyName: "Assignment")]
         public string Assignment { get; set; }
 
         [JsonProperty(propertyName: "Type")]
