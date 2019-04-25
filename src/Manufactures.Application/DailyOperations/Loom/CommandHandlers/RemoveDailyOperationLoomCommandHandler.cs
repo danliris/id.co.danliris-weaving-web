@@ -30,7 +30,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         {
             var query = 
                 _dailyOperationalDocumentRepository.Query
-                                                   .Include(d => d.DailyOperationMachineDetails)
+                                                   .Include(d => d.DailyOperationLoomDetails)
                                                    .Where(entity => entity.Identity.Equals(request.Id));
             var existingOperation = _dailyOperationalDocumentRepository.Find(query).FirstOrDefault();
 

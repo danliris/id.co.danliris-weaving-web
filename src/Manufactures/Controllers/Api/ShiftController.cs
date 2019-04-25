@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/suppliers")]
+    [Route("weaving/shifts")]
     [ApiController]
     [Authorize]
     public class ShiftController : ControllerApiBase
