@@ -31,7 +31,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
                 Status = this.Status,
-                DailyOperationMachineDetails = this.DailyOperationMachineDetails.ToList()
+                DailyOperationLoomDetails = this.DailyOperationMachineDetails.ToList()
             };
         }
 
@@ -41,7 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
             this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
             this.Status = readModel.Status; 
-            this.DailyOperationMachineDetails = readModel.DailyOperationMachineDetails;
+            this.DailyOperationMachineDetails = readModel.DailyOperationLoomDetails;
         }
 
         public void AddDailyOperationMachineDetail(DailyOperationLoomDetail dailyOperationMachineDetail)
@@ -49,7 +49,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
             DailyOperationMachineDetails = list;
-            ReadModel.DailyOperationMachineDetails = DailyOperationMachineDetails.ToList();
+            ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
 
             MarkModified();
         }
@@ -61,7 +61,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
 
             list.Remove(detail);
             DailyOperationMachineDetails = list;
-            ReadModel.DailyOperationMachineDetails = DailyOperationMachineDetails.ToList();
+            ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
 
             MarkModified();
         }

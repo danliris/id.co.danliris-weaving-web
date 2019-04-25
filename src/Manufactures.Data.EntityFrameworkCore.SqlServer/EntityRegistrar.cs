@@ -49,7 +49,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
                 modelBuilder.Entity<DailyOperationLoomDetail>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationMachineDetails");
+                etb.ToTable("Weaving_DailyOperationLoomDetails");
                 etb.HasKey(e => e.Identity);
                 
                 etb.Property(e => e.Information).HasMaxLength(2000);
@@ -61,12 +61,12 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationMachineLoomReadModel>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationMachineDocuments");
+                etb.ToTable("Weaving_DailyOperationLoomDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.DailyOperationMachineDetails)
-                    .WithOne(e => e.DailyOperationMachineDocument)
-                    .HasForeignKey(e => e.DailyOperationMachineDocumentId);
+                etb.HasMany(e => e.DailyOperationLoomDetails)
+                    .WithOne(e => e.DailyOperationLoomDocument)
+                    .HasForeignKey(e => e.DailyOperationLoomDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -14,6 +14,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
         public Guid? MachineId { get; internal set; }
         public int? UnitId { get; internal set; }
         public string Status { get; internal set; }
-        public List<DailyOperationLoomDetail> DailyOperationMachineDetails { get; internal set; }
+        public List<DailyOperationLoomDetail> DailyOperationLoomDetails { get; internal set; }
     }
 }

@@ -38,7 +38,7 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Weaving_DailyOperationMachineDocuments",
+                name: "Weaving_DailyOperationLoomDocuments",
                 columns: table => new
                 {
                     Identity = table.Column<Guid>(nullable: false),
@@ -57,7 +57,7 @@ namespace DanLiris.Admin.Web.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weaving_DailyOperationMachineDocuments", x => x.Identity);
+                    table.PrimaryKey("PK_Weaving_DailyOperationLoomDocuments", x => x.Identity);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,7 +323,7 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Weaving_DailyOperationMachineDetails",
+                name: "Weaving_DailyOperationLoomDetails",
                 columns: table => new
                 {
                     Identity = table.Column<Guid>(nullable: false),
@@ -345,15 +345,15 @@ namespace DanLiris.Admin.Web.Migrations
                     SizingOperatorDocumentId = table.Column<Guid>(nullable: true),
                     Information = table.Column<string>(maxLength: 2000, nullable: true),
                     DetailStatus = table.Column<string>(maxLength: 255, nullable: true),
-                    DailyOperationMachineDocumentId = table.Column<Guid>(nullable: false)
+                    DailyOperationLoomDocumentId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Weaving_DailyOperationMachineDetails", x => x.Identity);
+                    table.PrimaryKey("PK_Weaving_DailyOperationLoomDetails", x => x.Identity);
                     table.ForeignKey(
-                        name: "FK_Weaving_DailyOperationMachineDetails_Weaving_DailyOperationMachineDocuments_DailyOperationMachineDocumentId",
-                        column: x => x.DailyOperationMachineDocumentId,
-                        principalTable: "Weaving_DailyOperationMachineDocuments",
+                        name: "FK_Weaving_DailyOperationLoomDetails_Weaving_DailyOperationLoomDocuments_DailyOperationLoomDocumentId",
+                        column: x => x.DailyOperationLoomDocumentId,
+                        principalTable: "Weaving_DailyOperationLoomDocuments",
                         principalColumn: "Identity",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -388,9 +388,9 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weaving_DailyOperationMachineDetails_DailyOperationMachineDocumentId",
-                table: "Weaving_DailyOperationMachineDetails",
-                column: "DailyOperationMachineDocumentId");
+                name: "IX_Weaving_DailyOperationLoomDetails_DailyOperationLoomDocumentId",
+                table: "Weaving_DailyOperationLoomDetails",
+                column: "DailyOperationLoomDocumentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Weaving_EstimationDetails_EstimatedProductionDocumentId",
@@ -404,7 +404,7 @@ namespace DanLiris.Admin.Web.Migrations
                 name: "Weaving_ConstructionDocuments");
 
             migrationBuilder.DropTable(
-                name: "Weaving_DailyOperationMachineDetails");
+                name: "Weaving_DailyOperationLoomDetails");
 
             migrationBuilder.DropTable(
                 name: "Weaving_EstimationDetails");
@@ -440,7 +440,7 @@ namespace DanLiris.Admin.Web.Migrations
                 name: "Weaving_YarnNumberDocuments");
 
             migrationBuilder.DropTable(
-                name: "Weaving_DailyOperationMachineDocuments");
+                name: "Weaving_DailyOperationLoomDocuments");
 
             migrationBuilder.DropTable(
                 name: "Weaving_EstimationProductDocuments");

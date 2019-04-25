@@ -60,7 +60,7 @@ namespace Manufactures.Controllers.Api
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationalMachineDocuments =
                 _dailyOperationalDocumentRepository
-                    .Find(domQuery.Include(d => d.DailyOperationMachineDetails));
+                    .Find(domQuery.Include(d => d.DailyOperationLoomDetails));
 
             var resultDto = new List<DailyOperationLoomListDto>();
 
@@ -159,7 +159,7 @@ namespace Manufactures.Controllers.Api
             var query = _dailyOperationalDocumentRepository.Query;
             var dailyOperationalMachineDocument = 
                 _dailyOperationalDocumentRepository
-                    .Find(query.Include(p => p.DailyOperationMachineDetails))
+                    .Find(query.Include(p => p.DailyOperationLoomDetails))
                     .Where(o => o.Identity == Identity)
                     .FirstOrDefault();
 

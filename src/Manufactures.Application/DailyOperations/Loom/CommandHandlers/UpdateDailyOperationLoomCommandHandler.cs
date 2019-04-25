@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
         public async Task<DailyOperationLoomDocument> Handle(UpdateDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationMachineDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationLoomDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).FirstOrDefault();
 
             foreach(var operationDetail in request.DailyOperationMachineDetails)
