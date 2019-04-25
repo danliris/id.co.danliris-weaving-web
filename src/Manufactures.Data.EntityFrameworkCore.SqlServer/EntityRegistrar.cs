@@ -86,7 +86,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationMachineLoomReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationLoomReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomDocuments");
                 etb.HasKey(e => e.Identity);
