@@ -56,7 +56,7 @@ namespace Manufactures.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PlaceOrderCommand command)
+        public async Task<IActionResult> Post([FromBody]PlaceOrderCommandOld command)
         {
             var order = await Mediator.Send(command);
 
@@ -64,7 +64,7 @@ namespace Manufactures.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]UpdateOrderCommand command)
+        public async Task<IActionResult> Put(string id, [FromBody]UpdateOrderCommandOld command)
         {
             if (!Guid.TryParse(id, out Guid orderId))
                 return NotFound();
@@ -82,7 +82,7 @@ namespace Manufactures.Controllers
             if (!Guid.TryParse(id, out Guid orderId))
                 return NotFound();
 
-            var command = new RemoveOrderCommand();
+            var command = new RemoveOrderCommandOld();
             command.SetId(orderId);
 
             var order = await Mediator.Send(command);

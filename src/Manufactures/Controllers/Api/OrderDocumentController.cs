@@ -1,6 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;
@@ -295,7 +295,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PlaceWeavingOrderCommand command)
+        public async Task<IActionResult> Post([FromBody]PlaceOrderCommand command)
         {
             var order = await Mediator.Send(command);
 
@@ -304,7 +304,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateWeavingOrderCommand command)
+                                             [FromBody]UpdateOrderCommand command)
         {
             if (!Guid.TryParse(Id, out Guid orderId))
             {
@@ -325,7 +325,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            var command = new RemoveWeavingOrderCommand();
+            var command = new RemoveOrderCommand();
             command.SetId(orderId);
 
             var order = await Mediator.Send(command);

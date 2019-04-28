@@ -2,9 +2,9 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Domain.Orders.Commands
+namespace Manufactures.Domain.FabricConstruction.Commands
 {
-    public class RemoveOrderCommand : ICommand<OrderDocument>
+    public class RemoveConstructionCommand : ICommand<ConstructionDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }

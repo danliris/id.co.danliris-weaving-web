@@ -29,7 +29,7 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "WeavingUnit")]
         public UnitId UnitId { get; }
 
-        public ListWeavingOrderDocumentDto(WeavingOrderDocument weavingOrderDocument, 
+        public ListWeavingOrderDocumentDto(OrderDocument weavingOrderDocument, 
                                            FabricConstructionDocument fabricConstruction)
         {
             Id = weavingOrderDocument.Identity;
