@@ -13,7 +13,7 @@ using Manufactures.Domain.Yarns.ReadModels;
 using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.MachineTypes.ReadModels;
-using Manufactures.Domain.OperationalMachinesPlanning.ReadModels;
+using Manufactures.Domain.MachinesPlanning.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Shifts.ReadModels;
@@ -203,7 +203,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<WeavingOrderDocumentReadModel>(etb =>
+            modelBuilder.Entity<OrderDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);

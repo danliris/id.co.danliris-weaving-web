@@ -49,7 +49,7 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "EstimatedProductionDocument")]
         public EstimatedProductionDocumentValueObject EstimatedProductionDocument { get; private set; }
 
-        public OrderReportBySearchDto(WeavingOrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber, string unit)
+        public OrderReportBySearchDto(OrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber, string unit)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;

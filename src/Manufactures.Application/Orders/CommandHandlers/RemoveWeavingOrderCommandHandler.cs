@@ -3,52 +3,41 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.Orders.CommandHandlers
 {
-    public class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, OrderDocument>
+    public class RemoveWeavingOrderCommandHandler : ICommandHandler<RemoveOrderCommand, OrderDocument>
     {
         private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
         private readonly IStorage _storage;
 
-        public UpdateOrderCommandHandler(IStorage storage)
+        public RemoveWeavingOrderCommandHandler(IStorage storage)
         {
             _storage = storage;
             _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
 
-
-        public async Task<OrderDocument> Handle(UpdateOrderCommand command, 
+        public async Task<OrderDocument> Handle(RemoveOrderCommand command, 
                                                        CancellationToken cancellationToken)
         {
             var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id)
                                                        .FirstOrDefault();
 
-            if(order == null)
+            if (order == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Order: " + command.Id));
             }
 
-            order.SetFabricConstructionDocument(new ConstructionId(Guid.Parse(command.FabricConstructionDocument.Id)));
-            order.SetWarpOrigin(command.WarpOrigin);
-            order.SetWeftOrigin(command.WeftOrigin);
-            order.SetWholeGrade(command.WholeGrade);
-            order.SetYarnType(command.YarnType);
-            order.SetPeriod(command.Period);
-            order.SetWarpComposition(command.WarpComposition);
-            order.SetWeftComposition(command.WeftComposition);
-            order.SetWeavingUnit(new UnitId(command.WeavingUnit.Id));
+            order.Remove();
 
             await _weavingOrderDocumentRepository.Update(order);
 
             _storage.Save();
-            
+
             return order;
         }
     }

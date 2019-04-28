@@ -63,7 +63,7 @@ namespace Manufactures.Tests.CommandHandlers
 
             this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
 
-            PlaceOrderCommand request = new PlaceOrderCommand
+            PlaceOrderCommandOld request = new PlaceOrderCommandOld
             {
                 OrderDate = DateTime.Now,
                 UnitDepartmentId = unitId,
