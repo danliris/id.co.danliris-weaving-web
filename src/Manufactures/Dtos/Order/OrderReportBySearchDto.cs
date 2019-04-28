@@ -6,7 +6,7 @@ using Manufactures.Domain.Orders.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using ConstructionDocument = Manufactures.Domain.Construction.ConstructionDocument;
+using ConstructionDocument = Manufactures.Domain.FabricConstruction.ConstructionDocument;
 
 namespace Manufactures.Dtos.Order
 {

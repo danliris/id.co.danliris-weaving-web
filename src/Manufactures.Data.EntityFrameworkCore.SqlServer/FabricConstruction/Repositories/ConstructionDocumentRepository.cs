@@ -1,9 +1,9 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
-using Manufactures.Domain.Construction.ReadModels;
-using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction.ReadModels;
+using Manufactures.Domain.FabricConstruction;
+using Manufactures.Domain.FabricConstruction.Repositories;
 
-namespace Manufactures.Data.EntityFrameworkCore.Construction.Repositories
+namespace Manufactures.Data.EntityFrameworkCore.FabricConstruction.Repositories
 {
     public class ConstructionDocumentRepository : AggregateRepostory<ConstructionDocument, ConstructionDocumentReadModel>, IConstructionDocumentRepository
     {

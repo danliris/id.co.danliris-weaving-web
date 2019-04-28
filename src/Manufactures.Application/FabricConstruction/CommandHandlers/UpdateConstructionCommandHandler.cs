@@ -4,16 +4,16 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction;
+using Manufactures.Domain.FabricConstruction.Commands;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using Manufactures.Domain.Shared.ValueObjects;
 
-namespace Manufactures.Application.Construction.CommandHandlers
+namespace Manufactures.Application.FabricConstruction.CommandHandlers
 {
     public class UpdateConstructionCommandHandler : ICommandHandler<UpdateConstructionCommand, ConstructionDocument>
     {

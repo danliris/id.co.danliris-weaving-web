@@ -1,11 +1,10 @@
-﻿using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.ValueObjects;
+﻿using Manufactures.Domain.FabricConstruction;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Construction
+namespace Manufactures.Dtos.FabricConstruction
 {
-    public class ConstructionDocumentDto
+    public class FabricConstructionDocumentDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -19,7 +18,7 @@ namespace Manufactures.Dtos.Construction
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
-        public ConstructionDocumentDto(ConstructionDocument constructionDocument)
+        public FabricConstructionDocumentDto(ConstructionDocument constructionDocument)
         {
             Id = constructionDocument.Identity;
             ConstructionNumber = constructionDocument.ConstructionNumber;

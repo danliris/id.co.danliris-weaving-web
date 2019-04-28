@@ -1,13 +1,13 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Construction.ReadModels;
+using Manufactures.Domain.FabricConstruction.ValueObjects;
+using Manufactures.Domain.FabricConstruction.ReadModels;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Domain.Construction
+namespace Manufactures.Domain.FabricConstruction
 {
     public class ConstructionDocument : AggregateRoot<ConstructionDocument, ConstructionDocumentReadModel>
     {
@@ -66,7 +66,7 @@ namespace Manufactures.Domain.Construction
                 ListOfWeft = ListOfWeft.Serialize()
             };
 
-            ReadModel.AddDomainEvent(new OnConstructionPlaced(this.Identity));
+            ReadModel.AddDomainEvent(new OnFabricConstructionPlaced(this.Identity));
         }
 
         public ConstructionDocument(ConstructionDocumentReadModel readModel) : base(readModel)

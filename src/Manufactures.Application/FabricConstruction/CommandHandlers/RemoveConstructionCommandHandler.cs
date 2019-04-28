@@ -3,12 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction;
+using Manufactures.Domain.FabricConstruction.Commands;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Moonlay;
 
-namespace Manufactures.Application.Construction.CommandHandlers
+namespace Manufactures.Application.FabricConstruction.CommandHandlers
 {
     public class RemoveConstructionCommandHandler : ICommandHandler<RemoveConstructionCommand, ConstructionDocument>
     {

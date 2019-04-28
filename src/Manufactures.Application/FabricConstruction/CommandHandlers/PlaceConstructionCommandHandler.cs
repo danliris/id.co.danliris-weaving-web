@@ -1,8 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction;
+using Manufactures.Domain.FabricConstruction.Commands;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Moonlay;
 using System;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Manufactures.Domain.Shared.ValueObjects;
 
-namespace Manufactures.Application.Construction.CommandHandlers
+namespace Manufactures.Application.FabricConstruction.CommandHandlers
 {
     public class PlaceConstructionCommandHandler : ICommandHandler<PlaceConstructionCommand,
                                                                    ConstructionDocument>

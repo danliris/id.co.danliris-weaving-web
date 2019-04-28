@@ -4,9 +4,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.Construction.ValueObjects
+namespace Manufactures.Domain.FabricConstruction.ValueObjects
 {
-    public class Warp : ValueObject
+    public class Weft : ValueObject
     {
         [JsonProperty(PropertyName = "Yarn")]
         public YarnValueObject Yarn { get; private set; }
@@ -17,7 +17,7 @@ namespace Manufactures.Domain.Construction.ValueObjects
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
         
-        public Warp(double quantity,
+        public Weft(double quantity,
                     string information,
                     YarnValueObject yarn)
         {

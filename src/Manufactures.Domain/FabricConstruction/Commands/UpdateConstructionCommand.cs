@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.FabricConstruction.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.Construction.Commands
+namespace Manufactures.Domain.FabricConstruction.Commands
 {
     public class UpdateConstructionCommand : ICommand<ConstructionDocument>
     {

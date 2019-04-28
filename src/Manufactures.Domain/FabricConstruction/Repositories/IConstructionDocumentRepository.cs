@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Domain.Repositories;
-using Manufactures.Domain.Construction.ReadModels;
+using Manufactures.Domain.FabricConstruction.ReadModels;
 
-namespace Manufactures.Domain.Construction.Repositories
+namespace Manufactures.Domain.FabricConstruction.Repositories
 {
     public interface IConstructionDocumentRepository : IAggregateRepository<ConstructionDocument, ConstructionDocumentReadModel>
     {

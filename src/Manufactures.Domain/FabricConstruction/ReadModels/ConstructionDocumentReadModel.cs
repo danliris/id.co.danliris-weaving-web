@@ -1,7 +1,7 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using System;
 
-namespace Manufactures.Domain.Construction.ReadModels
+namespace Manufactures.Domain.FabricConstruction.ReadModels
 {
     public class ConstructionDocumentReadModel : ReadModelBase
     {

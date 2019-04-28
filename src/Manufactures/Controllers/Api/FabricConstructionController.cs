@@ -1,12 +1,12 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Construction.Commands;
-using Manufactures.Domain.Construction.Repositories;
-using Manufactures.Domain.Construction.ValueObjects;
+using Manufactures.Domain.FabricConstruction.Commands;
+using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstruction.ValueObjects;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.Dtos.Construction;
+using Manufactures.Dtos.FabricConstruction;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -22,14 +22,14 @@ namespace Manufactures.Controllers.Api
     [Route("weaving/fabric-constructions")]
     [ApiController]
     [Authorize]
-    public class ConstructionController : ControllerApiBase
+    public class FabricConstructionController : ControllerApiBase
     {
         private readonly IConstructionDocumentRepository _constructionDocumentRepository;
         private readonly IMaterialTypeRepository _materialTypeRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         private readonly IYarnNumberRepository _yarnNumberRepository;
 
-        public ConstructionController(IServiceProvider serviceProvider, 
+        public FabricConstructionController(IServiceProvider serviceProvider, 
                                       IWorkContext workContext) : base(serviceProvider)
         {
             _constructionDocumentRepository = 
@@ -54,7 +54,7 @@ namespace Manufactures.Controllers.Api
                 _constructionDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
             var constructionDocuments = 
                 _constructionDocumentRepository.Find(query)
-                                               .Select(item => new ConstructionDocumentDto(item));
+                                               .Select(item => new FabricConstructionDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -70,7 +70,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(ConstructionDocumentDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(FabricConstructionDocumentDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -107,7 +107,7 @@ namespace Manufactures.Controllers.Api
                 _constructionDocumentRepository.Find(o => o.Identity == Identity)
                                                .FirstOrDefault();
 
-            var result = new ConstructionByIdDto(constructionDocument);
+            var result = new FabricConstructionByIdDto(constructionDocument);
             
             foreach(var detail in constructionDocument.ListOfWarp)
             {

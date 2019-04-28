@@ -1,6 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;

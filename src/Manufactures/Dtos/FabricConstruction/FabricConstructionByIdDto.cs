@@ -1,14 +1,13 @@
-﻿using Manufactures.Domain.Construction;
-using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
+﻿using Manufactures.Domain.FabricConstruction;
+using Manufactures.Domain.FabricConstruction.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Dtos.Construction
+namespace Manufactures.Dtos.FabricConstruction
 {
-    public class ConstructionByIdDto
+    public class FabricConstructionByIdDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -47,7 +46,7 @@ namespace Manufactures.Dtos.Construction
         public IReadOnlyCollection<Weft> ItemsWeft { get; private set; }
 
 
-        public ConstructionByIdDto(ConstructionDocument document)
+        public FabricConstructionByIdDto(ConstructionDocument document)
         {
             Id = document.Identity;
             ConstructionNumber = document.ConstructionNumber;

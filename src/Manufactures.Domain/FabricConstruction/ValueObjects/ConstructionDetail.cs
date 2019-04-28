@@ -3,7 +3,7 @@ using Moonlay.Domain;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.Construction.ValueObjects
+namespace Manufactures.Domain.FabricConstruction.ValueObjects
 {
     public class ConstructionDetail : ValueObject
     {

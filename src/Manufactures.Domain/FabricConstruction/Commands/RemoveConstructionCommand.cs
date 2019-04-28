@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Domain.Construction.Commands
+namespace Manufactures.Domain.FabricConstruction.Commands
 {
     public class RemoveConstructionCommand : ICommand<ConstructionDocument>
     {

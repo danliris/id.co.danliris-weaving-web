@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Manufactures.Domain.Events
 {
-    public class OnConstructionPlaced : IManufactureEvent
+    public class OnFabricConstructionPlaced : IManufactureEvent
     {
-        public OnConstructionPlaced(Guid identity)
+        public OnFabricConstructionPlaced(Guid identity)
         {
             Identity = identity;
         }
