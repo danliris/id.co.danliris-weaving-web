@@ -1,12 +1,11 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.FabricConstruction.Commands;
-using Manufactures.Domain.FabricConstruction.Repositories;
-using Manufactures.Domain.FabricConstruction.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.Dtos.FabricConstruction;
+using Manufactures.Dtos.FabricConstructions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -24,7 +23,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class FabricConstructionController : ControllerApiBase
     {
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
         private readonly IMaterialTypeRepository _materialTypeRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         private readonly IYarnNumberRepository _yarnNumberRepository;
@@ -33,7 +32,7 @@ namespace Manufactures.Controllers.Api
                                       IWorkContext workContext) : base(serviceProvider)
         {
             _constructionDocumentRepository = 
-                this.Storage.GetRepository<IConstructionDocumentRepository>();
+                this.Storage.GetRepository<IFabricConstructionRepository>();
             _materialTypeRepository =
                 this.Storage.GetRepository<IMaterialTypeRepository>();
             _yarnDocumentRepository =
@@ -164,7 +163,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PlaceConstructionCommand command)
+        public async Task<IActionResult> Post([FromBody]AddFabricConstructionCommand command)
         {
             var newConstructionDocument = await Mediator.Send(command);
 
@@ -173,7 +172,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id, 
-                                             [FromBody]UpdateConstructionCommand command)
+                                             [FromBody]UpdateFabricConstructionCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -194,7 +193,7 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
 
-            var command = new RemoveConstructionCommand();
+            var command = new RemoveFabricConstructionCommand();
             command.SetId(documentId);
 
             var deletedConstructionDocument = await Mediator.Send(command);

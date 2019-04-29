@@ -1,5 +1,5 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Machines.Repositories;
@@ -27,7 +27,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationalDocumentRepository;
         private readonly IWeavingOrderDocumentRepository 
             _weavingOrderDocumentRepository;
-        private readonly IConstructionDocumentRepository 
+        private readonly IFabricConstructionRepository 
             _constructionDocumentRepository;
         private readonly IMachineRepository 
             _machineRepository;
@@ -41,7 +41,7 @@ namespace Manufactures.Controllers.Api
             _weavingOrderDocumentRepository = 
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
-                this.Storage.GetRepository<IConstructionDocumentRepository>();
+                this.Storage.GetRepository<IFabricConstructionRepository>();
             _machineRepository = 
                 this.Storage.GetRepository<IMachineRepository>();
         }
