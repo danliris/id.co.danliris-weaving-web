@@ -1,10 +1,10 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
-using Manufactures.Domain.OperationalMachinesPlanning.Commands;
-using Manufactures.Domain.OperationalMachinesPlanning.Repositories;
+using Manufactures.Domain.MachinesPlanning.Commands;
+using Manufactures.Domain.MachinesPlanning.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Dtos.OperationalMachinesPlanning;
+using Manufactures.Dtos.MachinesPlanning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

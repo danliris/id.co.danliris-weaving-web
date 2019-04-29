@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,8 @@ namespace Manufactures.Domain.DailyOperations.Loom
                 Status = this.Status,
                 DailyOperationLoomDetails = this.DailyOperationMachineDetails.ToList()
             };
+
+            ReadModel.AddDomainEvent(new OnAddDailyOperationLoom(Identity));
         }
 
         public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)

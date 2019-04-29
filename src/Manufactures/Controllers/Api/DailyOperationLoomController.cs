@@ -1,5 +1,5 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Construction.Repositories;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Machines.Repositories;

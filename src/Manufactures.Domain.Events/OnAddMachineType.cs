@@ -6,7 +6,6 @@ namespace Manufactures.Domain.Events
     {
         public Guid Id { get; }
 
-
         public OnAddMachineType(Guid id)
         {
             Id = id;
