@@ -18,6 +18,8 @@ using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Operators.ReadModels;
+using Manufactures.Domain.DailyOperations.Sizing.Entities;
+using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -25,6 +27,31 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Visco).HasMaxLength(255);
+                etb.Property(e => e.Information).HasMaxLength(2000);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationSizingReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.DailyOperationSizingDetails)
+                    .WithOne(e => e.DailyOperationSizingDocument)
+                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<OperatorReadModel>(etb =>
             {
                 etb.ToTable("Weaving_OperatorDocuments");
