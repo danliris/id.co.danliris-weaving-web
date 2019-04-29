@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.FabricConstruction.ValueObjects
+namespace Manufactures.Domain.FabricConstructions.ValueObjects
 {
     public class YarnValueObject : ValueObject
     {

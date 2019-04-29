@@ -4,21 +4,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.FabricConstruction;
-using Manufactures.Domain.FabricConstruction.Commands;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions;
+using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using Manufactures.Domain.Shared.ValueObjects;
 
-namespace Manufactures.Application.FabricConstruction.CommandHandlers
+namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
-    public class UpdateConstructionCommandHandler : ICommandHandler<UpdateConstructionCommand, ConstructionDocument>
+    public class UpdateConstructionCommandHandler : ICommandHandler<UpdateFabricConstructionCommand, FabricConstructionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         public readonly IMaterialTypeRepository _materialTypeRepository;
         public readonly IYarnNumberRepository _yarnNumberRepository;
@@ -26,13 +26,13 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
         public UpdateConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
             _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
             _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
             _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request,
+        public async Task<FabricConstructionDocument> Handle(UpdateFabricConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             var query = _constructionDocumentRepository.Query;

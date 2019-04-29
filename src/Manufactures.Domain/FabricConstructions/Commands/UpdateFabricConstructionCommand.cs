@@ -1,13 +1,17 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.FabricConstruction.ValueObjects;
+using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Domain.FabricConstruction.Commands
+namespace Manufactures.Domain.FabricConstructions.Commands
 {
-    public class PlaceConstructionCommand : ICommand<ConstructionDocument>
+    public class UpdateFabricConstructionCommand : ICommand<FabricConstructionDocument>
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; private set; }
+
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; set; }
 
@@ -40,11 +44,16 @@ namespace Manufactures.Domain.FabricConstruction.Commands
 
         [JsonProperty(PropertyName = "ItemsWeft")]
         public List<ConstructionDetail> ItemsWeft { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 
-    public class PlaceConstructionCommandValidator : AbstractValidator<PlaceConstructionCommand>
+    public class UpdateConstructionCommandValidator : AbstractValidator<UpdateFabricConstructionCommand>
     {
-        public PlaceConstructionCommandValidator()
+        public UpdateConstructionCommandValidator()
         {
             RuleFor(command => command.ConstructionNumber).NotEmpty();
             RuleFor(command => command.AmountOfWarp).NotEmpty();

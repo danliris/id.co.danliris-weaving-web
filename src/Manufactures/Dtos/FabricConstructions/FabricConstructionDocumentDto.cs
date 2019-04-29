@@ -1,8 +1,8 @@
-﻿using Manufactures.Domain.FabricConstruction;
+﻿using Manufactures.Domain.FabricConstructions;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.FabricConstruction
+namespace Manufactures.Dtos.FabricConstructions
 {
     public class FabricConstructionDocumentDto
     {
@@ -18,7 +18,7 @@ namespace Manufactures.Dtos.FabricConstruction
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
-        public FabricConstructionDocumentDto(ConstructionDocument constructionDocument)
+        public FabricConstructionDocumentDto(FabricConstructionDocument constructionDocument)
         {
             Id = constructionDocument.Identity;
             ConstructionNumber = constructionDocument.ConstructionNumber;

@@ -1,8 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.FabricConstruction;
-using Manufactures.Domain.FabricConstruction.Commands;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions;
+using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Moonlay;
 using System;
 using System.Linq;
@@ -10,21 +10,21 @@ using System.Threading;
 using System.Threading.Tasks;
 using Manufactures.Domain.Shared.ValueObjects;
 
-namespace Manufactures.Application.FabricConstruction.CommandHandlers
+namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
-    public class PlaceConstructionCommandHandler : ICommandHandler<PlaceConstructionCommand,
-                                                                   ConstructionDocument>
+    public class PlaceConstructionCommandHandler : ICommandHandler<AddFabricConstructionCommand,
+                                                                   FabricConstructionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
 
         public PlaceConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request,
+        public async Task<FabricConstructionDocument> Handle(AddFabricConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             // Check Available construction number if has defined
@@ -38,7 +38,7 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
                 Validator.ErrorValidation(("constructionNumber", request.ConstructionNumber + " Has available!"));
             }
 
-            var constructionDocument = new ConstructionDocument(id: Guid.NewGuid(),
+            var constructionDocument = new FabricConstructionDocument(id: Guid.NewGuid(),
                                                                 constructionNumber: request.ConstructionNumber,
                                                                 amountOfWarp: request.AmountOfWarp,
                                                                 amountOfWeft: request.AmountOfWeft,

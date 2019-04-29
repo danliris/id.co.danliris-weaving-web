@@ -1,6 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;
@@ -31,7 +31,7 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IWeavingOrderDocumentRepository
                                                _weavingOrderDocumentRepository;
-        private readonly IConstructionDocumentRepository
+        private readonly IFabricConstructionRepository
                                                _constructionDocumentRepository;
         private readonly IEstimationProductRepository
                                                _estimationProductRepository;
@@ -44,7 +44,7 @@ namespace Manufactures.Controllers.Api
             _weavingOrderDocumentRepository =
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
-                this.Storage.GetRepository<IConstructionDocumentRepository>();
+                this.Storage.GetRepository<IFabricConstructionRepository>();
             _estimationProductRepository =
                 this.Storage.GetRepository<IEstimationProductRepository>();
             _yarnDocumentRepository =
