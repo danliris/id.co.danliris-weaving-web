@@ -1,9 +1,7 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Events;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Yarns.ReadModels;
-using Moonlay;
 using System;
 
 namespace Manufactures.Domain.Yarns
