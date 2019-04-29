@@ -1,15 +1,15 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.FabricConstruction.ValueObjects;
-using Manufactures.Domain.FabricConstruction.ReadModels;
+using Manufactures.Domain.FabricConstructions.ValueObjects;
+using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Domain.FabricConstruction
+namespace Manufactures.Domain.FabricConstructions
 {
-    public class ConstructionDocument : AggregateRoot<ConstructionDocument, ConstructionDocumentReadModel>
+    public class FabricConstructionDocument : AggregateRoot<FabricConstructionDocument, FabricConstructionReadModel>
     {
         public string ConstructionNumber { get; private set; }
         public DateTimeOffset Date { get; private set; }
@@ -24,7 +24,7 @@ namespace Manufactures.Domain.FabricConstruction
         public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }
 
-        public ConstructionDocument(Guid id,
+        public FabricConstructionDocument(Guid id,
                                     string constructionNumber,
                                     string wofenType,
                                     string warpType,
@@ -51,7 +51,7 @@ namespace Manufactures.Domain.FabricConstruction
 
             this.MarkTransient();
 
-            ReadModel = new ConstructionDocumentReadModel(Identity)
+            ReadModel = new FabricConstructionReadModel(Identity)
             {
                 ConstructionNumber = ConstructionNumber,
                 AmountOfWarp = AmountOfWarp,
@@ -69,7 +69,7 @@ namespace Manufactures.Domain.FabricConstruction
             ReadModel.AddDomainEvent(new OnFabricConstructionPlaced(this.Identity));
         }
 
-        public ConstructionDocument(ConstructionDocumentReadModel readModel) : base(readModel)
+        public FabricConstructionDocument(FabricConstructionReadModel readModel) : base(readModel)
         {
             this.ConstructionNumber = readModel.ConstructionNumber;
             this.AmountOfWarp = readModel.AmountOfWarp;
@@ -261,7 +261,7 @@ namespace Manufactures.Domain.FabricConstruction
             }
         }
 
-        protected override ConstructionDocument GetEntity()
+        protected override FabricConstructionDocument GetEntity()
         {
             return this;
         }

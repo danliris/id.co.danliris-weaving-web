@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Dtos.DailyOperations.Sizing;

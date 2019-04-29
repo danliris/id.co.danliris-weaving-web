@@ -3,14 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.FabricConstruction;
-using Manufactures.Domain.FabricConstruction.Commands;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions;
+using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Moonlay;
 
-namespace Manufactures.Application.FabricConstruction.CommandHandlers
+namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
-    public class RemoveConstructionCommandHandler : ICommandHandler<RemoveConstructionCommand, ConstructionDocument>
+    public class RemoveConstructionCommandHandler : ICommandHandler<RemoveFabricConstructionCommand, FabricConstructionDocument>
     {
         private readonly IStorage _storage;
         private readonly IFabricConstructionRepository _constructionDocumentRepository;
@@ -21,7 +21,7 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
             _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(RemoveConstructionCommand request, 
+        public async Task<FabricConstructionDocument> Handle(RemoveFabricConstructionCommand request, 
                                                        CancellationToken cancellationToken)
         {
             var constructionDocument = _constructionDocumentRepository.Find(entity => entity.Identity == request.Id)

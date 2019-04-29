@@ -4,18 +4,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.FabricConstruction;
-using Manufactures.Domain.FabricConstruction.Commands;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions;
+using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 using Manufactures.Domain.Shared.ValueObjects;
 
-namespace Manufactures.Application.FabricConstruction.CommandHandlers
+namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
-    public class UpdateConstructionCommandHandler : ICommandHandler<UpdateConstructionCommand, ConstructionDocument>
+    public class UpdateConstructionCommandHandler : ICommandHandler<UpdateFabricConstructionCommand, FabricConstructionDocument>
     {
         private readonly IStorage _storage;
         private readonly IFabricConstructionRepository _constructionDocumentRepository;
@@ -32,7 +32,7 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
             _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();
         }
 
-        public async Task<ConstructionDocument> Handle(UpdateConstructionCommand request,
+        public async Task<FabricConstructionDocument> Handle(UpdateFabricConstructionCommand request,
                                                        CancellationToken cancellationToken)
         {
             var query = _constructionDocumentRepository.Query;

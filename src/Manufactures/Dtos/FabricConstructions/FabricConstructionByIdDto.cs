@@ -1,11 +1,11 @@
-﻿using Manufactures.Domain.FabricConstruction;
-using Manufactures.Domain.FabricConstruction.ValueObjects;
+﻿using Manufactures.Domain.FabricConstructions;
+using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Dtos.FabricConstruction
+namespace Manufactures.Dtos.FabricConstructions
 {
     public class FabricConstructionByIdDto
     {
@@ -46,7 +46,7 @@ namespace Manufactures.Dtos.FabricConstruction
         public IReadOnlyCollection<Weft> ItemsWeft { get; private set; }
 
 
-        public FabricConstructionByIdDto(ConstructionDocument document)
+        public FabricConstructionByIdDto(FabricConstructionDocument document)
         {
             Id = document.Identity;
             ConstructionNumber = document.ConstructionNumber;

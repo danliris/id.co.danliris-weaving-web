@@ -6,7 +6,7 @@ using Manufactures.Domain.Orders.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using ConstructionDocument = Manufactures.Domain.FabricConstruction.ConstructionDocument;
+using FabricConstructionDocument = Manufactures.Domain.FabricConstructions.FabricConstructionDocument;
 
 namespace Manufactures.Dtos.Order
 {
@@ -49,7 +49,7 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "EstimatedProductionDocument")]
         public EstimatedProductionDocumentValueObject EstimatedProductionDocument { get; private set; }
 
-        public OrderReportBySearchDto(OrderDocument weavingOrderDocument, ConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber, string unit)
+        public OrderReportBySearchDto(OrderDocument weavingOrderDocument, FabricConstructionDocument constructionDocument, List<EstimatedProductionDocument> estimationDocument, string yarnNumber, string unit)
         {
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;

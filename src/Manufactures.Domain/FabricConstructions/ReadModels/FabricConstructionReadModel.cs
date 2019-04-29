@@ -1,11 +1,11 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using System;
 
-namespace Manufactures.Domain.FabricConstruction.ReadModels
+namespace Manufactures.Domain.FabricConstructions.ReadModels
 {
-    public class ConstructionDocumentReadModel : ReadModelBase
+    public class FabricConstructionReadModel : ReadModelBase
     {
-        public ConstructionDocumentReadModel(Guid identity) : base(identity) { }
+        public FabricConstructionReadModel(Guid identity) : base(identity) { }
 
         public string ConstructionNumber { get; internal set; }
         public int AmountOfWarp { get; internal set; }

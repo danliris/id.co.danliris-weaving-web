@@ -1,7 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.FabricConstruction.Repositories;
+using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Entities;

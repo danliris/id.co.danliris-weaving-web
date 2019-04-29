@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Manufactures.Domain.FabricConstruction.ReadModels;
+using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
@@ -214,7 +214,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
+            modelBuilder.Entity<FabricConstructionReadModel>(etb =>
             {
                 etb.ToTable("Weaving_ConstructionDocuments");
                 etb.HasKey(e => e.Identity);
