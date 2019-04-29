@@ -16,12 +16,12 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
                                                                    ConstructionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
 
         public PlaceConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(PlaceConstructionCommand request,

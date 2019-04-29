@@ -24,7 +24,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class FabricConstructionController : ControllerApiBase
     {
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
         private readonly IMaterialTypeRepository _materialTypeRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         private readonly IYarnNumberRepository _yarnNumberRepository;
@@ -33,7 +33,7 @@ namespace Manufactures.Controllers.Api
                                       IWorkContext workContext) : base(serviceProvider)
         {
             _constructionDocumentRepository = 
-                this.Storage.GetRepository<IConstructionDocumentRepository>();
+                this.Storage.GetRepository<IFabricConstructionRepository>();
             _materialTypeRepository =
                 this.Storage.GetRepository<IMaterialTypeRepository>();
             _yarnDocumentRepository =

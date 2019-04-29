@@ -20,6 +20,7 @@ using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Operators.ReadModels;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
+using Manufactures.Domain.Beams.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -27,6 +28,18 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BeamReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_BeamDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.BeamNumber).HasMaxLength(255);
+                etb.Property(p => p.BeamType).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationSizingDetails");

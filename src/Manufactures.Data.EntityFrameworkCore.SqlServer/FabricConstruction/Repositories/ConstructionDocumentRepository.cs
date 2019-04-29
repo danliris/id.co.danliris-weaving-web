@@ -5,7 +5,7 @@ using Manufactures.Domain.FabricConstruction.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.FabricConstruction.Repositories
 {
-    public class ConstructionDocumentRepository : AggregateRepostory<ConstructionDocument, ConstructionDocumentReadModel>, IConstructionDocumentRepository
+    public class ConstructionDocumentRepository : AggregateRepostory<ConstructionDocument, ConstructionDocumentReadModel>, IFabricConstructionRepository
     {
         protected override ConstructionDocument Map(ConstructionDocumentReadModel readModel)
         {

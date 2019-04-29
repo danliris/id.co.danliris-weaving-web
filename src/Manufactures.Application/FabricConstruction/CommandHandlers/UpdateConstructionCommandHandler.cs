@@ -18,7 +18,7 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
     public class UpdateConstructionCommandHandler : ICommandHandler<UpdateConstructionCommand, ConstructionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         public readonly IMaterialTypeRepository _materialTypeRepository;
         public readonly IYarnNumberRepository _yarnNumberRepository;
@@ -26,7 +26,7 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
         public UpdateConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
             _yarnDocumentRepository = _storage.GetRepository<IYarnDocumentRepository>();
             _materialTypeRepository = _storage.GetRepository<IMaterialTypeRepository>();
             _yarnNumberRepository = _storage.GetRepository<IYarnNumberRepository>();

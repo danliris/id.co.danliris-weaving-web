@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Construction.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
+using Manufactures.Domain.FabricConstruction.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Dtos.DailyOperations.Sizing;
@@ -13,7 +13,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -28,7 +27,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationSizingDocumentRepository;
         private readonly IMachineRepository
             _machineRepository;
-        private readonly IConstructionDocumentRepository
+        private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
         private readonly IShiftRepository
             _shiftDocumentRepository;
@@ -42,7 +41,7 @@ namespace Manufactures.Controllers.Api
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
             _constructionDocumentRepository =
-                this.Storage.GetRepository<IConstructionDocumentRepository>();
+                this.Storage.GetRepository<IFabricConstructionRepository>();
             _shiftDocumentRepository =
                 this.Storage.GetRepository<IShiftRepository>();
         }

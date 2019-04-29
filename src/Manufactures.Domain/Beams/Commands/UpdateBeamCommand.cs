@@ -10,8 +10,8 @@ namespace Manufactures.Domain.Beams.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(propertyName: "BeamCode")]
-        public string BeamCode { get; set; }
+        [JsonProperty(propertyName: "BeamNumber")]
+        public string BeamNumber { get; set; }
 
         [JsonProperty(propertyName: "BeamType")]
         public string BeamType { get; set; }
@@ -22,7 +22,7 @@ namespace Manufactures.Domain.Beams.Commands
         public UpdateBeamCommandValidator()
         {
             RuleFor(command => command.Id).NotNull();
-            RuleFor(command => command.BeamCode).NotEmpty();
+            RuleFor(command => command.BeamNumber).NotEmpty();
             RuleFor(command => command.BeamType).NotEmpty();
         }
     }

@@ -6,8 +6,8 @@ namespace Manufactures.Domain.Beams.Commands
 {
     public class AddBeamCommand : ICommand<BeamDocument>
     {
-        [JsonProperty(propertyName: "BeamCode")]
-        public string BeamCode { get; set; }
+        [JsonProperty(propertyName: "BeamNumber")]
+        public string BeamNumber { get; set; }
 
         [JsonProperty(propertyName: "BeamType")]
         public string BeamType { get; set; }
@@ -17,7 +17,7 @@ namespace Manufactures.Domain.Beams.Commands
     {
         public AddBeamCommandValidator()
         {
-            RuleFor(command => command.BeamCode).NotEmpty();
+            RuleFor(command => command.BeamNumber).NotEmpty();
             RuleFor(command => command.BeamType).NotEmpty();
         }
     }

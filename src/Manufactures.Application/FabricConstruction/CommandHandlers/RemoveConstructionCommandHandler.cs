@@ -13,12 +13,12 @@ namespace Manufactures.Application.FabricConstruction.CommandHandlers
     public class RemoveConstructionCommandHandler : ICommandHandler<RemoveConstructionCommand, ConstructionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IConstructionDocumentRepository _constructionDocumentRepository;
+        private readonly IFabricConstructionRepository _constructionDocumentRepository;
 
         public RemoveConstructionCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _constructionDocumentRepository = _storage.GetRepository<IConstructionDocumentRepository>();
+            _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
         }
 
         public async Task<ConstructionDocument> Handle(RemoveConstructionCommand request, 
