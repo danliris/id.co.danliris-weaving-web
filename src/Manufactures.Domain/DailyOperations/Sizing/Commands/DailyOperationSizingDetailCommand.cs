@@ -1,4 +1,5 @@
-﻿using Manufactures.Domain.Shared.ValueObjects;
+﻿using FluentValidation;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -43,5 +44,15 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; set; }
+    }
+
+    public class DailyOperationSizingDetailCommandValidator : AbstractValidator<DailyOperationSizingDetailCommand>
+    {
+        public DailyOperationSizingDetailCommandValidator()
+        {
+            RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.BeamDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+        }
     }
 }

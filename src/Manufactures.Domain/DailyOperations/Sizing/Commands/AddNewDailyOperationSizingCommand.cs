@@ -31,6 +31,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(command => command.ProductionDate).NotEmpty();
             RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
             RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
+            RuleForEach(command => command.DailyOperationSizingDetails).SetValidator(new DailyOperationSizingDetailCommandValidator());
         }
     }
 }
