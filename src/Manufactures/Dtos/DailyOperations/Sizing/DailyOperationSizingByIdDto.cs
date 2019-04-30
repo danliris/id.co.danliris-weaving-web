@@ -36,10 +36,10 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public string Visco { get; }
 
         [JsonProperty(PropertyName = "Start")]
-        public DateTimeOffset Start { get; }
+        public DateTimeOffset? Start { get; }
 
         [JsonProperty(PropertyName = "Doff")]
-        public DateTimeOffset Doff { get; }
+        public DateTimeOffset? Doff { get; }
 
         [JsonProperty(PropertyName = "BrokenBeam")]
         public int BrokenBeam { get; }

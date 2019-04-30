@@ -20,18 +20,18 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UnitId WeavingUnitId { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public List<DailyOperationSizingDetailCommand> DailyOperationSizingDetails { get; set; }
+        public AddNewDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
     }
 
-    public class AddNewDailyOperationalMachineCommandValidator
+    public class AddNewDailyOperationSizingCommandValidator
         : AbstractValidator<AddNewDailyOperationSizingCommand>
     {
-        public AddNewDailyOperationalMachineCommandValidator()
+        public AddNewDailyOperationSizingCommandValidator()
         {
             RuleFor(command => command.ProductionDate).NotEmpty();
             RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
             RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
-            RuleForEach(command => command.DailyOperationSizingDetails).SetValidator(new DailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.DailyOperationSizingDetails).SetValidator(new AddNewDailyOperationSizingDetailCommandValidator());
         }
     }
 }

@@ -8,12 +8,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingProductionTimeValueObject : ValueObject
     {
-        public DateTimeOffset Start { get; set; }
-        public DateTimeOffset Pause { get; set; }
-        public DateTimeOffset Resume { get; set; }
-        public DateTimeOffset Doff { get; set; }
+        public DateTimeOffset? Start { get; set; }
+        public DateTimeOffset? Pause { get; set; }
+        public DateTimeOffset? Resume { get; set; }
+        public DateTimeOffset? Doff { get; set; }
 
-        public DailyOperationSizingProductionTimeValueObject(DateTimeOffset start, DateTimeOffset pause, DateTimeOffset resume, DateTimeOffset doff)
+        public DailyOperationSizingProductionTimeValueObject(DateTimeOffset? start, DateTimeOffset? pause, DateTimeOffset? resume, DateTimeOffset? doff)
         {
             Start = start;
             Pause = pause;

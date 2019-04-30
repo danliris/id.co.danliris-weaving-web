@@ -147,7 +147,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDailyOperationSizingCommand command)
+                                             [FromBody]UpdatePauseDailyOperationSizingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -160,20 +160,20 @@ namespace Manufactures.Controllers.Api
             return Ok(updateDailyOperationSizingDocument.Identity);
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(string Id)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{Id}")]
+        //public async Task<IActionResult> Delete(string Id)
+        //{
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
 
-            var command = new RemoveDailyOperationSizingCommand();
-            command.SetId(documentId);
+        //    var command = new RemoveDailyOperationSizingCommand();
+        //    command.SetId(documentId);
 
-            var deletedDailyOperationSizingDocument = await Mediator.Send(command);
+        //    var deletedDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(deletedDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(deletedDailyOperationSizingDocument.Identity);
+        //}
     }
 }

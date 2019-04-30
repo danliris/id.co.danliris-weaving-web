@@ -8,25 +8,25 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingBeamTimeValueObject : ValueObject
     {
-        public DateTimeOffset Install { get; set; }
-        public DateTimeOffset Uninstall { get; set; }
+        public DateTimeOffset? UpTime { get; set; }
+        public DateTimeOffset? DownTime { get; set; }
 
-        public DailyOperationSizingBeamTimeValueObject(DateTimeOffset install, DateTimeOffset uninstall)
+        public DailyOperationSizingBeamTimeValueObject(DateTimeOffset? upTime, DateTimeOffset? downTime)
         {
-            Install = install;
-            Uninstall = uninstall;
+            UpTime = upTime;
+            DownTime = downTime;
         }
 
         public DailyOperationSizingBeamTimeValueObject(DailyOperationSizingBeamTimeCommand dailyOperationSizingBeam)
         {
-            Install = dailyOperationSizingBeam.Install;
-            Uninstall = dailyOperationSizingBeam.Uninstall;
+            UpTime = dailyOperationSizingBeam.UpTime;
+            DownTime = dailyOperationSizingBeam.DownTime;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return Install;
-            yield return Uninstall;
+            yield return UpTime;
+            yield return DownTime;
         }
     }
 }

@@ -33,26 +33,23 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId);
-            var listOfDailyOperationDetail = new List<DailyOperationSizingDetail>();
+            //var listOfDailyOperationDetail = new List<DailyOperationSizingDetail>();
 
-            foreach (var operationDetail in request.DailyOperationSizingDetails)
-            {
                 var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                      operationDetail.BeamDocumentId,
-                                                      operationDetail.ConstructionDocumentId,
-                                                      operationDetail.PIS,
-                                                      operationDetail.Visco,
-                                                      new DailyOperationSizingProductionTimeValueObject(operationDetail.ProductionTime),
-                                                      new DailyOperationSizingBeamTimeValueObject(operationDetail.BeamTime),
-                                                      operationDetail.BrokenBeam,
-                                                      operationDetail.TroubledMachine,
-                                                      operationDetail.Counter,
-                                                      operationDetail.ShiftDocumentId,
-                                                      operationDetail.Information);
+                                                   request.DailyOperationSizingDetails.BeamDocumentId,
+                                                   request.DailyOperationSizingDetails.ConstructionDocumentId,
+                                                   0,
+                                                   "",
+                                                   new DailyOperationSizingProductionTimeValueObject(request.DailyOperationSizingDetails.ProductionTime.Start,null,null,null),
+                                                   new DailyOperationSizingBeamTimeValueObject(null,null),
+                                                   0,
+                                                   0,
+                                                   0,
+                                                   request.DailyOperationSizingDetails.ShiftDocumentId,
+                                                   "");
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
-            }
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
 
