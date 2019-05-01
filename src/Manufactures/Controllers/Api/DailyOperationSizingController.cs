@@ -145,8 +145,8 @@ namespace Manufactures.Controllers.Api
             return Ok(newDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id,
+        [HttpPut("{Id}/state/{state}")]
+        public async Task<IActionResult> Put(string Id, string state,
                                              [FromBody]UpdatePauseDailyOperationSizingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
