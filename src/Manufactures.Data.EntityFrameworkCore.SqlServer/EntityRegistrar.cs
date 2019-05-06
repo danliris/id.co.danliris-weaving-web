@@ -2,8 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using ExtCore.Data.EntityFramework;
-using Manufactures.Domain.Construction.ValueObjects;
-using Manufactures.Domain.Construction.ReadModels;
+using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
@@ -13,6 +12,15 @@ using Manufactures.Domain.Suppliers.ReadModels;
 using Manufactures.Domain.Yarns.ReadModels;
 using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
+using Manufactures.Domain.MachineTypes.ReadModels;
+using Manufactures.Domain.MachinesPlanning.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
+using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Shifts.ReadModels;
+using Manufactures.Domain.Operators.ReadModels;
+using Manufactures.Domain.DailyOperations.Sizing.Entities;
+using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
+using Manufactures.Domain.Beams.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -20,6 +28,115 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<BeamReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_BeamDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.BeamNumber).HasMaxLength(255);
+                etb.Property(p => p.BeamType).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Visco).HasMaxLength(255);
+                etb.Property(e => e.Information).HasMaxLength(2000);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationSizingReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.DailyOperationSizingDetails)
+                    .WithOne(e => e.DailyOperationSizingDocument)
+                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<OperatorReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_OperatorDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Assignment).HasMaxLength(255);
+                etb.Property(e => e.Type).HasMaxLength(255);
+                etb.Property(e => e.Group).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<ShiftReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_ShiftDocuments");
+                etb.HasKey(e => e.Identity);
+                etb.Property(e => e.Name).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+                modelBuilder.Entity<DailyOperationLoomDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationLoomDetails");
+                etb.HasKey(e => e.Identity);
+                
+                etb.Property(e => e.Information).HasMaxLength(2000);
+                etb.Property(e => e.DetailStatus).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationLoomReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationLoomDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.DailyOperationLoomDetails)
+                    .WithOne(e => e.DailyOperationLoomDocument)
+                    .HasForeignKey(e => e.DailyOperationLoomDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<MachinesPlanningReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_MachinesPlanningDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.Area).HasMaxLength(255);
+                etb.Property(e => e.Blok).HasMaxLength(255);
+                etb.Property(e => e.BlokKaizen).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<MachineTypeReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_MachineTypeDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.TypeName).HasMaxLength(255);
+                etb.Property(e => e.MachineUnit).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<MachineDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_MachineDocuments");
@@ -97,7 +214,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<ConstructionDocumentReadModel>(etb =>
+            modelBuilder.Entity<FabricConstructionReadModel>(etb =>
             {
                 etb.ToTable("Weaving_ConstructionDocuments");
                 etb.HasKey(e => e.Identity);
@@ -126,7 +243,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<WeavingOrderDocumentReadModel>(etb =>
+            modelBuilder.Entity<OrderDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);

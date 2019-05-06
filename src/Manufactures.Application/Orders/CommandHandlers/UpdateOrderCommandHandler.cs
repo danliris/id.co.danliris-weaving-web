@@ -1,44 +1,54 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.Orders;
+using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.Domain.Orders.Commands
+namespace Manufactures.Application.Orders.CommandHandlers
 {
-    public class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, ManufactureOrder>
+    public class UpdateOrderCommandHandler : ICommandHandler<UpdateOrderCommand, OrderDocument>
     {
-        private readonly IManufactureOrderRepository _manufactureOrderRepo;
+        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
+        private readonly IStorage _storage;
 
         public UpdateOrderCommandHandler(IStorage storage)
         {
-            Storage = storage;
-            _manufactureOrderRepo = Storage.GetRepository<IManufactureOrderRepository>();
+            _storage = storage;
+            _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
 
-        private IStorage Storage { get; }
 
-
-        public async Task<ManufactureOrder> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
+        public async Task<OrderDocument> Handle(UpdateOrderCommand command, 
+                                                       CancellationToken cancellationToken)
         {
-            var order = _manufactureOrderRepo.Find(o => o.Identity == request.Id).FirstOrDefault();
+            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id)
+                                                       .FirstOrDefault();
 
-            if (order == null)
-                throw Validator.ErrorValidation(("Id", "Invalid Order: " + request.Id));
+            if(order == null)
+            {
+                throw Validator.ErrorValidation(("Id", "Invalid Order: " + command.Id));
+            }
 
-            order.SetBlended(request.Blended);
-            order.SetMachineId(request.MachineId);
-            order.SetUnitDepartment(request.UnitDepartmentId);
-            order.SetUserId(request.UserId);
-            order.SetYarnCodes(request.YarnCodes);
+            order.SetFabricConstructionDocument(new ConstructionId(Guid.Parse(command.FabricConstructionDocument.Id)));
+            order.SetWarpOrigin(command.WarpOrigin);
+            order.SetWeftOrigin(command.WeftOrigin);
+            order.SetWholeGrade(command.WholeGrade);
+            order.SetYarnType(command.YarnType);
+            order.SetPeriod(command.Period);
+            order.SetWarpComposition(command.WarpComposition);
+            order.SetWeftComposition(command.WeftComposition);
+            order.SetWeavingUnit(new UnitId(command.WeavingUnit.Id));
 
-            await _manufactureOrderRepo.Update(order);
+            await _weavingOrderDocumentRepository.Update(order);
 
-            // Save Changes
-            Storage.Save();
-
+            _storage.Save();
+            
             return order;
         }
     }

@@ -17,7 +17,7 @@ namespace Manufactures.ViewModels.Manufacture
                     yarnCodes: new YarnCodes(createViewModel.YarnCodes),
                     compositionId: createViewModel.CompositionId,
                     blended: new Blended(createViewModel.Blended),
-                    machineId: new MachineId(createViewModel.MachineId),
+                    machineId: new MachineIdValueObject(createViewModel.MachineId),
                     userId: currentUser);
         }
     }

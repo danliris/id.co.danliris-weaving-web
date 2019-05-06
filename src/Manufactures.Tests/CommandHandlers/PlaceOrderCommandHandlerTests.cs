@@ -59,11 +59,11 @@ namespace Manufactures.Tests.CommandHandlers
 
             var blended = new Blended(new List<float> { 10.5f, 20.23f });
 
-            var machineId = new MachineId(1);
+            var machineId = new MachineIdValueObject(1);
 
             this.mockOrderRepo.Setup(x => x.Update(It.IsAny<ManufactureOrder>())).Returns(Task.FromResult(It.IsAny<ManufactureOrder>()));
 
-            PlaceOrderCommand request = new PlaceOrderCommand
+            PlaceOrderCommandOld request = new PlaceOrderCommandOld
             {
                 OrderDate = DateTime.Now,
                 UnitDepartmentId = unitId,

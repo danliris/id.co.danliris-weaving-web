@@ -19,12 +19,12 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class YarnNumberDocumentController : ControllerApiBase
     {
-        private readonly IYarnNumberRepository _ringRepository;
+        private readonly IYarnNumberRepository _yarnNumberRepository;
 
         public YarnNumberDocumentController(IServiceProvider serviceProvider, 
                                       IWorkContext workContext) : base(serviceProvider)
         {
-            _ringRepository = 
+            _yarnNumberRepository = 
                 this.Storage.GetRepository<IYarnNumberRepository>();
         }
 
@@ -37,15 +37,15 @@ namespace Manufactures.Controllers.Api
         {
             page = page - 1;
             var query =
-                _ringRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var ringDocuments = 
-                _ringRepository.Find(query)
+                _yarnNumberRepository.Query.OrderByDescending(item => item.CreatedDate);
+            var yarnNumberDocuments = 
+                _yarnNumberRepository.Find(query)
                                .Select(item => new YarnNumberListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                ringDocuments = 
-                    ringDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                yarnNumberDocuments = 
+                    yarnNumberDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -58,21 +58,21 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    ringDocuments = ringDocuments.OrderBy(x => prop.GetValue(x, null));
+                    yarnNumberDocuments = yarnNumberDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    ringDocuments = ringDocuments.OrderByDescending(x => prop.GetValue(x, null));
+                    yarnNumberDocuments = yarnNumberDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            ringDocuments = ringDocuments.Take(size).Skip(page * size);
-            int totalRows = ringDocuments.Count();
+            yarnNumberDocuments = yarnNumberDocuments.Skip(page * size).Take(size);
+            int totalRows = yarnNumberDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(ringDocuments, info: new
+            return Ok(yarnNumberDocuments, info: new
             {
                 page,
                 size,
@@ -85,7 +85,7 @@ namespace Manufactures.Controllers.Api
         {
             var Identity = Guid.Parse(Id);
             var ringDocuments = 
-                _ringRepository.Find(item => item.Identity == Identity)
+                _yarnNumberRepository.Find(item => item.Identity == Identity)
                                .Select(item => new YarnNumberDocumentDto(item)).FirstOrDefault();
             await Task.Yield();
 

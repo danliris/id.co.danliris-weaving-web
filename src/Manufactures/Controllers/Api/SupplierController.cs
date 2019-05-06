@@ -69,7 +69,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            suppliers = suppliers.Take(size).Skip(page * size);
+            suppliers = suppliers.Skip(page * size).Take(size);
             int totalRows = suppliers.Count();
             page = page + 1;
 

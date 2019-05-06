@@ -2,6 +2,7 @@
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
+using Manufactures.Domain.Events;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
@@ -39,6 +40,8 @@ namespace Manufactures.Domain.Estimations.Productions
                 UnitId = this.UnitId.Value,
                 EstimationProducts = this.EstimationProducts.ToList()
             };
+
+            ReadModel.AddDomainEvent(new OnAddEstimation(Identity));
         }
 
         public EstimatedProductionDocument(EstimatedProductionDocumentReadModel readModel) : base(readModel)

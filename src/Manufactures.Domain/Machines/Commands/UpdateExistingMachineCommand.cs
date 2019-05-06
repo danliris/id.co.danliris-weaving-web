@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Machines.Commands
     public class UpdateExistingMachineCommand : ICommand<MachineDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; set; }
+        public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; set; }

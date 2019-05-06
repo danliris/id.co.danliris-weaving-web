@@ -7,6 +7,7 @@ using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Dtos.Yarn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -61,7 +62,7 @@ namespace Manufactures.Controllers.Api
                                            .FirstOrDefault();
                 var yarnNumber = 
                     _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
-                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number))
+                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
                                          .FirstOrDefault();
 
                 var data = new YarnDocumentListDto(yarn, materialType, yarnNumber);
@@ -95,7 +96,7 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            results = results.Take(size).Skip(page * size).ToList();
+            results = results.Skip(page * size).Take(size).ToList();
             int totalRows = results.Count();
             page = page + 1;
 
@@ -122,7 +123,7 @@ namespace Manufactures.Controllers.Api
                                        .FirstOrDefault();
             var yarnNumberDocument =
                 _yarnNumberRepository.Find(item => item.Identity == yarn.YarnNumberId.Value)
-                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number))
+                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
                                      .FirstOrDefault();
             await Task.Yield();
 
@@ -152,6 +153,15 @@ namespace Manufactures.Controllers.Api
             if (!Guid.TryParse(Id, out Guid Identity))
             {
                 return NotFound();
+            }
+
+            var existingCode =
+                _yarnDocumentRepository.Find(o => o.Code.Equals(command.Code) &&
+                                                  o.Deleted.Equals(false)).Count >= 1;
+
+            if(existingCode)
+            {
+                throw Validator.ErrorValidation(("Code", "Code with " + command.Code + " has available"));
             }
 
             command.SetId(Identity);

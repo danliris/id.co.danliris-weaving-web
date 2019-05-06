@@ -1,13 +1,17 @@
 ﻿using Infrastructure.Domain.Commands;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Orders.Commands
 {
-    public class RemoveOrderCommand : ICommand<ManufactureOrder>
+    public class RemoveOrderCommand : ICommand<OrderDocument>
     {
-        public void SetId(Guid id) { Id = id; }
+        [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 }
