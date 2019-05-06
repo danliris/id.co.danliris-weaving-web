@@ -1,1 +1,0 @@
-﻿weaving-version-beta-1 : beta-release
