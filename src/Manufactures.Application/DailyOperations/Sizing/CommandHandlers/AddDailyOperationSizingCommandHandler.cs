@@ -35,14 +35,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.WeavingUnitId);
             //var listOfDailyOperationDetail = new List<DailyOperationSizingDetail>();
 
+            var currentTime = DateTimeOffset.Now.LocalDateTime;
+
                 var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.DailyOperationSizingDetails.BeamDocumentId,
                                                    request.DailyOperationSizingDetails.ConstructionDocumentId,
                                                    0,
                                                    "",
-                                                   new DailyOperationSizingProductionTimeValueObject(request.DailyOperationSizingDetails.ProductionTime.Start,null,null,null),
-                                                   new DailyOperationSizingBeamTimeValueObject(null,null),
+                                                   new DailyOperationSizingProductionTimeValueObject(currentTime, DateTimeOffset.MinValue, DateTimeOffset.MinValue, DateTimeOffset.MinValue),
+                                                   new DailyOperationSizingBeamTimeValueObject(DateTimeOffset.MinValue, DateTimeOffset.MinValue),
                                                    0,
                                                    0,
                                                    0,

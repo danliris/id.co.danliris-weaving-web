@@ -38,7 +38,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Start")]
         public DateTimeOffset? Start { get; }
 
-        [JsonProperty(PropertyName = "Doff")]
+        [JsonProperty(PropertyName = "DoffFinish")]
         public DateTimeOffset? Doff { get; }
 
         [JsonProperty(PropertyName = "BrokenBeam")]
@@ -61,7 +61,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
             PIS = details.PIS;
             Visco = details.Visco;
             Start =details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Start;
-            Doff = details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Doff;
+            Doff = details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().DoffFinish;
             BrokenBeam = details.BrokenBeam;
             Counter = details.Counter;
             ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);

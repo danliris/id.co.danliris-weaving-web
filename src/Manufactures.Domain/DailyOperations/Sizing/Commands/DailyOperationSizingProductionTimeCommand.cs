@@ -16,7 +16,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Resume")]
         public DateTimeOffset Resume { get; set; }
 
-        [JsonProperty(PropertyName = "Doff")]
-        public DateTimeOffset Doff { get; set; }
+        [JsonProperty(PropertyName = "DoffFinish")]
+        public DateTimeOffset DoffFinish { get; set; }
     }
 }

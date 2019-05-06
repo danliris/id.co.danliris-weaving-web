@@ -11,7 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     public class AddNewDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "ProductionDate")]
-        public DateTimeOffset ProductionDate { get; private set; }
+        public DateTimeOffset ProductionDate { get; set; }
 
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; set; }

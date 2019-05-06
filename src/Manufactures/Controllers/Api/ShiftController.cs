@@ -2,6 +2,7 @@
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.Commands;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.Dtos.Shift;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;
@@ -40,7 +41,7 @@ namespace Manufactures.Controllers.Api
             var query =
                 _shiftRepository.Query.OrderByDescending(item => item.CreatedDate);
             var shiftDocuments =
-                _shiftRepository.Find(query);
+                _shiftRepository.Find(query).Select(item => new ShiftDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -58,7 +59,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(ShiftDocument).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(ShiftDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {

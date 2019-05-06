@@ -11,14 +11,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
         public DateTimeOffset? Start { get; set; }
         public DateTimeOffset? Pause { get; set; }
         public DateTimeOffset? Resume { get; set; }
-        public DateTimeOffset? Doff { get; set; }
+        public DateTimeOffset? DoffFinish { get; set; }
 
-        public DailyOperationSizingProductionTimeValueObject(DateTimeOffset? start, DateTimeOffset? pause, DateTimeOffset? resume, DateTimeOffset? doff)
+        public DailyOperationSizingProductionTimeValueObject(DateTimeOffset? start, DateTimeOffset? pause, DateTimeOffset? resume, DateTimeOffset? doffFinish)
         {
             Start = start;
             Pause = pause;
             Resume = resume;
-            Doff = doff;
+            DoffFinish = doffFinish;
         }
 
         public DailyOperationSizingProductionTimeValueObject(DailyOperationSizingProductionTimeCommand dailyOperationSizingProduction)
@@ -26,7 +26,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             Start = dailyOperationSizingProduction.Start;
             Pause = dailyOperationSizingProduction.Pause;
             Resume = dailyOperationSizingProduction.Resume;
-            Doff = dailyOperationSizingProduction.Doff;
+            DoffFinish = dailyOperationSizingProduction.DoffFinish;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -34,7 +34,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             yield return Start;
             yield return Pause;
             yield return Resume;
-            yield return Doff;
+            yield return DoffFinish;
         }
     }
 }
