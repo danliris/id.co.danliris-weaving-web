@@ -261,4 +261,4 @@ __pycache__/
 *.pyc
 
 # Ignore Migration File
-**/Migrations/*.cs
+**/Migrations/*
