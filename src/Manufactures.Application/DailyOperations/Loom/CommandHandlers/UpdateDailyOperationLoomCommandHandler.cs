@@ -1,10 +1,13 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
+using Manufactures.Domain.DailyOperations.Sizing.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -13,43 +16,97 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
-    public class UpdateDailyOperationLoomCommandHandler 
+    public class UpdateDailyOperationLoomCommandHandler
         : ICommandHandler<UpdateDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationLoomRepository 
+        private readonly IDailyOperationLoomRepository
             _dailyOperationalDocumentRepository;
+        private readonly IDailyOperationSizingRepository
+            _dailyOperationSizingRepository;
 
         public UpdateDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationalDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
+            _dailyOperationalDocumentRepository =
+                _storage.GetRepository<IDailyOperationLoomRepository>();
+            _dailyOperationSizingRepository =
+               _storage.GetRepository<IDailyOperationSizingRepository>();
         }
 
-        public async Task<DailyOperationLoomDocument> Handle(UpdateDailyOperationLoomCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationLoomDocument> Handle(UpdateDailyOperationLoomCommand request,
+                                                             CancellationToken cancellationToken)
         {
-            var query = _dailyOperationalDocumentRepository.Query.Include(d => d.DailyOperationLoomDetails).Where(entity => entity.Identity.Equals(request.Id));
-            var existingDailyOperation = _dailyOperationalDocumentRepository.Find(query).FirstOrDefault();
+            var query =
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .Include(d => d.DailyOperationLoomDetails)
+                    .Where(entity => entity.Identity.Equals(request.Id));
+            var existingDailyOperation =
+                _dailyOperationalDocumentRepository
+                    .Find(query)
+                    .FirstOrDefault();
 
-            foreach(var operationDetail in request.DailyOperationMachineDetails)
+            var newDailyOperationHistory = new DailyOperationLoomHistory();
+            newDailyOperationHistory.SetTimeOnMachine(request.Detail.DailyOperationLoomHistory.TimeOnMachine);
+
+            if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.STOP)
             {
-                if(operationDetail.Identity == null)
-                {
-                    var newOperation =
-                        new DailyOperationLoomDetail(Guid.NewGuid(),
-                                                          operationDetail.OrderDocumentId,
-                                                          operationDetail.WarpsOrigin,
-                                                          operationDetail.WeftsOrigin,
-                                                          operationDetail.BeamId,
-                                                          new DailyOperationLoomTimeValueObject(operationDetail.DOMTime),
-                                                                                 operationDetail.ShiftId,
-                                                                                 operationDetail.BeamOperatorId,
-                                                                                 operationDetail.SizingOperatorId,
-                                                                                 operationDetail.Information,
-                                                                                 operationDetail.DetailStatus);
+                newDailyOperationHistory.SetMachineStatus(Constants.STOP);
+                newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
+            }
+            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.RESUME)
+            {
+                newDailyOperationHistory.SetMachineStatus(Constants.RESUME);
+                newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
+            }
+            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.FINISH)
+            {
+                newDailyOperationHistory.SetMachineStatus(Constants.FINISH);
+                newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
+            }
 
-                    existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
-                }
+            if (request.DailyOperationSizingId.Value != null)
+            {
+                var sizingOperatorDocumentId =
+               _dailyOperationSizingRepository
+                   .Query
+                   .Where(o => o.Identity == request.DailyOperationSizingId.Value)
+                   .FirstOrDefault()
+                   .Identity;
+
+                var newOperation =
+                  new DailyOperationLoomDetail(Guid.NewGuid(),
+                                                    request.Detail.OrderDocumentId,
+                                                    request.Detail.WarpOrigin,
+                                                    request.Detail.WeftOrigin,
+                                                    request.Detail.BeamId,
+                                                    newDailyOperationHistory,
+                                                    request.Detail.ShiftId,
+                                                    request.Detail.BeamOperatorId,
+                                                    new OperatorId(sizingOperatorDocumentId));
+
+                existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
+
+            }
+            else
+            {
+                var list = existingDailyOperation.DailyOperationMachineDetails.ToList();
+                var lastDetail = list[list.Count - 1];
+                var sizingOperatorDocumentId = new OperatorId(lastDetail.SizingOperatorId);
+
+                var newOperation =
+                  new DailyOperationLoomDetail(Guid.NewGuid(),
+                                                    request.Detail.OrderDocumentId,
+                                                    request.Detail.WarpOrigin,
+                                                    request.Detail.WeftOrigin,
+                                                    request.Detail.BeamId,
+                                                    newDailyOperationHistory,
+                                                    request.Detail.ShiftId,
+                                                    request.Detail.BeamOperatorId,
+                                                    sizingOperatorDocumentId);
+
+                existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
             }
             
             await _dailyOperationalDocumentRepository.Update(existingDailyOperation);

@@ -3,11 +3,11 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class AddNewDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
+    public class AddNewDailyOperationLoomCommand 
+        : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset DateOperated { get; private set; }
@@ -18,11 +18,14 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; set; }
 
-        [JsonProperty(PropertyName = "Status")]
-        public string Status { get; set; }
+        [JsonProperty(PropertyName = "DailyOperationSizingId")]
+        public DailyOperationId DailyOperationSizingId { get; set; }
+
+        [JsonProperty(PropertyName = "DailyOperationStatus")]
+        public string DailyOperationStatus { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public List<DailyOperationLoomDetailCommand> DailyOperationMachineDetails { get; set; }
+        public DailyOperationLoomDetailCommand Detail { get; set; }
     }
 
     public class AddNewDailyOperationalMachineCommandValidator 
@@ -33,7 +36,10 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
             RuleFor(command => command.DateOperated).NotEmpty();
             RuleFor(command => command.MachineId.Value).NotEmpty();
             RuleFor(command => command.UnitId.Value).NotEmpty();
-            RuleFor(command => command.Status).NotEmpty();
+            RuleFor(command => command.DailyOperationSizingId.Value).NotEmpty();
+            RuleFor(command => command.DailyOperationStatus).NotEmpty();
+            RuleFor(command => command.Detail)
+                .SetValidator(new DailyOperationLoomDetailCommandValidator());
         }
     }
 }

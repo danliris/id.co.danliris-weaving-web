@@ -14,15 +14,19 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
-        public string Status { get; private set; }
+        public string DailyOperationStatus { get; private set; }
+        public DailyOperationId DailyOperationSizingId { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationLoomDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
+        public DailyOperationLoomDocument(Guid id,
+                                          MachineId machineId,
+                                          UnitId unitId,
+                                          string dailyOperationStatus) : base(id)
         {
             Identity = id;
             MachineId = machineId;
             UnitId = unitId;
-            Status = status;
+            DailyOperationStatus = dailyOperationStatus;
             DailyOperationMachineDetails = new List<DailyOperationLoomDetail>();
 
             this.MarkTransient();
@@ -31,7 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             {
                 MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
-                Status = this.Status,
+                DailyOperationStatus = this.DailyOperationStatus,
                 DailyOperationLoomDetails = this.DailyOperationMachineDetails.ToList()
             };
 
@@ -43,7 +47,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             this.DateOperated = readModel.CreatedDate;
             this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
             this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
-            this.Status = readModel.Status; 
+            this.DailyOperationStatus = readModel.DailyOperationStatus;
             this.DailyOperationMachineDetails = readModel.DailyOperationLoomDetails;
         }
 
@@ -69,34 +73,15 @@ namespace Manufactures.Domain.DailyOperations.Loom
             MarkModified();
         }
 
-        public void SetUnit(UnitId value)
+        public void SetDailyOperationStatus(string value)
         {
-            if (value.Value != UnitId.Value)
+            if(DailyOperationStatus != value)
             {
-                UnitId = value;
-                ReadModel.UnitId = UnitId.Value;
+                DailyOperationStatus = value;
+                ReadModel.DailyOperationStatus = DailyOperationStatus;
 
                 MarkModified();
             }
-        }
-
-        public void SetMachine(MachineId value)
-        {
-            if(value.Value != MachineId.Value)
-            {
-                MachineId = value;
-                ReadModel.MachineId = MachineId.Value;
-
-                MarkModified();
-            }
-        }
-
-        public void SetStatus(string value)
-        {
-            Status = value;
-            ReadModel.Status = Status;
-
-            MarkModified();
         }
 
         protected override DailyOperationLoomDocument GetEntity()
