@@ -82,7 +82,7 @@ namespace Manufactures.Controllers.Api
                     var orderDocument = 
                         await _weavingOrderDocumentRepository
                             .Query
-                            .Where(o => o.Identity.Equals(detail.OrderId.Value))
+                            .Where(o => o.Identity.Equals(detail.OrderId))
                             .FirstOrDefaultAsync();
                     
                     if(orderNumber == "")
