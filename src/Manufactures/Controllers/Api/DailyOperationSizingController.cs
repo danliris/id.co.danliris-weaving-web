@@ -175,7 +175,7 @@ namespace Manufactures.Controllers.Api
 
         [HttpPut("{Id}/doff")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDoffDailyOperationSizingCommand command)
+                                             [FromBody]UpdateDoffFinishDailyOperationSizingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {

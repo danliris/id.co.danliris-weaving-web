@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class UpdateDoffDailyOperationSizingDetailCommand
+    public class UpdateDoffFinishDailyOperationSizingDetailCommand
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; set; }
@@ -30,7 +30,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Counter")]
         public double Counter { get; set; }
     }
-    public class UpdateDoffDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateDoffDailyOperationSizingDetailCommand>
+    public class UpdateDoffDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateDoffFinishDailyOperationSizingDetailCommand>
     {
         public UpdateDoffDailyOperationSizingDetailCommandValidator()
         {

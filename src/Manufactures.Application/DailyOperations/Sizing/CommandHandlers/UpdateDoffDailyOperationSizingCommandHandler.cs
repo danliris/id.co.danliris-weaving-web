@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class UpdateDoffDailyOperationSizingCommandHandler : ICommandHandler<UpdateDoffDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class UpdateDoffDailyOperationSizingCommandHandler : ICommandHandler<UpdateDoffFinishDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
@@ -26,7 +26,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
         }
 
-        public async Task<DailyOperationSizingDocument> Handle(UpdateDoffDailyOperationSizingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();

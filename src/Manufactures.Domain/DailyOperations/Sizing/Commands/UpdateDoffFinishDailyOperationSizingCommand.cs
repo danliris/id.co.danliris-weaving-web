@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class UpdateDoffDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class UpdateDoffFinishDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public UpdateDoffDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
+        public UpdateDoffFinishDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
 
         public void SetId(Guid Id)
         {

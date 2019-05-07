@@ -5,7 +5,6 @@ using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing
 {
@@ -62,27 +61,27 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void SetMachineDocumentId(MachineId value)
-        {
-            if (value.Value != MachineDocumentId.Value)
-            {
-                MachineDocumentId = value;
-                ReadModel.MachineDocumentId = MachineDocumentId.Value;
+        //public void SetMachineDocumentId(MachineId value)
+        //{
+        //    if (value.Value != MachineDocumentId.Value)
+        //    {
+        //        MachineDocumentId = value;
+        //        ReadModel.MachineDocumentId = MachineDocumentId.Value;
 
-                MarkModified();
-            }
-        }
+        //        MarkModified();
+        //    }
+        //}
 
-        public void SetWeavingUnitId(UnitId value)
-        {
-            if (value.Value != WeavingUnitId.Value)
-            {
-                WeavingUnitId = value;
-                ReadModel.WeavingUnitId = WeavingUnitId.Value;
+        //public void SetWeavingUnitId(UnitId value)
+        //{
+        //    if (value.Value != WeavingUnitId.Value)
+        //    {
+        //        WeavingUnitId = value;
+        //        ReadModel.WeavingUnitId = WeavingUnitId.Value;
 
-                MarkModified();
-            }
-        }
+        //        MarkModified();
+        //    }
+        //}
 
         protected override DailyOperationSizingDocument GetEntity()
         {
