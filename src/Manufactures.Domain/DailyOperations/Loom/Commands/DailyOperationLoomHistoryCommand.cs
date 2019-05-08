@@ -12,10 +12,14 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; private set; }
 
+        [JsonProperty(PropertyName = "IsUp")]
+        public bool IsUp { get; private set; }
+
+        [JsonProperty(PropertyName = "IsDown")]
+        public bool IsDown { get; private set; }
+
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
-
-        
     }
 
     public class DailyOperationLoomHistoryCommandValidator 

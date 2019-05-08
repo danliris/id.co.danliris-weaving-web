@@ -16,11 +16,11 @@ using System.Threading.Tasks;
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
     public class AddDailyOperationLoomCommandHandler
-        : ICommandHandler<AddNewDailyOperationLoomCommand, 
+        : ICommandHandler<AddNewDailyOperationLoomCommand,
                           DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationLoomRepository 
+        private readonly IDailyOperationLoomRepository
             _dailyOperationalDocumentRepository;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingRepository;
@@ -28,28 +28,29 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public AddDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationalDocumentRepository = 
+            _dailyOperationalDocumentRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
-            _dailyOperationSizingRepository = 
+            _dailyOperationSizingRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
         }
 
-        public async Task<DailyOperationLoomDocument> 
-            Handle(AddNewDailyOperationLoomCommand request, 
+        public async Task<DailyOperationLoomDocument>
+            Handle(AddNewDailyOperationLoomCommand request,
                    CancellationToken cancellationToken)
         {
-            var dailyOperationMachineDocument = 
+            var dailyOperationMachineDocument =
                 new DailyOperationLoomDocument(Guid.NewGuid(),
-                                                    request.MachineId, 
-                                                    request.UnitId, 
+                                                    request.MachineId,
+                                                    request.UnitId,
                                                     request.DailyOperationStatus);
 
-            var newDailyOperationHistory = new DailyOperationLoomHistory();
-            newDailyOperationHistory.SetTimeOnMachine(request.Detail.DailyOperationLoomHistory.TimeOnMachine);
-            newDailyOperationHistory.SetMachineStatus(Constants.PROCESS);
-            newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
-
-            var sizingOperatorDocumentId = 
+            var newDailyOperationHistory =
+                new DailyOperationLoomHistory(request.Detail.DailyOperationLoomHistory.TimeOnMachine,
+                                              DailyOperationMachineStatus.ONPROCESS,
+                                              request.Detail.DailyOperationLoomHistory.Information,
+                                              request.Detail.DailyOperationLoomHistory.IsUp,
+                                              request.Detail.DailyOperationLoomHistory.IsDown);
+            var sizingOperatorDocumentId =
                 _dailyOperationSizingRepository
                     .Query
                     .Where(o => o.Identity == request.DailyOperationSizingId.Value)
@@ -58,14 +59,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             var newOperation =
                    new DailyOperationLoomDetail(Guid.NewGuid(),
-                                                     request.Detail.OrderDocumentId,
-                                                     request.Detail.WarpOrigin,
-                                                     request.Detail.WeftOrigin,
-                                                     request.Detail.BeamId,
-                                                     newDailyOperationHistory,
-                                                     request.Detail.ShiftId,
-                                                     request.Detail.BeamOperatorId,
-                                                     new OperatorId(sizingOperatorDocumentId));
+                                                request.Detail.OrderDocumentId,
+                                                request.Detail.WarpOrigin,
+                                                request.Detail.WeftOrigin,
+                                                request.Detail.BeamId,
+                                                newDailyOperationHistory,
+                                                request.Detail.ShiftId,
+                                                request.Detail.BeamOperatorId,
+                                                new OperatorId(sizingOperatorDocumentId));
 
             dailyOperationMachineDocument.AddDailyOperationMachineDetail(newOperation);
 

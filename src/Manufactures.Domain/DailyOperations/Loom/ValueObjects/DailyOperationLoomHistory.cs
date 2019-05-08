@@ -8,17 +8,33 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
     {
         public DateTimeOffset TimeOnMachine { get; private set; }
         public string MachineStatus { get; private set; }
+        public bool IsUp { get; private set; }
+        public bool IsDown { get; private set; }
         public string Information { get; private set; }
 
         public DailyOperationLoomHistory() { }
 
         public DailyOperationLoomHistory(DateTimeOffset timeOnMachine,
                                          string machineStatus,
-                                         string information)
+                                         string information, 
+                                         bool isUp,
+                                         bool isDown)
         {
             TimeOnMachine = timeOnMachine;
             MachineStatus = machineStatus;
             Information = information;
+            IsUp = isUp;
+            IsDown = isDown;
+        }
+
+        public void SetIsUp(bool value)
+        {
+            IsUp = value;
+        }
+
+        public void SetIsDown(bool value)
+        {
+            IsDown = value;
         }
 
         public void SetTimeOnMachine(DateTimeOffset value)
@@ -40,6 +56,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
         {
             yield return TimeOnMachine;
             yield return MachineStatus;
+            yield return IsUp;
+            yield return IsDown;
             yield return Information;
         }
     }

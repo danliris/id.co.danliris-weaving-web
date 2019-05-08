@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationSizingId")]
-        public DailyOperationId DailyOperationSizingId { get; set; }
+        public DailyOperationSizingId DailyOperationSizingId { get; set; }
 
         [JsonProperty(PropertyName = "Detail")]
         public DailyOperationLoomDetailCommand Detail { get; set; }

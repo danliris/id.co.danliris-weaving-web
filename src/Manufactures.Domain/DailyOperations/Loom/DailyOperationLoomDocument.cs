@@ -15,7 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
         public string DailyOperationStatus { get; private set; }
-        public DailyOperationId DailyOperationSizingId { get; private set; }
+        public DailyOperationSizingId DailyOperationSizingId { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
 
         public DailyOperationLoomDocument(Guid id,

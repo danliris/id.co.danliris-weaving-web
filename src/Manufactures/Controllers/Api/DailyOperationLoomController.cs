@@ -15,7 +15,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
-using Moonlay;
 
 namespace Manufactures.Controllers.Api
 {
@@ -178,11 +177,6 @@ namespace Manufactures.Controllers.Api
             }
             else
             {
-                foreach(var detail in dailyOperationalLoom.DailyOperationMachineDetails)
-                {
-
-                }
-
                 return Ok(dailyOperationalLoom);
             }
         }

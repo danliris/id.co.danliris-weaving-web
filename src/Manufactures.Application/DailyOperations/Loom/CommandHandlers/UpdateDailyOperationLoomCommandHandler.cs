@@ -50,19 +50,19 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var newDailyOperationHistory = new DailyOperationLoomHistory();
             newDailyOperationHistory.SetTimeOnMachine(request.Detail.DailyOperationLoomHistory.TimeOnMachine);
 
-            if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.STOP)
+            if (request.Detail.DailyOperationLoomHistory.MachineStatus == DailyOperationMachineStatus.ONSTOP)
             {
-                newDailyOperationHistory.SetMachineStatus(Constants.STOP);
+                newDailyOperationHistory.SetMachineStatus(DailyOperationMachineStatus.ONSTOP);
                 newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
             }
-            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.RESUME)
+            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == DailyOperationMachineStatus.ONRESUME)
             {
-                newDailyOperationHistory.SetMachineStatus(Constants.RESUME);
+                newDailyOperationHistory.SetMachineStatus(DailyOperationMachineStatus.ONRESUME);
                 newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
             }
-            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == Constants.FINISH)
+            else if (request.Detail.DailyOperationLoomHistory.MachineStatus == DailyOperationMachineStatus.ONFINISH)
             {
-                newDailyOperationHistory.SetMachineStatus(Constants.FINISH);
+                newDailyOperationHistory.SetMachineStatus(DailyOperationMachineStatus.ONFINISH);
                 newDailyOperationHistory.SetInformation(request.Detail.DailyOperationLoomHistory.Information);
             }
 
