@@ -12,13 +12,23 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenBeam")]
-        public int BrokenBeam { get; private set; }
-
-        [JsonProperty(PropertyName = "TroubledMachine")]
-        public int TroubledMachine { get; private set; }
+        [JsonProperty(PropertyName = "Causes")]
+        public DailyOperationSizingCausesCommand Causes { get; set; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; set; }
+
+        [JsonProperty(PropertyName = "ProductionTime")]
+        public DailyOperationSizingProductionTimeCommand ProductionTime { get; set; }
+    }
+
+    public class UpdatePauseDailyOperationSizingDetailCommandValidator
+       : AbstractValidator<UpdatePauseDailyOperationSizingDetailCommand>
+    {
+        public UpdatePauseDailyOperationSizingDetailCommandValidator()
+        {
+            RuleFor(command => command.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
+            RuleFor(command => command.ProductionTime.Pause).NotEmpty();
+        }
     }
 }

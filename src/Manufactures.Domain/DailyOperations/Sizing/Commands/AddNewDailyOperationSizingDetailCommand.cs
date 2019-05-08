@@ -9,26 +9,40 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class AddNewDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; set; }
+        [JsonProperty(PropertyName = "ShiftId")]
+        public string ShiftId { get; set; }
+
+        [JsonProperty(PropertyName = "OperatorDocumentId")]
+        public OperatorId OperatorDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "ProductionTime")]
-        public AddNewDailyOperationSizingDetailProductionTimeCommand ProductionTime { get; set; }
+        public DailyOperationSizingProductionTimeCommand ProductionTime { get; set; }
+
+        [JsonProperty(PropertyName = "Counter")]
+        public DailyOperationSizingCounterCommand Counter { get; set; }
+
+        [JsonProperty(PropertyName = "Weight")]
+        public DailyOperationSizingWeightCommand Weight { get; set; }
+
+        [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
+        public List<BeamId> WarpingBeamCollectionDocumentId { get; set; }
     }
 
     public class AddNewDailyOperationSizingDetailCommandValidator : AbstractValidator<AddNewDailyOperationSizingDetailCommand>
     {
         public AddNewDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.BeamDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(command => command.ShiftId).NotEmpty();
+            RuleFor(command => command.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(command => command.ProductionTime.Start).NotEmpty();
+            RuleFor(command => command.Counter.Start).NotEmpty();
+            RuleFor(command => command.Weight.Netto).NotEmpty();
+            RuleFor(command => command.WarpingBeamCollectionDocumentId.Count).Equal(0);
         }
     }
 }

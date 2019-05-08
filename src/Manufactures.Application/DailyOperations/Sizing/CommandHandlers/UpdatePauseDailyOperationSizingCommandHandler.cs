@@ -31,12 +31,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
 
-            foreach (var operation in existingDailyOperation.DailyOperationSizingDetails)
-            {
+            //foreach (var operation in existingDailyOperation.DailyOperationSizingDetails)
+            //{
                 var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                       new BeamId (operation.BeamDocumentId.Value),
-                                                       new ConstructionId(operation.ConstructionDocumentId.Value),
+                                                       new ConstructionId(operation.ConstructionDocumentId),
+                                                       operation.ShiftId,
+                                                       operation.OperatorDocumentId,
+                                                       new DailyOperationSizingProductionTimeValueObject(operation.ProductionTime, request.UpdatePauseDailyOperationSizingDetails.ProductionTime.Pause, DateTimeOffset.MinValue, DateTimeOffset.MinValue)
                                                        operation.PIS,
                                                        operation.Visco,
                                                        operation.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>(),
@@ -50,7 +52,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                 _storage.Save();
 
-            }
+            //}
 
             return existingDailyOperation;
         }

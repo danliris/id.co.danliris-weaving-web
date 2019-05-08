@@ -11,9 +11,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
     public class DailyOperationSizingDetail : EntityBase<DailyOperationSizingDetail>
     {
         public Guid ConstructionDocumentId { get; private set; }
-        public string Shift { get; private set; }
+        public string ShiftId { get; private set; }
         public Guid OperatorDocumentId { get; private set; }
-        public string ProductionTime { get; private set; }
+        public string DailyOperationSizingHistory { get; private set; }
         public string Counter { get; private set; }
         public string Weight { get; private set; }
         public string WarpingBeamCollectionDocumentId { get; private set; }
@@ -33,12 +33,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, ConstructionId constructionDocumentId, string shift, OperatorId operatorDocumentId, DailyOperationSizingProductionTimeValueObject productionTime, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<string> warpingBeamsDocumentId, DailyOperationSizingCausesValueObject causes, string information, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId) : base(identity)
+        public DailyOperationSizingDetail(Guid identity, ConstructionId constructionDocumentId, string shiftId, OperatorId operatorDocumentId, DailyOperationSizingHistory dailyOperationSizingHistory, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsDocumentId, DailyOperationSizingCausesValueObject causes, string information, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId) : base(identity)
         {
             ConstructionDocumentId = constructionDocumentId.Value;
-            Shift = shift;
+            ShiftId = shiftId;
             OperatorDocumentId = operatorDocumentId.Value;
-            ProductionTime = productionTime.Serialize();
+            DailyOperationSizingHistory = dailyOperationSizingHistory.Serialize();
             Counter = counter.Serialize();
             Weight = weight.Serialize();
             WarpingBeamCollectionDocumentId = warpingBeamsDocumentId.Serialize();
@@ -61,9 +61,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetShift(string shift)
+        public void SetShiftId(string shiftId)
         {
-                Shift = shift;
+                ShiftId = shiftId;
                 MarkModified();
         }
 
@@ -76,9 +76,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetProductionTime(DailyOperationSizingProductionTimeValueObject productionTime)
+        public void SetProductionTime(DailyOperationSizingHistory dailyOperationSizingHistory)
         {
-            ProductionTime = productionTime.Serialize();
+            DailyOperationSizingHistory = dailyOperationSizingHistory.Serialize();
             MarkModified();
         }
 

@@ -36,14 +36,14 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 
         public DailyOperationSizingListDto(DailyOperationSizingDocument document, DailyOperationSizingDetail details)
         {
-            Id = document.Identity;
-            ProductionDate = document.ProductionDate;
-            MachineDocumentId = document.MachineDocumentId;
-            WeavingUnitDocumentId = document.WeavingUnitId;
-            ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
-            BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
-            ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
-            PIS = details.PIS;
+            //Id = document.Identity;
+            //ProductionDate = document.ProductionDate;
+            //MachineDocumentId = document.MachineDocumentId;
+            //WeavingUnitDocumentId = document.WeavingUnitId;
+            //ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
+            //BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
+            //ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
+            //PIS = details.PIS;
         }
     }
 }

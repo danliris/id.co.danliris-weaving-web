@@ -12,34 +12,46 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; set; }
 
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; set; }
+        [JsonProperty(PropertyName = "MachineSpeed")]
+        public int? MachineSpeed { get; set; }
 
-        //[JsonProperty(PropertyName = "ConstructionDocumentId")]
-        //public ConstructionId ConstructionDocumentId { get; set; }
+        [JsonProperty(PropertyName = "TexSQ")]
+        public double? TexSQ { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; set; }
-
-        [JsonProperty(PropertyName = "PIS")]
-        public int PIS { get; set; }
+        [JsonProperty(PropertyName = "ProductionTime")]
+        public DailyOperationSizingProductionTimeCommand ProductionTime { get; set; }
 
         [JsonProperty(PropertyName = "Visco")]
-        public string Visco { get; set; }
+        public double? Visco { get; set; }
 
         [JsonProperty(PropertyName = "Counter")]
-        public double Counter { get; set; }
+        public DailyOperationSizingCounterCommand Counter { get; set; }
+
+        [JsonProperty(PropertyName = "Weight")]
+        public DailyOperationSizingWeightCommand Weight { get; set; }
+
+        [JsonProperty(PropertyName = "PIS")]
+        public int? PIS { get; set; }
+
+        [JsonProperty(PropertyName = "SPU")]
+        public double? SPU { get; set; }
+
+        [JsonProperty(PropertyName = "SizingBeamDocumentId")]
+        public BeamId SizingBeamDocumentId { get; set; }
     }
     public class UpdateDoffDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateDoffFinishDailyOperationSizingDetailCommand>
     {
         public UpdateDoffDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(validator => validator.BeamDocumentId.Value).NotEmpty();
-            //RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.PIS).NotEmpty();
+            RuleFor(validator => validator.MachineSpeed).NotEmpty();
+            RuleFor(validator => validator.TexSQ).NotEmpty();
+            RuleFor(validator => validator.ProductionTime.DoffFinish).NotEmpty();
             RuleFor(validator => validator.Visco).NotEmpty();
-            RuleFor(validator => validator.Counter).NotEmpty();
+            RuleFor(validator => validator.Counter.Finish).NotEmpty();
+            RuleFor(validator => validator.Weight.Bruto).NotEmpty();
+            RuleFor(validator => validator.PIS).NotEmpty();
+            RuleFor(validator => validator.SPU).NotEmpty();
+            RuleFor(validator => validator.SizingBeamDocumentId.Value).NotEmpty();
         }
     }
 }

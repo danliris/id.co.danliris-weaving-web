@@ -186,21 +186,5 @@ namespace Manufactures.Controllers.Api
 
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
-
-        //[HttpDelete("{Id}")]
-        //public async Task<IActionResult> Delete(string Id)
-        //{
-        //    if (!Guid.TryParse(Id, out Guid documentId))
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var command = new RemoveDailyOperationSizingCommand();
-        //    command.SetId(documentId);
-
-        //    var deletedDailyOperationSizingDocument = await Mediator.Send(command);
-
-        //    return Ok(deletedDailyOperationSizingDocument.Identity);
-        //}
     }
 }

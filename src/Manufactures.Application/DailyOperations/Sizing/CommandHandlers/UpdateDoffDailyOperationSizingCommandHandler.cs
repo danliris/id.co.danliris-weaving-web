@@ -31,26 +31,26 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
 
-            foreach (var operation in existingDailyOperation.DailyOperationSizingDetails)
-            {
-                var newOperation =
-                        new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                       request.DailyOperationSizingDetails.BeamDocumentId,
-                                                       new ConstructionId(operation.ConstructionDocumentId.Value),
-                                                       request.DailyOperationSizingDetails.PIS,
-                                                       request.DailyOperationSizingDetails.Visco,
-                                                       operation.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>(),
-                                                       operation.BeamTime.Deserialize<DailyOperationSizingBeamTimeValueObject>(),
-                                                       operation.BrokenBeam,
-                                                       operation.TroubledMachine,
-                                                       request.DailyOperationSizingDetails.Counter,
-                                                       request.DailyOperationSizingDetails.ShiftDocumentId,
-                                                       operation.Information);
+            //foreach (var operation in existingDailyOperation.DailyOperationSizingDetails)
+            //{
+            //    var newOperation =
+            //            new DailyOperationSizingDetail(Guid.NewGuid(),
+            //                                           request.DailyOperationSizingDetails.BeamDocumentId,
+            //                                           new ConstructionId(operation.ConstructionDocumentId.Value),
+            //                                           request.DailyOperationSizingDetails.PIS,
+            //                                           request.DailyOperationSizingDetails.Visco,
+            //                                           operation.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>(),
+            //                                           operation.BeamTime.Deserialize<DailyOperationSizingBeamTimeValueObject>(),
+            //                                           operation.BrokenBeam,
+            //                                           operation.TroubledMachine,
+            //                                           request.DailyOperationSizingDetails.Counter,
+            //                                           request.DailyOperationSizingDetails.ShiftDocumentId,
+            //                                           operation.Information);
 
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-                _storage.Save();
+            //    await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+            //    _storage.Save();
 
-            }
+            //}
 
             return existingDailyOperation;
         }

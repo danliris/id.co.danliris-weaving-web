@@ -61,28 +61,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        //public void SetMachineDocumentId(MachineId value)
-        //{
-        //    if (value.Value != MachineDocumentId.Value)
-        //    {
-        //        MachineDocumentId = value;
-        //        ReadModel.MachineDocumentId = MachineDocumentId.Value;
-
-        //        MarkModified();
-        //    }
-        //}
-
-        //public void SetWeavingUnitId(UnitId value)
-        //{
-        //    if (value.Value != WeavingUnitId.Value)
-        //    {
-        //        WeavingUnitId = value;
-        //        ReadModel.WeavingUnitId = WeavingUnitId.Value;
-
-        //        MarkModified();
-        //    }
-        //}
-
         protected override DailyOperationSizingDocument GetEntity()
         {
             return this;

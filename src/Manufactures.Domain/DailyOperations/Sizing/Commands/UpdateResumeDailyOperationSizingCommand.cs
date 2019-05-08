@@ -1,4 +1,5 @@
-﻿using Infrastructure.Domain.Commands;
+﻿using FluentValidation;
+using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -13,11 +14,20 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public UpdateResumeDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
+        public UpdateResumeDailyOperationSizingDetailCommand UpdateResumeDailyOperationSizingDetails { get; set; }
 
         public void SetId(Guid Id)
         {
             this.Id = Id;
+        }
+    }
+
+    public class UpdateResumeDailyOperationSizingCommandValidator
+      : AbstractValidator<UpdateResumeDailyOperationSizingCommand>
+    {
+        public UpdateResumeDailyOperationSizingCommandValidator()
+        {
+            RuleFor(command => command.UpdateResumeDailyOperationSizingDetails).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
         }
     }
 }

@@ -52,19 +52,19 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 
         public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, DailyOperationSizingDetail details)
         {
-            Id = document.Identity;
-            ProductionDate = document.ProductionDate;
-            MachineDocumentId = document.MachineDocumentId;
-            WeavingUnitDocumentId = document.WeavingUnitId;
-            BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
-            ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
-            PIS = details.PIS;
-            Visco = details.Visco;
-            Start =details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Start;
-            Doff = details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().DoffFinish;
-            BrokenBeam = details.BrokenBeam;
-            Counter = details.Counter;
-            ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
+            //Id = document.Identity;
+            //ProductionDate = document.ProductionDate;
+            //MachineDocumentId = document.MachineDocumentId;
+            //WeavingUnitDocumentId = document.WeavingUnitId;
+            //BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
+            //ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
+            //PIS = details.PIS;
+            //Visco = details.Visco;
+            //Start =details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Start;
+            //Doff = details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().DoffFinish;
+            //BrokenBeam = details.BrokenBeam;
+            //Counter = details.Counter;
+            //ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
         }
     }
 }
