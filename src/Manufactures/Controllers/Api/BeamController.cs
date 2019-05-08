@@ -41,9 +41,9 @@ namespace Manufactures.Controllers.Api
             if (!string.IsNullOrEmpty(keyword))
             {
                 beams =
-                    beams.Where(entity => 
-                        entity.BeamNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                        entity.BeamType.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                    beams.Where(entity =>
+                        entity.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                        entity.Type.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -83,8 +83,11 @@ namespace Manufactures.Controllers.Api
         {
             var Identity = Guid.Parse(Id);
             var beam =
-                _beamRepository.Find(item => item.Identity == Identity)
-                               .Select(item => new BeamDto(item)).FirstOrDefault();
+                _beamRepository
+                    .Find(item => item.Identity == Identity)
+                    .Select(item => new BeamDto(item))
+                    .FirstOrDefault();
+
             await Task.Yield();
 
             if (beam == null)
@@ -113,7 +116,7 @@ namespace Manufactures.Controllers.Api
             {
                 return NotFound();
             }
-
+            
             command.SetId(Identity);
             var beam = await Mediator.Send(command);
 

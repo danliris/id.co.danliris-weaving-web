@@ -7,21 +7,25 @@ namespace Manufactures.Domain.Beams
 {
     public class BeamDocument : AggregateRoot<BeamDocument, BeamReadModel>
     {
-        public string BeamNumber { get; private set; }
-        public string BeamType { get; private set; }
+        public string Number { get; private set; }
+        public string Type { get; private set; }
+        public double EmptyWeight { get; private set; }
 
         public BeamDocument(Guid identity,
                             string beamNumber,
-                            string beamType) : base(identity)
+                            string beamType,
+                            double emptyWeight) : base(identity)
         {
             Identity = identity;
-            BeamNumber = beamNumber;
-            BeamType = beamType;
+            Number = beamNumber;
+            Type = beamType;
+            EmptyWeight = emptyWeight;
 
             ReadModel = new BeamReadModel(Identity)
             {
-                BeamNumber = BeamNumber,
-                BeamType = BeamType
+                Number = Number,
+                Type = Type,
+                EmtpyWeight = EmptyWeight
             };
 
             MarkTransient();
@@ -31,16 +35,17 @@ namespace Manufactures.Domain.Beams
 
         public BeamDocument(BeamReadModel readModel) : base(readModel)
         {
-            this.BeamNumber = readModel.BeamNumber;
-            this.BeamType = readModel.BeamType;
+            this.Number = readModel.Number;
+            this.Type = readModel.Type;
+            this.EmptyWeight = readModel.EmtpyWeight;
         }
 
         public void SetBeamNumber(string value)
         {
-            if(BeamNumber != value)
+            if (Number != value)
             {
-                BeamNumber = value;
-                ReadModel.BeamNumber = BeamNumber;
+                Number = value;
+                ReadModel.Number = Number;
 
                 MarkModified();
             }
@@ -48,10 +53,21 @@ namespace Manufactures.Domain.Beams
 
         public void SetBeamType(string value)
         {
-            if (BeamType != value)
+            if (Type != value)
             {
-                BeamNumber = value;
-                ReadModel.BeamNumber = BeamNumber;
+                Number = value;
+                ReadModel.Number = Number;
+
+                MarkModified();
+            }
+        }
+
+        public void SetEmptyWeight(double value)
+        {
+            if (EmptyWeight != value)
+            {
+                EmptyWeight = value;
+                ReadModel.EmtpyWeight = EmptyWeight;
 
                 MarkModified();
             }

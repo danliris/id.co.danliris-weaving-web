@@ -9,7 +9,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
         public Guid Identity { get; private set; }
         public OrderDocumentValueObject OrderDocument { get; private set; }
         public BeamDocumentValueObject BeamDocument { get; private set; }
-        public DailyOperationLoomTimeValueObject DOMTime { get; private set; }
+        public DailyOperationLoomHistory DOMTime { get; private set; }
         public ShiftDocumentValueObject ShiftDocument { get; private set; }
         public OperatorDocumentValueObject BeamOperatorDocument { get; private set; }
         public OperatorDocumentValueObject SizingOperatorDocument { get; private set; }
@@ -20,7 +20,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.ValueObjects
 
         public DailyOperationLoomDetailsValueObject(Guid identity, OrderDocumentValueObject orderDocument, 
             //BeamDocumentValueObject beamDocument, 
-            DailyOperationLoomTimeValueObject domTime, 
+            DailyOperationLoomHistory domTime, 
             //ShiftDocumentValueObject shiftDocument, OperatorDocumentValueObject beamOperatorDocument, OperatorDocumentValueObject sizingOperatorDocument, 
             string loomGroup, string sizingGroup, string information, string detailStatus)
         {

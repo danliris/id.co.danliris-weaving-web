@@ -33,8 +33,8 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_BeamDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(p => p.BeamNumber).HasMaxLength(255);
-                etb.Property(p => p.BeamType).HasMaxLength(255);
+                etb.Property(p => p.Number).HasMaxLength(255);
+                etb.Property(p => p.Type).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -92,8 +92,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationLoomDetails");
                 etb.HasKey(e => e.Identity);
                 
-                etb.Property(e => e.Information).HasMaxLength(2000);
-                etb.Property(e => e.DetailStatus).HasMaxLength(255);
+                etb.Property(e => e.DailyOperationLoomHistory).HasMaxLength(2000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

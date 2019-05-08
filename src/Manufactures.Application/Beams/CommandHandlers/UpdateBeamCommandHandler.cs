@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Beams.CommandHandlers
 {
-    public class UpdateBeamCommandHandler : ICommandHandler<UpdateBeamCommand, BeamDocument>
+    public class UpdateBeamCommandHandler
+        : ICommandHandler<UpdateBeamCommand, BeamDocument>
     {
         private readonly IStorage _storage;
         private readonly IBeamRepository _beamRepository;
@@ -21,22 +22,36 @@ namespace Manufactures.Application.Beams.CommandHandlers
             _beamRepository = _storage.GetRepository<IBeamRepository>();
         }
 
-        public async Task<BeamDocument> Handle(UpdateBeamCommand request, CancellationToken cancellationToken)
+        public async Task<BeamDocument> Handle(UpdateBeamCommand request,
+                                               CancellationToken cancellationToken)
         {
             var existingBeam =
                _beamRepository
-                   .Query
-                   .Where(x => x.Identity.Equals(request.Id))
-                   .Select(readModel => new BeamDocument(readModel))
+                   .Find(x => x.Identity.Equals(request.Id))
                    .FirstOrDefault();
 
             if (existingBeam == null)
             {
-                Validator.ErrorValidation(("BeamNumber", "Beam not available with number " + existingBeam.BeamNumber));
+                Validator
+                    .ErrorValidation(("Number",
+                                      "Beam not available with number " +
+                                        existingBeam.Number));
             }
 
-            existingBeam.SetBeamNumber(request.BeamNumber);
-            existingBeam.SetBeamType(request.BeamType);
+            var existingBeamCode =
+              _beamRepository
+                  .Find(x => x.Number.Equals(request.Number))
+                  .FirstOrDefault();
+
+            if (request.Number == existingBeam.Number && existingBeamCode != null)
+            {
+                Validator
+                    .ErrorValidation(("Number",
+                                      "Beam Number has available"));
+            }
+
+            existingBeam.SetBeamNumber(request.Number);
+            existingBeam.SetBeamType(request.Type);
 
             await _beamRepository.Update(existingBeam);
             _storage.Save();

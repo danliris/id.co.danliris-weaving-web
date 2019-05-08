@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Application.Helpers;
 
 namespace Manufactures.Controllers.Api
 {
@@ -54,13 +55,15 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             page = page - 1;
-            var domQuery =
+            var query =
                 _dailyOperationalDocumentRepository
                     .Query
+                    .Include(d => d.DailyOperationLoomDetails)
+                    .Where(o => o.DailyOperationStatus != Constants.FINISH)
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationalMachineDocuments =
                 _dailyOperationalDocumentRepository
-                    .Find(domQuery.Include(d => d.DailyOperationLoomDetails));
+                    .Find(query);
 
             var resultDto = new List<DailyOperationLoomListDto>();
 
@@ -78,7 +81,7 @@ namespace Manufactures.Controllers.Api
                     var orderDocument = 
                         await _weavingOrderDocumentRepository
                             .Query
-                            .Where(o => o.Identity.Equals(detail.OrderDocumentId.Value))
+                            .Where(o => o.Identity.Equals(detail.OrderId))
                             .FirstOrDefaultAsync();
                     
                     if(orderNumber == "")
@@ -156,24 +159,25 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var query = _dailyOperationalDocumentRepository.Query;
-            var dailyOperationalMachineDocument = 
+            var query = 
                 _dailyOperationalDocumentRepository
-                    .Find(query.Include(p => p.DailyOperationLoomDetails))
-                    .Where(o => o.Identity == Identity)
+                    .Query
+                    .Include(p => p.DailyOperationLoomDetails)
+                    .Where(o => o.Identity == Identity);
+            var dailyOperationalLoom = 
+                _dailyOperationalDocumentRepository
+                    .Find(query)
                     .FirstOrDefault();
-
-
-
+            
             await Task.Yield();
 
-            if (Identity == null)
+            if (Identity == null || dailyOperationalLoom == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(dailyOperationalMachineDocument);
+                return Ok(dailyOperationalLoom);
             }
         }
 
