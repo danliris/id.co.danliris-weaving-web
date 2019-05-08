@@ -22,8 +22,8 @@ namespace Manufactures.Dtos.DailyOperations.Loom
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
-        [JsonProperty(PropertyName = "StatusOperation")]
-        public string Status { get; }
+        [JsonProperty(PropertyName = "DailyOperationStatus")]
+        public string DailyOperationStatus { get; }
 
         public DailyOperationLoomListDto(DailyOperationLoomDocument document,
                                               string orderNumber,
@@ -34,7 +34,7 @@ namespace Manufactures.Dtos.DailyOperations.Loom
             OrderNumber = orderNumber;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
-            Status = document.Status;
+            DailyOperationStatus = document.DailyOperationStatus;
         }
     }
 }

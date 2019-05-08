@@ -11,7 +11,8 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Beams.CommandHandlers
 {
-    public class AddBeamCommandHandler : ICommandHandler<AddBeamCommand, BeamDocument>
+    public class AddBeamCommandHandler
+        : ICommandHandler<AddBeamCommand, BeamDocument>
     {
         private readonly IStorage _storage;
         private readonly IBeamRepository _beamRepository;
@@ -22,16 +23,25 @@ namespace Manufactures.Application.Beams.CommandHandlers
             _beamRepository = _storage.GetRepository<IBeamRepository>();
         }
 
-        public async Task<BeamDocument> Handle(AddBeamCommand request, CancellationToken cancellationToken)
+        public async Task<BeamDocument> Handle(AddBeamCommand request,
+                                               CancellationToken cancellationToken)
         {
-            var existingBeamCode = _beamRepository.Find(x => x.BeamNumber.Equals(request.BeamNumber)).FirstOrDefault();
+            var existingBeamCode =
+               _beamRepository
+                   .Find(x => x.Number.Equals(request.Number))
+                   .FirstOrDefault();
 
-            if(existingBeamCode != null)
+            if (existingBeamCode != null)
             {
-                Validator.ErrorValidation(("BeamNumber", "Number for beam has available"));
+                Validator
+                    .ErrorValidation(("Number",
+                                      "Beam Number has available"));
             }
 
-            var newBeam = new BeamDocument(Guid.NewGuid(), request.BeamNumber, request.BeamType);
+            var newBeam = new BeamDocument(Guid.NewGuid(), 
+                                           request.Number, 
+                                           request.Type, 
+                                           request.EmtpyWeight);
 
             await _beamRepository.Update(newBeam);
             _storage.Save();

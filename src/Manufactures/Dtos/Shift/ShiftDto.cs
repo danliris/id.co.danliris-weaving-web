@@ -1,8 +1,6 @@
 ﻿using Manufactures.Domain.Shifts;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.Shift
 {
@@ -15,17 +13,16 @@ namespace Manufactures.Dtos.Shift
         public string Name { get; }
 
         [JsonProperty(PropertyName = "StartTime")]
-        public string StartTime { get; }
+        public TimeSpan StartTime { get; }
 
         [JsonProperty(PropertyName = "EndTime")]
-        public string EndTime { get; }
+        public TimeSpan EndTime { get; }
 
         public ShiftDto(ShiftDocument document)
         {
-            Id = document.Identity;
             Name = document.Name;
-            StartTime = document.StartTime;
-            EndTime = document.EndTime;
+            StartTime = DateTimeOffset.Parse(document.StartTime).TimeOfDay;
+            EndTime = DateTimeOffset.Parse(document.EndTime).TimeOfDay;
         }
     }
 }

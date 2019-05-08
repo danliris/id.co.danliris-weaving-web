@@ -34,7 +34,7 @@ namespace Manufactures.Dtos.DailyOperations.Loom
             DateOperated = document.DateOperated;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
-            Status = document.Status;
+            Status = document.DailyOperationStatus;
             DailyOperationalMachineDetails = new List<DailyOperationLoomDetailsValueObject>();
         }
     }
