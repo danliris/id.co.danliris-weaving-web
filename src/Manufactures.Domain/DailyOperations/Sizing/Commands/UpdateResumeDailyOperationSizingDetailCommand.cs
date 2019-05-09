@@ -12,8 +12,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "ProductionTime")]
-        public DailyOperationSizingProductionTimeCommand ProductionTime { get; set; }
+        [JsonProperty(PropertyName = "History")]
+        public DailyOperationSizingHistoryCommand History { get; set; }
     }
 
     public class UpdateResumeDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateResumeDailyOperationSizingDetailCommand>
@@ -21,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UpdateResumeDailyOperationSizingDetailCommandValidator()
         {
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(command => command.ProductionTime.Resume).NotEmpty();
+            RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
         }
     }
 }

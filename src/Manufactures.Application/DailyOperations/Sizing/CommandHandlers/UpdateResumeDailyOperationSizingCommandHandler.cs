@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
@@ -30,27 +31,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
+            var lastHistory = existingDailyOperation.DailyOperationSizingDetails.Last();
 
-            //foreach (var operation in existingDailyOperation.DailyOperationSizingDetails)
-            //{
-            //    var newOperation =
-            //            new DailyOperationSizingDetail(Guid.NewGuid(),
-            //                                           request.DailyOperationSizingDetails.BeamDocumentId,
-            //                                           new ConstructionId(operation.ConstructionDocumentId.Value),
-            //                                           operation.PIS,
-            //                                           operation.Visco,
-            //                                           operation.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>(),
-            //                                           new DailyOperationSizingBeamTimeValueObject(request.DailyOperationSizingDetails.BeamTime),
-            //                                           operation.BrokenBeam,
-            //                                           operation.TroubledMachine,
-            //                                           operation.Counter,
-            //                                           request.DailyOperationSizingDetails.ShiftDocumentId,
-            //                                           operation.Information);
+            var newOperation =
+                        new DailyOperationSizingDetail(Guid.NewGuid(),
+                                                       new ShiftId(lastHistory.ShiftId),
+                                                       new OperatorId (request.UpdateResumeDailyOperationSizingDetails.OperatorDocumentId.Value),
+                                                       new DailyOperationSizingHistoryValueObject(request.UpdateResumeDailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONRESUME, request.UpdateResumeDailyOperationSizingDetails.History.Information),
+                                                       new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesCommand>()));
 
-            //    await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-            //    _storage.Save();
-
-            //}
+                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+                _storage.Save();
+            
 
             return existingDailyOperation;
         }

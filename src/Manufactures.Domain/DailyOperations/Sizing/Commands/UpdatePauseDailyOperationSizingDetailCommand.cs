@@ -12,14 +12,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Identity { get; set; }
 
+        [JsonProperty(PropertyName = "History")]
+        public DailyOperationSizingHistoryCommand History { get; set; }
+
         [JsonProperty(PropertyName = "Causes")]
         public DailyOperationSizingCausesCommand Causes { get; set; }
-
-        [JsonProperty(PropertyName = "Information")]
-        public string Information { get; set; }
-
-        [JsonProperty(PropertyName = "ProductionTime")]
-        public DailyOperationSizingProductionTimeCommand ProductionTime { get; set; }
     }
 
     public class UpdatePauseDailyOperationSizingDetailCommandValidator
@@ -27,8 +24,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdatePauseDailyOperationSizingDetailCommandValidator()
         {
+            RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
             RuleFor(command => command.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
-            RuleFor(command => command.ProductionTime.Pause).NotEmpty();
         }
     }
 }

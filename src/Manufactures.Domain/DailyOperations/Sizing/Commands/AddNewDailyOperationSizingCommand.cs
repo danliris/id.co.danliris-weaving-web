@@ -19,6 +19,18 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public UnitId WeavingUnitId { get; set; }
 
+        [JsonProperty(PropertyName = "ConstructionDocumentId")]
+        public ConstructionId ConstructionDocumentId { get; set; }
+
+        [JsonProperty(PropertyName = "Counter")]
+        public DailyOperationSizingCounterCommand Counter { get; set; }
+
+        [JsonProperty(PropertyName = "Weight")]
+        public DailyOperationSizingWeightCommand Weight { get; set; }
+
+        [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
+        public List<BeamId> WarpingBeamCollectionDocumentId { get; set; }
+        
         [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
         public AddNewDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
     }
@@ -31,6 +43,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(command => command.ProductionDate).NotEmpty();
             RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
             RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
+            RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
+            RuleFor(command => command.WarpingBeamCollectionDocumentId.Count).NotEqual(0);
             RuleFor(command => command.DailyOperationSizingDetails).SetValidator(new AddNewDailyOperationSizingDetailCommandValidator());
         }
     }

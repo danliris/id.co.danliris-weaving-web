@@ -5,15 +5,15 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
-    public class DailyOperationSizingHistory : ValueObject
+    public class DailyOperationSizingHistoryValueObject : ValueObject
     {
         public DateTimeOffset TimeOnMachine { get; private set; }
         public string MachineStatus { get; private set; }
         public string Information { get; private set; }
 
-        public DailyOperationSizingHistory() { }
+        public DailyOperationSizingHistoryValueObject() { }
 
-        public DailyOperationSizingHistory(DateTimeOffset timeOnMachine,
+        public DailyOperationSizingHistoryValueObject(DateTimeOffset timeOnMachine,
                                          string machineStatus,
                                          string information)
         {

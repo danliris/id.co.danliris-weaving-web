@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FluentValidation;
+using Newtonsoft.Json;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
@@ -9,5 +10,15 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "Bruto")]
         public string Bruto { get; set; }
+    }
+
+    public class DailyOperationSizingWeightCommandValidator
+      : AbstractValidator<DailyOperationSizingWeightCommand>
+    {
+        public DailyOperationSizingWeightCommandValidator()
+        {
+            RuleFor(command => command.Netto).NotEmpty();
+            RuleFor(command => command.Bruto).NotEmpty().Unless(command => string.IsNullOrEmpty(command.Netto));
+        }
     }
 }

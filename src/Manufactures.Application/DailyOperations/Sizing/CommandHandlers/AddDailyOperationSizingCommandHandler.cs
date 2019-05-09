@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
@@ -33,7 +34,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
-                                                    request.WeavingUnitId);
+                                                    request.WeavingUnitId,
+                                                    request.ConstructionDocumentId,
+                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, ""),
+                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, ""),
+                                                    new List<BeamId>(request.WarpingBeamCollectionDocumentId),
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    0,
+                                                    new BeamId(Guid.Empty));
 
             //var startTime = request.DailyOperationSizingDetails.ProductionTime.Start;
             //var morningShift = new TimeSpan(6, 0, 0);
@@ -42,21 +53,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                   request.DailyOperationSizingDetails.ConstructionDocumentId,
                                                    request.DailyOperationSizingDetails.ShiftId,
                                                    request.DailyOperationSizingDetails.OperatorDocumentId,
-                                                   new DailyOperationSizingProductionTimeValueObject(request.DailyOperationSizingDetails.ProductionTime.Start, DateTimeOffset.MinValue, DateTimeOffset.MinValue, DateTimeOffset.MinValue),
-                                                   new DailyOperationSizingCounterValueObject(request.DailyOperationSizingDetails.Counter.Start,""),
-                                                   new DailyOperationSizingWeightValueObject(request.DailyOperationSizingDetails.Weight.Netto,""),
-                                                   new List<BeamId>(request.DailyOperationSizingDetails.WarpingBeamCollectionDocumentId),
-                                                   new DailyOperationSizingCausesValueObject("",""),
-                                                   "",
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   0,
-                                                   new BeamId(Guid.Empty));
+                                                   new DailyOperationSizingHistoryValueObject(request.DailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONPROCESS, request.DailyOperationSizingDetails.History.Information),
+                                                   new DailyOperationSizingCausesValueObject("",""));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 
