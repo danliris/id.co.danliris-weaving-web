@@ -9,7 +9,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "OrderDocumentId")]
         public OrderId OrderDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftId")]
+        [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftId { get; private set; }
 
         [JsonProperty(PropertyName = "BeamOperatorId")]

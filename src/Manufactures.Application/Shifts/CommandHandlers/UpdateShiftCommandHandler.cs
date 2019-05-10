@@ -31,7 +31,7 @@ namespace Manufactures.Application.Shifts.CommandHandlers
 
             if (existingShift == null)
             {
-                throw Validator.ErrorValidation(("Id", "Invalid ShiftId Id: " + request.Id));
+                throw Validator.ErrorValidation(("Id", "Invalid ShiftDocumentId Id: " + request.Id));
             }
 
 

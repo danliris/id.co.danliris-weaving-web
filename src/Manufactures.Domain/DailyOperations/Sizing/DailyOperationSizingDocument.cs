@@ -76,7 +76,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
             this.PIS = readModel.PIS.HasValue ? readModel.PIS.Value : 0;
             this.SPU = readModel.SPU.HasValue ? readModel.SPU.Value : 0;
-            this.SizingBeamDocumentId = readModel.SizingBeamDocumentId.HasValue ? new BeamId (readModel.SizingBeamDocumentId.Value) : null;
+            this.SizingBeamDocumentId = readModel.SizingBeamDocumentId.HasValue ? new BeamId(readModel.SizingBeamDocumentId.Value) : null;
             this.DailyOperationSizingDetails = readModel.DailyOperationSizingDetails;
         }
 

@@ -51,12 +51,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                       new ShiftId(lastHistory.ShiftId),
+                                                       new ShiftId(lastHistory.ShiftDocumentId),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
                                                        new DailyOperationSizingHistoryValueObject(request.UpdateDoffFinishDailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONFINISH, request.UpdateDoffFinishDailyOperationSizingDetails.History.Information),
                                                        new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesCommand>()));
 
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+            dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
+
+                await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
                 _storage.Save();
 
             return existingDailyOperation;

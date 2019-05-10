@@ -10,9 +10,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
     public class DailyOperationSizingDetail : EntityBase<DailyOperationSizingDetail>
     {
-        public Guid ShiftId { get; private set; }
+        public Guid ShiftDocumentId { get; private set; }
         public Guid OperatorDocumentId { get; private set; }
-        public string DailyOperationSizingHistory { get; private set; }
+        public string History { get; private set; }
         public string Causes { get; private set; }
 
         public Guid DailyOperationSizingDocumentId { get; set; }
@@ -22,17 +22,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, ShiftId shiftId, OperatorId operatorDocumentId, DailyOperationSizingHistoryValueObject dailyOperationSizingHistory, DailyOperationSizingCausesValueObject causes) : base(identity)
+        public DailyOperationSizingDetail(Guid identity, ShiftId shiftDocumentId, OperatorId operatorDocumentId, DailyOperationSizingHistoryValueObject history, DailyOperationSizingCausesValueObject causes) : base(identity)
         {
-            ShiftId = shiftId.Value;
+            ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
-            DailyOperationSizingHistory = dailyOperationSizingHistory.Serialize();
+            History = history.Serialize();
             Causes = causes.Serialize();
         }
 
-        public void SetShiftId(ShiftId shiftId)
+        public void SetShiftId(ShiftId shiftDocumentId)
         {
-                ShiftId = shiftId.Value;
+                ShiftDocumentId = shiftDocumentId.Value;
                 MarkModified();
         }
 
@@ -47,7 +47,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 
         public void SetDailyOperationSizingHistory(DailyOperationSizingHistoryValueObject dailyOperationSizingHistory)
         {
-            DailyOperationSizingHistory = dailyOperationSizingHistory.Serialize();
+            History = dailyOperationSizingHistory.Serialize();
             MarkModified();
         }
 

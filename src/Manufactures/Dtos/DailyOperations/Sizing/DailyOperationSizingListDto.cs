@@ -22,28 +22,24 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
         public UnitId WeavingUnitDocumentId { get; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; }
-
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; }
-
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; }
 
         [JsonProperty(PropertyName = "PIS")]
         public int PIS { get; }
 
+        [JsonProperty(PropertyName = "ShiftDocumentId")]
+        public ShiftId ShiftDocumentId { get; }
+
         public DailyOperationSizingListDto(DailyOperationSizingDocument document, DailyOperationSizingDetail details)
         {
-            //Id = document.Identity;
-            //ProductionDate = document.ProductionDate;
-            //MachineDocumentId = document.MachineDocumentId;
-            //WeavingUnitDocumentId = document.WeavingUnitId;
-            //ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
-            //BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
-            //ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
-            //PIS = details.PIS;
+            Id = document.Identity;
+            ProductionDate = document.ProductionDate;
+            MachineDocumentId = document.MachineDocumentId;
+            WeavingUnitDocumentId = document.WeavingUnitId;
+            ConstructionDocumentId = new ConstructionId(document.ConstructionDocumentId.Value);
+            PIS = document.PIS;
+            ShiftDocumentId = new ShiftId(details.ShiftDocumentId);
         }
     }
 }

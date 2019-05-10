@@ -35,7 +35,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(), 
-                                                       new ShiftId(lastHistory.ShiftId), 
+                                                       new ShiftId(lastHistory.ShiftDocumentId), 
                                                        new OperatorId(lastHistory.OperatorDocumentId),
                                                        new DailyOperationSizingHistoryValueObject(request.UpdatePauseDailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONSTOP, request.UpdatePauseDailyOperationSizingDetails.History.Information),
                                                        new DailyOperationSizingCausesValueObject(request.UpdatePauseDailyOperationSizingDetails.Causes.BrokenBeam,request.UpdatePauseDailyOperationSizingDetails.Causes.MachineTroubled));

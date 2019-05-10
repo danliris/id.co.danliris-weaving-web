@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftId")]
+        [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "History")]
