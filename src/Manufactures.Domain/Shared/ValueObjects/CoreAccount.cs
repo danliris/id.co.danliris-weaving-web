@@ -9,6 +9,8 @@ namespace Manufactures.Domain.Shared.ValueObjects
         public int Id { get; private set; }
         public string Name { get; private set; }
 
+        public CoreAccount() { }
+
         public CoreAccount(string mongoId, string name)
         {
             MongoId = mongoId;

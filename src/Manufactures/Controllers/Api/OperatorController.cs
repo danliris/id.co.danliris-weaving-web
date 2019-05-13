@@ -3,6 +3,7 @@ using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.Commands;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
+using Manufactures.Dtos.Operator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;
@@ -41,7 +42,7 @@ namespace Manufactures.Controllers.Api
             var query =
                 _OperatorRepository.Query.OrderByDescending(item => item.CreatedDate);
             var operatorDocuments =
-                _OperatorRepository.Find(query);
+                _OperatorRepository.Find(query).Select(x => new OperatorDto(x));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -60,7 +61,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(OperatorDocument).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(OperatorDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
