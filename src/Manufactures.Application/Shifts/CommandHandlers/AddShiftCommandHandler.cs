@@ -23,12 +23,12 @@ namespace Manufactures.Application.Shifts.CommandHandlers
 
         public async Task<ShiftDocument> Handle(AddShiftCommand request, CancellationToken cancellationToken)
         {
-            var startTime = request.StartTime.TimeOfDay;
-            var endTime = request.EndTime.TimeOfDay;
+            var startTime = TimeSpan.Parse(request.StartTime);
+            var endTime = TimeSpan.Parse(request.EndTime);
             var newShift = new ShiftDocument(Guid.NewGuid(), 
                                              request.Name, 
-                                             startTime.ToString(), 
-                                             endTime.ToString());
+                                             startTime, 
+                                             endTime);
 
             await _shiftRepository.Update(newShift);
             _storage.Save();

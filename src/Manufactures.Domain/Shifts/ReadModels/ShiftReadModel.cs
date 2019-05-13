@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Shifts.ReadModels
         public ShiftReadModel(Guid identity) : base(identity) { }
 
         public string Name { get; internal set; }
-        public string StartTime { get; internal set; }
-        public string EndTime { get; internal set; }
+        public TimeSpan StartTime { get; internal set; }
+        public TimeSpan EndTime { get; internal set; }
     }
 }

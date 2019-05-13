@@ -7,13 +7,13 @@ namespace Manufactures.Domain.Shifts
     public class ShiftDocument : AggregateRoot<ShiftDocument, ShiftReadModel>
     {
         public string Name { get; private set; }
-        public string StartTime { get; private set; }
-        public string EndTime { get; private set; }
+        public TimeSpan StartTime { get; private set; }
+        public TimeSpan EndTime { get; private set; }
 
-        public ShiftDocument(Guid identity, 
-                             string name, 
-                             string startTime, 
-                             string endTime) : base(identity)
+        public ShiftDocument(Guid identity,
+                             string name,
+                             TimeSpan startTime,
+                             TimeSpan endTime) : base(identity)
         {
             Identity = identity;
             Name = name;
@@ -39,7 +39,7 @@ namespace Manufactures.Domain.Shifts
 
         public void SetName(string value)
         {
-            if(Name != value)
+            if (Name != value)
             {
                 Name = value;
                 ReadModel.Name = Name;
@@ -48,10 +48,10 @@ namespace Manufactures.Domain.Shifts
             }
         }
 
-        public void SetStartTime(string value)
+        public void SetStartTime(TimeSpan value)
         {
 
-            if(StartTime != value)
+            if (StartTime != value)
             {
                 StartTime = value;
                 ReadModel.StartTime = StartTime;
@@ -60,11 +60,8 @@ namespace Manufactures.Domain.Shifts
             }
         }
 
-        public void SetEndTime(string value)
+        public void SetEndTime(TimeSpan value)
         {
-            var endTime = DateTimeOffset.Parse(EndTime);
-            var valueTime = DateTimeOffset.Parse(value);
-
             if (EndTime != value)
             {
                 EndTime = value;
