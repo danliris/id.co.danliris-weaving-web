@@ -29,6 +29,12 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "WeavingUnit")]
         public UnitId UnitId { get; }
 
+        [JsonProperty(PropertyName = "WarpOrigin")]
+        public string WarpOrigin { get; }
+
+        [JsonProperty(PropertyName = "WeftOrigin")]
+        public string WeftOrigin { get; }
+
         public ListWeavingOrderDocumentDto(OrderDocument weavingOrderDocument, 
                                            FabricConstructionDocument fabricConstruction)
         {
@@ -39,6 +45,8 @@ namespace Manufactures.Dtos.Order
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
             UnitId = weavingOrderDocument.UnitId;
+            WarpOrigin = weavingOrderDocument.WarpOrigin;
+            WeftOrigin = weavingOrderDocument.WeftOrigin;
         }
     }
 }
