@@ -16,10 +16,10 @@ namespace Manufactures.Domain.Shifts.Commands
         public string Name { get; private set; }
 
         [JsonProperty(propertyName: "StartTime")]
-        public DateTimeOffset StartTime { get; private set; }
+        public string StartTime { get; private set; }
 
         [JsonProperty(propertyName: "EndTime")]
-        public DateTimeOffset EndTime { get; private set; }
+        public string EndTime { get; private set; }
 
         public void SetId(Guid Id)
         {
