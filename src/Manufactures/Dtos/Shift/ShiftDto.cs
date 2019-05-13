@@ -20,9 +20,10 @@ namespace Manufactures.Dtos.Shift
 
         public ShiftDto(ShiftDocument document)
         {
+            Id = document.Identity;
             Name = document.Name;
-            StartTime = DateTimeOffset.Parse(document.StartTime).TimeOfDay;
-            EndTime = DateTimeOffset.Parse(document.EndTime).TimeOfDay;
+            StartTime =document.StartTime;
+            EndTime = document.EndTime;
         }
     }
 }
