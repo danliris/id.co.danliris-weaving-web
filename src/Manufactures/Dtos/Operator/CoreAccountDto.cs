@@ -18,11 +18,11 @@ namespace Manufactures.Dtos.Operator
         [JsonProperty(PropertyName = "Name")]
         public string Name { get; }
 
-        public CoreAccountDto(OperatorDocument document)
+        public CoreAccountDto(CoreAccount core)
         {
-            MongoId = document.CoreAccount.MongoId;
-            Id = document.CoreAccount.Id;
-            Name = document.CoreAccount.Name;
+            MongoId = core.MongoId;
+            Id = core.Id;
+            Name = core.Name;
         }
     }
 }

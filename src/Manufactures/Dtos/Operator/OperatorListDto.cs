@@ -7,10 +7,13 @@ using System.Text;
 
 namespace Manufactures.Dtos.Operator
 {
-    public class OperatorDto
+    public class OperatorListDto
     {
-        [JsonProperty(PropertyName = "CoreAccount")]
-        public CoreAccount CoreAccount { get; }
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "Username")]
+        public string Username { get; }
 
         [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; }
@@ -24,9 +27,10 @@ namespace Manufactures.Dtos.Operator
         [JsonProperty(PropertyName = "Type")]
         public string Type { get; }
 
-        public OperatorDto(OperatorDocument document)
+        public OperatorListDto(OperatorDocument document)
         {
-            CoreAccount = document.CoreAccount;
+            Id = document.Identity;
+            Username = document.CoreAccount.Name;
             UnitId = document.UnitId;
             Group = document.Group;
             Assignment = document.Assignment;

@@ -42,14 +42,13 @@ namespace Manufactures.Controllers.Api
             var query =
                 _OperatorRepository.Query.OrderByDescending(item => item.CreatedDate);
             var operatorDocuments =
-                _OperatorRepository.Find(query).Select(x => new OperatorDto(x));
+                _OperatorRepository.Find(query).Select(x => new OperatorListDto(x));
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 operatorDocuments =
                     operatorDocuments
-                        .Where(entity => entity.CoreAccount
-                                               .Name
+                        .Where(entity => entity.Username
                                                .Contains(keyword, 
                                                          StringComparison.OrdinalIgnoreCase))
                         .ToList();
@@ -61,7 +60,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(OperatorDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(OperatorListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -105,7 +104,7 @@ namespace Manufactures.Controllers.Api
             }
             else
             {
-                var resultData = operatorDocument;
+                var resultData = new OperatorByIdDto(operatorDocument);
 
                 return Ok(resultData);
             }
