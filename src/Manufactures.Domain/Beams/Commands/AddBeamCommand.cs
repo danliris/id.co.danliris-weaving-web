@@ -12,8 +12,8 @@ namespace Manufactures.Domain.Beams.Commands
         [JsonProperty(propertyName: "Type")]
         public string Type { get; set; }
 
-        [JsonProperty(propertyName: "EmtpyWeight")]
-        public double EmtpyWeight { get; set; }
+        [JsonProperty(propertyName: "EmptyWeight")]
+        public double EmptyWeight { get; set; }
     }
 
     public class AddBeamCommandValidator : AbstractValidator<AddBeamCommand>
@@ -22,7 +22,7 @@ namespace Manufactures.Domain.Beams.Commands
         {
             RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.Type).NotEmpty();
-            RuleFor(command => command.EmtpyWeight).NotEmpty();
+            RuleFor(command => command.EmptyWeight).NotEmpty();
         }
     }
 

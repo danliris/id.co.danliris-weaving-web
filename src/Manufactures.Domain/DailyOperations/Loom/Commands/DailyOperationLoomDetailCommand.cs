@@ -19,8 +19,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public BeamId BeamId { get; set; }
         
         [JsonProperty(PropertyName = "DOMTime")]
-        public DailyOperationLoomHistoryCommand 
-            DailyOperationLoomHistory { get; private set; }
+        public DailyOperationLoomHistoryCommand DailyOperationLoomHistory { get; private set; }
         
         [JsonProperty(PropertyName = "WarpOrigin")]
         public Origin WarpOrigin { get; set; }
