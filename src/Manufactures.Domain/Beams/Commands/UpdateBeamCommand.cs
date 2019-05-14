@@ -16,8 +16,8 @@ namespace Manufactures.Domain.Beams.Commands
         [JsonProperty(propertyName: "Type")]
         public string Type { get; set; }
 
-        [JsonProperty(propertyName: "EmtpyWeight")]
-        public double EmtpyWeight { get; set; }
+        [JsonProperty(propertyName: "EmptyWeight")]
+        public double EmptyWeight { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -32,6 +32,7 @@ namespace Manufactures.Domain.Beams.Commands
             RuleFor(command => command.Id).NotNull();
             RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.Type).NotEmpty();
+            RuleFor(command => command.EmptyWeight).NotEmpty();
         }
     }
 }
