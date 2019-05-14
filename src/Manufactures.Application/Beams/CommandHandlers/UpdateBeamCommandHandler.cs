@@ -52,6 +52,7 @@ namespace Manufactures.Application.Beams.CommandHandlers
 
             existingBeam.SetBeamNumber(request.Number);
             existingBeam.SetBeamType(request.Type);
+            existingBeam.SetEmptyWeight(request.EmptyWeight);
 
             await _beamRepository.Update(existingBeam);
             _storage.Save();
