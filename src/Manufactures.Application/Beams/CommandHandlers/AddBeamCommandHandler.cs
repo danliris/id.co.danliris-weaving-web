@@ -41,7 +41,7 @@ namespace Manufactures.Application.Beams.CommandHandlers
             var newBeam = new BeamDocument(Guid.NewGuid(), 
                                            request.Number, 
                                            request.Type, 
-                                           request.EmtpyWeight);
+                                           request.EmptyWeight);
 
             await _beamRepository.Update(newBeam);
             _storage.Save();
