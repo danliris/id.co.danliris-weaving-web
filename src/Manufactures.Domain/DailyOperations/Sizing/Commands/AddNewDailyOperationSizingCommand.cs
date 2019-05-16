@@ -10,8 +10,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class AddNewDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
-        [JsonProperty(PropertyName = "ProductionDate")]
-        public DateTimeOffset ProductionDate { get; set; }
+        [JsonProperty(PropertyName = "DateOperated")]
+        public DateTimeOffset DateOperated { get; set; }
 
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; set; }
@@ -40,7 +40,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public AddNewDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.ProductionDate).NotEmpty();
+            RuleFor(command => command.DateOperated).NotEmpty();
             RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
             RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
             RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();

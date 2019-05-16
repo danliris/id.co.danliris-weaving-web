@@ -11,7 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
 {
     public class DailyOperationSizingDocument : AggregateRoot<DailyOperationSizingDocument, DailyOperationSizingReadModel>
     {
-        public DateTimeOffset ProductionDate { get; private set; }
+        public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
@@ -64,7 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         }
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
         {
-            this.ProductionDate = readModel.CreatedDate;
+            this.DateOperated = readModel.CreatedDate;
             this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;

@@ -12,7 +12,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
 
-        [JsonProperty(PropertyName = "ProductionDate")]
+        [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset ProductionDate { get; }
 
         [JsonProperty(PropertyName = "MachineDocumentId")]
@@ -45,7 +45,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public DailyOperationSizingByIdDto(DailyOperationSizingDocument document)
         {
             Id = document.Identity;
-            ProductionDate = document.ProductionDate;
+            ProductionDate = document.DateOperated;
             MachineDocumentId = document.MachineDocumentId;
             WeavingUnitDocumentId = document.WeavingUnitId;
             WarpingBeamCollectionDocumentId = document.WarpingBeamCollectionDocumentId.Deserialize<List<BeamId>>();
