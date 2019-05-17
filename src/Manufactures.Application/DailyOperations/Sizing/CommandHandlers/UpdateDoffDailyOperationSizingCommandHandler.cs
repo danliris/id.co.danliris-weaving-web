@@ -39,6 +39,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                  existingDailyOperation.MachineDocumentId,
                                                  existingDailyOperation.WeavingUnitId,
                                                  existingDailyOperation.ConstructionDocumentId,
+                                                 existingDailyOperation.RecipeCode,
                                                  new DailyOperationSizingCounterValueObject(existingDailyOperation.Counter.Deserialize<DailyOperationSizingCounterCommand>()),
                                                  new DailyOperationSizingWeightValueObject(existingDailyOperation.Weight.Deserialize<DailyOperationSizingWeightCommand>()),
                                                  new List<BeamId>(existingDailyOperation.WarpingBeamCollectionDocumentId.Deserialize<List<BeamId>>()),
@@ -53,7 +54,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         new DailyOperationSizingDetail(Guid.NewGuid(),
                                                        new ShiftId(lastHistory.ShiftDocumentId),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
-                                                       new DailyOperationSizingHistoryValueObject(request.UpdateDoffFinishDailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONFINISH, request.UpdateDoffFinishDailyOperationSizingDetails.History.Information),
+                                                       new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONFINISH, request.Details.History.Information),
                                                        new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesCommand>()));
 
             dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);

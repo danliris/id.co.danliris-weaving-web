@@ -9,9 +9,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdatePauseDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Identity { get; set; }
-
         [JsonProperty(PropertyName = "History")]
         public DailyOperationSizingHistoryCommand History { get; set; }
 
@@ -19,8 +16,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public DailyOperationSizingCausesCommand Causes { get; set; }
     }
 
-    public class UpdatePauseDailyOperationSizingDetailCommandValidator
-       : AbstractValidator<UpdatePauseDailyOperationSizingDetailCommand>
+    public class UpdatePauseDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdatePauseDailyOperationSizingDetailCommand>
     {
         public UpdatePauseDailyOperationSizingDetailCommandValidator()
         {

@@ -37,28 +37,28 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "SizingBeamDocumentId")]
         public BeamId SizingBeamDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public UpdateDoffFinishDailyOperationSizingDetailCommand UpdateDoffFinishDailyOperationSizingDetails { get; set; }
+
+        [JsonProperty(PropertyName = "Details")]
+        public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)
         {
             this.Id = Id;
         }
     }
-    public class UpdateDoffFinishDailyOperationSizingCommandValidator
-     : AbstractValidator<UpdateDoffFinishDailyOperationSizingCommand>
+    public class UpdateDoffFinishDailyOperationSizingCommandValidator : AbstractValidator<UpdateDoffFinishDailyOperationSizingCommand>
     {
         public UpdateDoffFinishDailyOperationSizingCommandValidator()
         {
             RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
             RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
-            RuleFor(validator => validator.MachineSpeed).NotEmpty();
-            RuleFor(validator => validator.TexSQ).NotEmpty();
-            RuleFor(validator => validator.Visco).NotEmpty();
-            RuleFor(validator => validator.PIS).NotEmpty();
-            RuleFor(validator => validator.SPU).NotEmpty();
-            RuleFor(validator => validator.SizingBeamDocumentId.Value).NotEmpty();
-            RuleFor(command => command.UpdateDoffFinishDailyOperationSizingDetails).SetValidator(new UpdateDoffDailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.MachineSpeed).NotEmpty();
+            RuleFor(command => command.TexSQ).NotEmpty();
+            RuleFor(command => command.Visco).NotEmpty();
+            RuleFor(command => command.PIS).NotEmpty();
+            RuleFor(command => command.SPU).NotEmpty();
+            RuleFor(command => command.SizingBeamDocumentId).NotEmpty();
+            RuleFor(command => command.Details).SetValidator(new UpdateDoffDailyOperationSizingDetailCommandValidator());
         }
     }
 }

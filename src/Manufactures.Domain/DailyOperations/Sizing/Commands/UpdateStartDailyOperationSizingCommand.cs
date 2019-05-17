@@ -8,13 +8,13 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class UpdateResumeDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class UpdateStartDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "Details")]
-        public UpdateResumeDailyOperationSizingDetailCommand Details { get; set; }
+        public UpdateStartDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -22,11 +22,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         }
     }
 
-    public class UpdateResumeDailyOperationSizingCommandValidator : AbstractValidator<UpdateResumeDailyOperationSizingCommand>
+    public class AddNewDailyOperationSizingCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingCommand>
     {
-        public UpdateResumeDailyOperationSizingCommandValidator()
+        public AddNewDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.Details).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
         }
     }
 }
