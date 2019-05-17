@@ -45,9 +45,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationSizingDetails");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(e => e.Visco).HasMaxLength(255);
-                etb.Property(e => e.Information).HasMaxLength(2000);
-
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });

@@ -10,17 +10,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
     public class DailyOperationSizingDetail : EntityBase<DailyOperationSizingDetail>
     {
-        public Guid? BeamDocumentId { get; private set; }
-        public Guid? ConstructionDocumentId { get; private set; }
-        public int PIS { get; private set; }
-        public string Visco { get; private set; }
-        public string ProductionTime { get; private set; }
-        public string BeamTime { get; private set; }
-        public int BrokenBeam { get; private set; }
-        public int TroubledMachine { get; private set; }
-        public double Counter { get; private set; }
-        public Guid? ShiftDocumentId { get; private set; }
-        public string Information { get; private set; }
+        public Guid ShiftDocumentId { get; private set; }
+        public Guid OperatorDocumentId { get; private set; }
+        public string History { get; private set; }
+        public string Causes { get; private set; }
 
         public Guid DailyOperationSizingDocumentId { get; set; }
         public DailyOperationSizingReadModel DailyOperationSizingDocument { get; set; }
@@ -29,96 +22,40 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, BeamId beamDocumentId, ConstructionId constructionDocumentId, int pis, string visco, DailyOperationSizingProductionTimeValueObject productionTime, DailyOperationSizingBeamTimeValueObject beamTime, int brokenBeam, int troubledMachine, double counter, ShiftId shiftDocumentId, string information) : base(identity)
+        public DailyOperationSizingDetail(Guid identity, ShiftId shiftDocumentId, OperatorId operatorDocumentId, DailyOperationSizingHistoryValueObject history, DailyOperationSizingCausesValueObject causes) : base(identity)
         {
-            Identity = identity;
-            BeamDocumentId = beamDocumentId.Value;
-            ConstructionDocumentId = constructionDocumentId.Value;
-            PIS = pis;
-            Visco = visco;
-            ProductionTime = productionTime.Serialize();
-            BeamTime = beamTime.Serialize();
-            BrokenBeam = brokenBeam;
-            TroubledMachine = troubledMachine;
-            Counter = counter;
             ShiftDocumentId = shiftDocumentId.Value;
-            Information = information;
+            OperatorDocumentId = operatorDocumentId.Value;
+            History = history.Serialize();
+            Causes = causes.Serialize();
         }
 
-        public void SetBeamDocumentId(BeamId value)
+        public void SetShiftId(ShiftId shiftDocumentId)
         {
-            if (!BeamDocumentId.Value.Equals(value.Value))
+                ShiftDocumentId = shiftDocumentId.Value;
+                MarkModified();
+        }
+
+        public void SetOperatorDocumentId(OperatorId operatorDocumentId)
+        {
+            if (!OperatorDocumentId.Equals(operatorDocumentId.Value))
             {
-                BeamDocumentId = value.Value;
+                OperatorDocumentId = operatorDocumentId.Value;
                 MarkModified();
             }
         }
 
-        public void SetConstructionDocumentId(ConstructionId value)
+        public void SetDailyOperationSizingHistory(DailyOperationSizingHistoryValueObject dailyOperationSizingHistory)
         {
-            if (!ConstructionDocumentId.Value.Equals(value.Value))
-            {
-                ConstructionDocumentId = value.Value;
-                MarkModified();
-            }
-        }
-
-        public void SetPIS(int pis)
-        {
-            PIS = pis;
+            History = dailyOperationSizingHistory.Serialize();
             MarkModified();
         }
 
-        public void SetVisco(string visco)
+        public void SetCauses(DailyOperationSizingCausesValueObject causes)
         {
-            Visco = visco;
+            Causes = causes.Serialize();
             MarkModified();
-        }
-
-        public void SetProductionTime(DailyOperationSizingProductionTimeValueObject value)
-        {
-            ProductionTime = value.Serialize();
-            MarkModified();
-        }
-
-        public void SetBeamTime(DailyOperationSizingBeamTimeValueObject value)
-        {
-            BeamTime = value.Serialize();
-            MarkModified();
-        }
-
-        public void SetBrokenBeam(int brokenBeam)
-        {
-            BrokenBeam = brokenBeam;
-            MarkModified();
-        }
-
-        public void SetTroubledMachine(int troubledMachine)
-        {
-            TroubledMachine = troubledMachine;
-            MarkModified();
-        }
-
-        public void SetCounter(double counter)
-        {
-            Counter = counter;
-            MarkModified();
-        }
-
-        public void SetShiftDocumentId(ShiftId value)
-        {
-            if (!ShiftDocumentId.Value.Equals(value.Value))
-            {
-                ShiftDocumentId = value.Value;
-                MarkModified();
-            }
-        }
-
-        public void SetInformation(string information)
-        {
-            Information = information;
-            MarkModified();
-        }
+        }        
 
         protected override DailyOperationSizingDetail GetEntity()
         {

@@ -1,11 +1,9 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.DailyOperations.Sizing
 {
@@ -14,57 +12,53 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
 
-        [JsonProperty(PropertyName = "ProductionDate")]
+        [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset ProductionDate { get; }
-
-        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; }
 
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; }
+        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
+        public UnitId WeavingUnitDocumentId { get; }
+
+        [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
+        public List<BeamId> WarpingBeamCollectionDocumentId { get; }
 
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; }
 
+        [JsonProperty(PropertyName = "Counter")]
+        public DailyOperationSizingCounterDto Counter { get; }
+
+        [JsonProperty(PropertyName = "Visco")]
+        public double Visco { get; }
+
         [JsonProperty(PropertyName = "PIS")]
         public int PIS { get; }
 
-        [JsonProperty(PropertyName = "Visco")]
-        public string Visco { get; }
+        [JsonProperty(PropertyName = "SizingBeamDocumentId")]
+        public BeamId SizingBeamDocumentId { get; }
 
-        [JsonProperty(PropertyName = "Start")]
-        public DateTimeOffset Start { get; }
+        [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
+        public List<DailyOperationSizingDetailsDto> DailyOperationSizingDetails { get; }
 
-        [JsonProperty(PropertyName = "Doff")]
-        public DateTimeOffset Doff { get; }
-
-        [JsonProperty(PropertyName = "BrokenBeam")]
-        public int BrokenBeam { get; }
-
-        [JsonProperty(PropertyName = "Counter")]
-        public double Counter { get; }
-
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; }
-
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, DailyOperationSizingDetail details)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document)
         {
             Id = document.Identity;
-            ProductionDate = document.ProductionDate;
-            WeavingUnitDocumentId = document.WeavingUnitId;
+            ProductionDate = document.DateOperated;
             MachineDocumentId = document.MachineDocumentId;
-            BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
-            ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
-            PIS = details.PIS;
-            Visco = details.Visco;
-            Start =details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Start;
-            Doff = details.ProductionTime.Deserialize<DailyOperationSizingProductionTimeValueObject>().Doff;
-            BrokenBeam = details.BrokenBeam;
-            Counter = details.Counter;
-            ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
+            WeavingUnitDocumentId = document.WeavingUnitId;
+            WarpingBeamCollectionDocumentId = document.WarpingBeamCollectionDocumentId.Deserialize<List<BeamId>>();
+            ConstructionDocumentId = document.ConstructionDocumentId;
+            Counter = document.Counter.Deserialize<DailyOperationSizingCounterDto>();
+            Visco = document.Visco;
+            PIS = document.PIS;
+            SizingBeamDocumentId = document.SizingBeamDocumentId;
+            foreach (var details in document.DailyOperationSizingDetails)
+            {
+                var detailsDto = new DailyOperationSizingDetailsDto(details);
+                DailyOperationSizingDetails.Add(detailsDto);
+            }
         }
     }
 }

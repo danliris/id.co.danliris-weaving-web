@@ -145,35 +145,46 @@ namespace Manufactures.Controllers.Api
             return Ok(newDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}")]
+        [HttpPut("{Id}/pause")]
         public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDailyOperationSizingCommand command)
+                                             [FromBody]UpdatePauseDailyOperationSizingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
-
             command.SetId(documentId);
-            var updateDailyOperationSizingDocument = await Mediator.Send(command);
+            var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateDailyOperationSizingDocument.Identity);
+            return Ok(updatePauseDailyOperationSizingDocument.Identity);
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(string Id)
+        [HttpPut("{Id}/resume")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdateResumeDailyOperationSizingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
-
-            var command = new RemoveDailyOperationSizingCommand();
             command.SetId(documentId);
+            var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
 
-            var deletedDailyOperationSizingDocument = await Mediator.Send(command);
+            return Ok(updateResumeDailyOperationSizingDocument.Identity);
+        }
 
-            return Ok(deletedDailyOperationSizingDocument.Identity);
+        [HttpPut("{Id}/doff")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdateDoffFinishDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateDoffDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
     }
 }

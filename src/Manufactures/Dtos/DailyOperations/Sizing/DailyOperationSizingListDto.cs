@@ -13,20 +13,14 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
 
-        [JsonProperty(PropertyName = "ProductionDate")]
+        [JsonProperty(PropertyName = "DateOperated")]
         public DateTimeOffset ProductionDate { get; }
-
-        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; }
-
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; }
+        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
+        public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; }
@@ -34,16 +28,18 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "PIS")]
         public int PIS { get; }
 
+        [JsonProperty(PropertyName = "ShiftDocumentId")]
+        public ShiftId ShiftDocumentId { get; }
+
         public DailyOperationSizingListDto(DailyOperationSizingDocument document, DailyOperationSizingDetail details)
         {
             Id = document.Identity;
-            ProductionDate = document.ProductionDate;
-            WeavingUnitDocumentId = document.WeavingUnitId;
+            ProductionDate = document.DateOperated;
             MachineDocumentId = document.MachineDocumentId;
-            ShiftDocumentId = new ShiftId(details.ShiftDocumentId.Value);
-            BeamDocumentId = new BeamId(details.BeamDocumentId.Value);
-            ConstructionDocumentId = new ConstructionId(details.ConstructionDocumentId.Value);
-            PIS = details.PIS;
+            WeavingUnitDocumentId = document.WeavingUnitId;
+            ConstructionDocumentId = new ConstructionId(document.ConstructionDocumentId.Value);
+            PIS = document.PIS;
+            ShiftDocumentId = new ShiftId(details.ShiftDocumentId);
         }
     }
 }
