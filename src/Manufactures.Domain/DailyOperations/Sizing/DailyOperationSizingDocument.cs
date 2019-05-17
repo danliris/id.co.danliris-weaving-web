@@ -11,10 +11,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing
 {
     public class DailyOperationSizingDocument : AggregateRoot<DailyOperationSizingDocument, DailyOperationSizingReadModel>
     {
-        public DateTimeOffset DateOperated { get; private set; }
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
+        public string RecipeCode { get; private set; }
         public string Counter { get; private set; }
         public string Weight { get; private set; }
         public string WarpingBeamCollectionDocumentId { get; private set; }
@@ -26,12 +26,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public BeamId SizingBeamDocumentId { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> DailyOperationSizingDetails { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsDocumentId, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, string recipeCode, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsDocumentId, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
             ConstructionDocumentId = constructionDocumentId;
+            RecipeCode = recipeCode;
             Counter = counter.Serialize();
             Weight = weight.Serialize();
             WarpingBeamCollectionDocumentId = warpingBeamsDocumentId.Serialize();
@@ -50,6 +51,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 MachineDocumentId = this.MachineDocumentId.Value,
                 WeavingUnitId = this.WeavingUnitId.Value,
                 ConstructionDocumentId = this.ConstructionDocumentId.Value,
+                RecipeCode = this.RecipeCode,
                 Counter = this.Counter,
                 Weight = this.Weight,
                 WarpingBeamCollectionDocumentId = this.WarpingBeamCollectionDocumentId,
@@ -64,10 +66,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         }
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
         {
-            this.DateOperated = readModel.CreatedDate;
             this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
+            this.RecipeCode = readModel.RecipeCode;
             this.Counter = readModel.Counter.Serialize();
             this.Weight = readModel.Weight.Serialize();
             this.WarpingBeamCollectionDocumentId = readModel.WarpingBeamCollectionDocumentId.Serialize();

@@ -7,25 +7,20 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class AddNewDailyOperationSizingDetailCommand
+    public class UpdateStartDailyOperationSizingDetailCommand
     {
-
-        [JsonProperty(PropertyName = "OperatorDocumentId")]
-        public OperatorId OperatorDocumentId { get; set; }
-
         [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftId { get; set; }
+        public ShiftId ShiftDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "History")]
         public DailyOperationSizingHistoryCommand History { get; set; }
     }
 
-    public class AddNewDailyOperationSizingDetailCommandValidator : AbstractValidator<AddNewDailyOperationSizingDetailCommand>
+    public class UpdateStartDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingDetailCommand>
     {
-        public AddNewDailyOperationSizingDetailCommandValidator()
+        public UpdateStartDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(command => command.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(command => command.ShiftId.Value).NotEmpty();
+            RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
             RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
         }
     }

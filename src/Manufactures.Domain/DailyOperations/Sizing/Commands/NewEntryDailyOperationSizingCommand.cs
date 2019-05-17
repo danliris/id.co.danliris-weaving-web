@@ -8,11 +8,8 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class AddNewDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class NewEntryDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
-        [JsonProperty(PropertyName = "DateOperated")]
-        public DateTimeOffset DateOperated { get; set; }
-
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; set; }
 
@@ -22,6 +19,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "RecipeCode")]
+        public string RecipeCode { get; set; }
+
         [JsonProperty(PropertyName = "Counter")]
         public DailyOperationSizingCounterCommand Counter { get; set; }
 
@@ -30,24 +30,22 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
         public List<BeamId> WarpingBeamCollectionDocumentId { get; set; }
-        
-        [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public AddNewDailyOperationSizingDetailCommand DailyOperationSizingDetails { get; set; }
+
+        [JsonProperty(PropertyName = "Details")]
+        public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
     }
 
-    public class AddNewDailyOperationSizingCommandValidator
-        : AbstractValidator<AddNewDailyOperationSizingCommand>
+    public class NewEntryDailyOperationSizingCommandValidator : AbstractValidator<NewEntryDailyOperationSizingCommand>
     {
-        public AddNewDailyOperationSizingCommandValidator()
+        public NewEntryDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.DateOperated).NotEmpty();
             RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
             RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
             RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();
             RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
             RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
             RuleFor(command => command.WarpingBeamCollectionDocumentId.Count).NotEqual(0);
-            RuleFor(command => command.DailyOperationSizingDetails).SetValidator(new AddNewDailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }
 }

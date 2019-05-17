@@ -138,11 +138,25 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationSizingCommand command)
+        public async Task<IActionResult> Post([FromBody]NewEntryDailyOperationSizingCommand command)
         {
             var newDailyOperationSizingDocument = await Mediator.Send(command);
 
             return Ok(newDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{Id}/start")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateStartDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
 
         [HttpPut("{Id}/pause")]

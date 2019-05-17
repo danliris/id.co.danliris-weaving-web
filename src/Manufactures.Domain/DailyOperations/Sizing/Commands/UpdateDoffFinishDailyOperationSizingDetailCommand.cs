@@ -9,9 +9,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdateDoffFinishDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Identity { get; set; }
-
         [JsonProperty(PropertyName = "History")]
         public DailyOperationSizingHistoryCommand History { get; set; }
     }

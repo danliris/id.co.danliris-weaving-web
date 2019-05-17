@@ -13,8 +13,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public UpdatePauseDailyOperationSizingDetailCommand UpdatePauseDailyOperationSizingDetails { get; set; }
+        [JsonProperty(PropertyName = "Details")]
+        public UpdatePauseDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -22,12 +22,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         }
     }
 
-    public class UpdatePauseDailyOperationSizingCommandValidator
-       : AbstractValidator<UpdatePauseDailyOperationSizingCommand>
+    public class UpdatePauseDailyOperationSizingCommandValidator : AbstractValidator<UpdatePauseDailyOperationSizingCommand>
     {
         public UpdatePauseDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.UpdatePauseDailyOperationSizingDetails).SetValidator(new UpdatePauseDailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.Details).SetValidator(new UpdatePauseDailyOperationSizingDetailCommandValidator());
         }
     }
 }

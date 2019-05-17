@@ -14,13 +14,13 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class AddDailyOperationSizingCommandHandler : ICommandHandler<AddNewDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class NewEntryOperationSizingCommandHandler : ICommandHandler<NewEntryDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingDocumentRepository;
 
-        public AddDailyOperationSizingCommandHandler(IStorage storage)
+        public NewEntryOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
@@ -28,14 +28,20 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         }
 
         public async Task<DailyOperationSizingDocument>
-            Handle(AddNewDailyOperationSizingCommand request,
+            Handle(NewEntryDailyOperationSizingCommand request,
                    CancellationToken cancellationToken)
         {
+            //var startTime = request.DailyOperationSizingDetails.ProductionTime.Start;
+            //var morningShift = new TimeSpan(6, 0, 0);
+            //var afternoonShift = new TimeSpan(14, 0, 0);
+            //var nightShift = new TimeSpan(22,0,0);
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
+                                                    request.RecipeCode,
                                                     new DailyOperationSizingCounterValueObject(request.Counter.Start, ""),
                                                     new DailyOperationSizingWeightValueObject(request.Weight.Netto, ""),
                                                     new List<BeamId>(request.WarpingBeamCollectionDocumentId),
@@ -46,16 +52,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     new BeamId(Guid.Empty));
 
-            //var startTime = request.DailyOperationSizingDetails.ProductionTime.Start;
-            //var morningShift = new TimeSpan(6, 0, 0);
-            //var afternoonShift = new TimeSpan(14, 0, 0);
-            //var nightShift = new TimeSpan(22,0,0);
-
                 var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                   request.DailyOperationSizingDetails.ShiftId,
-                                                   request.DailyOperationSizingDetails.OperatorDocumentId,
-                                                   new DailyOperationSizingHistoryValueObject(request.DailyOperationSizingDetails.History.TimeOnMachine, DailyOperationMachineStatus.ONPROCESS, request.DailyOperationSizingDetails.History.Information),
+                                                   request.Details.ShiftId,
+                                                   request.Details.OperatorDocumentId,
+                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
                                                    new DailyOperationSizingCausesValueObject("",""));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
