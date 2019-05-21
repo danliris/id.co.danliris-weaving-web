@@ -129,6 +129,7 @@ namespace Manufactures.Controllers.Api
                     {
                         if (checkTime <= shift.EndTime)
                         {
+                            await Task.Yield();
                             return Ok(shift);
                         }
                     }
@@ -136,18 +137,17 @@ namespace Manufactures.Controllers.Api
                 {
                     var shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
 
+                    if (checkTime < shift.StartTime)
+                    {
+                        checkTime = checkTime + TimeSpan.FromHours(shift.StartTime.TotalHours);
+                    }
+
+
                     if (checkTime >= shift.StartTime)
                     {
                         if (checkTime <= shiftEnd)
                         {
-                            return Ok(shift);
-                        }
-                    } else
-                    {
-                        var newCheck = checkTime + TimeSpan.FromHours(24);
-
-                        if (newCheck <= shiftEnd)
-                        {
+                            await Task.Yield();
                             return Ok(shift);
                         }
                     }
