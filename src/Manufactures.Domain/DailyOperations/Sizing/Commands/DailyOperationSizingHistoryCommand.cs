@@ -30,7 +30,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public DailyOperationSizingHistoryCommandValidator()
         {
             RuleFor(command => command.TimeOnMachine).NotNull();
-            RuleFor(command => command.MachineStatus).NotEmpty();
         }
     }
 }

@@ -12,7 +12,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public DailyOperationSizingReadModel(Guid identity) : base(identity)
         {
         }
-        public DateTimeOffset ProductionDate { get; internal set; }
         public Guid? MachineDocumentId { get; internal set; }
         public int? WeavingUnitId { get; internal set; }
         public Guid? ConstructionDocumentId { get; internal set; }
