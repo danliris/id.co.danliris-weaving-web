@@ -115,20 +115,47 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> CheckShift(string time)
         {
             var checkTime = TimeSpan.Parse(time);
-            var query = _shiftRepository.Query.Where(x => checkTime >= x.StartTime && checkTime <= x.EndTime);
-            var existingShift = 
+            var query = _shiftRepository.Query;
+            var existingShift =
                 _shiftRepository
                     .Find(query)
-                    .Select(shift => new ShiftDto(shift)).FirstOrDefault();
+                    .Select(shift => new ShiftDto(shift));
 
-            await Task.Yield();
-
-            if (existingShift == null)
+            foreach (var shift in existingShift)
             {
-                return NotFound();
+                if (shift.StartTime < shift.EndTime)
+                {
+                    if (checkTime >= shift.StartTime)
+                    {
+                        if (checkTime <= shift.EndTime)
+                        {
+                            return Ok(shift);
+                        }
+                    }
+                }
+                {
+                    var shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
+
+                    if (checkTime >= shift.StartTime)
+                    {
+                        if (checkTime <= shiftEnd)
+                        {
+                            return Ok(shift);
+                        }
+                    } else
+                    {
+                        var newCheck = checkTime + TimeSpan.FromHours(24);
+
+                        if (newCheck <= shiftEnd)
+                        {
+                            return Ok(shift);
+                        }
+                    }
+                }
             }
 
-            return Ok(existingShift);
+            await Task.Yield();
+            return NotFound();
         }
 
         [HttpPost]
