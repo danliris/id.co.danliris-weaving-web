@@ -8,17 +8,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class DailyOperationSizingHistoryCommand
     {
-        [JsonProperty(PropertyName = "TimeOnMachine")]
-        public DateTimeOffset TimeOnMachine { get; set; }
+        [JsonProperty(PropertyName = "MachineDate")]
+        public DateTimeOffset MachineDate { get; set; }
+
+        [JsonProperty(PropertyName = "MachineTime")]
+        public TimeSpan MachineTime { get; set; }
 
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; private set; }
-
-        [JsonProperty(PropertyName = "IsUp")]
-        public bool IsUp { get; private set; }
-
-        [JsonProperty(PropertyName = "IsDown")]
-        public bool IsDown { get; private set; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
@@ -29,7 +26,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public DailyOperationSizingHistoryCommandValidator()
         {
-            RuleFor(command => command.TimeOnMachine).NotNull();
+            RuleFor(command => command.MachineDate).NotNull();
+            RuleFor(command => command.MachineTime).NotNull();
         }
     }
 }

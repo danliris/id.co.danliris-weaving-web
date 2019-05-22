@@ -56,7 +56,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
-                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
+                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
                                                    new DailyOperationSizingCausesValueObject("",""));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);

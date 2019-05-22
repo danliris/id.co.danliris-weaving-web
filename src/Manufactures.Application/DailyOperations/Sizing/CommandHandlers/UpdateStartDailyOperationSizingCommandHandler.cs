@@ -39,7 +39,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    new ShiftId(request.Details.ShiftDocumentId.Value),
                                                    new OperatorId(lastHistory.OperatorDocumentId),
-                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONSTOP, request.Details.History.Information),
+                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONSTOP, request.Details.History.Information),
                                                    new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesValueObject>().BrokenBeam, lastHistory.Causes.Deserialize<DailyOperationSizingCausesValueObject>().MachineTroubled));
 
             await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);

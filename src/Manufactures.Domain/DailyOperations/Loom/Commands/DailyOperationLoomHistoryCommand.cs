@@ -6,7 +6,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
     public class DailyOperationLoomHistoryCommand
     {
-        [JsonProperty(PropertyName = "TimeOnMachine")]
+        [JsonProperty(PropertyName = "MachineTime")]
         public DateTimeOffset TimeOnMachine { get; set; }
 
         [JsonProperty(PropertyName = "MachineStatus")]
