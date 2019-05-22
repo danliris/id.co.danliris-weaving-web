@@ -9,64 +9,69 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
+    public class DailyOperationLoomDocument 
+        : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
     {
-        public DateTimeOffset DateOperated { get; private set; }
-        public MachineId MachineId { get; private set; }
         public UnitId UnitId { get; private set; }
+        public MachineId MachineId { get; private set; }
+        public BeamId BeamId { get; private set; }
+        public OrderId OrderId { get; private set; }
         public string DailyOperationStatus { get; private set; }
-        public DailyOperationSizingId DailyOperationSizingId { get; private set; }
+        public DailyOperationMonitoringId DailyOperationMonitoringId { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
 
         public DailyOperationLoomDocument(Guid id,
-                                          MachineId machineId,
                                           UnitId unitId,
+                                          MachineId machineId,
+                                          BeamId beamId,
+                                          OrderId orderId,
+                                          DailyOperationMonitoringId dailyOperationMonitoringId,
                                           string dailyOperationStatus) : base(id)
         {
             Identity = id;
-            MachineId = machineId;
             UnitId = unitId;
+            MachineId = machineId;
+            BeamId = beamId;
+            OrderId = orderId;
             DailyOperationStatus = dailyOperationStatus;
+            DailyOperationMonitoringId = dailyOperationMonitoringId;
             DailyOperationMachineDetails = new List<DailyOperationLoomDetail>();
 
             this.MarkTransient();
 
             ReadModel = new DailyOperationLoomReadModel(Identity)
             {
-                MachineId = this.MachineId.Value,
                 UnitId = this.UnitId.Value,
+                MachineId = this.MachineId.Value,
+                BeamId = this.BeamId.Value,
+                OrderId = this.OrderId.Value,
                 DailyOperationStatus = this.DailyOperationStatus,
+                DailyOperationMonitoringId = this.DailyOperationMonitoringId.Value,
                 DailyOperationLoomDetails = this.DailyOperationMachineDetails.ToList()
             };
 
             ReadModel.AddDomainEvent(new OnAddDailyOperationLoom(Identity));
         }
 
-        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
+        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel)
+            : base(readModel)
         {
-            this.DateOperated = readModel.CreatedDate;
-            this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
-            this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
+            this.UnitId = new UnitId(readModel.UnitId);
+            this.MachineId = new MachineId(readModel.MachineId);
+            this.BeamId = new BeamId(readModel.BeamId);
+            this.OrderId = new OrderId(readModel.OrderId);
             this.DailyOperationStatus = readModel.DailyOperationStatus;
-            this.DailyOperationMachineDetails = readModel.DailyOperationLoomDetails;
+            this.DailyOperationMonitoringId =
+                readModel.DailyOperationMonitoringId.HasValue ? 
+                    new DailyOperationMonitoringId(readModel.DailyOperationMonitoringId.Value) : null;
+            this.DailyOperationMachineDetails = 
+                readModel.DailyOperationLoomDetails;
         }
 
         public void AddDailyOperationMachineDetail(DailyOperationLoomDetail dailyOperationMachineDetail)
         {
             var list = DailyOperationMachineDetails.ToList();
             list.Add(dailyOperationMachineDetail);
-            DailyOperationMachineDetails = list;
-            ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
-
-            MarkModified();
-        }
-
-        public void RemoveDailyOperationMachineDetail(Guid identity)
-        {
-            var detail = DailyOperationMachineDetails.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = DailyOperationMachineDetails.ToList();
-
-            list.Remove(detail);
             DailyOperationMachineDetails = list;
             ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
 

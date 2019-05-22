@@ -26,15 +26,16 @@ namespace Manufactures.Dtos.DailyOperations.Loom
         public string DailyOperationStatus { get; }
 
         public DailyOperationLoomListDto(DailyOperationLoomDocument document,
-                                              string orderNumber,
-                                              string machineNumber)
+                                         string orderNumber,
+                                         string machineNumber,
+                                         DateTimeOffset dateOperated)
         {
             Id = document.Identity;
-            DateOperated = document.DateOperated;
             OrderNumber = orderNumber;
             MachineNumber = machineNumber;
             UnitId = document.UnitId;
             DailyOperationStatus = document.DailyOperationStatus;
+            DateOperated = dateOperated;
         }
     }
 }
