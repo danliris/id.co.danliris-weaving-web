@@ -139,26 +139,23 @@ namespace Manufactures.Controllers.Api
                     isMoreDays = true;
                 }
 
-                if (shift.StartTime < shift.EndTime)
+                if (checkTime >= shift.StartTime)
                 {
-                    if (checkTime >= shift.StartTime)
+                    if (isMoreDays == false)
                     {
-                        if (isMoreDays == false )
+                        if (checkTime <= shift.EndTime)
                         {
-                            if (checkTime <= shift.EndTime)
-                            {
-                                await Task.Yield();
-                                return Ok(shift);
-                            }
-                        } else
-                        {
-                            if (checkTime <= shiftEnd)
-                            {
-                                await Task.Yield();
-                                return Ok(shift);
-                            }
+                            await Task.Yield();
+                            return Ok(shift);
                         }
-                        
+                    }
+                    else
+                    {
+                        if (checkTime <= shiftEnd)
+                        {
+                            await Task.Yield();
+                            return Ok(shift);
+                        }
                     }
                 }
             }
