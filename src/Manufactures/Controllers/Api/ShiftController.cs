@@ -123,33 +123,42 @@ namespace Manufactures.Controllers.Api
 
             foreach (var shift in existingShift)
             {
+                var shiftEnd = new TimeSpan();
+                var isMoreDays = false;
+
+                if (shift.StartTime > shift.EndTime)
+                {
+                    if (checkTime < shift.StartTime)
+                    {
+                        // Add more days
+                        checkTime = checkTime + TimeSpan.FromHours(24);
+                    }
+
+                    // Add more days
+                    shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
+                    isMoreDays = true;
+                }
+
                 if (shift.StartTime < shift.EndTime)
                 {
                     if (checkTime >= shift.StartTime)
                     {
-                        if (checkTime <= shift.EndTime)
+                        if (isMoreDays == false )
                         {
-                            await Task.Yield();
-                            return Ok(shift);
-                        }
-                    }
-                }
-                {
-                    var shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
-
-                    if (checkTime < shift.StartTime)
-                    {
-                        checkTime = checkTime + TimeSpan.FromHours(shift.StartTime.TotalHours);
-                    }
-
-
-                    if (checkTime >= shift.StartTime)
-                    {
-                        if (checkTime <= shiftEnd)
+                            if (checkTime <= shift.EndTime)
+                            {
+                                await Task.Yield();
+                                return Ok(shift);
+                            }
+                        } else
                         {
-                            await Task.Yield();
-                            return Ok(shift);
+                            if (checkTime <= shiftEnd)
+                            {
+                                await Task.Yield();
+                                return Ok(shift);
+                            }
                         }
+                        
                     }
                 }
             }
