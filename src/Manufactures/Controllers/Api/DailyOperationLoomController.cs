@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
 
 namespace Manufactures.Controllers.Api
 {
@@ -24,26 +25,26 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationLoomController : ControllerApiBase
     {
-        private readonly IDailyOperationLoomRepository 
+        private readonly IDailyOperationLoomRepository
             _dailyOperationalDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository 
+        private readonly IWeavingOrderDocumentRepository
             _weavingOrderDocumentRepository;
-        private readonly IFabricConstructionRepository 
+        private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
-        private readonly IMachineRepository 
+        private readonly IMachineRepository
             _machineRepository;
 
-        public DailyOperationLoomController(IServiceProvider serviceProvider, 
-                                                 IWorkContext workContext) 
+        public DailyOperationLoomController(IServiceProvider serviceProvider,
+                                                 IWorkContext workContext)
             : base(serviceProvider)
         {
-            _dailyOperationalDocumentRepository = 
+            _dailyOperationalDocumentRepository =
                 this.Storage.GetRepository<IDailyOperationLoomRepository>();
-            _weavingOrderDocumentRepository = 
+            _weavingOrderDocumentRepository =
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
-            _machineRepository = 
+            _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
         }
 
@@ -69,46 +70,53 @@ namespace Manufactures.Controllers.Api
 
             foreach (var dailyOperation in dailyOperationalMachineDocuments)
             {
-                var orderNumber = "";
-                var machineDocument = 
+                var dateOperated = new DateTimeOffset();
+
+                var machineDocument =
                     await _machineRepository
                         .Query
                         .Where(d => d.Identity.Equals(dailyOperation.MachineId.Value))
                         .FirstOrDefaultAsync();
+                var orderDocument =
+                       await _weavingOrderDocumentRepository
+                           .Query
+                           .Where(o => o.Identity.Equals(dailyOperation.OrderId))
+                           .FirstOrDefaultAsync();
 
                 foreach (var detail in dailyOperation.DailyOperationMachineDetails)
                 {
-                    var orderDocument = 
-                        await _weavingOrderDocumentRepository
-                            .Query
-                            .Where(o => o.Identity.Equals(detail.OrderId))
-                            .FirstOrDefaultAsync();
-                    
-                    if(orderNumber == "")
+                    if (detail.DailyOperationLoomHistory
+                            .Deserialize<DailyOperationLoomHistory>()
+                                .MachineStatus == DailyOperationMachineStatus.ONENTRY)
                     {
-                        orderNumber = orderDocument.OrderNumber;
+                        dateOperated = detail.DailyOperationLoomHistory
+                            .Deserialize<DailyOperationLoomHistory>().MachineDate
+                                .AddHours(detail.DailyOperationLoomHistory
+                                    .Deserialize<DailyOperationLoomHistory>()
+                                        .MachineTime.TotalHours);
                     }
                 }
 
-                var dto = 
-                    new DailyOperationLoomListDto(dailyOperation, 
-                                                       orderNumber,
-                                                       machineDocument.MachineNumber);
+                var dto =
+                    new DailyOperationLoomListDto(dailyOperation,
+                                                  orderDocument.OrderNumber,
+                                                  machineDocument.MachineNumber,
+                                                  dateOperated);
 
                 resultDto.Add(dto);
             }
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                resultDto = 
+                resultDto =
                     resultDto.Where(entity => entity
                                                 .OrderNumber
                                                 .Contains(keyword,
                                                           StringComparison
-                                                            .OrdinalIgnoreCase) || 
+                                                            .OrdinalIgnoreCase) ||
                                               entity
                                                 .MachineNumber
-                                                .Contains(keyword, 
+                                                .Contains(keyword,
                                                           StringComparison
                                                             .OrdinalIgnoreCase))
                              .ToList();
@@ -118,10 +126,10 @@ namespace Manufactures.Controllers.Api
             {
                 Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = 
+                var key =
                     orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                     orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = 
+                System.Reflection.PropertyInfo prop =
                     typeof(DailyOperationLoomListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
@@ -159,16 +167,16 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var query = 
+            var query =
                 _dailyOperationalDocumentRepository
                     .Query
                     .Include(p => p.DailyOperationLoomDetails)
                     .Where(o => o.Identity == Identity);
-            var dailyOperationalLoom = 
+            var dailyOperationalLoom =
                 _dailyOperationalDocumentRepository
                     .Find(query)
                     .FirstOrDefault();
-            
+
             await Task.Yield();
 
             if (Identity == null || dailyOperationalLoom == null)
@@ -187,37 +195,6 @@ namespace Manufactures.Controllers.Api
             var newDailyOperationalMachineDocument = await Mediator.Send(command);
 
             return Ok(newDailyOperationalMachineDocument.Identity);
-        }
-
-        [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDailyOperationLoomCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-
-            command.SetId(documentId);
-            var updateDailyOperationalMachineDocument = await Mediator.Send(command);
-
-            return Ok(updateDailyOperationalMachineDocument.Identity);
-        }
-
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(string Id)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-
-            var command = new RemoveDailyOperationLoomCommand();
-            command.SetId(documentId);
-
-            var deletedDailyOperationalMachineDocument = await Mediator.Send(command);
-
-            return Ok(deletedDailyOperationalMachineDocument.Identity);
         }
     }
 }

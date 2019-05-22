@@ -9,23 +9,38 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
     public class AddNewDailyOperationLoomCommand 
         : ICommand<DailyOperationLoomDocument>
     {
-        [JsonProperty(PropertyName = "DateOperated")]
-        public DateTimeOffset DateOperated { get; private set; }
+        [JsonProperty(PropertyName = "UnitId")]
+        public UnitId UnitId { get; set; }
 
         [JsonProperty(PropertyName = "MachineId")]
         public MachineId MachineId { get; set; }
 
-        [JsonProperty(PropertyName = "UnitId")]
-        public UnitId UnitId { get; set; }
+        [JsonProperty(PropertyName = "BeamId")]
+        public BeamId BeamId { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationSizingId")]
-        public DailyOperationSizingId DailyOperationSizingId { get; set; }
+        [JsonProperty(PropertyName = "OrderId")]
+        public OrderId OrderId { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationStatus")]
-        public string DailyOperationStatus { get; set; }
+        [JsonProperty(PropertyName = "PreparationDate")]
+        public DateTimeOffset PreparationDate { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationMachineDetails")]
-        public DailyOperationLoomDetailCommand Detail { get; set; }
+        [JsonProperty(PropertyName = "PreparationTime")]
+        public string PreparationTime { get; private set; }
+
+        [JsonProperty(PropertyName = "OperatorId")]
+        public OperatorId OperatorId { get; private set; }
+
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; private set; }
+
+        [JsonProperty(PropertyName = "DailyOperationMonitoringId")]
+        public DailyOperationMonitoringId DailyOperationMonitoringId { get; private set; }
+
+        [JsonProperty(PropertyName = "WarpOrigin")]
+        public string WarpOrigin { get; private set; }
+
+        [JsonProperty(PropertyName = "WeftOrigin")]
+        public string WeftOrigin { get; private set; }
     }
 
     public class AddNewDailyOperationalMachineCommandValidator 
@@ -33,13 +48,16 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
     {
         public AddNewDailyOperationalMachineCommandValidator()
         {
-            RuleFor(command => command.DateOperated).NotEmpty();
+            RuleFor(command => command.UnitId).NotEmpty();
             RuleFor(command => command.MachineId.Value).NotEmpty();
-            RuleFor(command => command.UnitId.Value).NotEmpty();
-            RuleFor(command => command.DailyOperationSizingId.Value).NotEmpty();
-            RuleFor(command => command.DailyOperationStatus).NotEmpty();
-            RuleFor(command => command.Detail)
-                .SetValidator(new DailyOperationLoomDetailCommandValidator());
+            RuleFor(command => command.BeamId.Value).NotEmpty();
+            RuleFor(command => command.OrderId.Value).NotEmpty();
+            RuleFor(command => command.PreparationDate).NotEmpty();
+            RuleFor(command => command.PreparationTime).NotEmpty();
+            RuleFor(command => command.OperatorId.Value).NotEmpty();
+            RuleFor(command => command.ShiftId.Value).NotEmpty();
+            RuleFor(command => command.WarpOrigin).NotEmpty();
+            RuleFor(command => command.WeftOrigin).NotEmpty();
         }
     }
 }

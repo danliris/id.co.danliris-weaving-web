@@ -9,14 +9,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
     public class DailyOperationLoomDetail
         : EntityBase<DailyOperationLoomDetail>
     {
-        public Guid OrderId { get; private set; }
         public Guid ShiftId { get; private set; }
         public Guid BeamOperatorId { get; private set; }
-        public Guid SizingOperatorId { get; private set; }
-        public Guid BeamId { get; private set; }
-        public string DailyOperationLoomHistory { get; private set; }
         public string WarpOrigin { get; private set; }
         public string WeftOrigin { get; private set; }
+        public string DailyOperationLoomHistory { get; private set; }
         public Guid DailyOperationLoomDocumentId { get; set; }
         public DailyOperationLoomReadModel DailyOperationLoomDocument { get; set; }
 
@@ -24,26 +21,20 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         {
         }
 
-        public DailyOperationLoomDetail(Guid identity,
-                                             OrderId orderDocumentId,
-                                             Origin warpOrigin,
-                                             Origin weftOrigin,
-                                             BeamId beamDocumentId,
-                                             DailyOperationLoomHistory dailyOperationLoomHistory,
-                                             ShiftId shiftDocumentId,
-                                             OperatorId beamOperatorDocumentId,
-                                             OperatorId sizingOperatorDocumentId) 
+        public DailyOperationLoomDetail(Guid identity, 
+                                        ShiftId shiftId, 
+                                        OperatorId beamOperatorId, 
+                                        string warpOrigin, 
+                                        string weftOrigin, 
+                                        DailyOperationLoomHistory dailyOperationLoomHistory)
             : base(identity)
         {
             Identity = identity;
-            OrderId = orderDocumentId.Value;
-            WarpOrigin = warpOrigin.Serialize();
-            WeftOrigin = weftOrigin.Serialize();
-            BeamId = beamDocumentId.Value;
+            ShiftId = shiftId.Value;
+            BeamOperatorId = beamOperatorId.Value;
+            WarpOrigin = warpOrigin;
+            WeftOrigin = weftOrigin;
             DailyOperationLoomHistory = dailyOperationLoomHistory.Serialize();
-            ShiftId = shiftDocumentId.Value;
-            BeamOperatorId = beamOperatorDocumentId.Value;
-            SizingOperatorId = sizingOperatorDocumentId.Value;
         }
 
         protected override DailyOperationLoomDetail GetEntity()
