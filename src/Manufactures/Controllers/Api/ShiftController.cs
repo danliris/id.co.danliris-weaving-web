@@ -115,20 +115,53 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> CheckShift(string time)
         {
             var checkTime = TimeSpan.Parse(time);
-            var query = _shiftRepository.Query.Where(x => checkTime >= x.StartTime && checkTime <= x.EndTime);
-            var existingShift = 
+            var query = _shiftRepository.Query;
+            var existingShift =
                 _shiftRepository
                     .Find(query)
-                    .Select(shift => new ShiftDto(shift)).FirstOrDefault();
+                    .Select(shift => new ShiftDto(shift));
 
-            await Task.Yield();
-
-            if (existingShift == null)
+            foreach (var shift in existingShift)
             {
-                return NotFound();
+                var shiftEnd = new TimeSpan();
+                var isMoreDays = false;
+
+                if (shift.StartTime > shift.EndTime)
+                {
+                    if (checkTime < shift.StartTime)
+                    {
+                        // Add more days
+                        checkTime = checkTime + TimeSpan.FromHours(24);
+                    }
+
+                    // Add more days
+                    shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
+                    isMoreDays = true;
+                }
+
+                if (checkTime >= shift.StartTime)
+                {
+                    if (isMoreDays == false)
+                    {
+                        if (checkTime <= shift.EndTime)
+                        {
+                            await Task.Yield();
+                            return Ok(shift);
+                        }
+                    }
+                    else
+                    {
+                        if (checkTime <= shiftEnd)
+                        {
+                            await Task.Yield();
+                            return Ok(shift);
+                        }
+                    }
+                }
             }
 
-            return Ok(existingShift);
+            await Task.Yield();
+            return NotFound();
         }
 
         [HttpPost]
