@@ -115,6 +115,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> CheckShift(string time)
         {
             var checkTime = TimeSpan.Parse(time);
+            var defaultTime = checkTime;
             var query = _shiftRepository.Query;
             var existingShift =
                 _shiftRepository
@@ -123,6 +124,7 @@ namespace Manufactures.Controllers.Api
 
             foreach (var shift in existingShift)
             {
+                checkTime = defaultTime;
                 var shiftEnd = new TimeSpan();
                 var isMoreDays = false;
 
