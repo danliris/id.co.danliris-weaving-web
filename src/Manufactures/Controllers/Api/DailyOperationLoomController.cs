@@ -189,7 +189,7 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        [HttpPost]
+        [HttpPost("entry-process")]
         public async Task<IActionResult> Post([FromBody]AddNewDailyOperationLoomCommand command)
         {
             var newDailyOperationalMachineDocument = await Mediator.Send(command);
