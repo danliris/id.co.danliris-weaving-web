@@ -11,7 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     public class UpdatePauseDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "Details")]
         public UpdatePauseDailyOperationSizingDetailCommand Details { get; set; }

@@ -31,7 +31,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             Handle(NewEntryDailyOperationSizingCommand request,
                    CancellationToken cancellationToken)
         {
-            //var startTime = request.DailyOperationSizingDetails.ProductionTime.Start;
+            //var startTime = request.Details.ProductionTime.Start;
             //var morningShift = new TimeSpan(6, 0, 0);
             //var afternoonShift = new TimeSpan(14, 0, 0);
             //var nightShift = new TimeSpan(22,0,0);
@@ -44,7 +44,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.RecipeCode,
                                                     new DailyOperationSizingCounterValueObject(request.Counter.Start, ""),
                                                     new DailyOperationSizingWeightValueObject(request.Weight.Netto, ""),
-                                                    new List<BeamId>(request.WarpingBeamCollectionDocumentId),
+                                                    request.WarpingBeamsId,
                                                     0,
                                                     0,
                                                     0,
@@ -57,7 +57,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
                                                    new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
-                                                   new DailyOperationSizingCausesValueObject("",""));
+                                                   new DailyOperationSizingCausesValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

@@ -8,6 +8,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,9 +31,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var lastHistory = existingDailyOperation.DailyOperationSizingDetails.Last();
+            var lastHistory = existingDailyOperation.Details.Last();
+
+            var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
+            var Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(existingDailyOperation.Weight);
             
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
@@ -40,9 +44,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                  existingDailyOperation.WeavingUnitId,
                                                  existingDailyOperation.ConstructionDocumentId,
                                                  existingDailyOperation.RecipeCode,
-                                                 new DailyOperationSizingCounterValueObject(existingDailyOperation.Counter.Deserialize<DailyOperationSizingCounterCommand>()),
-                                                 new DailyOperationSizingWeightValueObject(existingDailyOperation.Weight.Deserialize<DailyOperationSizingWeightCommand>()),
-                                                 new List<BeamId>(existingDailyOperation.WarpingBeamCollectionDocumentId.Deserialize<List<BeamId>>()),
+                                                 new DailyOperationSizingCounterValueObject(Counter.Start, request.Counter.Finish),
+                                                 new DailyOperationSizingWeightValueObject(Weight.Netto, request.Weight.Bruto),
+                                                 existingDailyOperation.WarpingBeamsId,
                                                  request.MachineSpeed,
                                                  request.TexSQ,
                                                  request.Visco,
@@ -50,12 +54,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                  request.SPU,
                                                  new BeamId(request.SizingBeamDocumentId.Value));
 
+            var History = request.Details.History;
+            var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
+
             var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
                                                        new ShiftId(lastHistory.ShiftDocumentId),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
-                                                       new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONFINISH, request.Details.History.Information),
-                                                       new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesCommand>()));
+                                                       new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONFINISH, History.Information),
+                                                       new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
             dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

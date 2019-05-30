@@ -8,6 +8,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -29,19 +30,24 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(UpdatePauseDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var lastHistory = existingDailyOperation.DailyOperationSizingDetails.Last();
+            var lastHistory = existingDailyOperation.Details.Last();
+            
+            var History = request.Details.History;
+            var Causes = request.Details.Causes;
 
-                var newOperation =
+            var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(), 
-                                                       new ShiftId(lastHistory.ShiftDocumentId), 
+                                                       new ShiftId(request.Details.ShiftDocumentId.Value), 
                                                        new OperatorId(lastHistory.OperatorDocumentId),
-                                                       new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONSTOP, request.Details.History.Information),
-                                                       new DailyOperationSizingCausesValueObject(request.Details.Causes.BrokenBeam,request.Details.Causes.MachineTroubled));
+                                                       new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONSTOP, History.Information),
+                                                       new DailyOperationSizingCausesValueObject(Causes.BrokenBeam,Causes.MachineTroubled));
 
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-                _storage.Save();
+            existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
+
+            await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+            _storage.Save();
             
 
             return existingDailyOperation;

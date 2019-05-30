@@ -28,8 +28,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Weight")]
         public DailyOperationSizingWeightCommand Weight { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
-        public List<BeamId> WarpingBeamCollectionDocumentId { get; set; }
+        [JsonProperty(PropertyName = "WarpingBeamsId")]
+        public List<BeamId> WarpingBeamsId { get; set; }
 
         [JsonProperty(PropertyName = "Details")]
         public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
@@ -44,7 +44,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();
             RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
             RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
-            RuleFor(command => command.WarpingBeamCollectionDocumentId.Count).NotEqual(0);
+            RuleFor(command => command.WarpingBeamsId.Count).NotEqual(0);
             RuleFor(command => command.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }
