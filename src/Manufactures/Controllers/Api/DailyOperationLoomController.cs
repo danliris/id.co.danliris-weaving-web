@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.DailyOperations.Loom.ValueObjects;
+using Manufactures.Domain.Operators.Repositories;
 
 namespace Manufactures.Controllers.Api
 {
@@ -33,6 +33,8 @@ namespace Manufactures.Controllers.Api
             _constructionDocumentRepository;
         private readonly IMachineRepository
             _machineRepository;
+        private readonly IOperatorRepository 
+            _operatorRepository;
 
         public DailyOperationLoomController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -46,6 +48,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
+            _operatorRepository =
+                this.Storage.GetRepository<IOperatorRepository>();
         }
 
         [HttpGet]
@@ -80,20 +84,15 @@ namespace Manufactures.Controllers.Api
                 var orderDocument =
                        await _weavingOrderDocumentRepository
                            .Query
-                           .Where(o => o.Identity.Equals(dailyOperation.OrderId))
+                           .Where(o => o.Identity.Equals(dailyOperation.OrderId.Value))
                            .FirstOrDefaultAsync();
 
                 foreach (var detail in dailyOperation.DailyOperationMachineDetails)
                 {
-                    if (detail.DailyOperationLoomHistory
-                            .Deserialize<DailyOperationLoomHistory>()
-                                .MachineStatus == DailyOperationMachineStatus.ONENTRY)
+
+                    if (detail.OperationStatus == DailyOperationMachineStatus.ONENTRY)
                     {
-                        dateOperated = detail.DailyOperationLoomHistory
-                            .Deserialize<DailyOperationLoomHistory>().MachineDate
-                                .AddHours(detail.DailyOperationLoomHistory
-                                    .Deserialize<DailyOperationLoomHistory>()
-                                        .MachineTime.TotalHours);
+                        dateOperated = detail.DateTimeOperation;
                     }
                 }
 
@@ -176,25 +175,173 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationalDocumentRepository
                     .Find(query)
                     .FirstOrDefault();
+            var operationDate = new DateTimeOffset();
+            var machineNumber = 
+                _machineRepository
+                    .Find(o => o.Identity.Equals(dailyOperationalLoom.MachineId.Value))
+                    .FirstOrDefault()
+                    .MachineNumber;
+            var order =
+                _weavingOrderDocumentRepository
+                    .Find(o => o.Identity.Equals(dailyOperationalLoom.OrderId.Value))
+                    .FirstOrDefault();
+            var orderNumber = order.OrderNumber;
+            var fabricConstructionNumber =
+                _constructionDocumentRepository
+                    .Find(o => o.Identity.Equals(order.ConstructionId.Value))
+                    .FirstOrDefault()
+                    .ConstructionNumber;
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach (var detail in dailyOperationalLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator =
+                    _operatorRepository
+                        .Find(o => o.Identity.Equals(detail.BeamOperatorId))
+                        .FirstOrDefault();
+
+                if (detail.OperationStatus == DailyOperationMachineStatus.ONENTRY)
+                {
+                    operationDate = detail.DateTimeOperation;
+                }
+
+                var history =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+
+                historys.Add(history);
+            }
+
+            var result =
+                new DailyOperationLoomByIdDto(dailyOperationalLoom.Identity,
+                                              operationDate,
+                                              dailyOperationalLoom.UnitId.Value,
+                                              machineNumber,
+                                              orderNumber,
+                                              fabricConstructionNumber);
+
+            if (historys.Count > 0)
+            {
+                result.LoomHistory = historys;
+            }
 
             await Task.Yield();
 
-            if (Identity == null || dailyOperationalLoom == null)
+            if (Identity == null || result == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(dailyOperationalLoom);
+                return Ok(result);
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]AddNewDailyOperationLoomCommand command)
+        [HttpPost("entry-process")]
+        public async Task<IActionResult> EntryPost([FromBody]AddNewDailyOperationLoomCommand command)
         {
-            var newDailyOperationalMachineDocument = await Mediator.Send(command);
+            var dailyOperationLoom = await Mediator.Send(command);
 
-            return Ok(newDailyOperationalMachineDocument.Identity);
+            var dailyOperationLoomDetailAsHistory = dailyOperationLoom.DailyOperationMachineDetails;
+
+            return Ok(dailyOperationLoom.Identity);
+        }
+
+        [HttpPost("start-process")]
+        public async Task<IActionResult> StartPost([FromBody]StartDailyOperationLoomCommand command)
+        {
+            var dailyOperationLoom = await Mediator.Send(command);
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach(var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator = 
+                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
+                                       .FirstOrDefault();
+                var result = 
+                    new DailyOperationLoomHistoryDto(detail.Identity, 
+                                                     beamOperator.CoreAccount.Name, 
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+
+                historys.Add(result);
+            }
+
+            return Ok(historys);
+        }
+
+        [HttpPost("stop-process")]
+        public async Task<IActionResult> StopPost([FromBody]StopDailyOperationLoomCommand command)
+        {
+            var dailyOperationLoom = await Mediator.Send(command);
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator =
+                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
+                                       .FirstOrDefault();
+                var result =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+
+                historys.Add(result);
+            }
+
+            return Ok(historys);
+        }
+
+        [HttpPost("resume-process")]
+        public async Task<IActionResult> ResumePost([FromBody]ResumeDailyOperationLoomCommand command)
+        {
+            var dailyOperationLoom = await Mediator.Send(command);
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator =
+                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
+                                       .FirstOrDefault();
+                var result =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+                historys.Add(result);
+            }
+
+            return Ok(historys);
+        }
+
+        [HttpPost("finish-process")]
+        public async Task<IActionResult> FinishPost([FromBody]FinishDailyOperationLoomCommand command)
+        {
+            var dailyOperationLoom = await Mediator.Send(command);
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator =
+                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
+                                       .FirstOrDefault();
+                var result =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+                historys.Add(result);
+            }
+
+            return Ok(historys);
         }
     }
 }
