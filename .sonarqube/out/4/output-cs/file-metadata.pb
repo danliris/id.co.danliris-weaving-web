@@ -1,0 +1,16 @@
+n
+eD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\IManufactureEvent.csutf-8u
+lD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\IManufactureEventHandler.csutf-8f
+]D:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnAddBeam.csutf-8t
+kD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnAddDailyOperationLoom.csutf-8p
+gD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnAddEnginePlanning.csutf-8l
+cD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnAddEstimation.csutf-8m
+dD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnAddMachineType.csutf-8w
+nD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnFabricConstructionPlaced.csutf-8u
+lD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnManufactureOrderPlaced.csutf-8p
+gD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnMaterialTypePlace.csutf-8q
+hD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnWeavingOrderPlaced.csutf-8n
+eD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnYarnAddDocument.csutf-8w
+nD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\OnYarnNumberDocumentPlaced.csutf-8d
+YC:\Users\achmad.setiaji\AppData\Local\Temp\.NETCoreApp,Version=v2.1.AssemblyAttributes.csutf-8Ÿ
+“D:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Manufactures.Domain.Events\obj\Debug\netcoreapp2.1\Manufactures.Domain.Events.AssemblyInfo.csutf-8

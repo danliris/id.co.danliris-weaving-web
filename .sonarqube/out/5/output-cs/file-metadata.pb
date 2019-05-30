@@ -1,0 +1,10 @@
+r
+iD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\AggregateRoot.csutf-8v
+mD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\Commands\ICommand.csutf-8o
+fD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\EntityBase.csutf-8}
+tD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\ReadModels\ReadModelBase.csutf-8†
+}D:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\Repositories\IAggregateRepository.csutf-8ƒ
+zD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\Repositories\IEntityRepository.csutf-8w
+nD:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\ValueObjects\ListX.csutf-8d
+YC:\Users\achmad.setiaji\AppData\Local\Temp\.NETCoreApp,Version=v2.1.AssemblyAttributes.csutf-8¢
+–D:\DanLirisDevelopment\id.co.danliris-weaving-web\src\Infrastructure.EntityFrameworkCore\obj\Debug\netcoreapp2.1\Infrastructure.Domain.AssemblyInfo.csutf-8

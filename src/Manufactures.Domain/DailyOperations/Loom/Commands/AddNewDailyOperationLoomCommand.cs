@@ -25,7 +25,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public DateTimeOffset PreparationDate { get; private set; }
 
         [JsonProperty(PropertyName = "PreparationTime")]
-        public string PreparationTime { get; private set; }
+        public TimeSpan PreparationTime { get; private set; }
 
         [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; private set; }

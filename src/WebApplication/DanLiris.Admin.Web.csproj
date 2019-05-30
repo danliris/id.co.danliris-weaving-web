@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20181214130840_Alter_WeavingOrders_AddCompositionId.Designer.cs" />
     <Compile Remove="Migrations\20190506071539_test-ignore.cs" />
     <Compile Remove="Migrations\20190506071539_test-ignore.Designer.cs" />
+    <Compile Remove="Migrations\20190529072506_module_loom.cs" />
+    <Compile Remove="Migrations\20190529072506_module_loom.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
