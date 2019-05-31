@@ -88,8 +88,6 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_DailyOperationLoomDetails");
                 etb.HasKey(e => e.Identity);
-                
-                etb.Property(e => e.DailyOperationLoomHistory).HasMaxLength(20000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
