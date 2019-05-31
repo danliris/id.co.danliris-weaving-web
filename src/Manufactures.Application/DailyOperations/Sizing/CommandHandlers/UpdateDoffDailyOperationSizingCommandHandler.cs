@@ -35,8 +35,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var lastHistory = existingDailyOperation.Details.Last();
 
-            var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
-            var Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(existingDailyOperation.Weight);
+            //var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
+            var Counter = existingDailyOperation.Weight.Deserialize<DailyOperationSizingCounterValueObject>();
+            //var Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(existingDailyOperation.Weight);
+            var Weight = existingDailyOperation.Weight.Deserialize<DailyOperationSizingWeightValueObject>();
             
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
