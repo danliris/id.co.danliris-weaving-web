@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var lastHistory = existingDailyOperation.Details.Last();
+            var lastHistory = existingDailyOperation.Details.FirstOrDefault();
 
             var History = request.Details.History;
             var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);

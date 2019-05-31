@@ -24,7 +24,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UpdateResumeDailyOperationSizingDetailCommandValidator()
         {
             RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(command => command.OperatorDocumentId.Value).NotEmpty();
             RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
         }
     }

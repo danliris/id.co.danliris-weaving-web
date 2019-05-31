@@ -3,6 +3,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,8 +34,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             WeavingUnitId = weavingUnitId;
             ConstructionDocumentId = constructionDocumentId;
             RecipeCode = recipeCode;
-            Counter = counter.Serialize();
-            Weight = weight.Serialize();
+            Counter = JsonConvert.SerializeObject(counter);
+            Weight = JsonConvert.SerializeObject(weight);
             WarpingBeamsId = warpingBeamsId;
             MachineSpeed = machineSpeed;
             TexSQ = texSQ;

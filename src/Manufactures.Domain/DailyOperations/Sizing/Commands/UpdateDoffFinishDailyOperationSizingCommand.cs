@@ -50,8 +50,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateDoffFinishDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
-            RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
+            //RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            //RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
             RuleFor(command => command.MachineSpeed).NotEmpty();
             RuleFor(command => command.TexSQ).NotEmpty();
             RuleFor(command => command.Visco).NotEmpty();

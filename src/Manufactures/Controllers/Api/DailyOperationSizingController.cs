@@ -5,6 +5,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.Domain.Shifts.ValueObjects;
 using Manufactures.Dtos.Beams;
 using Manufactures.Dtos.DailyOperations.Sizing;
 using Microsoft.AspNetCore.Authorization;
@@ -82,18 +83,20 @@ namespace Manufactures.Controllers.Api
                         .Find(e => e.Identity.Equals(dailyOperation.ConstructionDocumentId.Value))
                         .FirstOrDefault();
 
+                var shiftOnDetail = new ShiftValueObject();
+
                 foreach (var detail in dailyOperation.Details)
                 {
                     var shiftDocument =
                         _shiftDocumentRepository
-                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId))
-                            .FirstOrDefault();
+                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId)).Last();
 
-                    var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftDocument);
-
-                    resultDto.Add(dto);
-
+                    shiftOnDetail = new ShiftValueObject(shiftDocument.Name, shiftDocument.StartTime, shiftDocument.EndTime);
                 }
+
+                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail);
+
+                resultDto.Add(dto);
             }
 
             if (!order.Contains("{}"))

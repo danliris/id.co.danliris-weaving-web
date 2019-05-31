@@ -12,13 +12,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public string Bruto { get; set; }
     }
 
-    public class DailyOperationSizingWeightCommandValidator
-      : AbstractValidator<DailyOperationSizingWeightCommand>
-    {
-        public DailyOperationSizingWeightCommandValidator()
-        {
-            RuleFor(command => command.Netto).NotEmpty();
-            RuleFor(command => command.Bruto).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Netto));
-        }
-    }
+    //public class DailyOperationSizingWeightCommandValidator
+    //  : AbstractValidator<DailyOperationSizingWeightCommand>
+    //{
+    //    public DailyOperationSizingWeightCommandValidator()
+    //    {
+    //        RuleFor(command => command.Netto).NotEmpty();
+    //        RuleFor(command => command.Bruto).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Netto));
+    //    }
+    //}
 }

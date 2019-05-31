@@ -4,6 +4,7 @@ using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.Machines;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
+using Manufactures.Domain.Shifts.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
 
-        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftDocument shiftDocument)
+        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument)
         {
             Id = document.Identity;
             MachineNumber = machineDocument.MachineNumber;
