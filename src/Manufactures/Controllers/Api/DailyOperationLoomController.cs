@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Beams.Repositories;
 
 namespace Manufactures.Controllers.Api
 {
@@ -35,6 +36,8 @@ namespace Manufactures.Controllers.Api
             _machineRepository;
         private readonly IOperatorRepository 
             _operatorRepository;
+        private readonly IBeamRepository
+            _beamRepository;
 
         public DailyOperationLoomController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -50,6 +53,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IMachineRepository>();
             _operatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
+            _beamRepository =
+                this.Storage.GetRepository<IBeamRepository>();
         }
 
         [HttpGet]
@@ -191,6 +196,11 @@ namespace Manufactures.Controllers.Api
                     .Find(o => o.Identity.Equals(order.ConstructionId.Value))
                     .FirstOrDefault()
                     .ConstructionNumber;
+            var beamNumber =
+                _beamRepository
+                    .Find(o => o.Identity.Equals(dailyOperationalLoom.BeamId.Value))
+                    .FirstOrDefault()
+                    .Number;
             var historys = new List<DailyOperationLoomHistoryDto>();
 
             foreach (var detail in dailyOperationalLoom.DailyOperationMachineDetails)
@@ -220,6 +230,7 @@ namespace Manufactures.Controllers.Api
                                               operationDate,
                                               dailyOperationalLoom.UnitId.Value,
                                               machineNumber,
+                                              beamNumber,
                                               orderNumber,
                                               fabricConstructionNumber);
 
@@ -271,6 +282,11 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys = 
+                historys
+                    .OrderByDescending(field => field.DateTimeOperation)
+                    .ToList();
+
             return Ok(historys);
         }
 
@@ -295,6 +311,11 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
+
             return Ok(historys);
         }
 
@@ -318,6 +339,11 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
+
             return Ok(historys);
         }
 
@@ -340,6 +366,11 @@ namespace Manufactures.Controllers.Api
                                                      detail.OperationStatus);
                 historys.Add(result);
             }
+
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
 
             return Ok(historys);
         }
