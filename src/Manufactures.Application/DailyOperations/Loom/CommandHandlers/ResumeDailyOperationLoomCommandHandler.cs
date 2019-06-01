@@ -41,7 +41,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingOrder = 
                 _weavingOrderDocumentRepository.Find(e => e.Identity.Equals(existingDailyOperation.OrderId))
                                                .FirstOrDefault();
-            var dateTimeOperation = request.ResumeDate.Date + request.ResumeTime;
+            var dateTimeOperation = 
+                request.ResumeDate.ToUniversalTime().AddHours(7).Date + request.ResumeTime;
             var warpOrigin = existingOrder.WarpOrigin;
             var weftOrigin = existingOrder.WeftOrigin;
 

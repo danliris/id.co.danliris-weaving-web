@@ -12,9 +12,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "BeamId")]
-        public BeamId BeamId { get; set; }
-
         [JsonProperty(PropertyName = "StartDate")]
         public DateTimeOffset StartDate { get; set; }
 
@@ -34,7 +31,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public StartDailyOperationLoomCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.BeamId).NotEmpty();
             RuleFor(command => command.StartDate).NotEmpty();
             RuleFor(command => command.StartTime).NotEmpty();
             RuleFor(command => command.ShiftId).NotEmpty();

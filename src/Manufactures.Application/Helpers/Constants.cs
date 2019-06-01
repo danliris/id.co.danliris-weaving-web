@@ -2,6 +2,9 @@
 {
     public class Constants
     {
+        //Others
+        public static string EMPTYvALUE = " ";
+
         // Daily Operation Status
         public static string PROCESS = "PROCESSING";
         public static string STOP = "STOP";
