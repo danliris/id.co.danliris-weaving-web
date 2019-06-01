@@ -38,7 +38,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                request.OrderId, 
                                                request.DailyOperationMonitoringId, 
                                                DailyOperationMachineStatus.ONPROCESS);
-            var dateTimeOperation = request.PreparationDate.Date + request.PreparationTime;
+            var dateTimeOperation = 
+                request.PreparationDate.ToUniversalTime().AddHours(7).Date + request.PreparationTime;
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId, 

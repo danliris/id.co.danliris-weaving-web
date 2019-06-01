@@ -28,18 +28,19 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         }
 
         public async Task<DailyOperationLoomDocument> Handle(StartDailyOperationLoomCommand request,
-                                                       CancellationToken cancellationToken)
+                                                             CancellationToken cancellationToken)
         {
             var existingDailyOperation = 
                 _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
                                                    .FirstOrDefault();
-            var dateTimeOperation = request.StartDate.Date + request.StartTime;
+            var dateTimeOperation = 
+                request.StartDate.ToUniversalTime().AddHours(7).Date + request.StartTime;
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,
                                              request.OperatorId,
-                                             string.Empty,
-                                             string.Empty,
+                                             Constants.EMPTYvALUE,
+                                             Constants.EMPTYvALUE,
                                              dateTimeOperation,
                                              DailyOperationMachineStatus.ONSTART,
                                              true,

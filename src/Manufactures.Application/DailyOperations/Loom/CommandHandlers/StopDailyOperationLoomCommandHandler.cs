@@ -33,13 +33,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperation =
                 _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
                                                    .FirstOrDefault();
-            var dateTimeOperation = request.StopDate.Date + request.StopTime;
+            var dateTimeOperation = 
+                request.StopDate.ToUniversalTime().AddHours(7).Date + request.StopTime;
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,
                                              request.OperatorId,
-                                             string.Empty,
-                                             string.Empty,
+                                             Constants.EMPTYvALUE,
+                                             Constants.EMPTYvALUE,
                                              dateTimeOperation,
                                              DailyOperationMachineStatus.ONSTOP,
                                              false,

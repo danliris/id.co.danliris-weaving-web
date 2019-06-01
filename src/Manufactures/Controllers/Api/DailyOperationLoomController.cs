@@ -261,7 +261,7 @@ namespace Manufactures.Controllers.Api
             return Ok(dailyOperationLoom.Identity);
         }
 
-        [HttpPost("start-process")]
+        [HttpPut("start-process")]
         public async Task<IActionResult> StartPost([FromBody]StartDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -290,7 +290,7 @@ namespace Manufactures.Controllers.Api
             return Ok(historys);
         }
 
-        [HttpPost("stop-process")]
+        [HttpPut("stop-process")]
         public async Task<IActionResult> StopPost([FromBody]StopDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -319,7 +319,7 @@ namespace Manufactures.Controllers.Api
             return Ok(historys);
         }
 
-        [HttpPost("resume-process")]
+        [HttpPut("resume-process")]
         public async Task<IActionResult> ResumePost([FromBody]ResumeDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -347,7 +347,7 @@ namespace Manufactures.Controllers.Api
             return Ok(historys);
         }
 
-        [HttpPost("finish-process")]
+        [HttpPut("finish-process")]
         public async Task<IActionResult> FinishPost([FromBody]FinishDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
