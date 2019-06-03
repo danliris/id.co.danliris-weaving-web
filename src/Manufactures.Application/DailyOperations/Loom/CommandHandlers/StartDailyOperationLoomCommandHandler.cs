@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
@@ -42,6 +43,17 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .FirstOrDefault();
             var dateTimeOperation = 
                 request.StartDate.ToUniversalTime().AddHours(7).Date + request.StartTime;
+            var countStartStatus = 
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .Where( e => e.OperationStatus == DailyOperationMachineStatus.ONSTART)
+                    .Count();
+
+            if (countStartStatus > 0)
+            {
+                throw Validator.ErrorValidation(("Status", "Start status has available"));
+            }
+
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,

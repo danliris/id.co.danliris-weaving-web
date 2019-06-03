@@ -39,8 +39,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.ResumeDate).NotEmpty();
             RuleFor(command => command.ResumeTime).NotEmpty();
-            RuleFor(command => command.ShiftId).NotEmpty();
-            RuleFor(command => command.OperatorId).NotEmpty();
+            RuleFor(command => command.ShiftId.Value).NotEmpty();
+            RuleFor(command => command.OperatorId.Value).NotEmpty();
             RuleFor(command => command.WarpOrigin).NotEmpty();
             RuleFor(command => command.WeftOrigin).NotEmpty();
         }

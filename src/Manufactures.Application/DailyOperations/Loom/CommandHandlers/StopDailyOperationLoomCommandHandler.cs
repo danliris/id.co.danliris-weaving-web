@@ -10,6 +10,7 @@ using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
 
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
@@ -40,7 +41,18 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .Find(query)
                     .Where(e => e.Identity.Equals(request.Id))
                     .FirstOrDefault();
-            var dateTimeOperation = 
+            var detail = 
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .OrderByDescending(e => e.DateTimeOperation);
+
+            if (detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONSTART ||
+                detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONRESUME)
+            {
+                throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
+            }
+
+            var dateTimeOperation =
                 request.StopDate.ToUniversalTime().AddHours(7).Date + request.StopTime;
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
