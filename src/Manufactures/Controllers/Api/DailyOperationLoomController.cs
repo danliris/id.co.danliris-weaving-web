@@ -69,7 +69,7 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationalDocumentRepository
                     .Query
                     .Include(d => d.DailyOperationLoomDetails)
-                    .Where(o => o.DailyOperationStatus != Constants.FINISH)
+                    .Where(o => o.DailyOperationStatus != DailyOperationMachineStatus.ONFINISH)
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationalMachineDocuments =
                 _dailyOperationalDocumentRepository
