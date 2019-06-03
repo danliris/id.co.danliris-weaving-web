@@ -5,6 +5,7 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
@@ -30,9 +31,15 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(FinishDailyOperationLoomCommand request, 
                                                              CancellationToken cancellationToken)
         {
+            var query =
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .Include(o => o.DailyOperationLoomDetails);
             var existingDailyOperation =
-                _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
-                                                   .FirstOrDefault();
+                _dailyOperationalDocumentRepository
+                    .Find(query)
+                    .Where(e => e.Identity.Equals(request.Id))
+                    .FirstOrDefault();
             var dateTimeOperation = 
                 request.FinishDate.ToUniversalTime().AddHours(7).Date + request.FinishTime;
             existingDailyOperation.SetDailyOperationStatus(DailyOperationMachineStatus.ONFINISH);
