@@ -9,6 +9,7 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
@@ -30,9 +31,15 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(StopDailyOperationLoomCommand request, 
                                                        CancellationToken cancellationToken)
         {
+            var query =
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .Include(o => o.DailyOperationLoomDetails);
             var existingDailyOperation =
-                _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
-                                                   .FirstOrDefault();
+                _dailyOperationalDocumentRepository
+                    .Find(query)
+                    .Where(e => e.Identity.Equals(request.Id))
+                    .FirstOrDefault();
             var dateTimeOperation = 
                 request.StopDate.ToUniversalTime().AddHours(7).Date + request.StopTime;
             var newOperation =
