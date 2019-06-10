@@ -62,6 +62,17 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .FirstOrDefault();
             var dateTimeOperation = 
                 request.ResumeDate.ToUniversalTime().AddHours(7).Date + request.ResumeTime;
+            var firstDetail =
+               existingDailyOperation
+                   .DailyOperationMachineDetails
+                   .OrderByDescending(o => o.DateTimeOperation)
+                   .FirstOrDefault();
+
+            if (dateTimeOperation < firstDetail.DateTimeOperation)
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
+
             var warpOrigin = existingOrder.WarpOrigin;
             var weftOrigin = existingOrder.WeftOrigin;
 

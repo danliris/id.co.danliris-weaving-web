@@ -54,6 +54,17 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             var dateTimeOperation =
                 request.StopDate.ToUniversalTime().AddHours(7).Date + request.StopTime;
+            var firstDetail =
+               existingDailyOperation
+                   .DailyOperationMachineDetails
+                   .OrderByDescending(o => o.DateTimeOperation)
+                   .FirstOrDefault();
+
+            if (dateTimeOperation < firstDetail.DateTimeOperation)
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
+
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,
