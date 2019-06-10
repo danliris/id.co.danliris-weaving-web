@@ -20,6 +20,9 @@ namespace Manufactures.Dtos.DailyOperations.Loom
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
+        [JsonProperty(PropertyName = "BeamNumber")]
+        public string BeamNumber { get; }
+
         [JsonProperty(PropertyName = "OrderNumber")]
         public string OrderNumber { get; }
 
@@ -33,6 +36,7 @@ namespace Manufactures.Dtos.DailyOperations.Loom
                                          DateTimeOffset operationDate,
                                          int weavingUnit,
                                          string machineNumber,
+                                         string beamNumber,
                                          string orderNumber,
                                          string fabricConstructionNumber)
         {
@@ -40,6 +44,7 @@ namespace Manufactures.Dtos.DailyOperations.Loom
             OperationDate = operationDate;
             WeavingUnit = weavingUnit;
             MachineNumber = machineNumber;
+            BeamNumber = beamNumber;
             OrderNumber = orderNumber;
             FabricConstructionNumber = fabricConstructionNumber;
             LoomHistory = new List<DailyOperationLoomHistoryDto>();

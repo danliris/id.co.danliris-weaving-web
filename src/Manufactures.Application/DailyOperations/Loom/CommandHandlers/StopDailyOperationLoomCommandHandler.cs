@@ -9,6 +9,8 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Moonlay;
 
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
@@ -30,16 +32,34 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(StopDailyOperationLoomCommand request, 
                                                        CancellationToken cancellationToken)
         {
+            var query =
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .Include(o => o.DailyOperationLoomDetails);
             var existingDailyOperation =
-                _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
-                                                   .FirstOrDefault();
-            var dateTimeOperation = request.StopDate.Date + request.StopTime;
+                _dailyOperationalDocumentRepository
+                    .Find(query)
+                    .Where(e => e.Identity.Equals(request.Id))
+                    .FirstOrDefault();
+            var detail = 
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .OrderByDescending(e => e.DateTimeOperation);
+
+            if (detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONSTART ||
+                detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONRESUME)
+            {
+                throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
+            }
+
+            var dateTimeOperation =
+                request.StopDate.ToUniversalTime().AddHours(7).Date + request.StopTime;
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,
                                              request.OperatorId,
-                                             string.Empty,
-                                             string.Empty,
+                                             Constants.EMPTYvALUE,
+                                             Constants.EMPTYvALUE,
                                              dateTimeOperation,
                                              DailyOperationMachineStatus.ONSTOP,
                                              false,

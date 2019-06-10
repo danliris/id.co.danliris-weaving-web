@@ -6,6 +6,8 @@ using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Orders.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
@@ -35,13 +37,31 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(ResumeDailyOperationLoomCommand request, 
                                                        CancellationToken cancellationToken)
         {
+            var query =
+                _dailyOperationalDocumentRepository
+                    .Query
+                    .Include(o => o.DailyOperationLoomDetails);
             var existingDailyOperation =
-                _dailyOperationalDocumentRepository.Find(e => e.Identity.Equals(request.Id))
-                                                   .FirstOrDefault();
+                _dailyOperationalDocumentRepository
+                    .Find(query)
+                    .Where(e => e.Identity.Equals(request.Id))
+                    .FirstOrDefault();
+            var detail =
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .OrderByDescending(e => e.DateTimeOperation);
+
+            if (detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONSTOP)
+            {
+                throw Validator.ErrorValidation(("Status", "Can't continue, check your latest status"));
+            }
+
             var existingOrder = 
-                _weavingOrderDocumentRepository.Find(e => e.Identity.Equals(existingDailyOperation.OrderId))
-                                               .FirstOrDefault();
-            var dateTimeOperation = request.ResumeDate.Date + request.ResumeTime;
+                _weavingOrderDocumentRepository
+                    .Find(e => e.Identity.Equals(existingDailyOperation.OrderId.Value))
+                    .FirstOrDefault();
+            var dateTimeOperation = 
+                request.ResumeDate.ToUniversalTime().AddHours(7).Date + request.ResumeTime;
             var warpOrigin = existingOrder.WarpOrigin;
             var weftOrigin = existingOrder.WeftOrigin;
 

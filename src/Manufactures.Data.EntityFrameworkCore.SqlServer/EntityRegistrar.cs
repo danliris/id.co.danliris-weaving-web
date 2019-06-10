@@ -226,7 +226,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<MaterialTypeReadModel>(etb =>
             {
-                etb.ToTable("Weaving_MaterialTypeDocument");
+                etb.ToTable("Weaving_MaterialTypeDocuments");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(p => p.Code).HasMaxLength(255);

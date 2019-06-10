@@ -18,7 +18,7 @@ namespace Manufactures.Data.EntityFrameworkCore.Orders.Repositories
 
         public async Task<string> GetWeavingOrderNumber()
         {
-            DateTimeOffset now = DateTimeOffset.Now;
+            DateTimeOffset now = DateTimeOffset.UtcNow.AddHours(7);
             var year = now.Year.ToString();
             var month = now.Month.ToString();
             var orderNumber = (this.dbSet.Where(order => order.Period.Deserialize<Period>().Year.Contains(year)).Count() + 1).ToString();

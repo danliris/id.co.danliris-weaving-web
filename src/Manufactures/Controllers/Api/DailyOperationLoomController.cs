@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Beams.Repositories;
 
 namespace Manufactures.Controllers.Api
 {
@@ -35,6 +36,8 @@ namespace Manufactures.Controllers.Api
             _machineRepository;
         private readonly IOperatorRepository 
             _operatorRepository;
+        private readonly IBeamRepository
+            _beamRepository;
 
         public DailyOperationLoomController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -50,6 +53,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IMachineRepository>();
             _operatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
+            _beamRepository =
+                this.Storage.GetRepository<IBeamRepository>();
         }
 
         [HttpGet]
@@ -64,7 +69,7 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationalDocumentRepository
                     .Query
                     .Include(d => d.DailyOperationLoomDetails)
-                    .Where(o => o.DailyOperationStatus != Constants.FINISH)
+                    .Where(o => o.DailyOperationStatus != DailyOperationMachineStatus.ONFINISH)
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationalMachineDocuments =
                 _dailyOperationalDocumentRepository
@@ -191,6 +196,11 @@ namespace Manufactures.Controllers.Api
                     .Find(o => o.Identity.Equals(order.ConstructionId.Value))
                     .FirstOrDefault()
                     .ConstructionNumber;
+            var beamNumber =
+                _beamRepository
+                    .Find(o => o.Identity.Equals(dailyOperationalLoom.BeamId.Value))
+                    .FirstOrDefault()
+                    .Number;
             var historys = new List<DailyOperationLoomHistoryDto>();
 
             foreach (var detail in dailyOperationalLoom.DailyOperationMachineDetails)
@@ -220,6 +230,7 @@ namespace Manufactures.Controllers.Api
                                               operationDate,
                                               dailyOperationalLoom.UnitId.Value,
                                               machineNumber,
+                                              beamNumber,
                                               orderNumber,
                                               fabricConstructionNumber);
 
@@ -250,7 +261,7 @@ namespace Manufactures.Controllers.Api
             return Ok(dailyOperationLoom.Identity);
         }
 
-        [HttpPost("start-process")]
+        [HttpPut("start-process")]
         public async Task<IActionResult> StartPost([FromBody]StartDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -271,10 +282,15 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys = 
+                historys
+                    .OrderByDescending(field => field.DateTimeOperation)
+                    .ToList();
+
             return Ok(historys);
         }
 
-        [HttpPost("stop-process")]
+        [HttpPut("stop-process")]
         public async Task<IActionResult> StopPost([FromBody]StopDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -295,10 +311,15 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
+
             return Ok(historys);
         }
 
-        [HttpPost("resume-process")]
+        [HttpPut("resume-process")]
         public async Task<IActionResult> ResumePost([FromBody]ResumeDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -318,10 +339,15 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
+
             return Ok(historys);
         }
 
-        [HttpPost("finish-process")]
+        [HttpPut("finish-process")]
         public async Task<IActionResult> FinishPost([FromBody]FinishDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
@@ -340,6 +366,11 @@ namespace Manufactures.Controllers.Api
                                                      detail.OperationStatus);
                 historys.Add(result);
             }
+
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
 
             return Ok(historys);
         }
