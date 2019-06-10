@@ -53,7 +53,18 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             {
                 throw Validator.ErrorValidation(("Status", "Start status has available"));
             }
-            
+
+            var firstDetail =
+               existingDailyOperation
+                   .DailyOperationMachineDetails
+                   .OrderByDescending(o => o.DateTimeOperation)
+                   .FirstOrDefault();
+
+            if (dateTimeOperation < firstDetail.DateTimeOperation)
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
+
             existingDailyOperation.SetDailyOperationStatus(DailyOperationMachineStatus.ONFINISH);
             var newOperation =
                new DailyOperationLoomDetail(Guid.NewGuid(),

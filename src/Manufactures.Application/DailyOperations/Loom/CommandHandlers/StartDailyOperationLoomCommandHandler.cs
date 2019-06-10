@@ -48,6 +48,16 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .DailyOperationMachineDetails
                     .Where( e => e.OperationStatus == DailyOperationMachineStatus.ONSTART)
                     .Count();
+            var firstDetail = 
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .OrderByDescending(o => o.DateTimeOperation)
+                    .FirstOrDefault();
+
+            if (dateTimeOperation < firstDetail.DateTimeOperation )
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
 
             if (countStartStatus > 0)
             {
