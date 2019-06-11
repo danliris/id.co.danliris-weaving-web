@@ -74,6 +74,11 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             {
                 throw Validator.ErrorValidation(("Status", "Start status has available"));
             }
+            //Compare if has entry
+            if (!firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY))
+            {
+                throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
+            }
             //Create new operation / detail
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
