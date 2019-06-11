@@ -50,8 +50,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .OrderByDescending(e => e.DateTimeOperation)
                     .FirstOrDefault();
             //Compare if has status Start or Resume
-            if (detail.OperationStatus != DailyOperationMachineStatus.ONSTART ||
-                detail.OperationStatus != DailyOperationMachineStatus.ONRESUME)
+            if (!detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTART) ||
+                !detail.OperationStatus.Equals(DailyOperationMachineStatus.ONRESUME))
             {
                 throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
             }
