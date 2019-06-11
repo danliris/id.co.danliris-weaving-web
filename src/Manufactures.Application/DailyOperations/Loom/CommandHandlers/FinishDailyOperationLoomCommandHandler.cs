@@ -61,7 +61,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             //Compare if has finish status
             if (countFinishStatus > 0)
             {
-                throw Validator.ErrorValidation(("Status", "Start status has available"));
+                throw Validator.ErrorValidation(("Status", "Finish status has available"));
             }
             //Get Detail [0]
             var firstDetail =
