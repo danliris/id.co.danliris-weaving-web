@@ -34,36 +34,43 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
-            var lastHistory = existingDailyOperation.Details.FirstOrDefault();
+            var lastHistory = histories.FirstOrDefault();
 
-            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTART ||
-                histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME)
+            //if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTART ||
+            //    histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME ||
+            //    histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
+            //{
+            //    throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
+            //}
+
+            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONPROCESS || histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME)
             {
-                throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
-            }
-
-            var dateTimeOperation =
+                var dateTimeOperation =
                 request.Details.PauseDate.ToUniversalTime().AddHours(7).Date + request.Details.PauseTime;
 
-            //var History = request.Details.History;
-            var Causes = request.Details.Causes;
+                //var History = request.Details.History;
+                var Causes = request.Details.Causes;
 
-            var newOperation =
-                        new DailyOperationSizingDetail(Guid.NewGuid(), 
-                                                       new ShiftId(request.Details.ShiftDocumentId.Value), 
-                                                       new OperatorId(lastHistory.OperatorDocumentId), 
-                                                       dateTimeOperation, 
-                                                       DailyOperationMachineStatus.ONSTOP, 
-                                                       request.Details.Information,
-                                                       //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONSTOP, History.Information),
-                                                       new DailyOperationSizingCausesValueObject(Causes.BrokenBeam,Causes.MachineTroubled));
+                var newOperation =
+                            new DailyOperationSizingDetail(Guid.NewGuid(),
+                                                           new ShiftId(request.Details.ShiftDocumentId.Value),
+                                                           new OperatorId(lastHistory.OperatorDocumentId),
+                                                           dateTimeOperation,
+                                                           DailyOperationMachineStatus.ONSTOP,
+                                                           request.Details.Information,
+                                                           //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONSTOP, History.Information),
+                                                           new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
-            existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
+                existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
-            await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-            _storage.Save();            
+                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+                _storage.Save();
 
-            return existingDailyOperation;
+                return existingDailyOperation;
+            }else
+            {
+                throw Validator.ErrorValidation(("Status", "Can't stop, latest status is not on PROCESS or on RESUME"));
+            }
         }
     }
 }

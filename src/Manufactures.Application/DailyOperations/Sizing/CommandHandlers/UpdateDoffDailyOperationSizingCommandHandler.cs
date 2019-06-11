@@ -35,12 +35,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
-            var lastHistory = existingDailyOperation.Details.FirstOrDefault();
+            var lastHistory = histories.FirstOrDefault();
 
             var countFinishStatus =
                 existingDailyOperation
                     .Details
-                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONFINISH)
+                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
                     .Count();
 
             if (countFinishStatus > 0)
@@ -51,11 +51,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 request.Details.FinishDate.ToUniversalTime().AddHours(7).Date + request.Details.FinishTime;
 
-            var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
-            //var Counter = existingDailyOperation.Weight.Deserialize<DailyOperationSizingCounterValueObject>();
-            var Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(existingDailyOperation.Weight);
-            //var Weight = existingDailyOperation.Weight.Deserialize<DailyOperationSizingWeightValueObject>();
-            
+            //var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
+            //var Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(existingDailyOperation.Weight);
+
+            var Counter = existingDailyOperation.Counter;
+            var Weight = existingDailyOperation.Weight;
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                  existingDailyOperation.MachineDocumentId,
@@ -90,7 +91,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
                 _storage.Save();
 
-            return existingDailyOperation;
+            return dailyOperationSizingDocument;
         }
     }
 }

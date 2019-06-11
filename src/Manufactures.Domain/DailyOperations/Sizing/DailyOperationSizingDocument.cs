@@ -16,8 +16,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
         public string RecipeCode { get; private set; }
-        public string Counter { get; private set; }
-        public string Weight { get; private set; }
+        public DailyOperationSizingCounterValueObject Counter { get; private set; }
+        public DailyOperationSizingWeightValueObject Weight { get; private set; }
         public List<BeamId> WarpingBeamsId { get; private set; }
         public int MachineSpeed { get; private set; }
         public double TexSQ { get; private set; }
@@ -34,8 +34,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             WeavingUnitId = weavingUnitId;
             ConstructionDocumentId = constructionDocumentId;
             RecipeCode = recipeCode;
-            Counter = JsonConvert.SerializeObject(counter);
-            Weight = JsonConvert.SerializeObject(weight);
+            Counter = counter;
+            Weight = weight;
             WarpingBeamsId = warpingBeamsId;
             MachineSpeed = machineSpeed;
             TexSQ = texSQ;
@@ -53,8 +53,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 WeavingUnitId = this.WeavingUnitId.Value,
                 ConstructionDocumentId = this.ConstructionDocumentId.Value,
                 RecipeCode = this.RecipeCode,
-                Counter = this.Counter,
-                Weight = this.Weight,
+                Counter = this.Counter.Serialize(),
+                Weight = this.Weight.Serialize(),
                 WarpingBeamsId = this.WarpingBeamsId.Serialize(),
                 MachineSpeed = this.MachineSpeed,
                 TexSQ = this.TexSQ,
@@ -71,8 +71,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
             this.RecipeCode = readModel.RecipeCode;
-            this.Counter = JsonConvert.SerializeObject(readModel.Counter);
-            this.Weight = JsonConvert.SerializeObject(readModel.Weight);
+            this.Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(readModel.Counter);
+            this.Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(readModel.Weight);
             this.WarpingBeamsId = readModel.WarpingBeamsId.Deserialize<List<BeamId>>();
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
             this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
@@ -102,6 +102,42 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             Details = list;
             ReadModel.Details = Details.ToList();
 
+            MarkModified();
+        }
+
+        public void SetMachineSpeed(int machineSpeed)
+        {
+            MachineSpeed = machineSpeed;
+            MarkModified();
+        }
+
+        public void SetTexSQ(double texSQ)
+        {
+            TexSQ = texSQ;
+            MarkModified();
+        }
+
+        public void SetVisco(double visco)
+        {
+            Visco = visco;
+            MarkModified();
+        }
+
+        public void SetPIS(int pis)
+        {
+            PIS = pis;
+            MarkModified();
+        }
+
+        public void SetSPU(double spu)
+        {
+            SPU = spu;
+            MarkModified();
+        }
+
+        public void SetBeamDocumentId(BeamId sizingBeamDocumentId)
+        {
+            SizingBeamDocumentId = sizingBeamDocumentId;
             MarkModified();
         }
 
