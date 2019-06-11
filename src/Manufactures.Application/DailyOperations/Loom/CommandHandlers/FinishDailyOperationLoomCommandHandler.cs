@@ -56,12 +56,12 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var countFinishStatus =
                 existingDailyOperation
                     .DailyOperationMachineDetails
-                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONFINISH)
+                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
                     .Count();
             //Compare if has finish status
             if (countFinishStatus > 0)
             {
-                throw Validator.ErrorValidation(("Status", "Start status has available"));
+                throw Validator.ErrorValidation(("Status", "Finish status has available"));
             }
             //Get Detail [0]
             var firstDetail =
