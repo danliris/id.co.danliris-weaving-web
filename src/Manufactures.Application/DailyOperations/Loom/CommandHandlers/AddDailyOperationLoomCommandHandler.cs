@@ -30,6 +30,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             Handle(AddNewDailyOperationLoomCommand request,
                    CancellationToken cancellationToken)
         {
+            //Create new daily operation
             var dailyOperationMachineDocument =
                 new DailyOperationLoomDocument(Guid.NewGuid(),
                                                request.UnitId, 
@@ -38,18 +39,26 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                request.OrderId, 
                                                request.DailyOperationMonitoringId, 
                                                DailyOperationMachineStatus.ONPROCESS);
-            var dateTimeOperation = 
-                request.PreparationDate.ToUniversalTime().AddHours(7).Date + request.PreparationTime;
+            //Break datetime to match timezone
+            var year = request.PreparationDate.Year;
+            var month = request.PreparationDate.Month;
+            var day = request.PreparationDate.Day;
+            var hour = request.PreparationTime.Hours;
+            var minutes = request.PreparationTime.Minutes;
+            var seconds = request.PreparationTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+            //Create new Operation / detail
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId, 
-                                             request.OperatorId, 
-                                             request.WarpOrigin, 
-                                             request.WeftOrigin,
+                                             request.OperatorId,
                                              dateTimeOperation, 
                                              DailyOperationMachineStatus.ONENTRY,
                                              true,
                                              false);
+            newOperation.AddWarpOrigin(request.WarpOrigin);
+            newOperation.AddWeftOrigin(request.WeftOrigin);
 
             dailyOperationMachineDocument.AddDailyOperationMachineDetail(newOperation);
 

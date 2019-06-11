@@ -37,54 +37,69 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(ResumeDailyOperationLoomCommand request, 
                                                        CancellationToken cancellationToken)
         {
+            //Add query
             var query =
                 _dailyOperationalDocumentRepository
                     .Query
                     .Include(o => o.DailyOperationLoomDetails);
+            //Get existing daily operation
             var existingDailyOperation =
                 _dailyOperationalDocumentRepository
                     .Find(query)
                     .Where(e => e.Identity.Equals(request.Id))
                     .FirstOrDefault();
+            //Get[0] detail
             var detail =
                 existingDailyOperation
                     .DailyOperationMachineDetails
-                    .OrderByDescending(e => e.DateTimeOperation);
-
-            if (detail.FirstOrDefault().OperationStatus != DailyOperationMachineStatus.ONSTOP)
+                    .OrderByDescending(e => e.DateTimeOperation)
+                    .FirstOrDefault();
+            //Compare if has status stop
+            if (detail.OperationStatus != DailyOperationMachineStatus.ONSTOP)
             {
                 throw Validator.ErrorValidation(("Status", "Can't continue, check your latest status"));
             }
-
+            //Get existing order from Weaving Order Document
             var existingOrder = 
                 _weavingOrderDocumentRepository
                     .Find(e => e.Identity.Equals(existingDailyOperation.OrderId.Value))
                     .FirstOrDefault();
-            var dateTimeOperation = 
-                request.ResumeDate.ToUniversalTime().AddHours(7).Date + request.ResumeTime;
+            //Break datetime to match timezone
+            var year = request.ResumeDate.Year;
+            var month = request.ResumeDate.Month;
+            var day = request.ResumeDate.Day;
+            var hour = request.ResumeTime.Hours;
+            var minutes = request.ResumeTime.Minutes;
+            var seconds = request.ResumeTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+            //Compare datetime if possible
+            if (dateTimeOperation < detail.DateTimeOperation)
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
+            //Add origin if has change
             var warpOrigin = existingOrder.WarpOrigin;
             var weftOrigin = existingOrder.WeftOrigin;
-
-            if (warpOrigin != request.WarpOrigin)
-            {
-                warpOrigin = request.WarpOrigin;
-            }
-
-            if (weftOrigin != request.WeftOrigin)
-            {
-                weftOrigin = request.WeftOrigin;
-            }
-
+            //Add new operation / detail
             var newOperation =
                 new DailyOperationLoomDetail(Guid.NewGuid(),
                                              request.ShiftId,
                                              request.OperatorId,
-                                             warpOrigin,
-                                             weftOrigin,
                                              dateTimeOperation,
                                              DailyOperationMachineStatus.ONRESUME,
                                              true,
                                              false);
+            //Compare if has change warp origin
+            if (warpOrigin != request.WarpOrigin)
+            {
+                newOperation.AddWarpOrigin(request.WarpOrigin);
+            }
+            //Compare if has change weft origin
+            if (weftOrigin != request.WeftOrigin)
+            {
+                newOperation.AddWeftOrigin(request.WeftOrigin);
+            }
 
             existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
 

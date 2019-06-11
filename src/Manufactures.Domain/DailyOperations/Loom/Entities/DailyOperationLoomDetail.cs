@@ -23,11 +23,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         {
         }
 
-        public DailyOperationLoomDetail(Guid identity, 
-                                        ShiftId shiftId, 
-                                        OperatorId beamOperatorId, 
-                                        string warpOrigin, 
-                                        string weftOrigin,
+        public DailyOperationLoomDetail(Guid identity,
+                                        ShiftId shiftId,
+                                        OperatorId beamOperatorId,
                                         DateTimeOffset dateTimeOperation,
                                         string operationStatus,
                                         bool isUp,
@@ -37,12 +35,20 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             Identity = identity;
             ShiftId = shiftId.Value;
             BeamOperatorId = beamOperatorId.Value;
-            WarpOrigin = warpOrigin;
-            WeftOrigin = weftOrigin;
             DateTimeOperation = dateTimeOperation;
             OperationStatus = operationStatus;
             IsUp = isUp;
             IsDown = isDown;
+        }
+
+        public void AddWarpOrigin(string warpOrigin)
+        {
+            WarpOrigin = warpOrigin;
+        }
+
+        public void AddWeftOrigin(string weftOrigin)
+        {
+            WeftOrigin = weftOrigin;
         }
 
         protected override DailyOperationLoomDetail GetEntity()
