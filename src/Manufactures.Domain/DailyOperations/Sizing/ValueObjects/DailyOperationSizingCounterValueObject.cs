@@ -6,8 +6,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingCounterValueObject : ValueObject
     {
-        public string Start { get; set; }
-        public string Finish { get; set; }
+        public string Start { get; private set; }
+        public string Finish { get; private set; }
 
         public DailyOperationSizingCounterValueObject(string start, string finish)
         {

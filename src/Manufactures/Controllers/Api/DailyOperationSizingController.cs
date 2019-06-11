@@ -2,6 +2,7 @@
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
+using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
@@ -84,6 +85,7 @@ namespace Manufactures.Controllers.Api
                         .FirstOrDefault();
 
                 var shiftOnDetail = new ShiftValueObject();
+                var historyOnDetail = new DateTimeOffset();
 
                 foreach (var detail in dailyOperation.Details)
                 {
@@ -92,9 +94,11 @@ namespace Manufactures.Controllers.Api
                             .Find(e => e.Identity.Equals(detail.ShiftDocumentId)).Last();
 
                     shiftOnDetail = new ShiftValueObject(shiftDocument.Name, shiftDocument.StartTime, shiftDocument.EndTime);
+
+                    historyOnDetail = detail.DateTimeOperation;
                 }
 
-                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail);
+                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, historyOnDetail);
 
                 resultDto.Add(dto);
             }
@@ -185,9 +189,7 @@ namespace Manufactures.Controllers.Api
 
                     var shiftName = shiftDocument.Name;
 
-                    var detailHistory = detail.History.Deserialize<DailyOperationSizingHistoryDto>();
-
-                    var history = new DailyOperationSizingHistoryDto(detailHistory.MachineDate, detailHistory.MachineTime, detailHistory.MachineStatus, detailHistory.Information);
+                    var history = new DailyOperationSizingHistoryDto(detail.DateTimeOperation, detail.OperationStatus, detail.Information);
 
                     var detailCauses = detail.Causes.Deserialize<DailyOperationSizingCausesDto>();
 

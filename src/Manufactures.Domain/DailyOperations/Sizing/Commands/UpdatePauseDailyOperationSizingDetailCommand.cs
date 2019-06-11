@@ -12,8 +12,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "History")]
-        public DailyOperationSizingHistoryCommand History { get; set; }
+        [JsonProperty(PropertyName = "PauseDate")]
+        public DateTimeOffset PauseDate { get; set; }
+
+        [JsonProperty(PropertyName = "PauseTime")]
+        public TimeSpan PauseTime { get; set; }
+
+        [JsonProperty(PropertyName = "Information")]
+        public string Information { get; set; }
 
         [JsonProperty(PropertyName = "Causes")]
         public DailyOperationSizingCausesCommand Causes { get; set; }
@@ -23,9 +29,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdatePauseDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
-            RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
-            RuleFor(command => command.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
+            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.PauseDate).NotEmpty();
+            RuleFor(validator => validator.PauseTime).NotEmpty();
+            RuleFor(validator => validator.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
         }
     }
 }

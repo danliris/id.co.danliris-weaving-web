@@ -29,13 +29,17 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
 
-        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument)
+        [JsonProperty(PropertyName = "DateTimeOperationHistory")]
+        public DateTimeOffset DateTimeOperationHistory { get; }
+
+        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument, DateTimeOffset dateTimeOperation)
         {
             Id = document.Identity;
             MachineNumber = machineDocument.MachineNumber;
             WeavingUnitDocumentId = document.WeavingUnitId;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             ShiftName = shiftDocument.Name;
+            DateTimeOperationHistory = dateTimeOperation;
         }
     }
 }

@@ -39,13 +39,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public NewEntryDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.MachineDocumentId.Value).NotEmpty();
-            RuleFor(command => command.WeavingUnitId.Value).NotEmpty();
-            RuleFor(command => command.ConstructionDocumentId.Value).NotEmpty();
-            //RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
-            //RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
-            RuleFor(command => command.WarpingBeamsId.Count).NotEqual(0);
-            RuleFor(command => command.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
+            RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
+            RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            RuleFor(validator => validator.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
+            RuleFor(validator => validator.WarpingBeamsId.Count).NotEqual(0);
+            RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }
 }

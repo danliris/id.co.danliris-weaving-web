@@ -12,16 +12,20 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "History")]
-        public DailyOperationSizingHistoryCommand History { get; set; }
+        [JsonProperty(PropertyName = "StartDate")]
+        public DateTimeOffset StartDate { get; set; }
+
+        [JsonProperty(PropertyName = "StartTime")]
+        public TimeSpan StartTime { get; set; }
     }
 
     public class UpdateStartDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingDetailCommand>
     {
         public UpdateStartDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
-            RuleFor(command => command.History).SetValidator(new DailyOperationSizingHistoryCommandValidator());
+            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.StartDate).NotEmpty();
+            RuleFor(validator => validator.StartTime).NotEmpty();
         }
     }
 }

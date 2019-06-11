@@ -8,6 +8,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,22 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
+            var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = existingDailyOperation.Details.FirstOrDefault();
+
+            var countFinishStatus =
+                existingDailyOperation
+                    .Details
+                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONFINISH)
+                    .Count();
+
+            if (countFinishStatus > 0)
+            {
+                throw Validator.ErrorValidation(("Status", "Start status has available"));
+            }
+
+            var dateTimeOperation =
+                request.Details.FinishDate.ToUniversalTime().AddHours(7).Date + request.Details.FinishTime;
 
             var Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(existingDailyOperation.Counter);
             //var Counter = existingDailyOperation.Weight.Deserialize<DailyOperationSizingCounterValueObject>();
@@ -56,14 +72,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                  request.SPU,
                                                  new BeamId(request.SizingBeamDocumentId.Value));
 
-            var History = request.Details.History;
+            //var History = request.Details.History;
             var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
 
             var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
                                                        new ShiftId(lastHistory.ShiftDocumentId),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
-                                                       new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONFINISH, History.Information),
+                                                       dateTimeOperation,
+                                                       DailyOperationMachineStatus.ONFINISH, 
+                                                       "-",
+                                                       //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONFINISH, "-"),
                                                        new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
             dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);

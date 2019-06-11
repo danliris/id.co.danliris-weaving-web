@@ -28,8 +28,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         }
 
         public async Task<DailyOperationSizingDocument>
-            Handle(NewEntryDailyOperationSizingCommand request,
-                   CancellationToken cancellationToken)
+            Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
             //var startTime = request.Details.ProductionTime.Start;
             //var morningShift = new TimeSpan(6, 0, 0);
@@ -42,8 +41,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
                                                     request.RecipeCode,
-                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, ""),
-                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, ""),
+                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, "0"),
+                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, "0"),
                                                     request.WarpingBeamsId,
                                                     0,
                                                     0,
@@ -52,11 +51,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     new BeamId(Guid.Empty));
 
-                var newOperation =
+            var dateTimeOperation =
+                request.Details.PreparationDate.ToUniversalTime().AddHours(7).Date + request.Details.PreparationTime;
+
+            var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
-                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
+                                                   dateTimeOperation,
+                                                   DailyOperationMachineStatus.ONENTRY,
+                                                   "-",
+                                                   //new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONENTRY, "-"),
                                                    new DailyOperationSizingCausesValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);

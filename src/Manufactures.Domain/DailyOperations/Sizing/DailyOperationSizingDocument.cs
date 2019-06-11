@@ -71,8 +71,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
             this.RecipeCode = readModel.RecipeCode;
-            this.Counter = readModel.Counter.Serialize();
-            this.Weight = readModel.Weight.Serialize();
+            this.Counter = JsonConvert.SerializeObject(readModel.Counter);
+            this.Weight = JsonConvert.SerializeObject(readModel.Weight);
             this.WarpingBeamsId = readModel.WarpingBeamsId.Deserialize<List<BeamId>>();
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
             this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;

@@ -12,13 +12,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public string Finish { get; set; }
     }
 
-    //public class DailyOperationSizingCounterCommandValidator
-    //  : AbstractValidator<DailyOperationSizingCounterCommand>
-    //{
-    //    public DailyOperationSizingCounterCommandValidator()
-    //    {
-    //        RuleFor(command => command.Start).NotEmpty();
-    //        RuleFor(command => command.Finish).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Start));
-    //    }
-    //}
+    public class DailyOperationSizingCounterCommandValidator
+      : AbstractValidator<DailyOperationSizingCounterCommand>
+    {
+        public DailyOperationSizingCounterCommandValidator()
+        {
+            RuleFor(command => command.Start).NotEmpty();
+            RuleFor(command => command.Finish).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Start));
+        }
+    }
 }
