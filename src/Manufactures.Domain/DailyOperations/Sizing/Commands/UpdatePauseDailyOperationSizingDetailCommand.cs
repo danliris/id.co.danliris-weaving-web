@@ -9,8 +9,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdatePauseDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; set; }
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "PauseDate")]
         public DateTimeOffset PauseDate { get; set; }
@@ -29,7 +29,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdatePauseDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.PauseDate).NotEmpty();
             RuleFor(validator => validator.PauseTime).NotEmpty();
             RuleFor(validator => validator.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());

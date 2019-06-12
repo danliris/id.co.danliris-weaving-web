@@ -8,11 +8,11 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingDetailsDto
     {
-        [JsonProperty(PropertyName = "DateTimeOperationHistory")]
+        [JsonProperty(PropertyName = "DateTimeMachineHistory")]
         public DateTimeOffset DateTimeOperationHistory { get; }
 
-        [JsonProperty(PropertyName = "OperationStatusHistory")]
-        public string OperationStatusHistory { get; }
+        [JsonProperty(PropertyName = "MachineStatusHistory")]
+        public string MachineStatusHistory { get; }
 
         [JsonProperty(PropertyName = "InformationHistory")]
         public string InformationHistory { get; }
@@ -29,7 +29,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public DailyOperationSizingDetailsDto(string shiftName, DailyOperationSizingHistoryDto history, DailyOperationSizingCausesDto causes)
         {
             DateTimeOperationHistory = history.DateTimeOperation;
-            OperationStatusHistory = history.OperationStatus;
+            MachineStatusHistory = history.MachineStatus;
             InformationHistory = history.Information;
             ShiftName = shiftName;
             BrokenBeamCauses = causes.BrokenBeam;

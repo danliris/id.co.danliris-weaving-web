@@ -36,12 +36,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = histories.FirstOrDefault();
 
-            //if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTOP)
+            //if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTOP)
             //{
             //    throw Validator.ErrorValidation(("Status", "Can't continue, check your latest status"));
             //}
 
-            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTOP)
+            if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTOP)
             {
                 var dateTimeOperation =
             request.Details.ResumeDate.ToUniversalTime().AddHours(7).Date + request.Details.ResumeTime;
@@ -51,7 +51,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 var newOperation =
                             new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                           new ShiftId(request.Details.ShiftDocumentId.Value),
+                                                           new ShiftId(request.Details.ShiftId.Value),
                                                            new OperatorId(request.Details.OperatorDocumentId.Value),
                                                            dateTimeOperation,
                                                            DailyOperationMachineStatus.ONRESUME,

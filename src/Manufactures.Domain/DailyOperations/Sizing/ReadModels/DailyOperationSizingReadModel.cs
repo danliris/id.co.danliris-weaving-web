@@ -25,6 +25,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public int? PIS { get; internal set; }
         public double? SPU { get; internal set; }
         public Guid? SizingBeamDocumentId { get; internal set; }
+        public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingDetail> Details { get; internal set; }
     }
 }

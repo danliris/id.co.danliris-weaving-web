@@ -15,6 +15,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "FinishTime")]
         public TimeSpan FinishTime { get; set; }
+
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
     }
 
     public class UpdateDoffDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateDoffFinishDailyOperationSizingDetailCommand>
@@ -23,6 +26,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         {
             RuleFor(validator => validator.FinishDate).NotEmpty();
             RuleFor(validator => validator.FinishTime).NotEmpty();
+            RuleFor(validator => validator.ShiftId.Value).NotEmpty();
         }
     }
 }

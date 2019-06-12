@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public Guid ShiftDocumentId { get; private set; }
         public Guid OperatorDocumentId { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
-        public string OperationStatus { get; private set; }
+        public string MachineStatus { get; private set; }
         public string Information { get; private set; }
         public string Causes { get; private set; }
 
@@ -28,14 +28,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                                           ShiftId shiftDocumentId, 
                                           OperatorId operatorDocumentId, 
                                           DateTimeOffset dateTimeOperation, 
-                                          string operationStatus, 
+                                          string machineStatus, 
                                           string information, 
                                           DailyOperationSizingCausesValueObject causes) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
             DateTimeOperation = dateTimeOperation;
-            OperationStatus = operationStatus;
+            MachineStatus = machineStatus;
             Information = information;
             Causes = causes.Serialize();
         }
@@ -61,9 +61,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetOperationStatus(string operationStatus)
+        public void SetMachineStatus(string machineStatus)
         {
-            OperationStatus = operationStatus;
+            MachineStatus = machineStatus;
             MarkModified();
         }
 

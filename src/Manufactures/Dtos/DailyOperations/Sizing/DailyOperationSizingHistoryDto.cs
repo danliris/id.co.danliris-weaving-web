@@ -12,8 +12,8 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "DateTimeOperation")]
         public DateTimeOffset DateTimeOperation { get; }
 
-        [JsonProperty(PropertyName = "OperationStatus")]
-        public string OperationStatus { get; }
+        [JsonProperty(PropertyName = "MachineStatus")]
+        public string MachineStatus { get; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; }
@@ -22,10 +22,10 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         {
         }
 
-        public DailyOperationSizingHistoryDto(DateTimeOffset dateTimeOperation, string operationStatus, string information)
+        public DailyOperationSizingHistoryDto(DateTimeOffset dateTimeOperation, string machineStatus, string information)
         {
             DateTimeOperation = dateTimeOperation;
-            OperationStatus = operationStatus;
+            MachineStatus = machineStatus;
             Information = information;
         }
     }

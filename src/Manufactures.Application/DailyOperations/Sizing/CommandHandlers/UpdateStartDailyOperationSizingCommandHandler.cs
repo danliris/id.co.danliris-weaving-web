@@ -39,13 +39,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 request.Details.StartDate.ToUniversalTime().AddHours(7).Date + request.Details.StartTime;
 
-            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONENTRY)
+            if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
             {
                 var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
 
                 var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                       new ShiftId(request.Details.ShiftDocumentId.Value),
+                                                       new ShiftId(request.Details.ShiftId.Value),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
                                                        dateTimeOperation,
                                                        DailyOperationMachineStatus.ONSTART,
@@ -68,7 +68,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //var countStartStatus =
             //    existingDailyOperation
             //        .Details
-            //        .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONSTART)
+            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
             //        .Count();
 
             //if (countStartStatus > 0)

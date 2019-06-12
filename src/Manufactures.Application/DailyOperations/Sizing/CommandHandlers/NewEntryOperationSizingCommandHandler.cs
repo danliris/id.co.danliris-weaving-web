@@ -49,7 +49,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     0,
                                                     0,
-                                                    new BeamId(Guid.Empty));
+                                                    new BeamId(Guid.Empty),
+                                                    DailyOperationMachineStatus.ONPROCESS);
 
             var dateTimeOperation =
                 request.Details.PreparationDate.ToUniversalTime().AddHours(7).Date + request.Details.PreparationTime;

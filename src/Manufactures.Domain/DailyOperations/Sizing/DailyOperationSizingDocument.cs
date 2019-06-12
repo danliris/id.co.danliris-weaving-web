@@ -25,9 +25,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public int PIS { get; private set; }
         public double SPU { get; private set; }
         public BeamId SizingBeamDocumentId { get; private set; }
+        public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> Details { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, string recipeCode, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsId, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, string recipeCode, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsId, int machineSpeed, double texSQ, double visco, int pis, double spu, BeamId sizingBeamDocumentId, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -43,6 +44,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             PIS = pis;
             SPU = spu;
             SizingBeamDocumentId = sizingBeamDocumentId;
+            OperationStatus = operationStatus;
             Details = new List<DailyOperationSizingDetail>();
 
             this.MarkTransient();
@@ -62,6 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 PIS = this.PIS,
                 SPU = this.SPU,
                 SizingBeamDocumentId = this.SizingBeamDocumentId.Value,
+                OperationStatus = this.OperationStatus,
                 Details = this.Details.ToList()
             };
         }
@@ -80,6 +83,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.PIS = readModel.PIS.HasValue ? readModel.PIS.Value : 0;
             this.SPU = readModel.SPU.HasValue ? readModel.SPU.Value : 0;
             this.SizingBeamDocumentId = readModel.SizingBeamDocumentId.HasValue ? new BeamId(readModel.SizingBeamDocumentId.Value) : null;
+            this.OperationStatus = readModel.OperationStatus;
             this.Details = readModel.Details;
         }
 
@@ -150,6 +154,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public void SetSizingBeamDocumentId(BeamId sizingBeamDocumentId)
         {
             SizingBeamDocumentId = sizingBeamDocumentId;
+            MarkModified();
+        }
+
+        public void SetOperationStatus(string operationStatus)
+        {
+            OperationStatus = operationStatus;
             MarkModified();
         }
 

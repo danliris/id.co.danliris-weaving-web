@@ -85,20 +85,19 @@ namespace Manufactures.Controllers.Api
                         .FirstOrDefault();
 
                 var shiftOnDetail = new ShiftValueObject();
-                var historyOnDetail = new DateTimeOffset();
+                var dailyOperationEntryDateTime = dailyOperation.Details.OrderBy(e=>e.DateTimeOperation).FirstOrDefault().DateTimeOperation;
+                var lastDailyOperationStatus = dailyOperation.OperationStatus;
 
                 foreach (var detail in dailyOperation.Details)
                 {
                     var shiftDocument =
                         _shiftDocumentRepository
-                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId)).Last();
+                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId)).LastOrDefault();
 
                     shiftOnDetail = new ShiftValueObject(shiftDocument.Name, shiftDocument.StartTime, shiftDocument.EndTime);
-
-                    historyOnDetail = detail.DateTimeOperation;
                 }
 
-                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, historyOnDetail);
+                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, lastDailyOperationStatus, dailyOperationEntryDateTime);
 
                 resultDto.Add(dto);
             }
@@ -189,7 +188,7 @@ namespace Manufactures.Controllers.Api
 
                     var shiftName = shiftDocument.Name;
 
-                    var history = new DailyOperationSizingHistoryDto(detail.DateTimeOperation, detail.OperationStatus, detail.Information);
+                    var history = new DailyOperationSizingHistoryDto(detail.DateTimeOperation, detail.MachineStatus, detail.Information);
 
                     var detailCauses = detail.Causes.Deserialize<DailyOperationSizingCausesDto>();
 

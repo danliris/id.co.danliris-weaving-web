@@ -12,7 +12,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
+        [JsonProperty(PropertyName = "ShiftId")]
         public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
@@ -21,8 +21,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "PreparationTime")]
         public TimeSpan PreparationTime { get; private set; }
 
-        [JsonProperty(PropertyName = "OperationStatus")]
-        public string OperationStatus { get; set; }
+        [JsonProperty(PropertyName = "MachineStatus")]
+        public string MachineStatus { get; set; }
     }
 
     public class NewEntryDailyOperationSizingDetailCommandValidator : AbstractValidator<NewEntryDailyOperationSizingDetailCommand>

@@ -9,8 +9,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdateStartDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; set; }
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "StartDate")]
         public DateTimeOffset StartDate { get; set; }
@@ -23,7 +23,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateStartDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.StartDate).NotEmpty();
             RuleFor(validator => validator.StartTime).NotEmpty();
         }

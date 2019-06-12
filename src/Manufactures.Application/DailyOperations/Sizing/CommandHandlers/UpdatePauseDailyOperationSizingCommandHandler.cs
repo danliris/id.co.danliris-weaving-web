@@ -36,14 +36,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = histories.FirstOrDefault();
 
-            //if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTART ||
-            //    histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME ||
-            //    histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
+            //if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTART ||
+            //    histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONRESUME ||
+            //    histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
             //{
             //    throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
             //}
 
-            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTART || histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME)
+            if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTART || histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONRESUME)
             {
                 var dateTimeOperation =
                 request.Details.PauseDate.ToUniversalTime().AddHours(7).Date + request.Details.PauseTime;
@@ -53,7 +53,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 var newOperation =
                             new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                           new ShiftId(request.Details.ShiftDocumentId.Value),
+                                                           new ShiftId(request.Details.ShiftId.Value),
                                                            new OperatorId(lastHistory.OperatorDocumentId),
                                                            dateTimeOperation,
                                                            DailyOperationMachineStatus.ONSTOP,

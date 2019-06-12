@@ -40,12 +40,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var countFinishStatus =
                 existingDailyOperation
                     .Details
-                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
+                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
                     .Count();
 
             if (countFinishStatus > 0)
             {
-                throw Validator.ErrorValidation(("Status", "Start status has available"));
+                throw Validator.ErrorValidation(("Status", "Finish status has available"));
             }
 
             var dateTimeOperation =
@@ -81,16 +81,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             existingDailyOperation.SetPIS(request.PIS);
             existingDailyOperation.SetSPU(request.SPU);
             existingDailyOperation.SetSizingBeamDocumentId(request.SizingBeamDocumentId);
+            existingDailyOperation.SetOperationStatus(DailyOperationMachineStatus.ONFINISH);
 
             //var History = request.Details.History;
             var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
 
             var newOperation =
                         new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                       new ShiftId(lastHistory.ShiftDocumentId),
+                                                       new ShiftId(request.Details.ShiftId.Value),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
                                                        dateTimeOperation,
-                                                       DailyOperationMachineStatus.ONFINISH, 
+                                                       DailyOperationMachineStatus.ONCOMPLETE, 
                                                        "-",
                                                        //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONFINISH, "-"),
                                                        new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
