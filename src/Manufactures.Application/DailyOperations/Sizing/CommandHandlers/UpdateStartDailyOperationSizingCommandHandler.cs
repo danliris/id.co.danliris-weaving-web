@@ -48,7 +48,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                        new ShiftId(request.Details.ShiftDocumentId.Value),
                                                        new OperatorId(lastHistory.OperatorDocumentId),
                                                        dateTimeOperation,
-                                                       DailyOperationMachineStatus.ONPROCESS,
+                                                       DailyOperationMachineStatus.ONSTART,
                                                        "-",
                                                        //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONPROCESS, "-"),
                                                        new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));

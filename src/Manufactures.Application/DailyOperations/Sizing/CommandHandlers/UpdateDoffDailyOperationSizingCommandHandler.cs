@@ -57,21 +57,30 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var Counter = existingDailyOperation.Counter;
             var Weight = existingDailyOperation.Weight;
 
-            var dailyOperationSizingDocument =
-                new DailyOperationSizingDocument(Guid.NewGuid(),
-                                                 existingDailyOperation.MachineDocumentId,
-                                                 existingDailyOperation.WeavingUnitId,
-                                                 existingDailyOperation.ConstructionDocumentId,
-                                                 existingDailyOperation.RecipeCode,
-                                                 new DailyOperationSizingCounterValueObject(Counter.Start, request.Counter.Finish),
-                                                 new DailyOperationSizingWeightValueObject(Weight.Netto, request.Weight.Bruto),
-                                                 existingDailyOperation.WarpingBeamsId,
-                                                 request.MachineSpeed,
-                                                 request.TexSQ,
-                                                 request.Visco,
-                                                 request.PIS,
-                                                 request.SPU,
-                                                 new BeamId(request.SizingBeamDocumentId.Value));
+            //var dailyOperationSizingDocument =
+                //new DailyOperationSizingDocument(Guid.NewGuid(),
+                //                                 existingDailyOperation.MachineDocumentId,
+                //                                 existingDailyOperation.WeavingUnitId,
+                //                                 existingDailyOperation.ConstructionDocumentId,
+                //                                 existingDailyOperation.RecipeCode,
+                //                                 new DailyOperationSizingCounterValueObject(Counter.Start, request.Counter.Finish),
+                //                                 new DailyOperationSizingWeightValueObject(Weight.Netto, request.Weight.Bruto),
+                //                                 existingDailyOperation.WarpingBeamsId,
+                //                                 request.MachineSpeed,
+                //                                 request.TexSQ,
+                //                                 request.Visco,
+                //                                 request.PIS,
+                //                                 request.SPU,
+                //                                 new BeamId(request.SizingBeamDocumentId.Value));
+
+            existingDailyOperation.SetCounter(new DailyOperationSizingCounterValueObject(Counter.Start, request.Counter.Finish));
+            existingDailyOperation.SetWeight(new DailyOperationSizingWeightValueObject(Weight.Netto, request.Weight.Bruto));
+            existingDailyOperation.SetMachineSpeed(request.MachineSpeed);
+            existingDailyOperation.SetTexSQ(request.TexSQ);
+            existingDailyOperation.SetVisco(request.Visco);
+            existingDailyOperation.SetPIS(request.PIS);
+            existingDailyOperation.SetSPU(request.SPU);
+            existingDailyOperation.SetSizingBeamDocumentId(request.SizingBeamDocumentId);
 
             //var History = request.Details.History;
             var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
@@ -86,12 +95,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                        //new DailyOperationSizingHistoryValueObject(History.MachineDate, History.MachineTime, DailyOperationMachineStatus.ONFINISH, "-"),
                                                        new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
-            dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
+            existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
-                await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
+                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                 _storage.Save();
 
-            return dailyOperationSizingDocument;
+            return existingDailyOperation;
         }
     }
 }

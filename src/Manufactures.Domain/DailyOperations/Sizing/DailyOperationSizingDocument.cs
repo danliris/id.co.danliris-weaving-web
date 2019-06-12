@@ -105,6 +105,18 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
+        public void SetCounter(DailyOperationSizingCounterValueObject counter)
+        {
+            Counter = counter;
+            MarkModified();
+        }
+
+        public void SetWeight(DailyOperationSizingWeightValueObject weight)
+        {
+            Weight = weight;
+            MarkModified();
+        }
+
         public void SetMachineSpeed(int machineSpeed)
         {
             MachineSpeed = machineSpeed;
@@ -135,7 +147,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void SetBeamDocumentId(BeamId sizingBeamDocumentId)
+        public void SetSizingBeamDocumentId(BeamId sizingBeamDocumentId)
         {
             SizingBeamDocumentId = sizingBeamDocumentId;
             MarkModified();

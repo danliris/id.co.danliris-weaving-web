@@ -43,7 +43,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //    throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
             //}
 
-            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONPROCESS || histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME)
+            if (histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONSTART || histories.FirstOrDefault().OperationStatus == DailyOperationMachineStatus.ONRESUME)
             {
                 var dateTimeOperation =
                 request.Details.PauseDate.ToUniversalTime().AddHours(7).Date + request.Details.PauseTime;
