@@ -156,7 +156,8 @@ namespace Manufactures.Controllers.Api
             //Give to final result
             resultDto =
                 resultDto.Skip(page * size).Take(size).ToList();
-            int totalRows = resultDto.Count();
+            int totalRows = dailyOperationalMachineDocuments.Count();
+            int resultCount = resultDto.Count();
             page = page + 1;
 
             await Task.Yield();
@@ -165,7 +166,8 @@ namespace Manufactures.Controllers.Api
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
