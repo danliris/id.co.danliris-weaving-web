@@ -64,19 +64,21 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
+            //Set page
             page = page - 1;
+            //Add query
             var query =
                 _dailyOperationalDocumentRepository
                     .Query
                     .Include(d => d.DailyOperationLoomDetails)
-                    .Where(o => o.DailyOperationStatus != DailyOperationMachineStatus.ONFINISH)
                     .OrderByDescending(item => item.CreatedDate);
+            //Execute existing daily operation
             var dailyOperationalMachineDocuments =
                 _dailyOperationalDocumentRepository
                     .Find(query);
-
+            //Initiate new List 
             var resultDto = new List<DailyOperationLoomListDto>();
-
+            //Extract information from latest existing daily operation
             foreach (var dailyOperation in dailyOperationalMachineDocuments)
             {
                 var dateOperated = new DateTimeOffset();
@@ -109,7 +111,7 @@ namespace Manufactures.Controllers.Api
 
                 resultDto.Add(dto);
             }
-
+            //Search by keyword
             if (!string.IsNullOrEmpty(keyword))
             {
                 resultDto =
@@ -125,7 +127,7 @@ namespace Manufactures.Controllers.Api
                                                             .OrdinalIgnoreCase))
                              .ToList();
             }
-
+            //Order by
             if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary =
@@ -151,19 +153,21 @@ namespace Manufactures.Controllers.Api
                             .ToList();
                 }
             }
-
+            //Give to final result
             resultDto =
                 resultDto.Skip(page * size).Take(size).ToList();
-            int totalRows = resultDto.Count();
+            int totalRows = dailyOperationalMachineDocuments.Count();
+            int resultCount = resultDto.Count();
             page = page + 1;
 
             await Task.Yield();
-
+            //Return to end point
             return Ok(resultDto, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
