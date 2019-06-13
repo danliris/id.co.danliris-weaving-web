@@ -30,11 +30,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            //var startTime = request.Details.ProductionTime.Start;
-            //var morningShift = new TimeSpan(6, 0, 0);
-            //var afternoonShift = new TimeSpan(14, 0, 0);
-            //var nightShift = new TimeSpan(22,0,0);
-
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
@@ -52,8 +47,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     new BeamId(Guid.Empty),
                                                     DailyOperationMachineStatus.ONPROCESS);
 
+            var year = request.Details.PreparationDate.Year;
+            var month = request.Details.PreparationDate.Month;
+            var day = request.Details.PreparationDate.Day;
+            var hour = request.Details.PreparationTime.Hours;
+            var minutes = request.Details.PreparationTime.Minutes;
+            var seconds = request.Details.PreparationTime.Seconds;
             var dateTimeOperation =
-                request.Details.PreparationDate.ToUniversalTime().AddHours(7).Date + request.Details.PreparationTime;
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -62,7 +63,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    dateTimeOperation,
                                                    DailyOperationMachineStatus.ONENTRY,
                                                    "-",
-                                                   //new DailyOperationSizingHistoryValueObject(request.Details.History.MachineDate, request.Details.History.MachineTime, DailyOperationMachineStatus.ONENTRY, "-"),
                                                    new DailyOperationSizingCausesValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
