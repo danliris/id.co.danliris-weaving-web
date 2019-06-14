@@ -18,7 +18,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public DailyOperationSizingCounterCommandValidator()
         {
             RuleFor(command => command.Start).NotEmpty();
-            RuleFor(command => command.Finish).NotEmpty().Unless(command => string.IsNullOrEmpty(command.Start));
+            RuleFor(command => command.Finish).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Start));
         }
     }
 }

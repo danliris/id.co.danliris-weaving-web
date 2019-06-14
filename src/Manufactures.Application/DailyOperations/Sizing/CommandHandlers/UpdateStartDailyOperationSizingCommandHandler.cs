@@ -8,10 +8,10 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,22 +31,95 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateStartDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.DailyOperationSizingDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var lastHistory = existingDailyOperation.DailyOperationSizingDetails.Last();
+            var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
+            var lastHistory = histories.FirstOrDefault();
 
-            var newOperation =
-                    new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                   new ShiftId(request.Details.ShiftDocumentId.Value),
-                                                   new OperatorId(lastHistory.OperatorDocumentId),
-                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONSTOP, request.Details.History.Information),
-                                                   new DailyOperationSizingCausesValueObject(lastHistory.Causes.Deserialize<DailyOperationSizingCausesValueObject>().BrokenBeam, lastHistory.Causes.Deserialize<DailyOperationSizingCausesValueObject>().MachineTroubled));
+            //Validation for Start Status
+            var countStartStatus =
+                existingDailyOperation
+                    .Details
+                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
+                    .Count();
 
-            await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-            _storage.Save();
+            if (countStartStatus == 1)
+            {
+                throw Validator.ErrorValidation(("StartStatus", "This operation already has START status"));
+            }
+
+            //Validation for Finish Status
+            //var countFinishStatus =
+            //    existingDailyOperation
+            //        .Details
+            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
+            //        .Count();
+
+            //if (countFinishStatus == 1)
+            //{
+            //    throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
+            //}
+
+            //Reformat DateTime
+            var year = request.Details.StartDate.Year;
+            var month = request.Details.StartDate.Month;
+            var day = request.Details.StartDate.Day;
+            var hour = request.Details.StartTime.Hours;
+            var minutes = request.Details.StartTime.Minutes;
+            var seconds = request.Details.StartTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
+            //Validation for Pause Date
+            var entryDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeOperation.Date, new TimeSpan(+7, 0, 0));
+            var startDateMachineLogUtc = new DateTimeOffset(request.Details.StartDate.Date, new TimeSpan(+7, 0, 0));
+
+            if (startDateMachineLogUtc < entryDateMachineLogUtc)
+            {
+                throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
+            } else
+            {
+                if (dateTimeOperation < lastHistory.DateTimeOperation)
+                {
+                    throw Validator.ErrorValidation(("StartTime", "Start time cannot less than latest time log"));
+                } else
+                {
+                    if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
+                    {
+                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
+
+                        var newOperation =
+                                new DailyOperationSizingDetail(Guid.NewGuid(),
+                                                               new ShiftId(request.Details.ShiftId.Value),
+                                                               new OperatorId(lastHistory.OperatorDocumentId),
+                                                               dateTimeOperation,
+                                                               DailyOperationMachineStatus.ONSTART,
+                                                               "-",
+                                                               new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
+
+                        existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
+
+                        await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+                        _storage.Save();
 
 
-            return existingDailyOperation;
+                        return existingDailyOperation;
+                    }
+                    else
+                    {
+                        throw Validator.ErrorValidation(("Status", "Can't start, latest status is not on ENTRY"));
+                    }
+                }
+            }
+
+            //Validation for Start Time
+            //var entryTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
+            //var startTimeMachineLog = request.Details.StartTime;
+
+            //if(startTimeMachineLog < entryTimeMachineLog)
+            //{
+            //    throw Validator.ErrorValidation(("StartTime", "Start time cannot less than latest time log"));
+            //}
         }
     }
 }

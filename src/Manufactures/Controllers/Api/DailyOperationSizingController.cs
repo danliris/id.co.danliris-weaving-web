@@ -1,9 +1,13 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
+using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.Domain.Shifts.ValueObjects;
+using Manufactures.Dtos.Beams;
 using Manufactures.Dtos.DailyOperations.Sizing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -31,6 +35,8 @@ namespace Manufactures.Controllers.Api
             _constructionDocumentRepository;
         private readonly IShiftRepository
             _shiftDocumentRepository;
+        private readonly IBeamRepository
+            _beamDocumentRepository;
 
         public DailyOperationSizingController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -44,6 +50,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _shiftDocumentRepository =
                 this.Storage.GetRepository<IShiftRepository>();
+            _beamDocumentRepository =
+                this.Storage.GetRepository<IBeamRepository>();
         }
 
         [HttpGet]
@@ -60,20 +68,38 @@ namespace Manufactures.Controllers.Api
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationSizingDocuments =
                 _dailyOperationSizingDocumentRepository
-                    .Find(domQuery.Include(d => d.DailyOperationSizingDetails));
+                    .Find(domQuery.Include(d => d.Details));
 
             var resultDto = new List<DailyOperationSizingListDto>();
 
             foreach (var dailyOperation in dailyOperationSizingDocuments)
             {
+                var machineDocument =
+                   _machineRepository
+                       .Find(e => e.Identity.Equals(dailyOperation.MachineDocumentId.Value))
+                       .FirstOrDefault();
 
-                foreach (var detail in dailyOperation.DailyOperationSizingDetails)
+                var constructionDocument =
+                    _constructionDocumentRepository
+                        .Find(e => e.Identity.Equals(dailyOperation.ConstructionDocumentId.Value))
+                        .FirstOrDefault();
+
+                var shiftOnDetail = new ShiftValueObject();
+                var dailyOperationEntryDateTime = dailyOperation.Details.OrderBy(e=>e.DateTimeOperation).FirstOrDefault().DateTimeOperation;
+                var lastDailyOperationStatus = dailyOperation.OperationStatus;
+
+                foreach (var detail in dailyOperation.Details)
                 {
-                    var dto = new DailyOperationSizingListDto(dailyOperation, detail);
+                    var shiftDocument =
+                        _shiftDocumentRepository
+                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId)).LastOrDefault();
 
-                    resultDto.Add(dto);
-
+                    shiftOnDetail = new ShiftValueObject(shiftDocument.Name, shiftDocument.StartTime, shiftDocument.EndTime);
                 }
+
+                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, lastDailyOperationStatus, dailyOperationEntryDateTime);
+
+                resultDto.Add(dto);
             }
 
             if (!order.Contains("{}"))
@@ -117,23 +143,76 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
-            var Identity = Guid.Parse(Id);
-            var query = _dailyOperationSizingDocumentRepository.Query;
-            var dailyOperationSizingDocument =
-                _dailyOperationSizingDocumentRepository
-                    .Find(query.Include(p => p.DailyOperationSizingDetails))
-                    .Where(o => o.Identity == Identity)
-                    .FirstOrDefault();
-
-            await Task.Yield();
-
-            if (Identity == null)
+            try
             {
-                return NotFound();
+                var Identity = Guid.Parse(Id);
+                var query = _dailyOperationSizingDocumentRepository.Query;
+                var dailyOperationalSizing =
+                    _dailyOperationSizingDocumentRepository.Find(query.Include(p => p.Details))
+                                                .Where(o => o.Identity == Identity)
+                                                .FirstOrDefault();
+
+                var machineDocument =
+                       _machineRepository
+                           .Find(e => e.Identity.Equals(dailyOperationalSizing.MachineDocumentId.Value))
+                           .FirstOrDefault();
+
+                var machineNumber = machineDocument.MachineNumber;
+
+                var constructionDocument =
+                        _constructionDocumentRepository
+                            .Find(e => e.Identity.Equals(dailyOperationalSizing.ConstructionDocumentId.Value))
+                            .FirstOrDefault();
+
+                var constructionNumber = constructionDocument.ConstructionNumber;
+
+                var warpingBeams = new List<BeamDto>();
+
+                foreach(var beam in dailyOperationalSizing.WarpingBeamsId)
+                {
+                    var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Value)).FirstOrDefault();
+
+                    var beamsDto = new BeamDto(beamDocument);
+
+                    warpingBeams.Add(beamsDto);
+                }
+
+                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, constructionNumber, warpingBeams);
+
+                foreach (var detail in dailyOperationalSizing.Details)
+                {
+                    var shiftDocument =
+                        _shiftDocumentRepository
+                            .Find(e => e.Identity.Equals(detail.ShiftDocumentId))
+                            .FirstOrDefault();
+
+                    var shiftName = shiftDocument.Name;
+
+                    var history = new DailyOperationSizingHistoryDto(detail.DateTimeOperation, detail.MachineStatus, detail.Information);
+
+                    var detailCauses = detail.Causes.Deserialize<DailyOperationSizingCausesDto>();
+
+                    var causes = new DailyOperationSizingCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
+
+                    var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes);
+
+                    dto.Details.Add(detailsDto);
+                }
+
+                await Task.Yield();
+
+                if (Identity == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(dto);
+                }
             }
-            else
+            catch (Exception x)
             {
-                return Ok(dailyOperationSizingDocument);
+                throw x;
             }
         }
 

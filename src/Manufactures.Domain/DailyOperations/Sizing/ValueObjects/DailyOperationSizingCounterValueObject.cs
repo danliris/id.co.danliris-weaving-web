@@ -15,6 +15,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             Finish = finish;
         }
 
+        public DailyOperationSizingCounterValueObject()
+        {
+        }
+
         public DailyOperationSizingCounterValueObject(DailyOperationSizingCounterCommand dailyOperationSizingCounterProduction)
         {
             Start = dailyOperationSizingCounterProduction.Start;

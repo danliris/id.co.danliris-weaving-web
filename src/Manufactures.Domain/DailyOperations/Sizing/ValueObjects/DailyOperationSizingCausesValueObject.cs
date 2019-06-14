@@ -9,6 +9,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingCausesValueObject : ValueObject
     {
+        public DailyOperationSizingCausesValueObject()
+        {
+
+        }
         public string BrokenBeam { get; set; }
         
         public string MachineTroubled { get; set; }
