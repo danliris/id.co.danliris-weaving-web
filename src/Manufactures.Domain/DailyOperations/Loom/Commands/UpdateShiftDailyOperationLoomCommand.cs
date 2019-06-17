@@ -9,7 +9,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
     public class UpdateShiftDailyOperationLoomCommand
         : ICommand<string>
     {
-        public string Command { get; set; }
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
