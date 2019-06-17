@@ -16,6 +16,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             Bruto = bruto;
         }
 
+        public DailyOperationSizingWeightValueObject()
+        {
+        }
+
         public DailyOperationSizingWeightValueObject(DailyOperationSizingWeightCommand dailyOperationSizingWeightProduction)
         {
             Netto = dailyOperationSizingWeightProduction.Netto;

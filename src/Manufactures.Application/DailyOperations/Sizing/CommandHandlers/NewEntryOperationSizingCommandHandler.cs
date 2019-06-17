@@ -28,36 +28,42 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         }
 
         public async Task<DailyOperationSizingDocument>
-            Handle(NewEntryDailyOperationSizingCommand request,
-                   CancellationToken cancellationToken)
+            Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            //var startTime = request.DailyOperationSizingDetails.ProductionTime.Start;
-            //var morningShift = new TimeSpan(6, 0, 0);
-            //var afternoonShift = new TimeSpan(14, 0, 0);
-            //var nightShift = new TimeSpan(22,0,0);
-
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
                                                     request.RecipeCode,
-                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, ""),
-                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, ""),
-                                                    new List<BeamId>(request.WarpingBeamCollectionDocumentId),
+                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, "0"),
+                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, "0"),
+                                                    request.WarpingBeamsId,
                                                     0,
                                                     0,
                                                     0,
                                                     0,
                                                     0,
-                                                    new BeamId(Guid.Empty));
+                                                    new BeamId(Guid.Empty),
+                                                    DailyOperationMachineStatus.ONPROCESS);
 
-                var newOperation =
+            var year = request.Details.PreparationDate.Year;
+            var month = request.Details.PreparationDate.Month;
+            var day = request.Details.PreparationDate.Day;
+            var hour = request.Details.PreparationTime.Hours;
+            var minutes = request.Details.PreparationTime.Minutes;
+            var seconds = request.Details.PreparationTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
+            var newOperation =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
-                                                   new DailyOperationSizingHistoryValueObject(request.Details.History.TimeOnMachine, DailyOperationMachineStatus.ONENTRY, request.Details.History.Information),
-                                                   new DailyOperationSizingCausesValueObject("",""));
+                                                   dateTimeOperation,
+                                                   DailyOperationMachineStatus.ONENTRY,
+                                                   "-",
+                                                   new DailyOperationSizingCausesValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

@@ -26,7 +26,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateResumeDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
+            RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
         }
     }
 }

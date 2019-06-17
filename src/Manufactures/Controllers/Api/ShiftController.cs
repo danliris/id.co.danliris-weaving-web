@@ -177,7 +177,7 @@ namespace Manufactures.Controllers.Api
 
             if (existingOperator != null)
             {
-                throw Validator.ErrorValidation(("Name", "Has existing ShiftDocumentId Name"));
+                throw Validator.ErrorValidation(("Name", "Has existing ShiftName Name"));
             }
 
             var shiftDocument = await Mediator.Send(command);

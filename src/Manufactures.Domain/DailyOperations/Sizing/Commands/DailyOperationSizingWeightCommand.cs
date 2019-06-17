@@ -18,7 +18,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public DailyOperationSizingWeightCommandValidator()
         {
             RuleFor(command => command.Netto).NotEmpty();
-            RuleFor(command => command.Bruto).NotEmpty().Unless(command => string.IsNullOrEmpty(command.Netto));
+            RuleFor(command => command.Bruto).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Netto));
         }
     }
 }

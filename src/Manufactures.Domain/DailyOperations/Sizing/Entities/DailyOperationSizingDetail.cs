@@ -12,7 +12,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
     {
         public Guid ShiftDocumentId { get; private set; }
         public Guid OperatorDocumentId { get; private set; }
-        public string History { get; private set; }
+        public DateTimeOffset DateTimeOperation { get; private set; }
+        public string MachineStatus { get; private set; }
+        public string Information { get; private set; }
         public string Causes { get; private set; }
 
         public Guid DailyOperationSizingDocumentId { get; set; }
@@ -22,11 +24,19 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, ShiftId shiftDocumentId, OperatorId operatorDocumentId, DailyOperationSizingHistoryValueObject history, DailyOperationSizingCausesValueObject causes) : base(identity)
+        public DailyOperationSizingDetail(Guid identity, 
+                                          ShiftId shiftDocumentId, 
+                                          OperatorId operatorDocumentId, 
+                                          DateTimeOffset dateTimeOperation, 
+                                          string machineStatus, 
+                                          string information, 
+                                          DailyOperationSizingCausesValueObject causes) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
-            History = history.Serialize();
+            DateTimeOperation = dateTimeOperation;
+            MachineStatus = machineStatus;
+            Information = information;
             Causes = causes.Serialize();
         }
 
@@ -45,9 +55,21 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetDailyOperationSizingHistory(DailyOperationSizingHistoryValueObject dailyOperationSizingHistory)
+        public void SetDateTimeOperation(DateTimeOffset dateTimeOperation)
         {
-            History = dailyOperationSizingHistory.Serialize();
+            DateTimeOperation = dateTimeOperation;
+            MarkModified();
+        }
+
+        public void SetMachineStatus(string machineStatus)
+        {
+            MachineStatus = machineStatus;
+            MarkModified();
+        }
+
+        public void SetInformation(string information)
+        {
+            Information = information;
             MarkModified();
         }
 

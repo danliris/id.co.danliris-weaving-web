@@ -8,20 +8,32 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingDetailsDto
     {
-        [JsonProperty(PropertyName = "History")]
-        public DailyOperationSizingHistoryDto History { get; }
+        [JsonProperty(PropertyName = "DateTimeMachineHistory")]
+        public DateTimeOffset DateTimeOperationHistory { get; }
 
-        [JsonProperty(PropertyName = "ShiftDocumentId")]
-        public ShiftId ShiftDocumentId { get; }
+        [JsonProperty(PropertyName = "MachineStatusHistory")]
+        public string MachineStatusHistory { get; }
 
-        [JsonProperty(PropertyName = "Causes")]
-        public DailyOperationSizingCausesDto Causes { get; }
+        [JsonProperty(PropertyName = "InformationHistory")]
+        public string InformationHistory { get; }
 
-        public DailyOperationSizingDetailsDto(DailyOperationSizingDetail detail)
+        [JsonProperty(PropertyName = "ShiftName")]
+        public string ShiftName { get; }
+
+        [JsonProperty(PropertyName = "BrokenBeamCauses")]
+        public string BrokenBeamCauses { get; }
+
+        [JsonProperty(PropertyName = "MachineTroubledCauses")]
+        public string MachineTroubledCauses { get; }
+
+        public DailyOperationSizingDetailsDto(string shiftName, DailyOperationSizingHistoryDto history, DailyOperationSizingCausesDto causes)
         {
-            History = detail.History.Deserialize<DailyOperationSizingHistoryDto>();
-            ShiftDocumentId = new ShiftId(detail.ShiftDocumentId);
-            Causes = detail.Causes.Deserialize<DailyOperationSizingCausesDto>();
+            DateTimeOperationHistory = history.DateTimeOperation;
+            MachineStatusHistory = history.MachineStatus;
+            InformationHistory = history.Information;
+            ShiftName = shiftName;
+            BrokenBeamCauses = causes.BrokenBeam;
+            MachineTroubledCauses = causes.MachineTroubled;
         }
     }
 }

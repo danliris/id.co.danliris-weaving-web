@@ -11,7 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     public class UpdatePauseDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "Details")]
         public UpdatePauseDailyOperationSizingDetailCommand Details { get; set; }
@@ -26,7 +26,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdatePauseDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.Details).SetValidator(new UpdatePauseDailyOperationSizingDetailCommandValidator());
+            RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.Details).SetValidator(new UpdatePauseDailyOperationSizingDetailCommandValidator());
         }
     }
 }

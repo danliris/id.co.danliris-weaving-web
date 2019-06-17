@@ -37,7 +37,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "SizingBeamDocumentId")]
         public BeamId SizingBeamDocumentId { get; set; }
 
-
         [JsonProperty(PropertyName = "Details")]
         public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
 
@@ -50,15 +49,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateDoffFinishDailyOperationSizingCommandValidator()
         {
-            RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
-            RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
-            RuleFor(command => command.MachineSpeed).NotEmpty();
-            RuleFor(command => command.TexSQ).NotEmpty();
-            RuleFor(command => command.Visco).NotEmpty();
-            RuleFor(command => command.PIS).NotEmpty();
-            RuleFor(command => command.SPU).NotEmpty();
-            RuleFor(command => command.SizingBeamDocumentId).NotEmpty();
-            RuleFor(command => command.Details).SetValidator(new UpdateDoffDailyOperationSizingDetailCommandValidator());
+            //RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            //RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
+            RuleFor(validator => validator.MachineSpeed).NotEmpty();
+            RuleFor(validator => validator.TexSQ).NotEmpty();
+            RuleFor(validator => validator.Visco).NotEmpty();
+            RuleFor(validator => validator.PIS).NotEmpty();
+            RuleFor(validator => validator.SPU).NotEmpty();
+            RuleFor(validator => validator.SizingBeamDocumentId).NotEmpty();
         }
     }
 }

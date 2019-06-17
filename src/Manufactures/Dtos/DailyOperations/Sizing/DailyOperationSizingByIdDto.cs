@@ -1,6 +1,7 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.Shared.ValueObjects;
+using Manufactures.Dtos.Beams;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -12,49 +13,41 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
 
-        [JsonProperty(PropertyName = "MachineDocumentId")]
-        public MachineId MachineDocumentId { get; }
+        [JsonProperty(PropertyName = "MachineNumber")]
+        public string MachineNumber { get; }
 
         [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
         public UnitId WeavingUnitDocumentId { get; }
 
-        [JsonProperty(PropertyName = "WarpingBeamCollectionDocumentId")]
-        public List<BeamId> WarpingBeamCollectionDocumentId { get; }
+        [JsonProperty(PropertyName = "WarpingBeamsDocument")]
+        public List<BeamDto> WarpingBeamsDocument { get; }
 
-        [JsonProperty(PropertyName = "ConstructionDocumentId")]
-        public ConstructionId ConstructionDocumentId { get; }
+        [JsonProperty(PropertyName = "ConstructionNumber")]
+        public string ConstructionNumber { get; }
 
-        [JsonProperty(PropertyName = "Counter")]
-        public DailyOperationSizingCounterDto Counter { get; }
+        //[JsonProperty(PropertyName = "Counter")]
+        //public DailyOperationSizingCounterDto Counter { get; }
 
-        [JsonProperty(PropertyName = "Visco")]
-        public double Visco { get; }
+        //[JsonProperty(PropertyName = "Visco")]
+        //public double Visco { get; }
 
-        [JsonProperty(PropertyName = "PIS")]
-        public int PIS { get; }
+        //[JsonProperty(PropertyName = "PIS")]
+        //public int PIS { get; }
 
-        [JsonProperty(PropertyName = "SizingBeamDocumentId")]
-        public BeamId SizingBeamDocumentId { get; }
+        //[JsonProperty(PropertyName = "SizingBeamDocumentId")]
+        //public BeamId SizingBeamDocumentId { get; }
 
-        [JsonProperty(PropertyName = "DailyOperationSizingDetails")]
-        public List<DailyOperationSizingDetailsDto> DailyOperationSizingDetails { get; }
+        [JsonProperty(PropertyName = "Details")]
+        public List<DailyOperationSizingDetailsDto> Details { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<BeamDto> beams)
         {
             Id = document.Identity;
-            MachineDocumentId = document.MachineDocumentId;
+            MachineNumber = machineNumber;
             WeavingUnitDocumentId = document.WeavingUnitId;
-            WarpingBeamCollectionDocumentId = document.WarpingBeamCollectionDocumentId.Deserialize<List<BeamId>>();
-            ConstructionDocumentId = document.ConstructionDocumentId;
-            Counter = document.Counter.Deserialize<DailyOperationSizingCounterDto>();
-            Visco = document.Visco;
-            PIS = document.PIS;
-            SizingBeamDocumentId = document.SizingBeamDocumentId;
-            foreach (var details in document.DailyOperationSizingDetails)
-            {
-                var detailsDto = new DailyOperationSizingDetailsDto(details);
-                DailyOperationSizingDetails.Add(detailsDto);
-            }
+            ConstructionNumber = constructionNumber;
+            WarpingBeamsDocument = beams;
+            Details = new List<DailyOperationSizingDetailsDto>();
         }
     }
 }

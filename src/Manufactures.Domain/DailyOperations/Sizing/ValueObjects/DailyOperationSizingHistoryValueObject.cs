@@ -7,24 +7,31 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingHistoryValueObject : ValueObject
     {
-        public DateTimeOffset TimeOnMachine { get; private set; }
+        public DateTimeOffset MachineDate { get; private set; }
+        public TimeSpan MachineTime { get; private set; }
         public string MachineStatus { get; private set; }
         public string Information { get; private set; }
 
         public DailyOperationSizingHistoryValueObject() { }
 
-        public DailyOperationSizingHistoryValueObject(DateTimeOffset timeOnMachine,
+        public DailyOperationSizingHistoryValueObject(DateTimeOffset machineDate, TimeSpan machineTime,
                                          string machineStatus,
                                          string information)
         {
-            TimeOnMachine = timeOnMachine;
+            MachineDate = machineDate;
+            MachineTime = machineTime;
             MachineStatus = machineStatus;
             Information = information;
         }
 
-        public void SetTimeOnMachine(DateTimeOffset value)
+        public void SetMachineDate(DateTimeOffset value)
         {
-            TimeOnMachine = value;
+            MachineDate = value;
+        }
+
+        public void SetMachineTime(TimeSpan machineTime)
+        {
+            MachineTime = machineTime;
         }
 
         public void SetMachineStatus(string value)
@@ -39,7 +46,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return TimeOnMachine;
+            yield return MachineDate;
+            yield return MachineTime;
             yield return MachineStatus;
             yield return Information;
         }
