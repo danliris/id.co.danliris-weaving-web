@@ -51,7 +51,7 @@ namespace Manufactures.Controllers.Api
             var yarns =
                 _yarnDocumentRepository.Find(query);
 
-            var results = new List<YarnDocumentListDto>();
+            var yarnDocuments = new List<YarnDocumentListDto>();
 
             foreach(var yarn in yarns)
             {
@@ -67,14 +67,14 @@ namespace Manufactures.Controllers.Api
 
                 var data = new YarnDocumentListDto(yarn, materialType, yarnNumber);
 
-                results.Add(data);
+                yarnDocuments.Add(data);
             }
             
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                results =
-                    results.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                yarnDocuments =
+                    yarnDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                           entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
@@ -88,25 +88,27 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    results = results.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    yarnDocuments = yarnDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    results = results.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    yarnDocuments = yarnDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            results = results.Skip(page * size).Take(size).ToList();
-            int totalRows = results.Count();
+            var ResultYarnDocuments = yarnDocuments.Skip(page * size).Take(size).ToList();
+            int totalRows = yarnDocuments.Count();
+            int resultCount = ResultYarnDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(results, info: new
+            return Ok(ResultYarnDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

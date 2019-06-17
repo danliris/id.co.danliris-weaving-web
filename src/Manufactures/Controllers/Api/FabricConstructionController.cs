@@ -83,18 +83,20 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            constructionDocuments =
+            var ResultConstructionDocuments =
                 constructionDocuments.Skip(page * size).Take(size);
             int totalRows = constructionDocuments.Count();
+            int resultCount = ResultConstructionDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(constructionDocuments, info: new
+            return Ok(ResultConstructionDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

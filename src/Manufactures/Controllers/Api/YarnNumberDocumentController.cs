@@ -66,17 +66,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            yarnNumberDocuments = yarnNumberDocuments.Skip(page * size).Take(size);
+            var ResultYarnNumberDocuments = yarnNumberDocuments.Skip(page * size).Take(size);
             int totalRows = yarnNumberDocuments.Count();
+            int resultCount = ResultYarnNumberDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(yarnNumberDocuments, info: new
+            return Ok(ResultYarnNumberDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

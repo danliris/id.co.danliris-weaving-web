@@ -69,17 +69,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            suppliers = suppliers.Skip(page * size).Take(size);
+            var ResultSuppliers = suppliers.Skip(page * size).Take(size);
             int totalRows = suppliers.Count();
+            int resultCount = ResultSuppliers.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(suppliers, info: new
+            return Ok(ResultSuppliers, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
