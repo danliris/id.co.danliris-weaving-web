@@ -34,7 +34,7 @@ namespace Manufactures.Controllers.Api
             _constructionDocumentRepository;
         private readonly IMachineRepository
             _machineRepository;
-        private readonly IOperatorRepository 
+        private readonly IOperatorRepository
             _operatorRepository;
         private readonly IBeamRepository
             _beamRepository;
@@ -185,7 +185,7 @@ namespace Manufactures.Controllers.Api
                     .Find(query)
                     .FirstOrDefault();
             var operationDate = new DateTimeOffset();
-            var machineNumber = 
+            var machineNumber =
                 _machineRepository
                     .Find(o => o.Identity.Equals(dailyOperationalLoom.MachineId.Value))
                     .FirstOrDefault()
@@ -271,14 +271,14 @@ namespace Manufactures.Controllers.Api
             var dailyOperationLoom = await Mediator.Send(command);
             var historys = new List<DailyOperationLoomHistoryDto>();
 
-            foreach(var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
             {
-                var beamOperator = 
+                var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
-                var result = 
-                    new DailyOperationLoomHistoryDto(detail.Identity, 
-                                                     beamOperator.CoreAccount.Name, 
+                var result =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
                                                      detail.OperationStatus);
@@ -286,7 +286,7 @@ namespace Manufactures.Controllers.Api
                 historys.Add(result);
             }
 
-            historys = 
+            historys =
                 historys
                     .OrderByDescending(field => field.DateTimeOperation)
                     .ToList();
@@ -377,6 +377,15 @@ namespace Manufactures.Controllers.Api
                    .ToList();
 
             return Ok(historys);
+        }
+
+        [HttpPut("update-loom-shift")]
+        public async Task<IActionResult> UpdateShift([FromBody]UpdateShiftDailyOperationLoomCommand command)
+        {
+            var dailyOperationLoom = await Mediator.Send(command);
+            await Task.Yield();
+
+            return Ok(dailyOperationLoom);
         }
     }
 }

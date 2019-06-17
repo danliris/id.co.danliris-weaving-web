@@ -68,17 +68,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            machine = machine.Skip(page * size).Take(size);
+            var ResultMachine = machine.Skip(page * size).Take(size);
             int totalRows = machine.Count();
+            int resultCount = ResultMachine.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(machine, info: new
+            return Ok(ResultMachine, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

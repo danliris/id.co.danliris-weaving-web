@@ -71,17 +71,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            materialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
+            var ResultMaterialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
             int totalRows = materialTypeDocuments.Count();
+            int resultCount = ResultMaterialTypeDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(materialTypeDocuments, info: new
+            return Ok(ResultMaterialTypeDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

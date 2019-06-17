@@ -201,7 +201,7 @@ namespace Manufactures.Controllers.Api
             var weavingOrderDocuments =
                 _weavingOrderDocumentRepository.Find(query);
 
-            var resultData = new List<ListWeavingOrderDocumentDto>();
+            var orderDocuments = new List<ListWeavingOrderDocumentDto>();
 
             foreach (var weavingOrder in weavingOrderDocuments)
             {
@@ -212,14 +212,14 @@ namespace Manufactures.Controllers.Api
                     new ListWeavingOrderDocumentDto(weavingOrder,
                                                     new FabricConstructionDocument(construction.Identity, construction.ConstructionNumber));
 
-                resultData.Add(orderData);
+                orderDocuments.Add(orderData);
             }
 
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                resultData =
-                    resultData
+                orderDocuments =
+                    orderDocuments
                         .Where(entity => entity.OrderNumber.Contains(keyword,
                                                                      StringComparison.OrdinalIgnoreCase) ||
                                          entity.ConstructionNumber.Contains(keyword,
@@ -242,28 +242,30 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    resultData =
-                        resultData.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    orderDocuments =
+                        orderDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    resultData =
-                        resultData.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    orderDocuments =
+                        orderDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            resultData =
-                resultData.Skip(page * size).Take(size).ToList();
-            int totalRows = resultData.Count();
+            var ResultOrderDocuments =
+                orderDocuments.Skip(page * size).Take(size).ToList();
+            int totalRows = orderDocuments.Count();
+            int resultCount = ResultOrderDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(resultData, info: new
+            return Ok(ResultOrderDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

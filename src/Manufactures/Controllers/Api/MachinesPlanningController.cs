@@ -50,7 +50,7 @@ namespace Manufactures.Controllers.Api
             var machinesPlanning =
                 _machinesPlanningRepository.Find(query);
 
-            var machineDtos = new List<MachinesPlanningListDto>();
+            var machinePlanningDtos = new List<MachinesPlanningListDto>();
 
             foreach (var machinePlanning in machinesPlanning)
             {
@@ -64,14 +64,14 @@ namespace Manufactures.Controllers.Api
                 var machine = new ManufactureMachine(manufacturingMachine, manufacturingMachineType);
                 var machineDto = new MachinesPlanningListDto(machinePlanning, machine);
 
-                machineDtos.Add(machineDto);
+                machinePlanningDtos.Add(machineDto);
             }
 
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                machineDtos =
-                    machineDtos.Where(entity => entity.Area.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                machinePlanningDtos =
+                    machinePlanningDtos.Where(entity => entity.Area.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                                 entity.Blok.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                                 entity.BlokKaizen.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                                .ToList();
@@ -87,25 +87,27 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    machineDtos = machineDtos.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    machinePlanningDtos = machinePlanningDtos.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    machineDtos = machineDtos.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    machinePlanningDtos = machinePlanningDtos.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            machineDtos = machineDtos.Skip(page * size).Take(size).ToList();
-            int totalRows = machineDtos.Count();
+            var ResultMachinePlanningDtos = machinePlanningDtos.Skip(page * size).Take(size).ToList();
+            int totalRows = machinePlanningDtos.Count();
+            int resultCount = ResultMachinePlanningDtos.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(machineDtos, info: new
+            return Ok(ResultMachinePlanningDtos, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

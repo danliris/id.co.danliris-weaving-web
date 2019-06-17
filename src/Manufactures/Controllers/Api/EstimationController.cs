@@ -72,18 +72,20 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            estimationDocument = 
+            var ResultEstimationDocument = 
                 estimationDocument.Skip(page * size).Take(size);
             int totalRows = estimationDocument.Count();
+            int resultCount = ResultEstimationDocument.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(estimationDocument, info: new
+            return Ok(ResultEstimationDocument, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

@@ -73,19 +73,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            shiftDocuments = shiftDocuments.Skip(page * size).Take(size).ToList();
+            var ResultShiftDocuments = shiftDocuments.Skip(page * size).Take(size).ToList();
             int totalRows = shiftDocuments.Count();
+            int resultCount = ResultShiftDocuments.Count();
             page = page + 1;
-
-            var resultDocuments = shiftDocuments;
 
             await Task.Yield();
 
-            return Ok(resultDocuments, info: new
+            return Ok(ResultShiftDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
