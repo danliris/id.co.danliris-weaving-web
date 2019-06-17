@@ -7,7 +7,7 @@ using System;
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
     public class UpdateShiftDailyOperationLoomCommand
-        : ICommand<string>
+        : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
