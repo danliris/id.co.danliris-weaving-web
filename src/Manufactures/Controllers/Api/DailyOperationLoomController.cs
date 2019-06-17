@@ -77,7 +77,7 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationalDocumentRepository
                     .Find(query);
             //Initiate new List 
-            var resultDto = new List<DailyOperationLoomListDto>();
+            var dailyOperationLooms = new List<DailyOperationLoomListDto>();
             //Extract information from latest existing daily operation
             foreach (var dailyOperation in dailyOperationalMachineDocuments)
             {
@@ -109,13 +109,13 @@ namespace Manufactures.Controllers.Api
                                                   machineDocument.MachineNumber,
                                                   dateOperated);
 
-                resultDto.Add(dto);
+                dailyOperationLooms.Add(dto);
             }
             //Search by keyword
             if (!string.IsNullOrEmpty(keyword))
             {
-                resultDto =
-                    resultDto.Where(entity => entity
+                dailyOperationLooms =
+                    dailyOperationLooms.Where(entity => entity
                                                 .OrderNumber
                                                 .Contains(keyword,
                                                           StringComparison
@@ -140,29 +140,29 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    resultDto =
-                        resultDto
+                    dailyOperationLooms =
+                        dailyOperationLooms
                             .OrderBy(x => prop.GetValue(x, null))
                             .ToList();
                 }
                 else
                 {
-                    resultDto =
-                        resultDto
+                    dailyOperationLooms =
+                        dailyOperationLooms
                             .OrderByDescending(x => prop.GetValue(x, null))
                             .ToList();
                 }
             }
             //Give to final result
-            resultDto =
-                resultDto.Skip(page * size).Take(size).ToList();
-            int totalRows = dailyOperationalMachineDocuments.Count();
-            int resultCount = resultDto.Count();
+            var ResultDailyOperationLooms =
+                dailyOperationLooms.Skip(page * size).Take(size).ToList();
+            int totalRows = dailyOperationLooms.Count();
+            int resultCount = ResultDailyOperationLooms.Count();
             page = page + 1;
 
             await Task.Yield();
             //Return to end point
-            return Ok(resultDto, info: new
+            return Ok(ResultDailyOperationLooms, info: new
             {
                 page,
                 size,
