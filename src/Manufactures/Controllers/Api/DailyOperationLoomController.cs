@@ -383,9 +383,29 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> UpdateShift([FromBody]UpdateShiftDailyOperationLoomCommand command)
         {
             var dailyOperationLoom = await Mediator.Send(command);
+            var historys = new List<DailyOperationLoomHistoryDto>();
+
+            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            {
+                var beamOperator =
+                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
+                                       .FirstOrDefault();
+                var result =
+                    new DailyOperationLoomHistoryDto(detail.Identity,
+                                                     beamOperator.CoreAccount.Name,
+                                                     beamOperator.Group,
+                                                     detail.DateTimeOperation,
+                                                     detail.OperationStatus);
+                historys.Add(result);
+            }
+
+            historys =
+               historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
             await Task.Yield();
 
-            return Ok(dailyOperationLoom);
+            return Ok(historys);
         }
     }
 }

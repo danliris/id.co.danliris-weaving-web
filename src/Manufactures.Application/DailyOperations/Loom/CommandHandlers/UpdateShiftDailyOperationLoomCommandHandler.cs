@@ -1,10 +1,12 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
@@ -14,7 +16,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
     public class UpdateShiftDailyOperationLoomCommandHandler
         : ICommandHandler<UpdateShiftDailyOperationLoomCommand,
-                          string>
+                          DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
@@ -26,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             _dailyOperationalDocumentRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
         }
-        public async Task<string>
+        public async Task<DailyOperationLoomDocument>
             Handle(UpdateShiftDailyOperationLoomCommand request,
                    CancellationToken cancellationToken)
         {
@@ -36,57 +38,63 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .Query
                     .Include(o => o.DailyOperationLoomDetails);
             //Get existing daily operation
-            var existingDailyOperations =
+            var existingDailyOperation =
                 _dailyOperationalDocumentRepository
                     .Find(query)
-                    .Where(o => o.DailyOperationStatus.Equals(DailyOperationMachineStatus.ONPROCESS));
-            //Generate DateTimeOffset
-            var dateTimeOperation = DateTimeOffset.UtcNow.ToOffset(new TimeSpan(+7, 0, 0));
-            var timeOperation = dateTimeOperation.TimeOfDay;
-
-            //update all daily operation when status = process
-            foreach (var dailyOperation in existingDailyOperations)
+                    .Where(o => o.Identity.Equals(request.Id)).FirstOrDefault();
+            //Get[0] detail from existing daily operation
+            var detail =
+                existingDailyOperation
+                    .DailyOperationMachineDetails
+                    .OrderByDescending(e => e.DateTimeOperation)
+                    .FirstOrDefault();
+            //Compare if has status Entry or Finish
+            if (detail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY) ||
+                detail.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH))
             {
-                var checkTime = timeOperation;
-                var defaultTime = checkTime;
-                //Check latest operation
-                var isUp = false;
-                var isDown = false;
-                var detail =
-                    dailyOperation
-                        .DailyOperationMachineDetails
-                        .OrderByDescending(e => e.DateTimeOperation)
-                        .FirstOrDefault();
-                //get latest status of machine
-                if (!detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP) ||
-                    !detail.OperationStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE))
-                {
-                    isUp = true;
-                    isDown = false;
-                }
-                else
-                {
-                    isUp = false;
-                    isDown = true;
-                }
-
-                //Add new operation / detail
-                var newOperation =
-                    new DailyOperationLoomDetail(Guid.NewGuid(),
-                                                 request.ShiftId,
-                                                 request.OperatorId,
-                                                 dateTimeOperation,
-                                                 DailyOperationMachineStatus.ONCHANGESHIFT,
-                                                 isUp,
-                                                 isDown);
-
-                dailyOperation.AddDailyOperationMachineDetail(newOperation);
-                await _dailyOperationalDocumentRepository.Update(dailyOperation);
+                throw Validator.ErrorValidation(("Status", "Can't Change Shift, check your latest status"));
             }
+            //Break datetime to match timezone
+            var year = request.ChangeShiftDate.Year;
+            var month = request.ChangeShiftDate.Month;
+            var day = request.ChangeShiftDate.Day;
+            var hour = request.ChangeShifTime.Hours;
+            var minutes = request.ChangeShifTime.Minutes;
+            var seconds = request.ChangeShifTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+            //Compare to check datetime if possible
+            if (dateTimeOperation < detail.DateTimeOperation)
+            {
+                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
+            }
+            //Check laters status machine operation
+            var statusUp = false;
+            var statusDown = false;
 
+            if (detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
+            {
+                statusDown = true;
+            } else
+            {
+                statusUp = true;
+            }
+            //Add new operation / detail
+            var newOperation =
+                new DailyOperationLoomDetail(Guid.NewGuid(),
+                                             request.ShiftId,
+                                             request.OperatorId,
+                                             dateTimeOperation,
+                                             DailyOperationMachineStatus.ONCHANGESHIFT,
+                                             statusUp,
+                                             statusDown);
+
+            existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
+
+            await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
             _storage.Save();
 
-            return "Updated";
+            return existingDailyOperation;
         }
     }
 }
