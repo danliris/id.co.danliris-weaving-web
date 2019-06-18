@@ -251,6 +251,10 @@ namespace Manufactures.Controllers.Api
 
             if (historys.Count > 0)
             {
+                historys =
+                  historys
+                   .OrderByDescending(field => field.DateTimeOperation)
+                   .ToList();
                 result.LoomHistory = historys;
             }
 
