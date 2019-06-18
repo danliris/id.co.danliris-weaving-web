@@ -64,17 +64,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            beams = beams.Skip(page * size).Take(size);
+            var resultBeams = beams.Skip(page * size).Take(size);
             int totalRows = beams.Count();
+            int resultCount = resultBeams.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(beams, info: new
+            return Ok(resultBeams, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

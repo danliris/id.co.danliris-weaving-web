@@ -74,7 +74,7 @@ namespace Manufactures.Controllers.Api
                 _dailyOperationSizingDocumentRepository
                     .Find(domQuery.Include(d => d.Details));
 
-            var resultDto = new List<DailyOperationSizingListDto>();
+            var dailyOperationSizings = new List<DailyOperationSizingListDto>();
 
             foreach (var dailyOperation in dailyOperationSizingDocuments)
             {
@@ -103,7 +103,7 @@ namespace Manufactures.Controllers.Api
 
                 var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, lastDailyOperationStatus, dailyOperationEntryDateTime);
 
-                resultDto.Add(dto);
+                dailyOperationSizings.Add(dto);
             }
 
             if (!order.Contains("{}"))
@@ -115,32 +115,34 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    resultDto =
-                        resultDto
+                    dailyOperationSizings =
+                        dailyOperationSizings
                             .OrderBy(x => prop.GetValue(x, null))
                             .ToList();
                 }
                 else
                 {
-                    resultDto =
-                        resultDto
+                    dailyOperationSizings =
+                        dailyOperationSizings
                             .OrderByDescending(x => prop.GetValue(x, null))
                             .ToList();
                 }
             }
 
-            resultDto =
-                resultDto.Skip(page * size).Take(size).ToList();
-            int totalRows = resultDto.Count();
+            var ResultDailyOperationSizings =
+                dailyOperationSizings.Skip(page * size).Take(size).ToList();
+            int totalRows = dailyOperationSizings.Count();
+            int resultCount = ResultDailyOperationSizings.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(resultDto, info: new
+            return Ok(ResultDailyOperationSizings, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

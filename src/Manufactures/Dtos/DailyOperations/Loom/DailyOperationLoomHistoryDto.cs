@@ -20,17 +20,22 @@ namespace Manufactures.Dtos.DailyOperations.Loom
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; }
 
+        [JsonProperty(PropertyName = "ShiftName")]
+        public string ShiftName { get; }
+
         public DailyOperationLoomHistoryDto(Guid id,
                                             string beamOperatorName,
                                             string beamOperatorGroup,
                                             DateTimeOffset dateTimeOperation,
-                                            string operationStatus)
+                                            string operationStatus,
+                                            string shiftName)
         {
             Id = id;
             BeamOperatorName = beamOperatorName;
             BeamOperatorGroup = beamOperatorGroup;
             DateTimeOperation = dateTimeOperation;
             OperationStatus = operationStatus;
+            ShiftName = shiftName;
         }
     }
 }

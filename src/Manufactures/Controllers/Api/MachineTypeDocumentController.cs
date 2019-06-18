@@ -37,14 +37,14 @@ namespace Manufactures.Controllers.Api
             page = page - 1;
             var query =
                 _machineTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var machineType =
+            var machineTypeDtos =
                 _machineTypeRepository.Find(query)
                                        .Select(item => new MachineTypeDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                machineType =
-                    machineType.Where(entity => entity.TypeName.Contains(keyword,
+                machineTypeDtos =
+                    machineTypeDtos.Where(entity => entity.TypeName.Contains(keyword,
                                                                      StringComparison.OrdinalIgnoreCase));
             }
 
@@ -58,25 +58,27 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    machineType = machineType.OrderBy(x => prop.GetValue(x, null));
+                    machineTypeDtos = machineTypeDtos.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    machineType = machineType.OrderByDescending(x => prop.GetValue(x, null));
+                    machineTypeDtos = machineTypeDtos.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            machineType = machineType.Skip(page * size).Take(size);
-            int totalRows = machineType.Count();
+            var ResultMachineTypeDtos = machineTypeDtos.Skip(page * size).Take(size);
+            int totalRows = machineTypeDtos.Count();
+            int resultCount = ResultMachineTypeDtos.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(machineType, info: new
+            return Ok(ResultMachineTypeDtos, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 

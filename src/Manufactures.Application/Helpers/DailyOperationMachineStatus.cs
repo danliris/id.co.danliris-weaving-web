@@ -8,6 +8,7 @@
         public static string ONSTOP = "STOP";
         public static string ONRESUME = "CONTINUE";
         public static string ONCOMPLETE = "COMPLETED";
+        public static string ONCHANGESHIFT = "CHANGE-SHIFT";
 
         //Operation Status
         public static string ONPROCESS = "PROCESSING";

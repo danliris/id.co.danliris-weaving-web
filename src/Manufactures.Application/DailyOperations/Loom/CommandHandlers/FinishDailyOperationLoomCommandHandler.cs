@@ -69,6 +69,12 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                    .DailyOperationMachineDetails
                    .OrderByDescending(o => o.DateTimeOperation)
                    .FirstOrDefault();
+            //Check to change finish status not on entry and not stop
+            if (firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY) ||
+                firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
+            {
+                throw Validator.ErrorValidation(("Status", "Can't Finish, check your latest status"));
+            }
             //Compare datetime if possible
             if (dateTimeOperation < firstDetail.DateTimeOperation)
             {

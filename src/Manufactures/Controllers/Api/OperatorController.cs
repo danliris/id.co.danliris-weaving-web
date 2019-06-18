@@ -74,19 +74,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            operatorDocuments = operatorDocuments.Skip(page * size).Take(size).ToList();
+            var ResultOperatorDocuments = operatorDocuments.Skip(page * size).Take(size).ToList();
             int totalRows = operatorDocuments.Count();
+            int resultCount = ResultOperatorDocuments.Count();
             page = page + 1;
-
-            var resultDocuments = operatorDocuments;
 
             await Task.Yield();
 
-            return Ok(resultDocuments, info: new
+            return Ok(ResultOperatorDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
