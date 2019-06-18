@@ -63,11 +63,6 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var seconds = request.ChangeShifTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
-            //Compare to check datetime if possible
-            if (dateTimeOperation < detail.DateTimeOperation)
-            {
-                throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
-            }
             //Check laters status machine operation
             var statusUp = false;
             var statusDown = false;
@@ -75,7 +70,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             if (detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
             {
                 statusDown = true;
-            } else
+            }
+            else
             {
                 statusUp = true;
             }
