@@ -1,12 +1,15 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
+using Manufactures.Dtos;
 using Manufactures.Dtos.Beams;
 using Manufactures.Dtos.DailyOperations.Sizing;
 using Microsoft.AspNetCore.Authorization;
@@ -17,6 +20,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -198,6 +202,7 @@ namespace Manufactures.Controllers.Api
 
                     dto.Details.Add(detailsDto);
                 }
+                dto.Details = dto.Details.OrderBy(history => history.DateTimeOperationHistory).ToList();
 
                 await Task.Yield();
 
@@ -278,6 +283,110 @@ namespace Manufactures.Controllers.Api
             var updateDoffDailyOperationSizingDocument = await Mediator.Send(command);
 
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpGet("size-pickup/daterange/start-date/{startDate}/end-date/{endDate}/unit-id/{weavingUnitId}/shift/{shiftId}")]
+        public async Task<IActionResult> GetReportByDateRange(DateTimeOffset StartDate, DateTimeOffset EndDate, Guid WeavingUnitId, Guid ShiftId)
+        {
+            try
+            {
+                int totalCount = 0;
+
+                var acceptRequest = Request.Headers.Values.ToList();
+                //var index = acceptRequest.IndexOf("application/pdf") > 0;
+
+                var resultData = new List<SizePickupListDto>();
+                var query =
+                    _dailyOperationSizingDocumentRepository
+                        .Query.OrderByDescending(item => item.CreatedDate);
+                var sizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query).Where(sizePickup=> sizePickup.WeavingUnitId.Value.Equals(WeavingUnitId));
+
+                foreach (var sizePickupDto in sizePickupDtos)
+                {
+                    foreach (var detail in sizePickupDto.Details)
+                    {
+                        var filterShiftDto = detail.ShiftDocumentId;
+                        var filterDateDto = detail.DateTimeOperation;
+
+                        if (filterShiftDto == ShiftId)
+                        {
+                            if (filterDateDto >= StartDate && filterDateDto >= EndDate)
+                            {
+                                var requestedDto = new SizePickupListDto(sizePickupDto, detail);
+                                resultData.Add(requestedDto);
+                            }
+                        }
+                    }
+                }
+
+                //var results = SizePickupReportXlsTemplate.GetDataByDateRange(startDate, endDate, weavingUnitId, shiftId);
+                //data = results;
+                //totalCount = results.Count;
+
+                await Task.Yield();
+                return Ok(resultData, info: new
+                {
+                    count = totalCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("size-pickup/month/{Month}/unit-id/{WeavingUnitId}/shift/{ShiftId}")]
+        public async Task<IActionResult> GetReportByMonth(int Month, int WeavingUnitId, string ShiftId)
+        {
+            try
+            {
+                int totalCount = 0;
+
+                //var acceptRequest = Request.Headers.Values.ToList();
+                //var index = acceptRequest.IndexOf("application/pdf") > 0;
+
+                var resultData = new List<SizePickupListDto>();
+                var query =
+                    _dailyOperationSizingDocumentRepository
+                        .Query.OrderByDescending(item => item.CreatedDate);
+                var sizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Equals(WeavingUnitId)&&sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH));
+
+                foreach (var sizePickupDto in sizePickupDtos)
+                {
+                    foreach (var detail in sizePickupDto.Details)
+                    {
+                        var filterShiftDto = detail.ShiftDocumentId.ToString();
+                        var filterMonthDto = detail.DateTimeOperation.Month;
+
+                        if(filterShiftDto == ShiftId)
+                        {
+                            if (filterMonthDto == Month)
+                            {
+                                var filteredDto = new SizePickupListDto(sizePickupDto, detail);
+                                resultData.Add(filteredDto);
+                            }
+                        }
+                    }
+                }
+
+                //var results = SizePickupReportXlsTemplate.GetDataByMonth(periodType, month, weavingUnitId, shiftId);
+                //data = results;
+                //totalCount = results.Count;
+
+                await Task.Yield();
+                return Ok(resultData, info: new
+                {
+                    count = totalCount
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

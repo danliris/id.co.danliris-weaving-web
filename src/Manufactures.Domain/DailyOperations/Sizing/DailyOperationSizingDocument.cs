@@ -112,6 +112,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public void SetCounter(DailyOperationSizingCounterValueObject counter)
         {
             Counter = counter;
+            //ReadModel.Counter = counter;
             MarkModified();
         }
 
