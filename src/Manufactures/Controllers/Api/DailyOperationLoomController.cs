@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.Shifts.Repositories;
 
 namespace Manufactures.Controllers.Api
 {
@@ -38,6 +39,8 @@ namespace Manufactures.Controllers.Api
             _operatorRepository;
         private readonly IBeamRepository
             _beamRepository;
+        private readonly IShiftRepository
+            _shiftRepository;
 
         public DailyOperationLoomController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -55,6 +58,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IOperatorRepository>();
             _beamRepository =
                 this.Storage.GetRepository<IBeamRepository>();
+            _shiftRepository =
+                this.Storage.GetRepository<IShiftRepository>();
         }
 
         [HttpGet]
@@ -213,6 +218,11 @@ namespace Manufactures.Controllers.Api
                     _operatorRepository
                         .Find(o => o.Identity.Equals(detail.BeamOperatorId))
                         .FirstOrDefault();
+                var shiftName =
+                    _shiftRepository
+                        .Find(o => o.Identity.Equals(detail.ShiftId))
+                        .FirstOrDefault()
+                        .Name;
 
                 if (detail.OperationStatus == DailyOperationMachineStatus.ONENTRY)
                 {
@@ -224,7 +234,8 @@ namespace Manufactures.Controllers.Api
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
+                                                     detail.OperationStatus,
+                                                     shiftName);
 
                 historys.Add(history);
             }
@@ -276,13 +287,19 @@ namespace Manufactures.Controllers.Api
                 var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
+                var shiftName =
+                    _shiftRepository
+                        .Find(o => o.Identity.Equals(detail.ShiftId))
+                        .FirstOrDefault()
+                        .Name;
+
                 var result =
                     new DailyOperationLoomHistoryDto(detail.Identity,
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
-
+                                                     detail.OperationStatus,
+                                                     shiftName);
                 historys.Add(result);
             }
 
@@ -305,13 +322,18 @@ namespace Manufactures.Controllers.Api
                 var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
+                var shiftName =
+                    _shiftRepository
+                        .Find(o => o.Identity.Equals(detail.ShiftId))
+                        .FirstOrDefault()
+                        .Name;
                 var result =
                     new DailyOperationLoomHistoryDto(detail.Identity,
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
-
+                                                     detail.OperationStatus,
+                                                     shiftName);
                 historys.Add(result);
             }
 
@@ -334,12 +356,18 @@ namespace Manufactures.Controllers.Api
                 var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
+                var shiftName =
+                   _shiftRepository
+                       .Find(o => o.Identity.Equals(detail.ShiftId))
+                       .FirstOrDefault()
+                       .Name;
                 var result =
                     new DailyOperationLoomHistoryDto(detail.Identity,
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
+                                                     detail.OperationStatus,
+                                                     shiftName);
                 historys.Add(result);
             }
 
@@ -362,12 +390,18 @@ namespace Manufactures.Controllers.Api
                 var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
+                var shiftName =
+                   _shiftRepository
+                       .Find(o => o.Identity.Equals(detail.ShiftId))
+                       .FirstOrDefault()
+                       .Name;
                 var result =
                     new DailyOperationLoomHistoryDto(detail.Identity,
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
+                                                     detail.OperationStatus,
+                                                     shiftName);
                 historys.Add(result);
             }
 
@@ -390,12 +424,18 @@ namespace Manufactures.Controllers.Api
                 var beamOperator =
                     _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
                                        .FirstOrDefault();
+                var shiftName =
+                   _shiftRepository
+                       .Find(o => o.Identity.Equals(detail.ShiftId))
+                       .FirstOrDefault()
+                       .Name;
                 var result =
                     new DailyOperationLoomHistoryDto(detail.Identity,
                                                      beamOperator.CoreAccount.Name,
                                                      beamOperator.Group,
                                                      detail.DateTimeOperation,
-                                                     detail.OperationStatus);
+                                                     detail.OperationStatus,
+                                                     shiftName);
                 historys.Add(result);
             }
 
