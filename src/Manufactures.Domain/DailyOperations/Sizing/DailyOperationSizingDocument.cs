@@ -112,55 +112,63 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public void SetCounter(DailyOperationSizingCounterValueObject counter)
         {
             Counter = counter;
-            //ReadModel.Counter = counter;
+            ReadModel.Counter = counter.Serialize();
             MarkModified();
         }
 
         public void SetWeight(DailyOperationSizingWeightValueObject weight)
         {
             Weight = weight;
+            ReadModel.Weight = weight.Serialize();
             MarkModified();
         }
 
         public void SetMachineSpeed(int machineSpeed)
         {
             MachineSpeed = machineSpeed;
+            ReadModel.MachineSpeed = machineSpeed;
             MarkModified();
         }
 
         public void SetTexSQ(double texSQ)
         {
             TexSQ = texSQ;
+            ReadModel.TexSQ = texSQ;
             MarkModified();
         }
 
         public void SetVisco(double visco)
         {
             Visco = visco;
+            ReadModel.Visco = visco;
             MarkModified();
         }
 
         public void SetPIS(int pis)
         {
             PIS = pis;
+            ReadModel.PIS = pis;
             MarkModified();
         }
 
         public void SetSPU(double spu)
         {
             SPU = spu;
+            ReadModel.SPU = spu;
             MarkModified();
         }
 
         public void SetSizingBeamDocumentId(BeamId sizingBeamDocumentId)
         {
             SizingBeamDocumentId = sizingBeamDocumentId;
+            ReadModel.SizingBeamDocumentId = sizingBeamDocumentId.Value;
             MarkModified();
         }
 
         public void SetOperationStatus(string operationStatus)
         {
             OperationStatus = operationStatus;
+            ReadModel.OperationStatus = operationStatus;
             MarkModified();
         }
 

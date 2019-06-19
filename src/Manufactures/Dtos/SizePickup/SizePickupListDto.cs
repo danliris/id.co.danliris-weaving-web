@@ -17,8 +17,8 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "DateTimeMachineHistory")]
         public DateTimeOffset DateTimeMachineHistory { get; }
 
-        [JsonProperty(PropertyName = "OperatorDocumentId")]
-        public OperatorId OperatorDocumentId { get; }
+        [JsonProperty(PropertyName = "OperatorGroup")]
+        public string OperatorGroup { get; }
 
         [JsonProperty(PropertyName = "RecipeCode")]
         public string RecipeCode { get; }
@@ -47,11 +47,14 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; }
 
-        public SizePickupListDto(DailyOperationSizingDocument document, DailyOperationSizingDetail detail)
+        [JsonProperty(PropertyName = "BeamNumber")]
+        public string BeamNumber { get; }
+
+        public SizePickupListDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorGroup, string beamNumber)
         {
             Id = document.Identity;
-            DateTimeMachineHistory = detail.DateTimeOperation;
-            OperatorDocumentId = new OperatorId(detail.OperatorDocumentId);
+            DateTimeMachineHistory = dateTimeOperation;
+            OperatorGroup = operatorGroup;
             RecipeCode = document.RecipeCode;
             MachineSpeed = document.MachineSpeed;
             TexSQ = document.TexSQ;
@@ -61,6 +64,7 @@ namespace Manufactures.Dtos
             Netto = document.Weight.Netto;
             Bruto = document.Weight.Bruto;
             SPU = document.SPU;
+            BeamNumber = beamNumber;
         }
     }
 }

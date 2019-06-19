@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
+using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
@@ -41,6 +42,8 @@ namespace Manufactures.Controllers.Api
             _shiftDocumentRepository;
         private readonly IBeamRepository
             _beamDocumentRepository;
+        private readonly IOperatorRepository
+            _operatorDocumentRepository;
 
         public DailyOperationSizingController(IServiceProvider serviceProvider,
                                                  IWorkContext workContext)
@@ -56,6 +59,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IShiftRepository>();
             _beamDocumentRepository =
                 this.Storage.GetRepository<IBeamRepository>();
+            _operatorDocumentRepository = 
+                this.Storage.GetRepository<IOperatorRepository>();
         }
 
         [HttpGet]
@@ -316,8 +321,8 @@ namespace Manufactures.Controllers.Api
                         {
                             if (filterDateDto >= StartDate && filterDateDto >= EndDate)
                             {
-                                var requestedDto = new SizePickupListDto(sizePickupDto, detail);
-                                resultData.Add(requestedDto);
+                                //var requestedDto = new SizePickupListDto(sizePickupDto, detail);
+                                //resultData.Add(requestedDto);
                             }
                         }
                     }
@@ -352,27 +357,40 @@ namespace Manufactures.Controllers.Api
                 var resultData = new List<SizePickupListDto>();
                 var query =
                     _dailyOperationSizingDocumentRepository
-                        .Query.OrderByDescending(item => item.CreatedDate);
-                var sizePickupDtos =
+                        .Query.Include(o=>o.Details).OrderByDescending(item => item.CreatedDate);
+                var filteredSizePickupDtos =
                     _dailyOperationSizingDocumentRepository
-                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Equals(WeavingUnitId)&&sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH));
+                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(WeavingUnitId)&&sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
 
-                foreach (var sizePickupDto in sizePickupDtos)
+                foreach(var data in filteredSizePickupDtos)
                 {
-                    foreach (var detail in sizePickupDto.Details)
-                    {
-                        var filterShiftDto = detail.ShiftDocumentId.ToString();
-                        var filterMonthDto = detail.DateTimeOperation.Month;
+                    var filteredDetails = data.Details.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(ShiftId) && x.DateTimeOperation.Month.Equals(Month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
+                    var machineStatus = filteredDetails.MachineStatus;
+                    var entryDate = filteredDetails.DateTimeOperation;
 
-                        if(filterShiftDto == ShiftId)
-                        {
-                            if (filterMonthDto == Month)
-                            {
-                                var filteredDto = new SizePickupListDto(sizePickupDto, detail);
-                                resultData.Add(filteredDto);
-                            }
-                        }
+                    var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
+                    var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+                    var filteredBeamNumber = " ";
+
+                    foreach (var beam in filteredBeam)
+                    {
+                        filteredBeamNumber = beam.Number;
                     }
+
+                    var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+                    var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+                    var operatorGroup = " ";
+                    foreach(var item in operatorDetail)
+                    {
+                        operatorGroup = item.Group;
+                    }
+
+                    if(filteredDetails != null)
+                    {
+                        var results = new SizePickupListDto(data, entryDate, operatorGroup, filteredBeamNumber);
+                        resultData.Add(results);
+                    }
+                    
                 }
 
                 //var results = SizePickupReportXlsTemplate.GetDataByMonth(periodType, month, weavingUnitId, shiftId);
