@@ -5,6 +5,9 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Manufactures.Domain.Movements;
+using Manufactures.Domain.Movements.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,12 +21,16 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationalDocumentRepository;
+        private readonly IMovementRepository
+            _movementRepository;
 
         public AddDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationalDocumentRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
+            _movementRepository =
+                _storage.GetRepository<IMovementRepository>();
         }
 
         public async Task<DailyOperationLoomDocument>
@@ -63,6 +70,15 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             dailyOperationMachineDocument.AddDailyOperationMachineDetail(newOperation);
 
             await _dailyOperationalDocumentRepository.Update(dailyOperationMachineDocument);
+
+            //Add new Movement
+            var newMovement = 
+                new MovementDocument(Guid.NewGuid(), 
+                                     new DailyOperationId(dailyOperationMachineDocument.Identity), 
+                                     MovementStatusConstant.LOOM, 
+                                     true);
+
+            await _movementRepository.Update(newMovement);
 
             _storage.Save();
 
