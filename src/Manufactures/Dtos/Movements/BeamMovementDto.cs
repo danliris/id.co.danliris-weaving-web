@@ -1,13 +1,10 @@
-﻿using Manufactures.Domain.DailyOperations.Loom;
-using Manufactures.Domain.Movements;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos.Movements
 {
-    public class BeamListDto
+    public class BeamMovementDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -18,13 +15,17 @@ namespace Manufactures.Dtos.Movements
         [JsonProperty(PropertyName = "Status")]
         public string Status { get; private set; }
 
-        public BeamListDto(Guid movementDocumentId,
-                           string movementStatus,
-                           string beamNumber)
+        [JsonProperty(PropertyName = "BeamMovementDetails")]
+        public List<BeamMovementDetailDto> BeamMovementDetails { get; set; }
+
+        public BeamMovementDto(Guid movementDocumentId,
+                          string movementStatus,
+                          string beamNumber)
         {
             Id = movementDocumentId;
             Status = movementStatus;
             BeamNumber = beamNumber;
+            BeamMovementDetails = new List<BeamMovementDetailDto>();
         }
     }
 }
