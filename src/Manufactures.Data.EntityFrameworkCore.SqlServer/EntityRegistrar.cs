@@ -21,6 +21,7 @@ using Manufactures.Domain.Operators.ReadModels;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.Beams.ReadModels;
+using Manufactures.Domain.Movements.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -28,7 +29,16 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<BeamReadModel>(etb =>
+            modelBuilder.Entity<MovementReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_MovementDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+                modelBuilder.Entity<BeamReadModel>(etb =>
             {
                 etb.ToTable("Weaving_BeamDocuments");
                 etb.HasKey(e => e.Identity);
