@@ -5,6 +5,7 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Manufactures.Domain.Movements.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using System;
@@ -21,12 +22,16 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationalDocumentRepository;
+        private readonly IMovementRepository
+            _movementRepository;
 
         public FinishDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationalDocumentRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
+            _movementRepository =
+               _storage.GetRepository<IMovementRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(FinishDailyOperationLoomCommand request, 
@@ -42,6 +47,11 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 _dailyOperationalDocumentRepository
                     .Find(query)
                     .Where(e => e.Identity.Equals(request.Id))
+                    .FirstOrDefault();
+            //Get Existing movement from daily operation
+            var existingMovement =
+                _movementRepository
+                    .Find(o => o.DailyOperationId.Equals(existingDailyOperation.Identity))
                     .FirstOrDefault();
             //Break datetime to match timezone
             var year = request.FinishDate.Year;
@@ -95,6 +105,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
 
             await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
+
+            //Update movement if available
+            if (existingMovement != null)
+            {
+                existingMovement.UpdateActiveMovement(false);
+                await _movementRepository.Update(existingMovement);
+            }
 
             _storage.Save();
 

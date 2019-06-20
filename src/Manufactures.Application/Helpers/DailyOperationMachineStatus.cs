@@ -2,7 +2,7 @@
 {
     public class DailyOperationMachineStatus
     {
-        //Machine Loom Status
+        //Machine Status (Loom, Sizing, Warping)
         public static string ONENTRY = "ENTRY";
         public static string ONSTART = "START";
         public static string ONSTOP = "STOP";
@@ -10,7 +10,7 @@
         public static string ONCOMPLETE = "COMPLETED";
         public static string ONCHANGESHIFT = "CHANGE-SHIFT";
 
-        //Operation Status
+        //Operation Status (Loom, Sizing, Warping)
         public static string ONPROCESS = "PROCESSING";
         public static string ONFINISH = "FINISH";
     }
