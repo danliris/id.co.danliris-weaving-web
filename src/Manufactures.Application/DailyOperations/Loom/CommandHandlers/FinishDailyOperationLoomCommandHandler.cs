@@ -106,6 +106,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
 
+            //Update movement if available
             if (existingMovement != null)
             {
                 existingMovement.UpdateActiveMovement(false);

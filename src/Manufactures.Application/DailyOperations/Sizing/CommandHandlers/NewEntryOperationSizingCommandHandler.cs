@@ -6,6 +6,8 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
+using Manufactures.Domain.Movements;
+using Manufactures.Domain.Movements.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -19,12 +21,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IMovementRepository
+            _movementRepository;
 
         public NewEntryOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
+            _movementRepository =
+               _storage.GetRepository<IMovementRepository>();
         }
 
         public async Task<DailyOperationSizingDocument>
@@ -68,6 +74,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
+
+            //Add new Movement
+            var newMovement =
+                new MovementDocument(Guid.NewGuid(),
+                                     new DailyOperationId(dailyOperationSizingDocument.Identity),
+                                     MovementStatusConstant.SIZING,
+                                     true);
+
+            await _movementRepository.Update(newMovement);
 
             _storage.Save();
 

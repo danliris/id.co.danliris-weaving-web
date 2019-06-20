@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
+using Manufactures.Domain.Movements.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
@@ -23,11 +24,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IMovementRepository
+            _movementRepository;
 
         public UpdateDoffDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _dailyOperationSizingDocumentRepository = 
+                _storage.GetRepository<IDailyOperationSizingRepository>();
+            _movementRepository =
+              _storage.GetRepository<IMovementRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
@@ -36,7 +42,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = histories.FirstOrDefault();
-            
+            //Get Existing movement from daily operation
+            var existingMovement =
+                _movementRepository
+                    .Find(o => o.DailyOperationId.Equals(existingDailyOperation.Identity))
+                    .FirstOrDefault();
+
             //Validation for Start Status
             //var countStartStatus =
             //    existingDailyOperation
@@ -113,6 +124,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
                     await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+
+                    //Update movement if available
+                    if (existingMovement != null)
+                    {
+                        existingMovement.UpdateActiveMovement(false);
+                        await _movementRepository.Update(existingMovement);
+                    }
+
                     _storage.Save();
 
                     return existingDailyOperation;
