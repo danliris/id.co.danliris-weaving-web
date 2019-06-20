@@ -7,6 +7,7 @@ using Manufactures.Domain.Movements.Repositories;
 using Manufactures.Dtos.Movements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -43,6 +44,95 @@ namespace Manufactures.Controllers.Api
 
         }
 
+        [HttpGet("beam/{Id}/beam-number/{number}")]
+        public async Task<IActionResult> GetBeamById(string Id, string number)
+        {
+            var Identity = Guid.Parse(Id);
+            var queryMovement =
+               _movementRepository
+                   .Query
+                   .OrderByDescending(item => item.CreatedDate);
+            var movement =
+                _movementRepository
+                    .Find(queryMovement)
+                    .Where(o => o.Identity.Equals(Identity))
+                    .FirstOrDefault();
+
+            if (movement.MovementType.Equals(MovementStatusConstant.SIZING))
+            {
+                var query =
+                    _dailyOperationSizingRepository
+                        .Query
+                        .Include(o => o.Details);
+                var dailyOperation =
+                        _dailyOperationSizingRepository
+                            .Find(query)
+                            .Where(o => o.Identity.Equals(movement.DailyOperationId.Value))
+                            .FirstOrDefault();
+
+                foreach (var beamId in dailyOperation.WarpingBeamsId)
+                {
+                    var beam =
+                       _beamRepository
+                           .Find(o => o.Identity.Equals(beamId.Value))
+                           .FirstOrDefault();
+
+                    if (beam.Number.Equals(number))
+                    {
+                        var details = dailyOperation.Details;
+                        details = details.OrderByDescending(o => o.DateTimeOperation).ToList();
+                        var beamMovementDto =
+                            new BeamMovementDto(movement.Identity,
+                                                movement.MovementType,
+                                                beam.Number);
+
+                        foreach (var dailyOperationDetail in details)
+                        {
+                            var beamMovementDetailDto = new BeamMovementDetailDto(dailyOperationDetail);
+
+                            beamMovementDto.BeamMovementDetails.Add(beamMovementDetailDto);
+                        }
+
+                        await Task.Yield();
+                        return Ok(beamMovementDto);
+                    }
+                }
+            }
+            else if (movement.MovementType.Equals(MovementStatusConstant.LOOM))
+            {
+                var query =
+                    _dailyOperationalLoomRepository
+                        .Query
+                        .Include(o => o.DailyOperationLoomDetails);
+                var dailyOperation =
+                        _dailyOperationalLoomRepository
+                            .Find(query)
+                            .Where(o => o.Identity.Equals(movement.DailyOperationId.Value))
+                            .FirstOrDefault();
+                var beam =
+                       _beamRepository
+                          .Find(o => o.Identity.Equals(dailyOperation.BeamId.Value) && o.Number.Equals(number))
+                          .FirstOrDefault();
+
+                var beamMovementDto =
+                            new BeamMovementDto(movement.Identity,
+                                                movement.MovementType,
+                                                beam.Number);
+
+                foreach(var detail in dailyOperation.DailyOperationMachineDetails)
+                {
+                    var beamMovementDetailDto = new BeamMovementDetailDto(detail);
+                    beamMovementDto.BeamMovementDetails.Add(beamMovementDetailDto);
+                }
+
+                await Task.Yield();
+                return Ok(beamMovementDto);
+            }
+
+            await Task.Yield();
+            return Ok();
+        }
+
         [HttpGet("beam")]
         public async Task<IActionResult> GetBeamLoom(int page = 1,
                                            int size = 25,
@@ -59,7 +149,7 @@ namespace Manufactures.Controllers.Api
                 _movementRepository
                     .Find(queryMovement)
                     .Where(o => o.IsActive.Equals(true));
-            var result = new List<BeamListDto>();
+            var result = new List<BeamMovementListDto>();
             //Extract value to dto
             foreach (var movement in movements)
             {
@@ -76,7 +166,7 @@ namespace Manufactures.Controllers.Api
                        _beamRepository
                            .Find(o => o.Identity.Equals(beamId.Value))
                            .FirstOrDefault().Number;
-                        var beamListDto = new BeamListDto(movement.Identity, movement.MovementType, beamNumber);
+                        var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
                         result.Add(beamListDto);
                     }
 
@@ -91,7 +181,7 @@ namespace Manufactures.Controllers.Api
                         _beamRepository
                             .Find(o => o.Identity.Equals(dailyOperation.BeamId.Value))
                             .FirstOrDefault().Number;
-                    var beamListDto = new BeamListDto(movement.Identity, movement.MovementType, beamNumber);
+                    var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
                     result.Add(beamListDto);
                 }
             }
@@ -122,7 +212,7 @@ namespace Manufactures.Controllers.Api
                     orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                     orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop =
-                    typeof(BeamListDto).GetProperty(key);
+                    typeof(BeamMovementListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
