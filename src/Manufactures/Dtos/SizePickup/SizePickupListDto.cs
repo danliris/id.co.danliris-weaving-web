@@ -17,6 +17,9 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "DateTimeMachineHistory")]
         public DateTimeOffset DateTimeMachineHistory { get; }
 
+        [JsonProperty(PropertyName = "OperatorName")]
+        public string OperatorName{ get; }
+
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; }
 
@@ -50,10 +53,11 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; }
 
-        public SizePickupListDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorGroup, string beamNumber)
+        public SizePickupListDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorName, string operatorGroup, string beamNumber)
         {
             Id = document.Identity;
             DateTimeMachineHistory = dateTimeOperation;
+            OperatorName= operatorName;
             OperatorGroup = operatorGroup;
             RecipeCode = document.RecipeCode;
             MachineSpeed = document.MachineSpeed;
