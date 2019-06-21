@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Manufactures.Dtos
 {
-    public class SizePickupListDto
+    public class SizePickupDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -38,14 +38,17 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "PIS")]
         public int PIS { get; }
 
-        [JsonProperty(PropertyName = "Finish")]
-        public string Finish { get; }
+        [JsonProperty(PropertyName = "CounterStart")]
+        public string CounterStart { get; }
 
-        [JsonProperty(PropertyName = "Netto")]
-        public string Netto { get; }
+        [JsonProperty(PropertyName = "CounterFinish")]
+        public string CounterFinish { get; }
 
-        [JsonProperty(PropertyName = "Bruto")]
-        public string Bruto { get; }
+        [JsonProperty(PropertyName = "WeightNetto")]
+        public string WeightNetto { get; }
+
+        [JsonProperty(PropertyName = "WeightBruto")]
+        public string WeightBruto { get; }
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; }
@@ -53,7 +56,7 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; }
 
-        public SizePickupListDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorName, string operatorGroup, string beamNumber)
+        public SizePickupDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorName, string operatorGroup, string beamNumber)
         {
             Id = document.Identity;
             DateTimeMachineHistory = dateTimeOperation;
@@ -64,9 +67,10 @@ namespace Manufactures.Dtos
             TexSQ = document.TexSQ;
             Visco = document.Visco;
             PIS = document.PIS;
-            Finish = document.Counter.Finish;
-            Netto = document.Weight.Netto;
-            Bruto = document.Weight.Bruto;
+            CounterStart = document.Counter.Start;
+            CounterFinish = document.Counter.Finish;
+            WeightNetto = document.Weight.Netto;
+            WeightBruto = document.Weight.Bruto;
             SPU = document.SPU;
             BeamNumber = beamNumber;
         }
