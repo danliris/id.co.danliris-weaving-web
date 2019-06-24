@@ -303,9 +303,9 @@ namespace Manufactures.Controllers.Api
                 int totalCount = 0;
 
                 var acceptRequest = Request.Headers.Values.ToList();
-                var index = acceptRequest.IndexOf("application/pdf") > 0;
+                var index = acceptRequest.IndexOf("application/xls") > 0;
 
-                var resultData = new List<SizePickupDto>();
+                var resultData = new List<SizePickupListDto>();
                 var query =
                     _dailyOperationSizingDocumentRepository
                         .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
@@ -347,13 +347,12 @@ namespace Manufactures.Controllers.Api
                             operatorGroup = item.Group;
                         }
 
-                        var results = new SizePickupDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
                         resultData.Add(results);
+                        resultData = resultData.OrderBy(o=>o.DateTimeMachineHistory).ToList();
                     }
-
                 }
-
-                //var results = SizePickupReportXlsTemplate.GetDataByDateRange(startDate, endDate, weavingUnitId, shiftId);
+                
                 //data = results;
                 //totalCount = results.Count;
 
@@ -361,12 +360,26 @@ namespace Manufactures.Controllers.Api
 
                 if (index.Equals(true))
                 {
+                    byte[] xlsInBytes;
+                    string startDay = DateTime.Parse(startDate).Day.ToString();
+                    int startMonth = DateTime.Parse(startDate).Month;
+                    string indonesianStartMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(startMonth).ToString();
+                    string startYear = DateTime.Parse(startDate).Year.ToString();
+                    string startDateOfReport = startDay + "-" + indonesianStartMonth + "-" + startYear;
+
+                    string endDay = DateTime.Parse(endDate).Day.ToString();
+                    int endMonth = DateTime.Parse(endDate).Month;
+                    string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
+                    string endYear = DateTime.Parse(endDate).Year.ToString();
+                    string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
+                    
+                    string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;
+
                     SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                    MemoryStream xlsInBytes = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                    return new FileStreamResult(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    {
-                        FileDownloadName = string.Format("Laporan Size Pickup.xls")
-                    };
+                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+                    xlsInBytes = xls.ToArray();
+                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    return xlsFile;
                 }
                 else
                 {
@@ -384,15 +397,16 @@ namespace Manufactures.Controllers.Api
 
         [HttpGet("size-pickup/month/{month}/unit-id/{weavingUnitId}/shift/{shiftId}")]
         public async Task<IActionResult> GetReportByMonth(int month, int weavingUnitId, string shiftId)
+
         {
             try
             {
                 int totalCount = 0;
 
                 var acceptRequest = Request.Headers.Values.ToList();
-                var index = acceptRequest.IndexOf("application/pdf") > 0;
+                var index = acceptRequest.IndexOf("application/xls") > 0;
 
-                var resultData = new List<SizePickupDto>();
+                var resultData = new List<SizePickupListDto>();
                 var query =
                     _dailyOperationSizingDocumentRepository
                         .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
@@ -427,13 +441,13 @@ namespace Manufactures.Controllers.Api
 
                     if (filteredDetails != null)
                     {
-                        var results = new SizePickupDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
                         resultData.Add(results);
+                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
                     }
 
                 }
-
-                //var results = SizePickupReportXlsTemplate.GetDataByMonth(periodType, month, weavingUnitId, shiftId);
+                
                 //data = results;
                 //totalCount = results.Count;
 
@@ -441,12 +455,16 @@ namespace Manufactures.Controllers.Api
 
                 if (index.Equals(true))
                 {
+                    byte[] xlsInBytes;
+                    string monthOfReport = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month);
+                    string yearOfReport = DateTime.Now.Year.ToString();
+                    string fileName = "Laporan Size Pickup " + monthOfReport + "_" + yearOfReport;
+
                     SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                    MemoryStream xlsInBytes = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                    return new FileStreamResult(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-                    {
-                        FileDownloadName = string.Format("Laporan Size Pickup.xls")
-                    };
+                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+                    xlsInBytes = xls.ToArray();
+                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    return xlsFile;
                 }
                 else
                 {

@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Manufactures.Dtos
 {
-    public class SizePickupDto
+    public class SizePickupListDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -56,7 +56,7 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; }
 
-        public SizePickupDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorName, string operatorGroup, string beamNumber)
+        public SizePickupListDto(DailyOperationSizingDocument document, DateTimeOffset dateTimeOperation, string operatorName, string operatorGroup, string beamNumber)
         {
             Id = document.Identity;
             DateTimeMachineHistory = dateTimeOperation;

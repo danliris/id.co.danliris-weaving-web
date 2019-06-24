@@ -20,7 +20,7 @@ namespace Manufactures.Helpers.XlsTemplates
 {
     public class SizePickupReportXlsTemplate
     {
-        public MemoryStream GenerateSizePickupReportXls(List<SizePickupDto> sizePickupModel)
+        public MemoryStream GenerateSizePickupReportXls(List<SizePickupListDto> sizePickupModel)
         {
             DataTable dt = new DataTable();
 
@@ -41,18 +41,32 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Jam Doffing", DataType = typeof(string) });
 
-
             if (sizePickupModel.Count == 0)
             {
-                dt.Rows.Add("", "", "", "", "", "", "", "", "");
+                dt.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
             }
             else
             {
                 int index = 1;
                 foreach (var item in sizePickupModel)
                 {
-                    dt.Rows.Add(index++, item.DateTimeMachineHistory.Date.ToString("dd MMMM yyyy"), item.OperatorGroup, item.OperatorName, item.RecipeCode, item.MachineSpeed,
-                        item.TexSQ, item.Visco, item.BeamNumber, item.PIS, item.CounterStart, item.CounterFinish, item.WeightNetto, item.WeightBruto, item.SPU, item.DateTimeMachineHistory.TimeOfDay.ToString("HH:mm:ss"));
+                    var date = item.DateTimeMachineHistory.ToString("dd MMMM yyyy");
+                    var operatorGroup = item.OperatorGroup;
+                    var operatorName = item.OperatorName;
+                    var recipeCode = item.RecipeCode;
+                    var machineSpeed = item.MachineSpeed.ToString();
+                    var texSQ = item.TexSQ.ToString();
+                    var visco = item.Visco.ToString();
+                    var beamNumber = item.BeamNumber;
+                    var pis = item.PIS.ToString();
+                    var counterStart = item.CounterStart;
+                    var counterFinish = item.CounterFinish;
+                    var netto = item.WeightNetto;
+                    var bruto = item.WeightBruto;
+                    var spu = item.SPU.ToString();
+                    var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
+                    dt.Rows.Add(index++, date, operatorGroup, operatorName, recipeCode, machineSpeed,
+                        texSQ, visco, beamNumber, pis, counterStart, counterFinish, netto, bruto, spu, doffingTime);
                 }
             }
 
