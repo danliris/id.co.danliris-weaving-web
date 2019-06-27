@@ -114,7 +114,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .FirstOrDefault();
 
             //Update value of latest length of yarn;
-            existingBeam.SetLatestYarnLength(request.YarnUsedOnLenght);
+            var latestBeamLength = existingBeam.YarnLength - request.YarnUsedOnLength;
+            existingBeam.SetLatestYarnLength(latestBeamLength);
 
             await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
             //update beam
