@@ -162,11 +162,11 @@ namespace Manufactures.Controllers.Api
 
                     foreach (var beamId in dailyOperation.WarpingBeamsId)
                     {
-                        var beamNumber =
+                        var beam =
                        _beamRepository
                            .Find(o => o.Identity.Equals(beamId.Value))
-                           .FirstOrDefault().Number;
-                        var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
+                           .FirstOrDefault();
+                        var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                         result.Add(beamListDto);
                     }
 
@@ -177,11 +177,11 @@ namespace Manufactures.Controllers.Api
                         _dailyOperationalLoomRepository
                             .Find(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
-                    var beamNumber =
+                    var beam =
                         _beamRepository
                             .Find(o => o.Identity.Equals(dailyOperation.BeamId.Value))
-                            .FirstOrDefault().Number;
-                    var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
+                            .FirstOrDefault();
+                    var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                     result.Add(beamListDto);
                 }
             }
