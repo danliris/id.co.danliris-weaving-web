@@ -93,7 +93,7 @@ namespace Manufactures.Domain.Beams
         {
             if (YarnLength != yarnLength)
             {
-                YarnLength = YarnLength - yarnLength;
+                YarnLength = yarnLength;
                 ReadModel.YarnLength = YarnLength;
 
                 MarkModified();
