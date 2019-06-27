@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 
 namespace Manufactures.Domain.Beams
@@ -10,6 +11,8 @@ namespace Manufactures.Domain.Beams
         public string Number { get; private set; }
         public string Type { get; private set; }
         public double EmptyWeight { get; private set; }
+        public double YarnLength { get; private set; }
+        public ConstructionId ConstructionId { get; private set; }
 
         public BeamDocument(Guid identity,
                             string beamNumber,
@@ -38,6 +41,8 @@ namespace Manufactures.Domain.Beams
             this.Number = readModel.Number;
             this.Type = readModel.Type;
             this.EmptyWeight = readModel.EmtpyWeight;
+            this.ConstructionId = readModel.ContructionId.HasValue ? new ConstructionId(readModel.ContructionId.Value) : null;
+            this.YarnLength = readModel.YarnLength.HasValue ? readModel.YarnLength.Value : 0;
         }
 
         public void SetBeamNumber(string value)
@@ -68,6 +73,28 @@ namespace Manufactures.Domain.Beams
             {
                 EmptyWeight = value;
                 ReadModel.EmtpyWeight = EmptyWeight;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLatestConstructionId( ConstructionId constructionId)
+        {
+            if (!ConstructionId.Value.Equals(constructionId.Value))
+            {
+                ConstructionId = constructionId;
+                ReadModel.ContructionId = ConstructionId.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLatestYarnLength(double yarnLength)
+        {
+            if (YarnLength != yarnLength)
+            {
+                YarnLength = YarnLength - yarnLength;
+                ReadModel.YarnLength = YarnLength;
 
                 MarkModified();
             }

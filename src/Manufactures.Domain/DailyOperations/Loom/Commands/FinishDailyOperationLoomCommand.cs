@@ -23,6 +23,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
 
         [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; set; }
+
+        [JsonProperty(PropertyName = "YarnUsedOnLenght")]
+        public double YarnUsedOnLenght { get; set; }
     }
 
     public class FinishDailyOperationLoomCommandValidator 

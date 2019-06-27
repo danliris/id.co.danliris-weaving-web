@@ -24,9 +24,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; set; }
 
-        [JsonProperty(PropertyName = "WarpOrigin")]
-        public string WarpOrigin { get; set; }
-
         [JsonProperty(PropertyName = "WeftOrigin")]
         public string WeftOrigin { get; set; }
     }
@@ -41,7 +38,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
             RuleFor(command => command.ResumeTime).NotEmpty();
             RuleFor(command => command.ShiftId.Value).NotEmpty();
             RuleFor(command => command.OperatorId.Value).NotEmpty();
-            RuleFor(command => command.WarpOrigin).NotEmpty();
             RuleFor(command => command.WeftOrigin).NotEmpty();
         }
     }
