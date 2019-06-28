@@ -108,6 +108,9 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                             true);
 
             existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
+            //Update Used yarn
+            existingDailyOperation.AddYarnUsed(request.YarnUsedOnLength);
+            //Get Existing beam
             var existingBeam = 
                 _beamRepository
                     .Find(o => o.Identity.Equals(existingDailyOperation.BeamId.Value))
