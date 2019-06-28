@@ -14,9 +14,12 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
         public string DailyOperationStatus { get; internal set; }
         public Guid? DailyOperationMonitoringId { get; internal set; }
         public List<DailyOperationLoomDetail> DailyOperationLoomDetails { get; internal set; }
+        public double? UsedYarn { get; internal set; }
 
         public DailyOperationLoomReadModel(Guid identity) : base(identity)
         {
         }
+
+        
     }
 }
