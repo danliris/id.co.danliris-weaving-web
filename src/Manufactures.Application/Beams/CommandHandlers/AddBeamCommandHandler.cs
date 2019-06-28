@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Commands;
 using Manufactures.Domain.Beams.Repositories;
@@ -26,6 +27,7 @@ namespace Manufactures.Application.Beams.CommandHandlers
         public async Task<BeamDocument> Handle(AddBeamCommand request,
                                                CancellationToken cancellationToken)
         {
+            var beamType = "";
             var existingBeamCode =
                _beamRepository
                    .Find(x => x.Number.Equals(request.Number))
@@ -38,9 +40,17 @@ namespace Manufactures.Application.Beams.CommandHandlers
                                       "Beam Number has available"));
             }
 
+            if (request.Type.Equals(BeamConstant.SIZING))
+            {
+                beamType = BeamConstant.SIZING;
+            } else if (request.Type.Equals(BeamConstant.WARPING))
+            {
+                beamType = BeamConstant.WARPING;
+            }
+
             var newBeam = new BeamDocument(Guid.NewGuid(), 
                                            request.Number, 
-                                           request.Type, 
+                                           beamType, 
                                            request.EmptyWeight);
 
             await _beamRepository.Update(newBeam);
