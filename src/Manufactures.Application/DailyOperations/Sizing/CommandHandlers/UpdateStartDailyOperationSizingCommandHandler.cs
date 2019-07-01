@@ -86,6 +86,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
                     {
+                        existingDailyOperation.SetNeReal(request.NeReal);
+
                         var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
 
                         var newOperation =

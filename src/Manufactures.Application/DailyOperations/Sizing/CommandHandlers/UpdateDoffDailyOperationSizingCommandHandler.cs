@@ -103,10 +103,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     existingDailyOperation.SetCounter(new DailyOperationSizingCounterValueObject(Counter.Start, request.Counter.Finish));
                     existingDailyOperation.SetWeight(new DailyOperationSizingWeightValueObject(Weight.Netto, request.Weight.Bruto));
                     existingDailyOperation.SetMachineSpeed(request.MachineSpeed);
+                    existingDailyOperation.SetCutmark(existingDailyOperation.Cutmark);
                     existingDailyOperation.SetTexSQ(request.TexSQ);
                     existingDailyOperation.SetVisco(request.Visco);
                     existingDailyOperation.SetPIS(request.PIS);
                     existingDailyOperation.SetSPU(request.SPU);
+                    existingDailyOperation.SetNeReal(existingDailyOperation.NeReal);
                     existingDailyOperation.SetSizingBeamDocumentId(request.SizingBeamDocumentId);
                     existingDailyOperation.SetOperationStatus(DailyOperationMachineStatus.ONFINISH);
 

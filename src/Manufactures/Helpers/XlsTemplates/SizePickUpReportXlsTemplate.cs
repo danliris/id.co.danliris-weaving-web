@@ -30,10 +30,10 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Kode Resep", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Kecepatan Mesin", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "TexSQ", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Tek", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Visco", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "No. Beam", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "PIS", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "PIS(m)", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Counter Awal", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Counter Akhir", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Netto", DataType = typeof(string) });

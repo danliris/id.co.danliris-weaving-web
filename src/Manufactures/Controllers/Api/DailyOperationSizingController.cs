@@ -295,12 +295,101 @@ namespace Manufactures.Controllers.Api
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
 
+        [HttpGet("size-pickup/date/{date}/unit-id/{weavingUnitId}/shift/{shiftId}")]
+        public async Task<IActionResult> GetReportByDate(string date, int weavingUnitId, string shiftId)
+        {
+            try
+            {
+                int count = 0;
+
+                var acceptRequest = Request.Headers.Values.ToList();
+                var index = acceptRequest.IndexOf("application/xls") > 0;
+
+                var resultData = new List<SizePickupListDto>();
+                var query =
+                    _dailyOperationSizingDocumentRepository
+                        .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+                var filteredSizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
+
+                foreach (var data in filteredSizePickupDtos)
+                {
+                    var convertedDate = DateTime.Parse(date);
+
+                    var filteredDetails = data.Details.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
+                                                                  x.ShiftDocumentId.ToString().Equals(shiftId) &&
+                                                                  x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
+
+                    if (filteredDetails != null)
+                    {
+                        var machineStatus = filteredDetails.MachineStatus;
+                        var machineDateTime = filteredDetails.DateTimeOperation;
+
+                        var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
+                        var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+                        var filteredBeamNumber = " ";
+
+                        foreach (var beam in filteredBeam)
+                        {
+                            filteredBeamNumber = beam.Number;
+                        }
+
+                        var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+                        var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+                        var operatorName = " ";
+                        var operatorGroup = " ";
+                        foreach (var item in operatorDetail)
+                        {
+                            operatorName = item.CoreAccount.Name;
+                            operatorGroup = item.Group;
+                        }
+
+                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+                        resultData.Add(results);
+                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+                    }
+                }
+
+                await Task.Yield();
+
+                if (index.Equals(true))
+                {
+                    byte[] xlsInBytes;
+                    string day = DateTime.Parse(date).Day.ToString();
+                    int month = DateTime.Parse(date).Month;
+                    string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
+                    string year = DateTime.Parse(date).Year.ToString();
+                    string dateOfReport = day + "-" + indonesianMonth + "-" + year;
+
+                    string fileName = "Laporan Size Pickup " + dateOfReport;
+
+                    SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+                    xlsInBytes = xls.ToArray();
+                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    return xlsFile;
+                }
+                else
+                {
+                    return Ok(resultData, info: new
+                    {
+                        count = resultData.Count
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
         [HttpGet("size-pickup/daterange/start-date/{startDate}/end-date/{endDate}/unit-id/{weavingUnitId}/shift/{shiftId}")]
         public async Task<IActionResult> GetReportByDateRange(string startDate, string endDate, int weavingUnitId, string shiftId)
         {
             try
             {
-                int totalCount = 0;
+                int count = 0;
 
                 var acceptRequest = Request.Headers.Values.ToList();
                 var index = acceptRequest.IndexOf("application/xls") > 0;
@@ -349,12 +438,9 @@ namespace Manufactures.Controllers.Api
 
                         var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
                         resultData.Add(results);
-                        resultData = resultData.OrderBy(o=>o.DateTimeMachineHistory).ToList();
+                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
                     }
                 }
-                
-                //data = results;
-                //totalCount = results.Count;
 
                 await Task.Yield();
 
@@ -372,7 +458,7 @@ namespace Manufactures.Controllers.Api
                     string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
                     string endYear = DateTime.Parse(endDate).Year.ToString();
                     string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
-                    
+
                     string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;
 
                     SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
@@ -385,7 +471,7 @@ namespace Manufactures.Controllers.Api
                 {
                     return Ok(resultData, info: new
                     {
-                        count = totalCount
+                        count = resultData.Count
                     });
                 }
             }
@@ -401,7 +487,7 @@ namespace Manufactures.Controllers.Api
         {
             try
             {
-                int totalCount = 0;
+                int count = 0;
 
                 var acceptRequest = Request.Headers.Values.ToList();
                 var index = acceptRequest.IndexOf("application/xls") > 0;
@@ -447,9 +533,6 @@ namespace Manufactures.Controllers.Api
                     }
 
                 }
-                
-                //data = results;
-                //totalCount = results.Count;
 
                 await Task.Yield();
 
@@ -470,7 +553,7 @@ namespace Manufactures.Controllers.Api
                 {
                     return Ok(resultData, info: new
                     {
-                        count = totalCount
+                        count = resultData.Count
                     });
                 }
             }
