@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Manufactures.Domain.Beams;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Dtos.Movements
@@ -11,16 +12,20 @@ namespace Manufactures.Dtos.Movements
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; private set; }
 
+        [JsonProperty(PropertyName = "YarnLength")]
+        public double YarnLength { get; private set; }
+
         [JsonProperty(PropertyName = "Status")]
         public string Status { get; private set; }
 
         public BeamMovementListDto(Guid movementDocumentId,
                            string movementStatus,
-                           string beamNumber)
+                           BeamDocument beam)
         {
             Id = movementDocumentId;
             Status = movementStatus;
-            BeamNumber = beamNumber;
+            BeamNumber = beam.Number;
+            YarnLength = beam.YarnLength;
         }
     }
 }

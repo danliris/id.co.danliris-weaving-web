@@ -1,6 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
@@ -24,6 +25,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             _dailyOperationalDocumentRepository;
         private readonly IMovementRepository
             _movementRepository;
+        private readonly IBeamRepository
+            _beamRepository;
 
         public FinishDailyOperationLoomCommandHandler(IStorage storage)
         {
@@ -32,6 +35,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _movementRepository =
                _storage.GetRepository<IMovementRepository>();
+            _beamRepository =
+               _storage.GetRepository<IBeamRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(FinishDailyOperationLoomCommand request, 
@@ -103,8 +108,21 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                             true);
 
             existingDailyOperation.AddDailyOperationMachineDetail(newOperation);
+            //Update Used yarn
+            existingDailyOperation.AddYarnUsed(request.YarnUsedOnLength);
+            //Get Existing beam
+            var existingBeam = 
+                _beamRepository
+                    .Find(o => o.Identity.Equals(existingDailyOperation.BeamId.Value))
+                    .FirstOrDefault();
+
+            //Update value of latest length of yarn;
+            var latestBeamLength = existingBeam.YarnLength - request.YarnUsedOnLength;
+            existingBeam.SetLatestYarnLength(latestBeamLength);
 
             await _dailyOperationalDocumentRepository.Update(existingDailyOperation);
+            //update beam
+            await _beamRepository.Update(existingBeam);
 
             //Update movement if available
             if (existingMovement != null)

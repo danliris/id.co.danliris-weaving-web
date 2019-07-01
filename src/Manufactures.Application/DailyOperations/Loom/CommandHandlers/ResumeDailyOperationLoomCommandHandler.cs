@@ -90,11 +90,6 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                              DailyOperationMachineStatus.ONRESUME,
                                              true,
                                              false);
-            //Compare if has change warp origin
-            if (warpOrigin != request.WarpOrigin)
-            {
-                newOperation.AddWarpOrigin(request.WarpOrigin);
-            }
             //Compare if has change weft origin
             if (weftOrigin != request.WeftOrigin)
             {

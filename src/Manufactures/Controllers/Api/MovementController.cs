@@ -162,11 +162,11 @@ namespace Manufactures.Controllers.Api
 
                     foreach (var beamId in dailyOperation.WarpingBeamsId)
                     {
-                        var beamNumber =
+                        var beam =
                        _beamRepository
                            .Find(o => o.Identity.Equals(beamId.Value))
-                           .FirstOrDefault().Number;
-                        var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
+                           .FirstOrDefault();
+                        var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                         result.Add(beamListDto);
                     }
 
@@ -177,11 +177,11 @@ namespace Manufactures.Controllers.Api
                         _dailyOperationalLoomRepository
                             .Find(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
-                    var beamNumber =
+                    var beam =
                         _beamRepository
                             .Find(o => o.Identity.Equals(dailyOperation.BeamId.Value))
-                            .FirstOrDefault().Number;
-                    var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beamNumber);
+                            .FirstOrDefault();
+                    var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                     result.Add(beamListDto);
                 }
             }
@@ -246,6 +246,27 @@ namespace Manufactures.Controllers.Api
             });
         }
 
+        [HttpGet("order")]
+        public async Task<IActionResult> GetOrder(int page = 1,
+                                           int size = 25,
+                                           string order = "{}",
+                                           string keyword = null,
+                                           string filter = "{}")
+        {
+            page = page - 1;
+            var queryMovement =
+                _movementRepository
+                    .Query
+                    .OrderByDescending(item => item.CreatedDate);
+            var movements =
+               _movementRepository
+                   .Find(queryMovement)
+                   .Where(o => o.IsActive.Equals(true));
+
+            await Task.Yield();
+            return Ok();
+        }
+
         [HttpGet("machine-loom")]
         public async Task<IActionResult> GetMachineLoom(int page = 1,
                                            int size = 25,
@@ -258,7 +279,7 @@ namespace Manufactures.Controllers.Api
                 _movementRepository
                     .Query
                     .OrderByDescending(item => item.CreatedDate);
-
+            await Task.Yield();
             return Ok();
         }
     }

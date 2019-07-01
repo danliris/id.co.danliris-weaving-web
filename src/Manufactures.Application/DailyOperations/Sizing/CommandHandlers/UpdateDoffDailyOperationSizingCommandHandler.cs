@@ -1,6 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
@@ -12,7 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,6 +26,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             _dailyOperationSizingDocumentRepository;
         private readonly IMovementRepository
             _movementRepository;
+        private readonly IBeamRepository
+            _beamRepository;
 
         public UpdateDoffDailyOperationSizingCommandHandler(IStorage storage)
         {
@@ -34,6 +36,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 _storage.GetRepository<IDailyOperationSizingRepository>();
             _movementRepository =
               _storage.GetRepository<IMovementRepository>();
+            _beamRepository =
+              _storage.GetRepository<IBeamRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
@@ -97,6 +101,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 }
                 else
                 {
+                    var beamDocument = 
+                        _beamRepository
+                            .Find(o => o.Identity.Equals(request.SizingBeamDocumentId.Value))
+                            .FirstOrDefault();
                     var Counter = existingDailyOperation.Counter;
                     var Weight = existingDailyOperation.Weight;
 
@@ -125,7 +133,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                     existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
+                    //Update Value on Master beam sizing
+                    beamDocument.SetLatestConstructionId(existingDailyOperation.ConstructionDocumentId);
+                    var beamLength = double.Parse(request.Counter.Finish);
+                    beamDocument.SetLatestYarnLength(beamLength);
+
                     await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
+                    //Update beam for latest value from process
+                    await _beamRepository.Update(beamDocument);
 
                     //Update movement if available
                     if (existingMovement != null)

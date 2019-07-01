@@ -19,6 +19,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public string DailyOperationStatus { get; private set; }
         public DailyOperationMonitoringId DailyOperationMonitoringId { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
+        public double UsedYarn { get; private set; }
 
         public DailyOperationLoomDocument(Guid id,
                                           UnitId unitId,
@@ -66,6 +67,19 @@ namespace Manufactures.Domain.DailyOperations.Loom
                     new DailyOperationMonitoringId(readModel.DailyOperationMonitoringId.Value) : null;
             this.DailyOperationMachineDetails = 
                 readModel.DailyOperationLoomDetails;
+            this.UsedYarn = 
+                readModel.UsedYarn.HasValue ? readModel.UsedYarn.Value : 0;
+        }
+
+        public void AddYarnUsed(double yarnLength)
+        {
+            if (UsedYarn != yarnLength)
+            {
+                UsedYarn = yarnLength;
+                ReadModel.UsedYarn = UsedYarn;
+
+                MarkModified();
+            }
         }
 
         public void AddDailyOperationMachineDetail(DailyOperationLoomDetail dailyOperationMachineDetail)
