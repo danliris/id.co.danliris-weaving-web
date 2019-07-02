@@ -35,6 +35,12 @@ namespace Manufactures.Domain.FabricConstructions.Commands
         [JsonProperty(PropertyName = "MaterialTypeName")]
         public string MaterialTypeName { get; set; }
 
+        [JsonProperty(PropertyName = "ReedSpace")]
+        public int ReedSpace { get; private set; }
+
+        [JsonProperty(PropertyName = "TotalEnds")]
+        public int TotalEnds { get; private set; }
+
         [JsonProperty(PropertyName = "ItemsWarp")]
         public List<ConstructionDetail> ItemsWarp { get; set; }
 
