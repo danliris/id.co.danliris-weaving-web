@@ -39,6 +39,12 @@ namespace Manufactures.Dtos.FabricConstructions
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
+        [JsonProperty(PropertyName = "ReedSpace")]
+        public int ReedSpace { get; private set; }
+
+        [JsonProperty(PropertyName = "TotalEnds")]
+        public int TotalEnds { get; private set; }
+
         [JsonProperty(PropertyName = "ItemsWarp")]
         public IReadOnlyCollection<Warp> ItemsWarp { get; private set; }
 
@@ -58,6 +64,8 @@ namespace Manufactures.Dtos.FabricConstructions
             WeftTypeForm = document.WeftType;
             TotalYarn = document.TotalYarn;
             MaterialTypeName = document.MaterialTypeName;
+            ReedSpace = document.ReedSpace;
+            TotalEnds = document.TotalEnds;
             
             ItemsWarp = new List<Warp>();
             ItemsWeft = new List<Weft>();

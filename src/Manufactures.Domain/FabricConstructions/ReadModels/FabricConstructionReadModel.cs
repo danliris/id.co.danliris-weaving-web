@@ -18,5 +18,7 @@ namespace Manufactures.Domain.FabricConstructions.ReadModels
         public string MaterialTypeName { get; internal set; }
         public string ListOfWarp { get; set; }
         public string ListOfWeft { get; set; }
+        public int? ReedSpace { get; internal set; }
+        public int? TotalEnds { get; internal set; }
     }
 }
