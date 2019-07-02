@@ -42,6 +42,11 @@ namespace Manufactures.Application.YarnNumbers.CommandHandlers
                                                 ringType: request.RingType,
                                                 description: request.Description);
 
+            if (request.AdditionalNumber != 0)
+            {
+                yarnNumberDocument.AddAditionalNumber(request.AdditionalNumber);
+            }
+
             await _YarnNumberRepository.Update(yarnNumberDocument);
 
             _storage.Save();
