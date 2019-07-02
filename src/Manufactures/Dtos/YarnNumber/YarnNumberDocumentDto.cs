@@ -15,6 +15,10 @@ namespace Manufactures.Dtos.YarnNumber
         [JsonProperty(PropertyName = "Number")]
         public int Number { get; private set; }
 
+
+        [JsonProperty(PropertyName = "AdditionalNumber")]
+        public int AdditionalNumber { get; private set; }
+
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; private set; }
 
@@ -26,6 +30,7 @@ namespace Manufactures.Dtos.YarnNumber
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
             Number = ringDocument.Number;
+            AdditionalNumber = ringDocument.AdditionalNumber;
             RingType = ringDocument.RingType;
             Description = ringDocument.Description;
         }

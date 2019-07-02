@@ -10,6 +10,7 @@ namespace Manufactures.Domain.YarnNumbers
     {
         public string Code { get; private set; }
         public int Number { get; private set; }
+        public int AdditionalNumber { get; private set; }
         public string RingType { get; private set; }
         public string Description { get; private set; }
 
@@ -45,6 +46,19 @@ namespace Manufactures.Domain.YarnNumbers
             this.Number = readModel.Number;
             this.Description = readModel.Description;
             this.RingType = readModel.RingType;
+            this.AdditionalNumber = 
+                readModel.AdditionalNumber.HasValue ? readModel.AdditionalNumber.Value : 0;
+        }
+
+        public void AddAditionalNumber(int number)
+        {
+            if (AdditionalNumber != number)
+            {
+                AdditionalNumber = number;
+                ReadModel.AdditionalNumber = AdditionalNumber;
+
+                MarkModified();
+            }
         }
 
         public void SetCode(string code)
