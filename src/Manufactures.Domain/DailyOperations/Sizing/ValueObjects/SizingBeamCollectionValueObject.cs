@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
-    public class DailyOperationSizingBeamsCollectionValueObject : ValueObject
+    public class SizingBeamsCollectionValueObject : ValueObject
     {
         public Guid Id { get; set; }
         
@@ -15,7 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
         
         public double EmptyWeight { get; set; }
 
-        public DailyOperationSizingBeamsCollectionValueObject(Guid id, string number, string type, double emptyWeight)
+        public SizingBeamsCollectionValueObject(Guid id, string number, string type, double emptyWeight)
         {
             Id = id;
             Number = number;

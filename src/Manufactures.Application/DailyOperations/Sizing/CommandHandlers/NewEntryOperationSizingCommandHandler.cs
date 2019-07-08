@@ -9,6 +9,7 @@ using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Movements;
 using Manufactures.Domain.Movements.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -41,19 +42,22 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
-                                                    request.RecipeCode,
-                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, "0"),
-                                                    new DailyOperationSizingWeightValueObject("0", "0"),
                                                     request.WarpingBeamsId,
-                                                    request.Cutmark,
+                                                    request.RecipeCode,
+                                                    request.NeReal,
                                                     0,
                                                     0,
                                                     0,
-                                                    0,
-                                                    0,
-                                                    0,
-                                                    new BeamId(Guid.Empty),
                                                     DailyOperationMachineStatus.ONPROCESS);
+
+            var counter = new SizingCounterValueObject(request.Counter.Start, 0);
+            var weight = new SizingWeightValueObject(0, 0, 0);
+            var beam = new SizingBeamDocumentValueObject(request.SizingBeamId, 
+                                                         counter, 
+                                                         weight, 
+                                                         0);
+
+            dailyOperationSizingDocument.AddSizingBeam(beam);
 
             var year = request.Details.PreparationDate.Year;
             var month = request.Details.PreparationDate.Month;
@@ -71,7 +75,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    dateTimeOperation,
                                                    DailyOperationMachineStatus.ONENTRY,
                                                    "-",
-                                                   new DailyOperationSizingCausesValueObject("0","0"));
+                                                   new SizingCauseValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

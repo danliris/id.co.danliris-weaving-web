@@ -14,10 +14,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "Counter")]
-        public DailyOperationSizingCounterCommand Counter { get; set; }
+        public SizingCounterCommand Counter { get; set; }
 
         [JsonProperty(PropertyName = "Weight")]
-        public DailyOperationSizingWeightCommand Weight { get; set; }
+        public SizingWeightCommand Weight { get; set; }
 
         [JsonProperty(PropertyName = "MachineSpeed")]
         public int MachineSpeed { get; set; }
@@ -28,8 +28,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Visco")]
         public double Visco { get; set; }
 
-        [JsonProperty(PropertyName = "PIS")]
-        public int PIS { get; set; }
+        [JsonProperty(PropertyName = "PISM")]
+        public int PISM { get; set; }
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
@@ -49,12 +49,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateDoffFinishDailyOperationSizingCommandValidator()
         {
-            //RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
-            //RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
+            //RuleFor(command => command.Counter).SetValidator(new SizingCounterCommandValidator());
+            //RuleFor(command => command.Weight).SetValidator(new SizingWeightCommandValidator());
             RuleFor(validator => validator.MachineSpeed).NotEmpty();
             RuleFor(validator => validator.TexSQ).NotEmpty();
             RuleFor(validator => validator.Visco).NotEmpty();
-            RuleFor(validator => validator.PIS).NotEmpty();
+            RuleFor(validator => validator.PISM).NotEmpty();
             RuleFor(validator => validator.SPU).NotEmpty();
             RuleFor(validator => validator.SizingBeamDocumentId).NotEmpty();
         }

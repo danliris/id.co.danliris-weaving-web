@@ -9,6 +9,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdatePauseDailyOperationSizingDetailCommand
     {
+        [JsonProperty(PropertyName = "OperatorDocumentId")]
+        public OperatorId OperatorDocumentId { get; set; }
+
         [JsonProperty(PropertyName = "ShiftId")]
         public ShiftId ShiftId { get; set; }
 
@@ -18,21 +21,22 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "PauseTime")]
         public TimeSpan PauseTime { get; set; }
 
+        [JsonProperty(PropertyName = "Causes")]
+        public SizingCauseCommand Causes { get; set; }
+
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; set; }
-
-        [JsonProperty(PropertyName = "Causes")]
-        public DailyOperationSizingCausesCommand Causes { get; set; }
     }
 
     public class UpdatePauseDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdatePauseDailyOperationSizingDetailCommand>
     {
         public UpdatePauseDailyOperationSizingDetailCommandValidator()
         {
+            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.PauseDate).NotEmpty();
             RuleFor(validator => validator.PauseTime).NotEmpty();
-            RuleFor(validator => validator.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
+            RuleFor(validator => validator.Causes).SetValidator(new SizingCausesCommandValidator());
         }
     }
 }

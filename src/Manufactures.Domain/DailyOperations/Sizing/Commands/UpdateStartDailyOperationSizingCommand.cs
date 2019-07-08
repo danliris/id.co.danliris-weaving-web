@@ -13,9 +13,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "NeReal")]
-        public double NeReal { get; set; }
-
         [JsonProperty(PropertyName = "Details")]
         public UpdateStartDailyOperationSizingDetailCommand Details { get; set; }
 
@@ -30,7 +27,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public AddNewDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.NeReal).NotEmpty();
             RuleFor(validator => validator.Details).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
         }
     }

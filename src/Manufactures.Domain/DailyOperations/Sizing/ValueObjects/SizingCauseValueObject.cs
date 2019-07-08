@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
-    public class DailyOperationSizingCausesValueObject : ValueObject
+    public class SizingCauseValueObject : ValueObject
     {
-        public DailyOperationSizingCausesValueObject()
+        public SizingCauseValueObject()
         {
 
         }
@@ -17,13 +17,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
         
         public string MachineTroubled { get; set; }
 
-        public DailyOperationSizingCausesValueObject(string brokenBeam, string machineTroubled)
+        public SizingCauseValueObject(string brokenBeam, string machineTroubled)
         {
             BrokenBeam = brokenBeam;
             MachineTroubled = machineTroubled;
         }
 
-        public DailyOperationSizingCausesValueObject(DailyOperationSizingCausesCommand dailyOperationSizingCausesProduction)
+        public SizingCauseValueObject(SizingCauseCommand dailyOperationSizingCausesProduction)
         {
             BrokenBeam = dailyOperationSizingCausesProduction.BrokenBeam;
             MachineTroubled = dailyOperationSizingCausesProduction.MachineTroubled;

@@ -9,11 +9,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class UpdateResumeDailyOperationSizingDetailCommand
     {
-        [JsonProperty(PropertyName = "ShiftId")]
-        public ShiftId ShiftId { get; set; }
-
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
+
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "ResumeDate")]
         public DateTimeOffset ResumeDate { get; set; }
@@ -26,10 +26,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateResumeDailyOperationSizingDetailCommandValidator()
         {
+            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.ResumeDate).NotEmpty();
             RuleFor(validator => validator.ResumeTime).NotEmpty();
-            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
         }
     }
 }

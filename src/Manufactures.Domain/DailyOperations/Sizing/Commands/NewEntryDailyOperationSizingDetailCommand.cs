@@ -20,9 +20,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "PreparationTime")]
         public TimeSpan PreparationTime { get; private set; }
-
-        [JsonProperty(PropertyName = "MachineStatus")]
-        public string MachineStatus { get; set; }
     }
 
     public class NewEntryDailyOperationSizingDetailCommandValidator : AbstractValidator<NewEntryDailyOperationSizingDetailCommand>

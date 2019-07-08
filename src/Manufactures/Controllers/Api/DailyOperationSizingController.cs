@@ -1,13 +1,12 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators.Repositories;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
 using Manufactures.Dtos;
@@ -231,6 +230,23 @@ namespace Manufactures.Controllers.Api
             }
         }
 
+        [HttpGet("calculate/pis/{pisInput}")]
+        public async Task<IActionResult> CalculatePIS(int pisInput)
+        {
+            int calculationResults;
+
+            if (pisInput != 0)
+            {
+                PIS calculate = new PIS();
+                calculationResults = calculate.Calculate(pisInput);
+
+                await Task.Yield();
+                return Ok(calculationResults);
+            }
+            await Task.Yield();
+            return NotFound();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]NewEntryDailyOperationSizingCommand command)
         {
@@ -295,272 +311,271 @@ namespace Manufactures.Controllers.Api
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
 
-        [HttpGet("size-pickup/date/{date}/unit-id/{weavingUnitId}/shift/{shiftId}")]
-        public async Task<IActionResult> GetReportByDate(string date, int weavingUnitId, string shiftId)
-        {
-            try
-            {
-                int count = 0;
+        //[HttpGet("size-pickup/date/{date}/unit-id/{weavingUnitId}/shift/{shiftId}")]
+        //public async Task<IActionResult> GetReportByDate(string date, int weavingUnitId, string shiftId)
+        //{
+        //    try
+        //    {
+        //        int count = 0;
 
-                var acceptRequest = Request.Headers.Values.ToList();
-                var index = acceptRequest.IndexOf("application/xls") > 0;
+        //        var acceptRequest = Request.Headers.Values.ToList();
+        //        var index = acceptRequest.IndexOf("application/xls") > 0;
 
-                var resultData = new List<SizePickupListDto>();
-                var query =
-                    _dailyOperationSizingDocumentRepository
-                        .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
-                var filteredSizePickupDtos =
-                    _dailyOperationSizingDocumentRepository
-                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
+        //        var resultData = new List<SizePickupListDto>();
+        //        var query =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //        var filteredSizePickupDtos =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
 
-                foreach (var data in filteredSizePickupDtos)
-                {
-                    var convertedDate = DateTime.Parse(date);
+        //        foreach (var data in filteredSizePickupDtos)
+        //        {
+        //            var convertedDate = DateTime.Parse(date);
 
-                    var filteredDetails = data.Details.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
-                                                                  x.ShiftDocumentId.ToString().Equals(shiftId) &&
-                                                                  x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
+        //            var filteredDetails = data.Details.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
+        //                                                          x.ShiftDocumentId.ToString().Equals(shiftId) &&
+        //                                                          x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
-                    if (filteredDetails != null)
-                    {
-                        var machineStatus = filteredDetails.MachineStatus;
-                        var machineDateTime = filteredDetails.DateTimeOperation;
+        //            if (filteredDetails != null)
+        //            {
+        //                var machineStatus = filteredDetails.MachineStatus;
+        //                var machineDateTime = filteredDetails.DateTimeOperation;
 
-                        var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-                        var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
-                        var filteredBeamNumber = " ";
+        //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
+        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //                var filteredBeamNumber = " ";
 
-                        foreach (var beam in filteredBeam)
-                        {
-                            filteredBeamNumber = beam.Number;
-                        }
+        //                foreach (var beam in filteredBeam)
+        //                {
+        //                    filteredBeamNumber = beam.Number;
+        //                }
 
-                        var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-                        var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
-                        var operatorName = " ";
-                        var operatorGroup = " ";
-                        foreach (var item in operatorDetail)
-                        {
-                            operatorName = item.CoreAccount.Name;
-                            operatorGroup = item.Group;
-                        }
+        //                var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+        //                var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+        //                var operatorName = " ";
+        //                var operatorGroup = " ";
+        //                foreach (var item in operatorDetail)
+        //                {
+        //                    operatorName = item.CoreAccount.Name;
+        //                    operatorGroup = item.Group;
+        //                }
 
-                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
-                        resultData.Add(results);
-                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
-                    }
-                }
+        //                var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+        //                resultData.Add(results);
+        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+        //            }
+        //        }
 
-                await Task.Yield();
+        //        await Task.Yield();
 
-                if (index.Equals(true))
-                {
-                    byte[] xlsInBytes;
-                    string day = DateTime.Parse(date).Day.ToString();
-                    int month = DateTime.Parse(date).Month;
-                    string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
-                    string year = DateTime.Parse(date).Year.ToString();
-                    string dateOfReport = day + "-" + indonesianMonth + "-" + year;
+        //        if (index.Equals(true))
+        //        {
+        //            byte[] xlsInBytes;
+        //            string day = DateTime.Parse(date).Day.ToString();
+        //            int month = DateTime.Parse(date).Month;
+        //            string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
+        //            string year = DateTime.Parse(date).Year.ToString();
+        //            string dateOfReport = day + "-" + indonesianMonth + "-" + year;
 
-                    string fileName = "Laporan Size Pickup " + dateOfReport;
+        //            string fileName = "Laporan Size Pickup " + dateOfReport;
 
-                    SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                    xlsInBytes = xls.ToArray();
-                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                    return xlsFile;
-                }
-                else
-                {
-                    return Ok(resultData, info: new
-                    {
-                        count = resultData.Count
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
+        //            SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+        //            MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+        //            xlsInBytes = xls.ToArray();
+        //            var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        //            return xlsFile;
+        //        }
+        //        else
+        //        {
+        //            return Ok(resultData, info: new
+        //            {
+        //                count = resultData.Count
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        //    }
+        //}
 
-        [HttpGet("size-pickup/daterange/start-date/{startDate}/end-date/{endDate}/unit-id/{weavingUnitId}/shift/{shiftId}")]
-        public async Task<IActionResult> GetReportByDateRange(string startDate, string endDate, int weavingUnitId, string shiftId)
-        {
-            try
-            {
-                int count = 0;
+        //[HttpGet("size-pickup/daterange/start-date/{startDate}/end-date/{endDate}/unit-id/{weavingUnitId}/shift/{shiftId}")]
+        //public async Task<IActionResult> GetReportByDateRange(string startDate, string endDate, int weavingUnitId, string shiftId)
+        //{
+        //    try
+        //    {
+        //        int count = 0;
 
-                var acceptRequest = Request.Headers.Values.ToList();
-                var index = acceptRequest.IndexOf("application/xls") > 0;
+        //        var acceptRequest = Request.Headers.Values.ToList();
+        //        var index = acceptRequest.IndexOf("application/xls") > 0;
 
-                var resultData = new List<SizePickupListDto>();
-                var query =
-                    _dailyOperationSizingDocumentRepository
-                        .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
-                var filteredSizePickupDtos =
-                    _dailyOperationSizingDocumentRepository
-                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
+        //        var resultData = new List<SizePickupListDto>();
+        //        var query =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //        var filteredSizePickupDtos =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
 
-                foreach (var data in filteredSizePickupDtos)
-                {
-                    var convertedStartDate = DateTime.Parse(startDate);
-                    var convertedEndDate = DateTime.Parse(endDate);
+        //        foreach (var data in filteredSizePickupDtos)
+        //        {
+        //            var convertedStartDate = DateTime.Parse(startDate);
+        //            var convertedEndDate = DateTime.Parse(endDate);
 
-                    var filteredDetails = data.Details.Where(x => (x.DateTimeOperation.DateTime >= convertedStartDate &&
-                                                                   x.DateTimeOperation.DateTime <= convertedEndDate) &&
-                                                                   x.ShiftDocumentId.ToString().Equals(shiftId) &&
-                                                                   x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
+        //            var filteredDetails = data.Details.Where(x => (x.DateTimeOperation.DateTime >= convertedStartDate &&
+        //                                                           x.DateTimeOperation.DateTime <= convertedEndDate) &&
+        //                                                           x.ShiftDocumentId.ToString().Equals(shiftId) &&
+        //                                                           x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
-                    if (filteredDetails != null)
-                    {
-                        var machineStatus = filteredDetails.MachineStatus;
-                        var machineDateTime = filteredDetails.DateTimeOperation;
+        //            if (filteredDetails != null)
+        //            {
+        //                var machineStatus = filteredDetails.MachineStatus;
+        //                var machineDateTime = filteredDetails.DateTimeOperation;
 
-                        var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-                        var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
-                        var filteredBeamNumber = " ";
+        //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
+        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //                var filteredBeamNumber = " ";
 
-                        foreach (var beam in filteredBeam)
-                        {
-                            filteredBeamNumber = beam.Number;
-                        }
+        //                foreach (var beam in filteredBeam)
+        //                {
+        //                    filteredBeamNumber = beam.Number;
+        //                }
 
-                        var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-                        var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
-                        var operatorName = " ";
-                        var operatorGroup = " ";
-                        foreach (var item in operatorDetail)
-                        {
-                            operatorName = item.CoreAccount.Name;
-                            operatorGroup = item.Group;
-                        }
+        //                var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+        //                var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+        //                var operatorName = " ";
+        //                var operatorGroup = " ";
+        //                foreach (var item in operatorDetail)
+        //                {
+        //                    operatorName = item.CoreAccount.Name;
+        //                    operatorGroup = item.Group;
+        //                }
 
-                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
-                        resultData.Add(results);
-                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
-                    }
-                }
+        //                var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+        //                resultData.Add(results);
+        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+        //            }
+        //        }
 
-                await Task.Yield();
+        //        await Task.Yield();
 
-                if (index.Equals(true))
-                {
-                    byte[] xlsInBytes;
-                    string startDay = DateTime.Parse(startDate).Day.ToString();
-                    int startMonth = DateTime.Parse(startDate).Month;
-                    string indonesianStartMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(startMonth).ToString();
-                    string startYear = DateTime.Parse(startDate).Year.ToString();
-                    string startDateOfReport = startDay + "-" + indonesianStartMonth + "-" + startYear;
+        //        if (index.Equals(true))
+        //        {
+        //            byte[] xlsInBytes;
+        //            string startDay = DateTime.Parse(startDate).Day.ToString();
+        //            int startMonth = DateTime.Parse(startDate).Month;
+        //            string indonesianStartMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(startMonth).ToString();
+        //            string startYear = DateTime.Parse(startDate).Year.ToString();
+        //            string startDateOfReport = startDay + "-" + indonesianStartMonth + "-" + startYear;
 
-                    string endDay = DateTime.Parse(endDate).Day.ToString();
-                    int endMonth = DateTime.Parse(endDate).Month;
-                    string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
-                    string endYear = DateTime.Parse(endDate).Year.ToString();
-                    string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
+        //            string endDay = DateTime.Parse(endDate).Day.ToString();
+        //            int endMonth = DateTime.Parse(endDate).Month;
+        //            string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
+        //            string endYear = DateTime.Parse(endDate).Year.ToString();
+        //            string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
 
-                    string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;
+        //            string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;
 
-                    SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                    xlsInBytes = xls.ToArray();
-                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                    return xlsFile;
-                }
-                else
-                {
-                    return Ok(resultData, info: new
-                    {
-                        count = resultData.Count
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
+        //            SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+        //            MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+        //            xlsInBytes = xls.ToArray();
+        //            var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        //            return xlsFile;
+        //        }
+        //        else
+        //        {
+        //            return Ok(resultData, info: new
+        //            {
+        //                count = resultData.Count
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        //    }
+        //}
 
-        [HttpGet("size-pickup/month/{month}/unit-id/{weavingUnitId}/shift/{shiftId}")]
-        public async Task<IActionResult> GetReportByMonth(int month, int weavingUnitId, string shiftId)
+        //[HttpGet("size-pickup/month/{month}/unit-id/{weavingUnitId}/shift/{shiftId}")]
+        //public async Task<IActionResult> GetReportByMonth(int month, int weavingUnitId, string shiftId)
+        //{
+        //    try
+        //    {
+        //        int count = 0;
 
-        {
-            try
-            {
-                int count = 0;
+        //        var acceptRequest = Request.Headers.Values.ToList();
+        //        var index = acceptRequest.IndexOf("application/xls") > 0;
 
-                var acceptRequest = Request.Headers.Values.ToList();
-                var index = acceptRequest.IndexOf("application/xls") > 0;
+        //        var resultData = new List<SizePickupListDto>();
+        //        var query =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //        var filteredSizePickupDtos =
+        //            _dailyOperationSizingDocumentRepository
+        //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
 
-                var resultData = new List<SizePickupListDto>();
-                var query =
-                    _dailyOperationSizingDocumentRepository
-                        .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
-                var filteredSizePickupDtos =
-                    _dailyOperationSizingDocumentRepository
-                        .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
+        //        foreach (var data in filteredSizePickupDtos)
+        //        {
+        //            var filteredDetails = data.Details.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeOperation.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
+        //            var machineStatus = filteredDetails.MachineStatus;
+        //            var machineDateTime = filteredDetails.DateTimeOperation;
 
-                foreach (var data in filteredSizePickupDtos)
-                {
-                    var filteredDetails = data.Details.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeOperation.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
-                    var machineStatus = filteredDetails.MachineStatus;
-                    var machineDateTime = filteredDetails.DateTimeOperation;
+        //            var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
+        //            var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //            var filteredBeamNumber = " ";
 
-                    var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-                    var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
-                    var filteredBeamNumber = " ";
+        //            foreach (var beam in filteredBeam)
+        //            {
+        //                filteredBeamNumber = beam.Number;
+        //            }
 
-                    foreach (var beam in filteredBeam)
-                    {
-                        filteredBeamNumber = beam.Number;
-                    }
+        //            var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+        //            var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+        //            var operatorName = " ";
+        //            var operatorGroup = " ";
+        //            foreach (var item in operatorDetail)
+        //            {
+        //                operatorName = item.CoreAccount.Name;
+        //                operatorGroup = item.Group;
+        //            }
 
-                    var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-                    var operatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
-                    var operatorName = " ";
-                    var operatorGroup = " ";
-                    foreach (var item in operatorDetail)
-                    {
-                        operatorName = item.CoreAccount.Name;
-                        operatorGroup = item.Group;
-                    }
+        //            if (filteredDetails != null)
+        //            {
+        //                var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
+        //                resultData.Add(results);
+        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+        //            }
 
-                    if (filteredDetails != null)
-                    {
-                        var results = new SizePickupListDto(data, machineDateTime, operatorName, operatorGroup, filteredBeamNumber);
-                        resultData.Add(results);
-                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
-                    }
+        //        }
 
-                }
+        //        await Task.Yield();
 
-                await Task.Yield();
+        //        if (index.Equals(true))
+        //        {
+        //            byte[] xlsInBytes;
+        //            string monthOfReport = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month);
+        //            string yearOfReport = DateTime.Now.Year.ToString();
+        //            string fileName = "Laporan Size Pickup " + monthOfReport + "_" + yearOfReport;
 
-                if (index.Equals(true))
-                {
-                    byte[] xlsInBytes;
-                    string monthOfReport = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month);
-                    string yearOfReport = DateTime.Now.Year.ToString();
-                    string fileName = "Laporan Size Pickup " + monthOfReport + "_" + yearOfReport;
-
-                    SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                    xlsInBytes = xls.ToArray();
-                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                    return xlsFile;
-                }
-                else
-                {
-                    return Ok(resultData, info: new
-                    {
-                        count = resultData.Count
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
-            }
-        }
+        //            SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+        //            MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+        //            xlsInBytes = xls.ToArray();
+        //            var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+        //            return xlsFile;
+        //        }
+        //        else
+        //        {
+        //            return Ok(resultData, info: new
+        //            {
+        //                count = resultData.Count
+        //            });
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+        //    }
+        //}
     }
 }

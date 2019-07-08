@@ -15,40 +15,30 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
-        public string RecipeCode { get; private set; }
-        public DailyOperationSizingCounterValueObject Counter { get; private set; }
-        public DailyOperationSizingWeightValueObject Weight { get; private set; }
         public List<BeamId> WarpingBeamsId { get; private set; }
-        public int Cutmark { get; private set; }
+        public string RecipeCode { get; private set; }
+        public double NeReal { get; private set; }
         public int MachineSpeed { get; private set; }
         public double TexSQ { get; private set; }
         public double Visco { get; private set; }
-        public int PIS { get; private set; }
-        public double SPU { get; private set; }
-        public double NeReal { get; private set; }
-        public BeamId SizingBeamDocumentId { get; private set; }
         public string OperationStatus { get; private set; }
+        public List<SizingBeamDocumentValueObject> SizingBeamDocument { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> Details { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, string recipeCode, DailyOperationSizingCounterValueObject counter, DailyOperationSizingWeightValueObject weight, List<BeamId> warpingBeamsId, int cutmark, int machineSpeed, double texSQ, double visco, int pis, double spu, double neReal, BeamId sizingBeamDocumentId, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> warpingBeamsId, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
             ConstructionDocumentId = constructionDocumentId;
-            RecipeCode = recipeCode;
-            Counter = counter;
-            Weight = weight;
             WarpingBeamsId = warpingBeamsId;
-            Cutmark = cutmark;
+            RecipeCode = recipeCode;
+            NeReal = neReal;
             MachineSpeed = machineSpeed;
             TexSQ = texSQ;
             Visco = visco;
-            PIS = pis;
-            SPU = spu;
-            NeReal = neReal;
-            SizingBeamDocumentId = sizingBeamDocumentId;
             OperationStatus = operationStatus;
+            SizingBeamDocument = new List<SizingBeamDocumentValueObject>();
             Details = new List<DailyOperationSizingDetail>();
 
             this.MarkTransient();
@@ -58,19 +48,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 MachineDocumentId = this.MachineDocumentId.Value,
                 WeavingUnitId = this.WeavingUnitId.Value,
                 ConstructionDocumentId = this.ConstructionDocumentId.Value,
-                RecipeCode = this.RecipeCode,
-                Counter = this.Counter.Serialize(),
-                Weight = this.Weight.Serialize(),
                 WarpingBeamsId = this.WarpingBeamsId.Serialize(),
-                Cutmark = this.Cutmark,
+                RecipeCode = this.RecipeCode,
+                NeReal = this.NeReal,
                 MachineSpeed = this.MachineSpeed,
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
-                PIS = this.PIS,
-                SPU = this.SPU,
-                NeReal = this.NeReal,
-                SizingBeamDocumentId = this.SizingBeamDocumentId.Value,
                 OperationStatus = this.OperationStatus,
+                SizingBeamDocument = this.SizingBeamDocument.Serialize(),
                 Details = this.Details.ToList()
             };
         }
@@ -79,19 +64,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
-            this.RecipeCode = readModel.RecipeCode;
-            this.Counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(readModel.Counter);
-            this.Weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(readModel.Weight);
             this.WarpingBeamsId = readModel.WarpingBeamsId.Deserialize<List<BeamId>>();
-            this.Cutmark = readModel.Cutmark;
+            this.RecipeCode = readModel.RecipeCode;
+            this.NeReal = readModel.NeReal;
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
             this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
             this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
-            this.PIS = readModel.PIS.HasValue ? readModel.PIS.Value : 0;
-            this.SPU = readModel.SPU.HasValue ? readModel.SPU.Value : 0;
-            this.NeReal = readModel.NeReal.HasValue ? readModel.NeReal.Value : 0;
-            this.SizingBeamDocumentId = readModel.SizingBeamDocumentId.HasValue ? new BeamId(readModel.SizingBeamDocumentId.Value) : null;
             this.OperationStatus = readModel.OperationStatus;
+            this.SizingBeamDocument = readModel.SizingBeamDocument.Deserialize<List<SizingBeamDocumentValueObject>>();
             this.Details = readModel.Details;
         }
 
@@ -117,24 +97,33 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void SetCounter(DailyOperationSizingCounterValueObject counter)
+        public void AddSizingBeam(SizingBeamDocumentValueObject sizingBeam)
         {
-            Counter = counter;
-            ReadModel.Counter = counter.Serialize();
+            var list = SizingBeamDocument.ToList();
+            foreach (var document in list)
+            {
+                if (!document.SizingBeamId.Equals(sizingBeam.SizingBeamId))
+                {
+                    list.Add(sizingBeam);
+                    SizingBeamDocument = list;
+                    ReadModel.SizingBeamDocument = SizingBeamDocument.ToString();
+
+                    MarkModified();
+                }
+            }
+        }
+
+        public void SetRecipeCode(string recipeCode)
+        {
+            RecipeCode = recipeCode;
+            ReadModel.RecipeCode = recipeCode;
             MarkModified();
         }
 
-        public void SetWeight(DailyOperationSizingWeightValueObject weight)
+        public void SetNeReal(double neReal)
         {
-            Weight = weight;
-            ReadModel.Weight = weight.Serialize();
-            MarkModified();
-        }
-
-        public void SetCutmark(int cutmark)
-        {
-            Cutmark = cutmark;
-            ReadModel.Cutmark = cutmark;
+            NeReal = neReal;
+            ReadModel.NeReal = neReal;
             MarkModified();
         }
 
@@ -156,34 +145,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         {
             Visco = visco;
             ReadModel.Visco = visco;
-            MarkModified();
-        }
-
-        public void SetPIS(int pis)
-        {
-            PIS = pis;
-            ReadModel.PIS = pis;
-            MarkModified();
-        }
-
-        public void SetSPU(double spu)
-        {
-            SPU = spu;
-            ReadModel.SPU = spu;
-            MarkModified();
-        }
-
-        public void SetNeReal(double neReal)
-        {
-            NeReal = neReal;
-            ReadModel.NeReal = neReal;
-            MarkModified();
-        }
-
-        public void SetSizingBeamDocumentId(BeamId sizingBeamDocumentId)
-        {
-            SizingBeamDocumentId = sizingBeamDocumentId;
-            ReadModel.SizingBeamDocumentId = sizingBeamDocumentId.Value;
             MarkModified();
         }
 
