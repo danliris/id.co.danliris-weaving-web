@@ -21,6 +21,9 @@ namespace Manufactures.Domain.FabricConstructions
         public string WeftType { get; private set; }
         public double TotalYarn { get; private set; }
         public string MaterialTypeName { get; private set; }
+        public int ReedSpace { get; private set; }
+        //JUmlah Helai benang
+        public int TotalEnds { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }
 
@@ -83,6 +86,32 @@ namespace Manufactures.Domain.FabricConstructions
             this.ListOfWarp = !String.IsNullOrEmpty(readModel.ListOfWarp) ? readModel.ListOfWarp.Deserialize<List<ConstructionDetail>>() : null;
             this.ListOfWeft = !String.IsNullOrEmpty(readModel.ListOfWeft) ? readModel.ListOfWeft.Deserialize<List<ConstructionDetail>>() : null;
             this.Date = readModel.CreatedDate;
+            this.ReedSpace =
+                readModel.ReedSpace.HasValue ? readModel.ReedSpace.Value : 0;
+            this.TotalEnds =
+                readModel.TotalEnds.HasValue ? readModel.TotalEnds.Value : 0;
+        }
+
+        public void AddReedSpace(int number)
+        {
+            if (ReedSpace != number)
+            {
+                ReedSpace = number;
+                ReadModel.ReedSpace = ReedSpace;
+
+                MarkModified();
+            }
+        }
+
+        public void AddTotalEnds(int number)
+        {
+            if (TotalEnds != number)
+            {
+                TotalEnds = number;
+                ReadModel.TotalEnds = TotalEnds;
+
+                MarkModified();
+            }
         }
 
         public void UpdateWarp(ConstructionDetail value)

@@ -1,7 +1,6 @@
 ﻿using Manufactures.Domain.YarnNumbers;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Manufactures.Dtos.YarnNumber
@@ -15,7 +14,7 @@ namespace Manufactures.Dtos.YarnNumber
         public string Code { get; }
 
         [JsonProperty(PropertyName = "Number")]
-        public int Number { get; }
+        public string Number { get; }
 
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; }
@@ -24,7 +23,20 @@ namespace Manufactures.Dtos.YarnNumber
         {
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
-            Number = ringDocument.Number;
+
+            if (ringDocument.AdditionalNumber != 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(ringDocument.Number.ToString());
+                sb.Append("/");
+                sb.Append(ringDocument.AdditionalNumber.ToString());
+
+                Number =  sb.ToString();
+            } else
+            {
+                Number = ringDocument.Number.ToString();
+            }
+
             RingType = ringDocument.RingType;
         }
     }

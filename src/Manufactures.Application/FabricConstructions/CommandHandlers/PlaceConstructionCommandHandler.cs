@@ -8,7 +8,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Manufactures.Domain.Shared.ValueObjects;
 
 namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
@@ -48,7 +47,15 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                                                                 weftType: request.WeftTypeForm,
                                                                 totalYarn: request.TotalYarn,
                                                                 materialTypeName: request.MaterialTypeName);
+            if (request.ReedSpace != 0)
+            {
+                constructionDocument.AddReedSpace(request.ReedSpace);
+            }
 
+            if (request.TotalEnds != 0)
+            {
+                constructionDocument.AddTotalEnds(request.TotalEnds);
+            }
 
             if (request.ItemsWarp.Count > 0)
             {
