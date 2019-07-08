@@ -93,7 +93,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var newOperation =
                                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                    new ShiftId(request.Details.ShiftId.Value),
-                                                                   new OperatorId(lastHistory.OperatorDocumentId),
+                                                                   new OperatorId(request.Details.OperatorDocumentId.Value),
                                                                    dateTimeOperation,
                                                                    DailyOperationMachineStatus.ONSTOP,
                                                                    request.Details.Information,

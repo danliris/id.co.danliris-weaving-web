@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class ResumeBeamProductionDetailDailyOperationSizingCommand
+    public class BeamProductionResumeDetailDailyOperationSizingCommand
     {
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
@@ -15,21 +15,21 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ShiftId")]
         public ShiftId ShiftId { get; set; }
 
-        [JsonProperty(PropertyName = "ResumeBeamProductionDate")]
-        public DateTimeOffset ResumeBeamProductionDate { get; set; }
+        [JsonProperty(PropertyName = "BeamProductionResumeDate")]
+        public DateTimeOffset BeamProductionResumeDate { get; set; }
 
-        [JsonProperty(PropertyName = "ResumeBeamProductionTime")]
-        public TimeSpan ResumeBeamProductionTime { get; set; }
+        [JsonProperty(PropertyName = "BeamProductionResumeTime")]
+        public TimeSpan BeamProductionResumeTime { get; set; }
     }
 
-    public class ResumeBeamProductionDetailDailyOperationSizingCommandValidator : AbstractValidator<ResumeBeamProductionDetailDailyOperationSizingCommand>
+    public class ResumeBeamProductionDetailDailyOperationSizingCommandValidator : AbstractValidator<BeamProductionResumeDetailDailyOperationSizingCommand>
     {
         public ResumeBeamProductionDetailDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
-            RuleFor(validator => validator.ResumeBeamProductionDate).NotEmpty();
-            RuleFor(validator => validator.ResumeBeamProductionDate).NotEmpty();
+            RuleFor(validator => validator.BeamProductionResumeDate).NotEmpty();
+            RuleFor(validator => validator.BeamProductionResumeTime).NotEmpty();
         }
     }
 }

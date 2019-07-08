@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class ResumeBeamProductionDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class BeamProductionResumeDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
 
         [JsonProperty(PropertyName = "SizingBeamId")]
@@ -30,9 +30,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double SPU { get; set; }
     }
 
-    public class ResumeBeamProductionDailyOperationSizingCommandValidator : AbstractValidator<ResumeBeamProductionDailyOperationSizingCommand>
+    public class BeamProductionResumeDailyOperationSizingCommandValidator : AbstractValidator<BeamProductionResumeDailyOperationSizingCommand>
     {
-        public ResumeBeamProductionDailyOperationSizingCommandValidator()
+        public BeamProductionResumeDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
             RuleFor(validator => validator.CounterFinish).NotEmpty();

@@ -70,7 +70,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            //Validation for Pause Date
+            //Validation for Start Date
             var entryDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeOperation.Date, new TimeSpan(+7, 0, 0));
             var startDateMachineLogUtc = new DateTimeOffset(request.Details.StartDate.Date, new TimeSpan(+7, 0, 0));
 
@@ -91,7 +91,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var newOperation =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                new ShiftId(request.Details.ShiftId.Value),
-                                                               new OperatorId(lastHistory.OperatorDocumentId),
+                                                               new OperatorId(request.Details.OperatorDocumentId.Value),
                                                                dateTimeOperation,
                                                                DailyOperationMachineStatus.ONSTART,
                                                                "-",
