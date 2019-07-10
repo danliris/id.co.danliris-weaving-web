@@ -103,7 +103,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     var beamDocument = 
                         _beamRepository
-                            .Find(o => o.Identity.Equals(request.SizingBeamDocumentId.Value))
+                            .Find(o => o.Identity.Equals(request.SizingBeamId.Value))
                             .FirstOrDefault();
                     //var Weight = existingDailyOperation.Weight;
                     

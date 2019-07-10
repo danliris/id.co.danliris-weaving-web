@@ -34,8 +34,8 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         //[JsonProperty(PropertyName = "PIS")]
         //public int PIS { get; }
 
-        //[JsonProperty(PropertyName = "SizingBeamDocumentId")]
-        //public BeamId SizingBeamDocumentId { get; }
+        //[JsonProperty(PropertyName = "SizingBeamId")]
+        //public BeamId SizingBeamId { get; }
 
         [JsonProperty(PropertyName = "Details")]
         public List<DailyOperationSizingDetailsDto> Details { get; set; }

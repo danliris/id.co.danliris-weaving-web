@@ -54,8 +54,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var weight = new SizingWeightValueObject(0, 0, 0);
             var beam = new SizingBeamDocumentValueObject(request.SizingBeamId, 
                                                          counter, 
-                                                         weight, 
-                                                         0);
+                                                         weight,
+                                                         0,
+                                                         0,
+                                                         DailyOperationMachineStatus.ONPROCESS);
 
             dailyOperationSizingDocument.AddSizingBeam(beam);
 

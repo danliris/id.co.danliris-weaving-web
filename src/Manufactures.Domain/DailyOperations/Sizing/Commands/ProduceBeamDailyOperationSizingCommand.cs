@@ -8,8 +8,10 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class BeamProductionResumeDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class ProduceBeamDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
@@ -18,21 +20,29 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public string CounterFinish { get; set; }
 
         [JsonProperty(PropertyName = "WeightNetto")]
-        public string WeightNetto { get; set; }
+        public double WeightNetto { get; set; }
 
         [JsonProperty(PropertyName = "WeightBruto")]
-        public string WeightBruto { get; set; }
+        public double WeightBruto { get; set; }
 
         [JsonProperty(PropertyName = "WeightTheoretical")]
-        public string WeightTheoretical { get; set; }
+        public double WeightTheoretical { get; set; }
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
+
+        [JsonProperty(PropertyName = "SizingBeamStatus")]
+        public string SizingBeamStatus { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 
-    public class BeamProductionResumeDailyOperationSizingCommandValidator : AbstractValidator<BeamProductionResumeDailyOperationSizingCommand>
+    public class ProduceBeamDailyOperationSizingCommandValidator : AbstractValidator<ProduceBeamDailyOperationSizingCommand>
     {
-        public BeamProductionResumeDailyOperationSizingCommandValidator()
+        public ProduceBeamDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
             RuleFor(validator => validator.CounterFinish).NotEmpty();

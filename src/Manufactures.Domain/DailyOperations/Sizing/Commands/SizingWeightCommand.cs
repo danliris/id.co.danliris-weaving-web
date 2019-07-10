@@ -11,8 +11,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Bruto")]
         public double Bruto { get; set; }
 
-        [JsonProperty(PropertyName = "Theoretical")]
-        public double Theoretical { get; set; }
+        [JsonProperty(PropertyName = "Theoritical")]
+        public double Theoritical { get; set; }
     }
 
     public class SizingWeightCommandValidator
@@ -22,7 +22,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         {
             RuleFor(validator => validator.Netto).NotEmpty();
             RuleFor(validator => validator.Bruto).NotEmpty();
-            RuleFor(validator => validator.Theoretical).NotEmpty();
+            RuleFor(validator => validator.Theoritical).NotEmpty();
         }
     }
 }

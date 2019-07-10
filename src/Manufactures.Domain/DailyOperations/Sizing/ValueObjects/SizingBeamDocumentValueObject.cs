@@ -14,18 +14,24 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 
         public SizingWeightValueObject Weight { get; private set; }
 
+        public double PISMeter { get; private set; }
+
         public double SPU { get; private set; }
+
+        public string SizingBeamStatus { get; private set; }
 
         public SizingBeamDocumentValueObject()
         {
         }
 
-        public SizingBeamDocumentValueObject(BeamId sizingBeamId, SizingCounterValueObject counter, SizingWeightValueObject weight, double sPU)
+        public SizingBeamDocumentValueObject(BeamId sizingBeamId, SizingCounterValueObject counter, SizingWeightValueObject weight, double pisMeter, double spu, string sizingBeamStatus)
         {
             SizingBeamId = sizingBeamId;
             Counter = counter;
             Weight = weight;
-            SPU = sPU;
+            PISMeter = pisMeter;
+            SPU = spu;
+            SizingBeamStatus = sizingBeamStatus;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
@@ -33,7 +39,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
             yield return SizingBeamId;
             yield return Counter;
             yield return Weight;
+            yield return PISMeter;
             yield return SPU;
+            yield return SizingBeamStatus;
         }
     }
 }

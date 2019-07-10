@@ -1,4 +1,5 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Application.DailyOperations.Sizing.Calculations;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
@@ -230,18 +231,86 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        [HttpGet("calculate/pis/{pisInput}")]
-        public async Task<IActionResult> CalculatePIS(int pisInput)
+        [HttpGet("calculate/pis-in-meter/start/{counterStart}/finish/{counterFinish}")]
+        public async Task<IActionResult> CalculatePISInMeter(double counterStartInput, double counterFinishInput)
         {
-            int calculationResults;
+            double pisInPieces;
 
-            if (pisInput != 0)
+            if (counterStartInput != null && counterFinishInput != null)
             {
                 PIS calculate = new PIS();
-                calculationResults = calculate.Calculate(pisInput);
+                pisInPieces = calculate.CalculateInMeter(counterStartInput, counterFinishInput);
 
                 await Task.Yield();
-                return Ok(calculationResults);
+                return Ok(pisInPieces);
+            }
+            await Task.Yield();
+            return NotFound();
+        }
+
+        [HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
+        public async Task<IActionResult> CalculatePISInPieces(double counterStartInput, double counterFinishInput)
+        {
+            double pisInMeter;
+
+            if (counterStartInput != null && counterFinishInput != null)
+            {
+                PIS calculate = new PIS();
+                pisInMeter = calculate.CalculateInPieces(counterStartInput, counterFinishInput);
+
+                await Task.Yield();
+                return Ok(pisInMeter);
+            }
+            await Task.Yield();
+            return NotFound();
+        }
+
+        [HttpGet("calculate/theoritical-kawamoto/pis/{pisInMeterInput}/yarn-strands/{yarnStrandsInput}/ne-real/{neRealInput}")]
+        public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisInMeterInput, int yarnStrandsInput, double neRealInput)
+        {
+            double kawamotoCalculationResult;
+
+            if (pisInMeterInput != null && yarnStrandsInput != null && neRealInput != null)
+            {
+                Netto calculate = new Netto();
+                kawamotoCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
+
+                await Task.Yield();
+                return Ok(kawamotoCalculationResult);
+            }
+            await Task.Yield();
+            return NotFound();
+        }
+
+        [HttpGet("calculate/theoritical-sucker-muller/pis/{pisInMeterInput}/yarn-strands/{yarnStrandsInput}/ne-real/{neRealInput}")]
+        public async Task<IActionResult> CalculateTheoriticalSuckerMuller(double pisInMeterInput, int yarnStrandsInput, double neRealInput)
+        {
+            double suckerMullerCalculationResult;
+
+            if (pisInMeterInput != null && yarnStrandsInput != null && neRealInput != null)
+            {
+                Netto calculate = new Netto();
+                suckerMullerCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
+
+                await Task.Yield();
+                return Ok(suckerMullerCalculationResult);
+            }
+            await Task.Yield();
+            return NotFound();
+        }
+
+        [HttpGet("calculate/spu/netto/{netto}/theoritical/{theoritical}")]
+        public async Task<IActionResult> CalculateSPU(double netto, double theoritical)
+        {
+            double spuCalculationResult;
+
+            if (netto != null && theoritical != 0)
+            {
+                SPU calculate = new SPU();
+                spuCalculationResult = calculate.Calculate(netto, theoritical);
+
+                await Task.Yield();
+                return Ok(spuCalculationResult);
             }
             await Task.Yield();
             return NotFound();
@@ -297,6 +366,20 @@ namespace Manufactures.Controllers.Api
             return Ok(updateResumeDailyOperationSizingDocument.Identity);
         }
 
+        [HttpPut("{Id}/reuse")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]ProduceBeamDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
+        }
+
         [HttpPut("{Id}/doff")]
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdateDoffFinishDailyOperationSizingCommand command)
@@ -343,7 +426,7 @@ namespace Manufactures.Controllers.Api
         //                var machineDateTime = filteredDetails.DateTimeOperation;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));
         //                var filteredBeamNumber = " ";
 
         //                foreach (var beam in filteredBeam)
@@ -434,7 +517,7 @@ namespace Manufactures.Controllers.Api
         //                var machineDateTime = filteredDetails.DateTimeOperation;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));
         //                var filteredBeamNumber = " ";
 
         //                foreach (var beam in filteredBeam)
@@ -522,7 +605,7 @@ namespace Manufactures.Controllers.Api
         //            var machineDateTime = filteredDetails.DateTimeOperation;
 
         //            var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-        //            var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamDocumentId.Value));
+        //            var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));
         //            var filteredBeamNumber = " ";
 
         //            foreach (var beam in filteredBeam)

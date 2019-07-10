@@ -7,16 +7,28 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Calculation
 {
     public class PIS
     {
-        public int Calculate(int cutmarkInput)
+        public double CalculateInMeter(double counterStart, double counterFinish)
         {
-            var result = 0;
+            double pisInMeter = 0;
 
-            if (cutmarkInput != 0)
+            if (counterStart != null && counterFinish != null)
             {
-                result = cutmarkInput * ConstantCalculations.CUTMARK_STANDARD_VALUE;
+                pisInMeter = (counterFinish - counterStart);
             }
 
-            return result;
+            return pisInMeter;
+        }
+
+        public double CalculateInPieces(double counterStart, double counterFinish)
+        {
+            double pisInPieces = 0;
+
+            if (counterStart != null && counterFinish != null)
+            {
+                pisInPieces = (counterFinish - counterStart)/ ConstantsValue.CUTMARK_STANDARD_VALUE;
+            }
+
+            return pisInPieces;
         }
     }
 }
