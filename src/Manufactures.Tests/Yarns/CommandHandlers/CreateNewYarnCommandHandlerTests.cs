@@ -23,8 +23,7 @@ namespace Manufactures.Tests.Yarns.CommandHandlers
 
         public CreateNewYarnCommandHandlerTests()
         {
-            this.mockRepository = new MockRepository(MockBehavior.Strict);
-
+            this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
             this.mockStorage.Setup(x => x.Save());
 
