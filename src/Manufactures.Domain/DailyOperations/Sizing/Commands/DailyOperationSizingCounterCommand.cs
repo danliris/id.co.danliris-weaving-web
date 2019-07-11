@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class SizingCounterCommand
+    public class DailyOperationSizingCounterCommand
     {
         [JsonProperty(PropertyName = "Start")]
         public double Start { get; set; }
@@ -12,13 +12,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double Finish { get; set; }
     }
 
-    public class SizingCounterCommandValidator
-      : AbstractValidator<SizingCounterCommand>
+    public class DailyOperationSizingCounterCommandValidator
+      : AbstractValidator<DailyOperationSizingCounterCommand>
     {
-        public SizingCounterCommandValidator()
+        public DailyOperationSizingCounterCommandValidator()
         {
             RuleFor(validator => validator.Start).NotEmpty();
-            RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => !validator.Start.Equals(0) && (validator.Start > 0));
+            RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start > 0);
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class SizingCauseCommand
+    public class DailyOperationSizingCauseCommand
     {
         [JsonProperty(PropertyName = "BrokenBeam")]
         public string BrokenBeam { get; set; }
@@ -14,10 +14,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "MachineTroubled")]
         public string MachineTroubled { get; set; }
     }
-    public class SizingCausesCommandValidator
-      : AbstractValidator<SizingCauseCommand>
+    public class DailyOperationSizingCausesCommandValidator
+      : AbstractValidator<DailyOperationSizingCauseCommand>
     {
-        public SizingCausesCommandValidator()
+        public DailyOperationSizingCausesCommandValidator()
         {
             RuleFor(validator => validator.BrokenBeam).NotEmpty().Unless(command => string.IsNullOrEmpty(command.MachineTroubled));
             RuleFor(validator => validator.MachineTroubled).NotEmpty().Unless(command => string.IsNullOrEmpty(command.BrokenBeam));

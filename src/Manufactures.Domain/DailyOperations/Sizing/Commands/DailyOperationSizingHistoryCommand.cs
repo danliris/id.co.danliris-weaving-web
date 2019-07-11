@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class SizingHistoryCommand
+    public class DailyOperationSizingHistoryCommand
     {
         [JsonProperty(PropertyName = "MachineDate")]
         public DateTimeOffset MachineDate { get; set; }
@@ -21,10 +21,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public string Information { get; private set; }
     }
 
-    public class SizingHistoryCommandValidator
-       : AbstractValidator<SizingHistoryCommand>
+    public class DailyOperationSizingHistoryCommandValidator
+       : AbstractValidator<DailyOperationSizingHistoryCommand>
     {
-        public SizingHistoryCommandValidator()
+        public DailyOperationSizingHistoryCommandValidator()
         {
             RuleFor(validator => validator.MachineDate).NotNull();
             RuleFor(validator => validator.MachineTime).NotNull();

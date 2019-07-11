@@ -14,10 +14,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "Counter")]
-        public SizingCounterCommand Counter { get; set; }
+        public DailyOperationSizingCounterCommand Counter { get; set; }
 
         [JsonProperty(PropertyName = "Weight")]
-        public SizingWeightCommand Weight { get; set; }
+        public DailyOperationSizingWeightCommand Weight { get; set; }
 
         [JsonProperty(PropertyName = "MachineSpeed")]
         public int MachineSpeed { get; set; }
@@ -49,8 +49,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public UpdateDoffFinishDailyOperationSizingCommandValidator()
         {
-            //RuleFor(command => command.Counter).SetValidator(new SizingCounterCommandValidator());
-            //RuleFor(command => command.Weight).SetValidator(new SizingWeightCommandValidator());
+            //RuleFor(command => command.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            //RuleFor(command => command.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
             RuleFor(validator => validator.MachineSpeed).NotEmpty();
             RuleFor(validator => validator.TexSQ).NotEmpty();
             RuleFor(validator => validator.Visco).NotEmpty();

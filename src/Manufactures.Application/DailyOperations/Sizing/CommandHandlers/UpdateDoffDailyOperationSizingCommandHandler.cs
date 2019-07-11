@@ -116,7 +116,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     existingDailyOperation.SetNeReal(existingDailyOperation.NeReal);
                     existingDailyOperation.SetOperationStatus(DailyOperationMachineStatus.ONFINISH);
 
-                    var Causes = JsonConvert.DeserializeObject<SizingCauseValueObject>(lastHistory.Causes);
+                    var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastHistory.Causes);
 
                     var newOperation =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -125,7 +125,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                dateTimeOperation,
                                                                DailyOperationMachineStatus.ONCOMPLETE,
                                                                "-",
-                                                               new SizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
+                                                               new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
                     existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 

@@ -1,5 +1,5 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
-using Manufactures.Domain.DailyOperations.Sizing.Entities;
+using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Dtos.Beams;
 using Newtonsoft.Json;
@@ -25,17 +25,8 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
-        //[JsonProperty(PropertyName = "Counter")]
-        //public DailyOperationSizingCounterDto Counter { get; }
-
-        //[JsonProperty(PropertyName = "Visco")]
-        //public double Visco { get; }
-
-        //[JsonProperty(PropertyName = "PIS")]
-        //public int PIS { get; }
-
-        //[JsonProperty(PropertyName = "SizingBeamId")]
-        //public BeamId SizingBeamId { get; }
+        [JsonProperty(PropertyName = "SizingBeamDocument")]
+        public List<DailyOperationSizingBeamDocumentDto> SizingBeamDocument { get; }
 
         [JsonProperty(PropertyName = "Details")]
         public List<DailyOperationSizingDetailsDto> Details { get; set; }
@@ -47,6 +38,13 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
             WeavingUnitDocumentId = document.WeavingUnitId;
             ConstructionNumber = constructionNumber;
             WarpingBeamsDocument = beams;
+            SizingBeamDocument = new List<DailyOperationSizingBeamDocumentDto>();
+
+            foreach (var sizingBeamDocument in document.SizingBeamDocument)
+            {
+                var sizingBeam = new DailyOperationSizingBeamDocumentDto(sizingBeamDocument.SizingBeamId, sizingBeamDocument.Start, sizingBeamDocument.Finish, sizingBeamDocument.Netto, sizingBeamDocument.Bruto, sizingBeamDocument.Theoritical, sizingBeamDocument.PISMeter, sizingBeamDocument.SPU, sizingBeamDocument.SizingBeamStatus);
+                SizingBeamDocument.Add(sizingBeam);
+            }
             Details = new List<DailyOperationSizingDetailsDto>();
         }
     }

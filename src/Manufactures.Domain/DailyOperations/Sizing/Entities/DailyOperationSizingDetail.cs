@@ -30,7 +30,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                                           DateTimeOffset dateTimeOperation, 
                                           string machineStatus, 
                                           string information, 
-                                          SizingCauseValueObject causes) : base(identity)
+                                          DailyOperationSizingCauseValueObject causes) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
@@ -73,7 +73,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetCauses(SizingCauseValueObject causes)
+        public void SetCauses(DailyOperationSizingCauseValueObject causes)
         {
             Causes = causes.Serialize();
             MarkModified();

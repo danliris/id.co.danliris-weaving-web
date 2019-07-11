@@ -86,7 +86,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
                     {
-                        var Causes = JsonConvert.DeserializeObject<SizingCauseValueObject>(lastHistory.Causes);
+                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastHistory.Causes);
 
                         var newOperation =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -95,7 +95,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                dateTimeOperation,
                                                                DailyOperationMachineStatus.ONSTART,
                                                                "-",
-                                                               new SizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
+                                                               new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 

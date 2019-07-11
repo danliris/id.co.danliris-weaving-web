@@ -22,7 +22,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public TimeSpan PauseTime { get; set; }
 
         [JsonProperty(PropertyName = "Causes")]
-        public SizingCauseCommand Causes { get; set; }
+        public DailyOperationSizingCauseCommand Causes { get; set; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; set; }
@@ -36,7 +36,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.PauseDate).NotEmpty();
             RuleFor(validator => validator.PauseTime).NotEmpty();
-            RuleFor(validator => validator.Causes).SetValidator(new SizingCausesCommandValidator());
+            RuleFor(validator => validator.Causes).SetValidator(new DailyOperationSizingCausesCommandValidator());
         }
     }
 }

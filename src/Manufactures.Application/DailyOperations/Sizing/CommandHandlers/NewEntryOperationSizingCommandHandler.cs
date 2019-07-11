@@ -50,11 +50,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     DailyOperationMachineStatus.ONPROCESS);
 
-            var counter = new SizingCounterValueObject(request.Counter.Start, 0);
-            var weight = new SizingWeightValueObject(0, 0, 0);
-            var beam = new SizingBeamDocumentValueObject(request.SizingBeamId, 
-                                                         counter, 
-                                                         weight,
+            //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeam.Counter.Start, 0);
+            //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
+            var beam = new DailyOperationSizingBeamDocumentValueObject(request.SizingBeam.SizingBeamId,
+                                                         request.SizingBeam.Counter.Start, 
+                                                         0,
+                                                         0, 
+                                                         0, 
+                                                         0,
                                                          0,
                                                          0,
                                                          DailyOperationMachineStatus.ONPROCESS);
@@ -77,7 +80,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    dateTimeOperation,
                                                    DailyOperationMachineStatus.ONENTRY,
                                                    "-",
-                                                   new SizingCauseValueObject("0","0"));
+                                                   new DailyOperationSizingCauseValueObject("0","0"));
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

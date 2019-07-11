@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class SizingBeamCollectionCommand
+    public class DailyOperationSizingBeamCollectionCommand
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
@@ -21,10 +21,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double EmptyWeight { get; set; }
     }
 
-    public class SizingBeamCollectionCommandValidator
-      : AbstractValidator<SizingBeamCollectionCommand>
+    public class DailyOperationSizingBeamCollectionCommandValidator
+      : AbstractValidator<DailyOperationSizingBeamCollectionCommand>
     {
-        public SizingBeamCollectionCommandValidator()
+        public DailyOperationSizingBeamCollectionCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
             RuleFor(validator => validator.Number).NotEmpty();

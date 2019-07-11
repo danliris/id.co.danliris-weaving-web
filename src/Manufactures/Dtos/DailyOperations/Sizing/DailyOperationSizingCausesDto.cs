@@ -12,6 +12,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 
         [JsonProperty(PropertyName = "MachineTroubled")]
         public string MachineTroubled { get; }
+
         public DailyOperationSizingCausesDto(string brokenBeam, string machineTroubled)
         {
             BrokenBeam = brokenBeam;

@@ -4,22 +4,23 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
-    public class SizingCounterValueObject : ValueObject
+    public class DailyOperationSizingCounterValueObject : ValueObject
     {
         public double Start { get; set; }
+
         public double Finish { get; set; }
 
-        public SizingCounterValueObject(double start, double finish)
+        public DailyOperationSizingCounterValueObject(double start, double finish)
         {
             Start = start;
             Finish = finish;
         }
 
-        public SizingCounterValueObject()
+        public DailyOperationSizingCounterValueObject()
         {
         }
 
-        public SizingCounterValueObject(SizingCounterCommand dailyOperationSizingCounterProduction)
+        public DailyOperationSizingCounterValueObject(DailyOperationSizingCounterCommand dailyOperationSizingCounterProduction)
         {
             Start = dailyOperationSizingCounterProduction.Start;
             Finish = dailyOperationSizingCounterProduction.Finish;

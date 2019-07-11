@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
-    public class SizingWeightValueObject : ValueObject
+    public class DailyOperationSizingWeightValueObject : ValueObject
     {
         public double Netto { get; set; }
 
@@ -12,18 +12,18 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 
         public double Theoritical { get; set; }
 
-        public SizingWeightValueObject(double netto, double bruto, double theoritical)
+        public DailyOperationSizingWeightValueObject(double netto, double bruto, double theoritical)
         {
             Netto = netto;
             Bruto = bruto;
             Theoritical = theoritical;
         }
 
-        public SizingWeightValueObject()
+        public DailyOperationSizingWeightValueObject()
         {
         }
 
-        public SizingWeightValueObject(SizingWeightCommand dailyOperationSizingWeightProduction)
+        public DailyOperationSizingWeightValueObject(DailyOperationSizingWeightCommand dailyOperationSizingWeightProduction)
         {
             Netto = dailyOperationSizingWeightProduction.Netto;
             Bruto = dailyOperationSizingWeightProduction.Bruto;

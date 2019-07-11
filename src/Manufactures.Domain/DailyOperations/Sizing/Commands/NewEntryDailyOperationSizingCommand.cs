@@ -19,23 +19,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamsId")]
-        public List<BeamId> WarpingBeamsId { get; set; }
-
         [JsonProperty(PropertyName = "RecipeCode")]
         public string RecipeCode { get; set; }
 
         [JsonProperty(PropertyName = "NeReal")]
         public double NeReal { get; set; }
 
-        [JsonProperty(PropertyName = "SizingBeamId")]
-        public BeamId SizingBeamId { get; set; }
+        [JsonProperty(PropertyName = "WarpingBeamsId")]
+        public List<BeamId> WarpingBeamsId { get; set; }
 
-        //[JsonProperty(PropertyName = "Counter")]
-        //public double Counter { get; set; }
-
-        [JsonProperty(PropertyName = "Counter")]
-        public SizingCounterCommand Counter { get; set; }
+        [JsonProperty(PropertyName = "SizingBeam")]
+        public DailyOperationSizingBeamDocumentCommand SizingBeam { get; set; }
 
         [JsonProperty(PropertyName = "Details")]
         public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
@@ -48,12 +42,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
             RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.WarpingBeamsId.Count).NotEqual(0);
             RuleFor(validator => validator.RecipeCode).NotEmpty();
             RuleFor(validator => validator.NeReal).NotEmpty();
-            RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
-            //RuleFor(validator => validator.Counter).NotEmpty();
-            RuleFor(validator => validator.Counter).SetValidator(new SizingCounterCommandValidator());
+            RuleFor(validator => validator.WarpingBeamsId.Count).NotEqual(0);
+            RuleFor(validator => validator.SizingBeam).SetValidator(new DailyOperationSizingBeamDocumentCommandValidator()); ;
             RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }

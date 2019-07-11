@@ -8,9 +8,15 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
     public class DailyOperationSizingCounterDto
     {
         [JsonProperty(PropertyName = "Start")]
-        public string Start { get; }
+        public double Start { get; }
 
         [JsonProperty(PropertyName = "Finish")]
-        public string Finish { get; }
+        public double Finish { get; }
+
+        public DailyOperationSizingCounterDto(double start, double finish)
+        {
+            Start = start;
+            Finish = finish;
+        }
     }
 }
