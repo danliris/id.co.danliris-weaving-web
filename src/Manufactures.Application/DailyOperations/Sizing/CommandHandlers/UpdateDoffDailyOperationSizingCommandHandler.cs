@@ -44,7 +44,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
+            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = histories.FirstOrDefault();
             //Get Existing movement from daily operation
             var existingMovement =
@@ -55,7 +55,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Validation for Start Status
             //var countStartStatus =
             //    existingDailyOperation
-            //        .Details
+            //        .SizingDetails
             //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
             //        .Count();
 
@@ -67,7 +67,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Validation for Finish Status
             var countFinishStatus =
                 existingDailyOperation
-                    .Details
+                    .SizingDetails
                     .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
                     .Count();
 
@@ -154,7 +154,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //Validation for DoffFinish Time
             //var lastTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
-            //var doffFinishTimeMachineLog = request.Details.FinishTime;
+            //var doffFinishTimeMachineLog = request.SizingDetails.FinishTime;
 
             //if (doffFinishTimeMachineLog < lastTimeMachineLog)
             //{
@@ -163,7 +163,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //var countFinishStatus =
             //    existingDailyOperation
-            //        .Details
+            //        .SizingDetails
             //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
             //        .Count();
 

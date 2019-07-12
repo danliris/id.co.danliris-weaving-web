@@ -22,8 +22,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public double TexSQ { get; private set; }
         public double Visco { get; private set; }
         public string OperationStatus { get; private set; }
-        public List<DailyOperationSizingBeamDocumentValueObject> SizingBeamDocument { get; private set; }
-        public IReadOnlyCollection<DailyOperationSizingDetail> Details { get; private set; }
+        public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocument { get; private set; }
+        public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
 
         public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> warpingBeamsId, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
         {
@@ -38,8 +38,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             TexSQ = texSQ;
             Visco = visco;
             OperationStatus = operationStatus;
-            SizingBeamDocument = new List<DailyOperationSizingBeamDocumentValueObject>();
-            Details = new List<DailyOperationSizingDetail>();
+            SizingBeamDocument = new List<DailyOperationSizingBeamDocument>();
+            SizingDetails = new List<DailyOperationSizingDetail>();
 
             this.MarkTransient();
 
@@ -55,8 +55,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
                 OperationStatus = this.OperationStatus,
-                SizingBeamDocument = JsonConvert.SerializeObject(this.SizingBeamDocument),
-                Details = this.Details.ToList()
+                SizingBeamDocument = this.SizingBeamDocument.ToList(),
+                Details = this.SizingDetails.ToList()
             };
         }
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
@@ -71,42 +71,38 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
             this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
             this.OperationStatus = readModel.OperationStatus;
-            this.SizingBeamDocument = JsonConvert.DeserializeObject<List<DailyOperationSizingBeamDocumentValueObject>>(readModel.SizingBeamDocument);
-            this.Details = readModel.Details;
+            this.SizingBeamDocument = readModel.SizingBeamDocument;
+            this.SizingDetails = readModel.Details;
         }
 
         public void AddDailyOperationSizingDetail(DailyOperationSizingDetail dailyOperationSizingDetail)
         {
-            var list = Details.ToList();
+            var list = SizingDetails.ToList();
             list.Add(dailyOperationSizingDetail);
-            Details = list;
-            ReadModel.Details = Details.ToList();
+            SizingDetails = list;
+            ReadModel.Details = SizingDetails.ToList();
 
             MarkModified();
         }
 
         public void RemoveDailyOperationMachineDetail(Guid identity)
         {
-            var detail = Details.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = Details.ToList();
+            var detail = SizingDetails.Where(o => o.Identity == identity).FirstOrDefault();
+            var list = SizingDetails.ToList();
 
             list.Remove(detail);
-            Details = list;
-            ReadModel.Details = Details.ToList();
+            SizingDetails = list;
+            ReadModel.Details = SizingDetails.ToList();
 
             MarkModified();
         }
 
-        public void AddSizingBeam(DailyOperationSizingBeamDocumentValueObject sizingBeam)
+        public void AddSizingBeam(DailyOperationSizingBeamDocument sizingBeamDocument)
         {
-            //SizingBeamDocument.SizingBeamId(sizingBeam);
-            //ReadModel.SizingBeamDocument = SizingBeamDocument.ToString();
-
-            //MarkModified();
             var list = SizingBeamDocument.ToList();
-            list.Add(sizingBeam);
+            list.Add(sizingBeamDocument);
             SizingBeamDocument = list;
-            ReadModel.SizingBeamDocument = SizingBeamDocument.ToString();
+            ReadModel.SizingBeamDocument = SizingBeamDocument.ToList();
 
             MarkModified();
         }

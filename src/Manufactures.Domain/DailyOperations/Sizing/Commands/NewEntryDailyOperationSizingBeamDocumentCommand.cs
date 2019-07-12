@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class DailyOperationSizingBeamDocumentCommand
+    public class NewEntryDailyOperationSizingBeamDocumentCommand
     {
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
@@ -25,7 +25,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         //public string SizingBeamStatus { get; set; }
     }
 
-    public class DailyOperationSizingBeamDocumentCommandValidator : AbstractValidator<DailyOperationSizingBeamDocumentCommand>
+    public class DailyOperationSizingBeamDocumentCommandValidator : AbstractValidator<NewEntryDailyOperationSizingBeamDocumentCommand>
     {
         public DailyOperationSizingBeamDocumentCommandValidator()
         {

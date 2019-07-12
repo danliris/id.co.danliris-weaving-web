@@ -97,10 +97,10 @@ namespace Manufactures.Controllers.Api
                         .FirstOrDefault();
 
                 var shiftOnDetail = new ShiftValueObject();
-                var dailyOperationEntryDateTime = dailyOperation.Details.OrderBy(e => e.DateTimeOperation).FirstOrDefault().DateTimeOperation;
+                var dailyOperationEntryDateTime = dailyOperation.SizingDetails.OrderBy(e => e.DateTimeOperation).FirstOrDefault().DateTimeOperation;
                 var lastDailyOperationStatus = dailyOperation.OperationStatus;
 
-                foreach (var detail in dailyOperation.Details)
+                foreach (var detail in dailyOperation.SizingDetails)
                 {
                     var shiftDocument =
                         _shiftDocumentRepository
@@ -193,7 +193,7 @@ namespace Manufactures.Controllers.Api
 
                 var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, constructionNumber, warpingBeams);
 
-                foreach (var detail in dailyOperationalSizing.Details)
+                foreach (var detail in dailyOperationalSizing.SizingDetails)
                 {
                     var shiftDocument =
                         _shiftDocumentRepository
@@ -210,9 +210,9 @@ namespace Manufactures.Controllers.Api
 
                     var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes);
 
-                    dto.Details.Add(detailsDto);
+                    dto.SizingDetails.Add(detailsDto);
                 }
-                dto.Details = dto.Details.OrderBy(history => history.DateTimeOperationHistory).ToList();
+                dto.SizingDetails = dto.SizingDetails.OrderBy(history => history.DateTimeOperationHistory).ToList();
 
                 await Task.Yield();
 
@@ -407,7 +407,7 @@ namespace Manufactures.Controllers.Api
         //        var resultData = new List<SizePickupListDto>();
         //        var query =
         //            _dailyOperationSizingDocumentRepository
-        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //                .Query.Include(o => o.SizingDetails).OrderByDescending(item => item.CreatedDate);
         //        var filteredSizePickupDtos =
         //            _dailyOperationSizingDocumentRepository
         //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
@@ -416,7 +416,7 @@ namespace Manufactures.Controllers.Api
         //        {
         //            var convertedDate = DateTime.Parse(date);
 
-        //            var filteredDetails = data.Details.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
+        //            var filteredDetails = data.SizingDetails.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
         //                                                          x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                          x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
@@ -496,7 +496,7 @@ namespace Manufactures.Controllers.Api
         //        var resultData = new List<SizePickupListDto>();
         //        var query =
         //            _dailyOperationSizingDocumentRepository
-        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //                .Query.Include(o => o.SizingDetails).OrderByDescending(item => item.CreatedDate);
         //        var filteredSizePickupDtos =
         //            _dailyOperationSizingDocumentRepository
         //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
@@ -506,7 +506,7 @@ namespace Manufactures.Controllers.Api
         //            var convertedStartDate = DateTime.Parse(startDate);
         //            var convertedEndDate = DateTime.Parse(endDate);
 
-        //            var filteredDetails = data.Details.Where(x => (x.DateTimeOperation.DateTime >= convertedStartDate &&
+        //            var filteredDetails = data.SizingDetails.Where(x => (x.DateTimeOperation.DateTime >= convertedStartDate &&
         //                                                           x.DateTimeOperation.DateTime <= convertedEndDate) &&
         //                                                           x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                           x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
@@ -593,14 +593,14 @@ namespace Manufactures.Controllers.Api
         //        var resultData = new List<SizePickupListDto>();
         //        var query =
         //            _dailyOperationSizingDocumentRepository
-        //                .Query.Include(o => o.Details).OrderByDescending(item => item.CreatedDate);
+        //                .Query.Include(o => o.SizingDetails).OrderByDescending(item => item.CreatedDate);
         //        var filteredSizePickupDtos =
         //            _dailyOperationSizingDocumentRepository
         //                .Find(query).Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && sizePickup.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH)).ToList();
 
         //        foreach (var data in filteredSizePickupDtos)
         //        {
-        //            var filteredDetails = data.Details.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeOperation.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
+        //            var filteredDetails = data.SizingDetails.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeOperation.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
         //            var machineStatus = filteredDetails.MachineStatus;
         //            var machineDateTime = filteredDetails.DateTimeOperation;
 

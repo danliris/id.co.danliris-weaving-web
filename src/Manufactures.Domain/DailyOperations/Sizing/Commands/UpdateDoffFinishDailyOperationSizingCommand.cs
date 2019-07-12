@@ -37,7 +37,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
 
-        [JsonProperty(PropertyName = "Details")]
+        [JsonProperty(PropertyName = "SizingDetails")]
         public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)

@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "Details")]
+        [JsonProperty(PropertyName = "SizingDetails")]
         public UpdateStartDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)

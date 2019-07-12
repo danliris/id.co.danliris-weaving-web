@@ -33,13 +33,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
+            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeOperation);
             var lastHistory = histories.FirstOrDefault();
 
             //Validation for Start Status
             var countStartStatus =
                 existingDailyOperation
-                    .Details
+                    .SizingDetails
                     .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
                     .Count();
 
@@ -51,7 +51,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Validation for Finish Status
             var countFinishStatus =
                 existingDailyOperation
-                    .Details
+                    .SizingDetails
                     .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
                     .Count();
 
@@ -115,7 +115,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //Validation for Pause Time
             //var lastTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
-            //var pauseTimeMachineLog = request.Details.PauseTime;
+            //var pauseTimeMachineLog = request.SizingDetails.PauseTime;
 
             //if (pauseTimeMachineLog < lastTimeMachineLog)
             //{

@@ -21,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public double? TexSQ { get; internal set; }
         public double? Visco { get; internal set; }
         public string OperationStatus { get; internal set; }
-        public string SizingBeamDocument { get; internal set; }
+        public List<DailyOperationSizingBeamDocument> SizingBeamDocument { get; internal set; }
         public List<DailyOperationSizingDetail> Details { get; internal set; }
     }
 }

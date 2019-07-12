@@ -79,7 +79,7 @@ namespace Manufactures.Controllers.Api
 
                     if (beam.Number.Equals(number))
                     {
-                        var details = dailyOperation.Details;
+                        var details = dailyOperation.SizingDetails;
                         details = details.OrderByDescending(o => o.DateTimeOperation).ToList();
                         var beamMovementDto =
                             new BeamMovementDto(movement.Identity,

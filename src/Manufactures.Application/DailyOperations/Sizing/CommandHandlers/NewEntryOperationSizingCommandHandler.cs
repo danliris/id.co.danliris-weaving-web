@@ -50,17 +50,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     DailyOperationMachineStatus.ONPROCESS);
 
-            //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeam.Counter.Start, 0);
+            //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
             //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
-            var beam = new DailyOperationSizingBeamDocumentValueObject(request.SizingBeam.SizingBeamId,
-                                                         request.SizingBeam.Counter.Start, 
-                                                         0,
-                                                         0, 
-                                                         0, 
-                                                         0,
-                                                         0,
-                                                         0,
-                                                         DailyOperationMachineStatus.ONPROCESS);
+            var beam = new DailyOperationSizingBeamDocument(request.SizingBeamDocuments.SizingBeamId.Value, 
+                                                            new DailyOperationSizingCounterValueObject (request.SizingBeamDocuments.Counter.Start, 0), 
+                                                            new DailyOperationSizingWeightValueObject(0,0,0),
+                                                            0,
+                                                            0,
+                                                            DailyOperationMachineStatus.ONPROCESS);
 
             dailyOperationSizingDocument.AddSizingBeam(beam);
 

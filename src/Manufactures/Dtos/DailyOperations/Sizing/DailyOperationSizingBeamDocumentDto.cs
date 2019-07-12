@@ -38,16 +38,16 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingBeamStatus")]
         public string SizingBeamStatus { get; private set; }
 
-        public DailyOperationSizingBeamDocumentDto(BeamId sizingBeamId, double start, double finish, double netto, double bruto, double theoritical, double pISMeter, double sPU, string sizingBeamStatus)
+        public DailyOperationSizingBeamDocumentDto(BeamId sizingBeamId, DailyOperationSizingCounterDto counter, DailyOperationSizingWeightDto weight, double pisMeter, double spu, string sizingBeamStatus)
         {
             SizingBeamId = sizingBeamId;
-            Start = start;
-            Finish = finish;
-            Netto = netto;
-            Bruto = bruto;
-            Theoritical = theoritical;
-            PISMeter = pISMeter;
-            SPU = sPU;
+            Start = counter.Start;
+            Finish = counter.Finish;
+            Netto = weight.Netto;
+            Bruto = weight.Bruto;
+            Theoritical = weight.Theoritical;
+            PISMeter = pisMeter;
+            SPU = spu;
             SizingBeamStatus = sizingBeamStatus;
         }
     }

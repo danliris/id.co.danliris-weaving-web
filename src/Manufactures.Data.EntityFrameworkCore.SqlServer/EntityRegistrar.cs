@@ -50,6 +50,15 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
+            modelBuilder.Entity<DailyOperationSizingBeamDocument>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingBeamDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationSizingDetails");
@@ -63,6 +72,10 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.SizingBeamDocument)
+                    .WithOne(e => e.DailyOperationSizingDocument)
+                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 
                 etb.HasMany(e => e.Details)
                     .WithOne(e => e.DailyOperationSizingDocument)
