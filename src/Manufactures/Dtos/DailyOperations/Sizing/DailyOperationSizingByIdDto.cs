@@ -20,30 +20,30 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "WarpingBeamsDocument")]
-        public List<BeamDto> WarpingBeamsDocument { get; }
+        public List<DailyOperationSizingBeamCollectionsDto> WarpingBeamsDocument { get; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
-        [JsonProperty(PropertyName = "SizingBeamDocument")]
-        public List<DailyOperationSizingBeamDocumentDto> SizingBeamDocument { get; }
+        [JsonProperty(PropertyName = "SizingBeamDocuments")]
+        public List<DailyOperationSizingBeamDocumentsDto> SizingBeamDocuments { get; set; }
 
         [JsonProperty(PropertyName = "SizingDetails")]
         public List<DailyOperationSizingDetailsDto> SizingDetails { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<BeamDto> beams)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<DailyOperationSizingBeamCollectionsDto> beams)
         {
             Id = document.Identity;
             MachineNumber = machineNumber;
             WeavingUnitDocumentId = document.WeavingUnitId;
             ConstructionNumber = constructionNumber;
             WarpingBeamsDocument = beams;
-            SizingBeamDocument = new List<DailyOperationSizingBeamDocumentDto>();
+            SizingBeamDocuments = new List<DailyOperationSizingBeamDocumentsDto>();
 
-            //foreach (var sizingBeamDocument in document.SizingBeamDocument)
+            //foreach (var sizingBeamDocument in document.SizingBeamDocuments)
             //{
-            //    var sizingBeam = new DailyOperationSizingBeamDocumentDto(sizingBeamDocument.sizin, sizingBeamDocument.Start, sizingBeamDocument.Finish, sizingBeamDocument.Netto, sizingBeamDocument.Bruto, sizingBeamDocument.Theoritical, sizingBeamDocument.PISMeter, sizingBeamDocument.SPU, sizingBeamDocument.SizingBeamStatus);
-            //    SizingBeamDocument.Add(sizingBeam);
+            //    var sizingBeam = new DailyOperationSizingBeamDocumentDto(sizingBeamDocument.sizin, sizingBeamDocument.Start, sizingBeamDocument.Finish, sizingBeamDocument.Weight, sizingBeamDocument.Bruto, sizingBeamDocument.Theoritical, sizingBeamDocument.PISMeter, sizingBeamDocument.SPU, sizingBeamDocument.SizingBeamStatus);
+            //    SizingBeamDocuments.Add(sizingBeam);
             //}
             SizingDetails = new List<DailyOperationSizingDetailsDto>();
         }

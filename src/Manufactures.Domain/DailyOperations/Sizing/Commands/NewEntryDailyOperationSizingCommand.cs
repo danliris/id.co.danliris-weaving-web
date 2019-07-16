@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -25,11 +26,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "NeReal")]
         public double NeReal { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamsId")]
-        public List<BeamId> WarpingBeamsId { get; set; }
+        [JsonProperty(PropertyName = "BeamsWarping")]
+        public List<DailyOperationSizingBeamCollectionCommand> BeamsWarping { get; set; }
 
-        [JsonProperty(PropertyName = "SizingBeamDocuments")]
-        public NewEntryDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
+        //[JsonProperty(PropertyName = "SizingBeamDocuments")]
+        //public NewEntryDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
 
         [JsonProperty(PropertyName = "SizingDetails")]
         public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
@@ -44,8 +45,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.RecipeCode).NotEmpty();
             RuleFor(validator => validator.NeReal).NotEmpty();
-            RuleFor(validator => validator.WarpingBeamsId.Count).NotEqual(0);
-            RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new DailyOperationSizingBeamDocumentCommandValidator()); ;
+            RuleFor(validator => validator.BeamsWarping.Count).NotEqual(0);
+            //RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new DailyOperationSizingBeamDocumentCommandValidator()); ;
             RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }

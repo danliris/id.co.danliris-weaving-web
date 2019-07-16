@@ -95,7 +95,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                dateTimeOperation,
                                                                DailyOperationMachineStatus.ONSTART,
                                                                "-",
-                                                               new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
+                                                               new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
+                                                               request.Details.SizingBeamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 

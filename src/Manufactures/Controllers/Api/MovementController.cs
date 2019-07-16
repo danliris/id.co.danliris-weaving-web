@@ -70,11 +70,11 @@ namespace Manufactures.Controllers.Api
                             .Where(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
 
-                foreach (var beamId in dailyOperation.WarpingBeamsId)
+                foreach (var beamId in dailyOperation.BeamsWarping)
                 {
                     var beam =
                        _beamRepository
-                           .Find(o => o.Identity.Equals(beamId.Value))
+                           .Find(o => o.Identity.Equals(beamId.Id))
                            .FirstOrDefault();
 
                     if (beam.Number.Equals(number))
@@ -160,11 +160,11 @@ namespace Manufactures.Controllers.Api
                             .Find(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
 
-                    foreach (var beamId in dailyOperation.WarpingBeamsId)
+                    foreach (var beamId in dailyOperation.BeamsWarping)
                     {
                         var beam =
                        _beamRepository
-                           .Find(o => o.Identity.Equals(beamId.Value))
+                           .Find(o => o.Identity.Equals(beamId.Id))
                            .FirstOrDefault();
                         var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                         result.Add(beamListDto);

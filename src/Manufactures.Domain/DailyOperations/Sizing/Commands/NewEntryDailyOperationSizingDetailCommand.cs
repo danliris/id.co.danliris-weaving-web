@@ -2,8 +2,6 @@
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
@@ -16,10 +14,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
-        public DateTimeOffset PreparationDate { get; private set; }
+        public DateTimeOffset PreparationDate { get; set; }
 
         [JsonProperty(PropertyName = "PreparationTime")]
-        public TimeSpan PreparationTime { get; private set; }
+        public TimeSpan PreparationTime { get; set; }
     }
 
     public class NewEntryDailyOperationSizingDetailCommandValidator : AbstractValidator<NewEntryDailyOperationSizingDetailCommand>

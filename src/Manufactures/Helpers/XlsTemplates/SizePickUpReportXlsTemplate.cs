@@ -24,7 +24,7 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "PIS(m)", DataType = typeof(string) });
             //dt.Columns.Add(new DataColumn() { ColumnName = "Counter Awal", DataType = typeof(string) });
             //dt.Columns.Add(new DataColumn() { ColumnName = "Counter Akhir", DataType = typeof(string) });
-            //dt.Columns.Add(new DataColumn() { ColumnName = "Netto", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Weight", DataType = typeof(string) });
             //dt.Columns.Add(new DataColumn() { ColumnName = "Bruto", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Jam Doffing", DataType = typeof(string) });

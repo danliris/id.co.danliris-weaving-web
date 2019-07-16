@@ -162,9 +162,10 @@ namespace Manufactures.Controllers.Api
                 var Identity = Guid.Parse(Id);
                 var query = _dailyOperationSizingDocumentRepository.Query;
                 var dailyOperationalSizing =
-                    _dailyOperationSizingDocumentRepository.Find(query.Include(p => p.Details))
-                                                .Where(o => o.Identity == Identity)
-                                                .FirstOrDefault();
+                    _dailyOperationSizingDocumentRepository.Find(query
+                                                           .Include(detail => detail.Details).Where(detailId => detailId.Identity == Identity)
+                                                           .Include(beamDocument => beamDocument.SizingBeamDocuments).Where(beamDocumentId => beamDocumentId.Identity == Identity))
+                                                           .FirstOrDefault();
 
                 var machineDocument =
                        _machineRepository
@@ -180,13 +181,13 @@ namespace Manufactures.Controllers.Api
 
                 var constructionNumber = constructionDocument.ConstructionNumber;
 
-                var warpingBeams = new List<BeamDto>();
+                var warpingBeams = new List<DailyOperationSizingBeamCollectionsDto>();
 
-                foreach (var beam in dailyOperationalSizing.WarpingBeamsId)
+                foreach (var beam in dailyOperationalSizing.BeamsWarping)
                 {
-                    var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Value)).FirstOrDefault();
+                    var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Id)).FirstOrDefault();
 
-                    var beamsDto = new BeamDto(beamDocument);
+                    var beamsDto = new DailyOperationSizingBeamCollectionsDto(beamDocument.Identity, beamDocument.YarnStrands);
 
                     warpingBeams.Add(beamsDto);
                 }
@@ -213,6 +214,8 @@ namespace Manufactures.Controllers.Api
                     dto.SizingDetails.Add(detailsDto);
                 }
                 dto.SizingDetails = dto.SizingDetails.OrderBy(history => history.DateTimeOperationHistory).ToList();
+
+                dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderBy(beamDocument => beamDocument.DateTimeOperationBeamDocument).ToList();
 
                 await Task.Yield();
 

@@ -64,7 +64,7 @@ namespace Manufactures.Dtos
             //PISM = document.PISM;
             //CounterStart = document.Counter.Start;
             //CounterFinish = document.Counter.Finish;
-            //WeightNetto = document.Weight.Netto;
+            //WeightNetto = document.Weight.Weight;
             //WeightBruto = document.Weight.Bruto;
             //SPU = document.SPU;
             BeamNumber = beamNumber;

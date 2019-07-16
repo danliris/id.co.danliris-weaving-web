@@ -73,7 +73,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.SizingBeamDocument)
+                etb.HasMany(e => e.SizingBeamDocuments)
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 

@@ -10,7 +10,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
     public class DailyOperationSizingBeamDocument : EntityBase<DailyOperationSizingBeamDocument>
     {
-        //public Guid SizingBeamId { get; private set; }
+        public Guid SizingBeamId { get; private set; }
 
         public string Counter { get; private set; }
 
@@ -31,11 +31,26 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         }
 
         public DailyOperationSizingBeamDocument(Guid identity,
+                                                BeamId sizingBeamId,
                                                 DailyOperationSizingCounterValueObject counter,
                                                 DailyOperationSizingWeightValueObject weight,
                                                 double pisMeter,
                                                 double spu,
                                                 string sizingBeamStatus) : this(identity)
+        {
+            SizingBeamId = sizingBeamId.Value;
+            Counter = counter.Serialize();
+            Weight = weight.Serialize();
+            PISMeter = pisMeter;
+            SPU = spu;
+            SizingBeamStatus = sizingBeamStatus;
+        }
+        public DailyOperationSizingBeamDocument(Guid identity,
+                                               DailyOperationSizingCounterValueObject counter,
+                                               DailyOperationSizingWeightValueObject weight,
+                                               double pisMeter,
+                                               double spu,
+                                               string sizingBeamStatus) : this(identity)
         {
             Counter = counter.Serialize();
             Weight = weight.Serialize();

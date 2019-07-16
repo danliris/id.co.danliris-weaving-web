@@ -37,12 +37,20 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
+            var warpingBeamsCollection = new List<DailyOperationSizingBeamsCollectionValueObject>();
+
+            foreach(var beamDocument in request.BeamsWarping)
+            {
+                var beamValue = new DailyOperationSizingBeamsCollectionValueObject(beamDocument.Id, beamDocument.YarnStrands);
+                warpingBeamsCollection.Add(beamValue);
+            }
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
-                                                    request.WarpingBeamsId,
+                                                    warpingBeamsCollection,
                                                     request.RecipeCode,
                                                     request.NeReal,
                                                     0,
@@ -52,8 +60,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
             //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
-            var beam = new DailyOperationSizingBeamDocument(request.SizingBeamDocuments.SizingBeamId.Value, 
-                                                            new DailyOperationSizingCounterValueObject (request.SizingBeamDocuments.Counter.Start, 0), 
+            var beam = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
+                                                            new DailyOperationSizingCounterValueObject (0, 0), 
                                                             new DailyOperationSizingWeightValueObject(0,0,0),
                                                             0,
                                                             0,
@@ -77,7 +85,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    dateTimeOperation,
                                                    DailyOperationMachineStatus.ONENTRY,
                                                    "-",
-                                                   new DailyOperationSizingCauseValueObject("0","0"));
+                                                   new DailyOperationSizingCauseValueObject("0","0"),
+                                                   " ");
 
                 dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
 

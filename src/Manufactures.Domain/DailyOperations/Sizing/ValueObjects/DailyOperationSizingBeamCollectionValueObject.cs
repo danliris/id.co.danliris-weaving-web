@@ -9,26 +9,26 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
     {
         public Guid Id { get; set; }
         
-        public string Number { get; set; }
+        //public string Number { get; set; }
         
-        public string Type { get; set; }
-        
-        public double EmptyWeight { get; set; }
+        //public string Type { get; set; }
 
-        public DailyOperationSizingBeamsCollectionValueObject(Guid id, string number, string type, double emptyWeight)
+        public double YarnStrands { get; set; }
+
+        public DailyOperationSizingBeamsCollectionValueObject(Guid id, double yarnStrands)
         {
             Id = id;
-            Number = number;
-            Type = type;
-            EmptyWeight = emptyWeight;
+            //Number = number;
+            //Type = type;
+            YarnStrands = yarnStrands;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Id;
-            yield return Number;
-            yield return Type;
-            yield return EmptyWeight;
+            //yield return Number;
+            //yield return Type;
+            yield return YarnStrands;
         }
     }
 }

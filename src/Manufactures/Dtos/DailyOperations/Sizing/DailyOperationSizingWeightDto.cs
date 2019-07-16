@@ -7,7 +7,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingWeightDto
     {
-        [JsonProperty(PropertyName = "Netto")]
+        [JsonProperty(PropertyName = "Weight")]
         public double Netto { get; }
 
         [JsonProperty(PropertyName = "Bruto")]
