@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 {
-    public  class AddNewWarpingOperationCommandHandler :
-        ICommandHandler<AddNewWarpingOperationCommand, DailyOperationWarpingDocument>
+    public  class PreparationWarpingOperationCommandHandler :
+        ICommandHandler<PreparationWarpingOperationCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository 
             _warpingOperationRepository;
 
-        public AddNewWarpingOperationCommandHandler(IStorage storage)
+        public PreparationWarpingOperationCommandHandler(IStorage storage)
         {
             _storage = storage;
             _warpingOperationRepository = 
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
-        public async Task<DailyOperationWarpingDocument> Handle(AddNewWarpingOperationCommand request, 
+        public async Task<DailyOperationWarpingDocument> Handle(PreparationWarpingOperationCommand request, 
                                                           CancellationToken cancellationToken)
         {
             var datetimeOperation =

@@ -38,9 +38,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private AddNewWarpingOperationCommandHandler CreateAddNewWarpingOperationCommandHandler()
+        private PreparationWarpingOperationCommandHandler CreateAddNewWarpingOperationCommandHandler()
         {
-            return new AddNewWarpingOperationCommandHandler(this.mockStorage.Object);
+            return new PreparationWarpingOperationCommandHandler(this.mockStorage.Object);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var materialTypeId = new MaterialTypeId(Guid.NewGuid());
             var operatorId = new OperatorId(Guid.NewGuid());
 
-            AddNewWarpingOperationCommand request = new AddNewWarpingOperationCommand
+            PreparationWarpingOperationCommand request = new PreparationWarpingOperationCommand
             {
                 ConstructionId = constructionId,
                 MaterialTypeId = materialTypeId,

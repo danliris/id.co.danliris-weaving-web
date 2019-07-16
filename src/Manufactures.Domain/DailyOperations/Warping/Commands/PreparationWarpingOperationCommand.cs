@@ -1,27 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
+using Newtonsoft.Json;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Commands
 {
-    public class AddNewWarpingOperationCommand
+    public class PreparationWarpingOperationCommand
         : ICommand<DailyOperationWarpingDocument>
     {
+        [JsonProperty(PropertyName = "ConstructionId")]
         public ConstructionId ConstructionId { get; set; }
+
+        [JsonProperty(PropertyName = "MaterialTypeId")]
         public MaterialTypeId MaterialTypeId { get; set; }
+
+        [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; set; }
+
+        [JsonProperty(PropertyName = "ColourOfCone")]
         public string ColourOfCone { get; set; }
+
+        [JsonProperty(PropertyName = "DateOperation")]
         public DateTimeOffset DateOperation { get; set; }
+
+        [JsonProperty(PropertyName = "TimeOperation")]
         public String TimeOperation { get; set; }
+
+        [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; set; }
     }
 
-    public class AddNewWarpingOperationCommandValidator 
-        : AbstractValidator<AddNewWarpingOperationCommand>
+    public class PreparationWarpingOperationCommandValidator 
+        : AbstractValidator<PreparationWarpingOperationCommand>
     {
-        public AddNewWarpingOperationCommandValidator()
+        public PreparationWarpingOperationCommandValidator()
         {
             RuleFor(command => command.ConstructionId.Value).NotEmpty();
             RuleFor(command => command.MaterialTypeId.Value).NotEmpty();
