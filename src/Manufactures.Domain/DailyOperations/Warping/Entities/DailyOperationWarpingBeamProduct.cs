@@ -8,7 +8,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
     public class DailyOperationWarpingBeamProduct
         : EntityBase<DailyOperationWarpingBeamProduct>
     {
-        public BeamId BeamId { get; private set; }
+        public Guid BeamId { get; private set; }
         public double? Length { get; private set; }
         public int? Tention { get; private set; }
         public int? Speed { get; private set; }
@@ -23,7 +23,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
                                                 BeamId beamId)
             : base(identity)
         {
-            BeamId = beamId;
+            Identity = identity;
+            BeamId = beamId.Value;
         }
 
         public void SetLength(double value)

@@ -23,6 +23,7 @@ using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
+using Manufactures.Domain.DailyOperations.Warping.Entities;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -30,10 +31,36 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationWarpingBeamProduct");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationWarpingHistory>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationWarpingHistory");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationWarpingReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingDocuments");
                 etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.DailyOperationWarpingBeamProducts)
+                    .WithOne(e => e.DailyOperationWarpingDocument)
+                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
+
+                etb.HasMany(e => e.DailyOperationWarpingDetailHistory)
+                    .WithOne(e => e.DailyOperationWarpingDocument)
+                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
