@@ -40,12 +40,12 @@ namespace Manufactures.Application.Beams.CommandHandlers
                                       "Beam Number has available"));
             }
 
-            if (request.Type.Equals(BeamConstant.SIZING))
+            if (request.Type.Equals(BeamStatus.SIZING))
             {
-                beamType = BeamConstant.SIZING;
-            } else if (request.Type.Equals(BeamConstant.WARPING))
+                beamType = BeamStatus.SIZING;
+            } else if (request.Type.Equals(BeamStatus.WARPING))
             {
-                beamType = BeamConstant.WARPING;
+                beamType = BeamStatus.WARPING;
             }
 
             var newBeam = new BeamDocument(Guid.NewGuid(), 

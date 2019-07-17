@@ -7,6 +7,9 @@ using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
+using Manufactures.Domain.DailyOperations.Warping;
+using Manufactures.Domain.DailyOperations.Warping.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,6 +69,9 @@ namespace DanLiris.Admin.Web
                 options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
                 options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
             });
+
+            //Add query service config
+            services.AddScoped<IWarpingQuery<DailyOperationWarpingDocument>, DailyOperationWarpingQueryHandler>();
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);
 
