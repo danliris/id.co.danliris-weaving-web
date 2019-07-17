@@ -16,15 +16,19 @@ namespace Manufactures.Domain.GlobalValueObjects
         [JsonProperty(PropertyName = "Number")]
         public int Number { get; private set; }
 
+        [JsonProperty(PropertyName = "AdditionalNumber")]
+        public int AdditionalNumber { get; private set; }
+
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; private set; }
 
-        public YarnNumberValueObject(Guid id, string code, int number, string ringType)
+        public YarnNumberValueObject(Guid id, string code, int number, string ringType, int additionalNumber)
         {
             Id = id;
             Code = code;
             Number = number;
             RingType = ringType;
+            AdditionalNumber = additionalNumber;
         }
         
         protected override IEnumerable<object> GetAtomicValues()
@@ -33,6 +37,7 @@ namespace Manufactures.Domain.GlobalValueObjects
             yield return Code;
             yield return Number;
             yield return RingType;
+            yield return AdditionalNumber;
         }
     }
 }
