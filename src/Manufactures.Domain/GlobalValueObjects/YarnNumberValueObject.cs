@@ -22,6 +22,9 @@ namespace Manufactures.Domain.GlobalValueObjects
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; private set; }
 
+        [JsonProperty(PropertyName = "FullNumber")]
+        public string FullNumber { get; private set; }
+
         public YarnNumberValueObject(Guid id, string code, int number, string ringType, int additionalNumber)
         {
             Id = id;
@@ -29,6 +32,15 @@ namespace Manufactures.Domain.GlobalValueObjects
             Number = number;
             RingType = ringType;
             AdditionalNumber = additionalNumber;
+
+            if (AdditionalNumber != 0)
+            {
+                FullNumber = Number.ToString() + "\\" + AdditionalNumber.ToString(); 
+            } else
+            {
+                FullNumber = Number.ToString();
+            }
+            
         }
         
         protected override IEnumerable<object> GetAtomicValues()
