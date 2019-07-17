@@ -42,8 +42,9 @@ namespace Manufactures.Controllers.Api
             return Ok();
         }
 
-            //Preparation Warping Daily Operation Request
-            public async Task<IActionResult> 
+        //Preparation Warping Daily Operation Request
+        [HttpPost("entry-process")]
+        public async Task<IActionResult> 
             Preparation([FromBody]PreparationWarpingOperationCommand command)
         {
             // Sending command to command handler
