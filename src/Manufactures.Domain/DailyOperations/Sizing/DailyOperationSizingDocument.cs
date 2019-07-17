@@ -75,10 +75,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.SizingDetails = readModel.SizingDetails;
         }
 
-        public void AddDailyOperationSizingDetail(DailyOperationSizingDetail dailyOperationSizingDetail)
+        public void AddDailyOperationSizingDetail(DailyOperationSizingDetail sizingDetail)
         {
             var list = SizingDetails.ToList();
-            list.Add(dailyOperationSizingDetail);
+            list.Add(sizingDetail);
             SizingDetails = list;
             ReadModel.SizingDetails = SizingDetails.ToList();
 
