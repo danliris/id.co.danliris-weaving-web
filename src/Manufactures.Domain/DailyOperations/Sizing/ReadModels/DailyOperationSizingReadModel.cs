@@ -22,6 +22,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public double? Visco { get; internal set; }
         public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; internal set; }
-        public List<DailyOperationSizingDetail> Details { get; internal set; }
+        public List<DailyOperationSizingDetail> SizingDetails { get; internal set; }
     }
 }

@@ -80,7 +80,7 @@ namespace Manufactures.Controllers.Api
                     .OrderByDescending(item => item.CreatedDate);
             var dailyOperationSizingDocuments =
                 _dailyOperationSizingDocumentRepository
-                    .Find(domQuery.Include(d => d.Details));
+                    .Find(domQuery.Include(d => d.SizingDetails));
 
             var dailyOperationSizings = new List<DailyOperationSizingListDto>();
 
@@ -163,7 +163,7 @@ namespace Manufactures.Controllers.Api
                 var query = _dailyOperationSizingDocumentRepository.Query;
                 var dailyOperationalSizing =
                     _dailyOperationSizingDocumentRepository.Find(query
-                                                           .Include(detail => detail.Details).Where(detailId => detailId.Identity == Identity)
+                                                           .Include(detail => detail.SizingDetails).Where(detailId => detailId.Identity == Identity)
                                                            .Include(beamDocument => beamDocument.SizingBeamDocuments).Where(beamDocumentId => beamDocumentId.Identity == Identity))
                                                            .FirstOrDefault();
 

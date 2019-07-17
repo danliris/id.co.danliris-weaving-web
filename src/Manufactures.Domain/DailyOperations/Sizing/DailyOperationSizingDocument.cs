@@ -56,7 +56,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 Visco = this.Visco,
                 OperationStatus = this.OperationStatus,
                 SizingBeamDocuments = this.SizingBeamDocuments.ToList(),
-                Details = this.SizingDetails.ToList()
+                SizingDetails = this.SizingDetails.ToList()
             };
         }
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
@@ -72,7 +72,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
             this.OperationStatus = readModel.OperationStatus;
             this.SizingBeamDocuments = readModel.SizingBeamDocuments;
-            this.SizingDetails = readModel.Details;
+            this.SizingDetails = readModel.SizingDetails;
         }
 
         public void AddDailyOperationSizingDetail(DailyOperationSizingDetail dailyOperationSizingDetail)
@@ -80,7 +80,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             var list = SizingDetails.ToList();
             list.Add(dailyOperationSizingDetail);
             SizingDetails = list;
-            ReadModel.Details = SizingDetails.ToList();
+            ReadModel.SizingDetails = SizingDetails.ToList();
 
             MarkModified();
         }
@@ -92,7 +92,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
 
             list.Remove(detail);
             SizingDetails = list;
-            ReadModel.Details = SizingDetails.ToList();
+            ReadModel.SizingDetails = SizingDetails.ToList();
 
             MarkModified();
         }

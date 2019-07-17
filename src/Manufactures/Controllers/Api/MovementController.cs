@@ -63,7 +63,7 @@ namespace Manufactures.Controllers.Api
                 var query =
                     _dailyOperationSizingRepository
                         .Query
-                        .Include(o => o.Details);
+                        .Include(o => o.SizingDetails);
                 var dailyOperation =
                         _dailyOperationSizingRepository
                             .Find(query)

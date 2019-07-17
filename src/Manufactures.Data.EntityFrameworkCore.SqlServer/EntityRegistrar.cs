@@ -77,7 +77,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 
-                etb.HasMany(e => e.Details)
+                etb.HasMany(e => e.SizingDetails)
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 
