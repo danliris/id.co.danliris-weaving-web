@@ -74,7 +74,7 @@ namespace Manufactures.Controllers.Api
                 {
                     var beam =
                        _beamRepository
-                           .Find(o => o.Identity.Equals(beamId.Id))
+                           .Find(o => o.Identity.Equals(beamId.Value))
                            .FirstOrDefault();
 
                     if (beam.Number.Equals(number))
@@ -164,7 +164,7 @@ namespace Manufactures.Controllers.Api
                     {
                         var beam =
                        _beamRepository
-                           .Find(o => o.Identity.Equals(beamId.Id))
+                           .Find(o => o.Identity.Equals(beamId.Value))
                            .FirstOrDefault();
                         var beamListDto = new BeamMovementListDto(movement.Identity, movement.MovementType, beam);
                         result.Add(beamListDto);

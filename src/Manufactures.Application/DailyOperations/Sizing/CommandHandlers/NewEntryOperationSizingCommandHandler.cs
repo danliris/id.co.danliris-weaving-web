@@ -37,20 +37,20 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var warpingBeamsCollection = new List<DailyOperationSizingBeamsCollectionValueObject>();
+            //var warpingBeamsCollection = new List<BeamId>();
 
-            foreach(var beamDocument in request.BeamsWarping)
-            {
-                var beamValue = new DailyOperationSizingBeamsCollectionValueObject(beamDocument.Id, beamDocument.YarnStrands);
-                warpingBeamsCollection.Add(beamValue);
-            }
+            //foreach(var beamDocument in request.BeamsWarping)
+            //{
+            //    var beamValue = new DailyOperationSizingBeamsCollectionValueObject(beamDocument.Id, beamDocument.YarnStrands);
+            //    warpingBeamsCollection.Add(beamValue);
+            //}
 
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
-                                                    warpingBeamsCollection,
+                                                    request.BeamsWarping,
                                                     request.RecipeCode,
                                                     request.NeReal,
                                                     0,

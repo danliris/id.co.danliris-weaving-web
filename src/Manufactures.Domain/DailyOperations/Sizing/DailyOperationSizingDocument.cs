@@ -15,7 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
-        public List<DailyOperationSizingBeamsCollectionValueObject> BeamsWarping { get; private set; }
+        public List<BeamId> BeamsWarping { get; private set; }
         public string RecipeCode { get; private set; }
         public double NeReal { get; private set; }
         public int MachineSpeed { get; private set; }
@@ -25,7 +25,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<DailyOperationSizingBeamsCollectionValueObject> beamsWarping, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> beamsWarping, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -64,7 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
-            this.BeamsWarping = JsonConvert.DeserializeObject<List<DailyOperationSizingBeamsCollectionValueObject>>(readModel.BeamsWarping);
+            this.BeamsWarping = JsonConvert.DeserializeObject<List<BeamId>>(readModel.BeamsWarping);
             this.RecipeCode = readModel.RecipeCode;
             this.NeReal = readModel.NeReal;
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;

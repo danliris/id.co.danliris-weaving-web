@@ -185,7 +185,7 @@ namespace Manufactures.Controllers.Api
 
                 foreach (var beam in dailyOperationalSizing.BeamsWarping)
                 {
-                    var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Id)).FirstOrDefault();
+                    var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Value)).FirstOrDefault();
 
                     var beamsDto = new DailyOperationSizingBeamCollectionsDto(beamDocument.Identity, beamDocument.YarnStrands);
 

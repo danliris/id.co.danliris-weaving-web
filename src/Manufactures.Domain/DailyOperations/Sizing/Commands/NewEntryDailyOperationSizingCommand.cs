@@ -27,7 +27,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double NeReal { get; set; }
 
         [JsonProperty(PropertyName = "BeamsWarping")]
-        public List<DailyOperationSizingBeamCollectionCommand> BeamsWarping { get; set; }
+        public List<BeamId> BeamsWarping { get; set; }
 
         //[JsonProperty(PropertyName = "SizingBeamDocuments")]
         //public NewEntryDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
