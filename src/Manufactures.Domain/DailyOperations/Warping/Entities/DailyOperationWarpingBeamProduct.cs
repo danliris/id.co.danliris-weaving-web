@@ -27,6 +27,16 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             BeamId = beamId.Value;
         }
 
+        public void SetBeamId(Guid value)
+        {
+            if (!BeamId.Equals(value))
+            {
+                BeamId = value;
+
+                MarkModified();
+            }
+        }
+
         public void SetLength(double value)
         {
             if (Length != value)

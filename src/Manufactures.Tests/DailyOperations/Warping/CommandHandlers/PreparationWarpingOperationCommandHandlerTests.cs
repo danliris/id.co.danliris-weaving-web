@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 {
-    public class AddNewWarpingOperationCommandHandlerTests : IDisposable
+    public class PreparationWarpingOperationCommandHandlerTests : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
@@ -20,7 +20,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             mockWarpingOperationRepo;
 
 
-        public AddNewWarpingOperationCommandHandlerTests()
+        public PreparationWarpingOperationCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
@@ -38,22 +38,32 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private PreparationWarpingOperationCommandHandler CreateAddNewWarpingOperationCommandHandler()
+        private PreparationWarpingOperationCommandHandler 
+            CreateAddNewWarpingOperationCommandHandler()
         {
-            return new PreparationWarpingOperationCommandHandler(this.mockStorage.Object);
+            return 
+                new PreparationWarpingOperationCommandHandler(this.mockStorage.Object);
         }
 
+        /**
+         * Test for create new preparation on daily
+         * operation warping
+         * **/
         [Fact]
         public async Task Handle_StateUnderTest_ExpectedBehavior()
         {
-            // Arrange
-            var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
+            // Set preparation command handler object
+            var preparationWarpingOperationCommandHandler = 
+                this.CreateAddNewWarpingOperationCommandHandler();
 
+            //Instantiate new Object
             var constructionId = new ConstructionId(Guid.NewGuid());
             var materialTypeId = new MaterialTypeId(Guid.NewGuid());
             var operatorId = new OperatorId(Guid.NewGuid());
 
-            PreparationWarpingOperationCommand request = new PreparationWarpingOperationCommand
+            //Create new preparation object
+            PreparationWarpingOperationCommand request = 
+                new PreparationWarpingOperationCommand
             {
                 ConstructionId = constructionId,
                 MaterialTypeId = materialTypeId,
@@ -64,11 +74,22 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 OperatorId = operatorId
             };
 
+            //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
-            // Assert
-            var result = await unitUnderTest.Handle(request, cancellationToken);
+
+            // Instantiate command handler
+            var result = 
+                await preparationWarpingOperationCommandHandler
+                    .Handle(request, cancellationToken);
+
+            //Check if object not null
             result.Should().NotBeNull();
+
+            //Check if has identity
             result.Identity.Should().NotBeEmpty();
+
+            //check if has history
+            result.DailyOperationWarpingDetailHistory.Should().NotBeEmpty();
         }
     }
 }
