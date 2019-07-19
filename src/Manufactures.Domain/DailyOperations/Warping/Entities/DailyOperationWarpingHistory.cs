@@ -19,19 +19,35 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
         public DailyOperationWarpingHistory(Guid identity,
-                                                   string beamNumber,
-                                                   Guid beamOperatorId,
-                                                   DateTimeOffset datetimeOperation,
-                                                   string information,
-                                                   string operationStatus)
+                                            Guid beamOperatorId,
+                                            DateTimeOffset datetimeOperation,
+                                            string operationStatus)
             : base(identity)
         {
             Identity = identity;
-            BeamNumber = beamNumber;
             BeamOperatorId = beamOperatorId;
             DateTimeOperation = datetimeOperation;
-            Information = information;
             OperationStatus = operationStatus;
+        }
+
+        public void SetBeamNumber(string value)
+        {
+            if(!BeamNumber.Equals(value))
+            {
+                BeamNumber = value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetInformation(string value)
+        {
+            if(!Information.Equals(value))
+            {
+                Information = value;
+
+                MarkModified();
+            }
         }
 
         protected override DailyOperationWarpingHistory GetEntity()
