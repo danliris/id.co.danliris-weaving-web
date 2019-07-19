@@ -20,9 +20,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "StartTime")]
         public TimeSpan StartTime { get; set; }
-
-        [JsonProperty(PropertyName = "SizingBeamNumber")]
-        public string SizingBeamNumber { get; set; }
     }
 
     public class UpdateStartDailyOperationSizingDetailCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingDetailCommand>
@@ -33,7 +30,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
             RuleFor(validator => validator.StartDate).NotEmpty();
             RuleFor(validator => validator.StartTime).NotEmpty();
-            RuleFor(validator => validator.SizingBeamNumber).NotEmpty();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.SizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeOperation);
+            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeMachine);
             var lastHistory = histories.FirstOrDefault();
 
             //Validation for Start Status
@@ -71,7 +71,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Pause Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeOperation.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var pauseDateMachineLogUtc = new DateTimeOffset(request.Details.PauseDate.Date, new TimeSpan(+7, 0, 0));
 
             if (pauseDateMachineLogUtc < lastDateMachineLogUtc)
@@ -80,7 +80,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastHistory.DateTimeOperation)
+                if (dateTimeOperation < lastHistory.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("PauseTime", "Pause time cannot less than latest operation"));
                 }
@@ -115,7 +115,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Pause Time
-            //var lastTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
+            //var lastTimeMachineLog = lastHistory.DateTimeMachine.TimeOfDay;
             //var pauseTimeMachineLog = request.SizingDetails.PauseTime;
 
             //if (pauseTimeMachineLog < lastTimeMachineLog)

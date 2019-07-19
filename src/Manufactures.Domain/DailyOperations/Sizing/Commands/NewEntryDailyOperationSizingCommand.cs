@@ -29,9 +29,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "BeamsWarping")]
         public List<BeamId> BeamsWarping { get; set; }
 
-        //[JsonProperty(PropertyName = "SizingBeamDocuments")]
-        //public NewEntryDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
-
         [JsonProperty(PropertyName = "SizingDetails")]
         public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
     }
@@ -46,7 +43,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.RecipeCode).NotEmpty();
             RuleFor(validator => validator.NeReal).NotEmpty();
             RuleFor(validator => validator.BeamsWarping.Count).NotEqual(0);
-            //RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new DailyOperationSizingBeamDocumentCommandValidator()); ;
             RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }

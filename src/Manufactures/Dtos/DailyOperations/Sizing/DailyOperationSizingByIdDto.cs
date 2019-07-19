@@ -20,7 +20,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "WarpingBeamsDocument")]
-        public List<DailyOperationSizingBeamCollectionsDto> WarpingBeamsDocument { get; }
+        public List<BeamDto> WarpingBeamsDocument { get; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
@@ -31,7 +31,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingDetails")]
         public List<DailyOperationSizingDetailsDto> SizingDetails { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<DailyOperationSizingBeamCollectionsDto> beams)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<BeamDto> beams)
         {
             Id = document.Identity;
             MachineNumber = machineNumber;

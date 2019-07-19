@@ -60,14 +60,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
             //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
-            var beam = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
-                                                            new DailyOperationSizingCounterValueObject (0, 0), 
-                                                            new DailyOperationSizingWeightValueObject(0,0,0),
-                                                            0,
-                                                            0,
-                                                            DailyOperationMachineStatus.ONPROCESS);
-
-            dailyOperationSizingDocument.AddSizingBeam(beam);
 
             var year = request.Details.PreparationDate.Year;
             var month = request.Details.PreparationDate.Month;
@@ -78,7 +70,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            var newOperation =
+            var newBeamDocument = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
+                                                                       dateTimeOperation,
+                                                                       new DailyOperationSizingCounterValueObject(0, 0),
+                                                                       new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                       0,
+                                                                       0,
+                                                                       DailyOperationMachineStatus.ONPROCESS);
+
+            dailyOperationSizingDocument.AddDailyOperationSizingBeamDocument(newBeamDocument);
+
+            var newOperationDetail =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
@@ -88,18 +90,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    new DailyOperationSizingCauseValueObject("0","0"),
                                                    " ");
 
-                dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
+            dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperationDetail);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
 
             //Add new Movement
-            var newMovement =
-                new MovementDocument(Guid.NewGuid(),
-                                     new DailyOperationId(dailyOperationSizingDocument.Identity),
-                                     MovementStatusConstant.SIZING,
-                                     true);
+            //var newMovement =
+            //    new MovementDocument(Guid.NewGuid(),
+            //                         new DailyOperationId(dailyOperationSizingDocument.Identity),
+            //                         MovementStatusConstant.SIZING,
+            //                         true);
 
-            await _movementRepository.Update(newMovement);
+            //await _movementRepository.Update(newMovement);
 
             _storage.Save();
 

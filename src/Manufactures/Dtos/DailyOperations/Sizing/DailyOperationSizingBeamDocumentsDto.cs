@@ -6,39 +6,30 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingBeamDocumentsDto
     {
-
-        [JsonProperty(PropertyName = "DateTimeOperationBeamDocument")]
-        public DateTimeOffset DateTimeOperationBeamDocument { get; }
-
-        [JsonProperty(PropertyName = "ShiftName")]
-        public string ShiftName { get; }
-
-        [JsonProperty(PropertyName = "OperatorName")]
-        public string OperatorName { get; }
-
-        [JsonProperty(PropertyName = "SizingBeamNumber")]
-        public string SizingBeamNumber { get; set; }
+        [JsonProperty(PropertyName = "DateTimeBeamDocumentHistory")]
+        public DateTimeOffset DateTimeBeamDocumentHistory { get; }
 
         [JsonProperty(PropertyName = "Counter")]
-        public DailyOperationSizingCounterDto Counter { get; set; }
+        public DailyOperationSizingBeamDocumentsCounterDto Counter { get; }
 
         [JsonProperty(PropertyName = "Weight")]
-        public DailyOperationSizingWeightDto Weight { get; set; }
+        public DailyOperationSizingBeamDocumentsWeightDto Weight { get; }
+
+        [JsonProperty(PropertyName = "PISMeter")]
+        public double PISMeter { get; }
 
         [JsonProperty(PropertyName = "SPU")]
-        public double SPU { get; private set; }
+        public double SPU { get; }
 
         [JsonProperty(PropertyName = "SizingBeamStatus")]
-        public string SizingBeamStatus { get; private set; }
+        public string SizingBeamStatus { get; }
 
-        public DailyOperationSizingBeamDocumentsDto(DateTimeOffset dateTimeOperationBeamDocument, string shiftName, string operatorName, string sizingBeamNumber, DailyOperationSizingCounterDto counter, DailyOperationSizingWeightDto weight, double spu, string sizingBeamStatus)
+        public DailyOperationSizingBeamDocumentsDto(DateTimeOffset dateTimeBeamDocumentHistory, DailyOperationSizingBeamDocumentsCounterDto counter, DailyOperationSizingBeamDocumentsWeightDto weight, double pisMeter, double spu, string sizingBeamStatus)
         {
-            DateTimeOperationBeamDocument = dateTimeOperationBeamDocument;
-            ShiftName = shiftName;
-            OperatorName = operatorName;
-            SizingBeamNumber = sizingBeamNumber;
+            DateTimeBeamDocumentHistory = dateTimeBeamDocumentHistory;
             Counter = counter;
             Weight = weight;
+            PISMeter = pisMeter;
             SPU = spu;
             SizingBeamStatus = sizingBeamStatus;
         }

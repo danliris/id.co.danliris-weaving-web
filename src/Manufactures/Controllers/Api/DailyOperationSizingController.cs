@@ -97,7 +97,7 @@ namespace Manufactures.Controllers.Api
                         .FirstOrDefault();
 
                 var shiftOnDetail = new ShiftValueObject();
-                var dailyOperationEntryDateTime = dailyOperation.SizingDetails.OrderBy(e => e.DateTimeOperation).FirstOrDefault().DateTimeOperation;
+                var dailyOperationEntryDateTime = dailyOperation.SizingDetails.OrderBy(e => e.DateTimeMachine).FirstOrDefault().DateTimeMachine;
                 var lastDailyOperationStatus = dailyOperation.OperationStatus;
 
                 foreach (var detail in dailyOperation.SizingDetails)
@@ -181,13 +181,13 @@ namespace Manufactures.Controllers.Api
 
                 var constructionNumber = constructionDocument.ConstructionNumber;
 
-                var warpingBeams = new List<DailyOperationSizingBeamCollectionsDto>();
+                var warpingBeams = new List<BeamDto>();
 
                 foreach (var beam in dailyOperationalSizing.BeamsWarping)
                 {
                     var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(beam.Value)).FirstOrDefault();
 
-                    var beamsDto = new DailyOperationSizingBeamCollectionsDto(beamDocument.Identity, beamDocument.YarnStrands);
+                    var beamsDto = new BeamDto(beamDocument);
 
                     warpingBeams.Add(beamsDto);
                 }
@@ -203,19 +203,46 @@ namespace Manufactures.Controllers.Api
 
                     var shiftName = shiftDocument.Name;
 
-                    var history = new DailyOperationSizingHistoryDto(detail.DateTimeOperation, detail.MachineStatus, detail.Information);
+                    var history = new DailyOperationSizingDetailsHistoryDto(detail.DateTimeMachine, detail.MachineStatus, detail.Information);
 
-                    var detailCauses = detail.Causes.Deserialize<DailyOperationSizingCausesDto>();
+                    var detailCauses = detail.Causes.Deserialize<DailyOperationSizingDetailsCausesDto>();
 
-                    var causes = new DailyOperationSizingCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
+                    var causes = new DailyOperationSizingDetailsCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
 
                     var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes);
 
                     dto.SizingDetails.Add(detailsDto);
                 }
-                dto.SizingDetails = dto.SizingDetails.OrderBy(history => history.DateTimeOperationHistory).ToList();
+                dto.SizingDetails = dto.SizingDetails.OrderBy(history => history.DateTimeMachineHistory).ToList();
 
-                dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderBy(beamDocument => beamDocument.DateTimeOperationBeamDocument).ToList();
+                foreach (var beamDocument in dailyOperationalSizing.SizingBeamDocuments)
+                {
+                    var beamSizingDocument = _beamDocumentRepository
+                                                .Find(e => e.Identity.Equals(beamDocument.Identity))
+                                                .FirstOrDefault();
+
+                    var beamDocumentHistory = beamDocument.DateTimeBeamDocument;
+
+                    var beamDocumentCounter = beamDocument.Counter.Deserialize<DailyOperationSizingBeamDocumentsCounterDto>();
+
+                    var counter = new DailyOperationSizingBeamDocumentsCounterDto(beamDocumentCounter.Start, beamDocumentCounter.Finish);
+
+                    var beamDocumentWeight = beamDocument.Weight.Deserialize<DailyOperationSizingBeamDocumentsWeightDto>();
+
+                    var weight = new DailyOperationSizingBeamDocumentsWeightDto(beamDocumentWeight.Netto, beamDocumentWeight.Bruto, beamDocumentWeight.Theoritical);
+
+                    var pisMeter = beamDocument.PISMeter;
+
+                    var spu = beamDocument.SPU;
+
+                    var sizingBeamStatus = beamDocument.SizingBeamStatus;
+
+                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(beamDocumentHistory, counter, weight, pisMeter, spu, sizingBeamStatus);
+
+                    dto.SizingBeamDocuments.Add(beamDocumentsDto);
+                }
+
+                dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderBy(beamDocument => beamDocument.DateTimeBeamDocumentHistory).ToList();
 
                 await Task.Yield();
 
@@ -239,7 +266,7 @@ namespace Manufactures.Controllers.Api
         {
             double pisInPieces;
 
-            if (counterStartInput != null && counterFinishInput != null)
+            if (counterStartInput != 0 && counterFinishInput != 0)
             {
                 PIS calculate = new PIS();
                 pisInPieces = calculate.CalculateInMeter(counterStartInput, counterFinishInput);
@@ -256,7 +283,7 @@ namespace Manufactures.Controllers.Api
         {
             double pisInMeter;
 
-            if (counterStartInput != null && counterFinishInput != null)
+            if (counterStartInput != 0 && counterFinishInput != 0)
             {
                 PIS calculate = new PIS();
                 pisInMeter = calculate.CalculateInPieces(counterStartInput, counterFinishInput);
@@ -273,7 +300,7 @@ namespace Manufactures.Controllers.Api
         {
             double kawamotoCalculationResult;
 
-            if (pisInMeterInput != null && yarnStrandsInput != null && neRealInput != null)
+            if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
             {
                 Netto calculate = new Netto();
                 kawamotoCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
@@ -290,7 +317,7 @@ namespace Manufactures.Controllers.Api
         {
             double suckerMullerCalculationResult;
 
-            if (pisInMeterInput != null && yarnStrandsInput != null && neRealInput != null)
+            if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
             {
                 Netto calculate = new Netto();
                 suckerMullerCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
@@ -307,7 +334,7 @@ namespace Manufactures.Controllers.Api
         {
             double spuCalculationResult;
 
-            if (netto != null && theoritical != 0)
+            if (netto != 0 && theoritical != 0)
             {
                 SPU calculate = new SPU();
                 spuCalculationResult = calculate.Calculate(netto, theoritical);
@@ -419,14 +446,14 @@ namespace Manufactures.Controllers.Api
         //        {
         //            var convertedDate = DateTime.Parse(date);
 
-        //            var filteredDetails = data.SizingDetails.Where(x => x.DateTimeOperation.DateTime.Equals(convertedDate) &&
+        //            var filteredDetails = data.SizingDetails.Where(x => x.DateTimeMachine.DateTime.Equals(convertedDate) &&
         //                                                          x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                          x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
         //            if (filteredDetails != null)
         //            {
         //                var machineStatus = filteredDetails.MachineStatus;
-        //                var machineDateTime = filteredDetails.DateTimeOperation;
+        //                var machineDateTime = filteredDetails.DateTimeMachine;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
         //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));
@@ -509,15 +536,15 @@ namespace Manufactures.Controllers.Api
         //            var convertedStartDate = DateTime.Parse(startDate);
         //            var convertedEndDate = DateTime.Parse(endDate);
 
-        //            var filteredDetails = data.SizingDetails.Where(x => (x.DateTimeOperation.DateTime >= convertedStartDate &&
-        //                                                           x.DateTimeOperation.DateTime <= convertedEndDate) &&
+        //            var filteredDetails = data.SizingDetails.Where(x => (x.DateTimeMachine.DateTime >= convertedStartDate &&
+        //                                                           x.DateTimeMachine.DateTime <= convertedEndDate) &&
         //                                                           x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                           x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
         //            if (filteredDetails != null)
         //            {
         //                var machineStatus = filteredDetails.MachineStatus;
-        //                var machineDateTime = filteredDetails.DateTimeOperation;
+        //                var machineDateTime = filteredDetails.DateTimeMachine;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
         //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));
@@ -603,9 +630,9 @@ namespace Manufactures.Controllers.Api
 
         //        foreach (var data in filteredSizePickupDtos)
         //        {
-        //            var filteredDetails = data.SizingDetails.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeOperation.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
+        //            var filteredDetails = data.SizingDetails.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeMachine.Month.Equals(month) && x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE));
         //            var machineStatus = filteredDetails.MachineStatus;
-        //            var machineDateTime = filteredDetails.DateTimeOperation;
+        //            var machineDateTime = filteredDetails.DateTimeMachine;
 
         //            var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
         //            var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(data.SizingBeamId.Value));

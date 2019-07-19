@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Dtos.DailyOperations.Sizing
 {
-    public class DailyOperationSizingCounterDto
+    public class DailyOperationSizingBeamDocumentsCounterDto
     {
         [JsonProperty(PropertyName = "Start")]
         public double Start { get; }
@@ -13,7 +13,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Finish")]
         public double Finish { get; }
 
-        public DailyOperationSizingCounterDto(double start, double finish)
+        public DailyOperationSizingBeamDocumentsCounterDto(double start, double finish)
         {
             Start = start;
             Finish = finish;

@@ -14,7 +14,7 @@ namespace Manufactures.Dtos.Movements
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DateTimeOperation")]
+        [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeOperation { get; private set; }
 
         [JsonProperty(PropertyName = "Information")]
@@ -23,7 +23,7 @@ namespace Manufactures.Dtos.Movements
         public BeamMovementDetailDto(DailyOperationSizingDetail detail)
         {
             Id = detail.Identity;
-            DateTimeOperation = detail.DateTimeOperation;
+            DateTimeOperation = detail.DateTimeMachine;
             Information = detail.MachineStatus;
         }
 

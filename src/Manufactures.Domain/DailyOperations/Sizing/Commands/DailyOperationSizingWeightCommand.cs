@@ -13,6 +13,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "Theoritical")]
         public double Theoritical { get; set; }
+
+        //public DailyOperationSizingWeightCommand(DailyOperationSizingWeightCommand weight)
+        //{
+        //    Netto = weight.Netto;
+        //    Bruto = weight.Bruto;
+        //    Theoritical = weight.Theoritical;
+        //}
     }
 
     //public class DailyOperationSizingWeightCommandValidator

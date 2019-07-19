@@ -14,7 +14,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 
         public Guid OperatorDocumentId { get; private set; }
 
-        public DateTimeOffset DateTimeOperation { get; private set; }
+        public DateTimeOffset DateTimeMachine { get; private set; }
 
         public string MachineStatus { get; private set; }
 
@@ -35,7 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public DailyOperationSizingDetail(Guid identity, 
                                           ShiftId shiftDocumentId, 
                                           OperatorId operatorDocumentId, 
-                                          DateTimeOffset dateTimeOperation, 
+                                          DateTimeOffset dateTimeMachine, 
                                           string machineStatus, 
                                           string information, 
                                           DailyOperationSizingCauseValueObject causes,
@@ -43,7 +43,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
-            DateTimeOperation = dateTimeOperation;
+            DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             Information = information;
             Causes = causes.Serialize();
@@ -52,8 +52,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 
         public void SetShiftId(ShiftId shiftDocumentId)
         {
-                ShiftDocumentId = shiftDocumentId.Value;
-                MarkModified();
+            ShiftDocumentId = shiftDocumentId.Value;
+            MarkModified();
         }
 
         public void SetOperatorDocumentId(OperatorId operatorDocumentId)
@@ -65,9 +65,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetDateTimeOperation(DateTimeOffset dateTimeOperation)
+        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
         {
-            DateTimeOperation = dateTimeOperation;
+            DateTimeMachine = dateTimeMachine;
             MarkModified();
         }
 

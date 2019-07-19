@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Dtos.DailyOperations.Sizing
 {
-    public class DailyOperationSizingWeightDto
+    public class DailyOperationSizingBeamDocumentsWeightDto
     {
         [JsonProperty(PropertyName = "Weight")]
         public double Netto { get; }
@@ -16,7 +16,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Theoritical")]
         public double Theoritical { get; set; }
 
-        public DailyOperationSizingWeightDto(double netto, double bruto, double theoritical)
+        public DailyOperationSizingBeamDocumentsWeightDto(double netto, double bruto, double theoritical)
         {
             Netto = netto;
             Bruto = bruto;

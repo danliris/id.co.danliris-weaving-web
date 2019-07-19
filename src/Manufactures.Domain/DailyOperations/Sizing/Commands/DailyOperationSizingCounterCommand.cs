@@ -10,6 +10,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "Finish")]
         public double Finish { get; set; }
+
+        //public DailyOperationSizingCounterCommand(DailyOperationSizingCounterCommand counter)
+        //{
+        //    Start = counter.Start;
+        //    Finish = counter.Finish;
+        //}
     }
 
     public class DailyOperationSizingCounterCommandValidator

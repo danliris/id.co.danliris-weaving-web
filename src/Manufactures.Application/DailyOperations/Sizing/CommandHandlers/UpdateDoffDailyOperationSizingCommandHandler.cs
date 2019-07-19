@@ -44,7 +44,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.SizingDetails).Where(entity => entity.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeOperation);
+            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeMachine);
             var lastHistory = histories.FirstOrDefault();
             //Get Existing movement from daily operation
             var existingMovement =
@@ -87,7 +87,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for DoffFinish Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeOperation.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var doffFinishDateMachineLogUtc = new DateTimeOffset(request.Details.FinishDate.Date, new TimeSpan(+7, 0, 0));
 
             if (doffFinishDateMachineLogUtc < lastDateMachineLogUtc)
@@ -95,7 +95,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("DoffDate", "Finish date cannot less than latest date log"));
             } else
             {
-                if (dateTimeOperation < lastHistory.DateTimeOperation)
+                if (dateTimeOperation < lastHistory.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("DoffTime", "Finish time cannot less than latest time log"));
                 }
@@ -154,7 +154,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for DoffFinish Time
-            //var lastTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
+            //var lastTimeMachineLog = lastHistory.DateTimeMachine.TimeOfDay;
             //var doffFinishTimeMachineLog = request.SizingDetails.FinishTime;
 
             //if (doffFinishTimeMachineLog < lastTimeMachineLog)
