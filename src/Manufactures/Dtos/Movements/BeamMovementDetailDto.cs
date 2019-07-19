@@ -9,7 +9,7 @@ namespace Manufactures.Dtos.Movements
 {
     public class BeamMovementDetailDto
     {
-        private DailyOperationLoomDetail detail;
+        //private DailyOperationLoomDetail detail;
 
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }

@@ -41,8 +41,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                .Include(b => b.SizingBeamDocuments)
                                                                .Where(beamDocument => beamDocument.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeMachine);
-            var lastHistory = histories.FirstOrDefault();
+            var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
+            var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
+            var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
+            var lastDetail = existingDetails.FirstOrDefault();
 
             //Validation for Start Status
             var countStartStatus =
@@ -79,7 +81,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
-            var entryDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var entryDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var startDateMachineLogUtc = new DateTimeOffset(request.Details.StartDate.Date, new TimeSpan(+7, 0, 0));
 
             if (startDateMachineLogUtc < entryDateMachineLogUtc)
@@ -87,24 +89,28 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
             } else
             {
-                if (dateTimeOperation < lastHistory.DateTimeMachine)
+                if (dateTimeOperation < lastDetail.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("StartTime", "Start time cannot less than latest time log"));
                 } else
                 {
-                    if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
+                    if (existingDetails.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONENTRY)
                     {
-                        var existingSizingBeamDocument = existingDailyOperation.SizingBeamDocuments;
+                        var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId.Value)).FirstOrDefault();
+                        var beamNumber = beamDocument.Number;
 
-                        foreach(var sizingDocument in existingSizingBeamDocument)
-                        {
-                            sizingDocument.
-                        }
+                        var newBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
+                                                                                   new BeamId(beamDocument.Identity),
+                                                                                   dateTimeOperation,
+                                                                                   new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0),
+                                                                                   new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                                   0,
+                                                                                   0,
+                                                                                   existingDailyOperation.OperationStatus);
 
-                        var beamDocument = _beamDocumentRepository.Find(b=>b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId)).FirstOrDefault();
-                        var beamName = beamDocument.Number;
+                        existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
 
-                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastHistory.Causes);
+                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
                         var newOperationDetail =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -114,7 +120,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                DailyOperationMachineStatus.ONSTART,
                                                                "-",
                                                                new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
-                                                               beamName);
+                                                               beamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
 
@@ -132,7 +138,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Start Time
-            //var entryTimeMachineLog = lastHistory.DateTimeMachine.TimeOfDay;
+            //var entryTimeMachineLog = lastDetail.DateTimeMachine.TimeOfDay;
             //var startTimeMachineLog = request.SizingDetails.StartTime;
 
             //if(startTimeMachineLog < entryTimeMachineLog)
