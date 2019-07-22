@@ -71,7 +71,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var countFinishStatus =
                 existingDailyOperation
                     .DailyOperationMachineDetails
-                    .Where(e => e.OperationStatus == DailyOperationMachineStatus.ONCOMPLETE)
+                    .Where(e => e.OperationStatus == MachineStatus.ONCOMPLETE)
                     .Count();
             //Compare if has finish status
             if (countFinishStatus > 0)
@@ -85,8 +85,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                    .OrderByDescending(o => o.DateTimeOperation)
                    .FirstOrDefault();
             //Check to change finish status not on entry and not stop
-            if (firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY) ||
-                firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
+            if (firstDetail.OperationStatus.Equals(MachineStatus.ONENTRY) ||
+                firstDetail.OperationStatus.Equals(MachineStatus.ONSTOP))
             {
                 throw Validator.ErrorValidation(("Status", "Can't Finish, check your latest status"));
             }
@@ -96,14 +96,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 throw Validator.ErrorValidation(("Status", "Date and Time cannot less than latest operation"));
             }
             //Update daily operation status to finish
-            existingDailyOperation.SetDailyOperationStatus(DailyOperationMachineStatus.ONFINISH);
+            existingDailyOperation.SetDailyOperationStatus(OperationStatus.ONFINISH);
             //Add new operation / detail
             var newOperation =
                new DailyOperationLoomDetail(Guid.NewGuid(),
                                             request.ShiftId,
                                             request.OperatorId,
                                             dateTimeOperation, 
-                                            DailyOperationMachineStatus.ONCOMPLETE, 
+                                            MachineStatus.ONCOMPLETE, 
                                             false, 
                                             true);
 

@@ -56,7 +56,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     0,
                                                     0,
-                                                    DailyOperationMachineStatus.ONPROCESS);
+                                                    OperationStatus.ONPROCESS);
 
             //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
             //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
@@ -70,22 +70,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            var newBeamDocument = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
-                                                                       dateTimeOperation,
-                                                                       new DailyOperationSizingCounterValueObject(0, 0),
-                                                                       new DailyOperationSizingWeightValueObject(0, 0, 0),
-                                                                       0,
-                                                                       0,
-                                                                       DailyOperationMachineStatus.ONPROCESS);
-
-            dailyOperationSizingDocument.AddDailyOperationSizingBeamDocument(newBeamDocument);
-
             var newOperationDetail =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
                                                    dateTimeOperation,
-                                                   DailyOperationMachineStatus.ONENTRY,
+                                                   MachineStatus.ONENTRY,
                                                    "-",
                                                    new DailyOperationSizingCauseValueObject("0","0"),
                                                    " ");

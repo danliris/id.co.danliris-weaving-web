@@ -68,7 +68,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var countFinishStatus =
                 existingDailyOperation
                     .SizingDetails
-                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
+                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
                     .Count();
 
             if (countFinishStatus == 1)
@@ -114,7 +114,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     //existingDailyOperation.SetPIS(request.PISM);
                     //existingDailyOperation.SetSPU(request.SPU);
                     existingDailyOperation.SetNeReal(existingDailyOperation.NeReal);
-                    existingDailyOperation.SetOperationStatus(DailyOperationMachineStatus.ONFINISH);
+                    existingDailyOperation.SetOperationStatus(OperationStatus.ONFINISH);
 
                     var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastHistory.Causes);
 
@@ -123,7 +123,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                new ShiftId(request.Details.ShiftId.Value),
                                                                new OperatorId(lastHistory.OperatorDocumentId),
                                                                dateTimeOperation,
-                                                               DailyOperationMachineStatus.ONCOMPLETE,
+                                                               MachineStatus.ONCOMPLETE,
                                                                "-",
                                                                new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
                                                                lastHistory.SizingBeamNumber);

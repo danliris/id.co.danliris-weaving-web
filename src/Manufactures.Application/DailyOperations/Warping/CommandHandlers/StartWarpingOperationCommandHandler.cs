@@ -43,7 +43,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            request.OperatorId.Value,
                                                            datetimeOperation,
-                                                           DailyOperationMachineStatus.ONSTART);
+                                                           MachineStatus.ONSTART);
 
             existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
 

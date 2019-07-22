@@ -50,7 +50,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var countStartStatus =
                 existingDailyOperation
                     .SizingDetails
-                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
+                    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
                     .Count();
 
             if (countStartStatus == 0)
@@ -62,7 +62,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var countFinishStatus =
                 existingDailyOperation
                     .SizingDetails
-                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
+                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
                     .Count();
 
             if (countFinishStatus == 1)
@@ -96,7 +96,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 }
                 else
                 {
-                    if (existingDetails.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTART || existingDetails.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONRESUME)
+                    if (existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONSTART || existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONRESUME)
                     {
                         //var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId.Value)).FirstOrDefault();
                         //var beamNumber = beamDocument.Number;
@@ -111,7 +111,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
                                                                                    lastBeamDocument.PISMeter,
                                                                                    lastBeamDocument.SPU,
-                                                                                   lastBeamDocument.SizingBeamStatus);
+                                                                                   BeamStatus.ONPROCESS);
 
                         existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
 
@@ -122,7 +122,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    new ShiftId(request.Details.ShiftId.Value),
                                                                    new OperatorId(request.Details.OperatorDocumentId.Value),
                                                                    dateTimeOperation,
-                                                                   DailyOperationMachineStatus.ONSTOP,
+                                                                   MachineStatus.ONSTOP,
                                                                    request.Details.Information,
                                                                    new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
                                                                    lastDetail.SizingBeamNumber);

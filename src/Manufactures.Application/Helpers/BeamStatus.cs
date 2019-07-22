@@ -2,11 +2,11 @@
 {
     public class BeamStatus
     {
-        //Beam Type
+        //Daily Operation - Beam Type
         public static string SIZING = "Sizing";
         public static string WARPING = "Warping";
 
-        //Beam Status
+        //Daily Operation - Beam Status
         public static string ROLLEDUP = "ROLLED-UP";
         public static string ONPROCESS = "ON-PROCESS";
     }

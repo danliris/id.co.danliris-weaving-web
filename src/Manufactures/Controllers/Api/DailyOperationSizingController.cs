@@ -194,6 +194,8 @@ namespace Manufactures.Controllers.Api
 
                 var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, constructionNumber, warpingBeams);
 
+                string sizingBeamNumber = "";
+
                 foreach (var detail in dailyOperationalSizing.SizingDetails)
                 {
                     var shiftDocument =
@@ -209,7 +211,9 @@ namespace Manufactures.Controllers.Api
 
                     var causes = new DailyOperationSizingDetailsCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
 
-                    var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes);
+                    sizingBeamNumber = detail.SizingBeamNumber;
+
+                    var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes, sizingBeamNumber);
 
                     dto.SizingDetails.Add(detailsDto);
                 }
@@ -224,24 +228,24 @@ namespace Manufactures.Controllers.Api
                     var beamDocumentHistory = beamDocument.DateTimeBeamDocument;
 
                     var beamDocumentCounter = beamDocument.Counter.Deserialize<DailyOperationSizingBeamDocumentsCounterDto>();
-
-                    var counter = new DailyOperationSizingBeamDocumentsCounterDto(beamDocumentCounter.Start, beamDocumentCounter.Finish);
+                    //var counter = new DailyOperationSizingBeamDocumentsCounterDto(beamDocumentCounter.Start, beamDocumentCounter.Finish);
+                    var startCounter = beamDocumentCounter.Start;
+                    var finishCounter = beamDocumentCounter.Finish;
 
                     var beamDocumentWeight = beamDocument.Weight.Deserialize<DailyOperationSizingBeamDocumentsWeightDto>();
-
-                    var weight = new DailyOperationSizingBeamDocumentsWeightDto(beamDocumentWeight.Netto, beamDocumentWeight.Bruto, beamDocumentWeight.Theoritical);
+                    //var weight = new DailyOperationSizingBeamDocumentsWeightDto(beamDocumentWeight.Netto, beamDocumentWeight.Bruto, beamDocumentWeight.Theoritical);
+                    var nettoWeight = beamDocumentWeight.Netto;
+                    var brutoWeight = beamDocumentWeight.Bruto;
+                    var theoriticalWeight = beamDocumentWeight.Theoritical;
 
                     var pisMeter = beamDocument.PISMeter;
-
                     var spu = beamDocument.SPU;
-
                     var sizingBeamStatus = beamDocument.SizingBeamStatus;
 
-                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(beamDocumentHistory, counter, weight, pisMeter, spu, sizingBeamStatus);
+                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumber, beamDocumentHistory, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
 
                     dto.SizingBeamDocuments.Add(beamDocumentsDto);
                 }
-
                 dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderBy(beamDocument => beamDocument.DateTimeBeamDocumentHistory).ToList();
 
                 await Task.Yield();
@@ -396,7 +400,7 @@ namespace Manufactures.Controllers.Api
             return Ok(updateResumeDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}/reuse")]
+        [HttpPut("{Id}/produce-beams")]
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]ProduceBeamDailyOperationSizingCommand command)
         {

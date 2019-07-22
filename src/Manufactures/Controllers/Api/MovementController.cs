@@ -58,7 +58,7 @@ namespace Manufactures.Controllers.Api
                     .Where(o => o.Identity.Equals(Identity))
                     .FirstOrDefault();
 
-            if (movement.MovementType.Equals(MovementStatusConstant.SIZING))
+            if (movement.MovementType.Equals(MovementStatus.SIZING))
             {
                 var query =
                     _dailyOperationSizingRepository
@@ -98,7 +98,7 @@ namespace Manufactures.Controllers.Api
                     }
                 }
             }
-            else if (movement.MovementType.Equals(MovementStatusConstant.LOOM))
+            else if (movement.MovementType.Equals(MovementStatus.LOOM))
             {
                 var query =
                     _dailyOperationalLoomRepository
@@ -153,7 +153,7 @@ namespace Manufactures.Controllers.Api
             //Extract value to dto
             foreach (var movement in movements)
             {
-                if (movement.MovementType.Equals(MovementStatusConstant.SIZING))
+                if (movement.MovementType.Equals(MovementStatus.SIZING))
                 {
                     var dailyOperation =
                         _dailyOperationSizingRepository
@@ -171,7 +171,7 @@ namespace Manufactures.Controllers.Api
                     }
 
                 }
-                else if (movement.MovementType.Equals(MovementStatusConstant.LOOM))
+                else if (movement.MovementType.Equals(MovementStatus.LOOM))
                 {
                     var dailyOperation =
                         _dailyOperationalLoomRepository

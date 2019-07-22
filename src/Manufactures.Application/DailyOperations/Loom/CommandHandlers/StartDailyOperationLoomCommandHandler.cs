@@ -56,7 +56,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var countStartStatus = 
                 existingDailyOperation
                     .DailyOperationMachineDetails
-                    .Where( e => e.OperationStatus == DailyOperationMachineStatus.ONSTART)
+                    .Where( e => e.OperationStatus == MachineStatus.ONSTART)
                     .Count();
             //Get latest detail
             var firstDetail = 
@@ -75,7 +75,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 throw Validator.ErrorValidation(("Status", "Start status has available"));
             }
             //Compare if has entry
-            if (!firstDetail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY))
+            if (!firstDetail.OperationStatus.Equals(MachineStatus.ONENTRY))
             {
                 throw Validator.ErrorValidation(("Status", "Can't stop, check your latest status"));
             }
@@ -85,7 +85,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                              request.ShiftId,
                                              request.OperatorId,
                                              dateTimeOperation,
-                                             DailyOperationMachineStatus.ONSTART,
+                                             MachineStatus.ONSTART,
                                              true,
                                              false);
 

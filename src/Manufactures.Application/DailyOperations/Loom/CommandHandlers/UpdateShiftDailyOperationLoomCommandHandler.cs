@@ -49,8 +49,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .OrderByDescending(e => e.DateTimeOperation)
                     .FirstOrDefault();
             //Compare if has status Entry or Finish
-            if (detail.OperationStatus.Equals(DailyOperationMachineStatus.ONENTRY) ||
-                detail.OperationStatus.Equals(DailyOperationMachineStatus.ONFINISH))
+            if (detail.OperationStatus.Equals(MachineStatus.ONENTRY) ||
+                detail.OperationStatus.Equals(MachineStatus.ONCOMPLETE))
             {
                 throw Validator.ErrorValidation(("Status", "Can't Change Shift, check your latest status"));
             }
@@ -67,7 +67,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var statusUp = false;
             var statusDown = false;
 
-            if (detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
+            if (detail.OperationStatus.Equals(MachineStatus.ONSTOP))
             {
                 statusDown = true;
             }
@@ -81,7 +81,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                              request.ShiftId,
                                              request.OperatorId,
                                              dateTimeOperation,
-                                             DailyOperationMachineStatus.ONCHANGESHIFT,
+                                             MachineStatus.ONCHANGESHIFT,
                                              statusUp,
                                              statusDown);
 
