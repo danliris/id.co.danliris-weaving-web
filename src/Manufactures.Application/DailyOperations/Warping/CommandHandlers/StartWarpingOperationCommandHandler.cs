@@ -5,6 +5,8 @@ using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
@@ -26,18 +28,36 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
-        public Task<DailyOperationWarpingDocument> Handle(StartWarpingOperationCommand request, 
+        public async Task<DailyOperationWarpingDocument> Handle(StartWarpingOperationCommand request,
                                                           CancellationToken cancellationToken)
         {
             //Check if has existing daily operation
-            var existingDailyOperation = 
+            var warpingQuery =
                 _warpingOperationRepository
-                    .Find(x => x.Identity.Equals(request.Id))
+                    .Query
+                    .Include(x => x.DailyOperationWarpingDetailHistory)
+                    .Include(x => x.DailyOperationWarpingBeamProducts);
+            var existingDailyOperation =
+                _warpingOperationRepository
+                    .Find(warpingQuery)
+                    .Where(x => x.Identity.Equals(request.Id))
                     .FirstOrDefault();
+
+            //Check if has existing daily operation
+            if (existingDailyOperation == null)
+            {
+                //Throw an error doesn't have any operation
+                throw Validator
+                        .ErrorValidation(("Id",
+                                          "Unavailable exsisting daily operation warping Document with Id " + request.Id));
+            }
 
             //Set date time when user operate
             var datetimeOperation =
-                request.DateOperation.UtcDateTime.Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
+                request
+                    .DateOperation
+                    .UtcDateTime
+                    .Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
 
             //Add daily operation history
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
@@ -45,9 +65,36 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                            datetimeOperation,
                                                            MachineStatus.ONSTART);
 
-            existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
 
-            throw new NotImplementedException();
+            existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
+            
+            //Check if any beam on process
+            if (existingDailyOperation
+                    .DailyOperationWarpingBeamProducts
+                    .Any(x => !x.BeamStatus.Equals(BeamStatus.ONPROCESS)))
+            {
+                //Add new beam product
+                var warpingBeamProduct =
+                new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                     request.BeamId);
+                warpingBeamProduct.UpdateBeamStatus(BeamStatus.ONPROCESS);
+
+                existingDailyOperation.AddDailyOperationWarpingBeamProduct(warpingBeamProduct);
+            }
+            else
+            {
+                //Throw an error has beam on process
+                throw Validator
+                        .ErrorValidation(("BeamId",
+                                          "Still have another beam on process" + request.BeamId));
+            }
+
+            //Update existing daily operation
+            await _warpingOperationRepository.Update(existingDailyOperation);
+            _storage.Save();
+
+            //return existing operation
+            return existingDailyOperation;
         }
     }
 }
