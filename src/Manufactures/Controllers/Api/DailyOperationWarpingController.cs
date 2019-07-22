@@ -53,5 +53,17 @@ namespace Manufactures.Controllers.Api
             //Return result from command handler as Identity(Id)
             return Ok(dailyOperationWarping.Identity);
         }
+
+        //Start Warping Daily Operation Request
+        [HttpPost("start-process")]
+        public async Task<IActionResult>
+            Start([FromBody]StartWarpingOperationCommand command)
+        {
+            // Sending command to command handler
+            var dailyOperationWarping = await Mediator.Send(command);
+
+            //Return result from command handler as Identity(Id)
+            return Ok(dailyOperationWarping.DailyOperationWarpingBeamProducts);
+        }
     }
 }
