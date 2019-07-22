@@ -13,8 +13,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "Details")]
-        public UpdateStartDailyOperationSizingDetailCommand Details { get; set; }
+        [JsonProperty(PropertyName = "SizingBeamDocuments")]
+        public UpdateStartDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
+
+        [JsonProperty(PropertyName = "SizingDetails")]
+        public UpdateStartDailyOperationSizingDetailCommand SizingDetails { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -27,7 +30,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public AddNewDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.Details).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
+            RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new UpdateStartDailyOperationSizingBeamDocumentCommandValidator());
+            RuleFor(validator => validator.SizingDetails).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
         }
     }
 }

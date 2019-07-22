@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Manufactures.Dtos.DailyOperations.Sizing
 {
-    public class DailyOperationSizingHistoryDto
+    public class DailyOperationSizingDetailsHistoryDto
     {
 
-        [JsonProperty(PropertyName = "DateTimeOperation")]
+        [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeOperation { get; }
 
         [JsonProperty(PropertyName = "MachineStatus")]
@@ -18,11 +18,11 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; }
 
-        public DailyOperationSizingHistoryDto()
+        public DailyOperationSizingDetailsHistoryDto()
         {
         }
 
-        public DailyOperationSizingHistoryDto(DateTimeOffset dateTimeOperation, string machineStatus, string information)
+        public DailyOperationSizingDetailsHistoryDto(DateTimeOffset dateTimeOperation, string machineStatus, string information)
         {
             DateTimeOperation = dateTimeOperation;
             MachineStatus = machineStatus;

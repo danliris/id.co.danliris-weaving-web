@@ -11,13 +11,21 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
     public class DailyOperationSizingDetail : EntityBase<DailyOperationSizingDetail>
     {
         public Guid ShiftDocumentId { get; private set; }
+
         public Guid OperatorDocumentId { get; private set; }
-        public DateTimeOffset DateTimeOperation { get; private set; }
+
+        public DateTimeOffset DateTimeMachine { get; private set; }
+
         public string MachineStatus { get; private set; }
+
         public string Information { get; private set; }
+
         public string Causes { get; private set; }
 
+        public string SizingBeamNumber { get; private set; }
+
         public Guid DailyOperationSizingDocumentId { get; set; }
+
         public DailyOperationSizingReadModel DailyOperationSizingDocument { get; set; }
 
         public DailyOperationSizingDetail(Guid identity) : base(identity)
@@ -27,23 +35,25 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public DailyOperationSizingDetail(Guid identity, 
                                           ShiftId shiftDocumentId, 
                                           OperatorId operatorDocumentId, 
-                                          DateTimeOffset dateTimeOperation, 
+                                          DateTimeOffset dateTimeMachine, 
                                           string machineStatus, 
                                           string information, 
-                                          DailyOperationSizingCausesValueObject causes) : base(identity)
+                                          DailyOperationSizingCauseValueObject causes,
+                                          string sizingBeamNumber) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
-            DateTimeOperation = dateTimeOperation;
+            DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             Information = information;
             Causes = causes.Serialize();
+            SizingBeamNumber = sizingBeamNumber;
         }
 
         public void SetShiftId(ShiftId shiftDocumentId)
         {
-                ShiftDocumentId = shiftDocumentId.Value;
-                MarkModified();
+            ShiftDocumentId = shiftDocumentId.Value;
+            MarkModified();
         }
 
         public void SetOperatorDocumentId(OperatorId operatorDocumentId)
@@ -55,9 +65,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetDateTimeOperation(DateTimeOffset dateTimeOperation)
+        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
         {
-            DateTimeOperation = dateTimeOperation;
+            DateTimeMachine = dateTimeMachine;
             MarkModified();
         }
 
@@ -73,11 +83,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetCauses(DailyOperationSizingCausesValueObject causes)
+        public void SetCauses(DailyOperationSizingCauseValueObject causes)
         {
             Causes = causes.Serialize();
             MarkModified();
-        }        
+        }
+
+        public void SetSizingBeamNumber(string sizingBeamNumber)
+        {
+            SizingBeamNumber = sizingBeamNumber;
+            MarkModified();
+        }
 
         protected override DailyOperationSizingDetail GetEntity()
         {

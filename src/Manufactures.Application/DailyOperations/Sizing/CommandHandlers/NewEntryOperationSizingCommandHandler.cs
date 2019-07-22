@@ -9,6 +9,7 @@ using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Movements;
 using Manufactures.Domain.Movements.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -36,22 +37,29 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
+            //var warpingBeamsCollection = new List<BeamId>();
+
+            //foreach(var beamDocument in request.BeamsWarping)
+            //{
+            //    var beamValue = new DailyOperationSizingBeamsCollectionValueObject(beamDocument.Id, beamDocument.YarnStrands);
+            //    warpingBeamsCollection.Add(beamValue);
+            //}
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
+                                                    request.BeamsWarping,
                                                     request.RecipeCode,
-                                                    new DailyOperationSizingCounterValueObject(request.Counter.Start, "0"),
-                                                    new DailyOperationSizingWeightValueObject(request.Weight.Netto, "0"),
-                                                    request.WarpingBeamsId,
+                                                    request.NeReal,
                                                     0,
                                                     0,
                                                     0,
-                                                    0,
-                                                    0,
-                                                    new BeamId(Guid.Empty),
-                                                    DailyOperationMachineStatus.ONPROCESS);
+                                                    OperationStatus.ONPROCESS);
+
+            //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
+            //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
 
             var year = request.Details.PreparationDate.Year;
             var month = request.Details.PreparationDate.Month;
@@ -62,27 +70,28 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            var newOperation =
+            var newOperationDetail =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                    request.Details.ShiftId,
                                                    request.Details.OperatorDocumentId,
                                                    dateTimeOperation,
-                                                   DailyOperationMachineStatus.ONENTRY,
+                                                   MachineStatus.ONENTRY,
                                                    "-",
-                                                   new DailyOperationSizingCausesValueObject("0","0"));
+                                                   new DailyOperationSizingCauseValueObject("0","0"),
+                                                   " ");
 
-                dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperation);
+            dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperationDetail);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
 
             //Add new Movement
-            var newMovement =
-                new MovementDocument(Guid.NewGuid(),
-                                     new DailyOperationId(dailyOperationSizingDocument.Identity),
-                                     MovementStatusConstant.SIZING,
-                                     true);
+            //var newMovement =
+            //    new MovementDocument(Guid.NewGuid(),
+            //                         new DailyOperationId(dailyOperationSizingDocument.Identity),
+            //                         MovementStatusConstant.SIZING,
+            //                         true);
 
-            await _movementRepository.Update(newMovement);
+            //await _movementRepository.Update(newMovement);
 
             _storage.Save();
 

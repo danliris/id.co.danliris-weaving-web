@@ -1,45 +1,64 @@
-﻿using Manufactures.Domain.Shared.ValueObjects;
+﻿using Barebone.Util;
 using Manufactures.Dtos;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Text;
 
 namespace Manufactures.Helpers.XlsTemplates
 {
     public class SizePickupReportXlsTemplate
     {
-        //private MemoryStream GenerateSizePickupReportXls(List<SizePickupListDto> data)
-        //{
-        //    DataTable dt = new DataTable();
+        public MemoryStream GenerateSizePickupReportXls(List<SizePickupListDto> sizePickupModel)
+        {
+            DataTable dt = new DataTable();
 
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Unit", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Jenis Proses", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Nomor Mesin", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Merk Mesin", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Tipe Benang", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "Output", DataType = typeof(string) });
-        //    dt.Columns.Add(new DataColumn() { ColumnName = "UOM", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Grup Sizing", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Kode Resep", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Kecepatan Mesin", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Tek", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Visco", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No. Beam", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "PIS(m)", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Counter Awal", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Counter Akhir", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Weight", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Bruto", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "SPU", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Jam Doffing", DataType = typeof(string) });
 
+            if (sizePickupModel.Count == 0)
+            {
+                dt.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "");
+            }
+            else
+            {
+                int index = 1;
+                foreach (var item in sizePickupModel)
+                {
+                    var date = item.DateTimeMachineHistory.ToString("dd MMMM yyyy");
+                    var operatorGroup = item.OperatorGroup;
+                    var operatorName = item.OperatorName;
+                    var recipeCode = item.RecipeCode;
+                    var machineSpeed = item.MachineSpeed.ToString();
+                    var texSQ = item.TexSQ.ToString();
+                    var visco = item.Visco.ToString();
+                    var beamNumber = item.BeamNumber;
+                    var pism = item.PISM.ToString();
+                    //var counterStart = item.CounterStart;
+                    //var counterFinish = item.CounterFinish;
+                    //var netto = item.WeightNetto;
+                    //var bruto = item.WeightBruto;
+                    var spu = item.SPU.ToString();
+                    var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
+                    dt.Rows.Add(index++, date, operatorGroup, operatorName, recipeCode, machineSpeed,
+                        texSQ, visco, beamNumber, pism, spu, doffingTime);
+                }
+            }
 
-        //    if (data.Count == 0)
-        //    {
-        //        dt.Rows.Add("", "", "", "", "", "", "", "", "");
-        //    }
-        //    else
-        //    {
-        //        int index = 1;
-        //        foreach (var item in data)
-        //        {
-        //            dt.Rows.Add(index++, item.Date.Value.Date.ToString("dd/MM/yyyy"), item.UnitDepartment.Name, item.ProcessType, item.MachineSpinning.No, item.MachineSpinning.Name,
-        //                item.MaterialType.Code, item.Total.ToString("0.00"), item.MachineSpinning.UomUnit);
-        //        }
-        //    }
-
-        //    return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Machine Input") }, true);
-        //}
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Size Pickup") }, true);
+        }
     }
 }

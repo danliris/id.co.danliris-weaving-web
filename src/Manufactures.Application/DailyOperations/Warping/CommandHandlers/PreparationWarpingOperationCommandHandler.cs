@@ -50,7 +50,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            request.OperatorId.Value, 
                                                            datetimeOperation,
-                                                           DailyOperationMachineStatus.ONENTRY);
+                                                           MachineStatus.ONENTRY);
             dailyOperationWarping.AddDailyOperationWarpingDetailHistory(history);
             
             //Update and save

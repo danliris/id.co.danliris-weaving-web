@@ -3,7 +3,7 @@
     public class Constants
     {
         //Others
-        public static string EMPTYvALUE = " ";
+        public static string EMPTYVALUE = " ";
 
         // Daily Operation Status
         public static string PROCESS = "PROCESSING";

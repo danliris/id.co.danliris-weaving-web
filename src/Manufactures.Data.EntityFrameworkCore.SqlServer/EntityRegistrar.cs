@@ -76,7 +76,7 @@ namespace Manufactures.Data.EntityFrameworkCore
             });
 
             modelBuilder.Entity<BeamReadModel>(etb =>
-        {
+            {
             etb.ToTable("Weaving_BeamDocuments");
             etb.HasKey(e => e.Identity);
 
@@ -85,7 +85,16 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             etb.ApplyAuditTrail();
             etb.ApplySoftDelete();
-        });
+            });
+
+            modelBuilder.Entity<DailyOperationSizingBeamDocument>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingBeamDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
             modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
             {
@@ -101,7 +110,11 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.Details)
+                etb.HasMany(e => e.SizingBeamDocuments)
+                    .WithOne(e => e.DailyOperationSizingDocument)
+                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
+
+                etb.HasMany(e => e.SizingDetails)
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 

@@ -1,6 +1,6 @@
 ﻿namespace Manufactures.Application.Helpers
 {
-    public class MovementStatusConstant
+    public class MovementStatus
     {
         //MovementType
         public static string SIZING = "Movement-Sizing";

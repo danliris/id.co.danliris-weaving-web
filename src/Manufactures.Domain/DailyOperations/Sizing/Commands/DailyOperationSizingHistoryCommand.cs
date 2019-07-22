@@ -26,8 +26,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public DailyOperationSizingHistoryCommandValidator()
         {
-            RuleFor(command => command.MachineDate).NotNull();
-            RuleFor(command => command.MachineTime).NotNull();
+            RuleFor(validator => validator.MachineDate).NotNull();
+            RuleFor(validator => validator.MachineTime).NotNull();
         }
     }
 }

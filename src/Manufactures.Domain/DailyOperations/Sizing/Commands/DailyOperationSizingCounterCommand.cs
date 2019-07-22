@@ -6,10 +6,16 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     public class DailyOperationSizingCounterCommand
     {
         [JsonProperty(PropertyName = "Start")]
-        public string Start { get; set; }
+        public double Start { get; set; }
 
         [JsonProperty(PropertyName = "Finish")]
-        public string Finish { get; set; }
+        public double Finish { get; set; }
+
+        //public DailyOperationSizingCounterCommand(DailyOperationSizingCounterCommand counter)
+        //{
+        //    Start = counter.Start;
+        //    Finish = counter.Finish;
+        //}
     }
 
     public class DailyOperationSizingCounterCommandValidator
@@ -17,8 +23,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public DailyOperationSizingCounterCommandValidator()
         {
-            RuleFor(command => command.Start).NotEmpty();
-            RuleFor(command => command.Finish).NotEmpty().Unless(command => !string.IsNullOrEmpty(command.Start));
+            RuleFor(validator => validator.Start).NotEmpty();
+            RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start > 0);
         }
     }
 }

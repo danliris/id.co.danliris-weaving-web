@@ -60,11 +60,12 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
 
             //Add daily operation history
-            var history =
-                new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                 request.OperatorId.Value,
-                                                 datetimeOperation,
-                                                 DailyOperationMachineStatus.ONSTART);
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           request.OperatorId.Value,
+                                                           datetimeOperation,
+                                                           MachineStatus.ONSTART);
+
+
             existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
             
             //Check if any beam on process

@@ -14,7 +14,7 @@ namespace Manufactures.Dtos.DailyOperations.Loom
         [JsonProperty(PropertyName = "BeamOperatorGroup")]
         public string BeamOperatorGroup { get; }
 
-        [JsonProperty(PropertyName = "DateTimeOperation")]
+        [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeOperation { get; }
 
         [JsonProperty(PropertyName = "OperationStatus")]

@@ -58,19 +58,19 @@ namespace Manufactures.Controllers.Api
                     .Where(o => o.Identity.Equals(Identity))
                     .FirstOrDefault();
 
-            if (movement.MovementType.Equals(MovementStatusConstant.SIZING))
+            if (movement.MovementType.Equals(MovementStatus.SIZING))
             {
                 var query =
                     _dailyOperationSizingRepository
                         .Query
-                        .Include(o => o.Details);
+                        .Include(o => o.SizingDetails);
                 var dailyOperation =
                         _dailyOperationSizingRepository
                             .Find(query)
                             .Where(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
 
-                foreach (var beamId in dailyOperation.WarpingBeamsId)
+                foreach (var beamId in dailyOperation.BeamsWarping)
                 {
                     var beam =
                        _beamRepository
@@ -79,8 +79,8 @@ namespace Manufactures.Controllers.Api
 
                     if (beam.Number.Equals(number))
                     {
-                        var details = dailyOperation.Details;
-                        details = details.OrderByDescending(o => o.DateTimeOperation).ToList();
+                        var details = dailyOperation.SizingDetails;
+                        details = details.OrderByDescending(o => o.DateTimeMachine).ToList();
                         var beamMovementDto =
                             new BeamMovementDto(movement.Identity,
                                                 movement.MovementType,
@@ -98,7 +98,7 @@ namespace Manufactures.Controllers.Api
                     }
                 }
             }
-            else if (movement.MovementType.Equals(MovementStatusConstant.LOOM))
+            else if (movement.MovementType.Equals(MovementStatus.LOOM))
             {
                 var query =
                     _dailyOperationalLoomRepository
@@ -153,14 +153,14 @@ namespace Manufactures.Controllers.Api
             //Extract value to dto
             foreach (var movement in movements)
             {
-                if (movement.MovementType.Equals(MovementStatusConstant.SIZING))
+                if (movement.MovementType.Equals(MovementStatus.SIZING))
                 {
                     var dailyOperation =
                         _dailyOperationSizingRepository
                             .Find(o => o.Identity.Equals(movement.DailyOperationId.Value))
                             .FirstOrDefault();
 
-                    foreach (var beamId in dailyOperation.WarpingBeamsId)
+                    foreach (var beamId in dailyOperation.BeamsWarping)
                     {
                         var beam =
                        _beamRepository
@@ -171,7 +171,7 @@ namespace Manufactures.Controllers.Api
                     }
 
                 }
-                else if (movement.MovementType.Equals(MovementStatusConstant.LOOM))
+                else if (movement.MovementType.Equals(MovementStatus.LOOM))
                 {
                     var dailyOperation =
                         _dailyOperationalLoomRepository
