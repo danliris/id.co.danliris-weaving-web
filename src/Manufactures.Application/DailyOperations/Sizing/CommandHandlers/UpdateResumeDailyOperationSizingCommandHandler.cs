@@ -97,16 +97,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterCommand>(lastBeamDocument.Counter);
                         var weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightCommand>(lastBeamDocument.Weight);
 
-                        var newBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
-                                                                                   new BeamId(lastBeamDocument.SizingBeamId),
-                                                                                   dateTimeOperation,
-                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
-                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
-                                                                                   lastBeamDocument.PISMeter,
-                                                                                   lastBeamDocument.SPU,
-                                                                                   BeamStatus.ONPROCESS);
+                        var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
+                                                                                      new BeamId(lastBeamDocument.SizingBeamId),
+                                                                                      dateTimeOperation,
+                                                                                      new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
+                                                                                      new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
+                                                                                      lastBeamDocument.PISMeter,
+                                                                                      lastBeamDocument.SPU,
+                                                                                      BeamStatus.ONPROCESS);
 
-                        existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
+                        existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
 
                         var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 

@@ -104,7 +104,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterCommand>(lastBeamDocument.Counter);
                         var weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightCommand>(lastBeamDocument.Weight);
 
-                        var newBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
+                        var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
                                                                                    new BeamId(lastBeamDocument.SizingBeamId),
                                                                                    dateTimeOperation,
                                                                                    new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
@@ -113,7 +113,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    lastBeamDocument.SPU,
                                                                                    BeamStatus.ONPROCESS);
 
-                        existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
+                        existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
 
                         var Causes = request.Details.Causes;
 

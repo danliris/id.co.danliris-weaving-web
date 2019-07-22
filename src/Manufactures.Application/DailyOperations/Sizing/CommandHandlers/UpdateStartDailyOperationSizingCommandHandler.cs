@@ -123,6 +123,25 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                         var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
+                        var entryDetailId = lastDetail.Identity;
+                        var entryDetailShiftId = lastDetail.ShiftDocumentId;
+                        var entryDetailOperatorId = lastDetail.OperatorDocumentId;
+                        var entryDetailDateTimeMachine = lastDetail.DateTimeMachine;
+                        var entryDetailMachineStatus = lastDetail.MachineStatus;
+                        var entryDetailInformation = lastDetail.Information;
+                        var entryDetailSizingBeamNumber = beamNumber;
+                        var updateOnEntryOperationDetail = new DailyOperationSizingDetail(entryDetailId,
+                                                                                          new ShiftId(entryDetailShiftId),
+                                                                                          new OperatorId(entryDetailOperatorId),
+                                                                                          entryDetailDateTimeMachine,
+                                                                                          entryDetailMachineStatus,
+                                                                                          entryDetailInformation,
+                                                                                          new DailyOperationSizingCauseValueObject(Causes.BrokenBeam,
+                                                                                          Causes.MachineTroubled),
+                                                                                          entryDetailSizingBeamNumber);
+
+                        existingDailyOperation.UpdateSizingDetail(updateOnEntryOperationDetail);
+
                         var newOperationDetail =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                new ShiftId(request.SizingDetails.ShiftId.Value),
