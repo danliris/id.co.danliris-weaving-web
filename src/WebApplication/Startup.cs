@@ -7,8 +7,8 @@ using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
-using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -71,7 +71,7 @@ namespace DanLiris.Admin.Web
             });
 
             //Add query service config
-            services.AddScoped<IWarpingQuery<DailyOperationWarpingDocument>, DailyOperationWarpingQueryHandler>();
+            services.AddScoped<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);
 
