@@ -55,15 +55,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Finish Status
-            var countFinishStatus =
-                existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
-                    .Count();
+            var operationCompleteStatus =
+                existingDailyOperation.OperationStatus;
 
-            if (countFinishStatus == 1)
+            if (operationCompleteStatus == OperationStatus.ONFINISH)
             {
-                throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
+                throw Validator.ErrorValidation(("CompleteStatus", "This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -108,7 +105,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                         existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
 
-                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
+                        var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
                         var newOperation =
                                     new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -117,7 +114,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    dateTimeOperation,
                                                                    MachineStatus.ONRESUME,
                                                                    "-",
-                                                                   new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
+                                                                   new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                    lastDetail.SizingBeamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
@@ -133,15 +130,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                 }
             }
-
-            //Validation for Resume Time
-            //var lastTimeMachineLog = lastDetail.DateTimeMachine.TimeOfDay;
-            //var resumeTimeMachineLog = request.SizingDetails.ResumeTime;
-
-            //if (resumeTimeMachineLog < lastTimeMachineLog)
-            //{
-            //    throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than latest time log"));
-            //}
         }
     }
 }

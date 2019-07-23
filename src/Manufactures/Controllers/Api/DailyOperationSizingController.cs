@@ -217,7 +217,7 @@ namespace Manufactures.Controllers.Api
 
                     dto.SizingDetails.Add(detailsDto);
                 }
-                dto.SizingDetails = dto.SizingDetails.OrderBy(history => history.DateTimeMachineHistory).ToList();
+                dto.SizingDetails = dto.SizingDetails.OrderByDescending(history => history.DateTimeMachineHistory).ToList();
 
                 foreach (var beamDocument in dailyOperationalSizing.SizingBeamDocuments)
                 {
@@ -225,7 +225,7 @@ namespace Manufactures.Controllers.Api
                                                 .Find(e => e.Identity.Equals(beamDocument.Identity))
                                                 .FirstOrDefault();
 
-                    var beamDocumentHistory = beamDocument.DateTimeBeamDocument;
+                    var dateTimeBeamDocument = beamDocument.DateTimeBeamDocument;
 
                     var beamDocumentCounter = beamDocument.Counter.Deserialize<DailyOperationSizingBeamDocumentsCounterDto>();
                     //var counter = new DailyOperationSizingBeamDocumentsCounterDto(beamDocumentCounter.Start, beamDocumentCounter.Finish);
@@ -242,11 +242,11 @@ namespace Manufactures.Controllers.Api
                     var spu = beamDocument.SPU;
                     var sizingBeamStatus = beamDocument.SizingBeamStatus;
 
-                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumber, beamDocumentHistory, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
+                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumber, dateTimeBeamDocument, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
 
                     dto.SizingBeamDocuments.Add(beamDocumentsDto);
                 }
-                dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderBy(beamDocument => beamDocument.DateTimeBeamDocumentHistory).ToList();
+                dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderByDescending(beamDocument => beamDocument.DateTimeBeamDocument).ToList();
 
                 await Task.Yield();
 
@@ -306,7 +306,7 @@ namespace Manufactures.Controllers.Api
 
             if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
             {
-                Netto calculate = new Netto();
+                Theoritical calculate = new Theoritical();
                 kawamotoCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
 
                 await Task.Yield();
@@ -323,7 +323,7 @@ namespace Manufactures.Controllers.Api
 
             if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
             {
-                Netto calculate = new Netto();
+                Theoritical calculate = new Theoritical();
                 suckerMullerCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
 
                 await Task.Yield();

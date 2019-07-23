@@ -10,8 +10,8 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingBeamNumber")]
         public string SizingBeamNumber { get; }
 
-        [JsonProperty(PropertyName = "DateTimeBeamDocumentHistory")]
-        public DateTimeOffset DateTimeBeamDocumentHistory { get; }
+        [JsonProperty(PropertyName = "DateTimeBeamDocument")]
+        public DateTimeOffset DateTimeBeamDocument { get; }
 
         //[JsonProperty(PropertyName = "Counter")]
         //public DailyOperationSizingBeamDocumentsCounterDto Counter { get; }
@@ -43,7 +43,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public DailyOperationSizingBeamDocumentsDto(string sizingBeamNumber, DateTimeOffset dateTimeBeamDocumentHistory, double startCounter, double finishCounter, double nettoWeight, double brutoWeight, double pisMeter, double spu, string sizingBeamStatus)
         {
             SizingBeamNumber = sizingBeamNumber;
-            DateTimeBeamDocumentHistory = dateTimeBeamDocumentHistory;
+            DateTimeBeamDocument = dateTimeBeamDocumentHistory;
             StartCounter = startCounter;
             FinishCounter = finishCounter;
             NettoWeight = NettoWeight;

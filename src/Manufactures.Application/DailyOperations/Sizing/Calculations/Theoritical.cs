@@ -2,7 +2,7 @@
 
 namespace Manufactures.Application.DailyOperations.Sizing.Calculations
 {
-    public class Netto
+    public class Theoritical
     {
         public double CalculateKawamoto(double pisInMeter, int yarnStrands, double neReal)
         {

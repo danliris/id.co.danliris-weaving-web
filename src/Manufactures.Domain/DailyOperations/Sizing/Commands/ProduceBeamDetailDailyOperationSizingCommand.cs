@@ -15,11 +15,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ShiftId")]
         public ShiftId ShiftId { get; set; }
 
-        [JsonProperty(PropertyName = "ProduceBeamResumeDate")]
-        public DateTimeOffset ProduceBeamResumeDate { get; set; }
+        [JsonProperty(PropertyName = "ProduceBeamDate")]
+        public DateTimeOffset ProduceBeamDate { get; set; }
 
-        [JsonProperty(PropertyName = "ProduceBeamResumeTime")]
-        public TimeSpan ProduceBeamResumeTime { get; set; }
+        [JsonProperty(PropertyName = "ProduceBeamTime")]
+        public TimeSpan ProduceBeamTime { get; set; }
     }
 
     public class ProduceBeamDetailDailyOperationSizingCommandValidator : AbstractValidator<ProduceBeamDetailDailyOperationSizingCommand>
@@ -28,8 +28,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         {
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.ShiftId.Value).NotEmpty();
-            RuleFor(validator => validator.ProduceBeamResumeDate).NotEmpty();
-            RuleFor(validator => validator.ProduceBeamResumeTime).NotEmpty();
+            RuleFor(validator => validator.ProduceBeamDate).NotEmpty();
+            RuleFor(validator => validator.ProduceBeamTime).NotEmpty();
         }
     }
 }
