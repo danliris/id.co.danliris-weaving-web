@@ -6,10 +6,6 @@ namespace Infrastructure.Domain.Queries
 {
     public interface IQueries<TModels>
     {
-        Task<List<TModels>> Get(int page,
-                                int size,
-                                string order,
-                                string keyword,
-                                string filter);
+        Task<IEnumerable<TModels>> GetAll();
     }
 }

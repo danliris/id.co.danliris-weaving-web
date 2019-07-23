@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20190506071539_test-ignore.Designer.cs" />
     <Compile Remove="Migrations\20190529072506_module_loom.cs" />
     <Compile Remove="Migrations\20190529072506_module_loom.Designer.cs" />
+    <Compile Remove="Migrations\20190717070312_dev_daily_operation.cs" />
+    <Compile Remove="Migrations\20190717070312_dev_daily_operation.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

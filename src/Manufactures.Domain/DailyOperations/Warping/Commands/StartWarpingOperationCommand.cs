@@ -12,7 +12,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "Id")]
+        [JsonProperty(PropertyName = "BeamId")]
         public BeamId BeamId { get; set; }
 
         [JsonProperty(PropertyName = "DateOperation")]

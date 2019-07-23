@@ -1,11 +1,6 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
-using Manufactures.Domain.DailyOperations.Sizing.Entities;
-using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Dtos.DailyOperations.Sizing;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Dtos
 {
@@ -35,17 +30,20 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "Visco")]
         public double Visco { get; }
 
-        [JsonProperty(PropertyName = "PIS")]
-        public int PIS { get; }
+        [JsonProperty(PropertyName = "PISM")]
+        public int PISM { get; }
 
-        [JsonProperty(PropertyName = "Finish")]
-        public string Finish { get; }
+        //[JsonProperty(PropertyName = "CounterStart")]
+        //public string CounterStart { get; }
 
-        [JsonProperty(PropertyName = "Netto")]
-        public string Netto { get; }
+        //[JsonProperty(PropertyName = "CounterFinish")]
+        //public string CounterFinish { get; }
 
-        [JsonProperty(PropertyName = "Bruto")]
-        public string Bruto { get; }
+        //[JsonProperty(PropertyName = "WeightNetto")]
+        //public string WeightNetto { get; }
+
+        //[JsonProperty(PropertyName = "WeightBruto")]
+        //public string WeightBruto { get; }
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; }
@@ -63,11 +61,12 @@ namespace Manufactures.Dtos
             MachineSpeed = document.MachineSpeed;
             TexSQ = document.TexSQ;
             Visco = document.Visco;
-            PIS = document.PIS;
-            Finish = document.Counter.Finish;
-            Netto = document.Weight.Netto;
-            Bruto = document.Weight.Bruto;
-            SPU = document.SPU;
+            //PISM = document.PISM;
+            //CounterStart = document.Counter.Start;
+            //CounterFinish = document.Counter.Finish;
+            //WeightNetto = document.Weight.Weight;
+            //WeightBruto = document.Weight.Bruto;
+            //SPU = document.SPU;
             BeamNumber = beamNumber;
         }
     }

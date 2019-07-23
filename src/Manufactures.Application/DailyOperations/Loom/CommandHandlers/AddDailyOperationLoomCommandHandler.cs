@@ -45,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                request.BeamId, 
                                                request.OrderId, 
                                                request.DailyOperationMonitoringId, 
-                                               DailyOperationMachineStatus.ONPROCESS);
+                                               OperationStatus.ONPROCESS);
             //Break datetime to match timezone
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
@@ -61,7 +61,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                              request.ShiftId, 
                                              request.OperatorId,
                                              dateTimeOperation, 
-                                             DailyOperationMachineStatus.ONENTRY,
+                                             MachineStatus.ONENTRY,
                                              true,
                                              false);
             newOperation.AddWarpOrigin(request.WarpOrigin);
@@ -75,7 +75,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var newMovement = 
                 new MovementDocument(Guid.NewGuid(), 
                                      new DailyOperationId(dailyOperationMachineDocument.Identity), 
-                                     MovementStatusConstant.LOOM, 
+                                     MovementStatus.LOOM, 
                                      true);
 
             await _movementRepository.Update(newMovement);

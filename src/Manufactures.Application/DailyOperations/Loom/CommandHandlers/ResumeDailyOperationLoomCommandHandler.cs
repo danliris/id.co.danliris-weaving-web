@@ -55,7 +55,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     .OrderByDescending(e => e.DateTimeOperation)
                     .FirstOrDefault();
             //Compare if has status stop
-            if (!detail.OperationStatus.Equals(DailyOperationMachineStatus.ONSTOP))
+            if (!detail.OperationStatus.Equals(MachineStatus.ONSTOP))
             {
                 throw Validator.ErrorValidation(("Status", "Can't continue, check your latest status"));
             }
@@ -87,7 +87,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                              request.ShiftId,
                                              request.OperatorId,
                                              dateTimeOperation,
-                                             DailyOperationMachineStatus.ONRESUME,
+                                             MachineStatus.ONRESUME,
                                              true,
                                              false);
             //Compare if has change weft origin

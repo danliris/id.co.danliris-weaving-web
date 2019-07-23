@@ -28,16 +28,16 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Visco")]
         public double Visco { get; set; }
 
-        [JsonProperty(PropertyName = "PIS")]
-        public int PIS { get; set; }
+        [JsonProperty(PropertyName = "PISM")]
+        public int PISM { get; set; }
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
 
-        [JsonProperty(PropertyName = "SizingBeamDocumentId")]
-        public BeamId SizingBeamDocumentId { get; set; }
+        [JsonProperty(PropertyName = "SizingBeamId")]
+        public BeamId SizingBeamId { get; set; }
 
-        [JsonProperty(PropertyName = "Details")]
+        [JsonProperty(PropertyName = "SizingDetails")]
         public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
 
         public void SetId(Guid Id)
@@ -54,9 +54,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.MachineSpeed).NotEmpty();
             RuleFor(validator => validator.TexSQ).NotEmpty();
             RuleFor(validator => validator.Visco).NotEmpty();
-            RuleFor(validator => validator.PIS).NotEmpty();
+            RuleFor(validator => validator.PISM).NotEmpty();
             RuleFor(validator => validator.SPU).NotEmpty();
-            RuleFor(validator => validator.SizingBeamDocumentId).NotEmpty();
+            RuleFor(validator => validator.SizingBeamId).NotEmpty();
         }
     }
 }

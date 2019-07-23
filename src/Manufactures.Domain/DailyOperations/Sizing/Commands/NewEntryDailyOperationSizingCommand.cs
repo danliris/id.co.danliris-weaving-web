@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -22,16 +23,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "RecipeCode")]
         public string RecipeCode { get; set; }
 
-        [JsonProperty(PropertyName = "Counter")]
-        public DailyOperationSizingCounterCommand Counter { get; set; }
+        [JsonProperty(PropertyName = "NeReal")]
+        public double NeReal { get; set; }
 
-        [JsonProperty(PropertyName = "Weight")]
-        public DailyOperationSizingWeightCommand Weight { get; set; }
+        [JsonProperty(PropertyName = "BeamsWarping")]
+        public List<BeamId> BeamsWarping { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamsId")]
-        public List<BeamId> WarpingBeamsId { get; set; }
-
-        [JsonProperty(PropertyName = "Details")]
+        [JsonProperty(PropertyName = "SizingDetails")]
         public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
     }
 
@@ -42,9 +40,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
             RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
-            RuleFor(validator => validator.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
-            RuleFor(validator => validator.WarpingBeamsId.Count).NotEqual(0);
+            RuleFor(validator => validator.RecipeCode).NotEmpty();
+            RuleFor(validator => validator.NeReal).NotEmpty();
+            RuleFor(validator => validator.BeamsWarping.Count).NotEqual(0);
             RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }

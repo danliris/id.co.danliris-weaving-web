@@ -12,6 +12,7 @@ namespace Manufactures.Domain.Beams
         public string Type { get; private set; }
         public double EmptyWeight { get; private set; }
         public double YarnLength { get; private set; }
+        public double YarnStrands { get; private set; }
         public ConstructionId ConstructionId { get; private set; }
 
         public BeamDocument(Guid identity,
@@ -43,6 +44,7 @@ namespace Manufactures.Domain.Beams
             this.EmptyWeight = readModel.EmtpyWeight;
             this.ConstructionId = readModel.ContructionId.HasValue ? new ConstructionId(readModel.ContructionId.Value) : null;
             this.YarnLength = readModel.YarnLength.HasValue ? readModel.YarnLength.Value : 0;
+            this.YarnStrands = readModel.YarnStrands.HasValue ? readModel.YarnStrands.Value : 0;
         }
 
         public void SetBeamNumber(string value)
@@ -95,6 +97,17 @@ namespace Manufactures.Domain.Beams
             {
                 YarnLength = yarnLength;
                 ReadModel.YarnLength = YarnLength;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLatestYarnStrands(double yarnStrands)
+        {
+            if (YarnStrands != yarnStrands)
+            {
+                YarnStrands = yarnStrands;
+                ReadModel.YarnStrands = yarnStrands;
 
                 MarkModified();
             }

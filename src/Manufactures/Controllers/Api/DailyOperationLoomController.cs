@@ -102,7 +102,7 @@ namespace Manufactures.Controllers.Api
                 foreach (var detail in dailyOperation.DailyOperationMachineDetails)
                 {
 
-                    if (detail.OperationStatus == DailyOperationMachineStatus.ONENTRY)
+                    if (detail.OperationStatus == MachineStatus.ONENTRY)
                     {
                         dateOperated = detail.DateTimeOperation;
                     }
@@ -224,7 +224,7 @@ namespace Manufactures.Controllers.Api
                         .FirstOrDefault()
                         .Name;
 
-                if (detail.OperationStatus == DailyOperationMachineStatus.ONENTRY)
+                if (detail.OperationStatus == MachineStatus.ONENTRY)
                 {
                     operationDate = detail.DateTimeOperation;
                 }

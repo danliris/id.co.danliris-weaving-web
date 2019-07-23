@@ -31,16 +31,22 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateResumeDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.Details).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationSizingDocumentRepository.Query
+                                                               .Include(d => d.SizingDetails)
+                                                               .Where(detail => detail.Identity.Equals(request.Id))
+                                                               .Include(b => b.SizingBeamDocuments)
+                                                               .Where(beamDocument => beamDocument.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.Details.OrderByDescending(e => e.DateTimeOperation);
-            var lastHistory = histories.FirstOrDefault();
+            var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
+            var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
+            var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
+            var lastDetail = existingDetails.FirstOrDefault();
 
             //Validation for Start Status
             var countStartStatus =
                 existingDailyOperation
-                    .Details
-                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
+                    .SizingDetails
+                    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
                     .Count();
 
             if (countStartStatus == 0)
@@ -51,8 +57,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Validation for Finish Status
             var countFinishStatus =
                 existingDailyOperation
-                    .Details
-                    .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
+                    .SizingDetails
+                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
                     .Count();
 
             if (countFinishStatus == 1)
@@ -71,7 +77,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Resume Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeOperation.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var resumeDateMachineLogUtc = new DateTimeOffset(request.Details.ResumeDate.Date, new TimeSpan(+7, 0, 0));
 
             if (resumeDateMachineLogUtc < lastDateMachineLogUtc)
@@ -80,24 +86,39 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastHistory.DateTimeOperation)
+                if (dateTimeOperation < lastDetail.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than latest operation"));
                 }
                 else
                 {
-                    if (histories.FirstOrDefault().MachineStatus == DailyOperationMachineStatus.ONSTOP)
+                    if (existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONSTOP)
                     {
-                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCausesValueObject>(lastHistory.Causes);
+                        var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterCommand>(lastBeamDocument.Counter);
+                        var weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightCommand>(lastBeamDocument.Weight);
+
+                        var newBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
+                                                                                   new BeamId(lastBeamDocument.SizingBeamId),
+                                                                                   dateTimeOperation,
+                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
+                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
+                                                                                   lastBeamDocument.PISMeter,
+                                                                                   lastBeamDocument.SPU,
+                                                                                   BeamStatus.ONPROCESS);
+
+                        existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
+
+                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
                         var newOperation =
                                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                    new ShiftId(request.Details.ShiftId.Value),
                                                                    new OperatorId(request.Details.OperatorDocumentId.Value),
                                                                    dateTimeOperation,
-                                                                   DailyOperationMachineStatus.ONRESUME,
+                                                                   MachineStatus.ONRESUME,
                                                                    "-",
-                                                                   new DailyOperationSizingCausesValueObject(Causes.BrokenBeam, Causes.MachineTroubled));
+                                                                   new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
+                                                                   lastDetail.SizingBeamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
@@ -114,8 +135,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Resume Time
-            //var lastTimeMachineLog = lastHistory.DateTimeOperation.TimeOfDay;
-            //var resumeTimeMachineLog = request.Details.ResumeTime;
+            //var lastTimeMachineLog = lastDetail.DateTimeMachine.TimeOfDay;
+            //var resumeTimeMachineLog = request.SizingDetails.ResumeTime;
 
             //if (resumeTimeMachineLog < lastTimeMachineLog)
             //{

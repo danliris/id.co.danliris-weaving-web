@@ -6,14 +6,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingWeightValueObject : ValueObject
     {
-        public string Netto { get; set; }
-        
-        public string Bruto { get; set; }
+        public double Netto { get; set; }
 
-        public DailyOperationSizingWeightValueObject(string netto, string bruto)
+        public double Bruto { get; set; }
+
+        public double Theoritical { get; set; }
+
+        public DailyOperationSizingWeightValueObject(double netto, double bruto, double theoritical)
         {
             Netto = netto;
             Bruto = bruto;
+            Theoritical = theoritical;
         }
 
         public DailyOperationSizingWeightValueObject()
@@ -24,12 +27,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
         {
             Netto = dailyOperationSizingWeightProduction.Netto;
             Bruto = dailyOperationSizingWeightProduction.Bruto;
+            Theoritical = dailyOperationSizingWeightProduction.Theoritical;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Netto;
             yield return Bruto;
+            yield return Theoritical;
         }
     }
 }

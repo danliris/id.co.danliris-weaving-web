@@ -18,12 +18,20 @@ namespace Manufactures.Dtos.Beams
         [JsonProperty(PropertyName = "EmptyWeight")]
         public double EmptyWeight { get; }
 
+        [JsonProperty(PropertyName = "YarnLength")]
+        public double YarnLength { get; private set; }
+
+        [JsonProperty(PropertyName = "YarnStrands")]
+        public double YarnStrands { get; private set; }
+
         public BeamDto(BeamDocument document)
         {
             Id = document.Identity;
             Number = document.Number;
             Type = document.Type;
             EmptyWeight = document.EmptyWeight;
+            YarnLength = document.YarnLength;
+            YarnStrands = document.YarnStrands;
         }
     }
 }
