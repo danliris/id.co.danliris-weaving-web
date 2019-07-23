@@ -80,6 +80,21 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, totalRows, resultCount });
         }
 
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById(string Id)
+        {
+            var identity = Guid.Parse(Id);
+            var dailyOperationWarpingDocument = await _queries.GetById(identity);
+
+            if (dailyOperationWarpingDocument == null)
+            {
+                return NotFound(identity);
+            }
+
+
+            return Ok(dailyOperationWarpingDocument);
+        }
+
         //Preparation Warping Daily Operation Request
         [HttpPost("entry-process")]
         public async Task<IActionResult> 

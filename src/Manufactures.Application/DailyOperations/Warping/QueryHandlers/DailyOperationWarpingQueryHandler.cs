@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 {
@@ -31,7 +33,29 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingDocument =
                     _dailyOperationWarpingRepository
                         .Find(query)
-                        .Select(x => new DailyOperationWarpingListDto(x)).ToList();
+                        .Select(x => new DailyOperationWarpingListDto(x));
+
+            // Not completed
+
+            return await Task.FromResult(dailyOperationWarpingDocument);
+        }
+
+        public async Task<DailyOperationWarpingListDto> GetById(Guid id)
+        {
+            var query =
+                _dailyOperationWarpingRepository
+                    .Query
+                    .Include(o => o.DailyOperationWarpingBeamProducts)
+                    .Include(o => o.DailyOperationWarpingDetailHistory)
+                    .OrderByDescending(x => x.CreatedDate);
+
+            var dailyOperationWarpingDocument =
+                   _dailyOperationWarpingRepository
+                       .Find(query)
+                       .Select(x => new DailyOperationWarpingByIdDto(x))
+                       .FirstOrDefault();
+
+            //Not complete for detail
 
             return await Task.FromResult(dailyOperationWarpingDocument);
         }

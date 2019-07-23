@@ -24,10 +24,10 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "LatestBeamNumber")]
         public string LatestBeamNumber { get; private set; }
 
-        public DailyOperationWarpingListDto(DailyOperationWarpingDocument x)
+        public DailyOperationWarpingListDto(DailyOperationWarpingDocument document)
         {
-            Id = x.Identity;
-            DateTimeOperation = x.DateTimeOperation;
+            Id = document.Identity;
+            DateTimeOperation = document.DateTimeOperation;
         }
 
         public void SetDailyOperationNumber(string value)
