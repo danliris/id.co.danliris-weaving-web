@@ -17,6 +17,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
         public List<BeamId> BeamsWarping { get; private set; }
+        public double YarnStrands { get; private set; }
         public string RecipeCode { get; private set; }
         public double NeReal { get; private set; }
         public int MachineSpeed { get; private set; }
@@ -26,13 +27,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> beamsWarping, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> beamsWarping, double yarnStrands, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
             ConstructionDocumentId = constructionDocumentId;
             BeamsWarping = beamsWarping;
+            YarnStrands = yarnStrands;
             RecipeCode = recipeCode;
             NeReal = neReal;
             MachineSpeed = machineSpeed;
@@ -50,6 +52,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 WeavingUnitId = this.WeavingUnitId.Value,
                 ConstructionDocumentId = this.ConstructionDocumentId.Value,
                 BeamsWarping = JsonConvert.SerializeObject(this.BeamsWarping),
+                YarnStrands = this.YarnStrands,
                 RecipeCode = this.RecipeCode,
                 NeReal = this.NeReal,
                 MachineSpeed = this.MachineSpeed,
@@ -66,6 +69,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
             this.BeamsWarping = JsonConvert.DeserializeObject<List<BeamId>>(readModel.BeamsWarping);
+            this.YarnStrands = readModel.YarnStrands;
             this.RecipeCode = readModel.RecipeCode;
             this.NeReal = readModel.NeReal;
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
@@ -173,6 +177,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             SizingBeamDocuments = list;
             ReadModel.SizingBeamDocuments = SizingBeamDocuments.ToList();
 
+            MarkModified();
+        }
+
+        public void SetYarnStrands(double yarnStrands)
+        {
+            YarnStrands = yarnStrands;
+            ReadModel.YarnStrands = yarnStrands;
             MarkModified();
         }
 

@@ -7,6 +7,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
+using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
@@ -39,6 +40,8 @@ namespace Manufactures.Controllers.Api
             _dailyOperationSizingDocumentRepository;
         private readonly IMachineRepository
             _machineRepository;
+        private readonly IMachineTypeRepository
+            _machineTypeRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
         private readonly IShiftRepository
@@ -56,6 +59,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IDailyOperationSizingRepository>();
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
+            _machineTypeRepository =
+                this.Storage.GetRepository<IMachineTypeRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _shiftDocumentRepository =
@@ -171,8 +176,12 @@ namespace Manufactures.Controllers.Api
                        _machineRepository
                            .Find(e => e.Identity.Equals(dailyOperationalSizing.MachineDocumentId.Value))
                            .FirstOrDefault();
-
                 var machineNumber = machineDocument.MachineNumber;
+
+                var machineTypeDocument = _machineTypeRepository
+                    .Find(m => m.Identity.Equals(machineDocument.MachineTypeId.Value))
+                    .FirstOrDefault();
+                var machineType = machineTypeDocument.TypeName;
 
                 var constructionDocument =
                         _constructionDocumentRepository
@@ -192,9 +201,12 @@ namespace Manufactures.Controllers.Api
                     warpingBeams.Add(beamsDto);
                 }
 
-                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, constructionNumber, warpingBeams);
+                var yarnStrands = dailyOperationalSizing.YarnStrands;
+                var neReal = dailyOperationalSizing.NeReal;
 
-                string sizingBeamNumber = "";
+                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, machineType, constructionNumber, warpingBeams, yarnStrands, neReal);
+
+                //string sizingBeamNumberOnDetail = "";
 
                 foreach (var detail in dailyOperationalSizing.SizingDetails)
                 {
@@ -211,9 +223,9 @@ namespace Manufactures.Controllers.Api
 
                     var causes = new DailyOperationSizingDetailsCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
 
-                    sizingBeamNumber = detail.SizingBeamNumber;
+                    var sizingBeamNumberOnDetail = detail.SizingBeamNumber;
 
-                    var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes, sizingBeamNumber);
+                    var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes, sizingBeamNumberOnDetail);
 
                     dto.SizingDetails.Add(detailsDto);
                 }
@@ -222,7 +234,7 @@ namespace Manufactures.Controllers.Api
                 foreach (var beamDocument in dailyOperationalSizing.SizingBeamDocuments)
                 {
                     var beamSizingDocument = _beamDocumentRepository
-                                                .Find(e => e.Identity.Equals(beamDocument.Identity))
+                                                .Find(e => e.Identity.Equals(beamDocument.SizingBeamId))
                                                 .FirstOrDefault();
 
                     var dateTimeBeamDocument = beamDocument.DateTimeBeamDocument;
@@ -242,9 +254,20 @@ namespace Manufactures.Controllers.Api
                     var spu = beamDocument.SPU;
                     var sizingBeamStatus = beamDocument.SizingBeamStatus;
 
-                    var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumber, dateTimeBeamDocument, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
-
-                    dto.SizingBeamDocuments.Add(beamDocumentsDto);
+                    if (beamSizingDocument != null)
+                    {
+                        if(beamSizingDocument.Number != null)
+                        {
+                            var sizingBeamNumberOnBeamDocument = beamSizingDocument.Number;
+                            var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumberOnBeamDocument, dateTimeBeamDocument, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
+                            dto.SizingBeamDocuments.Add(beamDocumentsDto);
+                        }
+                    }
+                    else
+                    {
+                        var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(dateTimeBeamDocument, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
+                        dto.SizingBeamDocuments.Add(beamDocumentsDto);
+                    }
                 }
                 dto.SizingBeamDocuments = dto.SizingBeamDocuments.OrderByDescending(beamDocument => beamDocument.DateTimeBeamDocument).ToList();
 
@@ -266,14 +289,14 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("calculate/pis-in-meter/start/{counterStart}/finish/{counterFinish}")]
-        public async Task<IActionResult> CalculatePISInMeter(double counterStartInput, double counterFinishInput)
+        public async Task<IActionResult> CalculatePISInMeter(double counterStart, double counterFinish)
         {
             double pisInPieces;
 
-            if (counterStartInput != 0 && counterFinishInput != 0)
+            if (counterStart != 0 && counterFinish != 0)
             {
                 PIS calculate = new PIS();
-                pisInPieces = calculate.CalculateInMeter(counterStartInput, counterFinishInput);
+                pisInPieces = calculate.CalculateInMeter(counterStart, counterFinish);
 
                 await Task.Yield();
                 return Ok(pisInPieces);
@@ -283,14 +306,14 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
-        public async Task<IActionResult> CalculatePISInPieces(double counterStartInput, double counterFinishInput)
+        public async Task<IActionResult> CalculatePISInPieces(double counterStart, double counterFinish)
         {
             double pisInMeter;
 
-            if (counterStartInput != 0 && counterFinishInput != 0)
+            if (counterStart != 0 && counterFinish != 0)
             {
                 PIS calculate = new PIS();
-                pisInMeter = calculate.CalculateInPieces(counterStartInput, counterFinishInput);
+                pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
 
                 await Task.Yield();
                 return Ok(pisInMeter);
@@ -299,15 +322,15 @@ namespace Manufactures.Controllers.Api
             return NotFound();
         }
 
-        [HttpGet("calculate/theoritical-kawamoto/pis/{pisInMeterInput}/yarn-strands/{yarnStrandsInput}/ne-real/{neRealInput}")]
-        public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisInMeterInput, int yarnStrandsInput, double neRealInput)
+        [HttpGet("calculate/theoritical-kawamoto/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
+        public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisMeter, double yarnStrands, double neReal)
         {
             double kawamotoCalculationResult;
 
-            if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
+            if (pisMeter != 0 && yarnStrands != 0 && neReal != 0)
             {
                 Theoritical calculate = new Theoritical();
-                kawamotoCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
+                kawamotoCalculationResult = calculate.CalculateKawamoto(pisMeter, yarnStrands, neReal);
 
                 await Task.Yield();
                 return Ok(kawamotoCalculationResult);
@@ -316,15 +339,15 @@ namespace Manufactures.Controllers.Api
             return NotFound();
         }
 
-        [HttpGet("calculate/theoritical-sucker-muller/pis/{pisInMeterInput}/yarn-strands/{yarnStrandsInput}/ne-real/{neRealInput}")]
-        public async Task<IActionResult> CalculateTheoriticalSuckerMuller(double pisInMeterInput, int yarnStrandsInput, double neRealInput)
+        [HttpGet("calculate/theoritical-sucker-muller/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
+        public async Task<IActionResult> CalculateTheoriticalSuckerMuller(double pisMeter, double yarnStrands, double neReal)
         {
             double suckerMullerCalculationResult;
 
-            if (pisInMeterInput != 0 && yarnStrandsInput != 0 && neRealInput != 0)
+            if (pisMeter != 0 && yarnStrands != 0 && neReal != 0)
             {
                 Theoritical calculate = new Theoritical();
-                suckerMullerCalculationResult = calculate.CalculateKawamoto(pisInMeterInput, yarnStrandsInput, neRealInput);
+                suckerMullerCalculationResult = calculate.CalculateKawamoto(pisMeter, yarnStrands, neReal);
 
                 await Task.Yield();
                 return Ok(suckerMullerCalculationResult);

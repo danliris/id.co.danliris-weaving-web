@@ -46,6 +46,18 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
             DateTimeBeamDocument = dateTimeBeamDocumentHistory;
             StartCounter = startCounter;
             FinishCounter = finishCounter;
+            NettoWeight = nettoWeight;
+            BrutoWeight = brutoWeight;
+            PISMeter = pisMeter;
+            SPU = spu;
+            SizingBeamStatus = sizingBeamStatus;
+        }
+
+        public DailyOperationSizingBeamDocumentsDto(DateTimeOffset dateTimeBeamDocumentHistory, double startCounter, double finishCounter, double nettoWeight, double brutoWeight, double pisMeter, double spu, string sizingBeamStatus)
+        {
+            DateTimeBeamDocument = dateTimeBeamDocumentHistory;
+            StartCounter = startCounter;
+            FinishCounter = finishCounter;
             NettoWeight = NettoWeight;
             BrutoWeight = brutoWeight;
             PISMeter = pisMeter;

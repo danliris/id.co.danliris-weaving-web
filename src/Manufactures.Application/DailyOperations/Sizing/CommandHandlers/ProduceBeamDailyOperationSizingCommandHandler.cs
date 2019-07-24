@@ -108,7 +108,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
                                                                                    new BeamId(lastBeamDocument.SizingBeamId),
                                                                                    dateTimeOperation,
-                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, request.SizingBeamDocuments.Counter.Finish),
+                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, request.SizingBeamDocuments.FinishCounter),
                                                                                    new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
                                                                                    request.SizingBeamDocuments.PISMeter,
                                                                                    request.SizingBeamDocuments.SPU,

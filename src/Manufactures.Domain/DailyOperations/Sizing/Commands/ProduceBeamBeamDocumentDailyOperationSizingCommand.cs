@@ -9,11 +9,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
     public class ProduceBeamBeamDocumentDailyOperationSizingCommand
     {
-        [JsonProperty(PropertyName = "SizingBeamId")]
-        public BeamId SizingBeamId { get; set; }
+        //[JsonProperty(PropertyName = "SizingBeamId")]
+        //public BeamId SizingBeamId { get; set; }
 
-        [JsonProperty(PropertyName = "Counter")]
-        public DailyOperationSizingCounterCommand Counter { get; set; }
+        [JsonProperty(PropertyName = "FinishCounter")]
+        public double FinishCounter { get; set; }
 
         [JsonProperty(PropertyName = "Weight")]
         public DailyOperationSizingWeightCommand Weight { get; set; }
@@ -28,8 +28,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public ProduceBeamBeamDocumentDailyOperationSizingCommandValidator()
         {
-            RuleFor(validator => validator.SizingBeamId).NotEmpty();
-            RuleFor(validator => validator.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
+            //RuleFor(validator => validator.SizingBeamId).NotEmpty();
+            RuleFor(validator => validator.FinishCounter).NotEmpty();
+            //RuleFor(validator => validator.Counter).SetValidator(new DailyOperationSizingCounterCommandValidator());
             RuleFor(validator => validator.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
             RuleFor(validator => validator.PISMeter).NotEmpty();
             RuleFor(validator => validator.SPU).NotEmpty();

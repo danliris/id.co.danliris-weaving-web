@@ -15,6 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public int? WeavingUnitId { get; internal set; }
         public Guid? ConstructionDocumentId { get; internal set; }
         public string BeamsWarping { get; internal set; }
+        public double YarnStrands { get; internal set; }
         public string RecipeCode { get; internal set; }
         public double NeReal { get; internal set; }
         public int? MachineSpeed { get; internal set; }
