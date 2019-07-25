@@ -46,37 +46,26 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
-            //Validation for New Operation
-            //var newOperationBeamStatus = lastBeamDocument.SizingBeamStatus;
-            //var newOperationDetailStatus = lastDetail.MachineStatus;
+            //Validation for Beam Status
+            var countBeamStatus =
+                existingDailyOperation
+                    .SizingBeamDocuments
+                    .Where(e => e.SizingBeamStatus == BeamStatus.ONPROCESS)
+                    .Count();
 
-            //Validation for New Beam on The Same Operation
-            //var sameOperationBeamStatus = lastBeamDocument.SizingBeamStatus;
-            //var sameOperationDetailStatus = lastDetail.MachineStatus;
+            if (!countBeamStatus.Equals(0))
+            {
+                throw Validator.ErrorValidation(("BeamStatus", "Can's Start. There's ONPROCESS Sizing Beam on this Operation"));
+            }
 
-            ////Validation for Start Status
-            //var countStartStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-            //        .Count();
+            //Validation for Operation Status
+            var operationCompleteStatus =
+                existingDailyOperation.OperationStatus;
 
-            //if (countStartStatus == 1)
-            //{
-            //    throw Validator.ErrorValidation(("StartStatus", "This operation already has START status"));
-            //}
-
-            //Validation for Finish Status
-            //var countFinishStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
-            //        .Count();
-
-            //if (countFinishStatus == 1)
-            //{
-            //    throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
-            //}
+            if (operationCompleteStatus.Equals(OperationStatus.ONFINISH))
+            {
+                throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status already FINISHED"));
+            }
 
             //Reformat DateTime
             var year = request.SizingDetails.StartDate.Year;
@@ -89,10 +78,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
-            var entryDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var startDateMachineLogUtc = new DateTimeOffset(request.SizingDetails.StartDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (startDateMachineLogUtc < entryDateMachineLogUtc)
+            if (startDateMachineLogUtc < lastDateMachineLogUtc)
             {
                 throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
             }
@@ -176,7 +165,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                             existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
 
-                            var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
+                            var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
                             //var entryDetailId = lastDetail.Identity;
                             //var entryDetailShiftId = lastDetail.ShiftDocumentId;
@@ -184,7 +173,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                             //var entryDetailDateTimeMachine = lastDetail.DateTimeMachine;
                             //var entryDetailMachineStatus = lastDetail.MachineStatus;
                             //var entryDetailInformation = lastDetail.Information;
-                            //var entryDetailSizingBeamNumber = sizingBeamNumber;
+                            //var entryDetailSizingBeamNumber = beamNumber;
                             //var updateOnEntryOperationDetail = new DailyOperationSizingDetail(entryDetailId,
                             //                                                                  new ShiftId(entryDetailShiftId),
                             //                                                                  new OperatorId(entryDetailOperatorId),
@@ -204,7 +193,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    dateTimeOperation,
                                                                    MachineStatus.ONSTART,
                                                                    "-",
-                                                                   new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
+                                                                   new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                    beamNumber);
 
                             existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);

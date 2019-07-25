@@ -18,6 +18,7 @@ using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -293,7 +294,7 @@ namespace Manufactures.Controllers.Api
         {
             double pisInPieces;
 
-            if (counterStart != 0 && counterFinish != 0)
+            if (counterStart >= 0 && counterFinish > 0)
             {
                 PIS calculate = new PIS();
                 pisInPieces = calculate.CalculateInMeter(counterStart, counterFinish);
@@ -301,8 +302,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return Ok(pisInPieces);
             }
-            await Task.Yield();
-            return NotFound();
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+            }
         }
 
         [HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
@@ -310,7 +315,7 @@ namespace Manufactures.Controllers.Api
         {
             double pisInMeter;
 
-            if (counterStart != 0 && counterFinish != 0)
+            if (counterStart >= 0 && counterFinish > 0)
             {
                 PIS calculate = new PIS();
                 pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
@@ -318,8 +323,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return Ok(pisInMeter);
             }
-            await Task.Yield();
-            return NotFound();
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+            }
         }
 
         [HttpGet("calculate/theoritical-kawamoto/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
@@ -327,7 +336,7 @@ namespace Manufactures.Controllers.Api
         {
             double kawamotoCalculationResult;
 
-            if (pisMeter != 0 && yarnStrands != 0 && neReal != 0)
+            if (pisMeter > 0 && yarnStrands > 0 && neReal > 0)
             {
                 Theoritical calculate = new Theoritical();
                 kawamotoCalculationResult = calculate.CalculateKawamoto(pisMeter, yarnStrands, neReal);
@@ -335,8 +344,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return Ok(kawamotoCalculationResult);
             }
-            await Task.Yield();
-            return NotFound();
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+            }
         }
 
         [HttpGet("calculate/theoritical-sucker-muller/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
@@ -344,7 +357,7 @@ namespace Manufactures.Controllers.Api
         {
             double suckerMullerCalculationResult;
 
-            if (pisMeter != 0 && yarnStrands != 0 && neReal != 0)
+            if (pisMeter > 0 && yarnStrands > 0 && neReal > 0)
             {
                 Theoritical calculate = new Theoritical();
                 suckerMullerCalculationResult = calculate.CalculateKawamoto(pisMeter, yarnStrands, neReal);
@@ -352,8 +365,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return Ok(suckerMullerCalculationResult);
             }
-            await Task.Yield();
-            return NotFound();
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+            }
         }
 
         [HttpGet("calculate/spu/netto/{netto}/theoritical/{theoritical}")]
@@ -369,8 +386,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return Ok(spuCalculationResult);
             }
-            await Task.Yield();
-            return NotFound();
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+            }
         }
 
         [HttpPost]

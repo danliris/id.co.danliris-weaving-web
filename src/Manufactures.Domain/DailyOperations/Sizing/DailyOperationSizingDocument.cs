@@ -21,13 +21,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public string RecipeCode { get; private set; }
         public double NeReal { get; private set; }
         public int MachineSpeed { get; private set; }
-        public double TexSQ { get; private set; }
-        public double Visco { get; private set; }
+        public string TexSQ { get; private set; }
+        public string Visco { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> beamsWarping, double yarnStrands, string recipeCode, double neReal, int machineSpeed, double texSQ, double visco, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, List<BeamId> beamsWarping, double yarnStrands, string recipeCode, double neReal, int machineSpeed, string texSQ, string visco, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -73,8 +73,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.RecipeCode = readModel.RecipeCode;
             this.NeReal = readModel.NeReal;
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
-            this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
-            this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
+            this.TexSQ = readModel.TexSQ;
+            this.Visco = readModel.Visco;
             this.OperationStatus = readModel.OperationStatus;
             this.SizingBeamDocuments = readModel.SizingBeamDocuments;
             this.SizingDetails = readModel.SizingDetails;
@@ -208,14 +208,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void SetTexSQ(double texSQ)
+        public void SetTexSQ(string texSQ)
         {
             TexSQ = texSQ;
             ReadModel.TexSQ = texSQ;
             MarkModified();
         }
 
-        public void SetVisco(double visco)
+        public void SetVisco(string visco)
         {
             Visco = visco;
             ReadModel.Visco = visco;

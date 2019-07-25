@@ -42,38 +42,56 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            var query = _dailyOperationSizingDocumentRepository.Query.Include(d => d.SizingDetails).Where(entity => entity.Identity.Equals(request.Id));
+            var query = _dailyOperationSizingDocumentRepository.Query
+                                                               .Include(d => d.SizingDetails)
+                                                               .Where(detail => detail.Identity.Equals(request.Id))
+                                                               .Include(b => b.SizingBeamDocuments)
+                                                               .Where(beamDocument => beamDocument.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var histories = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeMachine);
-            var lastHistory = histories.FirstOrDefault();
-            //Get Existing movement from daily operation
-            var existingMovement =
-                _movementRepository
-                    .Find(o => o.DailyOperationId.Equals(existingDailyOperation.Identity))
-                    .FirstOrDefault();
+            var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
+            var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
+            var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(e => e.DateTimeMachine);
+            var lastDetail = existingDetails.FirstOrDefault();
 
-            //Validation for Start Status
-            //var countStartStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONSTART)
-            //        .Count();
-
-            //if (countStartStatus != 1)
-            //{
-            //    throw Validator.ErrorValidation(("StartStatus", "This operation has not started yet"));
-            //}
-
-            //Validation for Finish Status
-            var countFinishStatus =
+            //Validation for Beam Status
+            var countBeamStatus =
                 existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
+                    .SizingBeamDocuments
+                    .Where(e => e.SizingBeamStatus == BeamStatus.ONPROCESS)
                     .Count();
 
-            if (countFinishStatus == 1)
+            if (countBeamStatus != 0)
             {
-                throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Finish. There's ONPROCESS Sizing Beam on this Operation"));
+            }
+
+            //Validation for Machine Status
+            var currentMachineStatus = lastDetail.MachineStatus;
+
+            if (currentMachineStatus != MachineStatus.ONCOMPLETE)
+            {
+                throw Validator.ErrorValidation(("MachineStatus", "Can't Finish. This Machine's Operation is not ONCOMPLETE"));
+            }
+
+            //Validation for Started Operation Status
+            var operationStartStatus = 
+                existingDailyOperation
+                .SizingDetails
+                .Where(e => e.MachineStatus == MachineStatus.ONSTART)
+                .Count();
+
+            if (operationStartStatus == 0)
+            {
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
+            }
+
+            //Validation for Finished Operation Status
+            var currentOperationStatus =
+                existingDailyOperation.OperationStatus;
+
+            if (currentOperationStatus == OperationStatus.ONFINISH)
+            {
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -87,7 +105,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for DoffFinish Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var doffFinishDateMachineLogUtc = new DateTimeOffset(request.Details.FinishDate.Date, new TimeSpan(+7, 0, 0));
 
             if (doffFinishDateMachineLogUtc < lastDateMachineLogUtc)
@@ -95,56 +113,33 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("DoffDate", "Finish date cannot less than latest date log"));
             } else
             {
-                if (dateTimeOperation < lastHistory.DateTimeMachine)
+                if (dateTimeOperation < lastDetail.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("DoffTime", "Finish time cannot less than latest time log"));
                 }
                 else
                 {
-                    var beamDocument = 
-                        _beamRepository
-                            .Find(o => o.Identity.Equals(request.SizingBeamId.Value))
-                            .FirstOrDefault();
-                    //var Weight = existingDailyOperation.Weight;
-                    
-                    //existingDailyOperation.SetWeight(new SizingWeightValueObject(Weight.Netto, request.Weight.Bruto));
                     existingDailyOperation.SetMachineSpeed(request.MachineSpeed);
                     existingDailyOperation.SetTexSQ(request.TexSQ);
                     existingDailyOperation.SetVisco(request.Visco);
-                    //existingDailyOperation.SetPIS(request.PISM);
-                    //existingDailyOperation.SetSPU(request.SPU);
-                    existingDailyOperation.SetNeReal(existingDailyOperation.NeReal);
                     existingDailyOperation.SetOperationStatus(OperationStatus.ONFINISH);
 
-                    var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastHistory.Causes);
-
+                    //Add New Detail on Document
+                    var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
                     var newOperation =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                new ShiftId(request.Details.ShiftId.Value),
-                                                               new OperatorId(lastHistory.OperatorDocumentId),
+                                                               new OperatorId(request.Details.OperatorDocumentId.Value),
                                                                dateTimeOperation,
                                                                MachineStatus.ONCOMPLETE,
                                                                "-",
-                                                               new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
-                                                               lastHistory.SizingBeamNumber);
+                                                               new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
+                                                               //lastDetail.SizingBeamNumber
+                                                               " ");
 
                     existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
 
-                    //Update Value on Master beam sizing
-                    beamDocument.SetLatestConstructionId(existingDailyOperation.ConstructionDocumentId);
-                    var beamLength = request.Counter.Finish;
-                    beamDocument.SetLatestYarnLength(beamLength);
-
                     await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
-                    //Update beam for latest value from process
-                    await _beamRepository.Update(beamDocument);
-
-                    //Update movement if available
-                    if (existingMovement != null)
-                    {
-                        existingMovement.UpdateActiveMovement(false);
-                        await _movementRepository.Update(existingMovement);
-                    }
 
                     _storage.Save();
 
@@ -152,26 +147,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 }
 
             }
-
-            //Validation for DoffFinish Time
-            //var lastTimeMachineLog = lastHistory.DateTimeMachine.TimeOfDay;
-            //var doffFinishTimeMachineLog = request.SizingDetails.FinishTime;
-
-            //if (doffFinishTimeMachineLog < lastTimeMachineLog)
-            //{
-            //    throw Validator.ErrorValidation(("DoffFinishTime", "Finish time cannot less than latest time log"));
-            //}
-
-            //var countFinishStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
-            //        .Count();
-
-            //if (countFinishStatus > 0)
-            //{
-            //    throw Validator.ErrorValidation(("Status", "Finish status has available"));
-            //}
         }
     }
 }

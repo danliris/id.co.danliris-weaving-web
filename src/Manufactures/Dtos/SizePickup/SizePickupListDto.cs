@@ -25,10 +25,10 @@ namespace Manufactures.Dtos
         public int MachineSpeed { get; }
 
         [JsonProperty(PropertyName = "TexSQ")]
-        public double TexSQ { get; }
+        public string TexSQ { get; }
 
         [JsonProperty(PropertyName = "Visco")]
-        public double Visco { get; }
+        public string Visco { get; }
 
         [JsonProperty(PropertyName = "PISM")]
         public int PISM { get; }

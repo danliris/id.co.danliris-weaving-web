@@ -48,29 +48,30 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
-            ////Validation for Start Status
-            //var countStartStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-            //        .Count();
+            //Validation for Beam Status
+            var currentBeamStatus = lastBeamDocument.SizingBeamStatus;
 
-            //if (countStartStatus == 1)
-            //{
-            //    throw Validator.ErrorValidation(("StartStatus", "This operation already has START status"));
-            //}
+            if (!currentBeamStatus.Equals(BeamStatus.ONPROCESS))
+            {
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Produce Beam. There isn't ONPROCESS Sizing Beam on this Operation"));
+            }
 
-            //Validation for Finish Status
-            //var countFinishStatus =
-            //    existingDailyOperation
-            //        .SizingDetails
-            //        .Where(e => e.MachineStatus == DailyOperationMachineStatus.ONCOMPLETE)
-            //        .Count();
+            //Validation for Machine Status
+            var currentMachineStatus = lastDetail.MachineStatus;
 
-            //if (countFinishStatus == 1)
-            //{
-            //    throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
-            //}
+            if (currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
+            {
+                throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam. This current Operation status already ONCOMPLETE"));
+            }
+
+            //Validation for Operation Status
+            var currentOperationStatus =
+                existingDailyOperation.OperationStatus;
+
+            if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
+            {
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Produce Beam. This operation's status already FINISHED"));
+            }
 
             //Reformat DateTime
             var year = request.SizingDetails.ProduceBeamDate.Year;
@@ -104,14 +105,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         //var sizingBeamNumber = sizingBeamDocument.Number;
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(lastBeamDocument.Counter);
                         var weight = request.SizingBeamDocuments.Weight;
+                        var theoritical = Math.Round(weight.Theoritical,2);
+                        var spu = Math.Round(request.SizingBeamDocuments.SPU, 2);
 
                         var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
                                                                                    new BeamId(lastBeamDocument.SizingBeamId),
                                                                                    dateTimeOperation,
                                                                                    new DailyOperationSizingCounterValueObject(counter.Start, request.SizingBeamDocuments.FinishCounter),
-                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
+                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, theoritical),
                                                                                    request.SizingBeamDocuments.PISMeter,
-                                                                                   request.SizingBeamDocuments.SPU,
+                                                                                   spu,
                                                                                    BeamStatus.ROLLEDUP);
 
                         existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);

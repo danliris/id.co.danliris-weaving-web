@@ -42,25 +42,29 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
-            //Validation for Start Status
-            var countStartStatus =
-                existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-                    .Count();
+            //Validation for Beam Status
+            var currentBeamStatus = lastBeamDocument.SizingBeamStatus;
 
-            if (countStartStatus == 0)
+            if (!currentBeamStatus.Equals(BeamStatus.ONPROCESS))
             {
-                throw Validator.ErrorValidation(("StartStatus", "This operation has not started yet"));
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Resume. There isn't ONPROCESS Sizing Beam on this Operation"));
             }
 
-            //Validation for Finish Status
-            var operationCompleteStatus =
+            //Validation for Machine Status
+            var currentMachineStatus = lastDetail.MachineStatus;
+
+            if (!currentMachineStatus.Equals(MachineStatus.ONSTOP))
+            {
+                throw Validator.ErrorValidation(("MachineStatus", "Can't Resume. This current Operation status isn't ONSTOP"));
+            }
+
+            //Validation for Operation Status
+            var currentOperationStatus =
                 existingDailyOperation.OperationStatus;
 
-            if (operationCompleteStatus == OperationStatus.ONFINISH)
+            if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("CompleteStatus", "This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Resume. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime

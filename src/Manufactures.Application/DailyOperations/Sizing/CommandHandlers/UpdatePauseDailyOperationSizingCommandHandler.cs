@@ -46,25 +46,29 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
-            //Validation for Start Status
-            var countMachineStartStatus =
-                existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-                    .Count();
+            //Validation for Beam Status
+            var currentBeamStatus = lastBeamDocument.SizingBeamStatus;
 
-            if (countMachineStartStatus == 0)
+            if (!currentBeamStatus.Equals(BeamStatus.ONPROCESS))
             {
-                throw Validator.ErrorValidation(("StartStatus", "This operation has not started yet"));
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Pause. There isn't ONPROCESS Sizing Beam on this Operation"));
             }
 
-            //Validation for Finish Status
-            var operationCompleteStatus =
+            //Validation for Machine Status
+            var currentMachineStatus = lastDetail.MachineStatus;
+
+            if (currentMachineStatus.Equals(MachineStatus.ONENTRY) || currentMachineStatus.Equals(MachineStatus.ONSTOP) || currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
+            {
+                throw Validator.ErrorValidation(("MachineStatus", "Can't Pause. This current Operation status isn't ONSTART or ONRESUME"));
+            }
+
+            //Validation for Operation Status
+            var currentOperationStatus =
                 existingDailyOperation.OperationStatus;
 
-            if (operationCompleteStatus == OperationStatus.ONFINISH)
+            if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("CompleteStatus", "This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Pause. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
