@@ -16,11 +16,20 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
+        [JsonProperty(PropertyName = "MachineType")]
+        public string MachineType { get; }
+
         [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
         public UnitId WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "WarpingBeamsDocument")]
         public List<BeamDto> WarpingBeamsDocument { get; }
+
+        [JsonProperty(PropertyName = "YarnStrands")]
+        public double YarnStrands { get; }
+
+        [JsonProperty(PropertyName = "NeReal")]
+        public double NeReal { get;}
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
@@ -31,13 +40,16 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingDetails")]
         public List<DailyOperationSizingDetailsDto> SizingDetails { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string constructionNumber, List<BeamDto> beams)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string machineType, string constructionNumber, List<BeamDto> beams, double yarnStrands, double neReal)
         {
             Id = document.Identity;
             MachineNumber = machineNumber;
+            MachineType = machineType;
             WeavingUnitDocumentId = document.WeavingUnitId;
             ConstructionNumber = constructionNumber;
             WarpingBeamsDocument = beams;
+            YarnStrands = yarnStrands;
+            NeReal = neReal;
             SizingBeamDocuments = new List<DailyOperationSizingBeamDocumentsDto>();
 
             //foreach (var sizingBeamDocument in document.SizingBeamDocuments)

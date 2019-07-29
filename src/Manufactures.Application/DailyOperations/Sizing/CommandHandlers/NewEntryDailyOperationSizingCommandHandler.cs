@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class NewEntryOperationSizingCommandHandler : ICommandHandler<NewEntryDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class NewEntryDailyOperationSizingCommandHandler : ICommandHandler<NewEntryDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
@@ -25,7 +25,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IMovementRepository
             _movementRepository;
 
-        public NewEntryOperationSizingCommandHandler(IStorage storage)
+        public NewEntryDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
@@ -37,29 +37,19 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            //var warpingBeamsCollection = new List<BeamId>();
-
-            //foreach(var beamDocument in request.BeamsWarping)
-            //{
-            //    var beamValue = new DailyOperationSizingBeamsCollectionValueObject(beamDocument.Id, beamDocument.YarnStrands);
-            //    warpingBeamsCollection.Add(beamValue);
-            //}
-
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
                                                     request.ConstructionDocumentId,
-                                                    request.BeamsWarping,
+                                                    request.BeamsWarping, 
+                                                    request.YarnStrands,
                                                     request.RecipeCode,
                                                     request.NeReal,
                                                     0,
-                                                    0,
-                                                    0,
+                                                    "0",
+                                                    "0",
                                                     OperationStatus.ONPROCESS);
-
-            //var counter = new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0);
-            //var weight = new DailyOperationSizingWeightValueObject(0, 0, 0);
 
             var year = request.Details.PreparationDate.Year;
             var month = request.Details.PreparationDate.Month;
@@ -83,15 +73,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperationDetail);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
-
-            //Add new Movement
-            //var newMovement =
-            //    new MovementDocument(Guid.NewGuid(),
-            //                         new DailyOperationId(dailyOperationSizingDocument.Identity),
-            //                         MovementStatusConstant.SIZING,
-            //                         true);
-
-            //await _movementRepository.Update(newMovement);
 
             _storage.Save();
 

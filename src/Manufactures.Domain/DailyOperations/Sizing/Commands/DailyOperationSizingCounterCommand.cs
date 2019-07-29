@@ -23,8 +23,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public DailyOperationSizingCounterCommandValidator()
         {
-            RuleFor(validator => validator.Start).NotEmpty();
-            RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start > 0);
+            RuleFor(validator => validator.Start >= 0);
+            RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start >= 0);
         }
     }
 }
