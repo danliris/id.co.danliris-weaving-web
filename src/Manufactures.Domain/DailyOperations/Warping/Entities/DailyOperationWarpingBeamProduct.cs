@@ -87,7 +87,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             }
         }
 
-
         protected override DailyOperationWarpingBeamProduct GetEntity()
         {
             return this;

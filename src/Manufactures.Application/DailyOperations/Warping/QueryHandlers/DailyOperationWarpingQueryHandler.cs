@@ -15,7 +15,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository 
             _dailyOperationWarpingRepository;
-        public int _page { get; private set; }
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -30,6 +29,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .OrderByDescending(x => x.CreatedDate);
+
+            await Task.Yield();
             var dailyOperationWarpingDocument =
                     _dailyOperationWarpingRepository
                         .Find(query)
@@ -37,7 +38,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             // Not completed
 
-            return await Task.FromResult(dailyOperationWarpingDocument);
+            return dailyOperationWarpingDocument;
         }
 
         public async Task<DailyOperationWarpingListDto> GetById(Guid id)
@@ -49,6 +50,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .Include(o => o.DailyOperationWarpingDetailHistory)
                     .OrderByDescending(x => x.CreatedDate);
 
+            await Task.Yield();
             var dailyOperationWarpingDocument =
                    _dailyOperationWarpingRepository
                        .Find(query)
@@ -57,7 +59,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             //Not complete for detail
 
-            return await Task.FromResult(dailyOperationWarpingDocument);
+            return dailyOperationWarpingDocument;
         }
     }
 }
