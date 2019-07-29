@@ -1,7 +1,4 @@
 ﻿using Manufactures.Domain.DailyOperations.Warping;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Warping.DTOs
 {
