@@ -7,11 +7,11 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingBeamDocumentsWeightDto
     {
-        [JsonProperty(PropertyName = "Weight")]
-        public double Netto { get; }
+        [JsonProperty(PropertyName = "Netto")]
+        public double Netto { get; set; }
 
         [JsonProperty(PropertyName = "Bruto")]
-        public double Bruto { get; }
+        public double Bruto { get; set; }
 
         [JsonProperty(PropertyName = "Theoritical")]
         public double Theoritical { get; set; }

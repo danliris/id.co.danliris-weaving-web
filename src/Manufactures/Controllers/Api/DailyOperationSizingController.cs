@@ -473,8 +473,6 @@ namespace Manufactures.Controllers.Api
         {
             try
             {
-                //int count = 0;
-
                 var acceptRequest = Request.Headers.Values.ToList();
                 var index = acceptRequest.IndexOf("application/xls") > 0;
 
@@ -491,45 +489,51 @@ namespace Manufactures.Controllers.Api
 
                 foreach (var document in sizePickupDtos)
                 {
-                    var filteredDetails = document.SizingDetails.FirstOrDefault(x => x.ShiftDocumentId.ToString().Equals(shiftId) && x.DateTimeMachine.Month.Equals(month) && x.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
-                    //var machineStatus = filteredDetails.MachineStatus;
-                    var machineDateTime = filteredDetails.DateTimeMachine;
+                    var results = new SizePickupListDto();
 
-                    double filteredPISMeter = 0;
-                    double filteredSPU = 0;
+                    var recipeCode = document.RecipeCode;
+                    var machineSpeed = document.MachineSpeed;
+                    var texSQ = document.TexSQ;
+                    var visco = document.Visco;
 
-                    foreach (var sizingBeam in document.SizingBeamDocuments)
+                    var filteredSizingBeamDocuments = document.SizingBeamDocuments.Where(b => b.DateTimeBeamDocument.Month.Equals(month) && b.SizingBeamStatus.Equals(BeamStatus.ROLLEDUP));
+
+                    if (filteredSizingBeamDocuments != null)
                     {
-                        filteredPISMeter = sizingBeam.PISMeter;
-                        filteredSPU = sizingBeam.SPU;
+                        foreach (var sizingBeam in filteredSizingBeamDocuments)
+                        {
+                            var detailIndex = 0;
+
+                            //Get Beam Number from BeamRepository, relate by BeamId
+                            var sizingBeamQuery = _beamDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+                            var beamDetail = _beamDocumentRepository.Find(sizingBeamQuery).Where(b => b.Identity.Equals(sizingBeam.SizingBeamId)).FirstOrDefault();
+                            var beamNumber = beamDetail.Number;
+
+                            //Filter Entry Details
+                            //var filteredDetailsEntry= document.SizingDetails.Where(d => d.MachineStatus.Equals(MachineStatus.ONCOMPLETE)).FirstOrDefault();
+                            //var entryDate = filteredDetailsEntry.DateTimeMachine;
+
+                            //Filter Completed Details by ShiftId and Month from UI, and BeamNumber from BeamRepository
+                            var filteredDetailsComplete = document.SizingDetails.Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) && d.DateTimeMachine.Month.Equals(month) && d.SizingBeamNumber.Equals(beamNumber) && d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
+                            var filteredDetail = filteredDetailsComplete.ToList()[detailIndex++];
+
+                            //Get Operator Document from OperatorRepository, relate by filteredDetail.OperatorDocumentId
+                            var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
+                            var operatorDocument = _operatorDocumentRepository.Find(operatorQuery).Where(o => o.Identity.Equals(filteredDetail.OperatorDocumentId)).FirstOrDefault();
+
+                            var dateTime = sizingBeam.DateTimeBeamDocument;
+                            var counter = JsonConvert.DeserializeObject<DailyOperationSizingBeamDocumentsCounterDto>(sizingBeam.Counter);
+                            var weight = JsonConvert.DeserializeObject<DailyOperationSizingBeamDocumentsWeightDto>(sizingBeam.Weight);
+                            double pisMeter = sizingBeam.PISMeter;
+                            double spu = sizingBeam.SPU;
+
+                            //Placing Value as Parameter for SizePickupListDto and add to resultData
+                            results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                            resultData.Add(results);
+                        }
                     }
 
-                    var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
-                    var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(document.SizingBeamDocuments));
-                    var filteredBeamNumber = " ";
-
-                    foreach (var beam in filteredBeam)
-                    {
-                        filteredBeamNumber = beam.Number;
-                    }
-
-                    var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-                    var filteredOperatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
-                    var filteredOperatorName = " ";
-                    var filteredOperatorGroup = " ";
-                    foreach (var detail in filteredOperatorDetail)
-                    {
-                        filteredOperatorName = detail.CoreAccount.Name;
-                        filteredOperatorGroup = detail.Group;
-                    }
-
-                    if (filteredDetails != null)
-                    {
-                        var results = new SizePickupListDto(document, machineDateTime, filteredPISMeter, filteredSPU, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
-                        resultData.Add(results);
-                        resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
-                    }
-
+                    resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
                 }
 
                 await Task.Yield();
@@ -581,16 +585,16 @@ namespace Manufactures.Controllers.Api
 
         //        foreach (var document in sizePickupDtos)
         //        {
-        //            var convertedDate = DateTime.Parse(date);
+        //            var convertedDate = DateTimeDoff.Parse(date);
 
-        //            var filteredDetails = document.SizingDetails.Where(x => x.DateTimeMachine.DateTime.Equals(convertedDate) &&
+        //            var filteredDetailsComplete = document.SizingDetails.Where(x => x.DateTimeMachine.DateTimeDoff.Equals(convertedDate) &&
         //                                                          x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                          x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
-        //            if (filteredDetails != null)
+        //            if (filteredDetailsComplete != null)
         //            {
-        //                var machineStatus = filteredDetails.MachineStatus;
-        //                var machineDateTime = filteredDetails.DateTimeMachine;
+        //                var machineStatus = filteredDetailsComplete.MachineStatus;
+        //                var filteredMachineDateTime = filteredDetailsComplete.DateTimeMachine;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
         //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(document.SizingBeamId.Value));
@@ -602,7 +606,7 @@ namespace Manufactures.Controllers.Api
         //                }
 
         //                var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(detail => detail.CreatedDate);
-        //                var filteredOperatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+        //                var filteredOperatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetailsComplete.OperatorDocumentId));
         //                var filteredOperatorName = " ";
         //                var filteredOperatorGroup = " ";
         //                foreach (var detail in filteredOperatorDetail)
@@ -611,9 +615,9 @@ namespace Manufactures.Controllers.Api
         //                    filteredOperatorGroup = detail.Group;
         //                }
 
-        //                var results = new SizePickupListDto(document, machineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
+        //                var results = new SizePickupListDto(document, filteredMachineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
         //                resultData.Add(results);
-        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+        //                resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
         //            }
         //        }
 
@@ -622,10 +626,10 @@ namespace Manufactures.Controllers.Api
         //        if (index.Equals(true))
         //        {
         //            byte[] xlsInBytes;
-        //            string day = DateTime.Parse(date).Day.ToString();
-        //            int month = DateTime.Parse(date).Month;
+        //            string day = DateTimeDoff.Parse(date).Day.ToString();
+        //            int month = DateTimeDoff.Parse(date).Month;
         //            string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
-        //            string year = DateTime.Parse(date).Year.ToString();
+        //            string year = DateTimeDoff.Parse(date).Year.ToString();
         //            string dateOfReport = day + "-" + indonesianMonth + "-" + year;
 
         //            string fileName = "Laporan Size Pickup " + dateOfReport;
@@ -670,18 +674,18 @@ namespace Manufactures.Controllers.Api
 
         //        foreach (var document in sizePickupDtos)
         //        {
-        //            var convertedStartDate = DateTime.Parse(startDate);
-        //            var convertedEndDate = DateTime.Parse(endDate);
+        //            var convertedStartDate = DateTimeDoff.Parse(startDate);
+        //            var convertedEndDate = DateTimeDoff.Parse(endDate);
 
-        //            var filteredDetails = document.SizingDetails.Where(x => (x.DateTimeMachine.DateTime >= convertedStartDate &&
-        //                                                           x.DateTimeMachine.DateTime <= convertedEndDate) &&
+        //            var filteredDetailsComplete = document.SizingDetails.Where(x => (x.DateTimeMachine.DateTimeDoff >= convertedStartDate &&
+        //                                                           x.DateTimeMachine.DateTimeDoff <= convertedEndDate) &&
         //                                                           x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                           x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
-        //            if (filteredDetails != null)
+        //            if (filteredDetailsComplete != null)
         //            {
-        //                var machineStatus = filteredDetails.MachineStatus;
-        //                var machineDateTime = filteredDetails.DateTimeMachine;
+        //                var machineStatus = filteredDetailsComplete.MachineStatus;
+        //                var filteredMachineDateTime = filteredDetailsComplete.DateTimeMachine;
 
         //                var beamQuery = _beamDocumentRepository.Query.OrderByDescending(b => b.CreatedDate);
         //                var filteredBeam = _beamDocumentRepository.Find(beamQuery).Where(beam => beam.Identity.Equals(document.SizingBeamId.Value));
@@ -693,7 +697,7 @@ namespace Manufactures.Controllers.Api
         //                }
 
         //                var operatorQuery = _operatorDocumentRepository.Query.OrderByDescending(detail => detail.CreatedDate);
-        //                var filteredOperatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetails.OperatorDocumentId));
+        //                var filteredOperatorDetail = _operatorDocumentRepository.Find(operatorQuery).Where(detail => detail.Identity.Equals(filteredDetailsComplete.OperatorDocumentId));
         //                var filteredOperatorName = " ";
         //                var filteredOperatorGroup = " ";
         //                foreach (var detail in filteredOperatorDetail)
@@ -702,9 +706,9 @@ namespace Manufactures.Controllers.Api
         //                    filteredOperatorGroup = detail.Group;
         //                }
 
-        //                var results = new SizePickupListDto(document, machineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
+        //                var results = new SizePickupListDto(document, filteredMachineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
         //                resultData.Add(results);
-        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+        //                resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
         //            }
         //        }
 
@@ -713,16 +717,16 @@ namespace Manufactures.Controllers.Api
         //        if (index.Equals(true))
         //        {
         //            byte[] xlsInBytes;
-        //            string startDay = DateTime.Parse(startDate).Day.ToString();
-        //            int startMonth = DateTime.Parse(startDate).Month;
+        //            string startDay = DateTimeDoff.Parse(startDate).Day.ToString();
+        //            int startMonth = DateTimeDoff.Parse(startDate).Month;
         //            string indonesianStartMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(startMonth).ToString();
-        //            string startYear = DateTime.Parse(startDate).Year.ToString();
+        //            string startYear = DateTimeDoff.Parse(startDate).Year.ToString();
         //            string startDateOfReport = startDay + "-" + indonesianStartMonth + "-" + startYear;
 
-        //            string endDay = DateTime.Parse(endDate).Day.ToString();
-        //            int endMonth = DateTime.Parse(endDate).Month;
+        //            string endDay = DateTimeDoff.Parse(endDate).Day.ToString();
+        //            int endMonth = DateTimeDoff.Parse(endDate).Month;
         //            string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
-        //            string endYear = DateTime.Parse(endDate).Year.ToString();
+        //            string endYear = DateTimeDoff.Parse(endDate).Year.ToString();
         //            string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
 
         //            string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;

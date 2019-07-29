@@ -8,7 +8,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
 {
     public class DailyOperationSizingDetailsDto
     {
-        [JsonProperty(PropertyName = "DateTimeMachineHistory")]
+        [JsonProperty(PropertyName = "DateTimeDoff")]
         public DateTimeOffset DateTimeMachineHistory { get; }
 
         [JsonProperty(PropertyName = "MachineStatusHistory")]
