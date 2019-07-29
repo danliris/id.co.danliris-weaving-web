@@ -22,14 +22,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         //}
     }
 
-    //public class DailyOperationSizingWeightCommandValidator
-    //  : AbstractValidator<DailyOperationSizingWeightCommand>
-    //{
-    //    public DailyOperationSizingWeightCommandValidator()
-    //    {
-    //        RuleFor(validator => validator.Netto).NotEmpty();
-    //        RuleFor(validator => validator.Bruto).NotEmpty();
-    //        RuleFor(validator => validator.Theoritical).NotEmpty();
-    //    }
-    //}
+    public class DailyOperationSizingWeightCommandValidator
+      : AbstractValidator<DailyOperationSizingWeightCommand>
+    {
+        public DailyOperationSizingWeightCommandValidator()
+        {
+            RuleFor(validator => validator.Netto).NotEmpty();
+            RuleFor(validator => validator.Bruto).NotEmpty();
+            RuleFor(validator => validator.Theoritical).NotEmpty();
+        }
+    }
 }

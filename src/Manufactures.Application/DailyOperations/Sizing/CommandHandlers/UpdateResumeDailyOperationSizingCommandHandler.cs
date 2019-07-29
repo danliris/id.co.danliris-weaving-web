@@ -42,28 +42,29 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
-            //Validation for Start Status
-            var countStartStatus =
-                existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-                    .Count();
+            //Validation for Beam Status
+            var currentBeamStatus = lastBeamDocument.SizingBeamStatus;
 
-            if (countStartStatus == 0)
+            if (!currentBeamStatus.Equals(BeamStatus.ONPROCESS))
             {
-                throw Validator.ErrorValidation(("StartStatus", "This operation has not started yet"));
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Resume. There isn't ONPROCESS Sizing Beam on this Operation"));
             }
 
-            //Validation for Finish Status
-            var countFinishStatus =
-                existingDailyOperation
-                    .SizingDetails
-                    .Where(e => e.MachineStatus == MachineStatus.ONCOMPLETE)
-                    .Count();
+            //Validation for Machine Status
+            var currentMachineStatus = lastDetail.MachineStatus;
 
-            if (countFinishStatus == 1)
+            if (!currentMachineStatus.Equals(MachineStatus.ONSTOP))
             {
-                throw Validator.ErrorValidation(("FinishStatus", "This operation's status already COMPLETED"));
+                throw Validator.ErrorValidation(("MachineStatus", "Can't Resume. This current Operation status isn't ONSTOP"));
+            }
+
+            //Validation for Operation Status
+            var currentOperationStatus =
+                existingDailyOperation.OperationStatus;
+
+            if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
+            {
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Resume. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -97,18 +98,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterCommand>(lastBeamDocument.Counter);
                         var weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightCommand>(lastBeamDocument.Weight);
 
-                        var newBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
-                                                                                   new BeamId(lastBeamDocument.SizingBeamId),
-                                                                                   dateTimeOperation,
-                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
-                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
-                                                                                   lastBeamDocument.PISMeter,
-                                                                                   lastBeamDocument.SPU,
-                                                                                   BeamStatus.ONPROCESS);
+                        var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
+                                                                                      new BeamId(lastBeamDocument.SizingBeamId),
+                                                                                      dateTimeOperation,
+                                                                                      new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
+                                                                                      new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
+                                                                                      lastBeamDocument.PISMeter,
+                                                                                      lastBeamDocument.SPU,
+                                                                                      BeamStatus.ONPROCESS);
 
-                        existingDailyOperation.UpdateSizingBeamDocuments(newBeamDocument);
+                        existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
 
-                        var Causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
+                        var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
                         var newOperation =
                                     new DailyOperationSizingDetail(Guid.NewGuid(),
@@ -117,7 +118,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    dateTimeOperation,
                                                                    MachineStatus.ONRESUME,
                                                                    "-",
-                                                                   new DailyOperationSizingCauseValueObject(Causes.BrokenBeam, Causes.MachineTroubled),
+                                                                   new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                    lastDetail.SizingBeamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
@@ -133,15 +134,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                 }
             }
-
-            //Validation for Resume Time
-            //var lastTimeMachineLog = lastDetail.DateTimeMachine.TimeOfDay;
-            //var resumeTimeMachineLog = request.SizingDetails.ResumeTime;
-
-            //if (resumeTimeMachineLog < lastTimeMachineLog)
-            //{
-            //    throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than latest time log"));
-            //}
         }
     }
 }

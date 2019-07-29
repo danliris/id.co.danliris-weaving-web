@@ -11,7 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Calculation
         {
             double pisInMeter = 0;
 
-            if (counterStart != 0 && counterFinish != 0)
+            if (counterStart >= 0 && counterFinish != 0)
             {
                 pisInMeter = (counterFinish - counterStart);
             }
@@ -23,7 +23,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Calculation
         {
             double pisInPieces = 0;
 
-            if (counterStart != 0 && counterFinish != 0)
+            if (counterStart >= 0 && counterFinish != 0)
             {
                 pisInPieces = (counterFinish - counterStart)/ ConstantsValue.CUTMARK_STANDARD_VALUE;
             }

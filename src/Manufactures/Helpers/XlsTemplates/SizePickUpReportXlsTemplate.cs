@@ -46,7 +46,7 @@ namespace Manufactures.Helpers.XlsTemplates
                     var texSQ = item.TexSQ.ToString();
                     var visco = item.Visco.ToString();
                     var beamNumber = item.BeamNumber;
-                    var pism = item.PISM.ToString();
+                    var pism = item.PISMeter.ToString();
                     //var counterStart = item.CounterStart;
                     //var counterFinish = item.CounterFinish;
                     //var netto = item.WeightNetto;

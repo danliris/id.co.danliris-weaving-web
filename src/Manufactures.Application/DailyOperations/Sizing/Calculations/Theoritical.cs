@@ -2,9 +2,9 @@
 
 namespace Manufactures.Application.DailyOperations.Sizing.Calculations
 {
-    public class Netto
+    public class Theoritical
     {
-        public double CalculateKawamoto(double pisInMeter, int yarnStrands, double neReal)
+        public double CalculateKawamoto(double pisInMeter, double yarnStrands, double neReal)
         {
             double result = 0;
 
@@ -16,7 +16,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.Calculations
             return result;
         }
 
-        public double CalculateSuckerMuller(double pisInMeter, int yarnStrands, double neReal)
+        public double CalculateSuckerMuller(double pisInMeter, double yarnStrands, double neReal)
         {
             double result = 0;
 

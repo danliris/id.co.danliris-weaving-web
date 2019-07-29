@@ -15,11 +15,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public int? WeavingUnitId { get; internal set; }
         public Guid? ConstructionDocumentId { get; internal set; }
         public string BeamsWarping { get; internal set; }
+        public double YarnStrands { get; internal set; }
         public string RecipeCode { get; internal set; }
         public double NeReal { get; internal set; }
         public int? MachineSpeed { get; internal set; }
-        public double? TexSQ { get; internal set; }
-        public double? Visco { get; internal set; }
+        public string TexSQ { get; internal set; }
+        public string Visco { get; internal set; }
         public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; internal set; }
         public List<DailyOperationSizingDetail> SizingDetails { get; internal set; }
