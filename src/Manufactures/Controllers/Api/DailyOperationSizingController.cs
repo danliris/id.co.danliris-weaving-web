@@ -496,6 +496,15 @@ namespace Manufactures.Controllers.Api
                     var texSQ = document.TexSQ;
                     var visco = document.Visco;
 
+                    var constructionDocument =
+                        _constructionDocumentRepository
+                            .Find(e => e.Identity.Equals(document.ConstructionDocumentId.Value))
+                            .FirstOrDefault();
+                    var constructionNumber = constructionDocument.ConstructionNumber;
+                    string[] splittedConstructionNumber = constructionNumber.Split(" ");
+                    var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                    var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
+
                     var filteredSizingBeamDocuments = document.SizingBeamDocuments.Where(b => b.DateTimeBeamDocument.Month.Equals(month) && b.SizingBeamStatus.Equals(BeamStatus.ROLLEDUP));
 
                     if (filteredSizingBeamDocuments != null)
@@ -533,7 +542,7 @@ namespace Manufactures.Controllers.Api
                         }
                     }
 
-                    resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
+                    resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
                 }
 
                 await Task.Yield();
@@ -585,9 +594,9 @@ namespace Manufactures.Controllers.Api
 
         //        foreach (var document in sizePickupDtos)
         //        {
-        //            var convertedDate = DateTimeDoff.Parse(date);
+        //            var convertedDate = DateTimeMachineHistory.Parse(date);
 
-        //            var filteredDetailsComplete = document.SizingDetails.Where(x => x.DateTimeMachine.DateTimeDoff.Equals(convertedDate) &&
+        //            var filteredDetailsComplete = document.SizingDetails.Where(x => x.DateTimeMachine.DateTimeMachineHistory.Equals(convertedDate) &&
         //                                                          x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                          x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
@@ -617,7 +626,7 @@ namespace Manufactures.Controllers.Api
 
         //                var results = new SizePickupListDto(document, filteredMachineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
         //                resultData.Add(results);
-        //                resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
+        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
         //            }
         //        }
 
@@ -626,10 +635,10 @@ namespace Manufactures.Controllers.Api
         //        if (index.Equals(true))
         //        {
         //            byte[] xlsInBytes;
-        //            string day = DateTimeDoff.Parse(date).Day.ToString();
-        //            int month = DateTimeDoff.Parse(date).Month;
+        //            string day = DateTimeMachineHistory.Parse(date).Day.ToString();
+        //            int month = DateTimeMachineHistory.Parse(date).Month;
         //            string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
-        //            string year = DateTimeDoff.Parse(date).Year.ToString();
+        //            string year = DateTimeMachineHistory.Parse(date).Year.ToString();
         //            string dateOfReport = day + "-" + indonesianMonth + "-" + year;
 
         //            string fileName = "Laporan Size Pickup " + dateOfReport;
@@ -674,11 +683,11 @@ namespace Manufactures.Controllers.Api
 
         //        foreach (var document in sizePickupDtos)
         //        {
-        //            var convertedStartDate = DateTimeDoff.Parse(startDate);
-        //            var convertedEndDate = DateTimeDoff.Parse(endDate);
+        //            var convertedStartDate = DateTimeMachineHistory.Parse(startDate);
+        //            var convertedEndDate = DateTimeMachineHistory.Parse(endDate);
 
-        //            var filteredDetailsComplete = document.SizingDetails.Where(x => (x.DateTimeMachine.DateTimeDoff >= convertedStartDate &&
-        //                                                           x.DateTimeMachine.DateTimeDoff <= convertedEndDate) &&
+        //            var filteredDetailsComplete = document.SizingDetails.Where(x => (x.DateTimeMachine.DateTimeMachineHistory >= convertedStartDate &&
+        //                                                           x.DateTimeMachine.DateTimeMachineHistory <= convertedEndDate) &&
         //                                                           x.ShiftDocumentId.ToString().Equals(shiftId) &&
         //                                                           x.MachineStatus.Equals(DailyOperationMachineStatus.ONCOMPLETE)).FirstOrDefault();
 
@@ -708,7 +717,7 @@ namespace Manufactures.Controllers.Api
 
         //                var results = new SizePickupListDto(document, filteredMachineDateTime, filteredOperatorName, filteredOperatorGroup, filteredBeamNumber);
         //                resultData.Add(results);
-        //                resultData = resultData.OrderBy(o => o.DateTimeDoff).ToList();
+        //                resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
         //            }
         //        }
 
@@ -717,16 +726,16 @@ namespace Manufactures.Controllers.Api
         //        if (index.Equals(true))
         //        {
         //            byte[] xlsInBytes;
-        //            string startDay = DateTimeDoff.Parse(startDate).Day.ToString();
-        //            int startMonth = DateTimeDoff.Parse(startDate).Month;
+        //            string startDay = DateTimeMachineHistory.Parse(startDate).Day.ToString();
+        //            int startMonth = DateTimeMachineHistory.Parse(startDate).Month;
         //            string indonesianStartMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(startMonth).ToString();
-        //            string startYear = DateTimeDoff.Parse(startDate).Year.ToString();
+        //            string startYear = DateTimeMachineHistory.Parse(startDate).Year.ToString();
         //            string startDateOfReport = startDay + "-" + indonesianStartMonth + "-" + startYear;
 
-        //            string endDay = DateTimeDoff.Parse(endDate).Day.ToString();
-        //            int endMonth = DateTimeDoff.Parse(endDate).Month;
+        //            string endDay = DateTimeMachineHistory.Parse(endDate).Day.ToString();
+        //            int endMonth = DateTimeMachineHistory.Parse(endDate).Month;
         //            string indonesianEndMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(endMonth).ToString();
-        //            string endYear = DateTimeDoff.Parse(endDate).Year.ToString();
+        //            string endYear = DateTimeMachineHistory.Parse(endDate).Year.ToString();
         //            string endDateOfReport = endDay + "-" + indonesianEndMonth + "-" + endYear;
 
         //            string fileName = "Laporan Size Pickup " + startDateOfReport + "_" + endDateOfReport;

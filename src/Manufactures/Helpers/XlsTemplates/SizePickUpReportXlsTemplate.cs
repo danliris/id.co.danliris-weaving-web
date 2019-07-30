@@ -38,7 +38,7 @@ namespace Manufactures.Helpers.XlsTemplates
                 int index = 1;
                 foreach (var item in sizePickupModel)
                 {
-                    var date = item.DateTimeDoff.ToString("dd MMMM yyyy");
+                    var date = item.DateTimeMachineHistory.ToString("dd MMMM yyyy");
                     var operatorGroup = item.OperatorGroup;
                     var operatorName = item.OperatorName;
                     var recipeCode = item.RecipeCode;
@@ -52,7 +52,7 @@ namespace Manufactures.Helpers.XlsTemplates
                     var netto = item.NettoWeight;
                     var bruto = item.BrutoWeight;
                     var spu = item.SPU.ToString();
-                    var doffingTime = item.DateTimeDoff.ToString("HH:mm:ss");
+                    var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
                     dt.Rows.Add(index++, date, operatorGroup, operatorName, recipeCode, machineSpeed,
                         texSQ, visco, beamNumber, pism, counterStart, counterFinish, netto, bruto, spu, doffingTime);
                 }

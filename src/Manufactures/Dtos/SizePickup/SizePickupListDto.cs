@@ -31,8 +31,8 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; set; }
 
-        [JsonProperty(PropertyName = "DateTimeDoff")]
-        public DateTimeOffset DateTimeDoff { get; set; }
+        [JsonProperty(PropertyName = "DateTimeMachineHistory")]
+        public DateTimeOffset DateTimeMachineHistory { get; set; }
 
         [JsonProperty(PropertyName = "StartCounter")]
         public double StartCounter { get; set; }
@@ -61,7 +61,7 @@ namespace Manufactures.Dtos
             Visco = document.Visco;
             OperatorName = operatorName;
             OperatorGroup = operatorGroup;
-            DateTimeDoff = dateTimeDoff;
+            DateTimeMachineHistory = dateTimeDoff;
             StartCounter = counter.Start;
             FinishCounter = counter.Finish;
             NettoWeight = weight.Netto;

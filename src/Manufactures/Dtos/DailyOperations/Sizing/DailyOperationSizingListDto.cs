@@ -32,7 +32,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; }
 
-        [JsonProperty(PropertyName = "DateTimeDoff")]
+        [JsonProperty(PropertyName = "DateTimeMachineHistory")]
         public DateTimeOffset DateTimeMachineHistory { get; }
 
         public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument, string operationStatus, DateTimeOffset dateTimeMachineHistory)
