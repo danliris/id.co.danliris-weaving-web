@@ -21,11 +21,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Calculation
 
         public double CalculateInPieces(double counterStart, double counterFinish)
         {
+            double pisInMeter = 0;
             double pisInPieces = 0;
 
             if (counterStart >= 0 && counterFinish != 0)
             {
-                pisInPieces = (counterFinish - counterStart)/ ConstantsValue.CUTMARK_STANDARD_VALUE;
+                pisInMeter = counterFinish - counterStart;
+                pisInPieces = pisInMeter / ConstantsValue.CUTMARK_STANDARD_VALUE;
             }
 
             return pisInPieces;

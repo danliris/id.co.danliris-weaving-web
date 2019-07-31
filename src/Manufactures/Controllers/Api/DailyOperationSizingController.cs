@@ -1,5 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Sizing.Calculations;
+using Manufactures.Application.DailyOperations.Sizing.SizePickup;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
@@ -253,7 +254,7 @@ namespace Manufactures.Controllers.Api
 
                     if (beamSizingDocument != null)
                     {
-                        if(beamSizingDocument.Number != null)
+                        if (beamSizingDocument.Number != null)
                         {
                             var sizingBeamNumberOnBeamDocument = beamSizingDocument.Number;
                             var beamDocumentsDto = new DailyOperationSizingBeamDocumentsDto(sizingBeamNumberOnBeamDocument, dateTimeBeamDocument, startCounter, finishCounter, nettoWeight, brutoWeight, pisMeter, spu, sizingBeamStatus);
@@ -434,7 +435,7 @@ namespace Manufactures.Controllers.Api
             if (pisMeter > 0 && yarnStrands > 0 && neReal > 0)
             {
                 Theoritical calculate = new Theoritical();
-                suckerMullerCalculationResult = calculate.CalculateKawamoto(pisMeter, yarnStrands, neReal);
+                suckerMullerCalculationResult = calculate.CalculateSuckerMuller(pisMeter, yarnStrands, neReal);
 
                 await Task.Yield();
                 return Ok(suckerMullerCalculationResult);
@@ -468,8 +469,8 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        [HttpGet("size-pickup/month/{month}/unit-id/{weavingUnitId}/shift/{shiftId}")]
-        public async Task<IActionResult> GetReportByMonth(int month, int weavingUnitId, string shiftId)
+        [HttpGet("size-pickup/month/{month}/unit-id/{weavingUnitId}/shift/{shiftId}/spu/{spuStatus}")]
+        public async Task<IActionResult> GetReportByMonth(int month, int weavingUnitId, string shiftId, string spuStatus)
         {
             try
             {
@@ -484,7 +485,7 @@ namespace Manufactures.Controllers.Api
                                                            .Include(b => b.SizingBeamDocuments).OrderByDescending(item => item.CreatedDate);
                 var sizePickupDtos =
                     _dailyOperationSizingDocumentRepository.Find(query)
-                                                           .Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) && 
+                                                           .Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) &&
                                                                                 sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH)).ToList();
 
                 foreach (var document in sizePickupDtos)
@@ -536,13 +537,78 @@ namespace Manufactures.Controllers.Api
                             double pisMeter = sizingBeam.PISMeter;
                             double spu = sizingBeam.SPU;
 
-                            //Placing Value as Parameter for SizePickupListDto and add to resultData
-                            results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
-                            resultData.Add(results);
+                            switch (filteredConstructionNumber)
+                            {
+                                case SizePickupSPUConstants.PCCONSTRUCTION:
+                                    Filtering filteringPC = new Filtering();
+                                    var resultPC = filteringPC.ComparingPCCVC(spu);
+                                    if (resultPC == spuStatus || spuStatus.Equals("All"))
+                                    {
+                                        //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                        results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                        resultData.Add(results);
+                                    }
+                                    break;
+                                case SizePickupSPUConstants.CVCCONSTRUCTION:
+                                    Filtering filteringCVC = new Filtering();
+                                    var resultCVC = filteringCVC.ComparingPCCVC(spu);
+                                    if (resultCVC == spuStatus || spuStatus.Equals("All"))
+                                    {
+                                        //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                        results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                        resultData.Add(results);
+                                    }
+                                    break;
+                                case SizePickupSPUConstants.COTTONCONSTRUCTION:
+                                    Filtering filteringCotton = new Filtering();
+                                    var resultCotton = filteringCotton.ComparingPCCVC(spu);
+                                    if (resultCotton == spuStatus || spuStatus.Equals("All"))
+                                    {
+                                        //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                        results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                        resultData.Add(results);
+                                    }
+                                    break;
+                                case SizePickupSPUConstants.PECONSTRUCTION:
+                                    Filtering filteringPE = new Filtering();
+                                    var resultPE = filteringPE.ComparingPCCVC(spu);
+                                    if (resultPE == spuStatus || spuStatus.Equals("All"))
+                                    {
+                                        //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                        results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                        resultData.Add(results);
+                                    }
+                                    break;
+                                case SizePickupSPUConstants.RAYONCONSTRUCTION:
+                                    Filtering filteringRayon = new Filtering();
+                                    var resultRayon = filteringRayon.ComparingPCCVC(spu);
+                                    if (resultRayon == spuStatus || spuStatus.Equals("All"))
+                                    {
+                                        //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                        results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                        resultData.Add(results);
+                                    }
+                                    break;
+                                default:
+                                    //Placing Value as Parameter for SizePickupListDto and add to resultData
+                                    results = new SizePickupListDto(document, operatorDocument.CoreAccount.Name, operatorDocument.Group, dateTime, counter, weight, pisMeter, spu, beamNumber);
+                                    resultData.Add(results);
+                                    break;
+                            }
                         }
                     }
 
-                    resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+                    if (results != null)
+                    {
+                        try
+                        {
+                            resultData = resultData.OrderBy(o => o.DateTimeMachineHistory).ToList();
+                        }
+                        catch (Exception ex)
+                        {
+                            return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+                        }
+                    }
                 }
 
                 await Task.Yield();
