@@ -24,6 +24,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         public string ColourOfCone { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
         public OperatorId OperatorId { get; private set; }
+        public string DailyOperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingHistory> DailyOperationWarpingDetailHistory { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingBeamProduct> DailyOperationWarpingBeamProducts { get; private set; }
 
@@ -77,6 +78,17 @@ namespace Manufactures.Domain.DailyOperations.Warping
             this.OperatorId = new OperatorId(readModel.OperatorId);
             this.DailyOperationWarpingBeamProducts = readModel.DailyOperationWarpingBeamProducts;
             this.DailyOperationWarpingDetailHistory = readModel.DailyOperationWarpingDetailHistory;
+        }
+
+        public void SetDailyOperationStatus(string value)
+        {
+            if (!DailyOperationStatus.Equals(value))
+            {
+                DailyOperationStatus = value;
+                ReadModel.DailyOperationStatus = DailyOperationStatus;
+
+                MarkModified();
+            }
         }
 
         //Add Daily Operation Warping History

@@ -16,6 +16,8 @@
     <Compile Remove="Migrations\20190717070312_dev_daily_operation.Designer.cs" />
     <Compile Remove="Migrations\20190722105421_dev_warping_sizing_module.cs" />
     <Compile Remove="Migrations\20190722105421_dev_warping_sizing_module.Designer.cs" />
+    <Compile Remove="Migrations\20190729043451_dev_warping_sizing_module.cs" />
+    <Compile Remove="Migrations\20190729043451_dev_warping_sizing_module.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

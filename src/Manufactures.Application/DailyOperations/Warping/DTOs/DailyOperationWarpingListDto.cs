@@ -28,21 +28,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         {
             Id = document.Identity;
             DateTimeOperation = document.DateTimeOperation;
-        }
-
-        public void SetDailyOperationNumber(string value)
-        {
-            DailyOperationNumber = value;
+            DailyOperationNumber = document.DailyOperationNumber;
+            OperationStatus = document.DailyOperationStatus;
         }
 
         public void SetConstructionNumber(string value)
         {
             ConstructionNumber = value;
-        }
-
-        public void SetOperationStatus(string value)
-        {
-            OperationStatus = value;
         }
 
         public void SetLatestBeamNumber(string value)
