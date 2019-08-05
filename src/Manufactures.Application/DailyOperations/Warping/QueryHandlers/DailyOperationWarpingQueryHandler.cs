@@ -8,7 +8,6 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
-using Manufactures.Domain.Materials.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
