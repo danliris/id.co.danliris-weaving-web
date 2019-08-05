@@ -3,9 +3,9 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Application.DailyOperations.Warping.DTOs
+namespace Manufactures.Application.DailyOperations.Warping
 {
-    public class DailyOperationWarpingStartDto
+    public class DailyOperationBeamProductDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "BeamStatus")]
         public string BeamStatus { get; private set; }
 
-        public DailyOperationWarpingStartDto(DailyOperationWarpingBeamProduct x)
+        public DailyOperationBeamProductDto(DailyOperationWarpingBeamProduct x)
         {
             Id = x.Identity;
             BeamId = new BeamId(x.BeamId);
