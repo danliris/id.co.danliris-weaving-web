@@ -101,8 +101,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     if (existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONSTART || existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONRESUME)
                     {
-                        //var sizingBeamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId.Value)).FirstOrDefault();
-                        //var sizingBeamNumber = sizingBeamDocument.Number;
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(lastBeamDocument.Counter);
                         var weight = request.SizingBeamDocuments.Weight;
                         var theoritical = Math.Round(weight.Theoritical,2);
@@ -118,25 +116,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    BeamStatus.ROLLEDUP);
 
                         existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
-
-                        //var entryDetailId = lastDetail.Identity;
-                        //var entryDetailShiftId = lastDetail.ShiftDocumentId;
-                        //var entryDetailOperatorId = lastDetail.OperatorDocumentId;
-                        //var entryDetailDateTimeMachine = lastDetail.DateTimeMachine;
-                        //var entryDetailMachineStatus = lastDetail.MachineStatus;
-                        //var entryDetailInformation = lastDetail.Information;
-                        //var entryDetailSizingBeamNumber = sizingBeamNumber;
-                        //var updateOnEntryOperationDetail = new DailyOperationSizingDetail(entryDetailId,
-                        //                                                                  new ShiftId(entryDetailShiftId),
-                        //                                                                  new OperatorId(entryDetailOperatorId),
-                        //                                                                  entryDetailDateTimeMachine,
-                        //                                                                  entryDetailMachineStatus,
-                        //                                                                  entryDetailInformation,
-                        //                                                                  new DailyOperationSizingCauseValueObject(causes.BrokenBeam,
-                        //                                                                  causes.MachineTroubled),
-                        //                                                                  entryDetailSizingBeamNumber);
-
-                        //existingDailyOperation.UpdateSizingDetail(updateOnEntryOperationDetail);
 
                         var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 
