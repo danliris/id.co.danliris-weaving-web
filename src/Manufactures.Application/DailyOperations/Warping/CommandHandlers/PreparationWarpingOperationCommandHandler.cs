@@ -46,6 +46,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                               datetimeOperation,
                                                               request.OperatorId);
 
+            dailyOperationWarping.SetDailyOperationStatus(OperationStatus.ONPROCESS);
+
             //Add daily operation history
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            request.OperatorId.Value, 
