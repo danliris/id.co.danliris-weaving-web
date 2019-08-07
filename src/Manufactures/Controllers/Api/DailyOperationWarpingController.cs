@@ -88,7 +88,6 @@ namespace Manufactures.Controllers.Api
             int totalRows = dailyOperationWarpingDocuments.Count();
             var result = dailyOperationWarpingDocuments.Skip((page - 1) * size).Take(size);
             var resultCount = result.Count();
-            page = page + 1;
 
             return Ok(result, info: new { page, size, totalRows, resultCount });
         }
