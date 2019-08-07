@@ -8,6 +8,8 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
@@ -21,6 +23,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             _fabricConstructionRepository;
         private readonly IBeamRepository
             _beamRepository;
+        private readonly IOperatorRepository
+            _operatorRepository;
+        private readonly IShiftRepository _shiftRepository;
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -31,6 +36,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _storage.GetRepository<IFabricConstructionRepository>();
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
+            _operatorRepository = 
+                _storage.GetRepository<IOperatorRepository>();
+            _shiftRepository =
+                _storage.GetRepository<IShiftRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
@@ -101,6 +110,34 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
+
+            foreach(var history in dailyOperationWarpingDocument.DailyOperationWarpingDetailHistory)
+            {
+                var beamNumber = history.BeamNumber;
+
+                await Task.Yield();
+                var operatorBeam = 
+                    _operatorRepository
+                        .Find(entity => entity.Identity.Equals(history.BeamOperatorId))
+                        .FirstOrDefault();
+
+                await Task.Yield();
+                var shift = 
+                    _shiftRepository
+                        .Find(entity => entity.Identity.Equals(history.ShiftId))
+                        .FirstOrDefault();
+                var dailyHistory = 
+                    new DailyOperationLoomHistoryDto(history.Identity, 
+                                                     beamNumber, 
+                                                     operatorBeam.CoreAccount.Name, 
+                                                     operatorBeam.Group, 
+                                                     history.DateTimeOperation, 
+                                                     history.OperationStatus, 
+                                                     shift.Name);
+
+                await Task.Yield();
+                result.SetDailyOperationLoomHistories(dailyHistory);
+            }
 
             return result;
         }
