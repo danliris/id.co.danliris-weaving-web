@@ -14,21 +14,21 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 {
-    public class FinishWarpingOperationCommandHandler
-        : ICommandHandler<FinishWarpingOperationCommand, DailyOperationWarpingDocument>
+    public class CompleteWarpingOperationCommandHandler
+        : ICommandHandler<CompleteWarpingOperationCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository
             _warpingOperationRepository;
 
-        public FinishWarpingOperationCommandHandler(IStorage storage)
+        public CompleteWarpingOperationCommandHandler(IStorage storage)
         {
             _storage = storage;
             _warpingOperationRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
-        public async Task<DailyOperationWarpingDocument> Handle(FinishWarpingOperationCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationWarpingDocument> Handle(CompleteWarpingOperationCommand request, CancellationToken cancellationToken)
         {
             //Check if has existing daily operation
             var warpingQuery =
@@ -51,40 +51,34 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                           "Unavailable exsisting daily operation warping Document with Id " + request.Id));
             }
 
+            //Check if any beam has status on process
+            if (existingDailyOperation
+                    .DailyOperationWarpingBeamProducts
+                    .Any(entity => entity.BeamStatus.Equals(BeamStatus.ONPROCESS)))
+            {
+                //Throw an error doesn't have any operation
+                throw Validator
+                        .ErrorValidation(("Id",
+                                          "Unavailable process, still have beam on processing " + request.Id));
+            }
+
             //Set date time when user operate
             var datetimeOperation =
-                request
-                    .DateOperation
-                    .UtcDateTime
-                    .Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
+               request
+                   .DateOperation
+                   .UtcDateTime
+                   .Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
 
             //Add daily operation history
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            request.OperatorId.Value,
                                                            datetimeOperation,
-                                                           MachineStatus.ONFINISH);
+                                                           MachineStatus.ONCOMPLETE);
 
             existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
 
-
-            //Check if any beam on process
-
-            var beamProduct = existingDailyOperation
-                    .DailyOperationWarpingBeamProducts
-                    .Where(x => x.Identity.Equals(request.BeamId.Value) && x.BeamStatus.Equals(BeamStatus.ONPROCESS))
-                    .FirstOrDefault();
-
-            if (beamProduct == null)
-            {
-                //Throw an error has beam on process
-                throw Validator
-                        .ErrorValidation(("BeamId",
-                                          "Still have another beam on process" + request.BeamId));
-            }
-
-            //Update existing beam product
-            beamProduct.UpdateBeamStatus(BeamStatus.ROLLEDUP);
-            existingDailyOperation.UpdateDailyOperationWarpingBeamProduct(beamProduct);
+            //Update status on daily operation
+            existingDailyOperation.SetDailyOperationStatus(OperationStatus.ONFINISH);
 
             //Update existing daily operation
             await _warpingOperationRepository.Update(existingDailyOperation);
