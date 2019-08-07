@@ -55,6 +55,7 @@ namespace Manufactures.Controllers.Api
 
             if (!string.IsNullOrEmpty(keyword))
             {
+                await Task.Yield();
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
                         .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
@@ -72,11 +73,13 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
+                    await Task.Yield();
                     dailyOperationWarpingDocuments =
                         dailyOperationWarpingDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
+                    await Task.Yield();
                     dailyOperationWarpingDocuments =
                         dailyOperationWarpingDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
@@ -105,7 +108,7 @@ namespace Manufactures.Controllers.Api
         }
 
         //Preparation Warping Daily Operation Request
-        [HttpPost("entry-process")]
+        [HttpPost("entry-process-operation")]
         public async Task<IActionResult> 
             Preparation([FromBody]PreparationWarpingOperationCommand command)
         {
@@ -125,6 +128,7 @@ namespace Manufactures.Controllers.Api
             var dailyOperationWarping = await Mediator.Send(command);
 
             //Extract warping beam from command handler as Identity(Id)
+            await Task.Yield();
             var warpingBeams = 
                 dailyOperationWarping
                     .DailyOperationWarpingBeamProducts
@@ -138,7 +142,10 @@ namespace Manufactures.Controllers.Api
 
             foreach (var history in warpingHistory)
             {
+                await Task.Yield();
                 var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+
+                await Task.Yield();
                 var shiftById = await _shiftQuery.GetById(history.ShiftId);
 
                 await Task.Yield();
@@ -178,7 +185,10 @@ namespace Manufactures.Controllers.Api
 
             foreach(var history in warpingHistory)
             {
+                await Task.Yield();
                 var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+
+                await Task.Yield();
                 var shiftById = await _shiftQuery.GetById(history.ShiftId);
 
                 var operationHistory =
@@ -189,7 +199,7 @@ namespace Manufactures.Controllers.Api
                                               history.DateTimeOperation, 
                                               history.OperationStatus, 
                                               shiftById.Name);
-                await Task.Yield();
+
                 result.Add(operationHistory);
             }
 
@@ -203,8 +213,9 @@ namespace Manufactures.Controllers.Api
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
-
+            
             //Extract history
+            await Task.Yield();
             var warpingHistory =
                 dailyOperationWarping
                     .DailyOperationWarpingDetailHistory;
@@ -213,7 +224,10 @@ namespace Manufactures.Controllers.Api
 
             foreach (var history in warpingHistory)
             {
+                await Task.Yield();
                 var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+
+                await Task.Yield();
                 var shiftById = await _shiftQuery.GetById(history.ShiftId);
 
                 var operationHistory =
@@ -224,9 +238,57 @@ namespace Manufactures.Controllers.Api
                                               history.DateTimeOperation,
                                               history.OperationStatus,
                                               shiftById.Name);
-                await Task.Yield();
+
                 result.Add(operationHistory);
             }
+
+            return Ok(result);
+        }
+
+        //Finish Warping Daily Operation Request
+        [HttpPut("finish-process")]
+        public async Task<IActionResult>
+            Finish([FromBody]FinishWarpingOperationCommand command)
+        {
+            // Sending command to command handler
+            var dailyOperationWarping = await Mediator.Send(command);
+
+            //Extract warping beam from command handler as Identity(Id)
+            await Task.Yield();
+            var warpingBeams =
+                dailyOperationWarping
+                    .DailyOperationWarpingBeamProducts
+                    .Select(x => new DailyOperationBeamProductDto(x)).ToList();
+
+            //Extract history
+            var warpingHistory =
+                dailyOperationWarping
+                    .DailyOperationWarpingDetailHistory;
+            var historys = new List<DailyOperationHistory>();
+
+            foreach (var history in warpingHistory)
+            {
+                await Task.Yield();
+                var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+
+                await Task.Yield();
+                var shiftById = await _shiftQuery.GetById(history.ShiftId);
+
+                await Task.Yield();
+                var operationHistory =
+                    new DailyOperationHistory(history.Identity,
+                                              history.BeamNumber,
+                                              operatorById.Username,
+                                              operatorById.Group,
+                                              history.DateTimeOperation,
+                                              history.OperationStatus,
+                                              shiftById.Name);
+
+                historys.Add(operationHistory);
+            }
+
+            await Task.Yield();
+            var result = new StartProcessDto(warpingBeams, historys);
 
             return Ok(result);
         }
