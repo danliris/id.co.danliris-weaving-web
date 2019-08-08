@@ -24,6 +24,7 @@ using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
+using Manufactures.Domain.StockCard.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -31,6 +32,15 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<StockCardReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_StockCardDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBeamProduct");

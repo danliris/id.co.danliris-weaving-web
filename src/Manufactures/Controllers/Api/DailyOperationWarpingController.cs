@@ -6,7 +6,9 @@ using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.Operators.Queries;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
+using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Dtos.DailyOperations.Warping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +16,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -251,13 +254,44 @@ namespace Manufactures.Controllers.Api
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
-
+            
             //Extract warping beam from command handler as Identity(Id)
             await Task.Yield();
             var warpingBeams =
                 dailyOperationWarping
                     .DailyOperationWarpingBeamProducts
                     .Select(x => new DailyOperationBeamProductDto(x)).ToList();
+
+            //Get Latest product
+            await Task.Yield();
+            var latestBeamProduct = 
+                dailyOperationWarping
+                    .DailyOperationWarpingBeamProducts
+                    .OrderByDescending(x => x.CreatedDate)
+                    .FirstOrDefault();
+
+            //Preparing Event
+            var addStockEvent = new AddBeamStockWarpingEvent();
+
+            //Manipulate datetime to be stocknumber
+            var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
+            StringBuilder stockNumber = new StringBuilder();
+            stockNumber.Append(dateTimeNow.ToString("HH"));
+            stockNumber.Append(dateTimeNow.ToString("mm"));
+            stockNumber.Append("/");
+            stockNumber.Append("stock-weaving");
+            stockNumber.Append("/");
+            stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
+
+            //Initiate events
+            addStockEvent.BeamId = new BeamId(latestBeamProduct.BeamId);
+            addStockEvent.StockNumber =stockNumber.ToString();
+            addStockEvent.DailyOperationId = new DailyOperationId(dailyOperationWarping.Identity);
+            addStockEvent.DateTimeOperation = dateTimeNow;
+            addStockEvent.Length = latestBeamProduct.Length.Value;
+
+            //Update stock
+            await Mediator.Publish(addStockEvent);
 
             //Extract history
             var warpingHistory =
