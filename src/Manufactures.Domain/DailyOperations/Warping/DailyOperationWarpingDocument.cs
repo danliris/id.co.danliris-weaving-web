@@ -49,6 +49,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             OperatorId = operatorId;
             DailyOperationWarpingDetailHistory = new List<DailyOperationWarpingHistory>();
             DailyOperationWarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>();
+            DailyOperationStatus = " ";
 
             this.MarkTransient();
 
