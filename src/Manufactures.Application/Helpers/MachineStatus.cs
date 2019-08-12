@@ -7,6 +7,7 @@
         public static string ONSTART = "START";
         public static string ONSTOP = "STOP";
         public static string ONRESUME = "CONTINUE";
+        public static string ONFINISH = "FINISH";
         public static string ONCOMPLETE = "COMPLETED";
         public static string ONCHANGESHIFT = "CHANGE-SHIFT";
     }

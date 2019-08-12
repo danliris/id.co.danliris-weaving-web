@@ -18,11 +18,11 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "OperationStatus")]
-        public string OperationStatus { get; private set; }
-
         [JsonProperty(PropertyName = "LatestBeamNumber")]
         public string LatestBeamNumber { get; private set; }
+
+        [JsonProperty(PropertyName = "OperationStatus")]
+        public string OperationStatus { get; private set; }
 
         public DailyOperationWarpingListDto(DailyOperationWarpingDocument document)
         {
