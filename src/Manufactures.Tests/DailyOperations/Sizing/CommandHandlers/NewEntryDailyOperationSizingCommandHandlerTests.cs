@@ -48,10 +48,11 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
         [Fact]
         public async Task Handle_StateUnderTest_ExpectedBehavior()
         {
-            // Set new entry command handler object
+            //---ARRANGE---//
+            // Set New Entry Command Handler Object
             var createAddNewDailyOperationSizingCommandHandler = this.NewEntryDailyOperationSizingCommandHandler();
 
-            //Instantiate new Object
+            //Instantiate New Object
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(new int());
             var constructionDocumentId = new ConstructionId(Guid.NewGuid());
@@ -68,7 +69,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                 ShiftId = shiftId
             };
 
-            //Create new entry object
+            //Create New Entry Object
             NewEntryDailyOperationSizingCommand request = new NewEntryDailyOperationSizingCommand
             {
                 MachineDocumentId = machineDocumentId,
@@ -84,19 +85,15 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
 
-            // Instantiate command handler
+            //---ACT---//
+            // Instantiate Command Handler
             var result =
                 await createAddNewDailyOperationSizingCommandHandler
                     .Handle(request, cancellationToken);
 
-            //Check if object not null
+            //---ASSERT---//
             result.Should().NotBeNull();
-
-            //Check if has identity
             result.Identity.Should().NotBeEmpty();
-
-            //Check if has beam documents
-            //result.SizingBeamDocuments.Should().NotBeEmpty();
         }
     }
 }

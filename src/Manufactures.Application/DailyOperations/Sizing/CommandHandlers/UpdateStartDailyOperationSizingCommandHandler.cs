@@ -37,9 +37,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query
                                                                .Include(d => d.SizingDetails)
-                                                               .Where(detail => detail.Identity.Equals(request.Id))
                                                                .Include(b => b.SizingBeamDocuments)
-                                                               .Where(beamDocument => beamDocument.Identity.Equals(request.Id));
+                                                               .Where(sizingDoc => sizingDoc.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
             var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
@@ -106,30 +105,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    0,
                                                                                    0,
                                                                                    BeamStatus.ONPROCESS);
-
                         existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
 
                         var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
-
-                        //var entryDetailId = lastDetail.Identity;
-                        //var entryDetailShiftId = lastDetail.ShiftDocumentId;
-                        //var entryDetailOperatorId = lastDetail.OperatorDocumentId;
-                        //var entryDetailDateTimeMachine = lastDetail.DateTimeMachine;
-                        //var entryDetailMachineStatus = lastDetail.MachineStatus;
-                        //var entryDetailInformation = lastDetail.Information;
-                        //var entryDetailSizingBeamNumber = sizingBeamNumber;
-                        //var updateOnEntryOperationDetail = new DailyOperationSizingDetail(entryDetailId,
-                        //                                                                  new ShiftId(entryDetailShiftId),
-                        //                                                                  new OperatorId(entryDetailOperatorId),
-                        //                                                                  entryDetailDateTimeMachine,
-                        //                                                                  entryDetailMachineStatus,
-                        //                                                                  entryDetailInformation,
-                        //                                                                  new DailyOperationSizingCauseValueObject(causes.BrokenBeam,
-                        //                                                                  causes.MachineTroubled),
-                        //                                                                  entryDetailSizingBeamNumber);
-
-                        //existingDailyOperation.UpdateSizingDetail(updateOnEntryOperationDetail);
-
                         var newOperationDetail =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                new ShiftId(request.SizingDetails.ShiftId.Value),
@@ -139,7 +117,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                "-",
                                                                new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                sizingBeamNumber);
-
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
 
                         await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
@@ -162,30 +139,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                        0,
                                                                                        0,
                                                                                        BeamStatus.ONPROCESS);
-
                             existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
 
                             var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
-
-                            //var entryDetailId = lastDetail.Identity;
-                            //var entryDetailShiftId = lastDetail.ShiftDocumentId;
-                            //var entryDetailOperatorId = lastDetail.OperatorDocumentId;
-                            //var entryDetailDateTimeMachine = lastDetail.DateTimeMachine;
-                            //var entryDetailMachineStatus = lastDetail.MachineStatus;
-                            //var entryDetailInformation = lastDetail.Information;
-                            //var entryDetailSizingBeamNumber = beamNumber;
-                            //var updateOnEntryOperationDetail = new DailyOperationSizingDetail(entryDetailId,
-                            //                                                                  new ShiftId(entryDetailShiftId),
-                            //                                                                  new OperatorId(entryDetailOperatorId),
-                            //                                                                  entryDetailDateTimeMachine,
-                            //                                                                  entryDetailMachineStatus,
-                            //                                                                  entryDetailInformation,
-                            //                                                                  new DailyOperationSizingCauseValueObject(causes.BrokenBeam,
-                            //                                                                  causes.MachineTroubled),
-                            //                                                                  entryDetailSizingBeamNumber);
-
-                            //existingDailyOperation.UpdateSizingDetail(updateOnEntryOperationDetail);
-
                             var newOperationDetail =
                                     new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                    new ShiftId(request.SizingDetails.ShiftId.Value),
@@ -195,7 +151,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    "-",
                                                                    new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                    beamNumber);
-
                             existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
 
                             await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);

@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="DailyOperations\Loom\ValueObjects\" />
+    <Folder Include="DailyOperations\Tying\" />
+    <Folder Include="DailyOperations\Reaching\" />
     <Folder Include="Orders\Entities\" />
   </ItemGroup>
 
