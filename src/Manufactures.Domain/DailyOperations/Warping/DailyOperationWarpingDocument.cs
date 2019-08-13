@@ -79,6 +79,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             this.OperatorId = new OperatorId(readModel.OperatorId);
             this.DailyOperationWarpingBeamProducts = readModel.DailyOperationWarpingBeamProducts;
             this.DailyOperationWarpingDetailHistory = readModel.DailyOperationWarpingDetailHistory;
+            this.DailyOperationStatus = readModel.DailyOperationStatus;
         }
 
         public void SetDailyOperationStatus(string value)

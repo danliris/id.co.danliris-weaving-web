@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
@@ -19,12 +20,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
         public DailyOperationWarpingHistory(Guid identity,
+                                            ShiftId shiftId,
                                             Guid beamOperatorId,
                                             DateTimeOffset datetimeOperation,
                                             string operationStatus)
             : base(identity)
         {
             Identity = identity;
+            ShiftId = shiftId.Value;
             BeamOperatorId = beamOperatorId;
             DateTimeOperation = datetimeOperation;
             OperationStatus = operationStatus;

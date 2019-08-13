@@ -53,18 +53,21 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             }
 
             //Set date time when user operate
-            var datetimeOperation =
-                request
-                    .DateOperation
-                    .UtcDateTime
-                    .Add(new TimeSpan(+7)) + TimeSpan.Parse(request.TimeOperation);
+            var year = request.DateOperation.Year;
+            var month = request.DateOperation.Month;
+            var day = request.DateOperation.Day;
+            var hour = request.TimeOperation.Hours;
+            var minutes = request.TimeOperation.Minutes;
+            var seconds = request.TimeOperation.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Add daily operation history
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           request.ShiftId,
                                                            request.OperatorId.Value,
-                                                           datetimeOperation,
+                                                           dateTimeOperation,
                                                            MachineStatus.ONSTART);
-
 
             existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
             
