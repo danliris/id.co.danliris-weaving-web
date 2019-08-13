@@ -1,34 +1,36 @@
 ﻿using ExtCore.Data.Abstractions;
 using FluentAssertions;
-using Manufactures.Application.DailyOperations.Sizing.CommandHandlers;
-using Manufactures.Domain.DailyOperations.Sizing.Commands;
+using Manufactures.Application.DailyOperations.Reaching.CommandHandlers;
+using Manufactures.Domain.DailyOperations.Reaching.Command;
+using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
+namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
 {
-    public class NewEntryDailyOperationSizingCommandHandlerTests : IDisposable
+    public class NewEntryDailyOperationReachingCommandHandlerTest : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IDailyOperationSizingRepository>
-            mockDailyOperationSizingRepo;
+        private readonly Mock<IDailyOperationReachingRepository>
+            mockDailyOperationReachingRepo;
 
-        public NewEntryDailyOperationSizingCommandHandlerTests()
+        public NewEntryDailyOperationReachingCommandHandlerTest()
         {
             mockRepository = new MockRepository(MockBehavior.Default);
             mockStorage = mockRepository.Create<IStorage>();
             mockStorage.Setup(x => x.Save());
 
-            mockDailyOperationSizingRepo = mockRepository.Create<IDailyOperationSizingRepository>();
-            mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingRepository>())
-                .Returns(mockDailyOperationSizingRepo.Object);
+            mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingRepository>();
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>())
+                .Returns(mockDailyOperationReachingRepo.Object);
         }
 
         public void Dispose()
@@ -36,50 +38,52 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             mockRepository.VerifyAll();
         }
 
-        private NewEntryDailyOperationSizingCommandHandler NewEntryDailyOperationSizingCommandHandler()
+        private NewEntryDailyOperationReachingCommandHandler NewEntryDailyOperationReachingCommandHandler()
         {
             return
-                new NewEntryDailyOperationSizingCommandHandler(this.mockStorage.Object);
+                new NewEntryDailyOperationReachingCommandHandler(this.mockStorage.Object);
         }
 
         /**
-         * Test for Create New Entry on Daily Operation Sizing
+         * Test for Create New Entry on Daily Operation Reaching
          * **/
         [Fact]
         public async Task Handle_StateUnderTest_ExpectedBehavior()
         {
             //---ARRANGE---//
             // Set New Entry Command Handler Object
-            var createAddNewDailyOperationSizingCommandHandler = this.NewEntryDailyOperationSizingCommandHandler();
+            var createAddNewDailyOperationReachingCommandHandler = this.NewEntryDailyOperationReachingCommandHandler();
 
             //Instantiate New Object
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(new int());
             var constructionDocumentId = new ConstructionId(Guid.NewGuid());
-            List<BeamId> beamsWarping = new List<BeamId>();
+            var sizingBeamId = new BeamId(Guid.NewGuid());
+            var pisPieces = 20;
             var operatorId = new OperatorId(Guid.NewGuid());
             DateTimeOffset preparationDate = DateTimeOffset.UtcNow;
             var preparationTime = new TimeSpan(7);
             var shiftId = new ShiftId(Guid.NewGuid());
-            var newEntryDetail = new NewEntryDailyOperationSizingDetailCommand
-            {
-                OperatorDocumentId = operatorId,
-                PreparationDate = preparationDate,
-                PreparationTime = preparationTime,
-                ShiftId = shiftId
-            };
+            //var newEntryDetail = new NewEntryDailyOperationSizingDetailCommand
+            //{
+            //    OperatorDocumentId = operatorId,
+            //    PreparationDate = preparationDate,
+            //    PreparationTime = preparationTime,
+            //    ShiftId = shiftId
+            //};
 
             //Create New Entry Object
-            NewEntryDailyOperationSizingCommand request = new NewEntryDailyOperationSizingCommand
+            NewEntryDailyOperationReachingCommand request = new NewEntryDailyOperationReachingCommand
             {
                 MachineDocumentId = machineDocumentId,
                 WeavingUnitId = weavingUnitId,
                 ConstructionDocumentId = constructionDocumentId,
-                BeamsWarping = beamsWarping,
-                Details = newEntryDetail,
-                NeReal = 2,
-                RecipeCode = "PCA 133R",
-                YarnStrands = 63
+                SizingBeamId = sizingBeamId,
+                OperatorDocumentId = operatorId,
+                PISPieces = pisPieces,
+                PreparationDate = preparationDate,
+                PreparationTime = preparationTime,
+                ShiftDocumentId = shiftId
             };
 
             //Set Cancellation Token
@@ -88,7 +92,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             //---ACT---//
             // Instantiate Command Handler
             var result =
-                await createAddNewDailyOperationSizingCommandHandler
+                await createAddNewDailyOperationReachingCommandHandler
                     .Handle(request, cancellationToken);
 
             //---ASSERT---//
