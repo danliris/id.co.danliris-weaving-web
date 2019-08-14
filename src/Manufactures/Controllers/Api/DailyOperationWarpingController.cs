@@ -271,12 +271,13 @@ namespace Manufactures.Controllers.Api
                     .FirstOrDefault();
 
             //Preparing Event
-            var addStockEvent = new AddBeamStockWarpingEvent();
+            var addStockEvent = new MoveInBeamStockWarpingEvent();
 
             //Manipulate datetime to be stocknumber
             var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
             StringBuilder stockNumber = new StringBuilder();
             stockNumber.Append(dateTimeNow.ToString("HH"));
+            stockNumber.Append("/");
             stockNumber.Append(dateTimeNow.ToString("mm"));
             stockNumber.Append("/");
             stockNumber.Append("stock-weaving");
@@ -288,7 +289,6 @@ namespace Manufactures.Controllers.Api
             addStockEvent.StockNumber =stockNumber.ToString();
             addStockEvent.DailyOperationId = new DailyOperationId(dailyOperationWarping.Identity);
             addStockEvent.DateTimeOperation = dateTimeNow;
-            addStockEvent.Length = latestBeamProduct.Length.Value;
 
             //Update stock
             await Mediator.Publish(addStockEvent);
