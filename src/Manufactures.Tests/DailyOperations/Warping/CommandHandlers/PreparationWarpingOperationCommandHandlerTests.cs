@@ -70,7 +70,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 AmountOfCones = 10,
                 ColourOfCone = "Red",
                 DateOperation = DateTimeOffset.UtcNow,
-                TimeOperation = "01:00",
+                TimeOperation = TimeSpan.Parse("01:00"),
                 OperatorId = operatorId
             };
 

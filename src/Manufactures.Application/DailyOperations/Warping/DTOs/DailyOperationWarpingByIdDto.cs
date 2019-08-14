@@ -16,11 +16,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
         {
-            foreach(var product in document.DailyOperationWarpingBeamProducts)
-            {
-                var beamProduct = new DailyOperationBeamProduct(product);
-                DailyOperationBeamProducts.Add(beamProduct);
-            }
+            DailyOperationBeamProducts = new List<DailyOperationBeamProduct>();
+            DailyOperationLoomHistories = new List<DailyOperationLoomHistoryDto>();
         }
 
         public void AddDailyOperationBeamProducts(DailyOperationBeamProduct value)
@@ -31,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             }
         }
 
-        public void SetDailyOperationLoomHistories(DailyOperationLoomHistoryDto value)
+        public void AddDailyOperationLoomHistories(DailyOperationLoomHistoryDto value)
         {
             DailyOperationLoomHistories.Add(value);
         }

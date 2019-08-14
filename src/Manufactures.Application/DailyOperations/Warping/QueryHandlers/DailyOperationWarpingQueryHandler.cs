@@ -58,6 +58,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             foreach (var operation in dailyOperationWarpingDocuments)
             {
+                //initiate Operation Result
+                var operationResult = new DailyOperationWarpingListDto(operation);
+
                 //Get Contruction Number
                 await Task.Yield();
                 var constructionNumber =
@@ -66,27 +69,36 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .Equals(operation.ConstructionId.Value))
                         .FirstOrDefault()
                         .ConstructionNumber ?? "Not Found Construction Number";
+                
+                //add construction number
+                operationResult.SetConstructionNumber(constructionNumber);
+
                 //Get Latest BeamId
                 await Task.Yield();
-                var latestBeamId =
+                var latestBeam =
                     operation
                         .DailyOperationWarpingBeamProducts
                         .OrderByDescending(datetime => datetime.CreatedDate)
-                        .FirstOrDefault()
-                        .BeamId;
-                //Get Beam Number
-                await Task.Yield();
-                var beamNumber =
-                    _beamRepository
-                        .Find(entity => entity.Identity.Equals(latestBeamId))
-                        .FirstOrDefault()
-                        .Number ?? "Not Found Beam Number";
+                        .FirstOrDefault();
 
-                var operationResult = new DailyOperationWarpingListDto(operation);
+                //Check if has latest beamId
+                if (latestBeam != null)
+                {
+                    //Get Beam Number
+                    await Task.Yield();
+                    var beamNumber =
+                        _beamRepository
+                            .Find(entity => entity.Identity.Equals(latestBeam.BeamId))
+                            .FirstOrDefault()
+                            .Number ?? "Not Found Beam Number";
 
-                operationResult.SetConstructionNumber(constructionNumber);
-                operationResult.SetLatestBeamNumber(beamNumber);
 
+                    operationResult.SetLatestBeamNumber(beamNumber);
+                } else
+                {
+                    operationResult.SetLatestBeamNumber("no beam input, preparing state");
+                }
+               
                 result.Add(operationResult);
             }
 
@@ -95,6 +107,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public async Task<DailyOperationWarpingListDto> GetById(Guid id)
         {
+            //Prepare daily operation warping
             var query =
                 _dailyOperationWarpingRepository
                     .Query
@@ -102,6 +115,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .Include(o => o.DailyOperationWarpingDetailHistory)
                     .OrderByDescending(x => x.CreatedDate);
 
+            //Request from query
             await Task.Yield();
             var dailyOperationWarpingDocument =
                    _dailyOperationWarpingRepository
@@ -111,9 +125,19 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
 
+            // Add Beam Product to DTO
+            foreach(var beamProduct  in dailyOperationWarpingDocument.DailyOperationWarpingBeamProducts)
+            {
+                var beamWarping = new DailyOperationBeamProduct(beamProduct);
+
+                await Task.Yield();
+                result.AddDailyOperationBeamProducts(beamWarping);
+            }
+
+            //Add History to DTO
             foreach(var history in dailyOperationWarpingDocument.DailyOperationWarpingDetailHistory)
             {
-                var beamNumber = history.BeamNumber;
+                var beamNumber = history.BeamNumber ?? "no beam input, preparing state";
 
                 await Task.Yield();
                 var operatorBeam = 
@@ -136,9 +160,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                                      shift.Name);
 
                 await Task.Yield();
-                result.SetDailyOperationLoomHistories(dailyHistory);
+                result.AddDailyOperationLoomHistories(dailyHistory);
             }
 
+            //return as DailyOperationWarpingListDto
             return result;
         }
     }

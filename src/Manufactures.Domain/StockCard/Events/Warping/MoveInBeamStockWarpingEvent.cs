@@ -4,22 +4,18 @@ using Manufactures.Domain.Shared.ValueObjects;
 
 namespace Manufactures.Domain.StockCard.Events.Warping
 {
-    public class AddBeamStockWarpingEvent : AddBeamStockEvent
+    public class MoveInBeamStockWarpingEvent : BeamStockEvent
     {
-        public double?  Length { get; set; }
-
-        public double? YarnStrands { get; set; }
     }
-
     public class AddBeamStockWarpingEventValidator
-        : AbstractValidator<AddBeamStockWarpingEvent>
+       : AbstractValidator<MoveInBeamStockWarpingEvent>
     {
         public AddBeamStockWarpingEventValidator()
         {
             RuleFor(command => command.StockNumber).NotEmpty();
             RuleFor(command => command.DailyOperationId.Value).NotEmpty();
-            RuleFor(command => command.DateTimeOperation).NotNull();
             RuleFor(command => command.BeamId.Value).NotEmpty();
+            RuleFor(command => command.DateTimeOperation).NotNull();
         }
     }
 }
