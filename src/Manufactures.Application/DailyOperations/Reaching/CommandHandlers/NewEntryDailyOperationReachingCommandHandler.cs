@@ -36,12 +36,12 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                                                    request.PISPieces,
                                                    OperationStatus.ONPROCESS);
 
-            var year = request.PreparationDate.Year;
-            var month = request.PreparationDate.Month;
-            var day = request.PreparationDate.Day;
-            var hour = request.PreparationTime.Hours;
-            var minutes = request.PreparationTime.Minutes;
-            var seconds = request.PreparationTime.Seconds;
+            var year = request.EntryDate.Year;
+            var month = request.EntryDate.Month;
+            var day = request.EntryDate.Day;
+            var hour = request.EntryTime.Hours;
+            var minutes = request.EntryTime.Minutes;
+            var seconds = request.EntryTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 

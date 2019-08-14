@@ -61,8 +61,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var sizingBeamId = new BeamId(Guid.NewGuid());
             var pisPieces = 20;
             var operatorId = new OperatorId(Guid.NewGuid());
-            DateTimeOffset preparationDate = DateTimeOffset.UtcNow;
-            var preparationTime = new TimeSpan(7);
+            DateTimeOffset entryDate = DateTimeOffset.UtcNow;
+            var entryTime = new TimeSpan(7);
             var shiftId = new ShiftId(Guid.NewGuid());
             //var newEntryDetail = new NewEntryDailyOperationSizingDetailCommand
             //{
@@ -81,8 +81,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
                 SizingBeamId = sizingBeamId,
                 OperatorDocumentId = operatorId,
                 PISPieces = pisPieces,
-                PreparationDate = preparationDate,
-                PreparationTime = preparationTime,
+                EntryDate = entryDate,
+                EntryTime = entryTime,
                 ShiftDocumentId = shiftId
             };
 

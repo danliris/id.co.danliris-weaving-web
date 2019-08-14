@@ -28,11 +28,11 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationDate")]
-        public DateTimeOffset PreparationDate { get; set; }
+        [JsonProperty(PropertyName = "EntryDate")]
+        public DateTimeOffset EntryDate { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationTime")]
-        public TimeSpan PreparationTime { get; set; }
+        [JsonProperty(PropertyName = "EntryTime")]
+        public TimeSpan EntryTime { get; set; }
 
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
@@ -48,8 +48,8 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
             RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
             RuleFor(validator => validator.PISPieces).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.PreparationDate).NotEmpty();
-            RuleFor(validator => validator.PreparationTime).NotEmpty();
+            RuleFor(validator => validator.EntryDate).NotEmpty();
+            RuleFor(validator => validator.EntryTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
         }
     }

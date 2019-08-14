@@ -8,6 +8,8 @@ using FluentScheduler;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Manufactures.Application.Beams.QueryHandlers;
+using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Reaching.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
 using Manufactures.Application.Operators.DTOs;
@@ -15,6 +17,7 @@ using Manufactures.Application.Operators.QueryHandlers;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Application.Shifts.QueryHandlers;
 using Manufactures.Domain.Beams.Queries;
+using Manufactures.Domain.DailyOperations.Reaching.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
@@ -80,6 +83,7 @@ namespace DanLiris.Admin.Web
             });
 
             //Add query service config
+            services.AddTransient<IReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
             services.AddTransient<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();
