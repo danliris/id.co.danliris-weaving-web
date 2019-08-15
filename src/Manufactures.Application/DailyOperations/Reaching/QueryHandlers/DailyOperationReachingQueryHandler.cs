@@ -112,42 +112,53 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                     .Include(o => o.ReachingDetails)
                     .OrderByDescending(x => x.CreatedDate);
 
+            //Get Daily Operation Reaching Document
             await Task.Yield();
             var dailyOperationReachingDocument =
                    _dailyOperationReachingRepository
-                       .Find(query)
+                       .Find(x=>x.Identity.Equals(id))
                        .FirstOrDefault();
 
-            //Not complete for detail
-            var result = new DailyOperationReachingByIdDto(dailyOperationReachingDocument);
+            //Get Daily Operation Reaching Detail
+            await Task.Yield();
+            var dailyOperationReachingDetail = 
+                dailyOperationReachingDocument
+                    .ReachingDetails
+                    .OrderByDescending(e=>e.DateTimeMachine)
+                    .FirstOrDefault();
 
-            foreach (var history in dailyOperationReachingDocument.ReachingDetails)
-            {
-                var beamNumber = history.BeamNumber;
+            //Get Machine Number
+            await Task.Yield();
+            var machineNumber =
+                _machineRepository
+                    .Find(entity => entity.Identity
+                    .Equals(dailyOperationReachingDocument.MachineDocumentId.Value))
+                    .FirstOrDefault()
+                    .MachineNumber ?? "Not Found Machine Number";
 
-                await Task.Yield();
-                var operatorBeam =
-                    _operatorRepository
-                        .Find(entity => entity.Identity.Equals(history.BeamOperatorId))
-                        .FirstOrDefault();
+            //Get Unit
+            await Task.Yield();
+            var weavingUnitId = dailyOperationReachingDocument.WeavingUnitId;
 
-                await Task.Yield();
-                var shift =
-                    _shiftRepository
-                        .Find(entity => entity.Identity.Equals(history.ShiftId))
-                        .FirstOrDefault();
-                var dailyHistory =
-                    new DailyOperationLoomHistoryDto(history.Identity,
-                                                     beamNumber,
-                                                     operatorBeam.CoreAccount.Name,
-                                                     operatorBeam.Group,
-                                                     history.DateTimeOperation,
-                                                     history.OperationStatus,
-                                                     shift.Name);
+            //Get Contruction Number
+            await Task.Yield();
+            var constructionNumber =
+                _fabricConstructionRepository
+                    .Find(entity => entity.Identity
+                    .Equals(dailyOperationReachingDocument.ConstructionDocumentId.Value))
+                    .FirstOrDefault()
+                    .ConstructionNumber ?? "Not Found Construction Number";
 
-                await Task.Yield();
-                result.SetDailyOperationLoomHistories(dailyHistory);
-            }
+            //Get Sizing Beam Number
+            await Task.Yield();
+            var sizingBeamNumber =
+                _beamRepository
+                    .Find(entity => entity.Identity.Equals(dailyOperationReachingDocument.SizingBeamId))
+                    .FirstOrDefault()
+                    .Number ?? "Not Found Sizing Beam Number";
+
+            //Assign Parameter to Object Result
+            var result = new DailyOperationReachingByIdDto(dailyOperationReachingDocument, dailyOperationReachingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber);
 
             return result;
         }
