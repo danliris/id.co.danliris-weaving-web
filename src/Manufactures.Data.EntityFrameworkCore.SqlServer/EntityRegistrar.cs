@@ -25,6 +25,8 @@ using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
+using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -32,6 +34,28 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DailyOperationReachingDetail>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationReachingDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationReachingReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationReachingDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.ReachingDetails)
+                    .WithOne(e => e.DailyOperationReachingDocument)
+                    .HasForeignKey(e => e.DailyOperationReachingDocumentId);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<StockCardReadModel>(etb =>
             {
                 etb.ToTable("Weaving_StockCardDocuments");

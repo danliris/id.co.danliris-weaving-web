@@ -6,12 +6,8 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
-using Manufactures.Domain.Movements;
 using Manufactures.Domain.Movements.Repositories;
-using Manufactures.Domain.Shared.ValueObjects;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 

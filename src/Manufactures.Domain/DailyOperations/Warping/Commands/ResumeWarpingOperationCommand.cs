@@ -15,11 +15,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "BeamId")]
         public BeamId BeamId { get; set; }
 
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
+
         [JsonProperty(PropertyName = "DateOperation")]
         public DateTimeOffset DateOperation { get; set; }
 
         [JsonProperty(PropertyName = "TimeOperation")]
-        public String TimeOperation { get; set; }
+        public TimeSpan TimeOperation { get; set; }
 
         [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; set; }
@@ -32,6 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         {
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.BeamId.Value).NotEmpty();
+            RuleFor(command => command.ShiftId.Value).NotEmpty();
             RuleFor(command => command.DateOperation).NotEmpty();
             RuleFor(command => command.TimeOperation).NotEmpty();
             RuleFor(command => command.OperatorId.Value).NotEmpty();

@@ -33,9 +33,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             var query = _dailyOperationSizingDocumentRepository.Query
                                                                .Include(d => d.SizingDetails)
-                                                               .Where(detail => detail.Identity.Equals(request.Id))
                                                                .Include(b => b.SizingBeamDocuments)
-                                                               .Where(beamDocument => beamDocument.Identity.Equals(request.Id));
+                                                               .Where(sizingDoc => sizingDoc.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
             var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
             var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
@@ -107,7 +106,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                       lastBeamDocument.SPU,
                                                                                       BeamStatus.ONPROCESS);
 
-                        existingDailyOperation.UpdateSizingBeamDocuments(updateBeamDocument);
+                        existingDailyOperation.UpdateDailyOperationSizingBeamDocument(updateBeamDocument);
 
                         var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
 

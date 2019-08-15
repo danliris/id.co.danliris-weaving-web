@@ -9,13 +9,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ValueObjects
 {
     public class DailyOperationSizingCauseValueObject : ValueObject
     {
-        public DailyOperationSizingCauseValueObject()
-        {
-
-        }
         public string BrokenBeam { get; set; }
         
         public string MachineTroubled { get; set; }
+
+        public DailyOperationSizingCauseValueObject()
+        {
+        }
 
         public DailyOperationSizingCauseValueObject(string brokenBeam, string machineTroubled)
         {

@@ -10,8 +10,11 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
+using Manufactures.Domain.StockCard.Events.Sizing;
+using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Dtos;
 using Manufactures.Dtos.Beams;
 using Manufactures.Dtos.DailyOperations.Sizing;
@@ -28,6 +31,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -305,6 +309,38 @@ namespace Manufactures.Controllers.Api
             command.SetId(documentId);
             var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
 
+            //Preparing Event
+            var moveOutWarpingBeam = new MoveOutBeamStockWarpingEvent();
+
+            //Initiate beam stock
+            var moveOutWarpingBeamIds = 
+                updateStartDailyOperationSizingDocument.BeamsWarping;
+
+            foreach(var beam in moveOutWarpingBeamIds)
+            {
+                //Manipulate datetime to be stocknumber
+
+                //wait 2 seconds
+                await Task.Delay(2000);
+                var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
+                StringBuilder stockNumber = new StringBuilder();
+
+                stockNumber.Append(dateTimeNow.ToString("HH"));
+                stockNumber.Append("/");
+                stockNumber.Append(dateTimeNow.ToString("mm"));
+                stockNumber.Append("/");
+                stockNumber.Append("stock-sizing");
+                stockNumber.Append("/");
+                stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
+                
+                moveOutWarpingBeam.StockNumber = stockNumber.ToString();
+                moveOutWarpingBeam.DailyOperationId = new DailyOperationId(updateStartDailyOperationSizingDocument.Identity);
+                moveOutWarpingBeam.DateTimeOperation = dateTimeNow;
+
+                //Update stock
+                await Mediator.Publish(moveOutWarpingBeam);
+            }
+
             return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
 
@@ -360,6 +396,34 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
+
+            //Preparing Event
+            var addStockEvent = new MoveInBeamStockSizingEvent();
+
+            //Manipulate datetime to be stocknumber
+            var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
+            StringBuilder stockNumber = new StringBuilder();
+            stockNumber.Append(dateTimeNow.ToString("HH"));
+            stockNumber.Append("/");
+            stockNumber.Append(dateTimeNow.ToString("mm"));
+            stockNumber.Append("/");
+            stockNumber.Append("stock-sizing");
+            stockNumber.Append("/");
+            stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
+
+            //Initiate events existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
+            addStockEvent.BeamId = 
+                new BeamId(reuseBeamsDailyOperationSizingDocument
+                    .SizingBeamDocuments
+                    .OrderByDescending(b => b.DateTimeBeamDocument)
+                    .FirstOrDefault()
+                    .SizingBeamId);
+            addStockEvent.StockNumber = stockNumber.ToString();
+            addStockEvent.DailyOperationId = new DailyOperationId(reuseBeamsDailyOperationSizingDocument.Identity);
+            addStockEvent.DateTimeOperation = dateTimeNow;
+
+            //Update stock
+            await Mediator.Publish(addStockEvent);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
@@ -807,30 +871,30 @@ namespace Manufactures.Controllers.Api
 
                 //if (resultData.Count != 0)
                 //{
-                    if (index.Equals(true))
-                    {
-                        byte[] xlsInBytes;
-                        string day = DateTime.Parse(date).Day.ToString();
-                        int month = DateTime.Parse(date).Month;
-                        string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
-                        string year = DateTime.Parse(date).Year.ToString();
-                        string dateOfReport = day + "-" + indonesianMonth + "-" + year;
+                if (index.Equals(true))
+                {
+                    byte[] xlsInBytes;
+                    string day = DateTime.Parse(date).Day.ToString();
+                    int month = DateTime.Parse(date).Month;
+                    string indonesianMonth = new CultureInfo("id-ID").DateTimeFormat.GetMonthName(month).ToString();
+                    string year = DateTime.Parse(date).Year.ToString();
+                    string dateOfReport = day + "-" + indonesianMonth + "-" + year;
 
-                        string fileName = "Laporan Size Pickup " + dateOfReport;
+                    string fileName = "Laporan Size Pickup " + dateOfReport;
 
-                        SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
-                        MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
-                        xlsInBytes = xls.ToArray();
-                        var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                        return xlsFile;
-                    }
-                    else
+                    SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+                    MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(resultData);
+                    xlsInBytes = xls.ToArray();
+                    var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    return xlsFile;
+                }
+                else
+                {
+                    return Ok(resultData, info: new
                     {
-                        return Ok(resultData, info: new
-                        {
-                            count = resultData.Count
-                        });
-                    }
+                        count = resultData.Count
+                    });
+                }
                 //}
                 //else
                 //{
@@ -882,7 +946,7 @@ namespace Manufactures.Controllers.Api
                     var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
                     var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
 
-                    var filteredSizingBeamDocuments = document.SizingBeamDocuments.Where(b => b.DateTimeBeamDocument.DateTime >= convertedStartDate&& b.DateTimeBeamDocument.DateTime <= convertedEndDate && b.SizingBeamStatus.Equals(BeamStatus.ROLLEDUP));
+                    var filteredSizingBeamDocuments = document.SizingBeamDocuments.Where(b => b.DateTimeBeamDocument.DateTime >= convertedStartDate && b.DateTimeBeamDocument.DateTime <= convertedEndDate && b.SizingBeamStatus.Equals(BeamStatus.ROLLEDUP));
 
                     if (filteredSizingBeamDocuments != null)
                     {

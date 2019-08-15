@@ -2,8 +2,15 @@
 {
     public class StockCardStatus
     {
-        // Stock status
-        public static string MOVEIN = "IN";
-        public static string MOVEOUT = "OUT";
+        // Stock Type
+        public static string WARPING_STOCK = "warping";
+        public static string SIZING_STOCK = "sizing";
+        public static string LOOM_STOCK = "loom";
+        public static string REACHING_STOCK = "reaching";
+        public static string TYING_STOCK = "tying";
+
+        // Stock Status
+        public static string MOVEIN_STOCK = "move-in";
+        public static string MOVEOUT_STOCK = "move-out";
     }
 }

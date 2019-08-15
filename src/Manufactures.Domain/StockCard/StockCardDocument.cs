@@ -15,44 +15,57 @@ namespace Manufactures.Domain.StockCard
 
         public BeamId BeamId { get; private set; }
 
-        public double Length { get; private set; }
-
-        public double YarnStrands { get; private set; }
-
-        public bool IsAvailable { get; private set; }
+        public bool IsEmpty { get; private set; }
 
         public bool MoveIn { get; private set; }
 
         public bool MoveOut { get; private set; }
+
+        public bool IsReaching { get; internal set; }
+
+        public bool IsTying { get; internal set; }
+
+        public string StockType { get; private set; }
+
+        public string StockStatus { get; private set; }
+
+        public bool Expired { get; internal set; }
 
         public StockCardDocument(Guid id,
                                  string stockNumber,
                                  DailyOperationId dailyOperationId,
                                  DateTimeOffset dateTimeOperation,
                                  BeamId beamId,
-                                 double length,
-                                 double yarnStrands,
                                  bool isMoveIn,
-                                 bool isMoveOut) : base(id)
+                                 bool isMoveOut,
+                                 string stockType,
+                                 string stockStatus) : base(id)
         {
             Identity = id;
             StockNumber = stockNumber;
             DailyOperationId = dailyOperationId;
             DateTimeOperation = dateTimeOperation;
             BeamId = beamId;
-            Length = length;
-            YarnStrands = yarnStrands;
             MoveIn = isMoveIn;
             MoveOut = isMoveOut;
+            StockType = stockType;
+            StockStatus = stockStatus;
 
-            //Cek Status of available of stock
+            //Default Value is false, to make beam stock generic
+            IsReaching = false;
+            IsTying = false;
+            Expired = false;
+
+            //Update status of stock when move in
             if (MoveIn)
             {
-                IsAvailable = true;
+                IsEmpty = false;
             }
-            else if (MoveOut)
+
+            //Update status of stock when move out
+            if (MoveOut)
             {
-                IsAvailable = false;
+                IsEmpty = true;
             }
 
             MarkTransient();
@@ -63,9 +76,12 @@ namespace Manufactures.Domain.StockCard
                 DailyOperationId = DailyOperationId.Value,
                 BeamId = BeamId.Value,
                 DateTimeOperation = DateTimeOperation,
-                Length = Length,
-                YarnStrands = YarnStrands,
-                IsAvailable = IsAvailable
+                IsAvailable = IsEmpty,
+                StockType = StockType,
+                IsReaching = IsReaching,
+                IsTying = IsTying,
+                StockStatus = StockStatus,
+                Expired = Expired
             };
         }
 
@@ -75,37 +91,56 @@ namespace Manufactures.Domain.StockCard
             StockNumber = readModel.StockNumber;
             DateTimeOperation = readModel.DateTimeOperation;
             BeamId = new BeamId(readModel.BeamId);
-            Length = readModel.Length ?? 0;
-            YarnStrands = readModel.YarnStrands ?? 0;
+            StockType = readModel.StockType;
+            Expired = readModel.Expired;
+            StockStatus = readModel.StockStatus;
 
             //Cek Status of available of stock
             if (readModel.IsAvailable)
             {
                 MoveIn = true;
                 MoveOut = false;
+                IsEmpty = false;
             }
             else
             {
                 MoveIn = false;
                 MoveOut = true;
+                IsEmpty = true;
             }
         }
 
-        public void UpdateAvailability(bool moveIn, bool moveOut)
+        public void UpdateExpired(bool value)
         {
-            //Cek Status of available of stock
-            if (MoveIn)
+            if (Expired != value)
             {
-                IsAvailable = true;
+                Expired = value;
+                ReadModel.Expired = Expired;
+
+                MarkModified();
             }
-            else if (MoveOut)
+        }
+
+        public void UpdateIsReaching(bool value)
+        {
+            if (IsReaching != value)
             {
-                IsAvailable = false;
+                IsReaching = value;
+                ReadModel.IsReaching = IsReaching;
+
+                MarkModified();
             }
+        }
 
-            ReadModel.IsAvailable = IsAvailable;
+        public void UpdateIsTying(bool value)
+        {
+            if (IsTying != value)
+            {
+                IsTying = value;
+                ReadModel.IsTying = IsTying;
 
-            MarkModified();
+                MarkModified();
+            }
         }
 
         protected override StockCardDocument GetEntity()

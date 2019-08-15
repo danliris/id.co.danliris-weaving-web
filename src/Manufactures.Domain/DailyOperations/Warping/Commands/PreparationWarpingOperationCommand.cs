@@ -15,6 +15,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "MaterialTypeId")]
         public MaterialTypeId MaterialTypeId { get; set; }
 
+        [JsonProperty(PropertyName = "ShiftId")]
+        public ShiftId ShiftId { get; set; }
+
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; set; }
 
@@ -25,7 +28,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public DateTimeOffset DateOperation { get; set; }
 
         [JsonProperty(PropertyName = "TimeOperation")]
-        public String TimeOperation { get; set; }
+        public TimeSpan TimeOperation { get; set; }
 
         [JsonProperty(PropertyName = "OperatorId")]
         public OperatorId OperatorId { get; set; }
@@ -38,6 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         {
             RuleFor(command => command.ConstructionId.Value).NotEmpty();
             RuleFor(command => command.MaterialTypeId.Value).NotEmpty();
+            RuleFor(command => command.ShiftId.Value).NotEmpty();
             RuleFor(command => command.AmountOfCones).NotEmpty();
             RuleFor(command => command.ColourOfCone).NotEmpty();
             RuleFor(command => command.DateOperation).NotEmpty();

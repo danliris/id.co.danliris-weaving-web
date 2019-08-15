@@ -90,7 +90,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void UpdateSizingDetail(DailyOperationSizingDetail detail)
+        public void UpdateDailyOperationSizingDetail(DailyOperationSizingDetail detail)
         {
             var sizingDetails = SizingDetails.ToList();
 
@@ -140,7 +140,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void UpdateSizingBeamDocuments(DailyOperationSizingBeamDocument beamDocument)
+        public void UpdateDailyOperationSizingBeamDocument(DailyOperationSizingBeamDocument beamDocument)
         {
             var sizingBeamDocuments = SizingBeamDocuments.ToList();
 
