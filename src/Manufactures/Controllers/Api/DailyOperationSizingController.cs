@@ -14,6 +14,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
 using Manufactures.Domain.StockCard.Events.Sizing;
+using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Dtos;
 using Manufactures.Dtos.Beams;
 using Manufactures.Dtos.DailyOperations.Sizing;
@@ -307,6 +308,38 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
+
+            //Preparing Event
+            var moveOutWarpingBeam = new MoveOutBeamStockWarpingEvent();
+
+            //Initiate beam stock
+            var moveOutWarpingBeamIds = 
+                updateStartDailyOperationSizingDocument.BeamsWarping;
+
+            foreach(var beam in moveOutWarpingBeamIds)
+            {
+                //Manipulate datetime to be stocknumber
+
+                //wait 2 seconds
+                await Task.Delay(2000);
+                var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
+                StringBuilder stockNumber = new StringBuilder();
+
+                stockNumber.Append(dateTimeNow.ToString("HH"));
+                stockNumber.Append("/");
+                stockNumber.Append(dateTimeNow.ToString("mm"));
+                stockNumber.Append("/");
+                stockNumber.Append("stock-sizing");
+                stockNumber.Append("/");
+                stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
+                
+                moveOutWarpingBeam.StockNumber = stockNumber.ToString();
+                moveOutWarpingBeam.DailyOperationId = new DailyOperationId(updateStartDailyOperationSizingDocument.Identity);
+                moveOutWarpingBeam.DateTimeOperation = dateTimeNow;
+
+                //Update stock
+                await Mediator.Publish(moveOutWarpingBeam);
+            }
 
             return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
