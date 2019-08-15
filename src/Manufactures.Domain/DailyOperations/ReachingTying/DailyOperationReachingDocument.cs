@@ -20,7 +20,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
         public string ReachingType { get; private set; }
         public double ReachingWidth { get; private set; }
         public string OperationStatus { get; private set; }
-        public List<DailyOperationReachingDetail> ReachingDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationReachingDetail> ReachingDetails { get; private set; }
 
         public DailyOperationReachingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingReachingTypeValueObject reachingType, double reachingWidth, string operationStatus) : base(id)
         {
@@ -33,6 +33,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             ReachingType = reachingType.Serialize();
             ReachingWidth = reachingWidth;
             OperationStatus = operationStatus;
+            ReachingDetails = new List<DailyOperationReachingDetail>();
 
             this.MarkTransient();
 
@@ -45,7 +46,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
                 PISPieces = PISPieces,
                 ReachingType = ReachingType,
                 ReachingWidth = ReachingWidth,
-                OperationStatus = OperationStatus,
+                OperationStatus = OperationStatus
             };
         }
 
@@ -58,6 +59,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             OperationStatus = operationStatus;
+            ReachingDetails = new List<DailyOperationReachingDetail>();
 
             this.MarkTransient();
 
@@ -82,6 +84,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             ReachingType = readModel.ReachingType;
             ReachingWidth = readModel.ReachingWidth;
             OperationStatus = readModel.OperationStatus;
+            ReachingDetails = readModel.ReachingDetails;
         }
 
         public void AddDailyOperationReachingDetail(DailyOperationReachingDetail reachingDetail)
