@@ -2,6 +2,7 @@
 using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.DailyOperations.Reaching.ValueObjects;
+using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
@@ -10,19 +11,19 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching
 {
-    public class DailyOperationReachingDocument : AggregateRoot<DailyOperationReachingDocument, DailyOperationReachingReadModel>
+    public class DailyOperationReachingTyingDocument : AggregateRoot<DailyOperationReachingTyingDocument, DailyOperationReachingTyingReadModel>
     {
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
         public BeamId SizingBeamId { get; private set; }
         public double PISPieces { get; private set; }
-        public string ReachingType { get; private set; }
-        public double ReachingWidth { get; private set; }
+        public string ReachingValueObjects { get; private set; }
+        public string TyingValueObjects { get; private set; }
         public string OperationStatus { get; private set; }
-        public IReadOnlyCollection<DailyOperationReachingDetail> ReachingDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationReachingTyingDetail> ReachingDetails { get; private set; }
 
-        public DailyOperationReachingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingReachingTypeValueObject reachingType, double reachingWidth, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, DailyOperationTyingValueObject tyingValueObjects, double reachingWidth, string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -30,27 +31,53 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             ConstructionDocumentId = constructionDocumentId;
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
-            ReachingType = reachingType.Serialize();
-            ReachingWidth = reachingWidth;
+            ReachingValueObjects = reachingValueObjects.Serialize();
+            TyingValueObjects = tyingValueObjects.Serialize();
             OperationStatus = operationStatus;
-            ReachingDetails = new List<DailyOperationReachingDetail>();
+            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationReachingReadModel(Identity)
+            ReadModel = new DailyOperationReachingTyingReadModel(Identity)
             {
                 MachineDocumentId = MachineDocumentId.Value,
                 WeavingUnitId = WeavingUnitId.Value,
                 ConstructionDocumentId = ConstructionDocumentId.Value,
                 SizingBeamId = SizingBeamId.Value,
                 PISPieces = PISPieces,
-                ReachingType = ReachingType,
-                ReachingWidth = ReachingWidth,
+                ReachingValueObjects = ReachingValueObjects,
+                TyingValueObjects = TyingValueObjects,
                 OperationStatus = OperationStatus
             };
         }
 
-        public DailyOperationReachingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, string operationStatus) : base(id)
+        {
+            Identity = id;
+            MachineDocumentId = machineDocumentId;
+            WeavingUnitId = weavingUnitId;
+            ConstructionDocumentId = constructionDocumentId;
+            SizingBeamId = sizingBeamId;
+            PISPieces = pisPieces;
+            ReachingValueObjects = reachingValueObjects.Serialize();
+            OperationStatus = operationStatus;
+            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
+
+            this.MarkTransient();
+
+            ReadModel = new DailyOperationReachingTyingReadModel(Identity)
+            {
+                MachineDocumentId = MachineDocumentId.Value,
+                WeavingUnitId = WeavingUnitId.Value,
+                ConstructionDocumentId = ConstructionDocumentId.Value,
+                SizingBeamId = SizingBeamId.Value,
+                PISPieces = PISPieces,
+                ReachingValueObjects = ReachingValueObjects,
+                OperationStatus = OperationStatus,
+            };
+        }
+
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -59,11 +86,11 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             OperationStatus = operationStatus;
-            ReachingDetails = new List<DailyOperationReachingDetail>();
+            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationReachingReadModel(Identity)
+            ReadModel = new DailyOperationReachingTyingReadModel(Identity)
             {
                 MachineDocumentId = MachineDocumentId.Value,
                 WeavingUnitId = WeavingUnitId.Value,
@@ -74,30 +101,30 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             };
         }
 
-        public DailyOperationReachingDocument(DailyOperationReachingReadModel readModel) : base(readModel)
+        public DailyOperationReachingTyingDocument(DailyOperationReachingTyingReadModel readModel) : base(readModel)
         {
             MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
             SizingBeamId = readModel.SizingBeamId.HasValue ? new BeamId(readModel.SizingBeamId.Value) : null;
             PISPieces = readModel.PISPieces;
-            ReachingType = readModel.ReachingType;
-            ReachingWidth = readModel.ReachingWidth;
+            ReachingValueObjects = readModel.ReachingValueObjects;
+            TyingValueObjects = readModel.TyingValueObjects;
             OperationStatus = readModel.OperationStatus;
-            ReachingDetails = readModel.ReachingDetails;
+            ReachingDetails = readModel.ReachingTyingDetails;
         }
 
-        public void AddDailyOperationReachingDetail(DailyOperationReachingDetail reachingDetail)
+        public void AddDailyOperationReachingDetail(DailyOperationReachingTyingDetail reachingDetail)
         {
             var list = ReachingDetails.ToList();
             list.Add(reachingDetail);
             ReachingDetails = list;
-            ReadModel.ReachingDetails = ReachingDetails.ToList();
+            ReadModel.ReachingTyingDetails = ReachingDetails.ToList();
 
             MarkModified();
         }
 
-        public void UpdateDailyOperationReachingDetail(DailyOperationReachingDetail detail)
+        public void UpdateDailyOperationReachingDetail(DailyOperationReachingTyingDetail detail)
         {
             var reachingDetails = ReachingDetails.ToList();
 
@@ -118,7 +145,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
 
             reachingDetails[index] = reachingDetail;
             ReachingDetails = reachingDetails;
-            ReadModel.ReachingDetails = reachingDetails;
+            ReadModel.ReachingTyingDetails = reachingDetails;
             MarkModified();
         }
 
@@ -129,7 +156,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
 
             list.Remove(detail);
             ReachingDetails = list;
-            ReadModel.ReachingDetails = ReachingDetails.ToList();
+            ReadModel.ReachingTyingDetails = ReachingDetails.ToList();
 
             MarkModified();
         }
@@ -141,16 +168,15 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             MarkModified();
         }
 
-        public void SetReachingType(DailyOperationReachingReachingTypeValueObject reachingType)
+        public void SetReachingValueObjects(DailyOperationReachingValueObject reachingValueObjects)
         {
-            ReachingType = reachingType.Serialize();
+            ReachingValueObjects = reachingValueObjects.Serialize();
             MarkModified();
         }
 
-        public void SetReachingWidth(double reachingWidth)
+        public void SetTyingValueObjects(DailyOperationTyingValueObject tyingValueObjects)
         {
-            ReachingWidth = reachingWidth;
-            ReadModel.ReachingWidth = reachingWidth;
+            TyingValueObjects = tyingValueObjects.Serialize();
             MarkModified();
         }
 
@@ -161,7 +187,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             MarkModified();
         }
 
-        protected override DailyOperationReachingDocument GetEntity()
+        protected override DailyOperationReachingTyingDocument GetEntity()
         {
             return this;
         }

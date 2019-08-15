@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 {
-    //public class UpdateStartDailyOperationReachingCommandHandler : ICommandHandler<UpdateStartDailyOperationReachingCommand, DailyOperationReachingDocument>
+    //public class UpdateStartDailyOperationReachingCommandHandler : ICommandHandler<UpdateStartDailyOperationReachingCommand, DailyOperationReachingTyingDocument>
     //{
     //    private readonly IStorage _storage;
     //    private readonly IDailyOperationReachingRepository
@@ -26,13 +26,13 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
     //            _storage.GetRepository<IDailyOperationReachingRepository>();
     //    }
 
-    //    public Task<DailyOperationReachingDocument> Handle(UpdateStartDailyOperationReachingCommand request, CancellationToken cancellationToken)
+    //    public Task<DailyOperationReachingTyingDocument> Handle(UpdateStartDailyOperationReachingCommand request, CancellationToken cancellationToken)
     //    {
     //        var existingDailyOperationReaching = _dailyOperationReachingDocumentRepository.Query
-    //                                                                              .Include(d => d.ReachingDetails)
+    //                                                                              .Include(d => d.ReachingTyingDetails)
     //                                                                              .Where(reachingDoc => reachingDoc.Identity.Equals(request.Id))
     //                                                                              .FirstOrDefault();
-    //        var existingReachingDetail = existingDailyOperationReaching.ReachingDetails.OrderByDescending(d => d.DateTimeMachine);
+    //        var existingReachingDetail = existingDailyOperationReaching.ReachingTyingDetails.OrderByDescending(d => d.DateTimeMachine);
     //        var lastReachingDetail = existingReachingDetail.FirstOrDefault();
     //    }
     //}

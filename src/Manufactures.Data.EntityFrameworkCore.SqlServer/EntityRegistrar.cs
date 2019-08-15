@@ -34,23 +34,23 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DailyOperationReachingDetail>(etb =>
+            modelBuilder.Entity<DailyOperationReachingTyingDetail>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationReachingDetails");
+                etb.ToTable("Weaving_DailyOperationReachingTyingDetails");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationReachingReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationReachingTyingReadModel>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationReachingDocuments");
+                etb.ToTable("Weaving_DailyOperationReachingTyingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.ReachingDetails)
-                    .WithOne(e => e.DailyOperationReachingDocument)
-                    .HasForeignKey(e => e.DailyOperationReachingDocumentId);
+                etb.HasMany(e => e.ReachingTyingDetails)
+                    .WithOne(e => e.DailyOperationReachingTyingDocument)
+                    .HasForeignKey(e => e.DailyOperationReachingTyingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -83,7 +83,7 @@ namespace DanLiris.Admin.Web
             });
 
             //Add query service config
-            services.AddTransient<IReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
+            services.AddTransient<IReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();
             services.AddTransient<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();

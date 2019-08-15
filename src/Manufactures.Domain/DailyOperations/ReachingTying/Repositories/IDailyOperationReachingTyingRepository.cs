@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Repositories
 {
-    public interface IDailyOperationReachingRepository: IAggregateRepository<DailyOperationReachingDocument, DailyOperationReachingReadModel>
+    public interface IDailyOperationReachingTyingRepository: IAggregateRepository<DailyOperationReachingTyingDocument, DailyOperationReachingTyingReadModel>
     {
     }
 }

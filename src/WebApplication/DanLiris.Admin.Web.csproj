@@ -18,6 +18,10 @@
     <Compile Remove="Migrations\20190722105421_dev_warping_sizing_module.Designer.cs" />
     <Compile Remove="Migrations\20190729043451_dev_warping_sizing_module.cs" />
     <Compile Remove="Migrations\20190729043451_dev_warping_sizing_module.Designer.cs" />
+    <Compile Remove="Migrations\20190815102742_ChangeStructureOnDailyOperationReaching.cs" />
+    <Compile Remove="Migrations\20190815102742_ChangeStructureOnDailyOperationReaching.Designer.cs" />
+    <Compile Remove="Migrations\20190815102826_AddDailyOperationReachingTying.cs" />
+    <Compile Remove="Migrations\20190815102826_AddDailyOperationReachingTying.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IDailyOperationReachingRepository>
+        private readonly Mock<IDailyOperationReachingTyingRepository>
             mockDailyOperationReachingRepo;
 
         public NewEntryDailyOperationReachingCommandHandlerTest()
@@ -28,8 +28,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             mockStorage = mockRepository.Create<IStorage>();
             mockStorage.Setup(x => x.Save());
 
-            mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingRepository>();
-            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>())
+            mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingTyingRepository>();
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingTyingRepository>())
                 .Returns(mockDailyOperationReachingRepo.Object);
         }
 
@@ -38,10 +38,10 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             mockRepository.VerifyAll();
         }
 
-        private NewEntryDailyOperationReachingCommandHandler NewEntryDailyOperationReachingCommandHandler()
+        private NewEntryDailyOperationReachingTyingCommandHandler NewEntryDailyOperationReachingCommandHandler()
         {
             return
-                new NewEntryDailyOperationReachingCommandHandler(this.mockStorage.Object);
+                new NewEntryDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
         }
 
         /**
@@ -73,7 +73,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             //};
 
             //Create New Entry Object
-            NewEntryDailyOperationReachingCommand request = new NewEntryDailyOperationReachingCommand
+            NewEntryDailyOperationReachingTyingCommand request = new NewEntryDailyOperationReachingTyingCommand
             {
                 MachineDocumentId = machineDocumentId,
                 WeavingUnitId = weavingUnitId,

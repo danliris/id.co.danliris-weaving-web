@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Command
 {
-    public class UpdateStartDailyOperationReachingCommand : ICommand<DailyOperationReachingDocument>
+    public class UpdateStartDailyOperationReachingTyingCommand : ICommand<DailyOperationReachingTyingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
@@ -31,7 +31,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
     }
-    public class UpdateStartDailyOperationReachingCommandValidator : AbstractValidator<UpdateStartDailyOperationReachingCommand>
+    public class UpdateStartDailyOperationReachingCommandValidator : AbstractValidator<UpdateStartDailyOperationReachingTyingCommand>
     {
         public UpdateStartDailyOperationReachingCommandValidator()
         {

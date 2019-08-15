@@ -18,23 +18,23 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/daily-operations-reaching")]
+    [Route("weaving/daily-operations-reaching-tying")]
     [ApiController]
     [Authorize]
-    public class DailyOperationReachingController : ControllerApiBase
+    public class DailyOperationReachingTyingController : ControllerApiBase
     {
-        private readonly IReachingQuery<DailyOperationReachingListDto> _reachingQuery;
+        private readonly IReachingTyingQuery<DailyOperationReachingTyingListDto> _reachingTyingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         
         //Dependency Injection activated from constructor need IServiceProvider
-        public DailyOperationReachingController(IServiceProvider serviceProvider,
-                                                IReachingQuery<DailyOperationReachingListDto> reachingQuery,
+        public DailyOperationReachingTyingController(IServiceProvider serviceProvider,
+                                                IReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
                                                 IOperatorQuery<OperatorListDto> operatorQuery,
                                                 IShiftQuery<ShiftDto> shiftQuery)
             : base(serviceProvider)
         {
-            _reachingQuery = reachingQuery ?? throw new ArgumentNullException(nameof(reachingQuery));
+            _reachingTyingQuery = reachingTyingQuery ?? throw new ArgumentNullException(nameof(reachingTyingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
         }
@@ -46,14 +46,16 @@ namespace Manufactures.Controllers.Api
                                             string keyword = null,
                                             string filter = "{}")
         {
-            var dailyOperationReachingDocuments = await _reachingQuery.GetAll();
+            var dailyOperationReachingDocuments = await _reachingTyingQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 await Task.Yield();
                 dailyOperationReachingDocuments =
                     dailyOperationReachingDocuments
-                        .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                        .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.MachineNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.SizingBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -62,7 +64,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(DailyOperationReachingListDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(DailyOperationReachingTyingListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -86,7 +88,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]NewEntryDailyOperationReachingCommand command)
+        public async Task<IActionResult> Post([FromBody]NewEntryDailyOperationReachingTyingCommand command)
         {
             // Sending Command to Command Handler
             var dailyOperationReaching = await Mediator.Send(command);
