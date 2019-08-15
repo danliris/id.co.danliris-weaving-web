@@ -45,7 +45,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
         }
 
         [Fact]
-        public async Task MoveIn_Stock_Card_Should_Success()
+        public async Task MoveIn_Stock_Card_Sizing_Should_Success()
         {
             // Arrange
             var moveInBeamStockSizingEventHandler = this.CreateMoveInBeamStockSizingEventHandler();

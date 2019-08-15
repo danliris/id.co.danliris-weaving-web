@@ -47,7 +47,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
         }
 
         [Fact]
-        public async Task Handle_StateUnderTest_ExpectedBehavior()
+        public async Task MoveOut_Stock_Card_Sizing_Should_Success()
         {
             // Arrange
             var moveOutBeamStockSizingEventHandler = this.CreateMoveOutBeamStockSizingEventHandler();

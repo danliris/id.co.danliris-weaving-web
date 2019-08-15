@@ -45,7 +45,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
         }
 
         [Fact]
-        public async Task Handle_StateUnderTest_ExpectedBehavior()
+        public async Task MoveIn_Stock_Card_Warping_Should_Success()
         {
             // Arrange
             var moveInBeamStockWarpingEventHandler = this.CreateMoveInBeamStockWarpingEventHandler();
