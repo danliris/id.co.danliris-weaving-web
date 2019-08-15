@@ -22,18 +22,18 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
         public NewEntryDailyOperationSizingCommandHandlerTests()
         {
-            this.mockRepository = new MockRepository(MockBehavior.Default);
-            this.mockStorage = this.mockRepository.Create<IStorage>();
-            this.mockStorage.Setup(x => x.Save());
+            mockRepository = new MockRepository(MockBehavior.Default);
+            mockStorage = mockRepository.Create<IStorage>();
+            mockStorage.Setup(x => x.Save());
 
-            this.mockDailyOperationSizingRepo = this.mockRepository.Create<IDailyOperationSizingRepository>();
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingRepository>())
+            mockDailyOperationSizingRepo = mockRepository.Create<IDailyOperationSizingRepository>();
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingRepository>())
                 .Returns(mockDailyOperationSizingRepo.Object);
         }
 
         public void Dispose()
         {
-            this.mockRepository.VerifyAll();
+            mockRepository.VerifyAll();
         }
 
         private NewEntryDailyOperationSizingCommandHandler NewEntryDailyOperationSizingCommandHandler()
@@ -43,15 +43,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
         }
 
         /**
-         * Test for create new entry on daily operation sizing
+         * Test for Create New Entry on Daily Operation Sizing
          * **/
         [Fact]
         public async Task Handle_StateUnderTest_ExpectedBehavior()
         {
-            // Set new entry command handler object
+            //---ARRANGE---//
+            // Set New Entry Command Handler Object
             var createAddNewDailyOperationSizingCommandHandler = this.NewEntryDailyOperationSizingCommandHandler();
 
-            //Instantiate new Object
+            //Instantiate New Object
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(new int());
             var constructionDocumentId = new ConstructionId(Guid.NewGuid());
@@ -68,7 +69,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                 ShiftId = shiftId
             };
 
-            //Create new entry object
+            //Create New Entry Object
             NewEntryDailyOperationSizingCommand request = new NewEntryDailyOperationSizingCommand
             {
                 MachineDocumentId = machineDocumentId,
@@ -84,19 +85,15 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
 
-            // Instantiate command handler
+            //---ACT---//
+            // Instantiate Command Handler
             var result =
                 await createAddNewDailyOperationSizingCommandHandler
                     .Handle(request, cancellationToken);
 
-            //Check if object not null
+            //---ASSERT---//
             result.Should().NotBeNull();
-
-            //Check if has identity
             result.Identity.Should().NotBeEmpty();
-
-            //Check if has beam documents
-            //result.SizingBeamDocuments.Should().NotBeEmpty();
         }
     }
 }
