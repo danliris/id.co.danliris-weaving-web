@@ -60,6 +60,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var constructionId = new ConstructionId(Guid.NewGuid());
             var materialTypeId = new MaterialTypeId(Guid.NewGuid());
             var operatorId = new OperatorId(Guid.NewGuid());
+            var shiftId = new ShiftId(Guid.NewGuid());
 
             //Create new preparation object
             PreparationWarpingOperationCommand request = 
@@ -71,7 +72,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 ColourOfCone = "Red",
                 DateOperation = DateTimeOffset.UtcNow,
                 TimeOperation = TimeSpan.Parse("01:00"),
-                OperatorId = operatorId
+                OperatorId = operatorId,
+                ShiftId = shiftId
             };
 
             //Set Cancellation Token

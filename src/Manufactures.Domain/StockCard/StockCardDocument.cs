@@ -27,6 +27,8 @@ namespace Manufactures.Domain.StockCard
 
         public string StockType { get; private set; }
 
+        public string StockStatus { get; private set; }
+
         public bool Expired { get; internal set; }
 
         public StockCardDocument(Guid id,
@@ -36,7 +38,8 @@ namespace Manufactures.Domain.StockCard
                                  BeamId beamId,
                                  bool isMoveIn,
                                  bool isMoveOut,
-                                 string stockType) : base(id)
+                                 string stockType,
+                                 string stockStatus) : base(id)
         {
             Identity = id;
             StockNumber = stockNumber;
@@ -46,6 +49,7 @@ namespace Manufactures.Domain.StockCard
             MoveIn = isMoveIn;
             MoveOut = isMoveOut;
             StockType = stockType;
+            StockStatus = stockStatus;
 
             //Default Value is false, to make beam stock generic
             IsReaching = false;
@@ -72,10 +76,11 @@ namespace Manufactures.Domain.StockCard
                 DailyOperationId = DailyOperationId.Value,
                 BeamId = BeamId.Value,
                 DateTimeOperation = DateTimeOperation,
-                IsEmpty = IsEmpty,
+                IsAvailable = IsEmpty,
                 StockType = StockType,
                 IsReaching = IsReaching,
                 IsTying = IsTying,
+                StockStatus = StockStatus,
                 Expired = Expired
             };
         }
@@ -88,17 +93,20 @@ namespace Manufactures.Domain.StockCard
             BeamId = new BeamId(readModel.BeamId);
             StockType = readModel.StockType;
             Expired = readModel.Expired;
+            StockStatus = readModel.StockStatus;
 
             //Cek Status of available of stock
-            if (readModel.IsEmpty)
-            {
-                MoveIn = false;
-                MoveOut = true;
-            }
-            else
+            if (readModel.IsAvailable)
             {
                 MoveIn = true;
                 MoveOut = false;
+                IsEmpty = false;
+            }
+            else
+            {
+                MoveIn = false;
+                MoveOut = true;
+                IsEmpty = true;
             }
         }
 

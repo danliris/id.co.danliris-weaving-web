@@ -8,5 +8,9 @@
         public static string LOOM_STOCK = "loom";
         public static string REACHING_STOCK = "reaching";
         public static string TYING_STOCK = "tying";
+
+        // Stock Status
+        public static string MOVEIN_STOCK = "move-in";
+        public static string MOVEOUT_STOCK = "move-out";
     }
 }

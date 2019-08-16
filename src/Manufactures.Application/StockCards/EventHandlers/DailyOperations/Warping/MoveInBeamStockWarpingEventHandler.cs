@@ -30,9 +30,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
             var existingStockCard =
                 _stockCardRepository
                     .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.DailyOperationId.Equals(notification.DailyOperationId.Value) &&
                                     entity.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
-                                    entity.IsEmpty.Equals(false) &&
                                     entity.Expired.Equals(false))
                     .FirstOrDefault();
 
@@ -46,7 +44,8 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
                                       notification.BeamId,
                                       true,
                                       false,
-                                      StockCardStatus.WARPING_STOCK);
+                                      StockCardStatus.WARPING_STOCK,
+                                      StockCardStatus.MOVEIN_STOCK);
 
                 await _stockCardRepository.Update(newStockCard);
 
