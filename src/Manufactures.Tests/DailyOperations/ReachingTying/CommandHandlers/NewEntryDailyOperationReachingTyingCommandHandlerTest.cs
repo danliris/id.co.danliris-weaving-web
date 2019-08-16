@@ -15,14 +15,14 @@ using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
 {
-    public class NewEntryDailyOperationReachingCommandHandlerTest : IDisposable
+    public class NewEntryDailyOperationReachingTyingCommandHandlerTest : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingTyingRepository>
             mockDailyOperationReachingTyingRepo;
 
-        public NewEntryDailyOperationReachingCommandHandlerTest()
+        public NewEntryDailyOperationReachingTyingCommandHandlerTest()
         {
             mockRepository = new MockRepository(MockBehavior.Default);
             mockStorage = mockRepository.Create<IStorage>();

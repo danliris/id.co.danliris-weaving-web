@@ -17,6 +17,13 @@ namespace Manufactures.Domain.DailyOperations.Reaching.ValueObjects
         {
         }
 
+        public DailyOperationReachingValueObject(string reachingTypeInput, string reachingTypeOutput, double reachingWidth)
+        {
+            ReachingTypeInput = reachingTypeInput;
+            ReachingTypeOutput = reachingTypeOutput;
+            ReachingWidth = reachingWidth;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return ReachingTypeInput;

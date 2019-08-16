@@ -15,6 +15,13 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
         {
         }
 
+        public DailyOperationTyingValueObject(int tyingWovenStrands, int tyingNumber, double tyingWidth)
+        {
+            TyingWovenStrands = tyingWovenStrands;
+            TyingNumber = tyingNumber;
+            TyingWidth = tyingWidth;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return TyingWovenStrands;
