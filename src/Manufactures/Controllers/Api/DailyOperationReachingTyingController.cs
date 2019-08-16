@@ -29,9 +29,9 @@ namespace Manufactures.Controllers.Api
         
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationReachingTyingController(IServiceProvider serviceProvider,
-                                                IReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
-                                                IOperatorQuery<OperatorListDto> operatorQuery,
-                                                IShiftQuery<ShiftDto> shiftQuery)
+                                                     IReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
+                                                     IOperatorQuery<OperatorListDto> operatorQuery,
+                                                     IShiftQuery<ShiftDto> shiftQuery)
             : base(serviceProvider)
         {
             _reachingTyingQuery = reachingTyingQuery ?? throw new ArgumentNullException(nameof(reachingTyingQuery));

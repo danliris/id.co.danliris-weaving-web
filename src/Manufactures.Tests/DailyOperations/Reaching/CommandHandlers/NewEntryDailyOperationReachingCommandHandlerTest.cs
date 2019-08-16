@@ -20,7 +20,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingTyingRepository>
-            mockDailyOperationReachingRepo;
+            mockDailyOperationReachingTyingRepo;
 
         public NewEntryDailyOperationReachingCommandHandlerTest()
         {
@@ -28,9 +28,9 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             mockStorage = mockRepository.Create<IStorage>();
             mockStorage.Setup(x => x.Save());
 
-            mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingTyingRepository>();
+            mockDailyOperationReachingTyingRepo = mockRepository.Create<IDailyOperationReachingTyingRepository>();
             mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingTyingRepository>())
-                .Returns(mockDailyOperationReachingRepo.Object);
+                .Returns(mockDailyOperationReachingTyingRepo.Object);
         }
 
         public void Dispose()
@@ -64,13 +64,6 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             DateTimeOffset entryDate = DateTimeOffset.UtcNow;
             var entryTime = new TimeSpan(7);
             var shiftId = new ShiftId(Guid.NewGuid());
-            //var newEntryDetail = new NewEntryDailyOperationSizingDetailCommand
-            //{
-            //    OperatorDocumentId = operatorId,
-            //    PreparationDate = preparationDate,
-            //    PreparationTime = preparationTime,
-            //    ShiftId = shiftId
-            //};
 
             //Create New Entry Object
             NewEntryDailyOperationReachingTyingCommand request = new NewEntryDailyOperationReachingTyingCommand

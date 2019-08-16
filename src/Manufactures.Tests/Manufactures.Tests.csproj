@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Manufactures.Application\Manufactures.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DailyOperations\Reaching\QueryHandlers\" />
+  </ItemGroup>
+
 </Project>
