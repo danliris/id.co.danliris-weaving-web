@@ -95,9 +95,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                 var operationResult = new DailyOperationReachingTyingListDto(operation, reachingDetail, machineNumber, operation.WeavingUnitId,
                     constructionNumber, sizingBeamNumber);
 
-                //operationResult.SetConstructionNumber(constructionNumber);
-                //operationResult.SetLatestBeamNumber(beamNumber);
-
                 result.Add(operationResult);
             }
 
