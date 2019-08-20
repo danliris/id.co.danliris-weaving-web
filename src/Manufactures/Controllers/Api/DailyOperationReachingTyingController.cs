@@ -4,6 +4,7 @@ using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
+using Manufactures.Domain.DailyOperations.ReachingTying.Command;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -87,14 +88,58 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, totalRows, resultCount });
         }
 
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetById(string Id)
+        {
+            var identity = Guid.Parse(Id);
+            var dailyOperationReachingDocument = await _reachingTyingQuery.GetById(identity);
+
+            if (dailyOperationReachingDocument == null)
+            {
+                return NotFound(identity);
+            }
+
+            return Ok(dailyOperationReachingDocument);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]NewEntryDailyOperationReachingTyingCommand command)
         {
             // Sending Command to Command Handler
-            var dailyOperationReaching = await Mediator.Send(command);
+            var dailyOperationReachingTying = await Mediator.Send(command);
 
             //Return Result from Command Handler as Identity(Id)
-            return Ok(dailyOperationReaching.Identity);
+            return Ok(dailyOperationReachingTying.Identity);
+        }
+
+        [HttpPut("{Id}/reaching-start")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateReachingStartDailyOperationReachingTyingCommand command)
+        {
+            //Parse Id
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+
+            var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateStartDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{Id}/reaching-finish")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateReachingFinishDailyOperationReachingTyingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateFinishDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateFinishDailyOperationSizingDocument.Identity);
         }
     }
 }

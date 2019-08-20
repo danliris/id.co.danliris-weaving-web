@@ -21,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
         public string ReachingValueObjects { get; private set; }
         public string TyingValueObjects { get; private set; }
         public string OperationStatus { get; private set; }
-        public IReadOnlyCollection<DailyOperationReachingTyingDetail> ReachingDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationReachingTyingDetail> ReachingTyingDetails { get; private set; }
 
         public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, DailyOperationTyingValueObject tyingValueObjects, string operationStatus) : base(id)
         {
@@ -34,7 +34,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             ReachingValueObjects = reachingValueObjects.Serialize();
             TyingValueObjects = tyingValueObjects.Serialize();
             OperationStatus = operationStatus;
-            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
+            ReachingTyingDetails = new List<DailyOperationReachingTyingDetail>();
 
             this.MarkTransient();
 
@@ -61,7 +61,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             PISPieces = pisPieces;
             ReachingValueObjects = reachingValueObjects.Serialize();
             OperationStatus = operationStatus;
-            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
+            ReachingTyingDetails = new List<DailyOperationReachingTyingDetail>();
 
             this.MarkTransient();
 
@@ -86,7 +86,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             OperationStatus = operationStatus;
-            ReachingDetails = new List<DailyOperationReachingTyingDetail>();
+            ReachingTyingDetails = new List<DailyOperationReachingTyingDetail>();
 
             this.MarkTransient();
 
@@ -111,22 +111,22 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             ReachingValueObjects = readModel.ReachingValueObjects;
             TyingValueObjects = readModel.TyingValueObjects;
             OperationStatus = readModel.OperationStatus;
-            ReachingDetails = readModel.ReachingTyingDetails;
+            ReachingTyingDetails = readModel.ReachingTyingDetails;
         }
 
         public void AddDailyOperationReachingDetail(DailyOperationReachingTyingDetail reachingDetail)
         {
-            var list = ReachingDetails.ToList();
+            var list = ReachingTyingDetails.ToList();
             list.Add(reachingDetail);
-            ReachingDetails = list;
-            ReadModel.ReachingTyingDetails = ReachingDetails.ToList();
+            ReachingTyingDetails = list;
+            ReadModel.ReachingTyingDetails = ReachingTyingDetails.ToList();
 
             MarkModified();
         }
 
         public void UpdateDailyOperationReachingDetail(DailyOperationReachingTyingDetail detail)
         {
-            var reachingDetails = ReachingDetails.ToList();
+            var reachingDetails = ReachingTyingDetails.ToList();
 
             //Get Reaching Detail Update
             var index =
@@ -144,19 +144,19 @@ namespace Manufactures.Domain.DailyOperations.Reaching
             reachingDetail.SetMachineStatus(reachingDetail.MachineStatus);
 
             reachingDetails[index] = reachingDetail;
-            ReachingDetails = reachingDetails;
+            ReachingTyingDetails = reachingDetails;
             ReadModel.ReachingTyingDetails = reachingDetails;
             MarkModified();
         }
 
         public void RemoveDailyOperationReachingDetail(Guid identity)
         {
-            var detail = ReachingDetails.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = ReachingDetails.ToList();
+            var detail = ReachingTyingDetails.Where(o => o.Identity == identity).FirstOrDefault();
+            var list = ReachingTyingDetails.ToList();
 
             list.Remove(detail);
-            ReachingDetails = list;
-            ReadModel.ReachingTyingDetails = ReachingDetails.ToList();
+            ReachingTyingDetails = list;
+            ReadModel.ReachingTyingDetails = ReachingTyingDetails.ToList();
 
             MarkModified();
         }
@@ -171,12 +171,14 @@ namespace Manufactures.Domain.DailyOperations.Reaching
         public void SetReachingValueObjects(DailyOperationReachingValueObject reachingValueObjects)
         {
             ReachingValueObjects = reachingValueObjects.Serialize();
+            ReadModel.ReachingValueObjects = reachingValueObjects.Serialize();
             MarkModified();
         }
 
         public void SetTyingValueObjects(DailyOperationTyingValueObject tyingValueObjects)
         {
             TyingValueObjects = tyingValueObjects.Serialize();
+            ReadModel.TyingValueObjects = tyingValueObjects.Serialize();
             MarkModified();
         }
 

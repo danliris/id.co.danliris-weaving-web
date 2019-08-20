@@ -19,12 +19,10 @@ using Manufactures.Domain.Machines;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators;
-using Manufactures.Domain.Operators.ReadModels;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
 using Moq;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -283,7 +281,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
                 .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
 
-            //Instantiate Object fo Operator
+            //Instantiate Object for Operator
             var firstOperator = new OperatorDocument(
                 new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
@@ -299,7 +297,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 "AJL",
                 "Operator");
 
-            //Instantiate Object fo Shift
+            //Instantiate Object for Shift
             var firstShift = new ShiftDocument(
                 new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
                 "Pagi",
@@ -348,8 +346,10 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 MachineStatus.ONCOMPLETE);
             secondDocument.AddDailyOperationReachingDetail(secondDetail);
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingTyingReadModel>().AsQueryable());
-            mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingTyingReadModel, bool>>>())).Returns(
+            mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>())).Returns(
                 new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });
+            //mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingTyingReadModel, bool>>>())).Returns(
+            //    new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });
 
             // Act
             var result = await dailyOperationReachingTyingQueryHandler.GetById(firstDocument.Identity);
