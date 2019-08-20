@@ -9,7 +9,6 @@ using Manufactures.Domain.StockCard.Repositories;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
@@ -55,12 +54,13 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             notification.BeamId = new BeamId(Guid.NewGuid());
             notification.DailyOperationId = new DailyOperationId(Guid.NewGuid());
             notification.DateTimeOperation = DateTimeOffset.UtcNow;
-            notification.StockNumber = "Testing-MovOut-Sizing";
+            notification.StockNumber = "Testing-MoveIn-Sizing";
 
-            var stockCardDocument = new StockCardDocument(Guid.NewGuid(), "Testing-MovIn-Sizing", new DailyOperationId(Guid.NewGuid()), DateTimeOffset.UtcNow , notification.BeamId, true, false, StockCardStatus.SIZING_STOCK, StockCardStatus.MOVEIN_STOCK);
+            var stockCardDocument = new StockCardDocument(Guid.NewGuid(), "Testing-MoveIn-Sizing", new DailyOperationId(Guid.NewGuid()), DateTimeOffset.UtcNow , notification.BeamId, true, false, StockCardStatus.SIZING_STOCK, StockCardStatus.MOVEIN_STOCK);
+            var stockCardDocumentTwo = new StockCardDocument(Guid.NewGuid(), "Testing-MoveIn-Sizing", new DailyOperationId(Guid.NewGuid()), DateTimeOffset.UtcNow, notification.BeamId, true, false, StockCardStatus.WARPING_STOCK, StockCardStatus.MOVEIN_STOCK);
 
             //Setup value
-            _stockCardRepository.Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>())).Returns(new List<StockCardDocument>());
+            _stockCardRepository.Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>())).Returns(new List<StockCardDocument>() { stockCardDocument, stockCardDocumentTwo });
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;

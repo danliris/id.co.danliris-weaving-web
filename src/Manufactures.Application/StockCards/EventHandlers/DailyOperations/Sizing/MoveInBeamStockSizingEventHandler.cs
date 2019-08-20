@@ -37,15 +37,15 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
             if (existingStockCard == null)
             {
                 var newStockCard =
-                 new StockCardDocument(Guid.NewGuid(),
-                                       notification.StockNumber,
-                                       notification.DailyOperationId,
-                                       notification.DateTimeOperation,
-                                       notification.BeamId,
-                                       true,
-                                       false,
-                                       StockCardStatus.SIZING_STOCK,
-                                       StockCardStatus.MOVEIN_STOCK);
+                new StockCardDocument(Guid.NewGuid(),
+                                      notification.StockNumber,
+                                      notification.DailyOperationId,
+                                      notification.DateTimeOperation,
+                                      notification.BeamId,
+                                      true,
+                                      false,
+                                      StockCardStatus.SIZING_STOCK,
+                                      StockCardStatus.MOVEIN_STOCK);
 
                 await _stockCardRepository.Update(newStockCard);
 
