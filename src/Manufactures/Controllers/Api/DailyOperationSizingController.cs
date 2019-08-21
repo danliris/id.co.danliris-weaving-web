@@ -332,13 +332,14 @@ namespace Manufactures.Controllers.Api
                 stockNumber.Append("stock-sizing");
                 stockNumber.Append("/");
                 stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
-                
+
+                moveOutWarpingBeam.BeamId = beam;
                 moveOutWarpingBeam.StockNumber = stockNumber.ToString();
                 moveOutWarpingBeam.DailyOperationId = new DailyOperationId(updateStartDailyOperationSizingDocument.Identity);
                 moveOutWarpingBeam.DateTimeOperation = dateTimeNow;
 
                 //Update stock
-                await Mediator.Publish(moveOutWarpingBeam);
+                //await Mediator.Publish(moveOutWarpingBeam);
             }
 
             return Ok(updateStartDailyOperationSizingDocument.Identity);
@@ -423,7 +424,7 @@ namespace Manufactures.Controllers.Api
             addStockEvent.DateTimeOperation = dateTimeNow;
 
             //Update stock
-            await Mediator.Publish(addStockEvent);
+            //await Mediator.Publish(addStockEvent);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
