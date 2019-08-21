@@ -25,8 +25,8 @@ using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
-using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
+using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {

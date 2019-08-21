@@ -1,10 +1,10 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
+namespace Manufactures.Domain.DailyOperations.ReachingTying.ReadModels
 {
     public class DailyOperationReachingTyingReadModel : ReadModelBase
     {

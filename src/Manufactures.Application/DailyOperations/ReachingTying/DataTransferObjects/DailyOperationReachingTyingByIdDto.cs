@@ -1,12 +1,12 @@
-﻿using Manufactures.Domain.DailyOperations.Reaching;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
+﻿using Manufactures.Domain.DailyOperations.ReachingTying;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
+namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects
 {
     public class DailyOperationReachingTyingByIdDto : DailyOperationReachingTyingListDto
     {

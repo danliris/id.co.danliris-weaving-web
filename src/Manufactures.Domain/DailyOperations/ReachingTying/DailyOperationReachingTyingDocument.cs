@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
-using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.ValueObjects;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
+using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
@@ -9,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Reaching
+namespace Manufactures.Domain.DailyOperations.ReachingTying
 {
     public class DailyOperationReachingTyingDocument : AggregateRoot<DailyOperationReachingTyingDocument, DailyOperationReachingTyingReadModel>
     {

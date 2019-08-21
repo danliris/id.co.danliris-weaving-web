@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Reaching.ValueObjects
+namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
 {
     public class DailyOperationReachingValueObject : ValueObject
     {

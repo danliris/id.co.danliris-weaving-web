@@ -1,8 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
-using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.DailyOperations.Reaching.Queries;
-using Manufactures.Domain.DailyOperations.Reaching.Repositories;
+using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators.Repositories;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
+namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
 {
     public class DailyOperationReachingTyingQueryHandler : IReachingTyingQuery<DailyOperationReachingTyingListDto>
     {
