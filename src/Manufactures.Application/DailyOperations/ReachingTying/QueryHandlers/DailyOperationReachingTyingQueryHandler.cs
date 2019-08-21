@@ -161,9 +161,11 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             {
                 //Get Operator Name
                 await Task.Yield();
-                var operatorName = _operatorRepository.Find(entity => entity.Identity.Equals(detail.OperatorDocumentId))
-                    .FirstOrDefault()
-                    .CoreAccount.Name ?? "Not Found Operator Name";
+                var operatorName = 
+                    _operatorRepository
+                        .Find(entity => entity.Identity.Equals(detail.OperatorDocumentId))
+                        .FirstOrDefault()
+                        .CoreAccount.Name ?? "Not Found Operator Name";
 
                 //Get Shift Name
                 await Task.Yield();
