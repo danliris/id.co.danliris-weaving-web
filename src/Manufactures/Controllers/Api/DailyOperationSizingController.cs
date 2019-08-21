@@ -316,12 +316,12 @@ namespace Manufactures.Controllers.Api
             var moveOutWarpingBeamIds = 
                 updateStartDailyOperationSizingDocument.BeamsWarping;
 
-            foreach(var beam in moveOutWarpingBeamIds)
+            foreach(var beamId in moveOutWarpingBeamIds)
             {
                 //Manipulate datetime to be stocknumber
 
-                //wait 2 seconds
-                await Task.Delay(2000);
+                //wait 1 seconds
+                await Task.Delay(1000);
                 var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
                 StringBuilder stockNumber = new StringBuilder();
 
@@ -329,17 +329,17 @@ namespace Manufactures.Controllers.Api
                 stockNumber.Append("/");
                 stockNumber.Append(dateTimeNow.ToString("mm"));
                 stockNumber.Append("/");
-                stockNumber.Append("stock-sizing");
+                stockNumber.Append(StockCardStatus.SIZING_STOCK);
                 stockNumber.Append("/");
                 stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
 
-                moveOutWarpingBeam.BeamId = beam;
+                moveOutWarpingBeam.BeamId = beamId;
                 moveOutWarpingBeam.StockNumber = stockNumber.ToString();
                 moveOutWarpingBeam.DailyOperationId = new DailyOperationId(updateStartDailyOperationSizingDocument.Identity);
                 moveOutWarpingBeam.DateTimeOperation = dateTimeNow;
 
                 //Update stock
-                //await Mediator.Publish(moveOutWarpingBeam);
+                await Mediator.Publish(moveOutWarpingBeam);
             }
 
             return Ok(updateStartDailyOperationSizingDocument.Identity);
@@ -402,13 +402,16 @@ namespace Manufactures.Controllers.Api
             var addStockEvent = new MoveInBeamStockSizingEvent();
 
             //Manipulate datetime to be stocknumber
+
+            //wait 1 seconds
+            await Task.Delay(1000);
             var dateTimeNow = DateTimeOffset.UtcNow.AddHours(7);
             StringBuilder stockNumber = new StringBuilder();
             stockNumber.Append(dateTimeNow.ToString("HH"));
             stockNumber.Append("/");
             stockNumber.Append(dateTimeNow.ToString("mm"));
             stockNumber.Append("/");
-            stockNumber.Append("stock-sizing");
+            stockNumber.Append(StockCardStatus.SIZING_STOCK);
             stockNumber.Append("/");
             stockNumber.Append(dateTimeNow.ToString("dd'/'MM'/'yyyy"));
 
@@ -424,7 +427,7 @@ namespace Manufactures.Controllers.Api
             addStockEvent.DateTimeOperation = dateTimeNow;
 
             //Update stock
-            //await Mediator.Publish(addStockEvent);
+            await Mediator.Publish(addStockEvent);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
