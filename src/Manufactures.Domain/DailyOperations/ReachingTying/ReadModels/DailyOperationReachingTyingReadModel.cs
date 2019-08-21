@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
 {
-    public class DailyOperationReachingReadModel : ReadModelBase
+    public class DailyOperationReachingTyingReadModel : ReadModelBase
     {
-        public DailyOperationReachingReadModel(Guid identity) : base(identity)
+        public DailyOperationReachingTyingReadModel(Guid identity) : base(identity)
         {
         }
         public Guid? MachineDocumentId { get; internal set; }
@@ -16,9 +16,9 @@ namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
         public Guid? ConstructionDocumentId { get; internal set; }
         public Guid? SizingBeamId { get; internal set; }
         public double PISPieces { get; internal set; }
-        public string ReachingType { get; internal set; }
-        public double ReachingWidth { get; internal set; }
+        public string ReachingValueObjects { get; internal set; }
+        public string TyingValueObjects { get; internal set; }
         public string OperationStatus { get; internal set; }
-        public List<DailyOperationReachingDetail> ReachingDetails { get; internal set; }
+        public List<DailyOperationReachingTyingDetail> ReachingTyingDetails { get; internal set; }
     }
 }

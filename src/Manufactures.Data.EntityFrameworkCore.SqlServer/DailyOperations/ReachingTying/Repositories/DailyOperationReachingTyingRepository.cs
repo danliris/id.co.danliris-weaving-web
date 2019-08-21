@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Reaching.Repositories
 {
-    public class DailyOperationReachingRepository : AggregateRepostory<DailyOperationReachingDocument, DailyOperationReachingReadModel>, IDailyOperationReachingRepository
+    public class DailyOperationReachingTyingRepository : AggregateRepostory<DailyOperationReachingTyingDocument, DailyOperationReachingTyingReadModel>, IDailyOperationReachingTyingRepository
     {
-        protected override DailyOperationReachingDocument Map(DailyOperationReachingReadModel readModel)
+        protected override DailyOperationReachingTyingDocument Map(DailyOperationReachingTyingReadModel readModel)
         {
-            return new DailyOperationReachingDocument(readModel);
+            return new DailyOperationReachingTyingDocument(readModel);
         }
     }
 }

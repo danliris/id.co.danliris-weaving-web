@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
 {
-    public class DailyOperationReachingDetailDto
+    public class DailyOperationReachingTyingDetailDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -22,7 +22,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
-        public DailyOperationReachingDetailDto(Guid id, 
+        public DailyOperationReachingTyingDetailDto(Guid id, 
                                                string operatorName, 
                                                DateTimeOffset dateTimeMachine, 
                                                string shiftName, 

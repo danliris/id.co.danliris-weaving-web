@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
 {
-    public class DailyOperationReachingListDto
+    public class DailyOperationReachingTyingListDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         [JsonProperty(PropertyName = "SizingBeamNumber")]
         public string SizingBeamNumber { get; }
 
-        public DailyOperationReachingListDto(DailyOperationReachingDocument document, DailyOperationReachingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber)
+        public DailyOperationReachingTyingListDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber)
         {
             Id = document.Identity;
             DateTimeOperation = detail.DateTimeMachine;
