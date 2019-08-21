@@ -15,12 +15,14 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private bool IsSucceed;
 
         public MoveOutBeamStockSizingEventHandler(IStorage storage)
         {
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            IsSucceed = false;
         }
 
         public async Task Handle(MoveOutBeamStockSizingEvent notification, CancellationToken cancellationToken)
@@ -56,6 +58,13 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
             await _stockCardRepository.Update(newStockCard);
 
             _storage.Save();
+            IsSucceed = true;
+        }
+
+        //This function only for testing
+        public bool ReturnResult()
+        {
+            return IsSucceed;
         }
     }
 }

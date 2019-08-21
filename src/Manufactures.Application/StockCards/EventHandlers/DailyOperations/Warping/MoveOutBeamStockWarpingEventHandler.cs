@@ -5,7 +5,6 @@ using Manufactures.Domain.StockCard;
 using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Domain.StockCard.Repositories;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,12 +15,14 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private bool IsSucceed;
 
         public MoveOutBeamStockWarpingEventHandler(IStorage storage)
         {
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            IsSucceed = false;
         }
 
         public async Task Handle(MoveOutBeamStockWarpingEvent notification, CancellationToken cancellationToken)
@@ -57,6 +58,13 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
             await _stockCardRepository.Update(newStockCard);
 
             _storage.Save();
+            IsSucceed = true;
+        }
+
+        //This function only for testing
+        public bool ReturnResult()
+        {
+            return IsSucceed;
         }
     }
 }

@@ -16,13 +16,14 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
-        private bool IsSucceed = false;
+        private bool IsSucceed;
 
         public MoveInBeamStockWarpingEventHandler(IStorage storage)
         {
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            IsSucceed = false;
         }
 
         public async Task Handle(MoveInBeamStockWarpingEvent notification, CancellationToken cancellationToken)

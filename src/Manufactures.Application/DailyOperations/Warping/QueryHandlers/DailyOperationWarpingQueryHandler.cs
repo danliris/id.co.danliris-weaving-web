@@ -16,7 +16,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 {
     public class DailyOperationWarpingQueryHandler : IWarpingQuery<DailyOperationWarpingListDto>
     {
-        private readonly IStorage _storage;
+        private readonly IStorage 
+            _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
         private readonly IFabricConstructionRepository
@@ -25,7 +26,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             _beamRepository;
         private readonly IOperatorRepository
             _operatorRepository;
-        private readonly IShiftRepository _shiftRepository;
+        private readonly IShiftRepository 
+            _shiftRepository;
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -146,10 +148,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .FirstOrDefault();
 
                 await Task.Yield();
-                var shift = 
+                var shiftName = 
                     _shiftRepository
                         .Find(entity => entity.Identity.Equals(history.ShiftId))
-                        .FirstOrDefault();
+                        .FirstOrDefault().Name;
+
                 var dailyHistory = 
                     new DailyOperationLoomHistoryDto(history.Identity, 
                                                      beamNumber, 
@@ -157,7 +160,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                                      operatorBeam.Group, 
                                                      history.DateTimeOperation, 
                                                      history.OperationStatus, 
-                                                     shift.Name);
+                                                     shiftName);
 
                 await Task.Yield();
                 result.AddDailyOperationLoomHistories(dailyHistory);

@@ -5,7 +5,6 @@ using Manufactures.Domain.StockCard;
 using Manufactures.Domain.StockCard.Events.Sizing;
 using Manufactures.Domain.StockCard.Repositories;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,13 +15,14 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
-        private bool IsSucceed = false;
+        private bool IsSucceed;
 
         public MoveInBeamStockSizingEventHandler(IStorage storage)
         {
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            IsSucceed = false;
         }
 
         public async Task Handle(MoveInBeamStockSizingEvent notification, CancellationToken cancellationToken)
