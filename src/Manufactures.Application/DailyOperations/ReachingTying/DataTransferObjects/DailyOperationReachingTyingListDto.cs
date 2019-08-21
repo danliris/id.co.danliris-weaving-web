@@ -11,10 +11,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
     public class DailyOperationReachingTyingListDto
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
 
         [JsonProperty(PropertyName = "DateTimeOperation")]
-        public DateTimeOffset DateTimeOperation { get; private set; }
+        public DateTimeOffset DateTimeOperation { get; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }

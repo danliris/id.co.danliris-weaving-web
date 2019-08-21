@@ -10,6 +10,9 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
 {
     public class DailyOperationReachingTyingByIdDto : DailyOperationReachingTyingListDto
     {
+        [JsonProperty(PropertyName = "ReachingHistories")]
+        public List<DailyOperationReachingTyingDetailDto> ReachingHistories { get; set; }
+
         public DailyOperationReachingTyingByIdDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber) 
             : base(document,
                    detail,
@@ -18,6 +21,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
                    constructionNumber,
                    sizingBeamNumber)
         {
+            ReachingHistories = new List<DailyOperationReachingTyingDetailDto>();
         }
     }
 }
