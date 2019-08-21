@@ -2,7 +2,7 @@
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Queries
 {
-    public interface IReachingQuery<TModel> : IQueries<TModel>
+    public interface IReachingTyingQuery<TModel> : IQueries<TModel>
     {
     }
 }

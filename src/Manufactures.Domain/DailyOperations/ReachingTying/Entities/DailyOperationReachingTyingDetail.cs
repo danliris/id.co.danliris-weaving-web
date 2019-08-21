@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Entities
 {
-    public class DailyOperationReachingDetail : EntityBase<DailyOperationReachingDetail>
+    public class DailyOperationReachingTyingDetail : EntityBase<DailyOperationReachingTyingDetail>
     {
         public Guid OperatorDocumentId { get; private set; }
 
@@ -17,15 +17,15 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Entities
 
         public string MachineStatus { get; private set; }
 
-        public Guid DailyOperationReachingDocumentId { get; set; }
+        public Guid DailyOperationReachingTyingDocumentId { get; set; }
 
-        public DailyOperationReachingReadModel DailyOperationReachingDocument { get; set; }
+        public DailyOperationReachingTyingReadModel DailyOperationReachingTyingDocument { get; set; }
 
-        public DailyOperationReachingDetail(Guid identity) : base(identity)
+        public DailyOperationReachingTyingDetail(Guid identity) : base(identity)
         {
         }
 
-        public DailyOperationReachingDetail(Guid identity,
+        public DailyOperationReachingTyingDetail(Guid identity,
                                             OperatorId operatorDocumentId,
                                             DateTimeOffset dateTimeMachine,
                                             ShiftId shiftDocumentId,
@@ -64,7 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Entities
             MarkModified();
         }
 
-        protected override DailyOperationReachingDetail GetEntity()
+        protected override DailyOperationReachingTyingDetail GetEntity()
         {
             return this;
         }

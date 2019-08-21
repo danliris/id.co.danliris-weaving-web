@@ -11,24 +11,24 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 {
-    public class NewEntryDailyOperationReachingCommandHandler : ICommandHandler<NewEntryDailyOperationReachingCommand, DailyOperationReachingDocument>
+    public class NewEntryDailyOperationReachingTyingCommandHandler : ICommandHandler<NewEntryDailyOperationReachingTyingCommand, DailyOperationReachingTyingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationReachingRepository
+        private readonly IDailyOperationReachingTyingRepository
             _dailyOperationReachingDocumentRepository;
 
-        public NewEntryDailyOperationReachingCommandHandler(IStorage storage)
+        public NewEntryDailyOperationReachingTyingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingDocumentRepository =
-                _storage.GetRepository<IDailyOperationReachingRepository>();
+                _storage.GetRepository<IDailyOperationReachingTyingRepository>();
         }
 
-        public async Task<DailyOperationReachingDocument> 
-            Handle(NewEntryDailyOperationReachingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationReachingTyingDocument> 
+            Handle(NewEntryDailyOperationReachingTyingCommand request, CancellationToken cancellationToken)
         {
             var dailyOperationReachingDocument =
-                new DailyOperationReachingDocument(Guid.NewGuid(),
+                new DailyOperationReachingTyingDocument(Guid.NewGuid(),
                                                    request.MachineDocumentId,
                                                    request.WeavingUnitId,
                                                    request.ConstructionDocumentId,
@@ -46,7 +46,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             var newOperationDetail =
-                    new DailyOperationReachingDetail(Guid.NewGuid(),
+                    new DailyOperationReachingTyingDetail(Guid.NewGuid(),
                                                      request.OperatorDocumentId,
                                                      dateTimeOperation,
                                                      request.ShiftDocumentId,

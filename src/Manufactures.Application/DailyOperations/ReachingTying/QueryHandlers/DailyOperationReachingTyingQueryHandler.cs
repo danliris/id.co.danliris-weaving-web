@@ -16,27 +16,27 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 {
-    public class DailyOperationReachingQueryHandler : IReachingQuery<DailyOperationReachingListDto>
+    public class DailyOperationReachingTyingQueryHandler : IReachingTyingQuery<DailyOperationReachingTyingListDto>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationReachingRepository
-            _dailyOperationReachingRepository;
+        private readonly IDailyOperationReachingTyingRepository
+            _dailyOperationReachingTyingRepository;
         private readonly IMachineRepository
             _machineRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
         private readonly IBeamRepository
             _beamRepository;
-        private readonly IShiftRepository 
+        private readonly IShiftRepository
             _shiftRepository;
         private readonly IOperatorRepository
             _operatorRepository;
 
-        public DailyOperationReachingQueryHandler(IStorage storage)
+        public DailyOperationReachingTyingQueryHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationReachingRepository =
-                _storage.GetRepository<IDailyOperationReachingRepository>();
+            _dailyOperationReachingTyingRepository =
+                _storage.GetRepository<IDailyOperationReachingTyingRepository>();
             _machineRepository =
                 _storage.GetRepository<IMachineRepository>();
             _fabricConstructionRepository =
@@ -48,23 +48,23 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
         }
-        public async Task<IEnumerable<DailyOperationReachingListDto>> GetAll()
+        public async Task<IEnumerable<DailyOperationReachingTyingListDto>> GetAll()
         {
             var query =
-                _dailyOperationReachingRepository
+                _dailyOperationReachingTyingRepository
                     .Query
-                    .Include(o => o.ReachingDetails)
+                    .Include(o => o.ReachingTyingDetails)
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
-            var dailyOperationReachingDocuments =
-                    _dailyOperationReachingRepository
+            var dailyOperationReachingTyingDocuments =
+                    _dailyOperationReachingTyingRepository
                         .Find(query);
-            var result = new List<DailyOperationReachingListDto>();
+            var result = new List<DailyOperationReachingTyingListDto>();
 
-            foreach (var operation in dailyOperationReachingDocuments)
+            foreach (var operation in dailyOperationReachingTyingDocuments)
             {
-                var reachingDetail = operation.ReachingDetails.OrderByDescending(d => d.DateTimeMachine).FirstOrDefault();
+                var reachingDetail = operation.ReachingTyingDetails.OrderByDescending(d => d.DateTimeMachine).FirstOrDefault();
 
                 //Get Machine Number
                 await Task.Yield();
@@ -88,15 +88,12 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                 await Task.Yield();
                 var sizingBeamNumber =
                     _beamRepository
-                        .Find(entity => entity.Identity.Equals(operation.SizingBeamId))
+                        .Find(entity => entity.Identity.Equals(operation.SizingBeamId.Value))
                         .FirstOrDefault()
                         .Number ?? "Not Found Sizing Beam Number";
 
-                var operationResult = new DailyOperationReachingListDto(operation, reachingDetail, machineNumber, operation.WeavingUnitId,
+                var operationResult = new DailyOperationReachingTyingListDto(operation, reachingDetail, machineNumber, operation.WeavingUnitId,
                     constructionNumber, sizingBeamNumber);
-
-                //operationResult.SetConstructionNumber(constructionNumber);
-                //operationResult.SetLatestBeamNumber(beamNumber);
 
                 result.Add(operationResult);
             }
@@ -104,27 +101,27 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             return result;
         }
 
-        public async Task<DailyOperationReachingListDto> GetById(Guid id)
+        public async Task<DailyOperationReachingTyingListDto> GetById(Guid id)
         {
             var query =
-                _dailyOperationReachingRepository
-                    .Query
-                    .Include(o => o.ReachingDetails)
+                _dailyOperationReachingTyingRepository.Query
+                    .Include(o => o.ReachingTyingDetails)
                     .OrderByDescending(x => x.CreatedDate);
 
             //Get Daily Operation Reaching Document
             await Task.Yield();
-            var dailyOperationReachingDocument =
-                   _dailyOperationReachingRepository
-                       .Find(x=>x.Identity.Equals(id))
+            var dailyOperationReachingTyingDocument =
+                   _dailyOperationReachingTyingRepository
+                       .Find(query)
+                       .Where(x => x.Identity.Equals(id))
                        .FirstOrDefault();
 
             //Get Daily Operation Reaching Detail
             await Task.Yield();
-            var dailyOperationReachingDetail = 
-                dailyOperationReachingDocument
-                    .ReachingDetails
-                    .OrderByDescending(e=>e.DateTimeMachine)
+            var dailyOperationReachingTyingDetail =
+                dailyOperationReachingTyingDocument
+                    .ReachingTyingDetails
+                    .OrderByDescending(e => e.DateTimeMachine)
                     .FirstOrDefault();
 
             //Get Machine Number
@@ -132,20 +129,20 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             var machineNumber =
                 _machineRepository
                     .Find(entity => entity.Identity
-                    .Equals(dailyOperationReachingDocument.MachineDocumentId.Value))
+                    .Equals(dailyOperationReachingTyingDocument.MachineDocumentId.Value))
                     .FirstOrDefault()
                     .MachineNumber ?? "Not Found Machine Number";
 
             //Get Unit
             await Task.Yield();
-            var weavingUnitId = dailyOperationReachingDocument.WeavingUnitId;
+            var weavingUnitId = dailyOperationReachingTyingDocument.WeavingUnitId;
 
             //Get Contruction Number
             await Task.Yield();
             var constructionNumber =
                 _fabricConstructionRepository
                     .Find(entity => entity.Identity
-                    .Equals(dailyOperationReachingDocument.ConstructionDocumentId.Value))
+                    .Equals(dailyOperationReachingTyingDocument.ConstructionDocumentId.Value))
                     .FirstOrDefault()
                     .ConstructionNumber ?? "Not Found Construction Number";
 
@@ -153,12 +150,12 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             await Task.Yield();
             var sizingBeamNumber =
                 _beamRepository
-                    .Find(entity => entity.Identity.Equals(dailyOperationReachingDocument.SizingBeamId))
+                    .Find(entity => entity.Identity.Equals(dailyOperationReachingTyingDocument.SizingBeamId.Value))
                     .FirstOrDefault()
                     .Number ?? "Not Found Sizing Beam Number";
 
             //Assign Parameter to Object Result
-            var result = new DailyOperationReachingByIdDto(dailyOperationReachingDocument, dailyOperationReachingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber);
+            var result = new DailyOperationReachingTyingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber);
 
             return result;
         }

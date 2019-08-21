@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Command
 {
-    public class UpdateStartDailyOperationReachingCommand : ICommand<DailyOperationReachingDocument>
+    public class UpdateReachingStartDailyOperationReachingTyingCommand : ICommand<DailyOperationReachingTyingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
@@ -22,25 +22,31 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationDate")]
-        public DateTimeOffset PreparationDate { get; set; }
+        [JsonProperty(PropertyName = "ReachingStartDate")]
+        public DateTimeOffset ReachingStartDate { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationTime")]
-        public TimeSpan PreparationTime { get; set; }
+        [JsonProperty(PropertyName = "ReachingStartTime")]
+        public TimeSpan ReachingStartTime { get; set; }
 
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
-    public class UpdateStartDailyOperationReachingCommandValidator : AbstractValidator<UpdateStartDailyOperationReachingCommand>
+
+    public class UpdateReachingStartDailyOperationReachingTyingCommandValidator : AbstractValidator<UpdateReachingStartDailyOperationReachingTyingCommand>
     {
-        public UpdateStartDailyOperationReachingCommandValidator()
+        public UpdateReachingStartDailyOperationReachingTyingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
             RuleFor(validator => validator.ReachingTypeInput).NotEmpty();
             RuleFor(validator => validator.ReachingTypeOutput).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.PreparationDate).NotEmpty();
-            RuleFor(validator => validator.PreparationTime).NotEmpty();
+            RuleFor(validator => validator.ReachingStartDate).NotEmpty();
+            RuleFor(validator => validator.ReachingStartTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
         }
     }

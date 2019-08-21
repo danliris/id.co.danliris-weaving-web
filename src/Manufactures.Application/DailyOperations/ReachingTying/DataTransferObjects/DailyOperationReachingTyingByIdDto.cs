@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
 {
-    public class DailyOperationReachingByIdDto : DailyOperationReachingListDto
+    public class DailyOperationReachingTyingByIdDto : DailyOperationReachingTyingListDto
     {
-        public DailyOperationReachingByIdDto(DailyOperationReachingDocument document, DailyOperationReachingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber) 
+        public DailyOperationReachingTyingByIdDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber) 
             : base(document,
                    detail,
                    machineNumber,
