@@ -1,4 +1,5 @@
 using ExtCore.Data.Abstractions;
+using FluentAssertions;
 using Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizing;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.StockCard;
@@ -55,11 +56,6 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             notification.DateTimeOperation = DateTimeOffset.UtcNow;
             notification.StockNumber = "Testing-MovIn-Sizing";
 
-            //Setup find function
-            _stockCardRepository
-                .Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>()))
-                .Returns(new List<StockCardDocument>());
-
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
             
@@ -67,7 +63,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             await moveInBeamStockSizingEventHandler.Handle(notification,cancellationToken);
 
             // Assert
-            Assert.True(true);
+            moveInBeamStockSizingEventHandler.ReturnResult().Should().Equals(true);
         }
     }
 }

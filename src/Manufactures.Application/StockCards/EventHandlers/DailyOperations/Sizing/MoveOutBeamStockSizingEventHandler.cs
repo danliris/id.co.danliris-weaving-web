@@ -5,7 +5,6 @@ using Manufactures.Domain.StockCard;
 using Manufactures.Domain.StockCard.Events.Sizing;
 using Manufactures.Domain.StockCard.Repositories;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 

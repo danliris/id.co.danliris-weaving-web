@@ -1,4 +1,5 @@
 using ExtCore.Data.Abstractions;
+using FluentAssertions;
 using Manufactures.Application.StockCards.EventHandlers.Warping;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.StockCard;
@@ -55,15 +56,8 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
             notification.DateTimeOperation = DateTimeOffset.UtcNow;
             notification.StockNumber = "Testing-MovIn-Warping";
 
-            //Setup find function
-            _stockCardRepository
-                .Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>()))
-                .Returns(new List<StockCardDocument>());
-
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
-
-           
 
             // Act
             await moveInBeamStockWarpingEventHandler.Handle(
@@ -71,7 +65,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
                 cancellationToken);
 
             // Assert
-            Assert.True(true);
+            moveInBeamStockWarpingEventHandler.ReturnResult().Should().Equals(true);
         }
     }
 }

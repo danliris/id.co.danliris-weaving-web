@@ -16,6 +16,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private bool IsSucceed = false;
 
         public MoveInBeamStockWarpingEventHandler(IStorage storage)
         {
@@ -26,31 +27,27 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
 
         public async Task Handle(MoveInBeamStockWarpingEvent notification, CancellationToken cancellationToken)
         {
-            await Task.Yield();
-            var existingStockCard =
-                _stockCardRepository
-                    .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
-                                    entity.Expired.Equals(false))
-                    .FirstOrDefault();
+            var newStockCard =
+                 new StockCardDocument(Guid.NewGuid(),
+                                       notification.StockNumber,
+                                       notification.DailyOperationId,
+                                       notification.DateTimeOperation,
+                                       notification.BeamId,
+                                       true,
+                                       false,
+                                       StockCardStatus.WARPING_STOCK,
+                                       StockCardStatus.MOVEIN_STOCK);
 
-            if (existingStockCard == null)
-            {
-                var newStockCard =
-                new StockCardDocument(Guid.NewGuid(),
-                                      notification.StockNumber,
-                                      notification.DailyOperationId,
-                                      notification.DateTimeOperation,
-                                      notification.BeamId,
-                                      true,
-                                      false,
-                                      StockCardStatus.WARPING_STOCK,
-                                      StockCardStatus.MOVEIN_STOCK);
+            await _stockCardRepository.Update(newStockCard);
 
-                await _stockCardRepository.Update(newStockCard);
+            _storage.Save();
+            IsSucceed = true;
+        }
 
-                _storage.Save();
-            }
+        //This function only for testing
+        public bool ReturnResult()
+        {
+            return IsSucceed;
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private bool IsSucceed = false;
 
         public MoveInBeamStockSizingEventHandler(IStorage storage)
         {
@@ -26,17 +27,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
 
         public async Task Handle(MoveInBeamStockSizingEvent notification, CancellationToken cancellationToken)
         {
-            await Task.Yield();
-            var existingStockCard =
-                _stockCardRepository
-                    .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.StockType.Equals(StockCardStatus.SIZING_STOCK) &&
-                                    entity.Expired.Equals(false))
-                    .FirstOrDefault();
-
-            if (existingStockCard == null)
-            {
-                var newStockCard =
+            var newStockCard =
                 new StockCardDocument(Guid.NewGuid(),
                                       notification.StockNumber,
                                       notification.DailyOperationId,
@@ -47,10 +38,16 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
                                       StockCardStatus.SIZING_STOCK,
                                       StockCardStatus.MOVEIN_STOCK);
 
-                await _stockCardRepository.Update(newStockCard);
+            await _stockCardRepository.Update(newStockCard);
 
-                _storage.Save();
-            }
+            _storage.Save();
+            IsSucceed = true;
+        }
+
+        //This function only for testing
+        public bool ReturnResult()
+        {
+            return IsSucceed;
         }
     }
 }

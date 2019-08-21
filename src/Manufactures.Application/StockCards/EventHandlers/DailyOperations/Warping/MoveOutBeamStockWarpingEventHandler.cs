@@ -27,48 +27,36 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
         public async Task Handle(MoveOutBeamStockWarpingEvent notification, CancellationToken cancellationToken)
         {
             await Task.Yield();
-            var existingStockCard =
+            var existingStockCards =
                 _stockCardRepository
                     .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
-                                    entity.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK) &&
-                                    entity.Expired.Equals(false))
-                    .FirstOrDefault();
+                                    entity.Expired.Equals(false));
 
-            await Task.Yield();
-            var redundantStockCard =
-                _stockCardRepository
-                    .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
-                                    entity.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK) &&
-                                    entity.Expired.Equals(false))
-                    .FirstOrDefault();
-
-            if (redundantStockCard == null)
+            foreach(var stockCard in existingStockCards)
             {
-                //Update move in to expired
-                if (existingStockCard != null)
+                if (stockCard.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
+                    stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
                 {
-                    existingStockCard.UpdateExpired(true);
+                    stockCard.UpdateExpired(true);
 
-                    await _stockCardRepository.Update(existingStockCard);
+                    await _stockCardRepository.Update(stockCard);
                 }
-
-                var newStockCard =
-                 new StockCardDocument(Guid.NewGuid(),
-                                       notification.StockNumber,
-                                       notification.DailyOperationId,
-                                       notification.DateTimeOperation,
-                                       notification.BeamId,
-                                       false,
-                                       true,
-                                       StockCardStatus.WARPING_STOCK,
-                                       StockCardStatus.MOVEOUT_STOCK);
-
-                await _stockCardRepository.Update(newStockCard);
-
-                _storage.Save();
             }
+
+            var newStockCard =
+                new StockCardDocument(Guid.NewGuid(),
+                                      notification.StockNumber,
+                                      notification.DailyOperationId,
+                                      notification.DateTimeOperation,
+                                      notification.BeamId,
+                                      false,
+                                      true,
+                                      StockCardStatus.WARPING_STOCK,
+                                      StockCardStatus.MOVEOUT_STOCK);
+
+            await _stockCardRepository.Update(newStockCard);
+
+            _storage.Save();
         }
     }
 }
