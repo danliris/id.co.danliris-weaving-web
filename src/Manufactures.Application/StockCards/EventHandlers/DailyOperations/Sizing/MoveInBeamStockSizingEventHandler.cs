@@ -27,6 +27,23 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
 
         public async Task Handle(MoveInBeamStockSizingEvent notification, CancellationToken cancellationToken)
         {
+            //Update MoveOut stok from latest beam id (same id)
+            var moveOutStockCardSizings =
+                _stockCardRepository.Find(o => o.BeamId.Equals(notification.BeamId.Value) &&
+                                               o.Expired.Equals(false));
+
+            foreach(var stockCard in moveOutStockCardSizings)
+            {
+
+                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK) &&
+                    stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+                    await _stockCardRepository.Update(stockCard);
+                }
+            }
+
+            //Create new MoveIn StockCard
             var newStockCard =
                 new StockCardDocument(Guid.NewGuid(),
                                       notification.StockNumber,
