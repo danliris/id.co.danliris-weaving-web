@@ -7,7 +7,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
 {
     public class DailyOperationTyingValueObject : ValueObject
     {
-        public int TyingWovenStrands { get; set; }
+        public int TyingEdgeStitching { get; set; }
         public int TyingNumber { get; set; }
         public double TyingWidth { get; set; }
 
@@ -15,16 +15,27 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
         {
         }
 
-        public DailyOperationTyingValueObject(int tyingWovenStrands, int tyingNumber, double tyingWidth)
+        public DailyOperationTyingValueObject(int tyingEdgeStitching, int tyingNumber, double tyingWidth)
         {
-            TyingWovenStrands = tyingWovenStrands;
+            TyingEdgeStitching = tyingEdgeStitching;
             TyingNumber = tyingNumber;
+            TyingWidth = tyingWidth;
+        }
+
+        public DailyOperationTyingValueObject(int tyingEdgeStitching, int tyingNumber)
+        {
+            TyingEdgeStitching = tyingEdgeStitching;
+            TyingNumber = tyingNumber;
+        }
+
+        public DailyOperationTyingValueObject(double tyingWidth)
+        {
             TyingWidth = tyingWidth;
         }
 
         protected override IEnumerable<object> GetAtomicValues()
         {
-            yield return TyingWovenStrands;
+            yield return TyingEdgeStitching;
             yield return TyingNumber;
             yield return TyingWidth;
         }

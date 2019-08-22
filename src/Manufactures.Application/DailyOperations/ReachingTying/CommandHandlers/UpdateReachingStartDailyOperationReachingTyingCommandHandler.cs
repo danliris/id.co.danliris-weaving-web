@@ -37,12 +37,12 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var query =
                 _dailyOperationReachingTyingDocumentRepository.Query
                                                          .Include(d => d.ReachingTyingDetails)
-                                                         .Where(reachingDoc => reachingDoc.Identity.Equals(request.Id));
+                                                         .Where(doc => doc.Identity.Equals(request.Id));
             var existingReachingTyingDocument = _dailyOperationReachingTyingDocumentRepository.Find(query).FirstOrDefault();
             var existingReachingTyingDetail =
                 existingReachingTyingDocument.ReachingTyingDetails
                 .OrderByDescending(d => d.DateTimeMachine);
-            var lastReachingDetail = existingReachingTyingDetail.FirstOrDefault();
+            var lastReachingTyingDetail = existingReachingTyingDetail.FirstOrDefault();
 
             //Validation for Operation Status
             var operationStatus = existingReachingTyingDocument.OperationStatus;
@@ -62,22 +62,22 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastReachingDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var entryDateMachineLogUtc = new DateTimeOffset(request.ReachingStartDate.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastReachingTyingDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var reachingStartDateMachineLogUtc = new DateTimeOffset(request.ReachingStartDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (entryDateMachineLogUtc < lastDateMachineLogUtc)
+            if (reachingStartDateMachineLogUtc < lastDateMachineLogUtc)
             {
                 throw Validator.ErrorValidation(("ReachingStartDate", "Start date cannot less than latest date log"));
             }
             else
             {
-                if (dateTimeOperation < lastReachingDetail.DateTimeMachine)
+                if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("ReachingStartTime", "Start time cannot less than latest time log"));
                 }
                 else
                 {
-                    if (lastReachingDetail.MachineStatus.Equals(MachineStatus.ONENTRY))
+                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONENTRY))
                     {
                         existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(request.ReachingTypeInput, request.ReachingTypeOutput));
 
