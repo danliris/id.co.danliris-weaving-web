@@ -8,6 +8,7 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             _operatorRepository;
         private readonly IShiftRepository 
             _shiftRepository;
+        private readonly IMaterialTypeRepository
+            _materialTypeRepository;
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -42,6 +45,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
                 _storage.GetRepository<IShiftRepository>();
+            _materialTypeRepository =
+                _storage.GetRepository<IMaterialTypeRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
@@ -98,7 +103,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     operationResult.SetLatestBeamNumber(beamNumber);
                 } else
                 {
-                    operationResult.SetLatestBeamNumber("no beam input, preparing state");
+                    operationResult.SetLatestBeamNumber("Not Available beam on process, status: new entry");
                 }
                
                 result.Add(operationResult);
@@ -124,8 +129,34 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                        .Find(query)
                        .FirstOrDefault();
 
+            //Get Construction Number
+            await Task.Yield();
+            var constructionNumber =
+                _fabricConstructionRepository
+                    .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.ConstructionId.Value))
+                    .FirstOrDefault()
+                    .ConstructionNumber;
+
+            //Get MaterialName 
+            await Task.Yield();
+            var materialName =
+                _materialTypeRepository
+                    .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.MaterialTypeId.Value))
+                    .FirstOrDefault()
+                    .Name;
+
+            //Get Operator
+            await Task.Yield();
+            var operatorDocument =
+                _operatorRepository
+                    .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.OperatorId.Value))
+                    .FirstOrDefault();
+            
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
+            result.SetConstructionNumber(constructionNumber);
+            result.SetMaterialName(materialName);
+            result.SetOperator(operatorDocument);
 
             // Add Beam Product to DTO
             foreach(var beamProduct  in dailyOperationWarpingDocument.DailyOperationWarpingBeamProducts)
