@@ -5,7 +5,6 @@ using Manufactures.Domain.StockCard;
 using Manufactures.Domain.StockCard.Events.Sizing;
 using Manufactures.Domain.StockCard.Repositories;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,41 +15,56 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private bool IsSucceed;
 
         public MoveInBeamStockSizingEventHandler(IStorage storage)
         {
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            IsSucceed = false;
         }
 
         public async Task Handle(MoveInBeamStockSizingEvent notification, CancellationToken cancellationToken)
         {
-            await Task.Yield();
-            var existingStockCard =
-                _stockCardRepository
-                    .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
-                                    entity.StockType.Equals(StockCardStatus.SIZING_STOCK) &&
-                                    entity.Expired.Equals(false))
-                    .FirstOrDefault();
+            //Update MoveOut stok from latest beam id (same id)
+            var moveOutStockCardSizings =
+                _stockCardRepository.Find(o => o.BeamId.Equals(notification.BeamId.Value) &&
+                                               o.Expired.Equals(false));
 
-            if (existingStockCard == null)
+            foreach(var stockCard in moveOutStockCardSizings)
             {
-                var newStockCard =
-                 new StockCardDocument(Guid.NewGuid(),
-                                       notification.StockNumber,
-                                       notification.DailyOperationId,
-                                       notification.DateTimeOperation,
-                                       notification.BeamId,
-                                       true,
-                                       false,
-                                       StockCardStatus.SIZING_STOCK,
-                                       StockCardStatus.MOVEIN_STOCK);
 
-                await _stockCardRepository.Update(newStockCard);
-
-                _storage.Save();
+                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK) &&
+                    stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+                    await _stockCardRepository.Update(stockCard);
+                }
             }
+
+            //Create new MoveIn StockCard
+            var newStockCard =
+                new StockCardDocument(Guid.NewGuid(),
+                                      notification.StockNumber,
+                                      notification.DailyOperationId,
+                                      notification.DateTimeOperation,
+                                      notification.BeamId,
+                                      true,
+                                      false,
+                                      StockCardStatus.SIZING_STOCK,
+                                      StockCardStatus.MOVEIN_STOCK);
+
+            await _stockCardRepository.Update(newStockCard);
+
+            _storage.Save();
+            IsSucceed = true;
+        }
+
+        //This function only for testing
+        public bool ReturnResult()
+        {
+            return IsSucceed;
         }
     }
 }
