@@ -53,7 +53,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
             await MoveIn_StockCard_Warping_Should_Success_With_Existing_MoveOUt_StockCard();
         }
 
-        internal async Task MoveIn_Stock_Card_Warping_Should_Success_Without_Existing_MoveOut_StockCard()
+        private async Task MoveIn_Stock_Card_Warping_Should_Success_Without_Existing_MoveOut_StockCard()
         {
             // Arrange
             var moveInBeamStockWarpingEventHandler = this.CreateMoveInBeamStockWarpingEventHandler();
@@ -79,7 +79,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
             moveInBeamStockWarpingEventHandler.ReturnResult().Should().Equals(true);
         }
 
-        internal async Task MoveIn_StockCard_Warping_Should_Success_With_Existing_MoveOUt_StockCard()
+        private async Task MoveIn_StockCard_Warping_Should_Success_With_Existing_MoveOUt_StockCard()
         {
             // Arrange
             var moveInBeamStockWarpingEventHandler = this.CreateMoveInBeamStockWarpingEventHandler();
