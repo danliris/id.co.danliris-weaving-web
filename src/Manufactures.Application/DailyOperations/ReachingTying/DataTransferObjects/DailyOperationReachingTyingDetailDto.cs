@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
+namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects
 {
     public class DailyOperationReachingTyingDetailDto
     {

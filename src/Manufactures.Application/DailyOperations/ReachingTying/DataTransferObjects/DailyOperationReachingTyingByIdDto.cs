@@ -1,15 +1,18 @@
-﻿using Manufactures.Domain.DailyOperations.Reaching;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
+﻿using Manufactures.Domain.DailyOperations.ReachingTying;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
+namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects
 {
     public class DailyOperationReachingTyingByIdDto : DailyOperationReachingTyingListDto
     {
+        [JsonProperty(PropertyName = "ReachingHistories")]
+        public List<DailyOperationReachingTyingDetailDto> ReachingHistories { get; set; }
+
         public DailyOperationReachingTyingByIdDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber) 
             : base(document,
                    detail,
@@ -18,6 +21,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
                    constructionNumber,
                    sizingBeamNumber)
         {
+            ReachingHistories = new List<DailyOperationReachingTyingDetailDto>();
         }
     }
 }

@@ -1,15 +1,15 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
-using Manufactures.Domain.DailyOperations.Reaching;
-using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
-using Manufactures.Domain.DailyOperations.Reaching.Repositories;
+using Manufactures.Domain.DailyOperations.ReachingTying;
+using Manufactures.Domain.DailyOperations.ReachingTying.Command;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
+namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
 {
     public class NewEntryDailyOperationReachingTyingCommandHandler : ICommandHandler<NewEntryDailyOperationReachingTyingCommand, DailyOperationReachingTyingDocument>
     {

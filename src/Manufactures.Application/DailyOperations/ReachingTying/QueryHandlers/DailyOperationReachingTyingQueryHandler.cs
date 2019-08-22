@@ -1,8 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
-using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.DailyOperations.Reaching.Queries;
-using Manufactures.Domain.DailyOperations.Reaching.Repositories;
+using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators.Repositories;
@@ -14,7 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
+namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
 {
     public class DailyOperationReachingTyingQueryHandler : IReachingTyingQuery<DailyOperationReachingTyingListDto>
     {
@@ -116,14 +116,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                        .Where(x => x.Identity.Equals(id))
                        .FirstOrDefault();
 
-            //Get Daily Operation Reaching Detail
-            await Task.Yield();
-            var dailyOperationReachingTyingDetail =
-                dailyOperationReachingTyingDocument
-                    .ReachingTyingDetails
-                    .OrderByDescending(e => e.DateTimeMachine)
-                    .FirstOrDefault();
-
             //Get Machine Number
             await Task.Yield();
             var machineNumber =
@@ -154,8 +146,40 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                     .FirstOrDefault()
                     .Number ?? "Not Found Sizing Beam Number";
 
+            //Get Daily Operation Reaching Detail
+            await Task.Yield();
+            var dailyOperationReachingTyingDetail =
+                dailyOperationReachingTyingDocument
+                    .ReachingTyingDetails
+                    .OrderByDescending(e => e.DateTimeMachine)
+                    .FirstOrDefault();
+
             //Assign Parameter to Object Result
             var result = new DailyOperationReachingTyingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber);
+
+            foreach (var detail in dailyOperationReachingTyingDocument.ReachingTyingDetails)
+            {
+                //Get Operator Name
+                await Task.Yield();
+                var operatorName = 
+                    _operatorRepository
+                        .Find(entity => entity.Identity.Equals(detail.OperatorDocumentId))
+                        .FirstOrDefault()
+                        .CoreAccount.Name ?? "Not Found Operator Name";
+
+                //Get Shift Name
+                await Task.Yield();
+                var shiftName =
+                    _shiftRepository
+                        .Find(entity => entity.Identity.Equals(detail.ShiftDocumentId))
+                        .FirstOrDefault()
+                        .Name ?? "Not Found Shift Name";
+
+                var reachingDetail = new DailyOperationReachingTyingDetailDto(detail.Identity, operatorName, detail.DateTimeMachine, shiftName, detail.MachineStatus);
+
+                result.ReachingHistories.Add(reachingDetail);
+            }
+            result.ReachingHistories = result.ReachingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
 
             return result;
         }
