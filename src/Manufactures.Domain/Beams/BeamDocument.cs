@@ -29,7 +29,7 @@ namespace Manufactures.Domain.Beams
             {
                 Number = Number,
                 Type = Type,
-                EmtpyWeight = EmptyWeight
+                EmptyWeight = EmptyWeight
             };
 
             MarkTransient();
@@ -41,7 +41,7 @@ namespace Manufactures.Domain.Beams
         {
             this.Number = readModel.Number;
             this.Type = readModel.Type;
-            this.EmptyWeight = readModel.EmtpyWeight;
+            this.EmptyWeight = readModel.EmptyWeight;
             this.ConstructionId = readModel.ContructionId.HasValue ? new ConstructionId(readModel.ContructionId.Value) : null;
             this.YarnLength = readModel.YarnLength.HasValue ? readModel.YarnLength.Value : 0;
             this.YarnStrands = readModel.YarnStrands.HasValue ? readModel.YarnStrands.Value : 0;
@@ -74,7 +74,7 @@ namespace Manufactures.Domain.Beams
             if (EmptyWeight != value)
             {
                 EmptyWeight = value;
-                ReadModel.EmtpyWeight = EmptyWeight;
+                ReadModel.EmptyWeight = EmptyWeight;
 
                 MarkModified();
             }

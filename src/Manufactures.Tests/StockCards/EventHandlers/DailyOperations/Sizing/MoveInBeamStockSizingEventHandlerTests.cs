@@ -53,7 +53,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             await MoveIn_Stock_Card_Sizing_Should_Success_With_Existing_MoveOut_StockCard();
         }
 
-        internal async Task MoveIn_Stock_Card_Sizing_Should_Success_Without_Existing_MoveOut_StockCard()
+        private async Task MoveIn_Stock_Card_Sizing_Should_Success_Without_Existing_MoveOut_StockCard()
         {
             // Arrange
             var moveInBeamStockSizingEventHandler = this.CreateMoveInBeamStockSizingEventHandler();
@@ -77,7 +77,7 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             moveInBeamStockSizingEventHandler.ReturnResult().Should().Equals(true);
         }
 
-        internal async Task MoveIn_Stock_Card_Sizing_Should_Success_With_Existing_MoveOut_StockCard()
+        private async Task MoveIn_Stock_Card_Sizing_Should_Success_With_Existing_MoveOut_StockCard()
         {
             // Arrange
             var moveInBeamStockSizingEventHandler = this.CreateMoveInBeamStockSizingEventHandler();
