@@ -1,19 +1,16 @@
 ﻿using ExtCore.Data.Abstractions;
 using FluentAssertions;
-using Manufactures.Application.DailyOperations.Reaching.CommandHandlers;
-using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Repositories;
-using Manufactures.Domain.DailyOperations.Sizing.Repositories;
+using Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers;
+using Manufactures.Domain.DailyOperations.ReachingTying.Command;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
+namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 {
     public class NewEntryDailyOperationReachingTyingCommandHandlerTest : IDisposable
     {

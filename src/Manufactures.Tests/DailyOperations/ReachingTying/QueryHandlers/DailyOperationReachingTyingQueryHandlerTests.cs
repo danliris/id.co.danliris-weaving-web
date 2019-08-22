@@ -1,16 +1,15 @@
 using ExtCore.Data.Abstractions;
 using FluentAssertions;
-using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
-using Manufactures.Application.DailyOperations.Reaching.QueryHandlers;
+using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
+using Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.DailyOperations.Reaching;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
-using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Repositories;
-using Manufactures.Domain.DailyOperations.Reaching.ValueObjects;
+using Manufactures.Domain.DailyOperations.ReachingTying;
+using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
+using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.ReadModels;
@@ -19,9 +18,12 @@ using Manufactures.Domain.Machines;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators;
+using Manufactures.Domain.Operators.ReadModels;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
+using Manufactures.Domain.Shifts.ReadModels;
+using Manufactures.Domain.Shifts.Repositories;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -42,6 +44,8 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             mockMachineRepo;
         private readonly Mock<IOperatorRepository>
             mockOperatorRepo;
+        private readonly Mock<IShiftRepository>
+            mockShiftRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
         private readonly Mock<IBeamRepository>
@@ -54,12 +58,14 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
 
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
+            this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
             this.mockDailyOperationReachingTyingRepo = this.mockRepository.Create<IDailyOperationReachingTyingRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IMachineRepository>()).Returns(mockMachineRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingTyingRepository>()).Returns(mockDailyOperationReachingTyingRepo.Object);
@@ -296,6 +302,8 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 "F",
                 "AJL",
                 "Operator");
+            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
+                .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
 
             //Instantiate Object for Shift
             var firstShift = new ShiftDocument(
@@ -308,6 +316,8 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 "Siang",
                 new TimeSpan(14, 01, 00),
                 new TimeSpan(22, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { firstShift, secondShift });
 
             //Instantiate Object for Daily Operation Reaching-Tying
             var firstDocument = new DailyOperationReachingTyingDocument(

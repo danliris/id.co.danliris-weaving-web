@@ -1,10 +1,9 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
-using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Queries;
 using Manufactures.Domain.DailyOperations.ReachingTying.Command;
+using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +12,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api

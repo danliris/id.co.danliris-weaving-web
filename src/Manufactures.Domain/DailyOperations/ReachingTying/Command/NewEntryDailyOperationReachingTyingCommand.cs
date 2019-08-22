@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Domain.DailyOperations.Reaching.Command
+namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
 {
     public class NewEntryDailyOperationReachingTyingCommand : ICommand<DailyOperationReachingTyingDocument>
     {

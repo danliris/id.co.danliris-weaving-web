@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.DailyOperations.Reaching;
+using Manufactures.Domain.DailyOperations.ReachingTying;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
