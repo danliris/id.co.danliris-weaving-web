@@ -85,7 +85,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
             //Instantiate Incoming Object Update
-            var updateStartCommand = new UpdateReachingStartDailyOperationReachingTyingCommand
+            var updateReachingStartCommand = new UpdateReachingStartDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
@@ -97,7 +97,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             };
 
             //Update Incoming Object
-            UpdateReachingStartDailyOperationReachingTyingCommand request = updateStartCommand;
+            UpdateReachingStartDailyOperationReachingTyingCommand request = updateReachingStartCommand;
             request.SetId(reachingTyingTestId);
 
             //Set Cancellation Token

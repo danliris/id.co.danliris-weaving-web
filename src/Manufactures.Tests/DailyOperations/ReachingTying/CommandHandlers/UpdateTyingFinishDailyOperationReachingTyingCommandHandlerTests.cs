@@ -19,14 +19,14 @@ using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 {
-    public class UpdateReachingFinishDailyOperationReachingTyingCommandHandlerTests : IDisposable
+    public class UpdateTyingFinishDailyOperationReachingTyingCommandHandlerTests : IDisposable
     {
         private MockRepository mockRepository;
         private Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingTyingRepository>
             mockDailyOperationReachingTyingRepo;
 
-        public UpdateReachingFinishDailyOperationReachingTyingCommandHandlerTests()
+        public UpdateTyingFinishDailyOperationReachingTyingCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
 
@@ -43,9 +43,9 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private UpdateReachingFinishDailyOperationReachingTyingCommandHandler CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler()
+        private UpdateTyingFinishDailyOperationReachingTyingCommandHandler CreateUpdateTyingFinishDailyOperationReachingTyingCommandHandler()
         {
-            return new UpdateReachingFinishDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
+            return new UpdateTyingFinishDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
         }
 
         [Fact]
@@ -55,23 +55,24 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateUpdateTyingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var constructionId = new ConstructionId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var pisPieces = 12;
             var operationStatus = OperationStatus.ONPROCESS;
-            var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
+            var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus", 127);
+            var tyingValueObjects = new DailyOperationTyingValueObject(16, 90);
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, constructionId, beamId, pisPieces, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, constructionId, beamId, pisPieces, reachingValueObjects, tyingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
             var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
             var shiftId = new ShiftId(Guid.NewGuid());
-            var machineStatus = MachineStatus.ONSTARTREACHING;
+            var machineStatus = MachineStatus.ONSTARTTYING;
 
             //Assign Property to DailyOperationReachingTyingDetail
             var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, dateTimeMachine, shiftId, machineStatus);
@@ -83,18 +84,19 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
             //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var updateTyingFinishCommand = new UpdateTyingFinishDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ReachingFinishDate = DateTimeOffset.UtcNow,
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                TyingFinishDate = DateTimeOffset.UtcNow,
+                TyingFinishTime = new TimeSpan(7),
+                TyingWidth = 84,
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            UpdateTyingFinishDailyOperationReachingTyingCommand request = updateTyingFinishCommand;
+            request.SetId(reachingTyingTestId);
 
             //Set Cancellation Token
             CancellationToken cancellationToken = default(CancellationToken);
