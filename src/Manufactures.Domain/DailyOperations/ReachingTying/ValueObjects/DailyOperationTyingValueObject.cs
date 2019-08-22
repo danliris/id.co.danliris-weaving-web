@@ -28,11 +28,6 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
             TyingNumber = tyingNumber;
         }
 
-        public DailyOperationTyingValueObject(double tyingWidth)
-        {
-            TyingWidth = tyingWidth;
-        }
-
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return TyingEdgeStitching;

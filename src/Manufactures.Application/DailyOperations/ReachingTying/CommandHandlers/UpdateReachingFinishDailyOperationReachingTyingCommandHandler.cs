@@ -15,6 +15,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
 {
@@ -42,13 +43,13 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var existingReachingTyingDetail =
                 existingReachingTyingDocument.ReachingTyingDetails
                 .OrderByDescending(d => d.DateTimeMachine);
-            var lastReachingDetail = existingReachingTyingDetail.FirstOrDefault();
+            var lastReachingTyingDetail = existingReachingTyingDetail.FirstOrDefault();
 
             //Validation for Operation Status
             var operationStatus = existingReachingTyingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -62,7 +63,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
-            var lastDateMachineLogUtc = new DateTimeOffset(lastReachingDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var lastDateMachineLogUtc = new DateTimeOffset(lastReachingTyingDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
             var reachingFinishDateMachineLogUtc = new DateTimeOffset(request.ReachingFinishDate.Date, new TimeSpan(+7, 0, 0));
 
             if (reachingFinishDateMachineLogUtc < lastDateMachineLogUtc)
@@ -71,15 +72,18 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastReachingDetail.DateTimeMachine)
+                if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
                 {
                     throw Validator.ErrorValidation(("ReachingFinishTime", "Finish time cannot less than latest time log"));
                 }
                 else
                 {
-                    if (lastReachingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING))
+                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING))
                     {
-                        existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(request.ReachingWidth));
+                        var reachingValueObjects = JsonConvert.DeserializeObject<DailyOperationReachingValueObject>(existingReachingTyingDocument.ReachingValueObjects);
+                        existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(reachingValueObjects.ReachingTypeInput,
+                                                                                                                    reachingValueObjects.ReachingTypeOutput,
+                                                                                                                    request.ReachingWidth));
 
                         var newOperationDetail = new DailyOperationReachingTyingDetail(
                             Guid.NewGuid(),
@@ -87,7 +91,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                             dateTimeOperation,
                             new ShiftId(request.ShiftDocumentId.Value),
                             MachineStatus.ONFINISHREACHING);
-                        existingReachingTyingDocument.AddDailyOperationReachingDetail(newOperationDetail);
+                        existingReachingTyingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
 
                         await _dailyOperationReachingTyingDocumentRepository.Update(existingReachingTyingDocument);
 

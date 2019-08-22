@@ -52,7 +52,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                                                      request.ShiftDocumentId,
                                                      MachineStatus.ONENTRY);
 
-            dailyOperationReachingDocument.AddDailyOperationReachingDetail(newOperationDetail);
+            dailyOperationReachingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
 
             await _dailyOperationReachingDocumentRepository.Update(dailyOperationReachingDocument);
 

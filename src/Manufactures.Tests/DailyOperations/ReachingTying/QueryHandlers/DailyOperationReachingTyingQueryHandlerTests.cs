@@ -195,7 +195,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            firstDocument.AddDailyOperationReachingDetail(firstDetail);
+            firstDocument.AddDailyOperationReachingTyingDetail(firstDetail);
 
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
@@ -213,7 +213,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            secondDocument.AddDailyOperationReachingDetail(secondDetail);
+            secondDocument.AddDailyOperationReachingTyingDetail(secondDetail);
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingTyingReadModel>().AsQueryable());
             mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>())).Returns(
                 new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });
@@ -336,7 +336,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            firstDocument.AddDailyOperationReachingDetail(firstDetail);
+            firstDocument.AddDailyOperationReachingTyingDetail(firstDetail);
 
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
@@ -354,7 +354,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            secondDocument.AddDailyOperationReachingDetail(secondDetail);
+            secondDocument.AddDailyOperationReachingTyingDetail(secondDetail);
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingTyingReadModel>().AsQueryable());
             mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>())).Returns(
                 new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });

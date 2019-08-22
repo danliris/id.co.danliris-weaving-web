@@ -87,7 +87,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                             dateTimeOperation,
                             new ShiftId(request.ShiftDocumentId.Value),
                             MachineStatus.ONSTARTREACHING);
-                        existingReachingTyingDocument.AddDailyOperationReachingDetail(newOperationDetail);
+                        existingReachingTyingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
 
                         await _dailyOperationReachingTyingDocumentRepository.Update(existingReachingTyingDocument);
 

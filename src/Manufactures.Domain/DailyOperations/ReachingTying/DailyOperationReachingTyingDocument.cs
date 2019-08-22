@@ -113,17 +113,17 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             ReachingTyingDetails = readModel.ReachingTyingDetails;
         }
 
-        public void AddDailyOperationReachingDetail(DailyOperationReachingTyingDetail reachingDetail)
+        public void AddDailyOperationReachingTyingDetail(DailyOperationReachingTyingDetail detail)
         {
             var list = ReachingTyingDetails.ToList();
-            list.Add(reachingDetail);
+            list.Add(detail);
             ReachingTyingDetails = list;
             ReadModel.ReachingTyingDetails = ReachingTyingDetails.ToList();
 
             MarkModified();
         }
 
-        public void UpdateDailyOperationReachingDetail(DailyOperationReachingTyingDetail detail)
+        public void UpdateDailyOperationReachingTyingDetail(DailyOperationReachingTyingDetail detail)
         {
             var reachingDetails = ReachingTyingDetails.ToList();
 
@@ -148,7 +148,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             MarkModified();
         }
 
-        public void RemoveDailyOperationReachingDetail(Guid identity)
+        public void RemoveDailyOperationReachingTyingDetail(Guid identity)
         {
             var detail = ReachingTyingDetails.Where(o => o.Identity == identity).FirstOrDefault();
             var list = ReachingTyingDetails.ToList();

@@ -73,7 +73,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 
             //Assign Property to DailyOperationReachingTyingDetail
             var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingDetail(resultDetailModel);
+            resultModel.AddDailyOperationReachingTyingDetail(resultDetailModel);
 
             //Mocking Repository
             mockDailyOperationReachingTyingRepo
