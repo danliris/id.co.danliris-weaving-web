@@ -14,7 +14,6 @@ namespace Manufactures.Domain.Shared.ValueObjects
         public double YarnLength { get; private set; }
         public double YarnStrands { get; private set; }
 
-
         public BeamDocumentValueObject(BeamDocument beamDocument)
         {
             Identity = beamDocument.Identity;
@@ -24,6 +23,7 @@ namespace Manufactures.Domain.Shared.ValueObjects
             YarnLength = beamDocument.YarnLength;
             YarnStrands = beamDocument.YarnStrands;
         }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Identity;
