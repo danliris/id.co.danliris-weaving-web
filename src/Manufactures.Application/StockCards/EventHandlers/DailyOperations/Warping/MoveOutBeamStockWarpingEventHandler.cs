@@ -1,10 +1,13 @@
 ﻿using ExtCore.Data.Abstractions;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.Events;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.StockCard;
 using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Domain.StockCard.Repositories;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +18,8 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
         private readonly IStorage _storage;
         private readonly IStockCardRepository
             _stockCardRepository;
+        private readonly IBeamRepository
+           _beamRepository;
         private bool IsSucceed;
 
         public MoveOutBeamStockWarpingEventHandler(IStorage storage)
@@ -22,6 +27,8 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
+            _beamRepository =
+               _storage.GetRepository<IBeamRepository>();
             IsSucceed = false;
         }
 
@@ -30,10 +37,20 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
             await Task.Yield();
             var existingStockCards =
                 _stockCardRepository
-                    .Find(entity => entity.BeamId.Equals(notification.BeamId.Value) &&
+                    .Find(entity => entity.BeamDocument
+                                          .Deserialize<BeamDocumentValueObject>()
+                                          .Identity
+                                          .Equals(notification.BeamId.Value) &&
                                     entity.Expired.Equals(false));
 
-            foreach(var stockCard in existingStockCards)
+            //Get BeamDocument
+            await Task.Yield();
+            var beamDocument =
+                _beamRepository
+                    .Find(o => o.Identity.Equals(notification.BeamId.Value))
+                    .FirstOrDefault();
+
+            foreach (var stockCard in existingStockCards)
             {
                 if (stockCard.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
                     stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
@@ -49,7 +66,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
                                       notification.StockNumber,
                                       notification.DailyOperationId,
                                       notification.DateTimeOperation,
-                                      notification.BeamId,
+                                      new BeamDocumentValueObject(beamDocument),
                                       false,
                                       true,
                                       StockCardStatus.WARPING_STOCK,

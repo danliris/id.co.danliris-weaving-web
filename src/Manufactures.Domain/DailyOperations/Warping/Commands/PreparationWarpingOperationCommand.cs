@@ -9,6 +9,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
     public class PreparationWarpingOperationCommand
         : ICommand<DailyOperationWarpingDocument>
     {
+        [JsonProperty(PropertyName = "OrderId")]
+        public OrderId OrderId { get; set; }
+
         [JsonProperty(PropertyName = "ConstructionId")]
         public ConstructionId ConstructionId { get; set; }
 
@@ -39,6 +42,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
     {
         public PreparationWarpingOperationCommandValidator()
         {
+            RuleFor(command => command.OrderId.Value).NotEmpty();
             RuleFor(command => command.ConstructionId.Value).NotEmpty();
             RuleFor(command => command.MaterialTypeId.Value).NotEmpty();
             RuleFor(command => command.ShiftId.Value).NotEmpty();

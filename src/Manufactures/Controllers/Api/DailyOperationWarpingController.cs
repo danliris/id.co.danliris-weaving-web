@@ -62,7 +62,7 @@ namespace Manufactures.Controllers.Api
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
                         .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.DailyOperationNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OrderNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.LatestBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
