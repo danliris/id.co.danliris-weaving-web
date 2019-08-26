@@ -12,8 +12,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "DateTimeOperation")]
         public DateTimeOffset DateTimeOperation { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationNumber")]
-        public string DailyOperationNumber { get; private set; }
+        [JsonProperty(PropertyName = "OrderNumber")]
+        public string OrderNumber { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
@@ -28,8 +28,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         {
             Id = document.Identity;
             DateTimeOperation = document.DateTimeOperation;
-            DailyOperationNumber = document.DailyOperationNumber;
             OperationStatus = document.DailyOperationStatus;
+        }
+
+        public void SetOrderNumber(string value)
+        {
+            OrderNumber = value;
         }
 
         public void SetConstructionNumber(string value)

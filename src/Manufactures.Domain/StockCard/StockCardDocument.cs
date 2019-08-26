@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.StockCard.ReadModels;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Domain.StockCard
@@ -13,7 +14,7 @@ namespace Manufactures.Domain.StockCard
 
         public DateTimeOffset DateTimeOperation { get; private set; }
 
-        public BeamId BeamId { get; private set; }
+        public BeamDocumentValueObject BeamDocument { get; private set; }
 
         public bool IsEmpty { get; private set; }
 
@@ -35,7 +36,7 @@ namespace Manufactures.Domain.StockCard
                                  string stockNumber,
                                  DailyOperationId dailyOperationId,
                                  DateTimeOffset dateTimeOperation,
-                                 BeamId beamId,
+                                 BeamDocumentValueObject beamDocument,
                                  bool isMoveIn,
                                  bool isMoveOut,
                                  string stockType,
@@ -45,7 +46,7 @@ namespace Manufactures.Domain.StockCard
             StockNumber = stockNumber;
             DailyOperationId = dailyOperationId;
             DateTimeOperation = dateTimeOperation;
-            BeamId = beamId;
+            BeamDocument = beamDocument;
             MoveIn = isMoveIn;
             MoveOut = isMoveOut;
             StockType = stockType;
@@ -74,7 +75,7 @@ namespace Manufactures.Domain.StockCard
             {
                 StockNumber = StockNumber,
                 DailyOperationId = DailyOperationId.Value,
-                BeamId = BeamId.Value,
+                BeamDocument = JsonConvert.SerializeObject(BeamDocument),
                 DateTimeOperation = DateTimeOperation,
                 IsAvailable = IsEmpty,
                 StockType = StockType,
@@ -90,7 +91,7 @@ namespace Manufactures.Domain.StockCard
             Identity = readModel.Identity;
             StockNumber = readModel.StockNumber;
             DateTimeOperation = readModel.DateTimeOperation;
-            BeamId = new BeamId(readModel.BeamId);
+            BeamDocument = JsonConvert.DeserializeObject<BeamDocumentValueObject>(readModel.BeamDocument);
             StockType = readModel.StockType;
             Expired = readModel.Expired;
             StockStatus = readModel.StockStatus;

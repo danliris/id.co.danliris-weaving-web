@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DailyOperations\Loom\ValueObjects\" />
     <Folder Include="Orders\Entities\" />
   </ItemGroup>
 
