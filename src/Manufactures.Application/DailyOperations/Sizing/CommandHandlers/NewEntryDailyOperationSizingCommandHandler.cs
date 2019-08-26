@@ -37,7 +37,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
                                                     request.WeavingUnitId,
-                                                    request.ConstructionDocumentId,
+                                                    request.OrderDocumentId,
                                                     request.BeamsWarping, 
                                                     request.YarnStrands,
                                                     request.RecipeCode,

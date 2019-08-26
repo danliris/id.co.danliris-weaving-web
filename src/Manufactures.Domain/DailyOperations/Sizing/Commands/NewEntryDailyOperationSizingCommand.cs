@@ -17,8 +17,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public UnitId WeavingUnitId { get; set; }
 
-        [JsonProperty(PropertyName = "ConstructionDocumentId")]
-        public ConstructionId ConstructionDocumentId { get; set; }
+        [JsonProperty(PropertyName = "OrderDocumentId")]
+        public OrderId OrderDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "YarnStrands")]
         public double YarnStrands { get; set; }
@@ -42,7 +42,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         {
             RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
-            RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.OrderDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.YarnStrands).NotEmpty();
             RuleFor(validator => validator.RecipeCode).NotEmpty();
             RuleFor(validator => validator.NeReal).NotEmpty();

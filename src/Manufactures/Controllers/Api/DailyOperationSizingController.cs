@@ -10,6 +10,7 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Shifts.ValueObjects;
@@ -48,6 +49,8 @@ namespace Manufactures.Controllers.Api
             _machineRepository;
         private readonly IMachineTypeRepository
             _machineTypeRepository;
+        private readonly IWeavingOrderDocumentRepository
+            _orderDocumentRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
         private readonly IShiftRepository
@@ -67,6 +70,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =
                 this.Storage.GetRepository<IMachineTypeRepository>();
+            _orderDocumentRepository =
+                this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _shiftDocumentRepository =
@@ -102,9 +107,15 @@ namespace Manufactures.Controllers.Api
                        .Find(e => e.Identity.Equals(dailyOperation.MachineDocumentId.Value))
                        .FirstOrDefault();
 
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(e => e.Identity.Equals(dailyOperation.OrderDocumentId.Value))
+                        .FirstOrDefault();
+                var constructionId = orderDocument.ConstructionId.Value;
+
                 var constructionDocument =
                     _constructionDocumentRepository
-                        .Find(e => e.Identity.Equals(dailyOperation.ConstructionDocumentId.Value))
+                        .Find(e => e.Identity.Equals(constructionId))
                         .FirstOrDefault();
 
                 var shiftOnDetail = new ShiftValueObject();
@@ -191,7 +202,7 @@ namespace Manufactures.Controllers.Api
 
                 var constructionDocument =
                         _constructionDocumentRepository
-                            .Find(e => e.Identity.Equals(dailyOperationalSizing.ConstructionDocumentId.Value))
+                            .Find(e => e.Identity.Equals(dailyOperationalSizing.OrderDocumentId.Value))
                             .FirstOrDefault();
 
                 var constructionNumber = constructionDocument.ConstructionNumber;
@@ -567,7 +578,7 @@ namespace Manufactures.Controllers.Api
 
                     var constructionDocument =
                         _constructionDocumentRepository
-                            .Find(e => e.Identity.Equals(document.ConstructionDocumentId.Value))
+                            .Find(e => e.Identity.Equals(document.OrderDocumentId.Value))
                             .FirstOrDefault();
                     var constructionNumber = constructionDocument.ConstructionNumber;
                     string[] splittedConstructionNumber = constructionNumber.Split(" ");
@@ -753,7 +764,7 @@ namespace Manufactures.Controllers.Api
 
                     var constructionDocument =
                         _constructionDocumentRepository
-                            .Find(e => e.Identity.Equals(document.ConstructionDocumentId.Value))
+                            .Find(e => e.Identity.Equals(document.OrderDocumentId.Value))
                             .FirstOrDefault();
                     var constructionNumber = constructionDocument.ConstructionNumber;
                     string[] splittedConstructionNumber = constructionNumber.Split(" ");
@@ -943,7 +954,7 @@ namespace Manufactures.Controllers.Api
 
                     var constructionDocument =
                         _constructionDocumentRepository
-                            .Find(e => e.Identity.Equals(document.ConstructionDocumentId.Value))
+                            .Find(e => e.Identity.Equals(document.OrderDocumentId.Value))
                             .FirstOrDefault();
                     var constructionNumber = constructionDocument.ConstructionNumber;
                     string[] splittedConstructionNumber = constructionNumber.Split(" ");
