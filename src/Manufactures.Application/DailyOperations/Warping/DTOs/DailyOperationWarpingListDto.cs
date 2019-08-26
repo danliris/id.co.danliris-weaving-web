@@ -1,5 +1,6 @@
 ﻿using System;
 using Manufactures.Domain.DailyOperations.Warping;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 
 namespace Manufactures.Application.DailyOperations.Warping.DTOs
@@ -11,6 +12,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
 
         [JsonProperty(PropertyName = "DateTimeOperation")]
         public DateTimeOffset DateTimeOperation { get; private set; }
+
+        [JsonProperty(PropertyName = "OrderId")]
+        public OrderId OrderId { get; private set; }
 
         [JsonProperty(PropertyName = "OrderNumber")]
         public string OrderNumber { get; private set; }
@@ -29,6 +33,11 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             Id = document.Identity;
             DateTimeOperation = document.DateTimeOperation;
             OperationStatus = document.DailyOperationStatus;
+        }
+
+        public void SetOrderId(OrderId value)
+        {
+            OrderId = value;
         }
 
         public void SetOrderNumber(string value)
