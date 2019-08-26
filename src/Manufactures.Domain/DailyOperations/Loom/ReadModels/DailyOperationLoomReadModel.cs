@@ -20,6 +20,5 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
         {
         }
 
-        
     }
 }

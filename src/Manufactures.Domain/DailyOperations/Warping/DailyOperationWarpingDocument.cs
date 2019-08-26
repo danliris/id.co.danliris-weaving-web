@@ -17,7 +17,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
                         DailyOperationWarpingReadModel>
     {
         //Property
-        public string DailyOperationNumber { get; private set; }
+        public OrderId OrderId { get; private set; }
         public ConstructionId ConstructionId { get; private set; }
         public MaterialTypeId MaterialTypeId { get; private set; }
         public int AmountOfCones { get; private set; }
@@ -30,7 +30,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
 
         //Main Constructor
         public DailyOperationWarpingDocument(Guid id,
-                                             string dailyOperationNumber,
+                                             OrderId orderId,
                                              ConstructionId constructionId,
                                              MaterialTypeId materialTypeId,
                                              int amountOfCones,
@@ -40,7 +40,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         {
             //Instantiate property from parameter variable
             Identity = id;
-            DailyOperationNumber = dailyOperationNumber;
+            OrderId = orderId;
             ConstructionId = constructionId;
             MaterialTypeId = materialTypeId;
             AmountOfCones = amountOfCones;
@@ -56,7 +56,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             //Save object to database as new one
             ReadModel = new DailyOperationWarpingReadModel(Identity)
             {
-                DailyOperationNumber = this.DailyOperationNumber,
+                OrderId = this.OrderId.Value,
                 ConstructionId = this.ConstructionId.Value,
                 MaterialTypeId = this.MaterialTypeId.Value,
                 AmountOfCones = this.AmountOfCones,
@@ -70,7 +70,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         public DailyOperationWarpingDocument(DailyOperationWarpingReadModel readModel) : base(readModel)
         {
             //Instantiate object from database
-            this.DailyOperationNumber = ReadModel.DailyOperationNumber;
+            this.OrderId = new OrderId(ReadModel.OrderId);
             this.ConstructionId = new ConstructionId(readModel.ConstructionId);
             this.MaterialTypeId = new MaterialTypeId(readModel.MaterialTypeId);
             this.AmountOfCones = readModel.AmountOfCones;

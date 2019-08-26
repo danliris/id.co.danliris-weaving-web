@@ -10,6 +10,7 @@ using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -31,6 +32,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             _shiftRepository;
         private readonly IMaterialTypeRepository
             _materialTypeRepository;
+        private readonly IWeavingOrderDocumentRepository
+            _weavingOrderDocumentRepository;
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -47,6 +50,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _storage.GetRepository<IShiftRepository>();
             _materialTypeRepository =
                 _storage.GetRepository<IMaterialTypeRepository>();
+            _weavingOrderDocumentRepository =
+                _storage.GetRepository<IWeavingOrderDocumentRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
@@ -76,9 +81,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .Equals(operation.ConstructionId.Value))
                         .FirstOrDefault()
                         .ConstructionNumber ?? "Not Found Construction Number";
-                
-                //add construction number
-                operationResult.SetConstructionNumber(constructionNumber);
+
+                //Get Order Number
+                await Task.Yield();
+                var OrderNumber =
+                    _weavingOrderDocumentRepository
+                        .Find(o => o.Identity.Equals(operation.OrderId.Value))
+                        .FirstOrDefault()
+                        .OrderNumber;
 
                 //Get Latest BeamId
                 await Task.Yield();
@@ -99,8 +109,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                             .FirstOrDefault()
                             .Number ?? "Not Found Beam Number";
 
-
+                    //complete another field
+                    operationResult.SetConstructionNumber(constructionNumber);
                     operationResult.SetLatestBeamNumber(beamNumber);
+                    operationResult.SetOrderNumber(OrderNumber);
                 } else
                 {
                     operationResult.SetLatestBeamNumber("Not Available beam on process, status: new entry");
@@ -128,6 +140,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                    _dailyOperationWarpingRepository
                        .Find(query)
                        .FirstOrDefault();
+
+            //Get Order Number
+            await Task.Yield();
+            var OrderNumber =
+                _weavingOrderDocumentRepository
+                    .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.OrderId.Value))
+                    .FirstOrDefault()
+                    .OrderNumber;
 
             //Get Construction Number
             await Task.Yield();
@@ -157,6 +177,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialName(materialName);
             result.SetOperator(operatorDocument);
+            result.SetOrderNumber(OrderNumber);
 
             // Add Beam Product to DTO
             foreach(var beamProduct  in dailyOperationWarpingDocument.DailyOperationWarpingBeamProducts)
@@ -197,7 +218,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 result.AddDailyOperationLoomHistories(dailyHistory);
             }
 
-            //return as DailyOperationWarpingListDto
             return result;
         }
     }

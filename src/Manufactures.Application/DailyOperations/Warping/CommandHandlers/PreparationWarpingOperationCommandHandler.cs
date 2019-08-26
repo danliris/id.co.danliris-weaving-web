@@ -43,15 +43,9 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            //Set daily Operation warping number
-            var warpingNumber = new StringBuilder();
-            warpingNumber.Append("warping-operation/");
-            warpingNumber.Append(dateTimeOperation.ToString("mm/HH"));
-            warpingNumber.Append(dateTimeOperation.ToString("dd/MM/yyyy"));
-
             //Instantiate new Daily operation warping
             var dailyOperationWarping = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                              warpingNumber.ToString(),
+                                                              request.OrderId,
                                                               request.ConstructionId,
                                                               request.MaterialTypeId,
                                                               request.AmountOfCones,

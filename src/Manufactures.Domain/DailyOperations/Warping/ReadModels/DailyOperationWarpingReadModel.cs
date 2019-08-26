@@ -16,7 +16,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         public string DailyOperationStatus { get; internal set; }
         public List<DailyOperationWarpingHistory> DailyOperationWarpingDetailHistory { get; internal set; }
         public List<DailyOperationWarpingBeamProduct> DailyOperationWarpingBeamProducts { get; internal set; }
-        public string DailyOperationNumber { get; internal set; }
+        public Guid OrderId { get; internal set; }
 
         public DailyOperationWarpingReadModel(Guid identity) : base(identity) { }
     }
