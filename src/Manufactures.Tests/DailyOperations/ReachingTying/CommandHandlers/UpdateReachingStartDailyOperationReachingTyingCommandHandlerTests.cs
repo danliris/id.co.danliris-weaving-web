@@ -71,12 +71,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
+            var yarnStrandsProcessed = 100;
             var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
             var shiftId = new ShiftId(Guid.NewGuid());
             var machineStatus = MachineStatus.ONENTRY;
 
             //Assign Property to DailyOperationReachingTyingDetail
-            var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, dateTimeMachine, shiftId, machineStatus);
+            var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
             resultModel.AddDailyOperationReachingTyingDetail(resultDetailModel);
 
             //Mocking Repository

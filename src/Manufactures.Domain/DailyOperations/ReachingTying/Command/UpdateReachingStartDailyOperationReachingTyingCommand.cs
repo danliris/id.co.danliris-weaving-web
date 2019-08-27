@@ -22,6 +22,9 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
+        public int YarnStrandsProcessed { get; set; }
+
         [JsonProperty(PropertyName = "ReachingStartDate")]
         public DateTimeOffset ReachingStartDate { get; set; }
 
@@ -45,6 +48,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
             RuleFor(validator => validator.ReachingTypeInput).NotEmpty();
             RuleFor(validator => validator.ReachingTypeOutput).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
             RuleFor(validator => validator.ReachingStartDate).NotEmpty();
             RuleFor(validator => validator.ReachingStartTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();

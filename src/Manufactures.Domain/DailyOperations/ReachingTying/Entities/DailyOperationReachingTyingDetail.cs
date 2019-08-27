@@ -11,6 +11,8 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Entities
     {
         public Guid OperatorDocumentId { get; private set; }
 
+        public int YarnStrandsProcessed { get; private set; }
+
         public DateTimeOffset DateTimeMachine { get; private set; }
 
         public Guid ShiftDocumentId { get; private set; }
@@ -27,11 +29,13 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Entities
 
         public DailyOperationReachingTyingDetail(Guid identity,
                                             OperatorId operatorDocumentId,
+                                            int yarnStrandsProcessed,
                                             DateTimeOffset dateTimeMachine,
                                             ShiftId shiftDocumentId,
                                             string machineStatus) : base(identity)
         {
             OperatorDocumentId = operatorDocumentId.Value;
+            YarnStrandsProcessed = yarnStrandsProcessed;
             DateTimeMachine = dateTimeMachine;
             ShiftDocumentId = shiftDocumentId.Value;
             MachineStatus = machineStatus;
@@ -44,6 +48,12 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Entities
                 OperatorDocumentId = operatorDocumentId.Value;
                 MarkModified();
             }
+        }
+
+        public void SetYarnStrandsProcessed(int yarnStrandsProcessed)
+        {
+            YarnStrandsProcessed = yarnStrandsProcessed;
+            MarkModified();
         }
 
         public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
