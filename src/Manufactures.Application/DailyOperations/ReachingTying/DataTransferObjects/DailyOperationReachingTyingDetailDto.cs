@@ -13,6 +13,9 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
         [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; }
 
+        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
+        public int YarnStrandsProcessed { get; }
+
         [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeMachine { get; }
 
@@ -22,14 +25,16 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
-        public DailyOperationReachingTyingDetailDto(Guid id, 
-                                               string operatorName, 
-                                               DateTimeOffset dateTimeMachine, 
-                                               string shiftName, 
-                                               string machineStatus)
+        public DailyOperationReachingTyingDetailDto(Guid id,
+                                                    string operatorName,
+                                                    int yarnStrandsProcessed,
+                                                    DateTimeOffset dateTimeMachine,
+                                                    string shiftName,
+                                                    string machineStatus)
         {
             Id = id;
             OperatorName = operatorName;
+            YarnStrandsProcessed = yarnStrandsProcessed;
             DateTimeMachine = dateTimeMachine;
             ShiftName = shiftName;
             MachineStatus = machineStatus;

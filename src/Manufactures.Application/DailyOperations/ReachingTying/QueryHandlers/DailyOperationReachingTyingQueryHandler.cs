@@ -198,7 +198,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                         .FirstOrDefault()
                         .Name ?? "Not Found Shift Name";
 
-                var reachingDetail = new DailyOperationReachingTyingDetailDto(detail.Identity, operatorName, detail.DateTimeMachine, shiftName, detail.MachineStatus);
+                var reachingDetail = new DailyOperationReachingTyingDetailDto(detail.Identity, operatorName, detail.YarnStrandsProcessed, detail.DateTimeMachine, shiftName, detail.MachineStatus);
 
                 result.ReachingHistories.Add(reachingDetail);
             }
