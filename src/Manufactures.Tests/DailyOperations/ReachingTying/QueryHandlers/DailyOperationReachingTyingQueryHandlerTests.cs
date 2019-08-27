@@ -14,12 +14,17 @@ using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Machines;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.ReadModels;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Orders;
+using Manufactures.Domain.Orders.ReadModels;
+using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.ReadModels;
@@ -48,6 +53,8 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             mockShiftRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
+        private readonly Mock<IWeavingOrderDocumentRepository>
+            mockOrderDocumentRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
 
@@ -60,6 +67,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
             this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
             this.mockDailyOperationReachingTyingRepo = this.mockRepository.Create<IDailyOperationReachingTyingRepository>();
 
@@ -67,6 +75,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingTyingRepository>()).Returns(mockDailyOperationReachingTyingRepo.Object);
         }
@@ -111,7 +120,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 .Returns(new List<MachineDocument>() { firstMachine, secondMachine });
 
             //Instantiate Object for Fabric Construction
-            var firstFabricConstruction = new FabricConstructionDocument(
+            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
                 new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
                 "Melintang",
@@ -122,7 +131,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 55,
                 1000,
                 "PolyCotton100");
-            var secondFabricConstruction = new FabricConstructionDocument(
+            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
                 new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
                 "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
                 "Lurus",
@@ -134,7 +143,39 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 2400,
                 "Cotton12");
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+
+            //Instantiate Object for Order Document
+            var firstOrderDocument = new OrderDocument(
+                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
+                "0002/08-2019",
+                new ConstructionId(firstFabricConstruction.Identity),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                new Period("August", "2019"),
+                new Composition(50, 40, 10),
+                new Composition(30, 50, 20),
+                "PC",
+                "CD",
+                4000,
+                "PolyCotton",
+                new UnitId(11),
+                "OPEN-ORDER");
+            var secondOrderDocument = new OrderDocument(
+                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
+                "0001/08-2019",
+                new ConstructionId(secondFabricConstruction.Identity),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                new Period("August", "2019"),
+                new Composition(30, 50, 20),
+                new Composition(50, 40, 10),
+                "CD",
+                "CM",
+                3500,
+                "Cotton",
+                new UnitId(11),
+                "OPEN-ORDER");
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Instantiate Object for Beam
             var firstBeam = new BeamDocument(
@@ -183,7 +224,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 Guid.NewGuid(),
                 new MachineId(firstMachine.Identity),
                 new UnitId(11),
-                new ConstructionId(firstFabricConstruction.Identity),
+                new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
                 12,
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
@@ -195,13 +236,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            firstDocument.AddDailyOperationReachingDetail(firstDetail);
+            firstDocument.AddDailyOperationReachingTyingDetail(firstDetail);
 
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(secondMachine.Identity),
                 new UnitId(11),
-                new ConstructionId(secondFabricConstruction.Identity),
+                new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
                 17,
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),
@@ -213,7 +254,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            secondDocument.AddDailyOperationReachingDetail(secondDetail);
+            secondDocument.AddDailyOperationReachingTyingDetail(secondDetail);
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingTyingReadModel>().AsQueryable());
             mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>())).Returns(
                 new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });
@@ -248,7 +289,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 .Returns(new List<MachineDocument>() { firstMachine, secondMachine });
 
             //Instantiate Object for Fabric Construction
-            var firstFabricConstruction = new FabricConstructionDocument(
+            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
                 new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
                 "Melintang",
@@ -259,7 +300,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 55,
                 1000,
                 "PolyCotton100");
-            var secondFabricConstruction = new FabricConstructionDocument(
+            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
                 new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
                 "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
                 "Lurus",
@@ -271,7 +312,39 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 2400,
                 "Cotton12");
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+
+            //Instantiate Object for Order Document
+            var firstOrderDocument = new OrderDocument(
+                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
+                "0002/08-2019",
+                new ConstructionId(firstFabricConstruction.Identity),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                new Period("August", "2019"),
+                new Composition(50, 40, 10),
+                new Composition(30, 50, 20),
+                "PC",
+                "CD",
+                4000,
+                "PolyCotton",
+                new UnitId(11),
+                "OPEN-ORDER");
+            var secondOrderDocument = new OrderDocument(
+                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
+                "0001/08-2019",
+                new ConstructionId(secondFabricConstruction.Identity),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                new Period("August", "2019"),
+                new Composition(30, 50, 20),
+                new Composition(50, 40, 10),
+                "CD",
+                "CM",
+                3500,
+                "Cotton",
+                new UnitId(11),
+                "OPEN-ORDER");
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Instantiate Object for Beam
             var firstBeam = new BeamDocument(
@@ -324,7 +397,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 Guid.NewGuid(),
                 new MachineId(firstMachine.Identity),
                 new UnitId(11),
-                new ConstructionId(firstFabricConstruction.Identity),
+                new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
                 12,
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
@@ -336,13 +409,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            firstDocument.AddDailyOperationReachingDetail(firstDetail);
+            firstDocument.AddDailyOperationReachingTyingDetail(firstDetail);
 
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(secondMachine.Identity),
                 new UnitId(11),
-                new ConstructionId(secondFabricConstruction.Identity),
+                new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
                 17,
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),
@@ -354,7 +427,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);
-            secondDocument.AddDailyOperationReachingDetail(secondDetail);
+            secondDocument.AddDailyOperationReachingTyingDetail(secondDetail);
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingTyingReadModel>().AsQueryable());
             mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>())).Returns(
                 new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });

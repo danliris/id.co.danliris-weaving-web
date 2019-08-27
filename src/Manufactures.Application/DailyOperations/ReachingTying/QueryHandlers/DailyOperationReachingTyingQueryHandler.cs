@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Operators.Repositories;
+using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,6 +26,8 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
             _machineRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
+        private readonly IWeavingOrderDocumentRepository
+            _orderDocumentRepository;
         private readonly IBeamRepository
             _beamRepository;
         private readonly IShiftRepository
@@ -41,6 +44,8 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                 _storage.GetRepository<IMachineRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
+            _orderDocumentRepository =
+                _storage.GetRepository<IWeavingOrderDocumentRepository>();
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
             _shiftRepository =
@@ -75,12 +80,21 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                         .FirstOrDefault()
                         .MachineNumber ?? "Not Found Machine Number";
 
+                //Get Order Document
+                await Task.Yield();
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(entity => entity.Identity
+                        .Equals(operation.OrderDocumentId.Value))
+                        .FirstOrDefault();
+                var constructionId = orderDocument.ConstructionId.Value;
+
                 //Get Contruction Number
                 await Task.Yield();
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(entity => entity.Identity
-                        .Equals(operation.ConstructionDocumentId.Value))
+                        .Equals(constructionId))
                         .FirstOrDefault()
                         .ConstructionNumber ?? "Not Found Construction Number";
 
@@ -129,12 +143,21 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
             await Task.Yield();
             var weavingUnitId = dailyOperationReachingTyingDocument.WeavingUnitId;
 
+            //Get Order Document
+            await Task.Yield();
+            var orderDocument =
+                _orderDocumentRepository
+                    .Find(entity => entity.Identity
+                    .Equals(dailyOperationReachingTyingDocument.OrderDocumentId.Value))
+                    .FirstOrDefault();
+            var constructionId = orderDocument.ConstructionId.Value;
+
             //Get Contruction Number
             await Task.Yield();
             var constructionNumber =
                 _fabricConstructionRepository
                     .Find(entity => entity.Identity
-                    .Equals(dailyOperationReachingTyingDocument.ConstructionDocumentId.Value))
+                    .Equals(constructionId))
                     .FirstOrDefault()
                     .ConstructionNumber ?? "Not Found Construction Number";
 

@@ -55,7 +55,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             //Instantiate New Object
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(new int());
-            var constructionDocumentId = new ConstructionId(Guid.NewGuid());
+            var orderDocumentId = new OrderId(Guid.NewGuid());
             List<BeamId> beamsWarping = new List<BeamId>();
             var operatorId = new OperatorId(Guid.NewGuid());
             DateTimeOffset preparationDate = DateTimeOffset.UtcNow;
@@ -74,7 +74,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             {
                 MachineDocumentId = machineDocumentId,
                 WeavingUnitId = weavingUnitId,
-                ConstructionDocumentId = constructionDocumentId,
+                OrderDocumentId = orderDocumentId,
                 BeamsWarping = beamsWarping,
                 Details = newEntryDetail,
                 NeReal = 2,

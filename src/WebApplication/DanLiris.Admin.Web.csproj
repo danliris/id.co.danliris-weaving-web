@@ -22,6 +22,16 @@
     <Compile Remove="Migrations\20190808111437_dev_card_stock.Designer.cs" />
     <Compile Remove="Migrations\20190822105145_dev_latest_db.cs" />
     <Compile Remove="Migrations\20190822105145_dev_latest_db.Designer.cs" />
+    <Compile Remove="Migrations\20190826063823_dev_latest_db.cs" />
+    <Compile Remove="Migrations\20190826063823_dev_latest_db.Designer.cs" />
+    <Compile Remove="Migrations\20190826073840_ChangePropertiesOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190826073840_ChangePropertiesOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190826073943_ChangePropertiesOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190826073943_ChangePropertiesOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190826074225_ChangePropertiesOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190826074225_ChangePropertiesOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190826075224_LatestDb_ChangePropertyOnSizing.cs" />
+    <Compile Remove="Migrations\20190826075224_LatestDb_ChangePropertyOnSizing.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

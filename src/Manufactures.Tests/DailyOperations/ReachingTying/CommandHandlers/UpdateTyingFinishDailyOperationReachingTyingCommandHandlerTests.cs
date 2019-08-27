@@ -7,26 +7,26 @@ using Manufactures.Domain.DailyOperations.ReachingTying.Command;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
+using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 {
-    public class UpdateReachingStartDailyOperationReachingTyingCommandHandlerTests : IDisposable
+    public class UpdateTyingFinishDailyOperationReachingTyingCommandHandlerTests : IDisposable
     {
         private MockRepository mockRepository;
         private Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingTyingRepository>
             mockDailyOperationReachingTyingRepo;
 
-        public UpdateReachingStartDailyOperationReachingTyingCommandHandlerTests()
+        public UpdateTyingFinishDailyOperationReachingTyingCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
 
@@ -43,14 +43,11 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private UpdateReachingStartDailyOperationReachingTyingCommandHandler CreateUpdateReachingStartDailyOperationReachingTyingCommandHandler()
+        private UpdateTyingFinishDailyOperationReachingTyingCommandHandler CreateUpdateTyingFinishDailyOperationReachingTyingCommandHandler()
         {
-            return new UpdateReachingStartDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
+            return new UpdateTyingFinishDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
         }
 
-        /**
-         * Test for Update Start on Daily Operation Reaching-Tying
-         * **/
         [Fact]
         public async Task Handle_StateUnderTest_ExpectedBehavior()
         {
@@ -58,22 +55,24 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingStartDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateUpdateTyingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var pisPieces = 12;
             var operationStatus = OperationStatus.ONPROCESS;
+            var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus", 127);
+            var tyingValueObjects = new DailyOperationTyingValueObject(16, 90);
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, pisPieces, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, pisPieces, reachingValueObjects, tyingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
             var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
             var shiftId = new ShiftId(Guid.NewGuid());
-            var machineStatus = MachineStatus.ONENTRY;
+            var machineStatus = MachineStatus.ONSTARTTYING;
 
             //Assign Property to DailyOperationReachingTyingDetail
             var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, dateTimeMachine, shiftId, machineStatus);
@@ -85,23 +84,22 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
             //Instantiate Incoming Object Update
-            var updateReachingStartCommand = new UpdateReachingStartDailyOperationReachingTyingCommand
+            var updateTyingFinishCommand = new UpdateTyingFinishDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ReachingStartDate = DateTimeOffset.UtcNow,
-                ReachingStartTime = new TimeSpan(7),
-                ReachingTypeInput = "Plain",
-                ReachingTypeOutput = "Lurus",
+                TyingFinishDate = DateTimeOffset.UtcNow,
+                TyingFinishTime = new TimeSpan(7),
+                TyingWidth = 84,
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingStartDailyOperationReachingTyingCommand request = updateReachingStartCommand;
+            UpdateTyingFinishDailyOperationReachingTyingCommand request = updateTyingFinishCommand;
             request.SetId(reachingTyingTestId);
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(System.Threading.CancellationToken);
+            CancellationToken cancellationToken = default(CancellationToken);
 
             // Act
             var result = await unitUnderTest.Handle(request, cancellationToken);

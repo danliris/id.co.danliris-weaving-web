@@ -9,6 +9,7 @@ using Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,21 +19,20 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
 {
-    public class UpdateReachingStartDailyOperationReachingTyingCommandHandler : ICommandHandler<UpdateReachingStartDailyOperationReachingTyingCommand, DailyOperationReachingTyingDocument>
+    public class UpdateTyingStartDailyOperationReachingTyingCommandHandler : ICommandHandler<UpdateTyingStartDailyOperationReachingTyingCommand, DailyOperationReachingTyingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingTyingRepository
             _dailyOperationReachingTyingDocumentRepository;
 
-        public UpdateReachingStartDailyOperationReachingTyingCommandHandler(IStorage storage)
+        public UpdateTyingStartDailyOperationReachingTyingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingTyingDocumentRepository =
                 _storage.GetRepository<IDailyOperationReachingTyingRepository>();
         }
 
-        public async Task<DailyOperationReachingTyingDocument>
-            Handle(UpdateReachingStartDailyOperationReachingTyingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationReachingTyingDocument> Handle(UpdateTyingStartDailyOperationReachingTyingCommand request, CancellationToken cancellationToken)
         {
             var query =
                 _dailyOperationReachingTyingDocumentRepository.Query
@@ -52,41 +52,46 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             }
 
             //Reformat DateTime
-            var year = request.ReachingStartDate.Year;
-            var month = request.ReachingStartDate.Month;
-            var day = request.ReachingStartDate.Day;
-            var hour = request.ReachingStartTime.Hours;
-            var minutes = request.ReachingStartTime.Minutes;
-            var seconds = request.ReachingStartTime.Seconds;
+            var year = request.TyingStartDate.Year;
+            var month = request.TyingStartDate.Month;
+            var day = request.TyingStartDate.Day;
+            var hour = request.TyingStartTime.Hours;
+            var minutes = request.TyingStartTime.Minutes;
+            var seconds = request.TyingStartTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastReachingTyingDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var reachingStartDateMachineLogUtc = new DateTimeOffset(request.ReachingStartDate.Date, new TimeSpan(+7, 0, 0));
+            var tyingStartDateMachineLogUtc = new DateTimeOffset(request.TyingStartDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (reachingStartDateMachineLogUtc < lastDateMachineLogUtc)
+            if (tyingStartDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("ReachingStartDate", "Start date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("TyingStartDate", "Start date cannot less than latest date log"));
             }
             else
             {
                 if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ReachingStartTime", "Start time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("TyingStartTime", "Start time cannot less than latest time log"));
                 }
                 else
                 {
-                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONENTRY))
+                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONFINISHREACHING))
                     {
-                        existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(request.ReachingTypeInput, request.ReachingTypeOutput));
+                        var reachingValueObjects = JsonConvert.DeserializeObject<DailyOperationReachingValueObject>(existingReachingTyingDocument.ReachingValueObjects);
+                        existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(reachingValueObjects.ReachingTypeInput,
+                                                                                                                    reachingValueObjects.ReachingTypeOutput,
+                                                                                                                    reachingValueObjects.ReachingWidth));
+
+                        existingReachingTyingDocument.SetTyingValueObjects(new DailyOperationTyingValueObject(request.TyingEdgeStitching, request.TyingNumber));
 
                         var newOperationDetail = new DailyOperationReachingTyingDetail(
                             Guid.NewGuid(),
                             new OperatorId(request.OperatorDocumentId.Value),
                             dateTimeOperation,
                             new ShiftId(request.ShiftDocumentId.Value),
-                            MachineStatus.ONSTARTREACHING);
+                            MachineStatus.ONSTARTTYING);
                         existingReachingTyingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
 
                         await _dailyOperationReachingTyingDocumentRepository.Update(existingReachingTyingDocument);
@@ -97,7 +102,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status not ONENTRY"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status not ONFINISHREACHING"));
                     }
                 }
             }

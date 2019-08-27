@@ -66,7 +66,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var unitUnderTest = this.UpdateStartDailyOperationSizingCommandHandler();
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var unitId = new UnitId(new int());
-            var constructionId = new ConstructionId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
             List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
             var yarnStrands = 63;
             var recipeCode = "PCA 133R";
@@ -74,7 +74,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var operationStatus = OperationStatus.ONPROCESS;
 
             //Add Existing Data
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, unitId, constructionId, beamsWarping, yarnStrands, recipeCode, neReal, 0, "0", "0", operationStatus);
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, unitId, orderId, beamsWarping, yarnStrands, recipeCode, neReal, 0, "0", "0", operationStatus);
 
             var sizingBeamDocument = new DailyOperationSizingBeamDocument(
                 Guid.NewGuid(),
@@ -172,7 +172,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var unitUnderTest = this.UpdateStartDailyOperationSizingCommandHandler();
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var unitId = new UnitId(new int());
-            var constructionId = new ConstructionId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
             List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
             var yarnStrands = 63;
             var recipeCode = "PCA 133R";
@@ -180,7 +180,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var operationStatus = OperationStatus.ONPROCESS;
 
             //Add Existing Data
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, unitId, constructionId, beamsWarping, yarnStrands, recipeCode, neReal, 0, "0", "0", operationStatus);
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, unitId, orderId, beamsWarping, yarnStrands, recipeCode, neReal, 0, "0", "0", operationStatus);
 
             var sizingBeamDocument = new DailyOperationSizingBeamDocument(
                 Guid.NewGuid(),
