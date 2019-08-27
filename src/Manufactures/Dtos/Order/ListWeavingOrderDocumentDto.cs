@@ -17,6 +17,9 @@ namespace Manufactures.Dtos.Order
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; }
 
+        [JsonProperty(PropertyName = "ConstructionId")]
+        public ConstructionId ConstructionId { get; }
+
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
@@ -41,6 +44,7 @@ namespace Manufactures.Dtos.Order
             Id = weavingOrderDocument.Identity;
             OrderNumber = weavingOrderDocument.OrderNumber;
             DateOrdered = weavingOrderDocument.DateOrdered;
+            ConstructionId = new ConstructionId(fabricConstruction.Id);
             ConstructionNumber = fabricConstruction.ConstructionNumber;
             WarpComposition = weavingOrderDocument.WarpComposition;
             WeftComposition = weavingOrderDocument.WeftComposition;
