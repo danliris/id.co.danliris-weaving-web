@@ -69,7 +69,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var yarnStrandsProcessed = 100;
+            var yarnStrandsProcessed = 10;
             var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
             var shiftId = new ShiftId(Guid.NewGuid());
             var machineStatus = MachineStatus.ONSTARTREACHING;
@@ -88,6 +88,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                YarnStrandsProcessed = 12,
                 ReachingFinishDate = DateTimeOffset.UtcNow,
                 ReachingFinishTime = new TimeSpan(7),
                 ReachingWidth = 127,

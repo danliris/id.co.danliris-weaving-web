@@ -28,14 +28,26 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Entities
         }
 
         public DailyOperationReachingTyingDetail(Guid identity,
-                                            OperatorId operatorDocumentId,
-                                            int yarnStrandsProcessed,
-                                            DateTimeOffset dateTimeMachine,
-                                            ShiftId shiftDocumentId,
-                                            string machineStatus) : base(identity)
+                                                 OperatorId operatorDocumentId,
+                                                 int yarnStrandsProcessed,
+                                                 DateTimeOffset dateTimeMachine,
+                                                 ShiftId shiftDocumentId,
+                                                 string machineStatus) : base(identity)
         {
             OperatorDocumentId = operatorDocumentId.Value;
             YarnStrandsProcessed = yarnStrandsProcessed;
+            DateTimeMachine = dateTimeMachine;
+            ShiftDocumentId = shiftDocumentId.Value;
+            MachineStatus = machineStatus;
+        }
+
+        public DailyOperationReachingTyingDetail(Guid identity,
+                                                 OperatorId operatorDocumentId,
+                                                 DateTimeOffset dateTimeMachine,
+                                                 ShiftId shiftDocumentId,
+                                                 string machineStatus) : base(identity)
+        {
+            OperatorDocumentId = operatorDocumentId.Value;
             DateTimeMachine = dateTimeMachine;
             ShiftDocumentId = shiftDocumentId.Value;
             MachineStatus = machineStatus;

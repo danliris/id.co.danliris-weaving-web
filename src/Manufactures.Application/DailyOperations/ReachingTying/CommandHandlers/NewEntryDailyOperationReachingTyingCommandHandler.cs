@@ -48,7 +48,6 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var newOperationDetail =
                     new DailyOperationReachingTyingDetail(Guid.NewGuid(),
                                                           request.OperatorDocumentId,
-                                                          request.YarnStrandsProcessed,
                                                           dateTimeOperation,
                                                           request.ShiftDocumentId,
                                                           MachineStatus.ONENTRY);
