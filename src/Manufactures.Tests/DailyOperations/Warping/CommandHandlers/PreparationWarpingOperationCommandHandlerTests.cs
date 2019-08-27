@@ -1,11 +1,15 @@
 using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Application.DailyOperations.Warping.CommandHandlers;
+using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
+using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -76,6 +80,11 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ShiftId = shiftId,
                     OrderId = new OrderId(Guid.NewGuid())
             };
+
+            //Setup mock object result for beam repository
+            mockWarpingOperationRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
+                .Returns(new List<DailyOperationWarpingDocument>());
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
