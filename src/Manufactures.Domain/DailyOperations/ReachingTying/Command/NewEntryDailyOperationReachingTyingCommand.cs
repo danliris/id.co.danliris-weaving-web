@@ -16,8 +16,8 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public UnitId WeavingUnitId { get; set; }
 
-        [JsonProperty(PropertyName = "ConstructionDocumentId")]
-        public ConstructionId ConstructionDocumentId { get; set; }
+        [JsonProperty(PropertyName = "OrderDocumentId")]
+        public OrderId OrderDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
@@ -44,7 +44,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
         {
             RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
-            RuleFor(validator => validator.ConstructionDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.OrderDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
             RuleFor(validator => validator.PISPieces).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();

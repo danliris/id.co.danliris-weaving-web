@@ -121,9 +121,9 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
 
-            var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
+            var updateReachingStartDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateStartDailyOperationSizingDocument.Identity);
+            return Ok(updateReachingStartDailyOperationSizingDocument.Identity);
         }
 
         [HttpPut("{Id}/reaching-finish")]
@@ -135,9 +135,39 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
             command.SetId(documentId);
-            var updateFinishDailyOperationSizingDocument = await Mediator.Send(command);
+            var updateReachingFinishDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateFinishDailyOperationSizingDocument.Identity);
+            return Ok(updateReachingFinishDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{Id}/tying-start")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateTyingStartDailyOperationReachingTyingCommand command)
+        {
+            //Parse Id
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+
+            var updateTyingStartDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateTyingStartDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{Id}/tying-finish")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateTyingFinishDailyOperationReachingTyingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateTyingFinishDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateTyingFinishDailyOperationSizingDocument.Identity);
         }
     }
 }

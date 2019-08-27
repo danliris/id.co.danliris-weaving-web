@@ -30,11 +30,6 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ValueObjects
             ReachingTypeOutput = reachingTypeOutput;
         }
 
-        public DailyOperationReachingValueObject(double reachingWidth)
-        {
-            ReachingWidth = reachingWidth;
-        }
-
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return ReachingTypeInput;
