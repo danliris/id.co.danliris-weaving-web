@@ -58,14 +58,14 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var unitUnderTest = this.CreateUpdateTyingStartDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
-            var constructionId = new ConstructionId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var pisPieces = 12;
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus", 127);
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, constructionId, beamId, pisPieces, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderId, beamId, pisPieces, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());

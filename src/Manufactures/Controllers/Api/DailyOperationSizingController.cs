@@ -200,9 +200,15 @@ namespace Manufactures.Controllers.Api
                     .FirstOrDefault();
                 var machineType = machineTypeDocument.TypeName;
 
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(e => e.Identity.Equals(dailyOperationalSizing.OrderDocumentId.Value))
+                        .FirstOrDefault();
+                var constructionId = orderDocument.ConstructionId.Value;
+
                 var constructionDocument =
                         _constructionDocumentRepository
-                            .Find(e => e.Identity.Equals(dailyOperationalSizing.OrderDocumentId.Value))
+                            .Find(e => e.Identity.Equals(constructionId))
                             .FirstOrDefault();
 
                 var constructionNumber = constructionDocument.ConstructionNumber;
@@ -350,7 +356,7 @@ namespace Manufactures.Controllers.Api
                 moveOutWarpingBeam.DateTimeOperation = dateTimeNow;
 
                 //Update stock
-                await Mediator.Publish(moveOutWarpingBeam);
+                //await Mediator.Publish(moveOutWarpingBeam);
             }
 
             return Ok(updateStartDailyOperationSizingDocument.Identity);
@@ -438,7 +444,7 @@ namespace Manufactures.Controllers.Api
             addStockEvent.DateTimeOperation = dateTimeNow;
 
             //Update stock
-            await Mediator.Publish(addStockEvent);
+            //await Mediator.Publish(addStockEvent);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }

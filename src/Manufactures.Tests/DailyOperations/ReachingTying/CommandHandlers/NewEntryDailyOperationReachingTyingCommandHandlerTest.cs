@@ -54,7 +54,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate New Object
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(new int());
-            var constructionDocumentId = new ConstructionId(Guid.NewGuid());
+            var orderDocumentId = new OrderId(Guid.NewGuid());
             var sizingBeamId = new BeamId(Guid.NewGuid());
             var pisPieces = 20;
             var operatorId = new OperatorId(Guid.NewGuid());
@@ -67,7 +67,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             {
                 MachineDocumentId = machineDocumentId,
                 WeavingUnitId = weavingUnitId,
-                ConstructionDocumentId = constructionDocumentId,
+                OrderDocumentId = orderDocumentId,
                 SizingBeamId = sizingBeamId,
                 OperatorDocumentId = operatorId,
                 PISPieces = pisPieces,

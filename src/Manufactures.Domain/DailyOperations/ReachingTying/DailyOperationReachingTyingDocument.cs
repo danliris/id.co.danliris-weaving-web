@@ -14,7 +14,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
     {
         public MachineId MachineDocumentId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
-        public ConstructionId ConstructionDocumentId { get; private set; }
+        public OrderId OrderDocumentId { get; private set; }
         public BeamId SizingBeamId { get; private set; }
         public double PISPieces { get; private set; }
         public string ReachingValueObjects { get; private set; }
@@ -22,12 +22,12 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationReachingTyingDetail> ReachingTyingDetails { get; private set; }
 
-        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, DailyOperationTyingValueObject tyingValueObjects, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, OrderId orderDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, DailyOperationTyingValueObject tyingValueObjects, string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
-            ConstructionDocumentId = constructionDocumentId;
+            OrderDocumentId = orderDocumentId;
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             ReachingValueObjects = reachingValueObjects.Serialize();
@@ -41,7 +41,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             {
                 MachineDocumentId = MachineDocumentId.Value,
                 WeavingUnitId = WeavingUnitId.Value,
-                ConstructionDocumentId = ConstructionDocumentId.Value,
+                OrderDocumentId = OrderDocumentId.Value,
                 SizingBeamId = SizingBeamId.Value,
                 PISPieces = PISPieces,
                 ReachingValueObjects = ReachingValueObjects,
@@ -50,12 +50,12 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             };
         }
 
-        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, OrderId orderDocumentId, BeamId sizingBeamId, double pisPieces, DailyOperationReachingValueObject reachingValueObjects, string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
-            ConstructionDocumentId = constructionDocumentId;
+            OrderDocumentId = orderDocumentId;
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             ReachingValueObjects = reachingValueObjects.Serialize();
@@ -68,7 +68,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             {
                 MachineDocumentId = MachineDocumentId.Value,
                 WeavingUnitId = WeavingUnitId.Value,
-                ConstructionDocumentId = ConstructionDocumentId.Value,
+                OrderDocumentId = OrderDocumentId.Value,
                 SizingBeamId = SizingBeamId.Value,
                 PISPieces = PISPieces,
                 ReachingValueObjects = ReachingValueObjects,
@@ -76,12 +76,12 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             };
         }
 
-        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, ConstructionId constructionDocumentId, BeamId sizingBeamId, double pisPieces, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, OrderId orderDocumentId, BeamId sizingBeamId, double pisPieces, string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
             WeavingUnitId = weavingUnitId;
-            ConstructionDocumentId = constructionDocumentId;
+            OrderDocumentId = orderDocumentId;
             SizingBeamId = sizingBeamId;
             PISPieces = pisPieces;
             OperationStatus = operationStatus;
@@ -93,7 +93,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
             {
                 MachineDocumentId = MachineDocumentId.Value,
                 WeavingUnitId = WeavingUnitId.Value,
-                ConstructionDocumentId = ConstructionDocumentId.Value,
+                OrderDocumentId = OrderDocumentId.Value,
                 SizingBeamId = SizingBeamId.Value,
                 PISPieces = PISPieces,
                 OperationStatus = OperationStatus,
@@ -104,7 +104,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
         {
             MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
             WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
-            ConstructionDocumentId = readModel.ConstructionDocumentId.HasValue ? new ConstructionId(readModel.ConstructionDocumentId.Value) : null;
+            OrderDocumentId = readModel.OrderDocumentId.HasValue ? new OrderId(readModel.OrderDocumentId.Value) : null;
             SizingBeamId = readModel.SizingBeamId.HasValue ? new BeamId(readModel.SizingBeamId.Value) : null;
             PISPieces = readModel.PISPieces;
             ReachingValueObjects = readModel.ReachingValueObjects;

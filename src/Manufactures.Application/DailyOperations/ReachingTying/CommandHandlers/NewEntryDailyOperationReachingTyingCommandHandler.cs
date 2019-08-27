@@ -31,7 +31,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                 new DailyOperationReachingTyingDocument(Guid.NewGuid(),
                                                    request.MachineDocumentId,
                                                    request.WeavingUnitId,
-                                                   request.ConstructionDocumentId,
+                                                   request.OrderDocumentId,
                                                    request.SizingBeamId,
                                                    request.PISPieces,
                                                    OperationStatus.ONPROCESS);
