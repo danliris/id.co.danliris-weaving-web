@@ -22,6 +22,9 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
+        public int YarnStrandsProcessed { get; set; }
+
         [JsonProperty(PropertyName = "TyingStartDate")]
         public DateTimeOffset TyingStartDate { get; set; }
 
@@ -45,6 +48,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
             RuleFor(validator => validator.TyingEdgeStitching).NotEmpty();
             RuleFor(validator => validator.TyingNumber).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
             RuleFor(validator => validator.TyingStartDate).NotEmpty();
             RuleFor(validator => validator.TyingStartTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();

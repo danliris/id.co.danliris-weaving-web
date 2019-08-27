@@ -28,6 +28,9 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
+        public int YarnStrandsProcessed { get; set; }
+
         [JsonProperty(PropertyName = "EntryDate")]
         public DateTimeOffset EntryDate { get; set; }
 
@@ -48,6 +51,7 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.Command
             RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
             RuleFor(validator => validator.PISPieces).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
             RuleFor(validator => validator.EntryDate).NotEmpty();
             RuleFor(validator => validator.EntryTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();

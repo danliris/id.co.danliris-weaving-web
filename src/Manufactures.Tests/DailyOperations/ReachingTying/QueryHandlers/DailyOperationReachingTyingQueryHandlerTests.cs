@@ -233,6 +233,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var firstDetail = new DailyOperationReachingTyingDetail(
                 Guid.NewGuid(),
                 new OperatorId(firstOperator.Identity),
+                100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
@@ -251,6 +252,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var secondDetail = new DailyOperationReachingTyingDetail(
                 Guid.NewGuid(),
                 new OperatorId(secondOperator.Identity),
+                100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);
@@ -406,6 +408,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var firstDetail = new DailyOperationReachingTyingDetail(
                 Guid.NewGuid(),
                 new OperatorId(firstOperator.Identity),
+                100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(firstShift.Identity),
                 MachineStatus.ONCOMPLETE);
@@ -424,6 +427,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var secondDetail = new DailyOperationReachingTyingDetail(
                 Guid.NewGuid(),
                 new OperatorId(secondOperator.Identity),
+                100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(secondShift.Identity),
                 MachineStatus.ONCOMPLETE);

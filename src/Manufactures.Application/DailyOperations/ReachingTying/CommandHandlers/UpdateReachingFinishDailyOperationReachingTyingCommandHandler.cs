@@ -85,12 +85,13 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                                                                                                                     reachingValueObjects.ReachingTypeOutput,
                                                                                                                     request.ReachingWidth));
 
-                        var newOperationDetail = new DailyOperationReachingTyingDetail(
-                            Guid.NewGuid(),
-                            new OperatorId(request.OperatorDocumentId.Value),
-                            dateTimeOperation,
-                            new ShiftId(request.ShiftDocumentId.Value),
-                            MachineStatus.ONFINISHREACHING);
+                        var newOperationDetail =
+                            new DailyOperationReachingTyingDetail(Guid.NewGuid(),
+                                                                  new OperatorId(request.OperatorDocumentId.Value),
+                                                                  request.YarnStrandsProcessed,
+                                                                  dateTimeOperation,
+                                                                  new ShiftId(request.ShiftDocumentId.Value),
+                                                                  MachineStatus.ONFINISHREACHING);
                         existingReachingTyingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
 
                         await _dailyOperationReachingTyingDocumentRepository.Update(existingReachingTyingDocument);
