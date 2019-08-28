@@ -109,15 +109,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                             .FirstOrDefault()
                             .Number ?? "Not Found Beam Number";
 
-                    //complete another field
-                    operationResult.SetConstructionNumber(constructionNumber);
                     operationResult.SetLatestBeamNumber(beamNumber);
-                    operationResult.SetOrderNumber(OrderNumber);
                 } else
                 {
                     operationResult.SetLatestBeamNumber("Not Available beam on process, status: new entry");
                 }
-               
+
+                //complete another field
+                operationResult.SetConstructionNumber(constructionNumber);
+                operationResult.SetOrderNumber(OrderNumber);
+
                 result.Add(operationResult);
             }
 
@@ -143,11 +144,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             //Get Order Number
             await Task.Yield();
-            var OrderNumber =
+            var orderDocument =
                 _weavingOrderDocumentRepository
                     .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.OrderId.Value))
-                    .FirstOrDefault()
-                    .OrderNumber;
+                    .FirstOrDefault();
 
             //Get Construction Number
             await Task.Yield();
@@ -171,13 +171,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _operatorRepository
                     .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.OperatorId.Value))
                     .FirstOrDefault();
-            
+
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialName(materialName);
             result.SetOperator(operatorDocument);
-            result.SetOrderNumber(OrderNumber);
+            result.SetOrderNumber(orderDocument.OrderNumber);
+            result.SetWeavingUnit(orderDocument.UnitId);
 
             // Add Beam Product to DTO
             foreach(var beamProduct  in dailyOperationWarpingDocument.DailyOperationWarpingBeamProducts)
