@@ -103,7 +103,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status not ONFINISHREACHING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status not ONFINISHREACHING"));
                     }
                 }
             }

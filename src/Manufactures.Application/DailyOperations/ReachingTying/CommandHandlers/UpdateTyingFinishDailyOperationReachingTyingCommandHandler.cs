@@ -107,7 +107,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status not ONSTARTTYING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status not ONSTARTTYING"));
                     }
                 }
             }

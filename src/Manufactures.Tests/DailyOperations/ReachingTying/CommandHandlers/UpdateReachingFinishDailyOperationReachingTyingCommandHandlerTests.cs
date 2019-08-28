@@ -49,7 +49,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
         }
 
         [Fact]
-        public async Task Handle_StateUnderTest_ExpectedBehavior()
+        public async Task Handle_OnStartReaching_ExpectedBehavior()
         {
             // Arrange
             //Instantiate Properties
@@ -73,6 +73,67 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
             var shiftId = new ShiftId(Guid.NewGuid());
             var machineStatus = MachineStatus.ONSTARTREACHING;
+
+            //Assign Property to DailyOperationReachingTyingDetail
+            var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
+            resultModel.AddDailyOperationReachingTyingDetail(resultDetailModel);
+
+            //Mocking Repository
+            mockDailyOperationReachingTyingRepo
+                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
+                .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
+
+            //Instantiate Incoming Object Update
+            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            {
+                Id = reachingTyingDetailTestId,
+                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                YarnStrandsProcessed = 12,
+                ReachingFinishDate = DateTimeOffset.UtcNow,
+                ReachingFinishTime = new TimeSpan(7),
+                ReachingWidth = 127,
+                ShiftDocumentId = new ShiftId(Guid.NewGuid())
+            };
+
+            //Update Incoming Object
+            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = default(CancellationToken);
+
+            // Act
+            var result = await unitUnderTest.Handle(request, cancellationToken);
+
+            // Assert
+            result.Identity.Should().NotBeEmpty();
+            result.Should().NotBeNull();
+        }
+
+        [Fact]
+        public async Task Handle_ChangeOperatorReaching_ExpectedBehavior()
+        {
+            // Arrange
+            //Instantiate Properties
+            //Add Existing Data
+            var reachingTyingTestId = Guid.NewGuid();
+            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var machineId = new MachineId(Guid.NewGuid());
+            var weavingUnitId = new UnitId(11);
+            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var beamId = new BeamId(Guid.NewGuid());
+            var pisPieces = 12;
+            var operationStatus = OperationStatus.ONPROCESS;
+            var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
+
+            //Assign Property to DailyOperationReachingTyingDocument
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, pisPieces, reachingValueObjects, operationStatus);
+
+            var reachingTyingDetailTestId = Guid.NewGuid();
+            var operatorDocumentId = new OperatorId(Guid.NewGuid());
+            var yarnStrandsProcessed = 10;
+            var dateTimeMachine = DateTimeOffset.UtcNow.AddDays(-1);
+            var shiftId = new ShiftId(Guid.NewGuid());
+            var machineStatus = MachineStatus.CHANGEOPERATORREACHING;
 
             //Assign Property to DailyOperationReachingTyingDetail
             var resultDetailModel = new DailyOperationReachingTyingDetail(reachingTyingDetailTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);

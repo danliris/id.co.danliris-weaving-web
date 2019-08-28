@@ -78,7 +78,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                 }
                 else
                 {
-                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING))
+                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING) || lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHING))
                     {
                         var reachingValueObjects = JsonConvert.DeserializeObject<DailyOperationReachingValueObject>(existingReachingTyingDocument.ReachingValueObjects);
                         existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(reachingValueObjects.ReachingTypeInput,
@@ -102,7 +102,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status not ONSTARTREACHING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status not ONSTARTREACHING or CHANGEOPERATORREACHING"));
                     }
                 }
             }
