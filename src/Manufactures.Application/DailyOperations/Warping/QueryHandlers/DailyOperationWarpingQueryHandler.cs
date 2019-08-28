@@ -109,15 +109,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                             .FirstOrDefault()
                             .Number ?? "Not Found Beam Number";
 
-                    //complete another field
-                    operationResult.SetConstructionNumber(constructionNumber);
                     operationResult.SetLatestBeamNumber(beamNumber);
-                    operationResult.SetOrderNumber(OrderNumber);
                 } else
                 {
                     operationResult.SetLatestBeamNumber("Not Available beam on process, status: new entry");
                 }
-               
+
+                //complete another field
+                operationResult.SetConstructionNumber(constructionNumber);
+                operationResult.SetOrderNumber(OrderNumber);
+
                 result.Add(operationResult);
             }
 
