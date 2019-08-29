@@ -48,7 +48,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var operationStatus = existingReachingTyingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -101,7 +101,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Change Operator. This operation's status not ONSTARTREACHING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTREACHING or CHANGEOPERATORREACHING"));
                     }
                 }
             }

@@ -48,7 +48,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var operationStatus = existingReachingTyingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
