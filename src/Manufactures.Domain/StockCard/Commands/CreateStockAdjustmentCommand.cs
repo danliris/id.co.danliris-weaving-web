@@ -37,8 +37,6 @@ namespace Manufactures.Domain.StockCard.Commands
             RuleFor(command => command.BeamId.Value).NotEmpty();
             RuleFor(command => command.BeamNumber).NotEmpty();
             RuleFor(command => command.EmptyWeight).NotEmpty();
-            RuleFor(command => command.YarnLength).NotEmpty();
-            RuleFor(command => command.YarnStrands).NotEmpty();
             RuleFor(command => command.DailyOperationId.Value).NotEmpty();
             RuleFor(command => command.DateTimeOperation).NotNull();
         }
