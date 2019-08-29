@@ -58,6 +58,13 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
                     stockCard.UpdateExpired(true);
                     await _stockCardRepository.Update(stockCard);
                 }
+
+                if (stockCard.StockStatus.Equals(StockCardStatus.ADJUSTMENT) &&
+                   stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+                    await _stockCardRepository.Update(stockCard);
+                }
             }
 
             //Create new MoveIn StockCard
