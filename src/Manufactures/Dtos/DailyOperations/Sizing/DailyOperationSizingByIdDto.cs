@@ -25,6 +25,9 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "WarpingBeamsDocument")]
         public List<BeamDto> WarpingBeamsDocument { get; }
 
+        [JsonProperty(PropertyName = "EmptyWeight")]
+        public double EmptyWeight { get; }
+
         [JsonProperty(PropertyName = "YarnStrands")]
         public double YarnStrands { get; }
 
@@ -40,7 +43,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingDetails")]
         public List<DailyOperationSizingDetailsDto> SizingDetails { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string machineType, string constructionNumber, List<BeamDto> beams, double yarnStrands, double neReal)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string machineType, string constructionNumber, List<BeamDto> beams, double emptyWeight, double yarnStrands, double neReal)
         {
             Id = document.Identity;
             MachineNumber = machineNumber;
@@ -48,6 +51,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
             WeavingUnitDocumentId = document.WeavingUnitId;
             ConstructionNumber = constructionNumber;
             WarpingBeamsDocument = beams;
+            EmptyWeight = emptyWeight;
             YarnStrands = yarnStrands;
             NeReal = neReal;
             SizingBeamDocuments = new List<DailyOperationSizingBeamDocumentsDto>();

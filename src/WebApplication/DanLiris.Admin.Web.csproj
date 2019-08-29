@@ -34,6 +34,16 @@
     <Compile Remove="Migrations\20190826075224_LatestDb_ChangePropertyOnSizing.Designer.cs" />
     <Compile Remove="Migrations\20190827065321_ChangePropertyonDailyOperationReachingTying.cs" />
     <Compile Remove="Migrations\20190827065321_ChangePropertyonDailyOperationReachingTying.Designer.cs" />
+    <Compile Remove="Migrations\20190827094719_AddPropertyonDailyOperationReachingTying.cs" />
+    <Compile Remove="Migrations\20190827094719_AddPropertyonDailyOperationReachingTying.Designer.cs" />
+    <Compile Remove="Migrations\20190829093944_AddEmptyWeightOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190829093944_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190829094307_AddEmptyWeightOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190829094307_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190829094358_AddEmptyWeightOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190829094358_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190829094748_AddEmptyWeightOnDailyOperationSizing.cs" />
+    <Compile Remove="Migrations\20190829094748_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

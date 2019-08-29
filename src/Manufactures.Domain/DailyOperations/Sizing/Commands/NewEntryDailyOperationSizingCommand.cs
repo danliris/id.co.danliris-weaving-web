@@ -23,6 +23,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "YarnStrands")]
         public double YarnStrands { get; set; }
 
+        [JsonProperty(PropertyName = "EmptyWeight")]
+        public double EmptyWeight { get; set; }
+
         [JsonProperty(PropertyName = "RecipeCode")]
         public string RecipeCode { get; set; }
 
@@ -44,6 +47,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.WeavingUnitId.Value).NotEmpty();
             RuleFor(validator => validator.OrderDocumentId.Value).NotEmpty();
             RuleFor(validator => validator.YarnStrands).NotEmpty();
+            RuleFor(validator => validator.EmptyWeight).NotEmpty();
             RuleFor(validator => validator.RecipeCode).NotEmpty();
             RuleFor(validator => validator.NeReal).NotEmpty();
             RuleFor(validator => validator.BeamsWarping.Count).NotEqual(0);

@@ -224,10 +224,11 @@ namespace Manufactures.Controllers.Api
                     warpingBeams.Add(beamsDto);
                 }
 
+                var emptyWeight = dailyOperationalSizing.EmptyWeight;
                 var yarnStrands = dailyOperationalSizing.YarnStrands;
                 var neReal = dailyOperationalSizing.NeReal;
 
-                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, machineType, constructionNumber, warpingBeams, yarnStrands, neReal);
+                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, machineType, constructionNumber, warpingBeams, emptyWeight, yarnStrands, neReal);
 
                 foreach (var detail in dailyOperationalSizing.SizingDetails)
                 {
@@ -447,6 +448,27 @@ namespace Manufactures.Controllers.Api
             //await Mediator.Publish(addStockEvent);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpGet("calculate/netto/empty-weight/{emptyWeight}/bruto/{bruto}")]
+        public async Task<IActionResult> CalculateNetto(double emptyWeight, double bruto)
+        {
+            double nettoCalculationResult;
+
+            if (emptyWeight != 0 && bruto != 0)
+            {
+                Netto calculate = new Netto();
+                nettoCalculationResult = calculate.CalculateNetto(emptyWeight, bruto);
+
+                await Task.Yield();
+                return Ok(nettoCalculationResult);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsBruto", "Bruto cannot less than Empty Weight"));
+            }
         }
 
         [HttpGet("calculate/pis-in-meter/start/{counterStart}/finish/{counterFinish}")]

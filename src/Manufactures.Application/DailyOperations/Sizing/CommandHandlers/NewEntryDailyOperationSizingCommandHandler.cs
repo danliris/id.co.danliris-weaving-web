@@ -39,6 +39,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.WeavingUnitId,
                                                     request.OrderDocumentId,
                                                     request.BeamsWarping, 
+                                                    request.EmptyWeight,
                                                     request.YarnStrands,
                                                     request.RecipeCode,
                                                     request.NeReal,
