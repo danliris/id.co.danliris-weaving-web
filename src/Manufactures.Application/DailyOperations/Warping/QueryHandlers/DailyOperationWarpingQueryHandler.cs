@@ -88,7 +88,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     _weavingOrderDocumentRepository
                         .Find(o => o.Identity.Equals(operation.OrderId.Value))
                         .FirstOrDefault()
-                        .OrderNumber;
+                        .OrderNumber ?? "Not Found Order Number";
 
                 //Get Latest BeamId
                 await Task.Yield();
@@ -210,7 +210,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var shiftName = 
                     _shiftRepository
                         .Find(entity => entity.Identity.Equals(history.ShiftId))
-                        .FirstOrDefault().Name;
+                        .FirstOrDefault().Name ?? "shift not found";
 
                 var dailyHistory = 
                     new DailyOperationWarpingHistoryDto(history.Identity, 
