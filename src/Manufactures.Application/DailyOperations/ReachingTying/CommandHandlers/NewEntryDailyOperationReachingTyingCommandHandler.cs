@@ -33,7 +33,6 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                                                    request.WeavingUnitId,
                                                    request.OrderDocumentId,
                                                    request.SizingBeamId,
-                                                   request.PISPieces,
                                                    OperationStatus.ONPROCESS);
 
             var year = request.EntryDate.Year;

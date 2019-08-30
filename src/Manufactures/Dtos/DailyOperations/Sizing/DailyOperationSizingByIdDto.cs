@@ -19,9 +19,6 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "MachineType")]
         public string MachineType { get; }
 
-        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public UnitId WeavingUnitDocumentId { get; }
-
         [JsonProperty(PropertyName = "WarpingBeamsDocument")]
         public List<BeamDto> WarpingBeamsDocument { get; }
 
@@ -32,7 +29,10 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public double YarnStrands { get; }
 
         [JsonProperty(PropertyName = "NeReal")]
-        public double NeReal { get;}
+        public double NeReal { get; }
+
+        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
+        public int WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
@@ -43,12 +43,12 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "SizingDetails")]
         public List<DailyOperationSizingDetailsDto> SizingDetails { get; set; }
 
-        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string machineType, string constructionNumber, List<BeamDto> beams, double emptyWeight, double yarnStrands, double neReal)
+        public DailyOperationSizingByIdDto(DailyOperationSizingDocument document, string machineNumber, string machineType, int weavingUnitDocumentId, string constructionNumber, List<BeamDto> beams, double emptyWeight, double yarnStrands, double neReal)
         {
             Id = document.Identity;
             MachineNumber = machineNumber;
             MachineType = machineType;
-            WeavingUnitDocumentId = document.WeavingUnitId;
+            WeavingUnitDocumentId = weavingUnitDocumentId;
             ConstructionNumber = constructionNumber;
             WarpingBeamsDocument = beams;
             EmptyWeight = emptyWeight;

@@ -14,7 +14,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing
     public class DailyOperationSizingDocument : AggregateRoot<DailyOperationSizingDocument, DailyOperationSizingReadModel>
     {
         public MachineId MachineDocumentId { get; private set; }
-        public UnitId WeavingUnitId { get; private set; }
         public OrderId OrderDocumentId { get; private set; }
         public List<BeamId> BeamsWarping { get; private set; }
         public double EmptyWeight { get; private set; }
@@ -28,11 +27,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, UnitId weavingUnitId, OrderId orderDocumentId, List<BeamId> beamsWarping, double emptyWeight, double yarnStrands, string recipeCode, double neReal, int machineSpeed, string texSQ, string visco, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, OrderId orderDocumentId, List<BeamId> beamsWarping, double emptyWeight, double yarnStrands, string recipeCode, double neReal, int machineSpeed, string texSQ, string visco, string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
-            WeavingUnitId = weavingUnitId;
             OrderDocumentId = orderDocumentId;
             BeamsWarping = beamsWarping;
             EmptyWeight = emptyWeight;
@@ -51,7 +49,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             ReadModel = new DailyOperationSizingReadModel(Identity)
             {
                 MachineDocumentId = this.MachineDocumentId.Value,
-                WeavingUnitId = this.WeavingUnitId.Value,
                 OrderDocumentId = this.OrderDocumentId.Value,
                 BeamsWarping = JsonConvert.SerializeObject(this.BeamsWarping),
                 EmptyWeight = this.EmptyWeight,
@@ -69,7 +66,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
         {
             this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
-            this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.OrderDocumentId = readModel.OrderDocumentId.HasValue ? new OrderId(readModel.OrderDocumentId.Value) : null;
             this.BeamsWarping = JsonConvert.DeserializeObject<List<BeamId>>(readModel.BeamsWarping);
             this.EmptyWeight = readModel.EmptyWeight;

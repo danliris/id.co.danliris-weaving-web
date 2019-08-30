@@ -73,7 +73,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             NewEntryDailyOperationSizingCommand request = new NewEntryDailyOperationSizingCommand
             {
                 MachineDocumentId = machineDocumentId,
-                WeavingUnitId = weavingUnitId,
                 OrderDocumentId = orderDocumentId,
                 BeamsWarping = beamsWarping,
                 Details = newEntryDetail,

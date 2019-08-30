@@ -36,7 +36,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
-                                                    request.WeavingUnitId,
                                                     request.OrderDocumentId,
                                                     request.BeamsWarping, 
                                                     request.EmptyWeight,
