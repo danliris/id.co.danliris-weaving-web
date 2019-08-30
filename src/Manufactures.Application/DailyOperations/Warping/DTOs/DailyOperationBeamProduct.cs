@@ -1,4 +1,5 @@
-﻿using Manufactures.Domain.DailyOperations.Warping.Entities;
+﻿using Manufactures.Domain.Beams;
+using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -12,6 +13,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
 
         [JsonProperty(PropertyName = "BeamId")]
         public BeamId BeamId { get; private set; }
+
+        [JsonProperty(PropertyName = "BeamNumber")]
+        public string BeamNumber { get; private set; }
 
         [JsonProperty(PropertyName = "Length")]
         public double Length { get; private set; }
@@ -28,15 +32,16 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "BeamStatus")]
         public string BeamStatus { get; private set; }
 
-        public DailyOperationBeamProduct(DailyOperationWarpingBeamProduct x)
+        public DailyOperationBeamProduct(DailyOperationWarpingBeamProduct beamProduct, BeamDocument beamDocument)
         {
-            Id = x.Identity;
-            BeamId = new BeamId(x.BeamId);
-            Length = x.Length ?? 0;
-            Tention = x.Tention ?? 0;
-            Speed = x.Speed ?? 0;
-            PressRoll = x.PressRoll ?? 0;
-            BeamStatus = x.BeamStatus;
+            Id = beamProduct.Identity;
+            BeamId = new BeamId(beamProduct.BeamId);
+            BeamNumber = beamDocument.Number;
+            Length = beamProduct.Length ?? 0;
+            Tention = beamProduct.Tention ?? 0;
+            Speed = beamProduct.Speed ?? 0;
+            PressRoll = beamProduct.PressRoll ?? 0;
+            BeamStatus = beamProduct.BeamStatus;
         }
     }
 }

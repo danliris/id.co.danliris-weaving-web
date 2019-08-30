@@ -183,7 +183,13 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             // Add Beam Product to DTO
             foreach(var beamProduct  in dailyOperationWarpingDocument.DailyOperationWarpingBeamProducts)
             {
-                var beamWarping = new DailyOperationBeamProduct(beamProduct);
+                await Task.Yield();
+                var beam = 
+                    _beamRepository
+                        .Find(o => o.Identity.Equals(beamProduct.BeamId))
+                        .FirstOrDefault();
+
+                var beamWarping = new DailyOperationBeamProduct(beamProduct, beam);
 
                 await Task.Yield();
                 result.AddDailyOperationBeamProducts(beamWarping);
@@ -207,7 +213,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .FirstOrDefault().Name;
 
                 var dailyHistory = 
-                    new DailyOperationLoomHistoryDto(history.Identity, 
+                    new DailyOperationWarpingHistoryDto(history.Identity, 
                                                      beamNumber, 
                                                      operatorBeam.CoreAccount.Name, 
                                                      operatorBeam.Group, 
@@ -216,7 +222,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                                      shiftName);
 
                 await Task.Yield();
-                result.AddDailyOperationLoomHistories(dailyHistory);
+                result.AddDailyOperationWarpingHistories(dailyHistory);
             }
 
             return result;

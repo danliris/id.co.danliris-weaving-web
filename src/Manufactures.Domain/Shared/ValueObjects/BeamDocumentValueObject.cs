@@ -24,6 +24,21 @@ namespace Manufactures.Domain.Shared.ValueObjects
             YarnStrands = beamDocument.YarnStrands;
         }
 
+        public void SetEmptyWeight(double value)
+        {
+            EmptyWeight = value;
+        }
+
+        public void SetYarnLength(double value)
+        {
+            YarnLength = value;
+        }
+
+        public void SetYarnStrands(double value)
+        {
+            YarnStrands = value;
+        }
+
         protected override IEnumerable<object> GetAtomicValues()
         {
             yield return Identity;

@@ -12,5 +12,6 @@
         // Stock Status
         public static string MOVEIN_STOCK = "move-in";
         public static string MOVEOUT_STOCK = "move-out";
+        public static string ADJUSTMENT = "stock-adjustment";
     }
 }

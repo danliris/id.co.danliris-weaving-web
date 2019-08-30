@@ -35,7 +35,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
         public async Task Handle(MoveInBeamStockWarpingEvent notification, CancellationToken cancellationToken)
         {
             // Update for MoveOut StockCard Warping
-            var moveOutStockCardWarpings =
+            var existingStockCardWarpings =
                 _stockCardRepository.Find(o => o.BeamDocument
                                                 .Deserialize<BeamDocumentValueObject>()
                                                 .Identity
@@ -49,9 +49,16 @@ namespace Manufactures.Application.StockCards.EventHandlers.Warping
                     .Find(o => o.Identity.Equals(notification.BeamId.Value))
                     .FirstOrDefault();
 
-            foreach ( var stockCard in moveOutStockCardWarpings)
+            foreach ( var stockCard in existingStockCardWarpings)
             {
                 if (stockCard.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK) &&
+                   stockCard.StockType.Equals(StockCardStatus.WARPING_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+                    await _stockCardRepository.Update(stockCard);
+                }
+
+                if (stockCard.StockStatus.Equals(StockCardStatus.ADJUSTMENT) &&
                    stockCard.StockType.Equals(StockCardStatus.WARPING_STOCK))
                 {
                     stockCard.UpdateExpired(true);
