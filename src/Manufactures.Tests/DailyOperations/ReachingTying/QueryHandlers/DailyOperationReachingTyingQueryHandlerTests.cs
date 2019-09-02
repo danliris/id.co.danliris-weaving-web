@@ -226,7 +226,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 new UnitId(11),
                 new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
-                12,
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
                 new DailyOperationTyingValueObject(164, 90, 127),
                 OperationStatus.ONFINISH);
@@ -245,7 +244,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 new UnitId(11),
                 new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
-                17,
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),
                 new DailyOperationTyingValueObject(122, 76, 128),
                 OperationStatus.ONFINISH);
@@ -401,7 +399,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 new UnitId(11),
                 new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
-                12,
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
                 new DailyOperationTyingValueObject(164, 90, 127),
                 OperationStatus.ONFINISH);
@@ -420,7 +417,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
                 new UnitId(11),
                 new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
-                17,
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),
                 new DailyOperationTyingValueObject(122, 76, 128),
                 OperationStatus.ONFINISH);

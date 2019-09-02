@@ -48,7 +48,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var operationStatus = existingReachingTyingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -71,9 +71,9 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastReachingTyingDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("TyingStartTime", "Start time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("TyingStartTime", "Start time cannot less than or equal latest time log"));
                 }
                 else
                 {
@@ -103,7 +103,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status not ONFINISHREACHING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status not ONFINISHREACHING"));
                     }
                 }
             }

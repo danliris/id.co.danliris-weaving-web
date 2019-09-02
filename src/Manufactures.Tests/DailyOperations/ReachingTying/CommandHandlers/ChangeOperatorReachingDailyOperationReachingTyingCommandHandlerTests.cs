@@ -19,14 +19,14 @@ using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
 {
-    public class UpdateReachingFinishDailyOperationReachingTyingCommandHandlerTests : IDisposable
+    public class ChangeOperatorReachingDailyOperationReachingTyingCommandHandlerTests : IDisposable
     {
         private MockRepository mockRepository;
         private Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingTyingRepository>
             mockDailyOperationReachingTyingRepo;
 
-        public UpdateReachingFinishDailyOperationReachingTyingCommandHandlerTests()
+        public ChangeOperatorReachingDailyOperationReachingTyingCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
 
@@ -42,9 +42,9 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private UpdateReachingFinishDailyOperationReachingTyingCommandHandler CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler()
+        private ChangeOperatorReachingDailyOperationReachingTyingCommandHandler CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler()
         {
-            return new UpdateReachingFinishDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
+            return new ChangeOperatorReachingDailyOperationReachingTyingCommandHandler(this.mockStorage.Object);
         }
 
         [Fact]
@@ -54,7 +54,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -81,23 +81,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow,
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow,
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             try
             {
@@ -107,18 +105,18 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Finish. This operation's status already FINISHED", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Change Operator. This operation's status already FINISHED", messageException.Message);
             }
         }
 
         [Fact]
-        public async Task Handle_ReachingFinishDateLessThanLatestDate_ExpectedBehavior()
+        public async Task Handle_ChangeOperatorDateLessThanLatestDate_ExpectedBehavior()
         {
             // Arrange
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -145,23 +143,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow.AddDays(-1),
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow.AddDays(-1),
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             try
             {
@@ -171,18 +167,18 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- ReachingFinishDate: Finish date cannot less than latest date log", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- ReachingChangeOperator: Change Operator date cannot less than latest date log", messageException.Message);
             }
         }
 
         [Fact]
-        public async Task Handle_ReachingFinishTimeLessThanLatestTime_ExpectedBehavior()
+        public async Task Handle_ChangeOperatorTimeLessThanLatestTime_ExpectedBehavior()
         {
             // Arrange
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -209,23 +205,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow.AddHours(-1),
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow.AddHours(-1),
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             try
             {
@@ -235,7 +229,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- ReachingFinishTime: Finish time cannot less than latest time log", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- ReachingChangeOperator: Change Operator time cannot less than latest time log", messageException.Message);
             }
         }
 
@@ -247,7 +241,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -274,23 +268,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow,
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow,
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             // Act
             var result = await unitUnderTest.Handle(request, cancellationToken);
@@ -308,7 +300,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -335,23 +327,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow,
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow,
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             // Act
             var result = await unitUnderTest.Handle(request, cancellationToken);
@@ -368,7 +358,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             //Instantiate Properties
             //Add Existing Data
             var reachingTyingTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
+            var unitUnderTest = this.CreateChangeOperatorReachingDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
             var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
@@ -395,23 +385,21 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingTyingReadModel>>()))
                 .Returns(new List<DailyOperationReachingTyingDocument>() { resultModel });
 
-            //Instantiate Incoming Object Update
-            var updateReachingFinishCommand = new UpdateReachingFinishDailyOperationReachingTyingCommand
+            var changeOperatorReachingCommand = new ChangeOperatorReachingDailyOperationReachingTyingCommand
             {
                 Id = reachingTyingDetailTestId,
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 YarnStrandsProcessed = 12,
-                ReachingFinishDate = DateTimeOffset.UtcNow,
-                ReachingFinishTime = new TimeSpan(7),
-                ReachingWidth = 127,
+                ChangeOperatorReachingDate = DateTimeOffset.UtcNow,
+                ChangeOperatorReachingTime = new TimeSpan(7),
                 ShiftDocumentId = new ShiftId(Guid.NewGuid())
             };
 
             //Update Incoming Object
-            UpdateReachingFinishDailyOperationReachingTyingCommand request = updateReachingFinishCommand;
+            ChangeOperatorReachingDailyOperationReachingTyingCommand request = changeOperatorReachingCommand;
 
             //Set Cancellation Token
-            CancellationToken cancellationToken = default(CancellationToken);
+            CancellationToken cancellationToken = default(global::System.Threading.CancellationToken);
 
             try
             {
@@ -421,7 +409,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Finish. This operation's status not ONSTARTREACHING or CHANGEOPERATORREACHING", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Change Operator. This operation's status not ONSTARTREACHING or CHANGEOPERATORREACHING", messageException.Message);
             }
         }
     }

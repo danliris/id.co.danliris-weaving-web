@@ -3,6 +3,7 @@ using Manufactures.Application.DailyOperations.Sizing.Calculations;
 using Manufactures.Application.DailyOperations.Sizing.SizePickup;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
@@ -112,6 +113,7 @@ namespace Manufactures.Controllers.Api
                         .Find(e => e.Identity.Equals(dailyOperation.OrderDocumentId.Value))
                         .FirstOrDefault();
                 var constructionId = orderDocument.ConstructionId.Value;
+                var weavingUnitId = orderDocument.UnitId.Value;
 
                 var constructionDocument =
                     _constructionDocumentRepository
@@ -131,7 +133,7 @@ namespace Manufactures.Controllers.Api
                     shiftOnDetail = new ShiftValueObject(shiftDocument.Name, shiftDocument.StartTime, shiftDocument.EndTime);
                 }
 
-                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, constructionDocument, shiftOnDetail, lastDailyOperationStatus, dailyOperationEntryDateTime);
+                var dto = new DailyOperationSizingListDto(dailyOperation, machineDocument, weavingUnitId, constructionDocument, shiftOnDetail, lastDailyOperationStatus, dailyOperationEntryDateTime);
 
                 dailyOperationSizings.Add(dto);
             }
@@ -205,12 +207,12 @@ namespace Manufactures.Controllers.Api
                         .Find(e => e.Identity.Equals(dailyOperationalSizing.OrderDocumentId.Value))
                         .FirstOrDefault();
                 var constructionId = orderDocument.ConstructionId.Value;
+                var weavingUnitId = orderDocument.UnitId.Value;
 
                 var constructionDocument =
                         _constructionDocumentRepository
                             .Find(e => e.Identity.Equals(constructionId))
                             .FirstOrDefault();
-
                 var constructionNumber = constructionDocument.ConstructionNumber;
 
                 var warpingBeams = new List<BeamDto>();
@@ -224,10 +226,11 @@ namespace Manufactures.Controllers.Api
                     warpingBeams.Add(beamsDto);
                 }
 
+                var emptyWeight = dailyOperationalSizing.EmptyWeight;
                 var yarnStrands = dailyOperationalSizing.YarnStrands;
                 var neReal = dailyOperationalSizing.NeReal;
 
-                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, machineType, constructionNumber, warpingBeams, yarnStrands, neReal);
+                var dto = new DailyOperationSizingByIdDto(dailyOperationalSizing, machineNumber, machineType, weavingUnitId, constructionNumber, warpingBeams, emptyWeight, yarnStrands, neReal);
 
                 foreach (var detail in dailyOperationalSizing.SizingDetails)
                 {
@@ -449,6 +452,27 @@ namespace Manufactures.Controllers.Api
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
 
+        [HttpGet("calculate/netto/empty-weight/{emptyWeight}/bruto/{bruto}")]
+        public async Task<IActionResult> CalculateNetto(double emptyWeight, double bruto)
+        {
+            double nettoCalculationResult;
+
+            if (emptyWeight != 0 && bruto != 0)
+            {
+                Netto calculate = new Netto();
+                nettoCalculationResult = calculate.CalculateNetto(emptyWeight, bruto);
+
+                await Task.Yield();
+                return Ok(nettoCalculationResult);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ProduceBeamsBruto", "Bruto cannot less than Empty Weight"));
+            }
+        }
+
         [HttpGet("calculate/pis-in-meter/start/{counterStart}/finish/{counterFinish}")]
         public async Task<IActionResult> CalculatePISInMeter(double counterStart, double counterFinish)
         {
@@ -470,26 +494,26 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        [HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
-        public async Task<IActionResult> CalculatePISInPieces(double counterStart, double counterFinish)
-        {
-            double pisInMeter;
+        //[HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
+        //public async Task<IActionResult> CalculatePISInPieces(double counterStart, double counterFinish)
+        //{
+        //    double pisInMeter;
 
-            if (counterStart >= 0 && counterFinish > 0)
-            {
-                PIS calculate = new PIS();
-                pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
+        //    if (counterStart >= 0 && counterFinish > 0)
+        //    {
+        //        PIS calculate = new PIS();
+        //        pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
 
-                await Task.Yield();
-                return Ok(pisInMeter);
-            }
-            else
-            {
-                await Task.Yield();
-                return NotFound();
-                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
-            }
-        }
+        //        await Task.Yield();
+        //        return Ok(pisInMeter);
+        //    }
+        //    else
+        //    {
+        //        await Task.Yield();
+        //        return NotFound();
+        //        throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+        //    }
+        //}
 
         [HttpGet("calculate/theoritical-kawamoto/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
         public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisMeter, double yarnStrands, double neReal)
@@ -568,12 +592,32 @@ namespace Manufactures.Controllers.Api
                     _dailyOperationSizingDocumentRepository.Query
                                                            .Include(d => d.SizingDetails).OrderByDescending(item => item.CreatedDate)
                                                            .Include(b => b.SizingBeamDocuments).OrderByDescending(item => item.CreatedDate);
-                var sizePickupDtos =
-                    _dailyOperationSizingDocumentRepository.Find(query)
-                                                           .Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) &&
-                                                                                sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH)).ToList();
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(o => o.UnitId.Value.Equals(weavingUnitId))
+                        .ToList();
 
-                foreach (var document in sizePickupDtos)
+                var listOfSizingDoc = new List<DailyOperationSizingDocument>();
+
+                foreach (var order in orderDocument)
+                {
+                    var sizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query)
+                        .Where(sizePickup => sizePickup.OrderDocumentId.Value.Equals(order.Identity) && 
+                                             sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH))
+                                             .ToList();
+
+                    if(sizePickupDtos.Count > 0)
+                    {
+                        foreach(var sizingDoc in sizePickupDtos)
+                        {
+                            listOfSizingDoc.Add(sizingDoc);
+                        }
+                    }
+                }
+
+                foreach (var document in listOfSizingDoc)
                 {
                     var results = new SizePickupListDto();
 
@@ -753,12 +797,32 @@ namespace Manufactures.Controllers.Api
                     _dailyOperationSizingDocumentRepository.Query
                                                            .Include(d => d.SizingDetails).OrderByDescending(item => item.CreatedDate)
                                                            .Include(b => b.SizingBeamDocuments).OrderByDescending(item => item.CreatedDate);
-                var sizePickupDtos =
-                    _dailyOperationSizingDocumentRepository.Find(query)
-                                                           .Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) &&
-                                                                                sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH)).ToList();
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(o => o.UnitId.Value.Equals(weavingUnitId))
+                        .ToList();
 
-                foreach (var document in sizePickupDtos)
+                var listOfSizingDoc = new List<DailyOperationSizingDocument>();
+
+                foreach (var order in orderDocument)
+                {
+                    var sizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query)
+                        .Where(sizePickup => sizePickup.OrderDocumentId.Value.Equals(order.Identity) &&
+                                             sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH))
+                                             .ToList();
+
+                    if (sizePickupDtos.Count > 0)
+                    {
+                        foreach (var sizingDoc in sizePickupDtos)
+                        {
+                            listOfSizingDoc.Add(sizingDoc);
+                        }
+                    }
+                }
+
+                foreach (var document in listOfSizingDoc)
                 {
                     var results = new SizePickupListDto();
                     var convertedDate = DateTimeOffset.Parse(date).Date;
@@ -942,12 +1006,32 @@ namespace Manufactures.Controllers.Api
                     _dailyOperationSizingDocumentRepository.Query
                                                            .Include(d => d.SizingDetails).OrderByDescending(item => item.CreatedDate)
                                                            .Include(b => b.SizingBeamDocuments).OrderByDescending(item => item.CreatedDate);
-                var sizePickupDtos =
-                    _dailyOperationSizingDocumentRepository.Find(query)
-                                                           .Where(sizePickup => sizePickup.WeavingUnitId.Value.Equals(weavingUnitId) &&
-                                                                                sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH)).ToList();
+                var orderDocument =
+                    _orderDocumentRepository
+                        .Find(o => o.UnitId.Value.Equals(weavingUnitId))
+                        .ToList();
 
-                foreach (var document in sizePickupDtos)
+                var listOfSizingDoc = new List<DailyOperationSizingDocument>();
+
+                foreach (var order in orderDocument)
+                {
+                    var sizePickupDtos =
+                    _dailyOperationSizingDocumentRepository
+                        .Find(query)
+                        .Where(sizePickup => sizePickup.OrderDocumentId.Value.Equals(order.Identity) &&
+                                             sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH))
+                                             .ToList();
+
+                    if (sizePickupDtos.Count > 0)
+                    {
+                        foreach (var sizingDoc in sizePickupDtos)
+                        {
+                            listOfSizingDoc.Add(sizingDoc);
+                        }
+                    }
+                }
+
+                foreach (var document in listOfSizingDoc)
                 {
                     var results = new SizePickupListDto();
                     var convertedStartDate = DateTimeOffset.Parse(startDate).Date;

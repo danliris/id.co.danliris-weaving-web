@@ -56,7 +56,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var weavingUnitId = new UnitId(new int());
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var sizingBeamId = new BeamId(Guid.NewGuid());
-            var pisPieces = 20;
             var operatorId = new OperatorId(Guid.NewGuid());
             DateTimeOffset entryDate = DateTimeOffset.UtcNow;
             var entryTime = new TimeSpan(7);
@@ -70,7 +69,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
                 OrderDocumentId = orderDocumentId,
                 SizingBeamId = sizingBeamId,
                 OperatorDocumentId = operatorId,
-                PISPieces = pisPieces,
                 EntryDate = entryDate,
                 EntryTime = entryTime,
                 ShiftDocumentId = shiftId

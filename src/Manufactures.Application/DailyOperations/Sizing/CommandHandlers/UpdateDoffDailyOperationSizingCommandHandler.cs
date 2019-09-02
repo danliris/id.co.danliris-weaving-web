@@ -112,9 +112,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("DoffDate", "Finish date cannot less than latest date log"));
             } else
             {
-                if (dateTimeOperation < lastDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("DoffTime", "Finish time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("DoffTime", "Finish time cannot less than or equal latest time log"));
                 }
                 else
                 {

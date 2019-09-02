@@ -49,7 +49,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             var operationStatus = existingReachingTyingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
@@ -72,13 +72,13 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastReachingTyingDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ReachingFinishTime", "Finish time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("ReachingFinishTime", "Finish time cannot less than or equal latest time log"));
                 }
                 else
                 {
-                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING))
+                    if (lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.ONSTARTREACHING) || lastReachingTyingDetail.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHING))
                     {
                         var reachingValueObjects = JsonConvert.DeserializeObject<DailyOperationReachingValueObject>(existingReachingTyingDocument.ReachingValueObjects);
                         existingReachingTyingDocument.SetReachingValueObjects(new DailyOperationReachingValueObject(reachingValueObjects.ReachingTypeInput,
@@ -102,7 +102,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can's Finish. This operation's status not ONSTARTREACHING"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status not ONSTARTREACHING or CHANGEOPERATORREACHING"));
                     }
                 }
             }
