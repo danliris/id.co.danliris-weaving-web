@@ -121,11 +121,8 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
                 new StockCardDocument(Guid.NewGuid(), 
                                       "Testing-moveout-warping", 
                                       new DailyOperationId(Guid.NewGuid()), 
-                                      DateTimeOffset.UtcNow,
-                                      beamValueObject, 
-                                      false, 
-                                      true, 
-                                      StockCardStatus.WARPING_STOCK, 
+                                      notification.BeamId,
+                                      beamValueObject,
                                       StockCardStatus.MOVEOUT_STOCK);
 
             //Setup mock object result for find query linq

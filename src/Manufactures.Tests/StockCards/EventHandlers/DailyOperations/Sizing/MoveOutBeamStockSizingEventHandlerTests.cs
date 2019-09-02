@@ -72,11 +72,26 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Sizing
             var beamValueObject = new BeamDocumentValueObject(beamDocument);
 
 
-            var stockCardDocument = new StockCardDocument(Guid.NewGuid(), "Testing-MoveIn-Sizing", new DailyOperationId(Guid.NewGuid()), DateTimeOffset.UtcNow , beamValueObject, true, false, StockCardStatus.SIZING_STOCK, StockCardStatus.MOVEIN_STOCK);
-            var stockCardDocumentTwo = new StockCardDocument(Guid.NewGuid(), "Testing-MoveIn-Sizing", new DailyOperationId(Guid.NewGuid()), DateTimeOffset.UtcNow, beamValueObject, true, false, StockCardStatus.WARPING_STOCK, StockCardStatus.MOVEIN_STOCK);
+            var stockCardDocument = 
+                new StockCardDocument(Guid.NewGuid(), 
+                "Testing-MoveIn-Sizing", 
+                new DailyOperationId(Guid.NewGuid()), 
+                notification.BeamId , 
+                beamValueObject, 
+                StockCardStatus.MOVEIN_STOCK);
+
+            var stockCardDocumentTwo = 
+                new StockCardDocument(Guid.NewGuid(), 
+                "Testing-MoveIn-Sizing", 
+                new DailyOperationId(Guid.NewGuid()), 
+                notification.BeamId, 
+                beamValueObject,
+                StockCardStatus.MOVEIN_STOCK);
 
             //Setup value
-            _stockCardRepository.Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>())).Returns(new List<StockCardDocument>() { stockCardDocument, stockCardDocumentTwo });
+            _stockCardRepository
+                .Setup(x => x.Find(It.IsAny<Expression<Func<StockCardReadModel, bool>>>()))
+                .Returns(new List<StockCardDocument>() { stockCardDocument, stockCardDocumentTwo });
 
             //Setup mock object result for beam repository
             _beamRepository
