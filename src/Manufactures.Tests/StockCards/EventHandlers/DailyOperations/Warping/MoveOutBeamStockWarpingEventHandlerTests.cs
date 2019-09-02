@@ -79,11 +79,8 @@ namespace Manufactures.Tests.StockCards.EventHandlers.DailyOperations.Warping
                 new StockCardDocument(Guid.NewGuid(), 
                 "Testing-MovIn-Warping", 
                 new DailyOperationId(Guid.NewGuid()), 
-                DateTimeOffset.UtcNow, 
-                beamValueObject, 
-                true, 
-                false, 
-                StockCardStatus.WARPING_STOCK, 
+                notification.BeamId, 
+                beamValueObject,
                 StockCardStatus.MOVEIN_STOCK);
 
             //Setup value

@@ -42,18 +42,12 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
                                                 .Identity
                                                 .Equals(notification.BeamId.Value) &&
                                                o.Expired.Equals(false));
-            //Get BeamDocument
-            await Task.Yield();
-            var beamDocument =
-                _beamRepository
-                    .Find(o => o.Identity.Equals(notification.BeamId.Value))
-                    .FirstOrDefault();
 
             //Check for set expired movein sizing stock card
             foreach (var stockCard in moveInStockCardSizings)
             {
-                if (stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK) &&
-                    stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
+                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
+                    
                 {
                     stockCard.UpdateExpired(true);
 
@@ -61,15 +55,19 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
                 }
             }
 
+            //Get BeamDocument
+            await Task.Yield();
+            var beamDocument =
+                _beamRepository
+                    .Find(o => o.Identity.Equals(notification.BeamId.Value))
+                    .FirstOrDefault();
+
             var newStockCard =
                  new StockCardDocument(Guid.NewGuid(),
                                        notification.StockNumber,
                                        notification.DailyOperationId,
-                                       notification.DateTimeOperation,
+                                       notification.BeamId,
                                        new BeamDocumentValueObject(beamDocument),
-                                       false,
-                                       true,
-                                       StockCardStatus.WARPING_STOCK,
                                        StockCardStatus.MOVEOUT_STOCK);
 
             await _stockCardRepository.Update(newStockCard);

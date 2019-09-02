@@ -36,17 +36,14 @@ namespace Manufactures.Application.StockCards.CommandHandlers
         {
             await Task.Yield();
             var existingAdjustmentStock = _stockCardRepository
-                .Find(o => o.BeamDocument
-                            .Deserialize<BeamDocumentValueObject>()
-                            .Identity
+                .Find(o => o.BeamId
                             .Equals(request.BeamId.Value) &&
-                           o.StockStatus.Equals(StockCardStatus.ADJUSTMENT) &&
                            o.Expired.Equals(false))
-                .Any();
+                .FirstOrDefault();
 
-            if (existingAdjustmentStock == true)
+            if (existingAdjustmentStock == null)
             {
-                throw Validator.ErrorValidation(("BeamDocument", "Has stock Adjustment with beam Number " + request.BeamNumber));
+                throw Validator.ErrorValidation(("BeamDocument", "not have existing stock to adjustment"));
             }
 
             var beamDocument =
@@ -59,18 +56,7 @@ namespace Manufactures.Application.StockCards.CommandHandlers
                 throw Validator.ErrorValidation(("BeamId", "Not found beam"));
             }
 
-            var stockType = "";
             var beam = new BeamDocumentValueObject(beamDocument);
-
-            if (beamDocument.Type.Equals(BeamStatus.WARPING))
-            {
-                stockType = StockCardStatus.WARPING_STOCK;
-            }
-            else if (beamDocument.Type.Equals(BeamStatus.SIZING))
-            {
-                stockType = StockCardStatus.SIZING_STOCK;
-            }
-
             beam.SetEmptyWeight(request.EmptyWeight);
             beam.SetYarnLength(request.YarnLength);
             beam.SetYarnStrands(request.YarnStrands);
@@ -80,18 +66,25 @@ namespace Manufactures.Application.StockCards.CommandHandlers
             stockNumber.Append(dateTimeOperation.Second);
             stockNumber.Append("/");
             stockNumber.Append(dateTimeOperation.Hour);
-            stockNumber.Append("/Adjustment/");
+            stockNumber.Append("/adjustment/");
             stockNumber.Append(dateTimeOperation.Date);
 
-            var stockDocument = new StockCardDocument(Guid.NewGuid(), 
-                                                      stockNumber.ToString(), 
-                                                      request.DailyOperationId, 
-                                                      request.DateTimeOperation, 
-                                                      beam, 
-                                                      true,
-                                                      false,
-                                                      stockType,
-                                                      StockCardStatus.ADJUSTMENT);
+            var stockStatus = "";
+
+            if (request.IsMoveIn == true)
+            {
+                stockStatus = StockCardStatus.MOVEIN_STOCK;
+            } else
+            {
+                stockStatus = StockCardStatus.MOVEOUT_STOCK;
+            }
+
+            var stockDocument = new StockCardDocument(Guid.NewGuid(),
+                                                      stockNumber.ToString(),
+                                                      request.DailyOperationId,
+                                                      request.BeamId,
+                                                      beam,
+                                                      stockStatus);
 
             await _stockCardRepository.Update(stockDocument);
 

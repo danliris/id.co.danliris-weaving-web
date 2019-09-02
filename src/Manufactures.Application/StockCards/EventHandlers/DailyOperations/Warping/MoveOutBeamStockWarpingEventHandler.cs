@@ -37,11 +37,19 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
             await Task.Yield();
             var existingStockCards =
                 _stockCardRepository
-                    .Find(entity => entity.BeamDocument
-                                          .Deserialize<BeamDocumentValueObject>()
-                                          .Identity
+                    .Find(entity => entity.BeamId
                                           .Equals(notification.BeamId.Value) &&
                                     entity.Expired.Equals(false));
+
+            foreach (var stockCard in existingStockCards)
+            {
+                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+
+                    await _stockCardRepository.Update(stockCard);
+                }
+            }
 
             //Get BeamDocument
             await Task.Yield();
@@ -50,26 +58,12 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warp
                     .Find(o => o.Identity.Equals(notification.BeamId.Value))
                     .FirstOrDefault();
 
-            foreach (var stockCard in existingStockCards)
-            {
-                if (stockCard.StockType.Equals(StockCardStatus.WARPING_STOCK) &&
-                    stockCard.StockStatus.Equals(StockCardStatus.MOVEIN_STOCK))
-                {
-                    stockCard.UpdateExpired(true);
-
-                    await _stockCardRepository.Update(stockCard);
-                }
-            }
-
             var newStockCard =
                 new StockCardDocument(Guid.NewGuid(),
                                       notification.StockNumber,
                                       notification.DailyOperationId,
-                                      notification.DateTimeOperation,
+                                      notification.BeamId,
                                       new BeamDocumentValueObject(beamDocument),
-                                      false,
-                                      true,
-                                      StockCardStatus.WARPING_STOCK,
                                       StockCardStatus.MOVEOUT_STOCK);
 
             await _stockCardRepository.Update(newStockCard);
