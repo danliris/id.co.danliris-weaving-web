@@ -494,26 +494,26 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        [HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
-        public async Task<IActionResult> CalculatePISInPieces(double counterStart, double counterFinish)
-        {
-            double pisInMeter;
+        //[HttpGet("calculate/pis-in-pieces/start/{counterStart}/finish/{counterFinish}")]
+        //public async Task<IActionResult> CalculatePISInPieces(double counterStart, double counterFinish)
+        //{
+        //    double pisInMeter;
 
-            if (counterStart >= 0 && counterFinish > 0)
-            {
-                PIS calculate = new PIS();
-                pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
+        //    if (counterStart >= 0 && counterFinish > 0)
+        //    {
+        //        PIS calculate = new PIS();
+        //        pisInMeter = calculate.CalculateInPieces(counterStart, counterFinish);
 
-                await Task.Yield();
-                return Ok(pisInMeter);
-            }
-            else
-            {
-                await Task.Yield();
-                return NotFound();
-                throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
-            }
-        }
+        //        await Task.Yield();
+        //        return Ok(pisInMeter);
+        //    }
+        //    else
+        //    {
+        //        await Task.Yield();
+        //        return NotFound();
+        //        throw Validator.ErrorValidation(("ProduceBeamsFinishCounter", "PIS (m) cannot less than Start Counter"));
+        //    }
+        //}
 
         [HttpGet("calculate/theoritical-kawamoto/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
         public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisMeter, double yarnStrands, double neReal)

@@ -1,6 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Machines.Commands;
 using Manufactures.Domain.Machines.Repositories;
+using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Dtos.Machine;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,16 @@ namespace Manufactures.Controllers.Api
     public class MachineDocumentController : ControllerApiBase
     {
         private readonly IMachineRepository _machineRepository;
+        private readonly IMachineTypeRepository 
+            _machineTypeRepository;
 
         public MachineDocumentController(IServiceProvider serviceProvider) 
             : base(serviceProvider)
         {
             _machineRepository = 
                 this.Storage.GetRepository<IMachineRepository>();
+            _machineTypeRepository =
+                this.Storage.GetRepository<IMachineTypeRepository>();
         }
 
         [HttpGet]
@@ -37,17 +42,29 @@ namespace Manufactures.Controllers.Api
             page = page - 1;
             var query =
                 _machineRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var machine =
-                _machineRepository.Find(query)
-                                       .Select(item => new MachineListDto(item));
+            var allMachine =
+                _machineRepository.Find(query);
+
+            var machines = new List<MachineListDto>();
+
+            foreach (var machine in allMachine)
+            {
+                var machineType =
+                    _machineTypeRepository.Find(o => o.Identity.Equals(machine.MachineTypeId.Value)).FirstOrDefault().TypeName;
+                var machineDto  = new MachineListDto(machine);
+                machineDto.SetMachineType(machineType);
+
+                machines.Add(machineDto);
+            }
+
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                machine =
-                    machine.Where(entity => entity.MachineNumber.Contains(keyword,
+                machines =
+                    machines.Where(entity => entity.MachineNumber.Contains(keyword,
                                                                           StringComparison.OrdinalIgnoreCase) ||
                                             entity.Location.Contains(keyword, 
-                                                                     StringComparison.OrdinalIgnoreCase));
+                                                                     StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             if (!order.Contains("{}"))
@@ -60,16 +77,16 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    machine = machine.OrderBy(x => prop.GetValue(x, null));
+                    machines = machines.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    machine = machine.OrderByDescending(x => prop.GetValue(x, null));
+                    machines = machines.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            var ResultMachine = machine.Skip(page * size).Take(size);
-            int totalRows = machine.Count();
+            var ResultMachine = machines.Skip(page * size).Take(size);
+            int totalRows = machines.Count();
             int resultCount = ResultMachine.Count();
             page = page + 1;
 

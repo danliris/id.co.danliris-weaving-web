@@ -72,9 +72,9 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastReachingTyingDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastReachingTyingDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ReachingFinishTime", "Finish time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("ReachingFinishTime", "Finish time cannot less than or equal latest time log"));
                 }
                 else
                 {
