@@ -126,6 +126,20 @@ namespace Manufactures.Controllers.Api
             return Ok(updateReachingStartDailyOperationSizingDocument.Identity);
         }
 
+        [HttpPut("{Id}/change-operator")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]ChangeOperatorReachingDailyOperationReachingTyingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var changeOperatorReachingDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(changeOperatorReachingDailyOperationSizingDocument.Identity);
+        }
+
         [HttpPut("{Id}/reaching-finish")]
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateReachingFinishDailyOperationReachingTyingCommand command)

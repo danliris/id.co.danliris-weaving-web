@@ -15,11 +15,19 @@ namespace Manufactures.Dtos.Machine
         [JsonProperty(propertyName: "Location")]
         public string Location { get; }
 
+        [JsonProperty(propertyName: "MachineType")]
+        public string MachineType { get; private set; }
+
         public MachineListDto(MachineDocument document)
         {
             Id = document.Identity;
             MachineNumber = document.MachineNumber;
             Location = document.Location;
+        }
+
+        public void SetMachineType(string machineType)
+        {
+            MachineType = machineType;
         }
     }
 }

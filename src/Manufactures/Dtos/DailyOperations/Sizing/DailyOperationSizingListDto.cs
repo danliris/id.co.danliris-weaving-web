@@ -21,7 +21,7 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         public string MachineNumber { get; }
 
         [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public UnitId WeavingUnitDocumentId { get; }
+        public int WeavingUnitDocumentId { get; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
@@ -35,11 +35,11 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "DateTimeMachineHistory")]
         public DateTimeOffset DateTimeMachineHistory { get; }
 
-        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument, string operationStatus, DateTimeOffset dateTimeMachineHistory)
+        public DailyOperationSizingListDto(DailyOperationSizingDocument document, MachineDocument machineDocument, int weavingUnitDocumentId, FabricConstructionDocument constructionDocument, ShiftValueObject shiftDocument, string operationStatus, DateTimeOffset dateTimeMachineHistory)
         {
             Id = document.Identity;
             MachineNumber = machineDocument.MachineNumber;
-            WeavingUnitDocumentId = document.WeavingUnitId;
+            WeavingUnitDocumentId = weavingUnitDocumentId;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             ShiftName = shiftDocument.Name;
             OperationStatus = operationStatus;

@@ -90,9 +90,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("PauseTime", "Pause time cannot less than latest operation"));
+                    throw Validator.ErrorValidation(("PauseTime", "Pause time cannot less than or equal latest operation"));
                 }
                 else
                 {

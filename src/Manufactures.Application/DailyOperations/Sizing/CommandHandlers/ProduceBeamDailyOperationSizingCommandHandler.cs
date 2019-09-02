@@ -92,9 +92,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ProduceBeamTime", "Produce Beam time cannot less than latest time log"));
+                    throw Validator.ErrorValidation(("ProduceBeamTime", "Produce Beam time cannot less than or equal latest time log"));
                 }
                 else
                 {

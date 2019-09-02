@@ -8,6 +8,7 @@ using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Dtos.FabricConstructions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -201,6 +202,30 @@ namespace Manufactures.Controllers.Api
             var deletedConstructionDocument = await Mediator.Send(command);
 
             return Ok(deletedConstructionDocument.Identity);
+        }
+
+        [HttpGet("construction-number/{id}")]
+        public async Task<IActionResult> GetConstructionNumber(string id)
+        {
+            var constructionId = new Guid(id);
+
+            var constructionDocument =
+                _constructionDocumentRepository
+                    .Find(e => e.Identity.Equals(constructionId))
+                    .FirstOrDefault();
+            var constructionNumber = constructionDocument.ConstructionNumber;
+
+            if (constructionDocument != null)
+            {
+                await Task.Yield();
+                return Ok(constructionNumber);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("ConstructionNumber", "Can't Find Construction Number"));
+            }
         }
     }
 }

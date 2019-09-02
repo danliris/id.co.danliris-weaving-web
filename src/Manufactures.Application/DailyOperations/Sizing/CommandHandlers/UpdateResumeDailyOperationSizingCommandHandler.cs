@@ -86,9 +86,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
             else
             {
-                if (dateTimeOperation < lastDetail.DateTimeMachine)
+                if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than latest operation"));
+                    throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than or equal latest operation"));
                 }
                 else
                 {
