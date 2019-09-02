@@ -28,6 +28,9 @@ namespace Manufactures.Domain.StockCard.Commands
 
         [JsonProperty(propertyName: "DateTimeOperation")]
         public DateTimeOffset DateTimeOperation { get; set; }
+
+        [JsonProperty(propertyName: "IsMoveIn")]
+        public bool IsMoveIn { get; set; }
     }
 
     public class CreateStockAdjustmentCommandValidator : AbstractValidator<CreateStockAdjustmentCommand>

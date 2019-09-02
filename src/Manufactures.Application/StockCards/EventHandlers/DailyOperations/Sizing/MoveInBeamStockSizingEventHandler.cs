@@ -27,7 +27,7 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
             _storage = storage;
             _stockCardRepository =
                 _storage.GetRepository<IStockCardRepository>();
-            _beamRepository = 
+            _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
             IsSucceed = false;
         }
@@ -37,11 +37,20 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
             //Get MoveOut stok from latest beam id (same id)
             await Task.Yield();
             var moveOutStockCardSizings =
-                _stockCardRepository.Find(o => o.BeamDocument
-                                                .Deserialize<BeamDocumentValueObject>()
-                                                .Identity
+                _stockCardRepository.Find(o => o.BeamId
                                                 .Equals(notification.BeamId.Value) &&
                                                o.Expired.Equals(false));
+
+            foreach (var stockCard in moveOutStockCardSizings)
+            {
+
+                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK))
+                {
+                    stockCard.UpdateExpired(true);
+                    await _stockCardRepository.Update(stockCard);
+                }
+            }
+
             //Get Beam 
             await Task.Yield();
             var beamDocument =
@@ -49,34 +58,13 @@ namespace Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizi
                     .Find(o => o.Identity.Equals(notification.BeamId.Value))
                     .FirstOrDefault();
 
-            foreach (var stockCard in moveOutStockCardSizings)
-            {
-
-                if (stockCard.StockStatus.Equals(StockCardStatus.MOVEOUT_STOCK) &&
-                    stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK))
-                {
-                    stockCard.UpdateExpired(true);
-                    await _stockCardRepository.Update(stockCard);
-                }
-
-                if (stockCard.StockStatus.Equals(StockCardStatus.ADJUSTMENT) &&
-                   stockCard.StockType.Equals(StockCardStatus.SIZING_STOCK))
-                {
-                    stockCard.UpdateExpired(true);
-                    await _stockCardRepository.Update(stockCard);
-                }
-            }
-
             //Create new MoveIn StockCard
             var newStockCard =
                 new StockCardDocument(Guid.NewGuid(),
                                       notification.StockNumber,
                                       notification.DailyOperationId,
-                                      notification.DateTimeOperation,
+                                      notification.BeamId,
                                       new BeamDocumentValueObject(beamDocument),
-                                      true,
-                                      false,
-                                      StockCardStatus.SIZING_STOCK,
                                       StockCardStatus.MOVEIN_STOCK);
 
             await _stockCardRepository.Update(newStockCard);
