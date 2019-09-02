@@ -229,7 +229,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- ReachingChangeOperator: Change Operator time cannot less than latest time log", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- ReachingChangeOperator: Change Operator time cannot less than or equal latest time log", messageException.Message);
             }
         }
 
