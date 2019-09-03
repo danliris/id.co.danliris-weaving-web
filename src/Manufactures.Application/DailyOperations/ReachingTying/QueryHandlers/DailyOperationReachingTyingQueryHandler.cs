@@ -87,7 +87,12 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                         .Find(entity => entity.Identity
                         .Equals(operation.OrderDocumentId.Value))
                         .FirstOrDefault();
+
+                //Get Construction Id
                 var constructionId = orderDocument.ConstructionId.Value;
+
+                //Get Weaving Unit Id
+                var weavingUnitId = orderDocument.UnitId;
 
                 //Get Contruction Number
                 await Task.Yield();
@@ -106,7 +111,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                         .FirstOrDefault()
                         .Number ?? "Not Found Sizing Beam Number";
 
-                var operationResult = new DailyOperationReachingTyingListDto(operation, reachingDetail, machineNumber, operation.WeavingUnitId,
+                var operationResult = new DailyOperationReachingTyingListDto(operation, reachingDetail, machineNumber, weavingUnitId,
                     constructionNumber, sizingBeamNumber);
 
                 result.Add(operationResult);
@@ -139,10 +144,6 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                     .FirstOrDefault()
                     .MachineNumber ?? "Not Found Machine Number";
 
-            //Get Unit
-            await Task.Yield();
-            var weavingUnitId = dailyOperationReachingTyingDocument.WeavingUnitId;
-
             //Get Order Document
             await Task.Yield();
             var orderDocument =
@@ -150,7 +151,12 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                     .Find(entity => entity.Identity
                     .Equals(dailyOperationReachingTyingDocument.OrderDocumentId.Value))
                     .FirstOrDefault();
+
+            //Get Construction Id
             var constructionId = orderDocument.ConstructionId.Value;
+
+            //Get Weaving Unit Id
+            var weavingUnitId = orderDocument.UnitId;
 
             //Get Contruction Number
             await Task.Yield();

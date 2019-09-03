@@ -56,14 +56,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONFINISH;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
@@ -120,14 +119,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
@@ -184,14 +182,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
@@ -249,14 +246,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
@@ -310,14 +306,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());
@@ -370,14 +365,13 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             var reachingTyingTestId = Guid.NewGuid();
             var unitUnderTest = this.CreateUpdateReachingFinishDailyOperationReachingTyingCommandHandler();
             var machineId = new MachineId(Guid.NewGuid());
-            var weavingUnitId = new UnitId(11);
             var orderDocumentId = new OrderId(Guid.NewGuid());
             var beamId = new BeamId(Guid.NewGuid());
             var operationStatus = OperationStatus.ONPROCESS;
             var reachingValueObjects = new DailyOperationReachingValueObject("Plain", "Lurus");
 
             //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, weavingUnitId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
+            var resultModel = new DailyOperationReachingTyingDocument(reachingTyingTestId, machineId, orderDocumentId, beamId, reachingValueObjects, operationStatus);
 
             var reachingTyingDetailTestId = Guid.NewGuid();
             var operatorDocumentId = new OperatorId(Guid.NewGuid());

@@ -223,7 +223,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var firstDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(firstMachine.Identity),
-                new UnitId(11),
                 new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
@@ -241,7 +240,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(secondMachine.Identity),
-                new UnitId(11),
                 new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),
@@ -396,7 +394,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var firstDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(firstMachine.Identity),
-                new UnitId(11),
                 new OrderId(firstOrderDocument.Identity),
                 new BeamId(firstBeam.Identity),
                 new DailyOperationReachingValueObject("Plain", "Lurus", 17),
@@ -414,7 +411,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             var secondDocument = new DailyOperationReachingTyingDocument(
                 Guid.NewGuid(),
                 new MachineId(secondMachine.Identity),
-                new UnitId(11),
                 new OrderId(secondOrderDocument.Identity),
                 new BeamId(secondBeam.Identity),
                 new DailyOperationReachingValueObject("Plain", "Twist", 12),

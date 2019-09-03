@@ -33,7 +33,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
             Id = document.Identity;
             DateTimeOperation = detail.DateTimeMachine;
             MachineNumber = machineNumber;
-            WeavingUnitDocumentId = document.WeavingUnitId;
+            WeavingUnitDocumentId = weavingUnitDocumentId;
             ConstructionNumber = constructionNumber;
             SizingBeamNumber = sizingBeamNumber;
         }

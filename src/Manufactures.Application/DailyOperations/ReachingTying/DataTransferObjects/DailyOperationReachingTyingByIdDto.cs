@@ -17,7 +17,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
             : base(document,
                    detail,
                    machineNumber,
-                   document.WeavingUnitId,
+                   weavingUnitDocumentId,
                    constructionNumber,
                    sizingBeamNumber)
         {
