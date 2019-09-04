@@ -100,11 +100,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     if (existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONSTART || existingDetails.FirstOrDefault().MachineStatus == MachineStatus.ONRESUME)
                     {
+                        //Set Detail Value on Daily Operation Sizing Beam Document
                         var counter = JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(lastBeamDocument.Counter);
                         var weight = request.SizingBeamDocuments.Weight;
                         var theoritical = Math.Round(weight.Theoritical,2);
                         var spu = Math.Round(request.SizingBeamDocuments.SPU, 2);
-
                         var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
                                                                                    new BeamId(lastBeamDocument.SizingBeamId),
                                                                                    dateTimeOperation,
@@ -113,11 +113,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    request.SizingBeamDocuments.PISMeter,
                                                                                    spu,
                                                                                    BeamStatus.ROLLEDUP);
-
                         existingDailyOperation.UpdateDailyOperationSizingBeamDocument(updateBeamDocument);
 
+                        //Set Detail Value on Daily Operation Sizing Detail
                         var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
-
                         var newOperationDetail =
                                 new DailyOperationSizingDetail(Guid.NewGuid(),
                                                                new ShiftId(request.SizingDetails.ShiftId.Value),
@@ -127,8 +126,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                "-",
                                                                new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
                                                                lastDetail.SizingBeamNumber);
-
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
+
+                        //Set YarnStrands Value on Master Beam
+                        var beamQuery = _beamDocumentRepository
+                                            .Query
+                                            .Where(beamDoc => beamDoc.Identity.Equals(lastBeamDocument.SizingBeamId));
+                        var sizingBeamDocument = _beamDocumentRepository
+                                            .Find(beamQuery)
+                                            .FirstOrDefault();
+                        sizingBeamDocument.SetLatestYarnStrands(existingDailyOperation.YarnStrands);
 
                         await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                         _storage.Save();
