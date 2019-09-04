@@ -65,7 +65,6 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.CommandHandlers
             NewEntryDailyOperationReachingTyingCommand request = new NewEntryDailyOperationReachingTyingCommand
             {
                 MachineDocumentId = machineDocumentId,
-                WeavingUnitId = weavingUnitId,
                 OrderDocumentId = orderDocumentId,
                 SizingBeamId = sizingBeamId,
                 OperatorDocumentId = operatorId,

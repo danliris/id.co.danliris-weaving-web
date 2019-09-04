@@ -12,7 +12,6 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying.ReadModels
         {
         }
         public Guid? MachineDocumentId { get; internal set; }
-        public int? WeavingUnitId { get; internal set; }
         public Guid? OrderDocumentId { get; internal set; }
         public Guid? SizingBeamId { get; internal set; }
         public string ReachingValueObjects { get; internal set; }

@@ -5,6 +5,7 @@ using Manufactures.Domain.DailyOperations.ReachingTying;
 using Manufactures.Domain.DailyOperations.ReachingTying.Command;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -29,11 +30,10 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
         {
             var dailyOperationReachingDocument =
                 new DailyOperationReachingTyingDocument(Guid.NewGuid(),
-                                                   request.MachineDocumentId,
-                                                   request.WeavingUnitId,
-                                                   request.OrderDocumentId,
-                                                   request.SizingBeamId,
-                                                   OperationStatus.ONPROCESS);
+                                                        new MachineId(request.MachineDocumentId.Value),
+                                                        new OrderId(request.OrderDocumentId.Value),
+                                                        new BeamId(request.SizingBeamId.Value),
+                                                        OperationStatus.ONPROCESS);
 
             var year = request.EntryDate.Year;
             var month = request.EntryDate.Month;
@@ -46,9 +46,9 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
 
             var newOperationDetail =
                     new DailyOperationReachingTyingDetail(Guid.NewGuid(),
-                                                          request.OperatorDocumentId,
+                                                          new OperatorId(request.OperatorDocumentId.Value),
                                                           dateTimeOperation,
-                                                          request.ShiftDocumentId,
+                                                          new ShiftId(request.ShiftDocumentId.Value),
                                                           MachineStatus.ONENTRY);
 
             dailyOperationReachingDocument.AddDailyOperationReachingTyingDetail(newOperationDetail);
