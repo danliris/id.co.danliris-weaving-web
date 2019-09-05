@@ -12,8 +12,10 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
     {
         [JsonProperty(PropertyName = "ReachingHistories")]
         public List<DailyOperationReachingTyingDetailDto> ReachingHistories { get; set; }
+        [JsonProperty(PropertyName = "SizingYarnStrands")]
+        public double SizingYarnStrands { get; set; }
 
-        public DailyOperationReachingTyingByIdDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber) 
+        public DailyOperationReachingTyingByIdDto(DailyOperationReachingTyingDocument document, DailyOperationReachingTyingDetail detail, string machineNumber, UnitId weavingUnitDocumentId, string constructionNumber, string sizingBeamNumber, double sizingYarnStrands) 
             : base(document,
                    detail,
                    machineNumber,
@@ -22,6 +24,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.DataTransferObj
                    sizingBeamNumber)
         {
             ReachingHistories = new List<DailyOperationReachingTyingDetailDto>();
+            SizingYarnStrands = sizingYarnStrands;
         }
     }
 }
