@@ -169,11 +169,12 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
 
             //Get Sizing Beam Number
             await Task.Yield();
-            var sizingBeamNumber =
+            var sizingBeamDocument =
                 _beamRepository
                     .Find(entity => entity.Identity.Equals(dailyOperationReachingTyingDocument.SizingBeamId.Value))
-                    .FirstOrDefault()
-                    .Number ?? "Not Found Sizing Beam Number";
+                    .FirstOrDefault();
+            var sizingBeamNumber = sizingBeamDocument.Number ?? "Not Found Sizing Beam Number";
+            var sizingYarnStrands = sizingBeamDocument.YarnStrands;
 
             //Get Daily Operation Reaching Detail
             await Task.Yield();
@@ -184,7 +185,7 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
                     .FirstOrDefault();
 
             //Assign Parameter to Object Result
-            var result = new DailyOperationReachingTyingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber);
+            var result = new DailyOperationReachingTyingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber, sizingYarnStrands);
 
             foreach (var detail in dailyOperationReachingTyingDocument.ReachingTyingDetails)
             {
