@@ -54,12 +54,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Machine Status
-            var currentMachineStatus = lastDetail.MachineStatus;
+            //var currentMachineStatus = lastDetail.MachineStatus;
 
-            if (currentMachineStatus.Equals(MachineStatus.ONENTRY) || currentMachineStatus.Equals(MachineStatus.ONSTOP) || currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
-            {
-                throw Validator.ErrorValidation(("MachineStatus", "Can't Pause. This current Operation status isn't ONSTART or ONRESUME"));
-            }
+            //if (currentMachineStatus.Equals(MachineStatus.ONENTRY) || currentMachineStatus.Equals(MachineStatus.ONSTOP) || currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
+            //{
+            //    throw Validator.ErrorValidation(("MachineStatus", "Can't Pause. This current Operation status isn't ONSTART or ONRESUME"));
+            //}
 
             //Validation for Operation Status
             var currentOperationStatus =
@@ -105,13 +105,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         var weight = JsonConvert.DeserializeObject<DailyOperationSizingWeightCommand>(lastBeamDocument.Weight);
 
                         var updateBeamDocument = new DailyOperationSizingBeamDocument(lastBeamDocument.Identity,
-                                                                                   new BeamId(lastBeamDocument.SizingBeamId),
-                                                                                   dateTimeOperation,
-                                                                                   new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
-                                                                                   new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
-                                                                                   lastBeamDocument.PISMeter,
-                                                                                   lastBeamDocument.SPU,
-                                                                                   BeamStatus.ONPROCESS);
+                                                                                      new BeamId(lastBeamDocument.SizingBeamId),
+                                                                                      dateTimeOperation,
+                                                                                      new DailyOperationSizingCounterValueObject(counter.Start, counter.Finish),
+                                                                                      new DailyOperationSizingWeightValueObject(weight.Netto, weight.Bruto, weight.Theoritical),
+                                                                                      lastBeamDocument.PISMeter,
+                                                                                      lastBeamDocument.SPU,
+                                                                                      BeamStatus.ONPROCESS);
 
                         existingDailyOperation.UpdateDailyOperationSizingBeamDocument(updateBeamDocument);
 
@@ -136,7 +136,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("Status", "Can't stop, latest status is not on PROCESS or on RESUME"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't stop, latest status is not on START or on RESUME"));
                     }
                 }
             }

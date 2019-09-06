@@ -13,6 +13,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "MachineTroubled")]
         public string MachineTroubled { get; set; }
+
+        public DailyOperationSizingCauseCommand(string brokenBeam, string machineTroubled)
+        {
+            BrokenBeam = brokenBeam;
+            MachineTroubled = machineTroubled;
+        }
     }
     public class DailyOperationSizingCausesCommandValidator
       : AbstractValidator<DailyOperationSizingCauseCommand>

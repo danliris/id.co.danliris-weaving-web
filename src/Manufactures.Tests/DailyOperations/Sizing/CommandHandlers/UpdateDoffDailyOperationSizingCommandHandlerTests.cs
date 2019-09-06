@@ -1,7 +1,8 @@
-﻿using ExtCore.Data.Abstractions;
+using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Application.DailyOperations.Sizing.CommandHandlers;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing;
@@ -15,21 +16,20 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 {
-    public class UpdateStartDailyOperationSizingCommandHandlerTests : IDisposable
+    public class UpdateDoffDailyOperationSizingCommandHandlerTests : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationSizingRepository> mockDailyOperationSizingRepo;
         private readonly Mock<IBeamRepository> mockBeamRepo;
 
-        public UpdateStartDailyOperationSizingCommandHandlerTests()
+        public UpdateDoffDailyOperationSizingCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = mockRepository.Create<IStorage>();
@@ -45,141 +45,29 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
         public void Dispose()
         {
-            mockRepository.VerifyAll();
+            this.mockRepository.VerifyAll();
         }
 
-        private UpdateStartDailyOperationSizingCommandHandler CreateUpdateStartDailyOperationSizingCommandHandler()
+        private UpdateDoffDailyOperationSizingCommandHandler CreateUpdateDoffDailyOperationSizingCommandHandler()
         {
-            return new UpdateStartDailyOperationSizingCommandHandler(this.mockStorage.Object);
-        }
-
-        /**
-         * Test for Update Start on Daily Operation Sizing
+            return new UpdateDoffDailyOperationSizingCommandHandler(
+                this.mockStorage.Object);
+        }/**
+         * Test for Update Resume on Daily Operation Sizing
          * **/
         [Fact]
-        public async Task Handle_SizingStartDateLessThanLatestDate_ThrowError()
+        public async Task Handle_BeamStatusOnProcess_ThrowError()
         {
             // Arrange
             //Instantiate Properties
             //Add Existing Data
             var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var orderId = new OrderId(Guid.NewGuid());
             List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
             var emptyWeight = 63;
-            var yarnStrands = 630;
-            var recipeCode = "PCA 133R";
-            var neReal = 2;
-            var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
-            var operationStatus = OperationStatus.ONPROCESS;
-
-            //Assign Property to DailyOperationSizingDocument
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
-
-            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
-            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                new DailyOperationSizingCounterValueObject(0, 0),
-                new DailyOperationSizingWeightValueObject(0, 0, 0),
-                0,
-                0,
-                "");
-            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
-
-            //Instantiate and Assign Property to DailyOperationSizingDetail
-            var sizingDetail = new DailyOperationSizingDetail(
-                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
-                new OperatorId(Guid.NewGuid()),
-                DateTimeOffset.UtcNow,
-                MachineStatus.ONENTRY,
-                "",
-                new DailyOperationSizingCauseValueObject("0", "0"),
-                "TS122");
-            resultModel.AddDailyOperationSizingDetail(sizingDetail);
-
-            //Mocking Repository
-            mockDailyOperationSizingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            //mockDailyOperationSizingRepo
-            //    .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-            //    .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            //mockBeamRepo
-            //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-            //    .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
-
-            //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
-            //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
-            {
-                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow.AddDays(-1),
-                StartTime = new TimeSpan(7)
-            };
-
-            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
-            {
-                Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
-            };
-
-            //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
-            {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
-            };
-            //request.SetId(sizingDocumentTestId);
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- StartDate: Start date cannot less than latest date log", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_SizingStartTimeLessThanLatestTime_ThrowError()
-        {
-            // Arrange
-            //Instantiate Properties
-            //Add Existing Data
-            var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderId = new OrderId(Guid.NewGuid());
-            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
-            var emptyWeight = 63;
-            var yarnStrands = 630;
+            var yarnStrands = 63;
             var recipeCode = "PCA 133R";
             var neReal = 2;
             var machineSpeed = 0;
@@ -193,124 +81,12 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             //Instantiate and Assign Property to DailyOperationSizingBeamDocument
             var sizingBeamDocument = new DailyOperationSizingBeamDocument(
                 Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
+                DateTimeOffset.UtcNow.AddDays(-1),
                 new DailyOperationSizingCounterValueObject(0, 0),
                 new DailyOperationSizingWeightValueObject(0, 0, 0),
                 0,
                 0,
-                "");
-            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
-
-            //Instantiate and Assign Property to DailyOperationSizingDetail
-            var sizingDetail = new DailyOperationSizingDetail(
-                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
-                new OperatorId(Guid.NewGuid()),
-                DateTimeOffset.UtcNow,
-                MachineStatus.ONENTRY,
-                "",
-                new DailyOperationSizingCauseValueObject("0", "0"),
-                "TS122");
-            resultModel.AddDailyOperationSizingDetail(sizingDetail);
-
-            //Mocking Repository
-            mockDailyOperationSizingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            //mockDailyOperationSizingRepo
-            //    .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-            //    .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            //mockBeamRepo
-            //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-            //    .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
-
-            //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
-            //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
-            {
-                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow.AddHours(-1),
-                StartTime = new TimeSpan(7)
-            };
-
-            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
-            {
-                Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
-            };
-
-            //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
-            {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
-            };
-            //request.SetId(sizingDocumentTestId);
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- StartTime: Start time cannot less than or equal latest time log", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_MachineStatusEntry_DataUpdated()
-        {
-            // Arrange
-            this.mockStorage.Setup(x => x.Save());
-            //Instantiate Properties
-            //Add Existing Data
-            var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderId = new OrderId(Guid.NewGuid());
-            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
-            var emptyWeight = 63;
-            var yarnStrands = 630;
-            var recipeCode = "PCA 133R";
-            var neReal = 2;
-            var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
-            var operationStatus = OperationStatus.ONPROCESS;
-
-            //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
-
-            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
-            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                new DailyOperationSizingCounterValueObject(0, 0),
-                new DailyOperationSizingWeightValueObject(0, 0, 0),
-                0,
-                0,
-                "");
+                BeamStatus.ONPROCESS);
             resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
 
             //Instantiate and Assign Property to DailyOperationSizingDetail
@@ -328,78 +104,58 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             mockDailyOperationSizingRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            mockDailyOperationSizingRepo
-                .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-                .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            mockBeamRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
 
             //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
             //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
             {
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow,
-                StartTime = new TimeSpan(7)
+                FinishDate = DateTimeOffset.UtcNow,
+                FinishTime = new TimeSpan(7)
             };
 
             //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
             {
                 Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
+                Details = sizingDetailCommand
             };
 
             //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
             {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
+                Details = sizingDocument.Details
             };
-            request.SetId(sizingDocumentTestId);
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
 
-            //---ACT---//
-            //Instantiate Command Handler
-            var result = await unitUnderTest.Handle(request, cancellationToken);
-
-            //---ASSERT---//
-            result.Identity.Should().NotBeEmpty();
-            result.Should().NotBeNull();
+            try
+            {
+                // Act
+                var result = await unitUnderTest.Handle(request, cancellationToken);
+            }
+            catch (Exception messageException)
+            {
+                // Assert
+                Assert.Equal("Validation failed: \r\n -- BeamStatus: Can't Finish. There's ONPROCESS Sizing Beam on this Operation", messageException.Message);
+            }
         }
 
         [Fact]
-        public async Task Handle_MachineStatusCompleteBeamStatusRolledUp_DataUpdated()
+        public async Task Handle_MachineStatusNotOnComplete_DataUpdated()
         {
             // Arrange
             //Instantiate Properties
             //Add Existing Data
             var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
             var machineDocumentId = new MachineId(Guid.NewGuid());
             var orderId = new OrderId(Guid.NewGuid());
             List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
             var emptyWeight = 63;
-            var yarnStrands = 630;
+            var yarnStrands = 63;
             var recipeCode = "PCA 133R";
             var neReal = 2;
             var machineSpeed = 0;
@@ -425,227 +181,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var sizingDetail = new DailyOperationSizingDetail(
                 Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
                 new OperatorId(Guid.NewGuid()),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                MachineStatus.ONCOMPLETE,
-                "",
-                new DailyOperationSizingCauseValueObject("0", "0"),
-                "TS122");
-            resultModel.AddDailyOperationSizingDetail(sizingDetail);
-
-            //Mocking Repository
-            mockDailyOperationSizingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            mockDailyOperationSizingRepo
-                .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-                .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            mockBeamRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
-            this.mockStorage.Setup(x => x.Save());
-
-            //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
-            //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
-            {
-                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow,
-                StartTime = new TimeSpan(7)
-            };
-
-            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
-            {
-                Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
-            };
-
-            //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
-            {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
-            };
-            request.SetId(sizingDocumentTestId);
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            //---ACT---//
-            //Instantiate Command Handler
-            var result = await unitUnderTest.Handle(request, cancellationToken);
-
-            //---ASSERT---//
-            result.Identity.Should().NotBeEmpty();
-            result.Should().NotBeNull();
-        }
-
-        [Fact]
-        public async Task Handle_MachineStatusCompleteBeamStatusNotRolledUp_ThrowError()
-        {
-            // Arrange
-            //Instantiate Properties
-            //Add Existing Data
-            var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderId = new OrderId(Guid.NewGuid());
-            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
-            var emptyWeight = 63;
-            var yarnStrands = 630;
-            var recipeCode = "PCA 133R";
-            var neReal = 2;
-            var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
-            var operationStatus = OperationStatus.ONPROCESS;
-
-            //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
-
-            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
-            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
-                Guid.NewGuid(),
                 DateTimeOffset.UtcNow,
-                new DailyOperationSizingCounterValueObject(0, 0),
-                new DailyOperationSizingWeightValueObject(0, 0, 0),
-                0,
-                0,
-                BeamStatus.ROLLEDUP);
-            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
-
-            //Instantiate and Assign Property to DailyOperationSizingDetail
-            var sizingDetail = new DailyOperationSizingDetail(
-                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
-                new OperatorId(Guid.NewGuid()),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                MachineStatus.ONCOMPLETE,
-                "",
-                new DailyOperationSizingCauseValueObject("0", "0"),
-                "TS122");
-            resultModel.AddDailyOperationSizingDetail(sizingDetail);
-
-            //Mocking Repository
-            mockDailyOperationSizingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            mockDailyOperationSizingRepo
-                .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-                .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            mockBeamRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
-
-            //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
-            //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
-            {
-                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
-                ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow,
-                StartTime = new TimeSpan(7)
-            };
-
-            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
-            {
-                Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
-            };
-
-            //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
-            {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
-            };
-            //request.SetId(sizingDocumentTestId);
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- BeamStatus: Can't start, latest beam status must ROLLED-UP", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_MachineStatusNotEntryOrNotCompleted_ThrowError()
-        {
-            // Arrange
-            //Instantiate Properties
-            //Add Existing Data
-            var sizingDocumentTestId = Guid.NewGuid();
-            var unitUnderTest = this.CreateUpdateStartDailyOperationSizingCommandHandler();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderId = new OrderId(Guid.NewGuid());
-            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
-            var emptyWeight = 63;
-            var yarnStrands = 630;
-            var recipeCode = "PCA 133R";
-            var neReal = 2;
-            var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
-            var operationStatus = OperationStatus.ONPROCESS;
-
-            //Assign Property to DailyOperationReachingTyingDocument
-            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
-
-            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
-            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
-                Guid.NewGuid(),
-                DateTimeOffset.UtcNow,
-                new DailyOperationSizingCounterValueObject(0, 0),
-                new DailyOperationSizingWeightValueObject(0, 0, 0),
-                0,
-                0,
-                "");
-            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
-
-            //Instantiate and Assign Property to DailyOperationSizingDetail
-            var sizingDetail = new DailyOperationSizingDetail(
-                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
-                new OperatorId(Guid.NewGuid()),
-                DateTimeOffset.UtcNow.AddDays(-1),
                 MachineStatus.ONSTART,
                 "",
                 new DailyOperationSizingCauseValueObject("0", "0"),
@@ -656,50 +192,28 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             mockDailyOperationSizingRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { resultModel });
-            //mockDailyOperationSizingRepo
-            //    .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
-            //    .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
-            //mockBeamRepo
-            //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-            //    .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
 
             //Instantiate Incoming Object
-            //Counter Object on Sizing Beam Document Command (Incoming Object)
-            var counterBeamDocument = new DailyOperationSizingCounterCommand
-            {
-                Start = 0,
-                Finish = 0
-            };
-
-            //Sizing Beam Document Command (Incoming Object)
-            var sizingBeamDocumentCommand = new UpdateStartDailyOperationSizingBeamDocumentCommand
-            {
-                SizingBeamId = new BeamId(Guid.NewGuid()),
-                Counter = counterBeamDocument
-            };
-
             //Sizing Detail Command (Incoming Object)
-            var sizingDetailCommand = new UpdateStartDailyOperationSizingDetailCommand
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
             {
                 OperatorDocumentId = new OperatorId(Guid.NewGuid()),
                 ShiftId = new ShiftId(Guid.NewGuid()),
-                StartDate = DateTimeOffset.UtcNow,
-                StartTime = new TimeSpan(7)
+                FinishDate = DateTimeOffset.UtcNow.AddDays(1),
+                FinishTime = new TimeSpan(7)
             };
 
             //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
-            var sizingDocument = new UpdateStartDailyOperationSizingCommand
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
             {
                 Id = sizingDocumentTestId,
-                SizingBeamDocuments = sizingBeamDocumentCommand,
-                SizingDetails = sizingDetailCommand
+                Details = sizingDetailCommand
             };
 
             //Update Incoming Object
-            UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
             {
-                SizingBeamDocuments = sizingDocument.SizingBeamDocuments,
-                SizingDetails = sizingDocument.SizingDetails
+                Details = sizingDocument.Details
             };
             //request.SetId(sizingDocumentTestId);
 
@@ -714,8 +228,369 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't start, latest machine status must ONENTRY or ONCOMPLETE", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't Finish. This Machine's Operation is not ONCOMPLETE", messageException.Message);
             }
+        }
+
+        [Fact]
+        public async Task Handle_TheresNoMachineStatusStart_DataUpdated()
+        {
+            // Arrange
+            //Instantiate Properties
+            //Add Existing Data
+            var sizingDocumentTestId = Guid.NewGuid();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
+            var machineDocumentId = new MachineId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
+            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
+            var emptyWeight = 63;
+            var yarnStrands = 63;
+            var recipeCode = "PCA 133R";
+            var neReal = 2;
+            var machineSpeed = 0;
+            var texSQ = "0";
+            var visco = "0";
+            var operationStatus = OperationStatus.ONFINISH;
+
+            //Assign Property to DailyOperationReachingTyingDocument
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
+
+            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
+            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
+                Guid.NewGuid(),
+                DateTimeOffset.UtcNow,
+                new DailyOperationSizingCounterValueObject(0, 0),
+                new DailyOperationSizingWeightValueObject(0, 0, 0),
+                0,
+                0,
+                BeamStatus.ROLLEDUP);
+            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
+
+            //Instantiate and Assign Property to DailyOperationSizingDetail
+            var sizingDetail = new DailyOperationSizingDetail(
+                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
+                new OperatorId(Guid.NewGuid()),
+                DateTimeOffset.UtcNow,
+                MachineStatus.ONCOMPLETE,
+                "",
+                new DailyOperationSizingCauseValueObject("0", "0"),
+                "TS122");
+            resultModel.AddDailyOperationSizingDetail(sizingDetail);
+
+            //Mocking Repository
+            mockDailyOperationSizingRepo
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
+
+            //Instantiate Incoming Object
+            //Sizing Detail Command (Incoming Object)
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
+            {
+                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                ShiftId = new ShiftId(Guid.NewGuid()),
+                FinishDate = DateTimeOffset.UtcNow.AddDays(1),
+                FinishTime = new TimeSpan(7)
+            };
+
+            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Id = sizingDocumentTestId,
+                Details = sizingDetailCommand
+            };
+
+            //Update Incoming Object
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Details = sizingDocument.Details
+            };
+            //request.SetId(sizingDocumentTestId);
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            try
+            {
+                // Act
+                var result = await unitUnderTest.Handle(request, cancellationToken);
+            }
+            catch (Exception messageException)
+            {
+                // Assert
+                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Finish. This Operation's status already FINISHED", messageException.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Handle_DoffFinishDateLessThanLatestDate_DataUpdated()
+        {
+            // Arrange
+            //Instantiate Properties
+            //Add Existing Data
+            var sizingDocumentTestId = Guid.NewGuid();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
+            var machineDocumentId = new MachineId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
+            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
+            var emptyWeight = 63;
+            var yarnStrands = 63;
+            var recipeCode = "PCA 133R";
+            var neReal = 2;
+            var machineSpeed = 0;
+            var texSQ = "0";
+            var visco = "0";
+            var operationStatus = OperationStatus.ONPROCESS;
+
+            //Assign Property to DailyOperationReachingTyingDocument
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
+
+            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
+            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
+                Guid.NewGuid(),
+                DateTimeOffset.UtcNow,
+                new DailyOperationSizingCounterValueObject(0, 0),
+                new DailyOperationSizingWeightValueObject(0, 0, 0),
+                0,
+                0,
+                BeamStatus.ROLLEDUP);
+            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
+
+            //Instantiate and Assign Property to DailyOperationSizingDetail
+            var sizingDetail = new DailyOperationSizingDetail(
+                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
+                new OperatorId(Guid.NewGuid()),
+                DateTimeOffset.UtcNow,
+                MachineStatus.ONCOMPLETE,
+                "",
+                new DailyOperationSizingCauseValueObject("0", "0"),
+                "TS122");
+            resultModel.AddDailyOperationSizingDetail(sizingDetail);
+
+            //Mocking Repository
+            mockDailyOperationSizingRepo
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
+
+            //Instantiate Incoming Object
+            //Sizing Detail Command (Incoming Object)
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
+            {
+                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                ShiftId = new ShiftId(Guid.NewGuid()),
+                FinishDate = DateTimeOffset.UtcNow.AddDays(-1),
+                FinishTime = new TimeSpan(7)
+            };
+
+            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Id = sizingDocumentTestId,
+                Details = sizingDetailCommand
+            };
+
+            //Update Incoming Object
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Details = sizingDocument.Details
+            };
+            //request.SetId(sizingDocumentTestId);
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            try
+            {
+                // Act
+                var result = await unitUnderTest.Handle(request, cancellationToken);
+            }
+            catch (Exception messageException)
+            {
+                // Assert
+                Assert.Equal("Validation failed: \r\n -- DoffDate: Finish date cannot less than latest date log", messageException.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Handle_DoffFinishTimeLessThanLatestTime_DataUpdated()
+        {
+            // Arrange
+            //Instantiate Properties
+            //Add Existing Data
+            var sizingDocumentTestId = Guid.NewGuid();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
+            var machineDocumentId = new MachineId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
+            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
+            var emptyWeight = 63;
+            var yarnStrands = 63;
+            var recipeCode = "PCA 133R";
+            var neReal = 2;
+            var machineSpeed = 0;
+            var texSQ = "0";
+            var visco = "0";
+            var operationStatus = OperationStatus.ONPROCESS;
+
+            //Assign Property to DailyOperationReachingTyingDocument
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
+
+            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
+            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
+                Guid.NewGuid(),
+                DateTimeOffset.UtcNow,
+                new DailyOperationSizingCounterValueObject(0, 0),
+                new DailyOperationSizingWeightValueObject(0, 0, 0),
+                0,
+                0,
+                BeamStatus.ROLLEDUP);
+            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
+
+            //Instantiate and Assign Property to DailyOperationSizingDetail
+            var sizingDetail = new DailyOperationSizingDetail(
+                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
+                new OperatorId(Guid.NewGuid()),
+                DateTimeOffset.UtcNow,
+                MachineStatus.ONCOMPLETE,
+                "",
+                new DailyOperationSizingCauseValueObject("0", "0"),
+                "TS122");
+            resultModel.AddDailyOperationSizingDetail(sizingDetail);
+
+            //Mocking Repository
+            mockDailyOperationSizingRepo
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
+
+            //Instantiate Incoming Object
+            //Sizing Detail Command (Incoming Object)
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
+            {
+                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                ShiftId = new ShiftId(Guid.NewGuid()),
+                FinishDate = DateTimeOffset.UtcNow.AddHours(-1),
+                FinishTime = new TimeSpan(7)
+            };
+
+            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Id = sizingDocumentTestId,
+                Details = sizingDetailCommand
+            };
+
+            //Update Incoming Object
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Details = sizingDocument.Details
+            };
+            //request.SetId(sizingDocumentTestId);
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            try
+            {
+                // Act
+                var result = await unitUnderTest.Handle(request, cancellationToken);
+            }
+            catch (Exception messageException)
+            {
+                // Assert
+                Assert.Equal("Validation failed: \r\n -- DoffTime: Finish time cannot less than or equal latest time log", messageException.Message);
+            }
+        }
+
+        [Fact]
+        public async Task Handle_ValidationPassed_DataUpdated()
+        {
+            // Arrange
+            //Instantiate Properties
+            //Add Existing Data
+            var sizingDocumentTestId = Guid.NewGuid();
+            var unitUnderTest = this.CreateUpdateDoffDailyOperationSizingCommandHandler();
+            var machineDocumentId = new MachineId(Guid.NewGuid());
+            var orderId = new OrderId(Guid.NewGuid());
+            List<BeamId> beamsWarping = new List<BeamId> { new BeamId(Guid.NewGuid()) };
+            var emptyWeight = 63;
+            var yarnStrands = 63;
+            var recipeCode = "PCA 133R";
+            var neReal = 2;
+            var machineSpeed = 0;
+            var texSQ = "0";
+            var visco = "0";
+            var operationStatus = OperationStatus.ONPROCESS;
+
+            //Assign Property to DailyOperationReachingTyingDocument
+            var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
+
+            //Instantiate and Assign Property to DailyOperationSizingBeamDocument
+            var sizingBeamDocument = new DailyOperationSizingBeamDocument(
+                Guid.NewGuid(),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                new DailyOperationSizingCounterValueObject(0, 0),
+                new DailyOperationSizingWeightValueObject(0, 0, 0),
+                0,
+                0,
+                BeamStatus.ROLLEDUP);
+            resultModel.AddDailyOperationSizingBeamDocument(sizingBeamDocument);
+
+            //Instantiate and Assign Property to DailyOperationSizingDetail
+            var sizingDetail = new DailyOperationSizingDetail(
+                Guid.NewGuid(), new ShiftId(Guid.NewGuid()),
+                new OperatorId(Guid.NewGuid()),
+                DateTimeOffset.UtcNow.AddDays(-1),
+                MachineStatus.ONCOMPLETE,
+                "",
+                new DailyOperationSizingCauseValueObject("0", "0"),
+                "TS122");
+            resultModel.AddDailyOperationSizingDetail(sizingDetail);
+
+            //Mocking Repository
+            mockDailyOperationSizingRepo
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Returns(new List<DailyOperationSizingDocument>() { resultModel });
+            mockDailyOperationSizingRepo
+                .Setup(x => x.Update(It.IsAny<DailyOperationSizingDocument>()))
+                .Returns(Task.FromResult(It.IsAny<DailyOperationSizingDocument>()));
+            this.mockStorage.Setup(x => x.Save());
+
+            //Instantiate Incoming Object
+            //Sizing Detail Command (Incoming Object)
+            var sizingDetailCommand = new UpdateDoffFinishDailyOperationSizingDetailCommand
+            {
+                OperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                ShiftId = new ShiftId(Guid.NewGuid()),
+                FinishDate = DateTimeOffset.UtcNow,
+                FinishTime = new TimeSpan(7)
+            };
+
+            //Assign Beam Document Command & Detail Command (Childs Objects) to Sizing Document (Parent Objects)
+            var sizingDocument = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Id = sizingDocumentTestId,
+                Details = sizingDetailCommand
+            };
+
+            //Update Incoming Object
+            UpdateDoffFinishDailyOperationSizingCommand request = new UpdateDoffFinishDailyOperationSizingCommand
+            {
+                Id = Guid.NewGuid(),
+                Details = sizingDocument.Details,
+                MachineSpeed = 4000,
+                TexSQ = "40",
+                Visco = "50"
+            };
+            request.SetId(sizingDocumentTestId);
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            //---ACT---//
+            //Instantiate Command Handler
+            var result = await unitUnderTest.Handle(request, cancellationToken);
+
+            //---ASSERT---//
+            result.Identity.Should().NotBeEmpty();
+            result.Should().NotBeNull();
         }
     }
 }

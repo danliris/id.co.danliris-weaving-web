@@ -50,12 +50,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Machine Status
-            var currentMachineStatus = lastDetail.MachineStatus;
+            //var currentMachineStatus = lastDetail.MachineStatus;
 
-            if (!currentMachineStatus.Equals(MachineStatus.ONSTOP))
-            {
-                throw Validator.ErrorValidation(("MachineStatus", "Can't Resume. This current Operation status isn't ONSTOP"));
-            }
+            //if (!currentMachineStatus.Equals(MachineStatus.ONSTOP))
+            //{
+            //    throw Validator.ErrorValidation(("MachineStatus", "Can't Resume. This current Operation status isn't ONSTOP"));
+            //}
 
             //Validation for Operation Status
             var currentOperationStatus =
@@ -129,7 +129,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("Status", "Can't continue, latest status is not on STOP"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't Resume. This current Operation status isn't ONSTOP"));
                     }
                 }
             }

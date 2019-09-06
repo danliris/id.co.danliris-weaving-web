@@ -160,12 +160,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("Status", "Can't start, latest beam status must ROLLED-UP"));
+                            throw Validator.ErrorValidation(("BeamStatus", "Can't start, latest beam status must ROLLED-UP"));
                         }
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("Status", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));
                     }
                 }
             }

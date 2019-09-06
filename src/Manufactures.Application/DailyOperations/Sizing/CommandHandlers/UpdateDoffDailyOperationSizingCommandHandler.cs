@@ -73,16 +73,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Started Operation Status
-            var operationStartStatus = 
-                existingDailyOperation
-                .SizingDetails
-                .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-                .Count();
+            //var sizingOperationStartStatus = 
+            //    existingDailyOperation
+            //    .SizingDetails
+            //    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
+            //    .Count();
 
-            if (operationStartStatus == 0)
-            {
-                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
-            }
+            //if (sizingOperationStartStatus == 0)
+            //{
+            //    throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
+            //}
 
             //Validation for Finished Operation Status
             var currentOperationStatus =
