@@ -36,10 +36,9 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                           CancellationToken cancellationToken)
         {
             //Check if any sop/order id has define on daily operation
-            var existingDailyOperation =
-                _warpingOperationRepository
-                    .Find(o => o.OrderId.Equals(request.OrderId.Value))
-                    .Any();
+            var existingDailyOperation = _warpingOperationRepository
+                                         .Find(o => o.OrderDocumentId.Equals(request.OrderDocumentId.Value))
+                                         .Any();
 
             if (existingDailyOperation == true)
             {
@@ -47,34 +46,31 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             }
 
             //Set date time when user operate
-            var year = request.DateOperation.Year;
-            var month = request.DateOperation.Month;
-            var day = request.DateOperation.Day;
-            var hour = request.TimeOperation.Hours;
-            var minutes = request.TimeOperation.Minutes;
-            var seconds = request.TimeOperation.Seconds;
+            var year = request.PreparationDate.Year;
+            var month = request.PreparationDate.Month;
+            var day = request.PreparationDate.Day;
+            var hour = request.PreparationTime.Hours;
+            var minutes = request.PreparationTime.Minutes;
+            var seconds = request.PreparationTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Instantiate new Daily operation warping
             var dailyOperationWarping = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                              request.OrderId,
-                                                              request.ConstructionId,
-                                                              request.MaterialTypeId,
-                                                              request.AmountOfCones,
-                                                              request.ColourOfCone,
-                                                              dateTimeOperation,
-                                                              request.OperatorId);
-
-            dailyOperationWarping.SetDailyOperationStatus(OperationStatus.ONPROCESS);
+                                                                          request.OrderDocumentId,
+                                                                          request.MaterialTypeId,
+                                                                          request.AmountOfCones,
+                                                                          request.ColourOfCone,
+                                                                          dateTimeOperation,
+                                                                          OperationStatus.ONPROCESS);
 
             //Add daily operation history
-            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                           request.ShiftId,
-                                                           request.OperatorId.Value, 
-                                                           dateTimeOperation,
-                                                           MachineStatus.ONENTRY);
-            dailyOperationWarping.AddDailyOperationWarpingDetailHistory(history);
+            var history = new DailyOperationWarpingDetail(Guid.NewGuid(),
+                                                          request.ShiftDocumentId,
+                                                          request.OperatorDocumentId, 
+                                                          dateTimeOperation,
+                                                          MachineStatus.ONENTRY);
+            dailyOperationWarping.AddDailyOperationWarpingDetail(history);
             
             //Update and save
             await _warpingOperationRepository.Update(dailyOperationWarping);

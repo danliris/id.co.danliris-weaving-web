@@ -74,11 +74,11 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     MaterialTypeId = materialTypeId,
                     AmountOfCones = 10,
                     ColourOfCone = "Red",
-                    DateOperation = DateTimeOffset.UtcNow,
-                    TimeOperation = TimeSpan.Parse("01:00"),
-                    OperatorId = operatorId,
-                    ShiftId = shiftId,
-                    OrderId = new OrderId(Guid.NewGuid())
+                    PreparationDate = DateTimeOffset.UtcNow,
+                    PreparationTime = TimeSpan.Parse("01:00"),
+                    OperatorDocumentId = operatorId,
+                    ShiftDocumentId = shiftId,
+                    OrderDocumentId = new OrderId(Guid.NewGuid())
             };
 
             //Setup mock object result for beam repository
@@ -101,7 +101,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             result.Identity.Should().NotBeEmpty();
 
             //check if has history
-            result.DailyOperationWarpingDetailHistory.Should().NotBeEmpty();
+            result.WarpingDetails.Should().NotBeEmpty();
         }
     }
 }

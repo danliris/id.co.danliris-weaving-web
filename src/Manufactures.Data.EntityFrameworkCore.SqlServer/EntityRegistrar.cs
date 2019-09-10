@@ -74,7 +74,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingHistory");
                 etb.HasKey(e => e.Identity);
@@ -88,11 +88,11 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationWarpingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.DailyOperationWarpingBeamProducts)
+                etb.HasMany(e => e.WarpingBeamProducts)
                     .WithOne(e => e.DailyOperationWarpingDocument)
                     .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 
-                etb.HasMany(e => e.DailyOperationWarpingDetailHistory)
+                etb.HasMany(e => e.WarpingDetails)
                     .WithOne(e => e.DailyOperationWarpingDocument)
                     .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 

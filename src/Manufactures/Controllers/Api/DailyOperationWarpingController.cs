@@ -133,31 +133,31 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             var warpingBeams = 
                 dailyOperationWarping
-                    .DailyOperationWarpingBeamProducts
+                    .WarpingBeamProducts
                     .Select(x => new DailyOperationBeamProductDto(x)).ToList();
 
             //Extract history
             var warpingHistory =
                 dailyOperationWarping
-                    .DailyOperationWarpingDetailHistory;
+                    .WarpingDetails;
             var historys = new List<DailyOperationHistory>();
 
             foreach (var history in warpingHistory)
             {
                 await Task.Yield();
-                var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+                var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
 
                 await Task.Yield();
-                var shiftById = await _shiftQuery.GetById(history.ShiftId);
+                var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
 
                 await Task.Yield();
                 var operationHistory =
                     new DailyOperationHistory(history.Identity,
-                                              history.BeamNumber,
+                                              history.WarpingBeamNumber,
                                               operatorById.Username,
                                               operatorById.Group,
-                                              history.DateTimeOperation,
-                                              history.OperationStatus,
+                                              history.DateTimeMachine,
+                                              history.MachineStatus,
                                               shiftById.Name);
 
                 historys.Add(operationHistory);
@@ -181,25 +181,25 @@ namespace Manufactures.Controllers.Api
             //Return result from command handler as Identity(Id)
             var warpingHistory =
                 dailyOperationWarping
-                    .DailyOperationWarpingDetailHistory;
+                    .WarpingDetails;
 
             var result = new List<DailyOperationHistory>();
 
             foreach(var history in warpingHistory)
             {
                 await Task.Yield();
-                var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+                var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
 
                 await Task.Yield();
-                var shiftById = await _shiftQuery.GetById(history.ShiftId);
+                var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
 
                 var operationHistory =
                     new DailyOperationHistory(history.Identity, 
-                                              history.BeamNumber, 
+                                              history.WarpingBeamNumber, 
                                               operatorById.Username, 
                                               operatorById.Group, 
-                                              history.DateTimeOperation, 
-                                              history.OperationStatus, 
+                                              history.DateTimeMachine, 
+                                              history.MachineStatus, 
                                               shiftById.Name);
 
                 result.Add(operationHistory);
@@ -220,25 +220,25 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             var warpingHistory =
                 dailyOperationWarping
-                    .DailyOperationWarpingDetailHistory;
+                    .WarpingDetails;
 
             var result = new List<DailyOperationHistory>();
 
             foreach (var history in warpingHistory)
             {
                 await Task.Yield();
-                var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+                var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
 
                 await Task.Yield();
-                var shiftById = await _shiftQuery.GetById(history.ShiftId);
+                var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
 
                 var operationHistory =
                     new DailyOperationHistory(history.Identity,
-                                              history.BeamNumber,
+                                              history.WarpingBeamNumber,
                                               operatorById.Username,
                                               operatorById.Group,
-                                              history.DateTimeOperation,
-                                              history.OperationStatus,
+                                              history.DateTimeMachine,
+                                              history.MachineStatus,
                                               shiftById.Name);
 
                 result.Add(operationHistory);
@@ -259,14 +259,14 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             var warpingBeams =
                 dailyOperationWarping
-                    .DailyOperationWarpingBeamProducts
+                    .WarpingBeamProducts
                     .Select(x => new DailyOperationBeamProductDto(x)).ToList();
 
             //Get Latest product
             await Task.Yield();
             var latestBeamProduct = 
                 dailyOperationWarping
-                    .DailyOperationWarpingBeamProducts
+                    .WarpingBeamProducts
                     .OrderByDescending(x => x.CreatedDate)
                     .FirstOrDefault();
 
@@ -296,25 +296,25 @@ namespace Manufactures.Controllers.Api
             //Extract history
             var warpingHistory =
                 dailyOperationWarping
-                    .DailyOperationWarpingDetailHistory;
+                    .WarpingDetails;
             var historys = new List<DailyOperationHistory>();
 
             foreach (var history in warpingHistory)
             {
                 await Task.Yield();
-                var operatorById = await _operatorQuery.GetById(history.BeamOperatorId);
+                var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
 
                 await Task.Yield();
-                var shiftById = await _shiftQuery.GetById(history.ShiftId);
+                var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
 
                 await Task.Yield();
                 var operationHistory =
                     new DailyOperationHistory(history.Identity,
-                                              history.BeamNumber,
+                                              history.WarpingBeamNumber,
                                               operatorById.Username,
                                               operatorById.Group,
-                                              history.DateTimeOperation,
-                                              history.OperationStatus,
+                                              history.DateTimeMachine,
+                                              history.MachineStatus,
                                               shiftById.Name);
 
                 historys.Add(operationHistory);

@@ -9,17 +9,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
     public class PreparationWarpingOperationCommand
         : ICommand<DailyOperationWarpingDocument>
     {
-        [JsonProperty(PropertyName = "OrderId")]
-        public OrderId OrderId { get; set; }
-
-        [JsonProperty(PropertyName = "ConstructionId")]
-        public ConstructionId ConstructionId { get; set; }
+        [JsonProperty(PropertyName = "OrderDocumentId")]
+        public OrderId OrderDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "MaterialTypeId")]
         public MaterialTypeId MaterialTypeId { get; set; }
-
-        [JsonProperty(PropertyName = "ShiftId")]
-        public ShiftId ShiftId { get; set; }
 
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; set; }
@@ -27,14 +21,17 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "ColourOfCone")]
         public string ColourOfCone { get; set; }
 
-        [JsonProperty(PropertyName = "DateOperation")]
-        public DateTimeOffset DateOperation { get; set; }
+        [JsonProperty(PropertyName = "OperatorDocumentId")]
+        public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "TimeOperation")]
-        public TimeSpan TimeOperation { get; set; }
+        [JsonProperty(PropertyName = "PreparationDate")]
+        public DateTimeOffset PreparationDate { get; set; }
 
-        [JsonProperty(PropertyName = "OperatorId")]
-        public OperatorId OperatorId { get; set; }
+        [JsonProperty(PropertyName = "PreparationTime")]
+        public TimeSpan PreparationTime { get; set; }
+
+        [JsonProperty(PropertyName = "ShiftDocumentId")]
+        public ShiftId ShiftDocumentId { get; set; }
     }
 
     public class PreparationWarpingOperationCommandValidator 
@@ -42,15 +39,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
     {
         public PreparationWarpingOperationCommandValidator()
         {
-            RuleFor(command => command.OrderId.Value).NotEmpty();
-            RuleFor(command => command.ConstructionId.Value).NotEmpty();
+            RuleFor(command => command.OrderDocumentId.Value).NotEmpty();
             RuleFor(command => command.MaterialTypeId.Value).NotEmpty();
-            RuleFor(command => command.ShiftId.Value).NotEmpty();
             RuleFor(command => command.AmountOfCones).NotEmpty();
             RuleFor(command => command.ColourOfCone).NotEmpty();
-            RuleFor(command => command.DateOperation).NotEmpty();
-            RuleFor(command => command.TimeOperation).NotEmpty();
-            RuleFor(command => command.OperatorId.Value).NotEmpty();
+            RuleFor(command => command.OperatorDocumentId.Value).NotEmpty();
+            RuleFor(command => command.PreparationDate).NotEmpty();
+            RuleFor(command => command.PreparationTime).NotEmpty();
+            RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
         }
     }
 }

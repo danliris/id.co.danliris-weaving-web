@@ -34,8 +34,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var warpingQuery =
                 _warpingOperationRepository
                     .Query
-                    .Include(x => x.DailyOperationWarpingDetailHistory)
-                    .Include(x => x.DailyOperationWarpingBeamProducts);
+                    .Include(x => x.WarpingDetails)
+                    .Include(x => x.WarpingBeamProducts);
             var existingDailyOperation =
                 _warpingOperationRepository
                     .Find(warpingQuery)
@@ -62,12 +62,12 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Add daily operation history
-            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+            var history = new DailyOperationWarpingDetail(Guid.NewGuid(),
                                                            request.ShiftId,
-                                                           request.OperatorId.Value,
+                                                           request.OperatorId,
                                                            dateTimeOperation,
                                                            MachineStatus.ONSTOP);
-            existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
+            existingDailyOperation.AddDailyOperationWarpingDetail(history);
 
             //Update existing daily operation
             await _warpingOperationRepository.Update(existingDailyOperation);

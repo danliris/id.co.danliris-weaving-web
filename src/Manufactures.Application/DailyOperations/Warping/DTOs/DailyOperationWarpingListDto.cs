@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         {
             Id = document.Identity;
             DateTimeOperation = document.DateTimeOperation;
-            OperationStatus = document.DailyOperationStatus;
+            OperationStatus = document.OperationStatus;
         }
 
         public void SetOrderId(OrderId value)

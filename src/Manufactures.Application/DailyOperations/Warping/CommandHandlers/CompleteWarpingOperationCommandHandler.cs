@@ -34,8 +34,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var warpingQuery =
                 _warpingOperationRepository
                     .Query
-                    .Include(x => x.DailyOperationWarpingDetailHistory)
-                    .Include(x => x.DailyOperationWarpingBeamProducts);
+                    .Include(x => x.WarpingDetails)
+                    .Include(x => x.WarpingBeamProducts);
             var existingDailyOperation =
                 _warpingOperationRepository
                     .Find(warpingQuery)
@@ -53,7 +53,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             //Check if any beam has status on process
             if (existingDailyOperation
-                    .DailyOperationWarpingBeamProducts
+                    .WarpingBeamProducts
                     .Any(entity => entity.BeamStatus.Equals(BeamStatus.ONPROCESS)))
             {
                 //Throw an error doesn't have any operation
@@ -73,16 +73,16 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Add daily operation history
-            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+            var history = new DailyOperationWarpingDetail(Guid.NewGuid(),
                                                            request.ShiftId,
-                                                           request.OperatorId.Value,
+                                                           request.OperatorId,
                                                            dateTimeOperation,
                                                            MachineStatus.ONCOMPLETE);
 
-            existingDailyOperation.AddDailyOperationWarpingDetailHistory(history);
+            existingDailyOperation.AddDailyOperationWarpingDetail(history);
 
             //Update status on daily operation
-            existingDailyOperation.SetDailyOperationStatus(OperationStatus.ONFINISH);
+            existingDailyOperation.SetOperationStatus(OperationStatus.ONFINISH);
 
             //Update existing daily operation
             await _warpingOperationRepository.Update(existingDailyOperation);
