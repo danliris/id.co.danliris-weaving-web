@@ -62,8 +62,7 @@ namespace Manufactures.Controllers.Api
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
                         .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OrderNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.LatestBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                                    x.OrderNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -110,9 +109,8 @@ namespace Manufactures.Controllers.Api
         }
 
         //Preparation Warping Daily Operation Request
-        [HttpPost("entry-process-operation")]
-        public async Task<IActionResult> 
-            Preparation([FromBody]PreparationWarpingOperationCommand command)
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]PreparationWarpingOperationCommand command)
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
@@ -123,8 +121,7 @@ namespace Manufactures.Controllers.Api
 
         //Start Warping Daily Operation Request
         [HttpPut("start-process")]
-        public async Task<IActionResult>
-            Start([FromBody]StartWarpingOperationCommand command)
+        public async Task<IActionResult> Start([FromBody]StartWarpingOperationCommand command)
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
@@ -171,8 +168,7 @@ namespace Manufactures.Controllers.Api
 
         //Pause Warping Daily Operation Request
         [HttpPut("pause-process")]
-        public async Task<IActionResult>
-            Pause([FromBody]PauseWarpingOperationCommand command)
+        public async Task<IActionResult> Pause([FromBody]PauseWarpingOperationCommand command)
         {
             
             // Sending command to command handler
@@ -210,8 +206,7 @@ namespace Manufactures.Controllers.Api
 
         //Resume Warping Daily Operation Request
         [HttpPut("resume-process")]
-        public async Task<IActionResult>
-            Resume([FromBody]ResumeWarpingOperationCommand command)
+        public async Task<IActionResult> Resume([FromBody]ResumeWarpingOperationCommand command)
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
@@ -249,8 +244,7 @@ namespace Manufactures.Controllers.Api
 
         //Finish Warping Daily Operation Request
         [HttpPut("finish-process")]
-        public async Task<IActionResult>
-            Finish([FromBody]FinishWarpingOperationCommand command)
+        public async Task<IActionResult> Finish([FromBody]FinishWarpingOperationCommand command)
         {
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);

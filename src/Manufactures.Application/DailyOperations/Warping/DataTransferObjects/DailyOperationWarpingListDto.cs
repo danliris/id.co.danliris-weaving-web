@@ -10,11 +10,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DateTimeOperation")]
-        public DateTimeOffset DateTimeOperation { get; private set; }
-
-        [JsonProperty(PropertyName = "OrderId")]
-        public OrderId OrderId { get; private set; }
+        [JsonProperty(PropertyName = "DateTimeMachine")]
+        public DateTimeOffset DateTimeMachine { get; private set; }
 
         [JsonProperty(PropertyName = "OrderNumber")]
         public string OrderNumber { get; private set; }
@@ -22,8 +19,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "LatestBeamNumber")]
-        public string LatestBeamNumber { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
+        public int WeavingUnitDocumentId { get; private set; }
 
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; private set; }
@@ -31,28 +28,23 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public DailyOperationWarpingListDto(DailyOperationWarpingDocument document)
         {
             Id = document.Identity;
-            DateTimeOperation = document.DateTimeOperation;
+            DateTimeMachine = document.DateTimeOperation;
             OperationStatus = document.OperationStatus;
         }
 
-        public void SetOrderId(OrderId value)
+        public void SetOrderNumber(string orderNumber)
         {
-            OrderId = value;
+            OrderNumber = orderNumber;
         }
 
-        public void SetOrderNumber(string value)
+        public void SetConstructionNumber(string constructionNumber)
         {
-            OrderNumber = value;
+            ConstructionNumber = constructionNumber;
         }
 
-        public void SetConstructionNumber(string value)
+        public void SetWeavingUnitDocumentId(int weavingUnitDocumentId)
         {
-            ConstructionNumber = value;
-        }
-
-        public void SetLatestBeamNumber(string value)
-        {
-            LatestBeamNumber = value;
+            WeavingUnitDocumentId = weavingUnitDocumentId;
         }
     }
 }

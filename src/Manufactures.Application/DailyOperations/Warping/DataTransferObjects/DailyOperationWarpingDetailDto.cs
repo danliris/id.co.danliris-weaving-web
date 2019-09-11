@@ -3,7 +3,7 @@ using System;
 
 namespace Manufactures.Application.DailyOperations.Warping.DTOs
 {
-    public class DailyOperationWarpingHistoryDto
+    public class DailyOperationWarpingDetailDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
@@ -27,7 +27,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
 
-        public DailyOperationWarpingHistoryDto(Guid id,
+        public DailyOperationWarpingDetailDto(Guid id,
                                             string beamNumber,
                                             string beamOperatorName,
                                             string beamOperatorGroup,

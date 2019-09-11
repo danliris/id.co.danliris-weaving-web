@@ -61,7 +61,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 this.CreateAddNewWarpingOperationCommandHandler();
 
             //Instantiate new Object
-            var constructionId = new ConstructionId(Guid.NewGuid());
             var materialTypeId = new MaterialTypeId(Guid.NewGuid());
             var operatorId = new OperatorId(Guid.NewGuid());
             var shiftId = new ShiftId(Guid.NewGuid());
@@ -70,7 +69,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             PreparationWarpingOperationCommand request =
                 new PreparationWarpingOperationCommand
                 {
-                    ConstructionId = constructionId,
                     MaterialTypeId = materialTypeId,
                     AmountOfCones = 10,
                     ColourOfCone = "Red",

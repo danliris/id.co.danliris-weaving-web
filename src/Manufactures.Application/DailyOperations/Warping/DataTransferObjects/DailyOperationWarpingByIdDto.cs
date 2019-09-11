@@ -31,7 +31,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public List<DailyOperationBeamProduct> DailyOperationBeamProducts { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationWarpingHistories")]
-        public List<DailyOperationWarpingHistoryDto> DailyOperationWarpingHistories { get; private set; }
+        public List<DailyOperationWarpingDetailDto> DailyOperationWarpingDetails { get; private set; }
 
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
@@ -39,7 +39,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             AmountOfCones = document.AmountOfCones;
             ColourOfCone = document.ColourOfCone;
             DailyOperationBeamProducts = new List<DailyOperationBeamProduct>();
-            DailyOperationWarpingHistories = new List<DailyOperationWarpingHistoryDto>();
+            DailyOperationWarpingDetails = new List<DailyOperationWarpingDetailDto>();
         }
 
         public void SetWeavingUnit(UnitId value)
@@ -66,9 +66,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             }
         }
 
-        public void AddDailyOperationWarpingHistories(DailyOperationWarpingHistoryDto value)
+        public void AddDailyOperationWarpingHistories(DailyOperationWarpingDetailDto value)
         {
-            DailyOperationWarpingHistories.Add(value);
+            DailyOperationWarpingDetails.Add(value);
         }
     }
 }

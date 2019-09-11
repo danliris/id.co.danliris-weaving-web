@@ -67,7 +67,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationWarpingBeamProduct");
+                etb.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
@@ -76,7 +76,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationWarpingDetail>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationWarpingHistory");
+                etb.ToTable("Weaving_DailyOperationWarpingDetails");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
