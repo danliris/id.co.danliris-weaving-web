@@ -99,7 +99,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             result.Identity.Should().NotBeEmpty();
 
             //check if has history
-            result.WarpingDetails.Should().NotBeEmpty();
+            result.WarpingHistories.Should().NotBeEmpty();
         }
     }
 }

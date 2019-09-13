@@ -6,7 +6,7 @@ using System;
 
 namespace Manufactures.Application.DailyOperations.Warping.DTOs
 {
-    public class DailyOperationBeamProduct
+    public class DailyOperationWarpingBeamProductDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "BeamStatus")]
         public string BeamStatus { get; private set; }
 
-        public DailyOperationBeamProduct(DailyOperationWarpingBeamProduct beamProduct, BeamDocument beamDocument)
+        public DailyOperationWarpingBeamProductDto(Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct beamProduct, BeamDocument beamDocument)
         {
             Id = beamProduct.Identity;
             BeamId = new BeamId(beamProduct.BeamId);

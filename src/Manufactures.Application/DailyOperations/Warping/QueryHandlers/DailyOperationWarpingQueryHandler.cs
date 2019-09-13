@@ -60,7 +60,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .Include(o => o.WarpingBeamProducts)
-                    .Include(o => o.WarpingDetails)
+                    .Include(o => o.WarpingHistories)
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
@@ -116,7 +116,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .Include(o => o.WarpingBeamProducts)
-                    .Include(o => o.WarpingDetails)
+                    .Include(o => o.WarpingHistories)
                     .OrderByDescending(x => x.CreatedDate);
 
             //Request from query
@@ -173,14 +173,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .Find(o => o.Identity.Equals(beamProduct.BeamId))
                         .FirstOrDefault();
 
-                var beamWarping = new DailyOperationBeamProduct(beamProduct, beam);
+                var beamWarping = new DailyOperationWarpingBeamProductDto(beamProduct, beam);
 
                 await Task.Yield();
                 result.AddDailyOperationBeamProducts(beamWarping);
             }
 
             //Add History to DTO
-            foreach (var history in dailyOperationWarpingDocument.WarpingDetails)
+            foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
             {
                 var beamNumber = history.WarpingBeamNumber ?? "no beam input, preparing state";
 

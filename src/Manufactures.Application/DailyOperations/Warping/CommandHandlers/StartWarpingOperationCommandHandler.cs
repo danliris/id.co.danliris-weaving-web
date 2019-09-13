@@ -35,7 +35,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var warpingQuery =
                 _warpingOperationRepository
                     .Query
-                    .Include(x => x.WarpingDetails)
+                    .Include(x => x.WarpingHistories)
                     .Include(x => x.WarpingBeamProducts);
             var existingDailyOperation =
                 _warpingOperationRepository
@@ -63,13 +63,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Add daily operation history
-            var history = new DailyOperationWarpingDetail(Guid.NewGuid(),
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            request.ShiftId,
                                                            request.OperatorId,
                                                            dateTimeOperation,
                                                            MachineStatus.ONSTART);
 
-            existingDailyOperation.AddDailyOperationWarpingDetail(history);
+            existingDailyOperation.AddDailyOperationWarpingHistory(history);
             
             //Check if any beam on process
             if (existingDailyOperation

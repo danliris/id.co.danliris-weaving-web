@@ -23,7 +23,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         public string ColourOfCone { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
         public string OperationStatus { get; private set; }
-        public IReadOnlyCollection<DailyOperationWarpingDetail> WarpingDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationWarpingHistory> WarpingHistories { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingBeamProduct> WarpingBeamProducts { get; private set; }
 
         //Main Constructor
@@ -43,7 +43,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             ColourOfCone = colourOfCone;
             DateTimeOperation = datetimeOperation;
             OperationStatus = operationStatus;
-            WarpingDetails = new List<DailyOperationWarpingDetail>();
+            WarpingHistories = new List<DailyOperationWarpingHistory>();
             WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>();
 
             this.MarkTransient();
@@ -70,54 +70,54 @@ namespace Manufactures.Domain.DailyOperations.Warping
             this.ColourOfCone = readModel.ColourOfCone;
             this.DateTimeOperation = readModel.DateTimeOperation;
             this.OperationStatus = readModel.OperationStatus;
+            this.WarpingHistories = readModel.WarpingHistories;
             this.WarpingBeamProducts = readModel.WarpingBeamProducts;
-            this.WarpingDetails = readModel.WarpingDetails;
         }
 
-        //Add Daily Operation Warping Detail
-        public void AddDailyOperationWarpingDetail(DailyOperationWarpingDetail detail)
+        //Add Daily Operation Warping History
+        public void AddDailyOperationWarpingHistory(DailyOperationWarpingHistory history)
         {
             //Modified Existing List of Detail
-            var dailyOperationWarpingDetails = WarpingDetails.ToList();
+            var dailyOperationWarpingHistories = WarpingHistories.ToList();
 
             //Add New Detail
-            dailyOperationWarpingDetails.Add(detail);
+            dailyOperationWarpingHistories.Add(history);
 
             //Update Old List
-            WarpingDetails = dailyOperationWarpingDetails;
+            WarpingHistories = dailyOperationWarpingHistories;
 
             //Save List
-            ReadModel.WarpingDetails = dailyOperationWarpingDetails;
+            ReadModel.WarpingHistories = dailyOperationWarpingHistories;
             MarkModified();
         }
 
-        //Update Existing Detail
-        public void UpdateDailyOperationWarpingDetail(DailyOperationWarpingDetail detail)
+        //Update Existing Histories
+        public void UpdateDailyOperationWarpingHistory(DailyOperationWarpingHistory history)
         {
             //Check If Any Value
-            if (WarpingDetails.Any(x => x.Identity.Equals(detail.Identity)))
+            if (WarpingHistories.Any(x => x.Identity.Equals(history.Identity)))
             {
                 //Get Value by Identity & Index
-                var dailyOperationWarpingDetails = WarpingDetails.ToList();
-                var index = dailyOperationWarpingDetails.FindIndex(x => x.Identity.Equals(detail.Identity));
-                var warpingDetail = dailyOperationWarpingDetails
-                                    .Where(x => x.Identity.Equals(detail.Identity))
+                var dailyOperationWarpingHistories = WarpingHistories.ToList();
+                var index = dailyOperationWarpingHistories.FindIndex(x => x.Identity.Equals(history.Identity));
+                var warpingHistory = dailyOperationWarpingHistories
+                                    .Where(x => x.Identity.Equals(history.Identity))
                                     .FirstOrDefault();
 
                 //Update Properties When not Same
-                warpingDetail.SetShiftId(new ShiftId(detail.ShiftDocumentId));
-                warpingDetail.SetOperatorDocumentId(new OperatorId(detail.OperatorDocumentId));
-                warpingDetail.SetDateTimeMachine(detail.DateTimeMachine);
-                warpingDetail.SetMachineStatus(detail.MachineStatus);
-                warpingDetail.SetInformation(detail.Information);
-                warpingDetail.SetWarpingBeamNumber(detail.WarpingBeamNumber);
+                warpingHistory.SetDateTimeMachine(history.DateTimeMachine);
+                warpingHistory.SetShiftId(new ShiftId(history.ShiftDocumentId));
+                warpingHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
+                warpingHistory.SetMachineStatus(history.MachineStatus);
+                warpingHistory.SetInformation(history.Information);
+                warpingHistory.SetWarpingBeamNumber(history.WarpingBeamNumber);
 
                 //Replace to Update Warping Product
-                dailyOperationWarpingDetails[index] = warpingDetail;
-                WarpingDetails = dailyOperationWarpingDetails;
+                dailyOperationWarpingHistories[index] = warpingHistory;
+                WarpingHistories = dailyOperationWarpingHistories;
 
                 //Replace Old One List
-                ReadModel.WarpingDetails = dailyOperationWarpingDetails;
+                ReadModel.WarpingHistories = dailyOperationWarpingHistories;
                 MarkModified();
             }
         }

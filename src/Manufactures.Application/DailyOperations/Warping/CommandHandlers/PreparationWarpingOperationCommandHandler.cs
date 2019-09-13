@@ -65,12 +65,12 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           OperationStatus.ONPROCESS);
 
             //Add daily operation history
-            var history = new DailyOperationWarpingDetail(Guid.NewGuid(),
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                           request.ShiftDocumentId,
                                                           request.OperatorDocumentId, 
                                                           dateTimeOperation,
                                                           MachineStatus.ONENTRY);
-            dailyOperationWarping.AddDailyOperationWarpingDetail(history);
+            dailyOperationWarping.AddDailyOperationWarpingHistory(history);
             
             //Update and save
             await _warpingOperationRepository.Update(dailyOperationWarping);

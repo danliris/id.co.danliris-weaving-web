@@ -5,7 +5,7 @@ using System;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingDetail : EntityBase<DailyOperationWarpingDetail>
+    public class DailyOperationWarpingHistory : EntityBase<DailyOperationWarpingHistory>
     {
         public Guid ShiftDocumentId { get; private set; }
         public Guid OperatorDocumentId { get; private set; }
@@ -16,9 +16,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
-        public DailyOperationWarpingDetail(Guid identity) : base(identity) { }
+        public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
-        public DailyOperationWarpingDetail(Guid identity,
+        public DailyOperationWarpingHistory(Guid identity,
                                            ShiftId shiftDocumentId,
                                            OperatorId operatorDocumentId,
                                            DateTimeOffset datetimeMachine,
@@ -34,7 +34,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             WarpingBeamNumber = warpingBeamNumber;
         }
 
-        public DailyOperationWarpingDetail(Guid identity,
+        public DailyOperationWarpingHistory(Guid identity,
                                            ShiftId shiftDocumentId,
                                            OperatorId operatorDocumentId,
                                            DateTimeOffset dateTimeMachine,
@@ -91,7 +91,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             }
         }
 
-        protected override DailyOperationWarpingDetail GetEntity()
+        protected override DailyOperationWarpingHistory GetEntity()
         {
             return this;
         }

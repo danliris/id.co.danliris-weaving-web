@@ -13,8 +13,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeMachine { get; private set; }
 
-        [JsonProperty(PropertyName = "OrderNumber")]
-        public string OrderNumber { get; private set; }
+        [JsonProperty(PropertyName = "OrderProductionNumber")]
+        public string OrderProductionNumber { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
@@ -34,7 +34,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
 
         public void SetOrderNumber(string orderNumber)
         {
-            OrderNumber = orderNumber;
+            OrderProductionNumber = orderNumber;
         }
 
         public void SetConstructionNumber(string constructionNumber)

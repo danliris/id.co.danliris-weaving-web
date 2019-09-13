@@ -62,7 +62,7 @@ namespace Manufactures.Controllers.Api
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
                         .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OrderNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -136,7 +136,7 @@ namespace Manufactures.Controllers.Api
             //Extract history
             var warpingHistory =
                 dailyOperationWarping
-                    .WarpingDetails;
+                    .WarpingHistories;
             var historys = new List<DailyOperationHistory>();
 
             foreach (var history in warpingHistory)
@@ -177,7 +177,7 @@ namespace Manufactures.Controllers.Api
             //Return result from command handler as Identity(Id)
             var warpingHistory =
                 dailyOperationWarping
-                    .WarpingDetails;
+                    .WarpingHistories;
 
             var result = new List<DailyOperationHistory>();
 
@@ -215,7 +215,7 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             var warpingHistory =
                 dailyOperationWarping
-                    .WarpingDetails;
+                    .WarpingHistories;
 
             var result = new List<DailyOperationHistory>();
 
@@ -290,7 +290,7 @@ namespace Manufactures.Controllers.Api
             //Extract history
             var warpingHistory =
                 dailyOperationWarping
-                    .WarpingDetails;
+                    .WarpingHistories;
             var historys = new List<DailyOperationHistory>();
 
             foreach (var history in warpingHistory)

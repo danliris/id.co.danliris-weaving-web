@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         public string ColourOfCone { get; internal set; }
         public DateTimeOffset DateTimeOperation { get; internal set; }
         public string OperationStatus { get; internal set; }
-        public List<DailyOperationWarpingDetail> WarpingDetails { get; internal set; }
+        public List<DailyOperationWarpingHistory> WarpingHistories { get; internal set; }
         public List<DailyOperationWarpingBeamProduct> WarpingBeamProducts { get; internal set; }
 
         public DailyOperationWarpingReadModel(Guid identity) : base(identity) { }
