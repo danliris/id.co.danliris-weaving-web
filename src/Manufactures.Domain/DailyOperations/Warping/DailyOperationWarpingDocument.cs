@@ -154,10 +154,10 @@ namespace Manufactures.Domain.DailyOperations.Warping
                         .FirstOrDefault();
                 
                 //Update Properties When Not Same
-                warpingBeamProduct.SetBeamId(value.Identity);
-                warpingBeamProduct.SetLength(value.Length ?? 0);
+                warpingBeamProduct.SetWarpingBeamId(value.Identity);
+                warpingBeamProduct.SetWarpingBeamLength(value.WarpingBeamLength ?? 0);
                 warpingBeamProduct.SetTention(value.Tention ?? 0);
-                warpingBeamProduct.SetSpeed(value.Speed ?? 0);
+                warpingBeamProduct.SetMachineSpeed(value.MachineSpeed ?? 0);
                 warpingBeamProduct.SetPressRoll(value.PressRoll ?? 0);
 
                 //Replace to Update Warping Product
@@ -176,6 +176,17 @@ namespace Manufactures.Domain.DailyOperations.Warping
             {
                 OperationStatus = value;
                 ReadModel.OperationStatus = OperationStatus;
+
+                MarkModified();
+            }
+        }
+
+        public void SetDateTimeOperation(DateTimeOffset value)
+        {
+            if (!DateTimeOperation.Equals(value))
+            {
+                DateTimeOperation = value;
+                ReadModel.DateTimeOperation = DateTimeOperation;
 
                 MarkModified();
             }

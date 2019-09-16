@@ -101,7 +101,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 //Set Another Properties with Value
                 operationResult.SetOrderNumber(orderNumber);
                 operationResult.SetConstructionNumber(constructionNumber);
-                operationResult.SetWeavingUnitDocumentId(weavingUnit);
+                operationResult.SetWeavingUnitId(weavingUnit);
 
                 result.Add(operationResult);
             }
@@ -162,7 +162,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             result.SetMaterialName(materialName);
             //result.SetOperator(operatorDocument);
             result.SetOrderNumber(orderDocument.OrderNumber);
-            result.SetWeavingUnit(orderDocument.UnitId);
+            result.SetWeavingUnitId(orderDocument.UnitId.Value);
 
             // Add Beam Product to DTO
             foreach (var beamProduct in dailyOperationWarpingDocument.WarpingBeamProducts)
@@ -170,7 +170,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 await Task.Yield();
                 var beam =
                     _beamRepository
-                        .Find(o => o.Identity.Equals(beamProduct.BeamId))
+                        .Find(o => o.Identity.Equals(beamProduct.WarpingBeamId))
                         .FirstOrDefault();
 
                 var beamWarping = new DailyOperationWarpingBeamProductDto(beamProduct, beam);
@@ -182,7 +182,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             //Add History to DTO
             foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
             {
-                var beamNumber = history.WarpingBeamNumber ?? "no beam input, preparing state";
+                var beamNumber = history.WarpingBeamNumber ?? "Belum ada Beam yang Diproses";
 
                 await Task.Yield();
                 var operatorBeam =
@@ -194,16 +194,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var shiftName =
                     _shiftRepository
                         .Find(entity => entity.Identity.Equals(history.ShiftDocumentId))
-                        .FirstOrDefault().Name ?? "shift not found";
+                        .FirstOrDefault().Name ?? "Shift Not Found";
 
                 var dailyHistory =
-                    new DailyOperationWarpingDetailDto(history.Identity,
-                                                     beamNumber,
-                                                     operatorBeam.CoreAccount.Name,
-                                                     operatorBeam.Group,
-                                                     history.DateTimeMachine,
-                                                     history.MachineStatus,
-                                                     shiftName);
+                    new DailyOperationWarpingHistoryDto(history.Identity,
+                                                        beamNumber,
+                                                        history.DateTimeMachine,
+                                                        shiftName,
+                                                        operatorBeam.CoreAccount.Name,
+                                                        operatorBeam.Group,
+                                                        history.MachineStatus);
 
                 await Task.Yield();
                 result.AddDailyOperationWarpingHistories(dailyHistory);

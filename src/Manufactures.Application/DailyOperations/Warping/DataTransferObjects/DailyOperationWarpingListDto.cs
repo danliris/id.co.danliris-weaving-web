@@ -19,8 +19,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public int WeavingUnitDocumentId { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnitId")]
+        public int WeavingUnitId { get; private set; }
 
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; private set; }
@@ -42,9 +42,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             ConstructionNumber = constructionNumber;
         }
 
-        public void SetWeavingUnitDocumentId(int weavingUnitDocumentId)
+        public void SetWeavingUnitId(int weavingUnitId)
         {
-            WeavingUnitDocumentId = weavingUnitDocumentId;
+            WeavingUnitId = weavingUnitId;
         }
     }
 }

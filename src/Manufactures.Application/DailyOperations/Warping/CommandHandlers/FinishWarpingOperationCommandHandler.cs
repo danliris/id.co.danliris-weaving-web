@@ -87,7 +87,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             }
 
             //Update existing beam product
-            beamProduct.UpdateBeamStatus(BeamStatus.ROLLEDUP);
+            beamProduct.SetBeamStatus(BeamStatus.ROLLEDUP);
             existingDailyOperation.UpdateDailyOperationWarpingBeamProduct(beamProduct);
 
             //Update existing daily operation

@@ -31,10 +31,10 @@ namespace Manufactures.Application.DailyOperations.Warping
         public DailyOperationBeamProductDto(DailyOperationWarpingBeamProduct x)
         {
             Id = x.Identity;
-            BeamId = new BeamId(x.BeamId);
-            Length = x.Length ?? 0;
+            BeamId = new BeamId(x.WarpingBeamId);
+            Length = x.WarpingBeamLength ?? 0;
             Tention = x.Tention ?? 0;
-            Speed = x.Speed ?? 0;
+            Speed = x.MachineSpeed ?? 0;
             PressRoll = x.PressRoll ?? 0;
             BeamStatus = x.BeamStatus;
         }

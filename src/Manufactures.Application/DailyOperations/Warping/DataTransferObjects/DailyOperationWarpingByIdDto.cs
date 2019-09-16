@@ -12,8 +12,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; private set; }
 
-        [JsonProperty(PropertyName = "ColourOfCone")]
-        public string ColourOfCone { get; private set; }
+        [JsonProperty(PropertyName = "ColourOfCones")]
+        public string ColourOfCones { get; private set; }
 
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
@@ -24,28 +24,25 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnitId")]
-        public UnitId WeavingUnitId { get; private set; }
-
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
         public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; private set; }
 
-        [JsonProperty(PropertyName = "DailyOperationWarpingDetails")]
-        public List<DailyOperationWarpingDetailDto> DailyOperationWarpingDetails { get; private set; }
+        [JsonProperty(PropertyName = "DailyOperationWarpingHistories")]
+        public List<DailyOperationWarpingHistoryDto> DailyOperationWarpingHistories { get; private set; }
 
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
         {
             AmountOfCones = document.AmountOfCones;
-            ColourOfCone = document.ColourOfCone;
+            ColourOfCones = document.ColourOfCone;
             DailyOperationWarpingBeamProducts = new List<DailyOperationWarpingBeamProductDto>();
-            DailyOperationWarpingDetails = new List<DailyOperationWarpingDetailDto>();
+            DailyOperationWarpingHistories = new List<DailyOperationWarpingHistoryDto>();
         }
 
-        public void SetWeavingUnit(UnitId value)
-        {
-            WeavingUnitId = value;
-        }
+        //public void SetWeavingUnit(UnitId value)
+        //{
+        //    WeavingUnitId = value;
+        //}
 
         public void SetOperator (OperatorDocument value)
         {
@@ -66,9 +63,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             }
         }
 
-        public void AddDailyOperationWarpingHistories(DailyOperationWarpingDetailDto value)
+        public void AddDailyOperationWarpingHistories(DailyOperationWarpingHistoryDto value)
         {
-            DailyOperationWarpingDetails.Add(value);
+            DailyOperationWarpingHistories.Add(value);
         }
     }
 }
