@@ -178,6 +178,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 await Task.Yield();
                 result.AddDailyOperationBeamProducts(beamWarping);
             }
+            result.DailyOperationWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct).ToList();
 
             //Add History to DTO
             foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
@@ -208,6 +209,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 await Task.Yield();
                 result.AddDailyOperationWarpingHistories(dailyHistory);
             }
+            result.DailyOperationWarpingHistories = result.DailyOperationWarpingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
 
             return result;
         }

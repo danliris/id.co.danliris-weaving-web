@@ -44,6 +44,14 @@
     <Compile Remove="Migrations\20190829094358_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
     <Compile Remove="Migrations\20190829094748_AddEmptyWeightOnDailyOperationSizing.cs" />
     <Compile Remove="Migrations\20190829094748_AddEmptyWeightOnDailyOperationSizing.Designer.cs" />
+    <Compile Remove="Migrations\20190911092348_ChangePropertiesOnDailyOperationWarping.cs" />
+    <Compile Remove="Migrations\20190911092348_ChangePropertiesOnDailyOperationWarping.Designer.cs" />
+    <Compile Remove="Migrations\20190916083211_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.cs" />
+    <Compile Remove="Migrations\20190916083211_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.Designer.cs" />
+    <Compile Remove="Migrations\20190916114933_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.cs" />
+    <Compile Remove="Migrations\20190916114933_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.Designer.cs" />
+    <Compile Remove="Migrations\20190917073957_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.cs" />
+    <Compile Remove="Migrations\20190917073957_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

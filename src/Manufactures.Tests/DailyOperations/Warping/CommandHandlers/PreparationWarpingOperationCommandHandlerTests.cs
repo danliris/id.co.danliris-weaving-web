@@ -72,8 +72,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     MaterialTypeId = materialTypeId,
                     AmountOfCones = 10,
                     ColourOfCone = "Red",
-                    PreparationDate = DateTimeOffset.UtcNow,
-                    PreparationTime = TimeSpan.Parse("01:00"),
+                    WarpingPreparationDate = DateTimeOffset.UtcNow,
+                    WarpingPreparationTime = TimeSpan.Parse("01:00"),
                     OperatorDocumentId = operatorId,
                     ShiftDocumentId = shiftId,
                     OrderDocumentId = new OrderId(Guid.NewGuid())

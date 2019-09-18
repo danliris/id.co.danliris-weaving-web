@@ -46,29 +46,29 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             }
 
             //Set date time when user operate
-            var year = request.PreparationDate.Year;
-            var month = request.PreparationDate.Month;
-            var day = request.PreparationDate.Day;
-            var hour = request.PreparationTime.Hours;
-            var minutes = request.PreparationTime.Minutes;
-            var seconds = request.PreparationTime.Seconds;
-            var dateTimeOperation =
+            var year = request.WarpingPreparationDate.Year;
+            var month = request.WarpingPreparationDate.Month;
+            var day = request.WarpingPreparationDate.Day;
+            var hour = request.WarpingPreparationTime.Hours;
+            var minutes = request.WarpingPreparationTime.Minutes;
+            var seconds = request.WarpingPreparationTime.Seconds;
+            var warpingDateTime =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            //Instantiate new Daily operation warping
+            //Instantiate new Daily Operation warping
             var dailyOperationWarping = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                           request.OrderDocumentId,
                                                                           request.MaterialTypeId,
                                                                           request.AmountOfCones,
                                                                           request.ColourOfCone,
-                                                                          dateTimeOperation,
+                                                                          warpingDateTime,
                                                                           OperationStatus.ONPROCESS);
 
             //Add daily operation history
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                           request.ShiftDocumentId,
                                                           request.OperatorDocumentId, 
-                                                          dateTimeOperation,
+                                                          warpingDateTime,
                                                           MachineStatus.ONENTRY);
             dailyOperationWarping.AddDailyOperationWarpingHistory(history);
             

@@ -24,11 +24,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationDate")]
-        public DateTimeOffset PreparationDate { get; set; }
+        [JsonProperty(PropertyName = "WarpingPreparationDate")]
+        public DateTimeOffset WarpingPreparationDate { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationTime")]
-        public TimeSpan PreparationTime { get; set; }
+        [JsonProperty(PropertyName = "WarpingPreparationTime")]
+        public TimeSpan WarpingPreparationTime { get; set; }
 
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
@@ -44,8 +44,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.AmountOfCones).NotEmpty();
             RuleFor(command => command.ColourOfCone).NotEmpty();
             RuleFor(command => command.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(command => command.PreparationDate).NotEmpty();
-            RuleFor(command => command.PreparationTime).NotEmpty();
+            RuleFor(command => command.WarpingPreparationDate).NotEmpty();
+            RuleFor(command => command.WarpingPreparationTime).NotEmpty();
             RuleFor(command => command.ShiftDocumentId.Value).NotEmpty();
         }
     }

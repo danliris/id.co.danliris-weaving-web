@@ -12,20 +12,23 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingStartDate")]
-        public DateTimeOffset WarpingStartDate { get; set; }
+        [JsonProperty(PropertyName = "StartDate")]
+        public DateTimeOffset StartDate { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingStartTime")]
-        public TimeSpan WarpingStartTime { get; set; }
+        [JsonProperty(PropertyName = "StartTime")]
+        public TimeSpan StartTime { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftId")]
-        public ShiftId ShiftId { get; set; }
+        [JsonProperty(PropertyName = "StartShift")]
+        public ShiftId StartShift { get; set; }
 
-        [JsonProperty(PropertyName = "OperatorId")]
-        public OperatorId OperatorId { get; set; }
+        [JsonProperty(PropertyName = "StartOperator")]
+        public OperatorId StartOperator { get; set; }
 
         [JsonProperty(PropertyName = "WarpingBeamId")]
         public BeamId WarpingBeamId { get; set; }
+
+        [JsonProperty(PropertyName = "WarpingBeamNumber")]
+        public string WarpingBeamNumber { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -39,11 +42,12 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public UpdateStartDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.WarpingBeamId.Value).NotEmpty();
-            RuleFor(command => command.ShiftId.Value).NotEmpty();
-            RuleFor(command => command.WarpingStartDate).NotEmpty();
-            RuleFor(command => command.WarpingStartTime).NotEmpty();
-            RuleFor(command => command.OperatorId.Value).NotEmpty();
+            RuleFor(command => command.StartDate).NotEmpty();
+            RuleFor(command => command.StartTime).NotEmpty();
+            RuleFor(command => command.StartShift).NotEmpty();
+            RuleFor(command => command.StartOperator).NotEmpty();
+            RuleFor(command => command.WarpingBeamId).NotEmpty();
+            RuleFor(command => command.WarpingBeamNumber).NotEmpty();
         }
     }
 }

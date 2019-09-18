@@ -14,8 +14,11 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "WarpingBeamNumber")]
         public string WarpingBeamNumber { get; }
 
+        [JsonProperty(PropertyName = "LatestDateTimeBeamProduct")]
+        public DateTimeOffset LatestDateTimeBeamProduct { get; }
+
         [JsonProperty(PropertyName = "BrokenThreadsCause")]
-        public string BrokenThreadsCause { get; }
+        public int BrokenThreadsCause { get; }
 
         [JsonProperty(PropertyName = "ConeDeficient")]
         public int ConeDeficient { get; }
@@ -48,8 +51,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         {
             Id = beamProduct.Identity;
             WarpingBeamNumber = beamDocument.Number;
+            LatestDateTimeBeamProduct = beamProduct.LatestDateTimeBeamProduct;
             WarpingBeamLength = beamProduct.WarpingBeamLength ?? 0;
-            BrokenThreadsCause = beamProduct.BrokenThreadsCause ?? "-";
+            BrokenThreadsCause = beamProduct.BrokenThreadsCause ?? 0;
             ConeDeficient = beamProduct.ConeDeficient ?? 0;
             LooseThreadsAmount = beamProduct.LooseThreadsAmount ?? 0;
             RightLooseCreel = beamProduct.RightLooseCreel ?? 0;

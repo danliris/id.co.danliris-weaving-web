@@ -25,10 +25,10 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public string OperatorGroup { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
-        public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; private set; }
+        public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationWarpingHistories")]
-        public List<DailyOperationWarpingHistoryDto> DailyOperationWarpingHistories { get; private set; }
+        public List<DailyOperationWarpingHistoryDto> DailyOperationWarpingHistories { get; set; }
 
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)

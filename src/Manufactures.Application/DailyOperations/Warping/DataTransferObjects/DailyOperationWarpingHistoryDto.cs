@@ -12,7 +12,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public string WarpingBeamNumber { get; }
 
         [JsonProperty(PropertyName = "DateTimeMachine")]
-        public DateTimeOffset DateTimeOperation { get; }
+        public DateTimeOffset DateTimeMachine { get; }
 
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
 
         public DailyOperationWarpingHistoryDto(Guid id,
                                                string warpingBeamNumber,
-                                               DateTimeOffset dateTimeOperation,
+                                               DateTimeOffset dateTimeMachine,
                                                string shiftName,
                                                string operatorName,
                                                string operatorGroup,
@@ -36,7 +36,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         {
             Id = id;
             WarpingBeamNumber = warpingBeamNumber;
-            DateTimeOperation = dateTimeOperation;
+            DateTimeMachine = dateTimeMachine;
             ShiftName = shiftName;
             OperatorName = operatorName;
             OperatorGroup = operatorGroup;

@@ -5,11 +5,10 @@ using System;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingBeamProduct
-        : EntityBase<DailyOperationWarpingBeamProduct>
+    public class DailyOperationWarpingBeamProduct : EntityBase<DailyOperationWarpingBeamProduct>
     {
         public Guid WarpingBeamId { get; private set; }
-        public string BrokenThreadsCause { get; private set; }
+        public int? BrokenThreadsCause { get; private set; }
         public int? ConeDeficient { get; private set; }
         public int? LooseThreadsAmount { get; private set; }
         public int? RightLooseCreel { get; private set; }
@@ -19,21 +18,57 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
         public string BeamStatus { get; private set; }
-        public DateTimeOffset DateTimeBeamProduct{ get; private set; }
+        public DateTimeOffset LatestDateTimeBeamProduct{ get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
         public DailyOperationWarpingBeamProduct(Guid identity) : base(identity) { }
 
         public DailyOperationWarpingBeamProduct(Guid identity,
-                                                BeamId warpingBeamId)
-            : base(identity)
+                                                BeamId warpingBeamId,
+                                                DateTimeOffset latestDateTimeBeamProduct,
+                                                string beamStatus) : base(identity)
         {
             Identity = identity;
             WarpingBeamId = warpingBeamId.Value;
+            BeamStatus = beamStatus;
+            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
         }
 
-        public void SetBrokenThreadsCause(string value)
+        public DailyOperationWarpingBeamProduct(Guid identity, 
+                                                int brokenThreadsCause, 
+                                                int coneDeficient) : base(identity)
+        {
+            Identity = identity;
+            BrokenThreadsCause = brokenThreadsCause;
+            ConeDeficient = coneDeficient;
+        }
+
+        public DailyOperationWarpingBeamProduct(Guid identity, 
+                                                int looseThreadsAmount, 
+                                                int rightLooseCreel, 
+                                                int leftLooseCreel) : base(identity)
+        {
+            LooseThreadsAmount = looseThreadsAmount;
+            RightLooseCreel = rightLooseCreel;
+            LeftLooseCreel = leftLooseCreel;
+        }
+
+        public DailyOperationWarpingBeamProduct(Guid identity, 
+                                                double warpingBeamLength, 
+                                                int tention, 
+                                                int machineSpeed, 
+                                                double pressRoll, 
+                                                DateTimeOffset latestDateTimeBeamProduct) : base(identity)
+        {
+            WarpingBeamLength = warpingBeamLength;
+            Tention = tention;
+            MachineSpeed = machineSpeed;
+            PressRoll = pressRoll;
+            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+        }
+
+        public void SetBrokenThreadsCause(int value)
         {
             if (BrokenThreadsCause != value)
             {
@@ -143,11 +178,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             }
         }
 
-        public void SetDateTimeBeamProduct(DateTimeOffset value)
+        public void SetLatestDateTimeBeamProduct(DateTimeOffset value)
         {
-            if (!DateTimeBeamProduct.Equals(value))
+            if (!LatestDateTimeBeamProduct.Equals(value))
             {
-                DateTimeBeamProduct = value;
+                LatestDateTimeBeamProduct = value;
 
                 MarkModified();
             }

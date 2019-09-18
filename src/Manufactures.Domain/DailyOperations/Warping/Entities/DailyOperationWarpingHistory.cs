@@ -18,13 +18,42 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
         public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
+        //Constructor for Preparation Process
         public DailyOperationWarpingHistory(Guid identity,
-                                           ShiftId shiftDocumentId,
-                                           OperatorId operatorDocumentId,
-                                           DateTimeOffset datetimeMachine,
-                                           string machineStatus,
-                                           string information,
-                                           string warpingBeamNumber) : base(identity)
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset dateTimeMachine,
+                                            string machineStatus) : base(identity)
+        {
+            ShiftDocumentId = shiftDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId.Value;
+            DateTimeMachine = dateTimeMachine;
+            MachineStatus = machineStatus;
+        }
+
+        //Constructor for Resume, Produce Beams and Finish Process
+        public DailyOperationWarpingHistory(Guid identity,
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset dateTimeMachine,
+                                            string machineStatus,
+                                            string warpingBeamNumber) : base(identity)
+        {
+            ShiftDocumentId = shiftDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId.Value;
+            DateTimeMachine = dateTimeMachine;
+            MachineStatus = machineStatus;
+            WarpingBeamNumber = warpingBeamNumber;
+        }
+
+        //Constructor for Pause Process
+        public DailyOperationWarpingHistory(Guid identity,
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset datetimeMachine,
+                                            string machineStatus,
+                                            string information,
+                                            string warpingBeamNumber) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
             OperatorDocumentId = operatorDocumentId.Value;
@@ -32,18 +61,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             MachineStatus = machineStatus;
             Information = information;
             WarpingBeamNumber = warpingBeamNumber;
-        }
-
-        public DailyOperationWarpingHistory(Guid identity,
-                                           ShiftId shiftDocumentId,
-                                           OperatorId operatorDocumentId,
-                                           DateTimeOffset dateTimeMachine,
-                                           string machineStatus) : base(identity)
-        {
-            ShiftDocumentId = shiftDocumentId.Value;
-            OperatorDocumentId = operatorDocumentId.Value;
-            DateTimeMachine = dateTimeMachine;
-            MachineStatus = machineStatus;
         }
 
         public void SetShiftId(ShiftId shiftDocumentId)
