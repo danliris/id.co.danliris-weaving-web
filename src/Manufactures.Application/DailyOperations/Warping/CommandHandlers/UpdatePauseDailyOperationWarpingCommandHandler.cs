@@ -104,9 +104,9 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                               lastWarpingHistory.WarpingBeamNumber);
                             existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
-                            var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                                      request.BrokenThreadsCause,
-                                                                                      request.ConeDeficient);
+                            //var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                            //                                                          request.BrokenThreadsCause,
+                            //                                                          request.ConeDeficient);
                             lastWarpingBeamProduct.SetWarpingBeamId(lastWarpingBeamProduct.WarpingBeamId);
 
                             lastWarpingBeamProduct.SetBrokenThreadsCause(request.BrokenThreadsCause);
@@ -137,13 +137,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                               lastWarpingHistory.WarpingBeamNumber);
                             existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
-                            var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                                      request.BrokenThreadsCause,
-                                                                                      request.ConeDeficient);
+                            //var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                            //                                                          request.BrokenThreadsCause,
+                            //                                                          request.ConeDeficient);
                             lastWarpingBeamProduct.SetWarpingBeamId(lastWarpingBeamProduct.WarpingBeamId);
 
-                            lastWarpingBeamProduct.SetBrokenThreadsCause(request.BrokenThreadsCause);
-                            lastWarpingBeamProduct.SetConeDeficient(request.ConeDeficient);
+                            lastWarpingBeamProduct.SetBrokenThreadsCause(lastWarpingBeamProduct.BrokenThreadsCause ?? 0);
+                            lastWarpingBeamProduct.SetConeDeficient(lastWarpingBeamProduct.ConeDeficient ?? 0);
                             lastWarpingBeamProduct.SetLooseThreadsAmount(request.LooseThreadsAmount);
                             lastWarpingBeamProduct.SetRightLooseCreel(request.RightLooseCreel);
                             lastWarpingBeamProduct.SetLeftLooseCreel(request.LeftLooseCreel);
@@ -170,16 +170,16 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                               lastWarpingHistory.WarpingBeamNumber);
                             existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
-                            var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                                      request.BrokenThreadsCause,
-                                                                                      request.ConeDeficient);
+                            //var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                            //                                                          request.BrokenThreadsCause,
+                            //                                                          request.ConeDeficient);
                             lastWarpingBeamProduct.SetWarpingBeamId(lastWarpingBeamProduct.WarpingBeamId);
 
                             lastWarpingBeamProduct.SetBrokenThreadsCause(request.BrokenThreadsCause);
                             lastWarpingBeamProduct.SetConeDeficient(request.ConeDeficient);
-                            lastWarpingBeamProduct.SetLooseThreadsAmount(request.LooseThreadsAmount);
-                            lastWarpingBeamProduct.SetRightLooseCreel(request.RightLooseCreel);
-                            lastWarpingBeamProduct.SetLeftLooseCreel(request.LeftLooseCreel);
+                            lastWarpingBeamProduct.SetLooseThreadsAmount(lastWarpingBeamProduct.LooseThreadsAmount ?? 0);
+                            lastWarpingBeamProduct.SetRightLooseCreel(lastWarpingBeamProduct.RightLooseCreel ?? 0);
+                            lastWarpingBeamProduct.SetLeftLooseCreel(lastWarpingBeamProduct.LeftLooseCreel ?? 0);
 
                             lastWarpingBeamProduct.SetBeamStatus(lastWarpingBeamProduct.BeamStatus);
                             lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);

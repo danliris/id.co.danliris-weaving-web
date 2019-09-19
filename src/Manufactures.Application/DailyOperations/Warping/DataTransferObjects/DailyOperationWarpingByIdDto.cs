@@ -24,6 +24,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; private set; }
 
+        [JsonProperty(PropertyName = "TotalWarpingBeamLength")]
+        public double TotalWarpingBeamLength { get; private set; }
+
+        [JsonProperty(PropertyName = "CountWarpingBeamProducts")]
+        public double CountWarpingBeamProducts { get; private set; }
+
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
         public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; set; }
 
@@ -53,6 +59,16 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public void SetMaterialName(string value)
         {
             MaterialType = value;
+        }
+
+        public void SetTotalWarpingBeamLength(double value)
+        {
+            TotalWarpingBeamLength = value;
+        }
+
+        public void SetCountWarpingBeamProducts(double value)
+        {
+            CountWarpingBeamProducts = value;
         }
 
         public void AddDailyOperationBeamProducts(DailyOperationWarpingBeamProductDto value)

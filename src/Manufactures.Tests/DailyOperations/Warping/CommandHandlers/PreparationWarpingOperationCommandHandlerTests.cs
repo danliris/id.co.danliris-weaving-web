@@ -42,11 +42,11 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private PreparationWarpingOperationCommandHandler 
+        private PreparationDailyOperationWarpingCommandHandler 
             CreateAddNewWarpingOperationCommandHandler()
         {
             return 
-                new PreparationWarpingOperationCommandHandler(this.mockStorage.Object);
+                new PreparationDailyOperationWarpingCommandHandler(this.mockStorage.Object);
         }
 
         /**
@@ -66,17 +66,17 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var shiftId = new ShiftId(Guid.NewGuid());
 
             //Create new preparation object
-            PreparationWarpingOperationCommand request =
-                new PreparationWarpingOperationCommand
+            PreparationDailyOperationWarpingCommand request =
+                new PreparationDailyOperationWarpingCommand
                 {
-                    MaterialTypeId = materialTypeId,
+                    PreparationMaterialType = materialTypeId,
                     AmountOfCones = 10,
                     ColourOfCone = "Red",
-                    WarpingPreparationDate = DateTimeOffset.UtcNow,
-                    WarpingPreparationTime = TimeSpan.Parse("01:00"),
-                    OperatorDocumentId = operatorId,
-                    ShiftDocumentId = shiftId,
-                    OrderDocumentId = new OrderId(Guid.NewGuid())
+                    PreparationDate = DateTimeOffset.UtcNow,
+                    PreparationTime = TimeSpan.Parse("01:00"),
+                    PreparationOperator = operatorId,
+                    PreparationShift = shiftId,
+                    PreparationOrder = new OrderId(Guid.NewGuid())
             };
 
             //Setup mock object result for beam repository

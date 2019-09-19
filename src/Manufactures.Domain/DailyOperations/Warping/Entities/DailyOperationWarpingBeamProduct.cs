@@ -58,14 +58,12 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
                                                 double warpingBeamLength, 
                                                 int tention, 
                                                 int machineSpeed, 
-                                                double pressRoll, 
-                                                DateTimeOffset latestDateTimeBeamProduct) : base(identity)
+                                                double pressRoll) : base(identity)
         {
             WarpingBeamLength = warpingBeamLength;
             Tention = tention;
             MachineSpeed = machineSpeed;
             PressRoll = pressRoll;
-            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
         }
 
         public void SetBrokenThreadsCause(int value)

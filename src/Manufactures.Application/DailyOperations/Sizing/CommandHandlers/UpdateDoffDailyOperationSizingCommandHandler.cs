@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public UpdateDoffDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = 
+            _dailyOperationSizingDocumentRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
             _movementRepository =
               _storage.GetRepository<IMovementRepository>();
@@ -110,7 +110,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             if (doffFinishDateMachineLogUtc < lastDateMachineLogUtc)
             {
                 throw Validator.ErrorValidation(("DoffDate", "Finish date cannot less than latest date log"));
-            } else
+            }
+            else
             {
                 if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {

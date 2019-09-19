@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
@@ -110,6 +111,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         }
 
         public async Task<DailyOperationWarpingListDto> GetById(Guid id)
+
         {
             //Prepare daily operation warping
             var query =
@@ -158,6 +160,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
+            double totalWarpingBeamLength = 0;
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialName(materialName);
             //result.SetOperator(operatorDocument);
@@ -180,10 +183,31 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             result.DailyOperationWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct).ToList();
 
+            foreach(var beam in result.DailyOperationWarpingBeamProducts)
+            {
+                totalWarpingBeamLength = beam.WarpingBeamLength + totalWarpingBeamLength;
+            }
+            result.SetTotalWarpingBeamLength(totalWarpingBeamLength);
+            double countWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.Count();
+            result.SetCountWarpingBeamProducts(countWarpingBeamProducts);
+
             //Add History to DTO
             foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
             {
-                var beamNumber = history.WarpingBeamNumber ?? "Belum ada Beam yang Diproses";
+                var beamNumber = history.WarpingBeamNumber;
+
+                switch (history.MachineStatus)
+                {
+                    case "ENTRY":
+                        beamNumber = "Belum ada Beam yang Diproses";
+                        break;
+                    case "FINISH":
+                        beamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
+                        break;
+                    default:
+                        beamNumber = history.WarpingBeamNumber;
+                        break;
+                }
 
                 await Task.Yield();
                 var operatorBeam =

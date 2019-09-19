@@ -5,6 +5,7 @@ using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System;
 using System.Linq;
@@ -17,67 +18,67 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
     /**
      * Command handle for daily operation warping preparation
      * **/
-    public  class PreparationWarpingOperationCommandHandler :
-        ICommandHandler<PreparationWarpingOperationCommand, DailyOperationWarpingDocument>
+    public  class PreparationDailyOperationWarpingCommandHandler :
+        ICommandHandler<PreparationDailyOperationWarpingCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository 
-            _warpingOperationRepository;
+            _dailyOperationWarpingRepository;
 
-        public PreparationWarpingOperationCommandHandler(IStorage storage)
+        public PreparationDailyOperationWarpingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _warpingOperationRepository = 
+            _dailyOperationWarpingRepository = 
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
         //Handle request from User request
-        public async Task<DailyOperationWarpingDocument> Handle(PreparationWarpingOperationCommand request, 
+        public async Task<DailyOperationWarpingDocument> Handle(PreparationDailyOperationWarpingCommand request, 
                                                           CancellationToken cancellationToken)
         {
-            //Check if any sop/order id has define on daily operation
-            var existingDailyOperation = _warpingOperationRepository
-                                         .Find(o => o.OrderDocumentId.Equals(request.OrderDocumentId.Value))
-                                         .Any();
+            //Check if any Daily Operation using Selected Order (SOP)
+            var existingDailyOperationWarpingDocument = _dailyOperationWarpingRepository
+                                                        .Find(o => o.OrderDocumentId.Equals(request.PreparationOrder.Value))
+                                                        .Any();
 
-            if (existingDailyOperation == true)
+            if (existingDailyOperationWarpingDocument == true)
             {
                 throw Validator.ErrorValidation(("OrderId", "Please input daily operation with different Order "));
             }
 
             //Set date time when user operate
-            var year = request.WarpingPreparationDate.Year;
-            var month = request.WarpingPreparationDate.Month;
-            var day = request.WarpingPreparationDate.Day;
-            var hour = request.WarpingPreparationTime.Hours;
-            var minutes = request.WarpingPreparationTime.Minutes;
-            var seconds = request.WarpingPreparationTime.Seconds;
+            var year = request.PreparationDate.Year;
+            var month = request.PreparationDate.Month;
+            var day = request.PreparationDate.Day;
+            var hour = request.PreparationTime.Hours;
+            var minutes = request.PreparationTime.Minutes;
+            var seconds = request.PreparationTime.Seconds;
             var warpingDateTime =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Instantiate new Daily Operation warping
-            var dailyOperationWarping = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                          request.OrderDocumentId,
-                                                                          request.MaterialTypeId,
+            var newWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
+                                                                          new OrderId(request.PreparationOrder.Value),
+                                                                          new MaterialTypeId(request.PreparationMaterialType.Value),
                                                                           request.AmountOfCones,
                                                                           request.ColourOfCone,
                                                                           warpingDateTime,
                                                                           OperationStatus.ONPROCESS);
 
             //Add daily operation history
-            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                          request.ShiftDocumentId,
-                                                          request.OperatorDocumentId, 
+            var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                          new ShiftId(request.PreparationShift.Value),
+                                                          new OperatorId(request.PreparationOperator.Value), 
                                                           warpingDateTime,
                                                           MachineStatus.ONENTRY);
-            dailyOperationWarping.AddDailyOperationWarpingHistory(history);
+            newWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
             
             //Update and save
-            await _warpingOperationRepository.Update(dailyOperationWarping);
+            await _dailyOperationWarpingRepository.Update(newWarpingDocument);
             _storage.Save();
 
             //return as object  daily operation
-            return dailyOperationWarping;
+            return newWarpingDocument;
         }
     }
 }
