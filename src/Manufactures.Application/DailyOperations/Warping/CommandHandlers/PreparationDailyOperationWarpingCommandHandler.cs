@@ -43,7 +43,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (existingDailyOperationWarpingDocument == true)
             {
-                throw Validator.ErrorValidation(("OrderId", "Please input daily operation with different Order "));
+                throw Validator.ErrorValidation(("PreparationOrder", "Please Input Daily Operation With Different Order"));
             }
 
             //Set date time when user operate

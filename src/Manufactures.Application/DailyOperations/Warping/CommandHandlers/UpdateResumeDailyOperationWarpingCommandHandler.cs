@@ -35,11 +35,11 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .Include(x => x.WarpingHistories)
-                    .Include(x => x.WarpingBeamProducts);
+                    .Include(x => x.WarpingBeamProducts)
+                    .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationWarpingDocument =
                 _dailyOperationWarpingRepository
                     .Find(warpingQuery)
-                    .Where(x => x.Identity.Equals(request.Id))
                     .FirstOrDefault();
 
             //Get Daily Operation Detail

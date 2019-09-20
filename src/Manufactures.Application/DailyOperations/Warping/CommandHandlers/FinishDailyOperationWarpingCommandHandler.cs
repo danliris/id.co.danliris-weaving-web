@@ -36,11 +36,11 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .Include(x => x.WarpingHistories)
-                    .Include(x => x.WarpingBeamProducts);
+                    .Include(x => x.WarpingBeamProducts)
+                    .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationWarpingDocument =
                 _dailyOperationWarpingRepository
                     .Find(warpingQuery)
-                    .Where(doc => doc.Identity.Equals(request.Id))
                     .FirstOrDefault();
 
             //Get Daily Operation Detail
@@ -64,7 +64,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (countBeamStatus != 0)
             {
-                throw Validator.ErrorValidation(("BeamStatus", "Can't Finish. There's ONPROCESS Sizing Beam on this Operation"));
+                throw Validator.ErrorValidation(("WarpingBeamProductStatus", "Can's Start. There's ONPROCESS Warping Beam on this Operation"));
             }
 
             //Validation for Machine Status

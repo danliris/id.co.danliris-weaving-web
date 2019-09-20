@@ -20,7 +20,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IDailyOperationWarpingRepository> 
+        private readonly Mock<IDailyOperationWarpingRepository>
             mockWarpingOperationRepo;
 
 
@@ -42,10 +42,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private PreparationDailyOperationWarpingCommandHandler 
+        private PreparationDailyOperationWarpingCommandHandler
             CreateAddNewWarpingOperationCommandHandler()
         {
-            return 
+            return
                 new PreparationDailyOperationWarpingCommandHandler(this.mockStorage.Object);
         }
 
@@ -54,11 +54,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
          * operation warping
          * **/
         [Fact]
-        public async Task Handle_StateUnderTest_ExpectedBehavior()
+        public async Task Handle_NoSameOrderUsed_DataCreated()
         {
             // Set preparation command handler object
-            var preparationWarpingOperationCommandHandler = 
-                this.CreateAddNewWarpingOperationCommandHandler();
+            var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
 
             //Instantiate new Object
             var materialTypeId = new MaterialTypeId(Guid.NewGuid());
@@ -77,7 +76,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     PreparationOperator = operatorId,
                     PreparationShift = shiftId,
                     PreparationOrder = new OrderId(Guid.NewGuid())
-            };
+                };
 
             //Setup mock object result for beam repository
             mockWarpingOperationRepo
@@ -88,9 +87,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             CancellationToken cancellationToken = CancellationToken.None;
 
             // Instantiate command handler
-            var result = 
-                await preparationWarpingOperationCommandHandler
-                    .Handle(request, cancellationToken);
+            var result =
+                await unitUnderTest.Handle(request, cancellationToken);
 
             //Check if object not null
             result.Should().NotBeNull();
@@ -100,6 +98,52 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //check if has history
             result.WarpingHistories.Should().NotBeEmpty();
+        }
+
+
+        [Fact]
+        public async Task Handle_SameOrderUsed_ThrowError()
+        {
+            // Set Preparation Command Handler Object
+            var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
+
+            //Instantiate new Object
+            var materialTypeId = new MaterialTypeId(Guid.NewGuid());
+            var operatorId = new OperatorId(Guid.NewGuid());
+            var shiftId = new ShiftId(Guid.NewGuid());
+
+            //Create new preparation object
+            PreparationDailyOperationWarpingCommand request =
+                new PreparationDailyOperationWarpingCommand
+                {
+                    PreparationMaterialType = materialTypeId,
+                    AmountOfCones = 10,
+                    ColourOfCone = "Red",
+                    PreparationDate = DateTimeOffset.UtcNow,
+                    PreparationTime = TimeSpan.Parse("01:00"),
+                    PreparationOperator = operatorId,
+                    PreparationShift = shiftId,
+                    PreparationOrder = new OrderId(Guid.NewGuid())
+                };
+
+            //Setup mock object result for beam repository
+            mockWarpingOperationRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
+                .Returns(new List<DailyOperationWarpingDocument>());
+
+            //Set Cancellation Token
+            CancellationToken cancellationToken = CancellationToken.None;
+
+            try
+            {
+                // Act
+                var result = await unitUnderTest.Handle(request, cancellationToken);
+            }
+            catch (Exception messageException)
+            {
+                // Assert
+                Assert.Equal("Validation failed: \r\n -- PreparationOrder: Please Input Daily Operation With Different Order", messageException.Message);
+            }
         }
     }
 }
