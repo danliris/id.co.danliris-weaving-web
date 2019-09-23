@@ -119,6 +119,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .Query
                     .Include(o => o.WarpingBeamProducts)
                     .Include(o => o.WarpingHistories)
+                    .Where(doc => doc.Identity.Equals(id))
                     .OrderByDescending(x => x.CreatedDate);
 
             //Request from query
