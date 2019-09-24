@@ -165,6 +165,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialName(materialName);
             //result.SetOperator(operatorDocument);
+            result.SetOrderDocumentId(dailyOperationWarpingDocument.OrderDocumentId);
             result.SetOrderNumber(orderDocument.OrderNumber);
             result.SetWeavingUnitId(orderDocument.UnitId.Value);
 

@@ -2,6 +2,7 @@
 using Manufactures.Domain.Operators;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,6 +10,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
 {
     public class DailyOperationWarpingByIdDto : DailyOperationWarpingListDto
     {
+        [JsonProperty(PropertyName = "OrderDocumentId")]
+        public Guid OrderDocumentId { get; private set; }
+
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; private set; }
 
@@ -39,6 +43,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
         {
+            OrderDocumentId = document.OrderDocumentId.Value;
             AmountOfCones = document.AmountOfCones;
             ColourOfCones = document.ColourOfCone;
             DailyOperationWarpingBeamProducts = new List<DailyOperationWarpingBeamProductDto>();
@@ -50,7 +55,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         //    WeavingUnitId = value;
         //}
 
-        public void SetOperator (OperatorDocument value)
+        public void SetOrderDocumentId(OrderId value)
+        {
+            OrderDocumentId = value.Value;
+        }
+
+        public void SetOperator(OperatorDocument value)
         {
             OperatorName = value.CoreAccount.Name;
             OperatorGroup = value.Group;
