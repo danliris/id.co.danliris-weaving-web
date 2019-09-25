@@ -3,12 +3,14 @@ using Manufactures.Application.DailyOperations.Warping;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
+using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Domain.StockCard.Events.Warping;
+using Manufactures.Dtos.Beams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -33,17 +35,20 @@ namespace Manufactures.Controllers.Api
         private readonly IWarpingQuery<DailyOperationWarpingListDto> _warpingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
+        private readonly IBeamQuery<BeamListDto> _beamQuery;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
                                                IWarpingQuery<DailyOperationWarpingListDto> warpingQuery,
                                                IOperatorQuery<OperatorListDto> operatorQuery,
-                                               IShiftQuery<ShiftDto> shiftQuery)
+                                               IShiftQuery<ShiftDto> shiftQuery,
+                                               IBeamQuery<BeamListDto> beamQuery)
             : base(serviceProvider)
         {
             _warpingQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
+            _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
         }
 
         [HttpGet]
@@ -91,6 +96,21 @@ namespace Manufactures.Controllers.Api
             var resultCount = result.Count();
 
             return Ok(result, info: new { page, size, totalRows, resultCount });
+        }
+
+        [HttpGet("get-beams")]
+        public async Task<IActionResult> GetBeam(string keyword = null)
+        {
+            var beams = await _beamQuery.GetAll();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                beams = beams.Where(x => x.Type.Equals("Warping")&& x.Number.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            var result = beams;
+            return Ok(result);
         }
 
         [HttpGet("{Id}")]
