@@ -1,11 +1,15 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Warping;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
+using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
+using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Queries;
+using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
+using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
@@ -13,6 +17,8 @@ using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Dtos.Beams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Moonlay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -37,6 +43,11 @@ namespace Manufactures.Controllers.Api
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
 
+        private readonly IDailyOperationWarpingRepository
+            _dailyOperationWarpingRepository;
+        private readonly IBeamRepository
+            _beamRepository;
+
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
                                                IWarpingQuery<DailyOperationWarpingListDto> warpingQuery,
@@ -49,6 +60,9 @@ namespace Manufactures.Controllers.Api
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
+
+            _dailyOperationWarpingRepository = this.Storage.GetRepository<IDailyOperationWarpingRepository>();
+            _beamRepository = this.Storage.GetRepository<IBeamRepository>();
         }
 
         [HttpGet]
@@ -98,19 +112,77 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, totalRows, resultCount });
         }
 
-        [HttpGet("get-beams")]
-        public async Task<IActionResult> GetBeam(string keyword = null)
+        [HttpGet("get-warping-beams")]
+        public async Task<IActionResult> GetWarpingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
         {
-            var beams = await _beamQuery.GetAll();
-
-            if (!string.IsNullOrEmpty(keyword))
+            page = page - 1;
+            List<BeamId> warpingBeamIds = new List<BeamId>();
+            List<BeamDto> warpingBeams = new List<BeamDto>();
+            if (!filter.Contains("{}"))
             {
-                await Task.Yield();
-                beams = beams.Where(x => x.Type.Equals("Warping")&& x.Number.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+                var OrderDocumentId = filterDictionary["OrderId"].ToString();
+                if (!OrderDocumentId.Equals(null))
+                {
+                    var OrderIdentity = Guid.Parse(OrderDocumentId);
+
+                    await Task.Yield();
+                    var warpingQuery =
+                         _dailyOperationWarpingRepository
+                             .Query
+                             .Include(x => x.WarpingHistories)
+                             .Include(x => x.WarpingBeamProducts)
+                             .Where(doc => doc.OrderDocumentId.Equals(OrderIdentity));
+
+                    await Task.Yield();
+                    var existingDailyOperationWarpingDocument =
+                        _dailyOperationWarpingRepository
+                            .Find(warpingQuery);
+
+                    await Task.Yield();
+                    foreach (var warpingDocument in existingDailyOperationWarpingDocument)
+                    {
+                        foreach (var warpingBeamProduct in warpingDocument.WarpingBeamProducts)
+                        {
+                            await Task.Yield();
+                            var warpingBeamStatus = warpingBeamProduct.BeamStatus;
+                            if (warpingBeamStatus.Equals(BeamStatus.ROLLEDUP))
+                            {
+                                await Task.Yield();
+                                warpingBeamIds.Add(new BeamId(warpingBeamProduct.WarpingBeamId));
+                            }
+                        }
+                    }
+
+                    await Task.Yield();
+                    foreach (var beamId in warpingBeamIds)
+                    {
+                        await Task.Yield();
+                        var warpingBeamQuery = _beamRepository.Query.Where(beam => beam.Identity.Equals(beamId.Value) && beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                        var warpingBeam = _beamRepository.Find(warpingBeamQuery).FirstOrDefault();
+                        await Task.Yield();
+                        warpingBeams.Add(new BeamDto(warpingBeam));
+                    }
+                }
+                else
+                {
+                    throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Hasus Diisi"));
+                }
+            }
+            else
+            {
+                throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Hasus Diisi"));
             }
 
-            var result = beams;
-            return Ok(result);
+            var total = warpingBeams.Count();
+            var data = warpingBeams.Skip((page - 1) * size).Take(size);
+
+            return Ok(data, info: new
+            {
+                page,
+                size,
+                total
+            });
         }
 
         [HttpGet("{Id}")]

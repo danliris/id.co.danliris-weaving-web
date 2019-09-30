@@ -7,7 +7,9 @@ using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Movements.Repositories;
+using Moonlay;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +35,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument>
             Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
+            //Check if any Daily Operation using Selected Order (SOP)
+            var existingDailyOperationWarpingDocument = _dailyOperationSizingDocumentRepository
+                                                        .Find(o => o.OrderDocumentId.Equals(request.OrderDocumentId.Value))
+                                                        .Any();
+
+            if (existingDailyOperationWarpingDocument == true)
+            {
+                throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
+            }
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,

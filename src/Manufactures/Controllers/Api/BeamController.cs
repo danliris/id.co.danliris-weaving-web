@@ -32,10 +32,10 @@ namespace Manufactures.Controllers.Api
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
-                                            int size = 25,
-                                            string order = "{}",
-                                            string keyword = null,
-                                            string filter = "{}")
+                                             int size = 25,
+                                             string order = "{}",
+                                             string keyword = null,
+                                             string filter = "{}")
         {
             page = page - 1;
             //var query =
@@ -57,7 +57,7 @@ namespace Manufactures.Controllers.Api
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 query = QueryHelper<BeamReadModel>.Order(query, orderDictionary);
             }
 
