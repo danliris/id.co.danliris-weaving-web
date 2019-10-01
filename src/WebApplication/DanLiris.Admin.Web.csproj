@@ -52,6 +52,10 @@
     <Compile Remove="Migrations\20190916114933_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.Designer.cs" />
     <Compile Remove="Migrations\20190917073957_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.cs" />
     <Compile Remove="Migrations\20190917073957_ChangePropertiesNameOnWarpingDetailAddPropertiesOnWarpingBeamProducts.Designer.cs" />
+    <Compile Remove="Migrations\20191001073042_AddYarnDefect.cs" />
+    <Compile Remove="Migrations\20191001073042_AddYarnDefect.Designer.cs" />
+    <Compile Remove="Migrations\20191001082512_AddYarnDefect.cs" />
+    <Compile Remove="Migrations\20191001082512_AddYarnDefect.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

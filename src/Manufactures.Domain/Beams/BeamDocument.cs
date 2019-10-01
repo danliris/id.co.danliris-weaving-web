@@ -34,7 +34,7 @@ namespace Manufactures.Domain.Beams
 
             MarkTransient();
 
-            ReadModel.AddDomainEvent(new OnAddBeam(Identity));
+            //ReadModel.AddDomainEvent(new OnAddBeam(Identity));
         }
 
         public BeamDocument(BeamReadModel readModel) : base(readModel)

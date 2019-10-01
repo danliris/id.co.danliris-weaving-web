@@ -27,6 +27,7 @@ using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
+using Manufactures.Domain.Defects.YarnDefect.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -34,6 +35,20 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<YarnDefectReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_YarnDefectDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.DefectCode).HasMaxLength(255);
+                etb.Property(e => e.DefectType).HasMaxLength(255);
+                etb.Property(e => e.DefectCategory).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationReachingTyingDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationReachingTyingDetails");
