@@ -5,50 +5,105 @@ using System;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingHistory
-        : EntityBase<DailyOperationWarpingHistory>
+    public class DailyOperationWarpingHistory : EntityBase<DailyOperationWarpingHistory>
     {
-        public Guid ShiftId { get; private set; }
-        public string BeamNumber { get; private set; }
-        public Guid BeamOperatorId { get; private set; }
-        public DateTimeOffset DateTimeOperation { get; private set; }
+        public Guid ShiftDocumentId { get; private set; }
+        public Guid OperatorDocumentId { get; private set; }
+        public DateTimeOffset DateTimeMachine { get; private set; }
+        public string MachineStatus { get; private set; }
         public string Information { get; private set; }
-        public string OperationStatus { get; private set; }
+        public string WarpingBeamNumber { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
         public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
+        //Constructor for Preparation Process
         public DailyOperationWarpingHistory(Guid identity,
-                                            ShiftId shiftId,
-                                            Guid beamOperatorId,
-                                            DateTimeOffset datetimeOperation,
-                                            string operationStatus)
-            : base(identity)
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset dateTimeMachine,
+                                            string machineStatus) : base(identity)
         {
-            Identity = identity;
-            ShiftId = shiftId.Value;
-            BeamOperatorId = beamOperatorId;
-            DateTimeOperation = datetimeOperation;
-            OperationStatus = operationStatus;
+            ShiftDocumentId = shiftDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId.Value;
+            DateTimeMachine = dateTimeMachine;
+            MachineStatus = machineStatus;
         }
 
-        public void SetBeamNumber(string value)
+        //Constructor for Resume, Produce Beams and Finish Process
+        public DailyOperationWarpingHistory(Guid identity,
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset dateTimeMachine,
+                                            string machineStatus,
+                                            string warpingBeamNumber) : base(identity)
         {
-            if(!BeamNumber.Equals(value))
-            {
-                BeamNumber = value;
+            ShiftDocumentId = shiftDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId.Value;
+            DateTimeMachine = dateTimeMachine;
+            MachineStatus = machineStatus;
+            WarpingBeamNumber = warpingBeamNumber;
+        }
 
+        //Constructor for Pause Process
+        public DailyOperationWarpingHistory(Guid identity,
+                                            ShiftId shiftDocumentId,
+                                            OperatorId operatorDocumentId,
+                                            DateTimeOffset datetimeMachine,
+                                            string machineStatus,
+                                            string information,
+                                            string warpingBeamNumber) : base(identity)
+        {
+            ShiftDocumentId = shiftDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId.Value;
+            DateTimeMachine = datetimeMachine;
+            MachineStatus = machineStatus;
+            Information = information;
+            WarpingBeamNumber = warpingBeamNumber;
+        }
+
+        public void SetShiftId(ShiftId shiftDocumentId)
+        {
+            ShiftDocumentId = shiftDocumentId.Value;
+            MarkModified();
+        }
+
+        public void SetOperatorDocumentId(OperatorId operatorDocumentId)
+        {
+            if (!OperatorDocumentId.Equals(operatorDocumentId.Value))
+            {
+                OperatorDocumentId = operatorDocumentId.Value;
                 MarkModified();
             }
         }
 
-        public void SetInformation(string value)
+        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
         {
-            if(!Information.Equals(value))
-            {
-                Information = value;
+            DateTimeMachine = dateTimeMachine;
+            MarkModified();
+        }
 
+        public void SetMachineStatus(string machineStatus)
+        {
+            MachineStatus = machineStatus;
+            MarkModified();
+        }
+
+        public void SetInformation(string information)
+        {
+            if (!Information.Equals(information))
+            {
+                Information = information;
+                MarkModified();
+            }
+        }
+
+        public void SetWarpingBeamNumber(string warpingBeamNumber)
+        {
+            if (!WarpingBeamNumber.Equals(warpingBeamNumber))
+            {
+                WarpingBeamNumber = warpingBeamNumber;
                 MarkModified();
             }
         }

@@ -76,7 +76,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var visco = "0";
             var operationStatus = OperationStatus.ONPROCESS;
 
-            //Assign Property to DailyOperationReachingTyingDocument
+            //Assign Property to DailyOperationSizingDocument
             var resultModel = new DailyOperationSizingDocument(sizingDocumentTestId, machineDocumentId, orderId, beamsWarping, emptyWeight, yarnStrands, recipeCode, neReal, machineSpeed, texSQ, visco, operationStatus);
 
             //Instantiate and Assign Property to DailyOperationSizingBeamDocument
@@ -166,6 +166,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                 Assert.Equal("Validation failed: \r\n -- StartDate: Start date cannot less than latest date log", messageException.Message);
             }
         }
+
         [Fact]
         public async Task Handle_SizingStartTimeLessThanLatestTime_ThrowError()
         {
@@ -390,7 +391,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
         public async Task Handle_MachineStatusCompleteBeamStatusRolledUp_DataUpdated()
         {
             // Arrange
-            this.mockStorage.Setup(x => x.Save());
             //Instantiate Properties
             //Add Existing Data
             var sizingDocumentTestId = Guid.NewGuid();
@@ -442,6 +442,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             mockBeamRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
                 .Returns(new List<Domain.Beams.BeamDocument>() { new Domain.Beams.BeamDocument(Guid.NewGuid(), "TS122", "Sizing", 122) });
+            this.mockStorage.Setup(x => x.Save());
 
             //Instantiate Incoming Object
             //Counter Object on Sizing Beam Document Command (Incoming Object)
@@ -602,7 +603,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- Status: Can't start, latest beam status must ROLLED-UP", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- BeamStatus: Can't start, latest beam status must ROLLED-UP", messageException.Message);
             }
         }
 
@@ -713,7 +714,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- Status: Can't start, latest machine status must ONENTRY or ONCOMPLETE", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't start, latest machine status must ONENTRY or ONCOMPLETE", messageException.Message);
             }
         }
     }

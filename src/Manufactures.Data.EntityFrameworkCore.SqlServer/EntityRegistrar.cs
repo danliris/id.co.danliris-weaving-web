@@ -27,6 +27,7 @@ using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
+using Manufactures.Domain.Defects.YarnDefect.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -34,6 +35,20 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<YarnDefectReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_YarnDefectDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.DefectCode).HasMaxLength(255);
+                etb.Property(e => e.DefectType).HasMaxLength(255);
+                etb.Property(e => e.DefectCategory).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationReachingTyingDetail>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationReachingTyingDetails");
@@ -67,7 +82,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationWarpingBeamProduct");
+                etb.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
@@ -76,7 +91,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationWarpingHistory>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationWarpingHistory");
+                etb.ToTable("Weaving_DailyOperationWarpingHistories");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
@@ -88,11 +103,11 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationWarpingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.DailyOperationWarpingBeamProducts)
+                etb.HasMany(e => e.WarpingBeamProducts)
                     .WithOne(e => e.DailyOperationWarpingDocument)
                     .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 
-                etb.HasMany(e => e.DailyOperationWarpingDetailHistory)
+                etb.HasMany(e => e.WarpingHistories)
                     .WithOne(e => e.DailyOperationWarpingDocument)
                     .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 

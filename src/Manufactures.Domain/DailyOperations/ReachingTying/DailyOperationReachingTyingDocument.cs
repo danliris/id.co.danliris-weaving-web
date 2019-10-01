@@ -20,7 +20,13 @@ namespace Manufactures.Domain.DailyOperations.ReachingTying
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationReachingTyingDetail> ReachingTyingDetails { get; private set; }
 
-        public DailyOperationReachingTyingDocument(Guid id, MachineId machineDocumentId, OrderId orderDocumentId, BeamId sizingBeamId, DailyOperationReachingValueObject reachingValueObjects, DailyOperationTyingValueObject tyingValueObjects, string operationStatus) : base(id)
+        public DailyOperationReachingTyingDocument(Guid id, 
+                                                   MachineId machineDocumentId, 
+                                                   OrderId orderDocumentId, 
+                                                   BeamId sizingBeamId, 
+                                                   DailyOperationReachingValueObject reachingValueObjects, 
+                                                   DailyOperationTyingValueObject tyingValueObjects, 
+                                                   string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;

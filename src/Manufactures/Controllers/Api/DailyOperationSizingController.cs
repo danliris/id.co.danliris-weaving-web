@@ -174,6 +174,56 @@ namespace Manufactures.Controllers.Api
             });
         }
 
+        //[HttpGet("order/{OrderId}/beam-type/{BeamType}")]
+        //public async Task<IEnumerable<BeamDto>> GetBeamsByBeamType(string BeamType)
+        //{
+        //    var result = new List<BeamDto>();
+        //    var sizingQuery =
+        //        _dailyOperationSizingDocumentRepository
+        //            .Query
+        //            .OrderByDescending(item => item.CreatedDate);
+        //    var sizingOperations = _dailyOperationSizingDocumentRepository.Find(sizingQuery.Include(o=>o.SizingDetails).Include(o=>o.SizingBeamDocuments));
+
+        //    foreach (var operation in sizingOperations)
+        //    {
+        //        foreach (var beamProduct in operation.SizingBeamDocuments)
+        //        {
+        //            await Task.Yield();
+        //            var beams = _beamDocumentRepository.Find(o => o.Identity.Equals(beamProduct.SizingBeamId) && o.Type.Equals(BeamType));
+        //            foreach (var beam in beams)
+        //            {
+        //                await Task.Yield();
+        //                var beamDto = new BeamDto(beam);
+        //                result.Add(beamDto);
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+
+        //[HttpGet("order/{OrderId}/beam-type/{BeamType}")]
+        //public async Task<IEnumerable<BeamDto>> GetBeamsByOrderAndBeamType(string OrderId, string BeamType)
+        //{
+        //    var result = new List<BeamDto>();
+        //    var sizingOperations = _dailyOperationSizingDocumentRepository.Find(o => o.OrderDocumentId.Equals(OrderId));
+
+        //    foreach (var operation in sizingOperations)
+        //    {
+        //        foreach (var beamProduct in operation.SizingBeamDocuments)
+        //        {
+        //            await Task.Yield();
+        //            var beams = _beamDocumentRepository.Find(o => o.Identity.Equals(beamProduct.SizingBeamId) && o.Type.Equals(BeamType));
+        //            foreach (var beam in beams)
+        //            {
+        //                await Task.Yield();
+        //                var beamDto = new BeamDto(beam);
+        //                result.Add(beamDto);
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
+
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {

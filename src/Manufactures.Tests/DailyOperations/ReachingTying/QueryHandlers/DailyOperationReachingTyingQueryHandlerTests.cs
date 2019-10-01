@@ -191,7 +191,7 @@ namespace Manufactures.Tests.DailyOperations.ReachingTying.QueryHandlers
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
                 .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
 
-            //Instantiate Object fo Operator
+            //Instantiate Object to Operator
             var firstOperator = new OperatorDocument(
                 new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),

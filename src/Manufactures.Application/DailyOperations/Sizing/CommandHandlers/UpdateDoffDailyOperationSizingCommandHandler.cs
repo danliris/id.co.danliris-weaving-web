@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public UpdateDoffDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = 
+            _dailyOperationSizingDocumentRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
             _movementRepository =
               _storage.GetRepository<IMovementRepository>();
@@ -73,16 +73,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Started Operation Status
-            var operationStartStatus = 
-                existingDailyOperation
-                .SizingDetails
-                .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-                .Count();
+            //var sizingOperationStartStatus = 
+            //    existingDailyOperation
+            //    .SizingDetails
+            //    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
+            //    .Count();
 
-            if (operationStartStatus == 0)
-            {
-                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
-            }
+            //if (sizingOperationStartStatus == 0)
+            //{
+            //    throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
+            //}
 
             //Validation for Finished Operation Status
             var currentOperationStatus =
@@ -110,7 +110,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             if (doffFinishDateMachineLogUtc < lastDateMachineLogUtc)
             {
                 throw Validator.ErrorValidation(("DoffDate", "Finish date cannot less than latest date log"));
-            } else
+            }
+            else
             {
                 if (dateTimeOperation <= lastDetail.DateTimeMachine)
                 {

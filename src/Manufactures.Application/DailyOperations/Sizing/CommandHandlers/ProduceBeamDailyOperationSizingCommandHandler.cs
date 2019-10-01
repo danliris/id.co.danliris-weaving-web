@@ -144,7 +144,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("Status", "Can't Produce Beam, latest status is not ONSTART or ONRESUME"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam, latest status is not ONSTART or ONRESUME"));
                     }
                 }
             }
