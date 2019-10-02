@@ -26,23 +26,25 @@ namespace Manufactures.Application.Defects.YarnDefect.CommandHandlers
 
         public async Task<YarnDefectDocument> Handle(UpdateYarnDefectCommand request, CancellationToken cancellationToken)
         {
-            var existingYarnDefectByCode = _yarnDefectRepository
-                                        .Find(y => y.Identity.Equals(request.Id))
+            var query = _yarnDefectRepository.Query.Where(y => y.Identity.Equals(request.Id));
+
+            var existingYarnDefectById = _yarnDefectRepository
+                                        .Find(query)
                                         .FirstOrDefault();
 
-            if (existingYarnDefectByCode == null)
+            if (existingYarnDefectById == null)
             {
                 throw Validator.ErrorValidation(("Id", "Invalid Yarn Defect with : " + request.Id));
             }
 
-            existingYarnDefectByCode.SetDefectCode(request.DefectCode);
-            existingYarnDefectByCode.SetDefectType(request.DefectType);
-            existingYarnDefectByCode.SetDefectCategory(request.DefectCategory);
+            existingYarnDefectById.SetDefectCode(request.DefectCode);
+            existingYarnDefectById.SetDefectType(request.DefectType);
+            existingYarnDefectById.SetDefectCategory(request.DefectCategory);
 
-            await _yarnDefectRepository.Update(existingYarnDefectByCode);
+            await _yarnDefectRepository.Update(existingYarnDefectById);
             _storage.Save();
 
-            return existingYarnDefectByCode;
+            return existingYarnDefectById;
         }
     }
 }

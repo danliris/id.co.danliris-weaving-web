@@ -8,7 +8,7 @@ namespace Manufactures.Domain.Defects.YarnDefect.Commands
     public class UpdateYarnDefectCommand : ICommand<YarnDefectDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [JsonProperty(propertyName: "DefectCode")]
         public string DefectCode { get; set; }
