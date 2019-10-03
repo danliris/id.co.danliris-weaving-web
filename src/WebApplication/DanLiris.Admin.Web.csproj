@@ -58,6 +58,8 @@
     <Compile Remove="Migrations\20191001082512_AddYarnDefect.Designer.cs" />
     <Compile Remove="Migrations\20191001084602_AddYarnDefect.cs" />
     <Compile Remove="Migrations\20191001084602_AddYarnDefect.Designer.cs" />
+    <Compile Remove="Migrations\20191003034902_ChangeTableNameFromYarnDefectToFabricDefect.cs" />
+    <Compile Remove="Migrations\20191003034902_ChangeTableNameFromYarnDefectToFabricDefect.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
