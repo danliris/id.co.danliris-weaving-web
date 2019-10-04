@@ -30,27 +30,26 @@ namespace Manufactures.Application.Beams.CommandHandlers
             var beamType = "";
             var existingBeamCode =
                _beamRepository
-                   .Find(x => x.Number.Equals(request.Number))
+                   .Find(x => x.Number.Equals(request.Number) && x.Type.Equals(request.Type))
                    .FirstOrDefault();
 
             if (existingBeamCode != null)
             {
-                Validator
-                    .ErrorValidation(("Number",
-                                      "Beam Number has available"));
+                throw Validator.ErrorValidation(("Number", "No. Beam Sudah Digunakan"), ("Type", "No. Beam Dengan Tipe " + request.Type + " Sudah Digunakan"));
             }
 
             if (request.Type.Equals(BeamStatus.SIZING))
             {
                 beamType = BeamStatus.SIZING;
-            } else if (request.Type.Equals(BeamStatus.WARPING))
+            }
+            else if (request.Type.Equals(BeamStatus.WARPING))
             {
                 beamType = BeamStatus.WARPING;
             }
 
-            var newBeam = new BeamDocument(Guid.NewGuid(), 
-                                           request.Number, 
-                                           beamType, 
+            var newBeam = new BeamDocument(Guid.NewGuid(),
+                                           request.Number,
+                                           beamType,
                                            request.EmptyWeight);
 
             await _beamRepository.Update(newBeam);

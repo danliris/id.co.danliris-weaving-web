@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Manufactures.Domain.Shared.ValueObjects
 {
-    public class Origin : SingleValueObject<string>
+    public class OriginId : SingleValueObject<string>
     {
-        public Origin(string origin) : base(origin) { }
+        public OriginId(string origin) : base(origin) { }
     }
 }

@@ -2,6 +2,7 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ValueObjects;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -15,11 +16,11 @@ namespace Manufactures.Domain.Orders.Commands
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; set; }
 
-        [JsonProperty(PropertyName = "WarpOrigin")]
-        public string WarpOrigin { get; set; }
+        [JsonProperty(PropertyName = "WarpOriginId")]
+        public string WarpOriginId { get; set; }
 
-        [JsonProperty(PropertyName = "WeftOrigin")]
-        public string WeftOrigin { get; set; }
+        [JsonProperty(PropertyName = "WeftOriginId")]
+        public string WeftOriginId { get; set; }
 
         [JsonProperty(PropertyName = "WholeGrade")]
         public int WholeGrade { get; set; }
@@ -47,8 +48,8 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.FabricConstructionDocument.Id).NotEmpty();
             RuleFor(command => command.FabricConstructionDocument.ConstructionNumber).NotEmpty();
             RuleFor(command => command.DateOrdered).NotEmpty();
-            RuleFor(command => command.WarpOrigin).NotEmpty();
-            RuleFor(command => command.WeftOrigin).NotEmpty();
+            RuleFor(command => command.WarpOriginId).NotEmpty();
+            RuleFor(command => command.WeftOriginId).NotEmpty();
             RuleFor(command => command.WholeGrade).NotEmpty();
             RuleFor(command => command.YarnType).NotEmpty();
             RuleFor(command => command.Period.Month).NotEmpty();
