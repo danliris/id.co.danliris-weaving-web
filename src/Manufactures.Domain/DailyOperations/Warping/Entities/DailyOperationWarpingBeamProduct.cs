@@ -14,6 +14,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public int? RightLooseCreel { get; private set; }
         public int? LeftLooseCreel { get; private set; }
         public double? WarpingBeamLength { get; private set; }
+        public int? WarpingBeamLengthUOMId { get; private set; }
         public int? Tention { get; private set; }
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
@@ -131,6 +132,16 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (WarpingBeamLength != value)
             {
                 WarpingBeamLength = value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetWarpingBeamLengthUOMId(int value)
+        {
+            if (WarpingBeamLengthUOMId != value)
+            {
+                WarpingBeamLengthUOMId = value;
 
                 MarkModified();
             }

@@ -134,6 +134,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                             lastWarpingBeamProduct.SetLeftLooseCreel(lastWarpingBeamProduct.LeftLooseCreel ?? 0);
 
                             lastWarpingBeamProduct.SetWarpingBeamLength(request.WarpingBeamLength);
+                            lastWarpingBeamProduct.SetWarpingBeamLengthUOMId(request.WarpingBeamLengthUOMId);
                             lastWarpingBeamProduct.SetTention(request.Tention);
                             lastWarpingBeamProduct.SetMachineSpeed(request.MachineSpeed);
                             lastWarpingBeamProduct.SetPressRoll(request.PressRoll);

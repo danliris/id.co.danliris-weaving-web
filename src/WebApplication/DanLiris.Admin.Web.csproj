@@ -60,6 +60,8 @@
     <Compile Remove="Migrations\20191001084602_AddYarnDefect.Designer.cs" />
     <Compile Remove="Migrations\20191003034902_ChangeTableNameFromYarnDefectToFabricDefect.cs" />
     <Compile Remove="Migrations\20191003034902_ChangeTableNameFromYarnDefectToFabricDefect.Designer.cs" />
+    <Compile Remove="Migrations\20191007035727_AddWarpingBeamLengthUOMOnWarping.cs" />
+    <Compile Remove="Migrations\20191007035727_AddWarpingBeamLengthUOMOnWarping.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

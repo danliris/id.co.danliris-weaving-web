@@ -39,14 +39,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
     {
         public PreparationDailyOperationWarpingCommandValidator()
         {
-            RuleFor(command => command.PreparationOrder).NotEmpty();
-            RuleFor(command => command.PreparationMaterialType).NotEmpty();
-            RuleFor(command => command.AmountOfCones).NotEmpty();
-            RuleFor(command => command.ColourOfCone).NotEmpty();
-            RuleFor(command => command.PreparationDate).NotEmpty();
-            RuleFor(command => command.PreparationTime).NotEmpty();
-            RuleFor(command => command.PreparationShift).NotEmpty();
-            RuleFor(command => command.PreparationOperator).NotEmpty();
+            RuleFor(command => command.PreparationOrder).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
+            RuleFor(command => command.PreparationMaterialType).NotEmpty().WithMessage("Jenis Material Harus Diisi");
+            RuleFor(command => command.AmountOfCones).NotEmpty().WithMessage("Jumlah Cone Harus Diisi");
+            RuleFor(command => command.ColourOfCone).NotEmpty().WithMessage("Warna Cone Harus Diisi");
+            RuleFor(command => command.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
+            RuleFor(command => command.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
+            RuleFor(command => command.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.PreparationOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

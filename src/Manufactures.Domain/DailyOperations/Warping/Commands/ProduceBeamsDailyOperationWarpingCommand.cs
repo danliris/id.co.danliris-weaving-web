@@ -27,6 +27,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "WarpingBeamLength")]
         public double WarpingBeamLength { get; set; }
 
+        [JsonProperty(PropertyName = "WarpingBeamLengthUOMId")]
+        public int WarpingBeamLengthUOMId { get; set; }
+
         [JsonProperty(PropertyName = "Tention")]
         public int Tention { get; set; }
 
@@ -48,14 +51,15 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public ProduceBeamsDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.ProduceBeamsDate).NotEmpty();
-            RuleFor(command => command.ProduceBeamsTime).NotEmpty();
-            RuleFor(command => command.ProduceBeamsShift).NotEmpty();
-            RuleFor(command => command.ProduceBeamsOperator).NotEmpty();
-            RuleFor(command => command.WarpingBeamLength).NotEmpty();
-            RuleFor(command => command.Tention).NotEmpty();
-            RuleFor(command => command.MachineSpeed).NotEmpty();
-            RuleFor(command => command.PressRoll).NotEmpty();
+            RuleFor(command => command.ProduceBeamsDate).NotEmpty().WithMessage("Tanggal Produksi Beam Harus Diisi");
+            RuleFor(command => command.ProduceBeamsTime).NotEmpty().WithMessage("Waktu Produksi Beam Harus Diisi");
+            RuleFor(command => command.ProduceBeamsShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.ProduceBeamsOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(command => command.WarpingBeamLength).NotEmpty().WithMessage("Panjang Beam Warping Harus Diisi");
+            RuleFor(command => command.WarpingBeamLengthUOMId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
+            RuleFor(command => command.Tention).NotEmpty().WithMessage("Tention Harus Diisi");
+            RuleFor(command => command.MachineSpeed).NotEmpty().WithMessage("Machine Speed Harus Diisi");
+            RuleFor(command => command.PressRoll).NotEmpty().WithMessage("Press Roll Harus Diisi");
         }
     }
 }
