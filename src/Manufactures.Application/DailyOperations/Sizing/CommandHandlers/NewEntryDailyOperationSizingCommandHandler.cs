@@ -59,19 +59,19 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     "0",
                                                     OperationStatus.ONPROCESS);
 
-            var year = request.Details.PreparationDate.Year;
-            var month = request.Details.PreparationDate.Month;
-            var day = request.Details.PreparationDate.Day;
-            var hour = request.Details.PreparationTime.Hours;
-            var minutes = request.Details.PreparationTime.Minutes;
-            var seconds = request.Details.PreparationTime.Seconds;
+            var year = request.PreparationDate.Year;
+            var month = request.PreparationDate.Month;
+            var day = request.PreparationDate.Day;
+            var hour = request.PreparationTime.Hours;
+            var minutes = request.PreparationTime.Minutes;
+            var seconds = request.PreparationTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             var newOperationDetail =
                     new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                   request.Details.ShiftId,
-                                                   request.Details.OperatorDocumentId,
+                                                   request.PreparationShift,
+                                                   request.PreparationOperator,
                                                    dateTimeOperation,
                                                    MachineStatus.ONENTRY,
                                                    "-",

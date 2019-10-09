@@ -1,5 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Warping;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
@@ -116,7 +117,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> GetWarpingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
         {
             page = page - 1;
-            List<BeamId> warpingBeamIds = new List<BeamId>();
+            List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
             List<BeamDto> warpingBeams = new List<BeamDto>();
             if (!filter.Contains("{}"))
             {
@@ -149,29 +150,33 @@ namespace Manufactures.Controllers.Api
                             if (warpingBeamStatus.Equals(BeamStatus.ROLLEDUP))
                             {
                                 await Task.Yield();
-                                warpingBeamIds.Add(new BeamId(warpingBeamProduct.WarpingBeamId));
+                                var warpingBeamYarnStrands = warpingDocument.AmountOfCones;
+                                var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId, warpingBeamYarnStrands);
+                                warpingListBeamProducts.Add(warpingBeam);
                             }
                         }
                     }
 
                     await Task.Yield();
-                    foreach (var beamId in warpingBeamIds)
+                    foreach (var warpingBeam in warpingListBeamProducts)
                     {
                         await Task.Yield();
-                        var warpingBeamQuery = _beamRepository.Query.Where(beam => beam.Identity.Equals(beamId.Value) && beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-                        var warpingBeam = _beamRepository.Find(warpingBeamQuery).FirstOrDefault();
+                        var warpingBeamQuery = _beamRepository.Query.Where(beam => beam.Identity.Equals(warpingBeam.Id) && beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                        var warpingBeamDocument = _beamRepository.Find(warpingBeamQuery).FirstOrDefault();
+
                         await Task.Yield();
-                        warpingBeams.Add(new BeamDto(warpingBeam));
+                        var warpingBeamDto = new BeamDto(warpingBeam, warpingBeamDocument);
+                        warpingBeams.Add(warpingBeamDto);
                     }
                 }
                 else
                 {
-                    throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Hasus Diisi"));
+                    throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
                 }
             }
             else
             {
-                throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Hasus Diisi"));
+                throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
             }
 
             var total = warpingBeams.Count();

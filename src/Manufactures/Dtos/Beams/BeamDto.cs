@@ -1,4 +1,5 @@
-﻿using Manufactures.Domain.Beams;
+﻿using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
+using Manufactures.Domain.Beams;
 using Newtonsoft.Json;
 using System;
 
@@ -32,6 +33,16 @@ namespace Manufactures.Dtos.Beams
             EmptyWeight = document.EmptyWeight;
             YarnLength = document.YarnLength;
             YarnStrands = document.YarnStrands;
+        }
+
+        public BeamDto(DailyOperationWarpingBeamDto warpingBeam, BeamDocument beamDocument)
+        {
+            Id = warpingBeam.Id;
+            YarnStrands = warpingBeam.WarpingBeamConeAmount;
+            Number = beamDocument.Number;
+            Type = beamDocument.Type;
+            EmptyWeight = beamDocument.EmptyWeight;
+            YarnLength = beamDocument.YarnLength;
         }
     }
 }

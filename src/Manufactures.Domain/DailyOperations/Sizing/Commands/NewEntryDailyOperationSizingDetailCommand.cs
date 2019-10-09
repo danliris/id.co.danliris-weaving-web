@@ -24,8 +24,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public NewEntryDailyOperationSizingDetailCommandValidator()
         {
-            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.ShiftId.Value).NotEmpty();
+            RuleFor(validator => validator.OperatorDocumentId).NotEmpty();
+            RuleFor(validator => validator.ShiftId).NotEmpty();
             RuleFor(validator => validator.PreparationDate).NotEmpty();
             RuleFor(validator => validator.PreparationTime).NotEmpty();
         }
