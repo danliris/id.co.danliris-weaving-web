@@ -293,7 +293,20 @@ namespace Manufactures.Controllers.Api
 
                     var causes = new DailyOperationSizingDetailsCausesDto(detailCauses.BrokenBeam, detailCauses.MachineTroubled);
 
-                    var sizingBeamNumberOnDetail = detail.SizingBeamNumber;
+                    var sizingBeamNumberOnDetail = detail.MachineStatus;
+
+                    switch (detail.MachineStatus)
+                    {
+                        case "ENTRY":
+                            sizingBeamNumberOnDetail = "Belum ada Beam yang Diproses";
+                            break;
+                        case "FINISH":
+                            sizingBeamNumberOnDetail = "Operasi Selesai, Tidak ada Beam yang Diproses";
+                            break;
+                        default:
+                            sizingBeamNumberOnDetail = detail.MachineStatus;
+                            break;
+                    }
 
                     var detailsDto = new DailyOperationSizingDetailsDto(shiftName, history, causes, sizingBeamNumberOnDetail);
 
@@ -374,7 +387,7 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var updateStartDailyOperationSizingDocument = await Mediator.Send(command);
-            
+
             return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
 
@@ -430,7 +443,7 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
-            
+
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
 
@@ -586,13 +599,13 @@ namespace Manufactures.Controllers.Api
                     var sizePickupDtos =
                     _dailyOperationSizingDocumentRepository
                         .Find(query)
-                        .Where(sizePickup => sizePickup.OrderDocumentId.Value.Equals(order.Identity) && 
+                        .Where(sizePickup => sizePickup.OrderDocumentId.Value.Equals(order.Identity) &&
                                              sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH))
                                              .ToList();
 
-                    if(sizePickupDtos.Count > 0)
+                    if (sizePickupDtos.Count > 0)
                     {
-                        foreach(var sizingDoc in sizePickupDtos)
+                        foreach (var sizingDoc in sizePickupDtos)
                         {
                             listOfSizingDoc.Add(sizingDoc);
                         }
