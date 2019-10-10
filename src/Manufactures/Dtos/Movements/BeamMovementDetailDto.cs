@@ -20,7 +20,7 @@ namespace Manufactures.Dtos.Movements
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; private set; }
 
-        public BeamMovementDetailDto(DailyOperationSizingDetail detail)
+        public BeamMovementDetailDto(DailyOperationSizingHistory detail)
         {
             Id = detail.Identity;
             DateTimeOperation = detail.DateTimeMachine;

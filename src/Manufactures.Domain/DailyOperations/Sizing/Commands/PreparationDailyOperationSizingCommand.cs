@@ -1,15 +1,13 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
-    public class NewEntryDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
+    public class PreparationDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "MachineDocumentId")]
         public MachineId MachineDocumentId { get; set; }
@@ -48,7 +46,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         //public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
     }
 
-    public class NewEntryDailyOperationSizingCommandValidator : AbstractValidator<NewEntryDailyOperationSizingCommand>
+    public class NewEntryDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
     {
         public NewEntryDailyOperationSizingCommandValidator()
         {

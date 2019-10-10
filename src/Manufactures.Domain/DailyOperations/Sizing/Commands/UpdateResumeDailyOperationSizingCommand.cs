@@ -13,8 +13,20 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "SizingDetails")]
-        public UpdateResumeDailyOperationSizingDetailCommand Details { get; set; }
+        //[JsonProperty(PropertyName = "SizingDetails")]
+        //public UpdateResumeDailyOperationSizingDetailCommand Details { get; set; }
+
+        [JsonProperty(PropertyName = "ResumeDate")]
+        public DateTimeOffset ResumeDate { get; set; }
+
+        [JsonProperty(PropertyName = "ResumeTime")]
+        public TimeSpan ResumeTime { get; set; }
+
+        [JsonProperty(PropertyName = "ResumeShift")]
+        public ShiftId ResumeShift { get; set; }
+
+        [JsonProperty(PropertyName = "ResumeOperator")]
+        public OperatorId ResumeOperator { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -27,7 +39,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UpdateResumeDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
+            //RuleFor(validator => validator.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
+            RuleFor(command => command.ResumeDate).NotEmpty().WithMessage("Tanggal Lanjutkan Harus Diisi");
+            RuleFor(command => command.ResumeTime).NotEmpty().WithMessage("Waktu Lanjutkan Harus Diisi");
+            RuleFor(command => command.ResumeShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.ResumeOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

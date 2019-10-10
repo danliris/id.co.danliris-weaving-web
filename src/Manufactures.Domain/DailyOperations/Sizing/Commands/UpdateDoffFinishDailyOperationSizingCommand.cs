@@ -22,8 +22,20 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Visco")]
         public string Visco { get; set; }
 
-        [JsonProperty(PropertyName = "SizingDetails")]
-        public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
+        //[JsonProperty(PropertyName = "SizingDetails")]
+        //public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
+
+        [JsonProperty(PropertyName = "FinishDate")]
+        public DateTimeOffset FinishDate { get; set; }
+
+        [JsonProperty(PropertyName = "FinishTime")]
+        public TimeSpan FinishTime { get; set; }
+
+        [JsonProperty(PropertyName = "FinishShift")]
+        public ShiftId FinishShift { get; set; }
+
+        [JsonProperty(PropertyName = "FinishOperator")]
+        public OperatorId FinishOperator { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -38,6 +50,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.MachineSpeed).NotEmpty();
             RuleFor(validator => validator.TexSQ).NotEmpty();
             RuleFor(validator => validator.Visco).NotEmpty();
+            RuleFor(validator => validator.FinishDate).NotEmpty().WithMessage("Tanggal Selesai Harus Diisi");
+            RuleFor(validator => validator.FinishTime).NotEmpty().WithMessage("Waktu Selesai Harus Diisi");
+            RuleFor(validator => validator.FinishShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(validator => validator.FinishOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

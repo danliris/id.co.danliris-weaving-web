@@ -1,6 +1,5 @@
 ﻿using Infrastructure.Domain.ReadModels;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public string TexSQ { get; internal set; }
         public string Visco { get; internal set; }
         public string OperationStatus { get; internal set; }
-        public List<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; internal set; }
-        public List<DailyOperationSizingDetail> SizingDetails { get; internal set; }
+        public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; internal set; }
+        public List<DailyOperationSizingHistory> SizingHistories { get; internal set; }
     }
 }

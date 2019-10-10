@@ -35,16 +35,16 @@ namespace Manufactures.Dtos
         public DateTimeOffset DateTimeMachineHistory { get; set; }
 
         [JsonProperty(PropertyName = "StartCounter")]
-        public double StartCounter { get; set; }
+        public double CounterStart { get; set; }
 
         [JsonProperty(PropertyName = "FinishCounter")]
-        public double FinishCounter { get; set; }
+        public double CounterFinish { get; set; }
 
         [JsonProperty(PropertyName = "NettoWeight")]
-        public double NettoWeight { get; set; }
+        public double WeightNetto { get; set; }
 
         [JsonProperty(PropertyName = "BrutoWeight")]
-        public double BrutoWeight { get; set; }
+        public double WeightBruto { get; set; }
 
         [JsonProperty(PropertyName = "PISMeter")]
         public double PISMeter { get; set; }
@@ -52,7 +52,7 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
 
-        public SizePickupListDto(DailyOperationSizingDocument document, string operatorName, string operatorGroup, DateTimeOffset dateTimeDoff, DailyOperationSizingBeamDocumentsCounterDto counter, DailyOperationSizingBeamDocumentsWeightDto weight, double pisMeter, double spu, string beamNumber)
+        public SizePickupListDto(DailyOperationSizingDocument document, string operatorName, string operatorGroup, DateTimeOffset dateTimeDoff, double counterStart, double counterFinish, double weightNetto, double weightBruto, double pisMeter, double spu, string beamNumber)
         {
             Id = document.Identity;
             RecipeCode = document.RecipeCode;
@@ -62,10 +62,10 @@ namespace Manufactures.Dtos
             OperatorName = operatorName;
             OperatorGroup = operatorGroup;
             DateTimeMachineHistory = dateTimeDoff;
-            StartCounter = counter.Start;
-            FinishCounter = counter.Finish;
-            NettoWeight = weight.Netto;
-            BrutoWeight = weight.Bruto;
+            CounterStart = counterStart;
+            CounterFinish = counterFinish;
+            WeightNetto = weightNetto;
+            WeightBruto = weightBruto;
             PISMeter = pisMeter;
             SPU = spu;
             BeamNumber = beamNumber;

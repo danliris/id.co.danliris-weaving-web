@@ -1,14 +1,11 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
-    public class DailyOperationSizingDetail : EntityBase<DailyOperationSizingDetail>
+    public class DailyOperationSizingHistory : EntityBase<DailyOperationSizingHistory>
     {
         public Guid ShiftDocumentId { get; private set; }
 
@@ -20,7 +17,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 
         public string Information { get; private set; }
 
-        public string Causes { get; private set; }
+        //public string Causes { get; private set; }
+        public int BrokenBeam { get; private set; }
+
+        public int MachineTroubled { get; private set; }
 
         public string SizingBeamNumber { get; private set; }
 
@@ -28,17 +28,18 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 
         public DailyOperationSizingReadModel DailyOperationSizingDocument { get; set; }
 
-        public DailyOperationSizingDetail(Guid identity) : base(identity)
+        public DailyOperationSizingHistory(Guid identity) : base(identity)
         {
         }
 
-        public DailyOperationSizingDetail(Guid identity, 
+        public DailyOperationSizingHistory(Guid identity, 
                                           ShiftId shiftDocumentId, 
                                           OperatorId operatorDocumentId, 
                                           DateTimeOffset dateTimeMachine, 
                                           string machineStatus, 
-                                          string information, 
-                                          DailyOperationSizingCauseValueObject causes,
+                                          string information,
+                                          int brokenBeam,
+                                          int machineTroubled,
                                           string sizingBeamNumber) : base(identity)
         {
             ShiftDocumentId = shiftDocumentId.Value;
@@ -46,7 +47,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             Information = information;
-            Causes = causes.Serialize();
+            BrokenBeam = brokenBeam;
+            MachineTroubled = machineTroubled;
+            //Causes = causes.Serialize();
             SizingBeamNumber = sizingBeamNumber;
         }
 
@@ -83,11 +86,23 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetCauses(DailyOperationSizingCauseValueObject causes)
+        public void SetBrokenBeam(int brokenBeam)
         {
-            Causes = causes.Serialize();
+            BrokenBeam = brokenBeam;
             MarkModified();
         }
+
+        public void SetMachineTroubled (int machineTroubled)
+        {
+            MachineTroubled= machineTroubled;
+            MarkModified();
+        }
+
+        //public void SetCauses(DailyOperationSizingCauseValueObject causes)
+        //{
+        //    Causes = causes.Serialize();
+        //    MarkModified();
+        //}
 
         public void SetSizingBeamNumber(string sizingBeamNumber)
         {
@@ -95,7 +110,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        protected override DailyOperationSizingDetail GetEntity()
+        protected override DailyOperationSizingHistory GetEntity()
         {
             return this;
         }

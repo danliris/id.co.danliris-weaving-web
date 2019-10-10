@@ -5,7 +5,6 @@ using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Movements.Repositories;
 using Moonlay;
 using System;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class NewEntryDailyOperationSizingCommandHandler : ICommandHandler<NewEntryDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class PreparationDailyOperationSizingCommandHandler : ICommandHandler<PreparationDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
@@ -23,7 +22,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IMovementRepository
             _movementRepository;
 
-        public NewEntryDailyOperationSizingCommandHandler(IStorage storage)
+        public PreparationDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
@@ -33,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         }
 
         public async Task<DailyOperationSizingDocument>
-            Handle(NewEntryDailyOperationSizingCommand request, CancellationToken cancellationToken)
+            Handle(PreparationDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
             //Check if any Daily Operation using Selected Order (SOP)
             var existingDailyOperationWarpingDocument = _dailyOperationSizingDocumentRepository
@@ -69,13 +68,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             var newOperationDetail =
-                    new DailyOperationSizingDetail(Guid.NewGuid(),
+                    new DailyOperationSizingHistory(Guid.NewGuid(),
                                                    request.PreparationShift,
                                                    request.PreparationOperator,
                                                    dateTimeOperation,
                                                    MachineStatus.ONENTRY,
                                                    "-",
-                                                   new DailyOperationSizingCauseValueObject("0","0"),
+                                                   //new DailyOperationSizingCauseValueObject("0","0"),
+                                                   0,
+                                                   0,
                                                    " ");
 
             dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperationDetail);

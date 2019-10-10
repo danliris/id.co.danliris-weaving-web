@@ -19,8 +19,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
 
-        [JsonProperty(PropertyName = "Start")]
-        public double Start { get; set; }
+        [JsonProperty(PropertyName = "CounterStart")]
+        public double CounterStart { get; set; }
 
         //[JsonProperty(PropertyName = "Finish")]
         //public double Finish { get; set; }
@@ -52,8 +52,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         {
             RuleFor(validator => validator.Id).NotEmpty();
             //RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new UpdateStartDailyOperationSizingBeamDocumentCommandValidator());
-            RuleFor(validator => validator.SizingBeamId).NotEmpty();
-            RuleFor(validator => validator.Start >= 0);
+            RuleFor(validator => validator.SizingBeamId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");
+            RuleFor(validator => validator.CounterStart >= 0);
             //RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start >= 0);
             //RuleFor(validator => validator.SizingDetails).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
             RuleFor(command => command.StartDate).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
