@@ -468,20 +468,6 @@ namespace Manufactures.Controllers.Api
             return Ok(updateResumeDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}/doff")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateDoffFinishDailyOperationSizingCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateDoffDailyOperationSizingDocument = await Mediator.Send(command);
-
-            return Ok(updateDoffDailyOperationSizingDocument.Identity);
-        }
-
         [HttpPut("{Id}/produce-beams")]
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]ProduceBeamDailyOperationSizingCommand command)
@@ -494,6 +480,20 @@ namespace Manufactures.Controllers.Api
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{Id}/finish-doff")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]FinishDoffDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateDoffDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
 
         [HttpGet("calculate/netto/empty-weight/{emptyWeight}/bruto/{bruto}")]

@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class FinishDoffDailyOperationSizingCommandHandler : ICommandHandler<UpdateDoffFinishDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class FinishDoffDailyOperationSizingCommandHandler : ICommandHandler<FinishDoffDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
@@ -38,7 +38,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
               _storage.GetRepository<IBeamRepository>();
         }
 
-        public async Task<DailyOperationSizingDocument> Handle(UpdateDoffFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationSizingDocument> Handle(FinishDoffDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationSizingDocumentRepository.Query
                                                                .Include(d => d.SizingHistories)
@@ -92,18 +92,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Reformat DateTime
-            var year = request.FinishDate.Year;
-            var month = request.FinishDate.Month;
-            var day = request.FinishDate.Day;
-            var hour = request.FinishTime.Hours;
-            var minutes = request.FinishTime.Minutes;
-            var seconds = request.FinishTime.Seconds;
+            var year = request.FinishDoffDate.Year;
+            var month = request.FinishDoffDate.Month;
+            var day = request.FinishDoffDate.Day;
+            var hour = request.FinishDoffTime.Hours;
+            var minutes = request.FinishDoffTime.Minutes;
+            var seconds = request.FinishDoffTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for DoffFinish Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var doffFinishDateMachineLogUtc = new DateTimeOffset(request.FinishDate.Date, new TimeSpan(+7, 0, 0));
+            var doffFinishDateMachineLogUtc = new DateTimeOffset(request.FinishDoffDate.Date, new TimeSpan(+7, 0, 0));
 
             if (doffFinishDateMachineLogUtc < lastDateMachineLogUtc)
             {
@@ -126,8 +126,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     //var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
                     var newOperation =
                                 new DailyOperationSizingHistory(Guid.NewGuid(),
-                                                               new ShiftId(request.FinishShift.Value),
-                                                               new OperatorId(request.FinishOperator.Value),
+                                                               new ShiftId(request.FinishDoffShift.Value),
+                                                               new OperatorId(request.FinishDoffOperator.Value),
                                                                dateTimeOperation,
                                                                MachineStatus.ONFINISH,
                                                                "-",

@@ -68,6 +68,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("OperationStatus", "Can't Pause. This operation's status already FINISHED"));
             }
 
+            //Validation for Cause of Stopping
+            //var brokenBeam = request.BrokenBeam;
+            //var machineTroubled = request.MachineTroubled;
+
             //Reformat DateTime
             var year = request.PauseDate.Year;
             var month = request.PauseDate.Month;
@@ -128,7 +132,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    MachineStatus.ONSTOP,
                                                                    request.Information,
                                                                    //new DailyOperationSizingCauseValueObject(request.BrokenBeam, request.MachineTroubled),
-                                                                   request.BrokenBeam, request.MachineTroubled,
+                                                                   request.BrokenBeam, 
+                                                                   request.MachineTroubled,
                                                                    lastDetail.SizingBeamNumber);
 
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperation);

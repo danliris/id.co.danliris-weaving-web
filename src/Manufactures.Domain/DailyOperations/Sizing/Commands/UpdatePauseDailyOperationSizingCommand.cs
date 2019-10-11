@@ -54,9 +54,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(command => command.PauseShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(command => command.PauseOperator).NotEmpty().WithMessage("Operator Harus Diisi");
             //RuleFor(command => command.BrokenBeam).NotEmpty().Unless(command => string.IsNullOrEmpty(command.MachineTroubled)).WithMessage("Penyebab Berhenti Harus Diisi");
-            RuleFor(command => command.BrokenBeam).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
+            //RuleFor(command => command.BrokenBeam).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
             //RuleFor(command => command.MachineTroubled).NotEmpty().Unless(command => string.IsNullOrEmpty(command.BrokenBeam)).WithMessage("Penyebab Berhenti Harus Diisi");
-            RuleFor(command => command.MachineTroubled).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
+            //RuleFor(command => command.MachineTroubled).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
         }
     }
 }
