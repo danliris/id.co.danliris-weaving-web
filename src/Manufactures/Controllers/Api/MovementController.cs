@@ -63,7 +63,7 @@ namespace Manufactures.Controllers.Api
                 var query =
                     _dailyOperationSizingRepository
                         .Query
-                        .Include(o => o.SizingDetails);
+                        .Include(o => o.SizingHistories);
                 var dailyOperation =
                         _dailyOperationSizingRepository
                             .Find(query)
@@ -79,7 +79,7 @@ namespace Manufactures.Controllers.Api
 
                     if (beam.Number.Equals(number))
                     {
-                        var details = dailyOperation.SizingDetails;
+                        var details = dailyOperation.SizingHistories;
                         details = details.OrderByDescending(o => o.DateTimeMachine).ToList();
                         var beamMovementDto =
                             new BeamMovementDto(movement.Identity,

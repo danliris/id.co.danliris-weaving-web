@@ -38,10 +38,10 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public FinishDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.FinishDate).NotEmpty();
-            RuleFor(command => command.FinishTime).NotEmpty();
-            RuleFor(command => command.FinishShift).NotEmpty();
-            RuleFor(command => command.FinishOperator).NotEmpty();
+            RuleFor(command => command.FinishDate).NotEmpty().WithMessage("Tanggal Selesai Harus Diisi");
+            RuleFor(command => command.FinishTime).NotEmpty().WithMessage("Waktu Selesai Harus Diisi");
+            RuleFor(command => command.FinishShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.FinishOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

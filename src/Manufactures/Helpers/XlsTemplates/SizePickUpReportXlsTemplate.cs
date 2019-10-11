@@ -47,10 +47,10 @@ namespace Manufactures.Helpers.XlsTemplates
                     var visco = item.Visco.ToString();
                     var beamNumber = item.BeamNumber;
                     var pism = item.PISMeter.ToString();
-                    var counterStart = item.StartCounter;
-                    var counterFinish = item.FinishCounter;
-                    var netto = item.NettoWeight;
-                    var bruto = item.BrutoWeight;
+                    var counterStart = item.CounterStart;
+                    var counterFinish = item.CounterFinish;
+                    var netto = item.WeightNetto;
+                    var bruto = item.WeightBruto;
                     var spu = item.SPU.ToString();
                     var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
                     dt.Rows.Add(index++, date, operatorGroup, operatorName, recipeCode, machineSpeed,

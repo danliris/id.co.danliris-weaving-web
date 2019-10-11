@@ -17,23 +17,31 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
         [JsonProperty(PropertyName = "InformationHistory")]
         public string InformationHistory { get; }
 
+        [JsonProperty(PropertyName = "OperatorName")]
+        public string OperatorName { get; }
+
+        [JsonProperty(PropertyName = "OperatorGroup")]
+        public string OperatorGroup { get; }
+
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
 
         [JsonProperty(PropertyName = "BrokenBeamCauses")]
-        public string BrokenBeamCauses { get; }
+        public int BrokenBeamCauses { get; }
 
         [JsonProperty(PropertyName = "MachineTroubledCauses")]
-        public string MachineTroubledCauses { get; }
+        public int MachineTroubledCauses { get; }
 
         [JsonProperty(PropertyName = "SizingBeamNumber")]
         public string SizingBeamNumber { get; }
 
-        public DailyOperationSizingDetailsDto(string shiftName, DailyOperationSizingDetailsHistoryDto history, DailyOperationSizingDetailsCausesDto causes, string sizingBeamNumber)
+        public DailyOperationSizingDetailsDto(string operatorName, string operatorGroup, string shiftName, DailyOperationSizingDetailsHistoryDto history, DailyOperationSizingDetailsCausesDto causes, string sizingBeamNumber)
         {
             DateTimeMachineHistory = history.DateTimeOperation;
             MachineStatusHistory = history.MachineStatus;
             InformationHistory = history.Information;
+            OperatorName = operatorName;
+            OperatorGroup = operatorGroup;
             ShiftName = shiftName;
             BrokenBeamCauses = causes.BrokenBeam;
             MachineTroubledCauses = causes.MachineTroubled;

@@ -54,10 +54,10 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public UpdatePauseDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.PauseDate).NotEmpty();
-            RuleFor(command => command.PauseTime).NotEmpty();
-            RuleFor(command => command.PauseShift).NotEmpty();
-            RuleFor(command => command.PauseOperator).NotEmpty();
+            RuleFor(command => command.PauseDate).NotEmpty().WithMessage("Tanggal Berhenti Harus Diisi");
+            RuleFor(command => command.PauseTime).NotEmpty().WithMessage("Waktu Berhenti Harus Diisi");
+            RuleFor(command => command.PauseShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.PauseOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -24,8 +22,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public string TexSQ { get; private set; }
         public string Visco { get; private set; }
         public string OperationStatus { get; private set; }
-        public IReadOnlyCollection<DailyOperationSizingBeamDocument> SizingBeamDocuments { get; private set; }
-        public IReadOnlyCollection<DailyOperationSizingDetail> SizingDetails { get; private set; }
+        public IReadOnlyCollection<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
+        public IReadOnlyCollection<DailyOperationSizingHistory> SizingHistories { get; private set; }
 
         public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, OrderId orderDocumentId, List<BeamId> beamsWarping, double emptyWeight, double yarnStrands, string recipeCode, double neReal, int machineSpeed, string texSQ, string visco, string operationStatus) :base(id)
         {
@@ -41,8 +39,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             TexSQ = texSQ;
             Visco = visco;
             OperationStatus = operationStatus;
-            SizingBeamDocuments = new List<DailyOperationSizingBeamDocument>();
-            SizingDetails = new List<DailyOperationSizingDetail>();
+            SizingBeamProducts = new List<DailyOperationSizingBeamProduct>();
+            SizingHistories = new List<DailyOperationSizingHistory>();
 
             this.MarkTransient();
 
@@ -59,8 +57,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
                 OperationStatus = this.OperationStatus,
-                SizingBeamDocuments = this.SizingBeamDocuments.ToList(),
-                SizingDetails = this.SizingDetails.ToList()
+                SizingBeamProducts = this.SizingBeamProducts.ToList(),
+                SizingHistories = this.SizingHistories.ToList()
             };
         }
         public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
@@ -76,23 +74,23 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.TexSQ = readModel.TexSQ;
             this.Visco = readModel.Visco;
             this.OperationStatus = readModel.OperationStatus;
-            this.SizingBeamDocuments = readModel.SizingBeamDocuments;
-            this.SizingDetails = readModel.SizingDetails;
+            this.SizingBeamProducts = readModel.SizingBeamProducts;
+            this.SizingHistories = readModel.SizingHistories;
         }
 
-        public void AddDailyOperationSizingDetail(DailyOperationSizingDetail sizingDetail)
+        public void AddDailyOperationSizingDetail(DailyOperationSizingHistory sizingDetail)
         {
-            var list = SizingDetails.ToList();
+            var list = SizingHistories.ToList();
             list.Add(sizingDetail);
-            SizingDetails = list;
-            ReadModel.SizingDetails = SizingDetails.ToList();
+            SizingHistories = list;
+            ReadModel.SizingHistories = SizingHistories.ToList();
 
             MarkModified();
         }
 
-        public void UpdateDailyOperationSizingDetail(DailyOperationSizingDetail detail)
+        public void UpdateDailyOperationSizingDetail(DailyOperationSizingHistory detail)
         {
-            var sizingDetails = SizingDetails.ToList();
+            var sizingDetails = SizingHistories.ToList();
 
             //Get Sizing Detail Update
             var index =
@@ -109,40 +107,42 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             sizingDetail.SetDateTimeMachine(detail.DateTimeMachine);
             sizingDetail.SetMachineStatus(detail.MachineStatus);
             sizingDetail.SetInformation(detail.Information);
-            sizingDetail.SetCauses(JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(detail.Causes));
+            //sizingDetail.SetCauses(JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(detail.Causes));
+            sizingDetail.SetBrokenBeam(detail.BrokenBeam);
+            sizingDetail.SetMachineTroubled(detail.MachineTroubled);
             sizingDetail.SetSizingBeamNumber(detail.SizingBeamNumber);
 
             sizingDetails[index] = sizingDetail;
-            SizingDetails = sizingDetails;
-            ReadModel.SizingDetails = sizingDetails;
+            SizingHistories = sizingDetails;
+            ReadModel.SizingHistories = sizingDetails;
             MarkModified();
         }
 
         public void RemoveDailyOperationSizingDetail(Guid identity)
         {
-            var detail = SizingDetails.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = SizingDetails.ToList();
+            var detail = SizingHistories.Where(o => o.Identity == identity).FirstOrDefault();
+            var list = SizingHistories.ToList();
 
             list.Remove(detail);
-            SizingDetails = list;
-            ReadModel.SizingDetails = SizingDetails.ToList();
+            SizingHistories = list;
+            ReadModel.SizingHistories = SizingHistories.ToList();
 
             MarkModified();
         }
 
-        public void AddDailyOperationSizingBeamDocument(DailyOperationSizingBeamDocument sizingBeamDocument)
+        public void AddDailyOperationSizingBeamDocument(DailyOperationSizingBeamProduct sizingBeamDocument)
         {
-            var list = SizingBeamDocuments.ToList();
+            var list = SizingBeamProducts.ToList();
             list.Add(sizingBeamDocument);
-            SizingBeamDocuments = list;
-            ReadModel.SizingBeamDocuments = SizingBeamDocuments.ToList();
+            SizingBeamProducts = list;
+            ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
 
             MarkModified();
         }
 
-        public void UpdateDailyOperationSizingBeamDocument(DailyOperationSizingBeamDocument beamDocument)
+        public void UpdateDailyOperationSizingBeamDocument(DailyOperationSizingBeamProduct beamDocument)
         {
-            var sizingBeamDocuments = SizingBeamDocuments.ToList();
+            var sizingBeamDocuments = SizingBeamProducts.ToList();
 
             //Get Sizing Beam Update
             var index =
@@ -156,26 +156,31 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             //Update Propertynya
             sizingBeamDocument.SetSizingBeamId(beamDocument.SizingBeamId);
             sizingBeamDocument.SetDateTimeBeamDocument(beamDocument.DateTimeBeamDocument);
-            sizingBeamDocument.SetCounter(JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(beamDocument.Counter));
-            sizingBeamDocument.SetWeight(JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(beamDocument.Weight));
+            //sizingBeamDocument.SetCounter(JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(beamDocument.Counter));
+            sizingBeamDocument.SetCounterStart(beamDocument.CounterStart);
+            sizingBeamDocument.SetCounterFinish(beamDocument.CounterFinish);
+            //sizingBeamDocument.SetWeight(JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(beamDocument.Weight));
+            sizingBeamDocument.SetWeightNetto(beamDocument.WeightNetto);
+            sizingBeamDocument.SetWeightBruto(beamDocument.WeightBruto);
+            sizingBeamDocument.SetWeightTheoritical(beamDocument.WeightTheoritical);
             sizingBeamDocument.SetPISMeter(beamDocument.PISMeter);
             sizingBeamDocument.SetSPU(beamDocument.SPU);
             sizingBeamDocument.SetSizingBeamStatus(beamDocument.SizingBeamStatus);
 
             sizingBeamDocuments[index] = sizingBeamDocument;
-            SizingBeamDocuments = sizingBeamDocuments;
-            ReadModel.SizingBeamDocuments = sizingBeamDocuments;
+            SizingBeamProducts = sizingBeamDocuments;
+            ReadModel.SizingBeamProducts = sizingBeamDocuments;
             MarkModified();
         }
 
         public void RemoveDailyOperationSizingBeamDocument(Guid identity)
         {
-            var detail = SizingBeamDocuments.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = SizingBeamDocuments.ToList();
+            var detail = SizingBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
+            var list = SizingBeamProducts.ToList();
 
             list.Remove(detail);
-            SizingBeamDocuments = list;
-            ReadModel.SizingBeamDocuments = SizingBeamDocuments.ToList();
+            SizingBeamProducts = list;
+            ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
 
             MarkModified();
         }

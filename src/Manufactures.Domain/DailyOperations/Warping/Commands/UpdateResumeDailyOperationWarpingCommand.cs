@@ -36,10 +36,10 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public UpdateResumeDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.ResumeDate).NotEmpty();
-            RuleFor(command => command.ResumeTime).NotEmpty();
-            RuleFor(command => command.ResumeShift).NotEmpty();
-            RuleFor(command => command.ResumeOperator).NotEmpty();
+            RuleFor(command => command.ResumeDate).NotEmpty().WithMessage("Tanggal Lanjutkan Harus Diisi");
+            RuleFor(command => command.ResumeTime).NotEmpty().WithMessage("Waktu Lanjutkan Harus Diisi");
+            RuleFor(command => command.ResumeShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.ResumeOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

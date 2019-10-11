@@ -8,12 +8,12 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
     public class DailyOperationSizingDetailsCausesDto
     {
         [JsonProperty(PropertyName = "BrokenBeam")]
-        public string BrokenBeam { get; }
+        public int BrokenBeam { get; }
 
         [JsonProperty(PropertyName = "MachineTroubled")]
-        public string MachineTroubled { get; }
+        public int MachineTroubled { get; }
 
-        public DailyOperationSizingDetailsCausesDto(string brokenBeam, string machineTroubled)
+        public DailyOperationSizingDetailsCausesDto(int brokenBeam, int machineTroubled)
         {
             BrokenBeam = brokenBeam;
             MachineTroubled = machineTroubled;

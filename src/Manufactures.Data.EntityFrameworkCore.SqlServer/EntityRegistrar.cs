@@ -27,7 +27,7 @@ using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
-using Manufactures.Domain.Defects.YarnDefect.ReadModels;
+using Manufactures.Domain.Defects.FabricDefect.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -36,9 +36,9 @@ namespace Manufactures.Data.EntityFrameworkCore
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<YarnDefectReadModel>(etb =>
+            modelBuilder.Entity<FabricDefectReadModel>(etb =>
             {
-                etb.ToTable("Weaving_YarnDefectDocuments");
+                etb.ToTable("Weaving_FabricDefectDocuments");
                 etb.HasKey(e => e.Identity);
 
                 etb.Property(e => e.DefectCode).HasMaxLength(255);
@@ -136,18 +136,18 @@ namespace Manufactures.Data.EntityFrameworkCore
             etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingBeamDocument>(etb =>
+            modelBuilder.Entity<DailyOperationSizingBeamProduct>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationSizingBeamDocuments");
+                etb.ToTable("Weaving_DailyOperationSizingBeamProducts");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingDetail>(etb =>
+            modelBuilder.Entity<DailyOperationSizingHistory>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationSizingDetails");
+                etb.ToTable("Weaving_DailyOperationSizingHistories");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
@@ -159,11 +159,11 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.SizingBeamDocuments)
+                etb.HasMany(e => e.SizingBeamProducts)
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 
-                etb.HasMany(e => e.SizingDetails)
+                etb.HasMany(e => e.SizingHistories)
                     .WithOne(e => e.DailyOperationSizingDocument)
                     .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 

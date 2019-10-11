@@ -105,9 +105,9 @@ namespace Manufactures.Domain.DailyOperations.Warping
                                     .FirstOrDefault();
 
                 //Update Properties When not Same
-                warpingHistory.SetDateTimeMachine(history.DateTimeMachine);
                 warpingHistory.SetShiftId(new ShiftId(history.ShiftDocumentId));
                 warpingHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
+                warpingHistory.SetDateTimeMachine(history.DateTimeMachine);
                 warpingHistory.SetMachineStatus(history.MachineStatus);
                 warpingHistory.SetInformation(history.Information);
                 warpingHistory.SetWarpingBeamNumber(history.WarpingBeamNumber);
@@ -155,10 +155,17 @@ namespace Manufactures.Domain.DailyOperations.Warping
                 
                 //Update Properties When Not Same
                 warpingBeamProduct.SetWarpingBeamId(value.Identity);
+                warpingBeamProduct.SetBrokenThreadsCause(value.BrokenThreadsCause ?? 0);
+                warpingBeamProduct.SetConeDeficient(value.ConeDeficient ?? 0);
+                warpingBeamProduct.SetLooseThreadsAmount(value.LooseThreadsAmount?? 0);
+                warpingBeamProduct.SetRightLooseCreel(value.RightLooseCreel?? 0);
+                warpingBeamProduct.SetLeftLooseCreel(value.LeftLooseCreel?? 0);
                 warpingBeamProduct.SetWarpingBeamLength(value.WarpingBeamLength ?? 0);
                 warpingBeamProduct.SetTention(value.Tention ?? 0);
                 warpingBeamProduct.SetMachineSpeed(value.MachineSpeed ?? 0);
                 warpingBeamProduct.SetPressRoll(value.PressRoll ?? 0);
+                warpingBeamProduct.SetBeamStatus(value.BeamStatus);
+                warpingBeamProduct.SetLatestDateTimeBeamProduct(value.LatestDateTimeBeamProduct);
 
                 //Replace to Update Warping Product
                 dailyOperationWarpingBeamProducts[index] = warpingBeamProduct;

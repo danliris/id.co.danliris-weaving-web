@@ -6,11 +6,9 @@ using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
-using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Threading;
@@ -36,19 +34,19 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public async Task<DailyOperationSizingDocument> Handle(UpdateStartDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
             var query = _dailyOperationSizingDocumentRepository.Query
-                                                               .Include(d => d.SizingDetails)
-                                                               .Include(b => b.SizingBeamDocuments)
+                                                               .Include(d => d.SizingHistories)
+                                                               .Include(b => b.SizingBeamProducts)
                                                                .Where(sizingDoc => sizingDoc.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var existingBeamdocuments = existingDailyOperation.SizingBeamDocuments.OrderByDescending(b => b.DateTimeBeamDocument);
+            var existingBeamdocuments = existingDailyOperation.SizingBeamProducts.OrderByDescending(b => b.DateTimeBeamDocument);
             var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
-            var existingDetails = existingDailyOperation.SizingDetails.OrderByDescending(d => d.DateTimeMachine);
+            var existingDetails = existingDailyOperation.SizingHistories.OrderByDescending(d => d.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
 
             //Validation for Beam Status
             var countBeamStatus =
                 existingDailyOperation
-                    .SizingBeamDocuments
+                    .SizingBeamProducts
                     .Where(e => e.SizingBeamStatus == BeamStatus.ONPROCESS)
                     .Count();
 
@@ -67,18 +65,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Reformat DateTime
-            var year = request.SizingDetails.StartDate.Year;
-            var month = request.SizingDetails.StartDate.Month;
-            var day = request.SizingDetails.StartDate.Day;
-            var hour = request.SizingDetails.StartTime.Hours;
-            var minutes = request.SizingDetails.StartTime.Minutes;
-            var seconds = request.SizingDetails.StartTime.Seconds;
+            var year = request.StartDate.Year;
+            var month = request.StartDate.Month;
+            var day = request.StartDate.Day;
+            var hour = request.StartTime.Hours;
+            var minutes = request.StartTime.Minutes;
+            var seconds = request.StartTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastDetail.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var startDateMachineLogUtc = new DateTimeOffset(request.SizingDetails.StartDate.Date, new TimeSpan(+7, 0, 0));
+            var startDateMachineLogUtc = new DateTimeOffset(request.StartDate.Date, new TimeSpan(+7, 0, 0));
 
             if (startDateMachineLogUtc < lastDateMachineLogUtc)
             {
@@ -94,28 +92,35 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 {
                     if (lastDetail.MachineStatus == MachineStatus.ONENTRY)
                     {
-                        var sizingBeamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId.Value)).FirstOrDefault();
+                        var sizingBeamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamId.Value)).FirstOrDefault();
                         var sizingBeamNumber = sizingBeamDocument.Number;
 
-                        var newBeamDocument = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
+                        var newBeamDocument = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                                    new BeamId(sizingBeamDocument.Identity),
                                                                                    dateTimeOperation,
-                                                                                   new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0),
-                                                                                   new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                                   //new DailyOperationSizingCounterValueObject(request.CounterStart, 0),
+                                                                                   request.CounterStart, 
+                                                                                   0,
+                                                                                   //new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                                   0, 
+                                                                                   0, 
+                                                                                   0,
                                                                                    0,
                                                                                    0,
                                                                                    BeamStatus.ONPROCESS);
                         existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
 
-                        var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
+                        //var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
                         var newOperationDetail =
-                                new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                               new ShiftId(request.SizingDetails.ShiftId.Value),
-                                                               new OperatorId(request.SizingDetails.OperatorDocumentId.Value),
+                                new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                               new ShiftId(request.StartShift.Value),
+                                                               new OperatorId(request.StartOperator.Value),
                                                                dateTimeOperation,
                                                                MachineStatus.ONSTART,
                                                                "-",
-                                                               new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
+                                                               //new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
+                                                               lastDetail.BrokenBeam,
+                                                               lastDetail.MachineTroubled,
                                                                sizingBeamNumber);
                         existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
 
@@ -128,28 +133,35 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     {
                         if (lastBeamDocument.SizingBeamStatus == BeamStatus.ROLLEDUP)
                         {
-                            var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamDocuments.SizingBeamId.Value)).FirstOrDefault();
+                            var beamDocument = _beamDocumentRepository.Find(b => b.Identity.Equals(request.SizingBeamId.Value)).FirstOrDefault();
                             var beamNumber = beamDocument.Number;
 
-                            var newBeamDocument = new DailyOperationSizingBeamDocument(Guid.NewGuid(),
+                            var newBeamDocument = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                                        new BeamId(beamDocument.Identity),
-                                                                                       dateTimeOperation,
-                                                                                       new DailyOperationSizingCounterValueObject(request.SizingBeamDocuments.Counter.Start, 0),
-                                                                                       new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                                       dateTimeOperation, 
+                                                                                       request.CounterStart, 
+                                                                                       0,
+                                                                                       //new DailyOperationSizingCounterValueObject(request.CounterStart, 0),
+                                                                                       //new DailyOperationSizingWeightValueObject(0, 0, 0),
+                                                                                       0, 
+                                                                                       0, 
+                                                                                       0,
                                                                                        0,
                                                                                        0,
                                                                                        BeamStatus.ONPROCESS);
                             existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
 
-                            var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
+                            //var causes = JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(lastDetail.Causes);
                             var newOperationDetail =
-                                    new DailyOperationSizingDetail(Guid.NewGuid(),
-                                                                   new ShiftId(request.SizingDetails.ShiftId.Value),
-                                                                   new OperatorId(request.SizingDetails.OperatorDocumentId.Value),
+                                    new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                   new ShiftId(request.StartShift.Value),
+                                                                   new OperatorId(request.StartOperator.Value),
                                                                    dateTimeOperation,
                                                                    MachineStatus.ONSTART,
                                                                    "-",
-                                                                   new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
+                                                                   //new DailyOperationSizingCauseValueObject(causes.BrokenBeam, causes.MachineTroubled),
+                                                                   lastDetail.BrokenBeam,
+                                                                   lastDetail.MachineTroubled,
                                                                    beamNumber);
                             existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
 

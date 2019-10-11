@@ -1,6 +1,4 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
-using Manufactures.Domain.DailyOperations.Sizing.ValueObjects;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Dtos.Beams;
 using Newtonsoft.Json;
 using System;
@@ -55,13 +53,13 @@ namespace Manufactures.Dtos.DailyOperations.Sizing
             YarnStrands = yarnStrands;
             NeReal = neReal;
             SizingBeamDocuments = new List<DailyOperationSizingBeamDocumentsDto>();
+            SizingDetails = new List<DailyOperationSizingDetailsDto>();
 
             //foreach (var sizingBeamDocument in document.SizingBeamDocuments)
             //{
             //    var sizingBeam = new DailyOperationSizingBeamDocumentDto(sizingBeamDocument.sizin, sizingBeamDocument.Start, sizingBeamDocument.Finish, sizingBeamDocument.Weight, sizingBeamDocument.Bruto, sizingBeamDocument.Theoritical, sizingBeamDocument.PISMeter, sizingBeamDocument.SPU, sizingBeamDocument.SizingBeamStatus);
             //    SizingBeamDocuments.Add(sizingBeam);
             //}
-            SizingDetails = new List<DailyOperationSizingDetailsDto>();
         }
     }
 }

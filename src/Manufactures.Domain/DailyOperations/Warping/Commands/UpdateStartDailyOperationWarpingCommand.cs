@@ -42,11 +42,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public UpdateStartDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.StartDate).NotEmpty();
-            RuleFor(command => command.StartTime).NotEmpty();
-            RuleFor(command => command.StartShift).NotEmpty();
-            RuleFor(command => command.StartOperator).NotEmpty();
-            RuleFor(command => command.WarpingBeamId).NotEmpty();
+            RuleFor(command => command.StartDate).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
+            RuleFor(command => command.StartTime).NotEmpty().WithMessage("Waktu Mulai Harus Diisi");
+            RuleFor(command => command.StartShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(command => command.StartOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(command => command.WarpingBeamId).NotEmpty().WithMessage("No. Beam Warping Harus Diisi");
             RuleFor(command => command.WarpingBeamNumber).NotEmpty();
         }
     }

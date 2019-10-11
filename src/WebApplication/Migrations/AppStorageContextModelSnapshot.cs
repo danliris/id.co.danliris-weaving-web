@@ -253,12 +253,14 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationReachingTyingDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamDocument", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamProduct", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Counter");
+                    b.Property<double>("CounterFinish");
+
+                    b.Property<double>("CounterStart");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -294,21 +296,25 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("SizingBeamStatus");
 
-                    b.Property<string>("Weight");
+                    b.Property<double>("WeightBruto");
+
+                    b.Property<double>("WeightNetto");
+
+                    b.Property<double>("WeightTheoritical");
 
                     b.HasKey("Identity");
 
                     b.HasIndex("DailyOperationSizingDocumentId");
 
-                    b.ToTable("Weaving_DailyOperationSizingBeamDocuments");
+                    b.ToTable("Weaving_DailyOperationSizingBeamProducts");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingDetail", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingHistory", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Causes");
+                    b.Property<int>("BrokenBeam");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -331,6 +337,8 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("MachineStatus");
 
+                    b.Property<int>("MachineTroubled");
+
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
@@ -350,7 +358,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasIndex("DailyOperationSizingDocumentId");
 
-                    b.ToTable("Weaving_DailyOperationSizingDetails");
+                    b.ToTable("Weaving_DailyOperationSizingHistories");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.ReadModels.DailyOperationSizingReadModel", b =>
@@ -460,6 +468,8 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<double?>("WarpingBeamLength");
 
+                    b.Property<int?>("WarpingBeamLengthUOMId");
+
                     b.HasKey("Identity");
 
                     b.HasIndex("DailyOperationWarpingDocumentId");
@@ -559,7 +569,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationWarpingDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.Defects.YarnDefect.ReadModels.YarnDefectReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.Defects.FabricDefect.ReadModels.FabricDefectReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -597,7 +607,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.ToTable("Weaving_YarnDefectDocuments");
+                    b.ToTable("Weaving_FabricDefectDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
@@ -1294,18 +1304,18 @@ namespace DanLiris.Admin.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamDocument", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamProduct", b =>
                 {
                     b.HasOne("Manufactures.Domain.DailyOperations.Sizing.ReadModels.DailyOperationSizingReadModel", "DailyOperationSizingDocument")
-                        .WithMany("SizingBeamDocuments")
+                        .WithMany("SizingBeamProducts")
                         .HasForeignKey("DailyOperationSizingDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingDetail", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingHistory", b =>
                 {
                     b.HasOne("Manufactures.Domain.DailyOperations.Sizing.ReadModels.DailyOperationSizingReadModel", "DailyOperationSizingDocument")
-                        .WithMany("SizingDetails")
+                        .WithMany("SizingHistories")
                         .HasForeignKey("DailyOperationSizingDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
