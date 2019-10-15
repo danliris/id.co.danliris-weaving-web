@@ -41,9 +41,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "BeamsWarping")]
         public List<BeamId> BeamsWarping { get; set; }
-
-        //[JsonProperty(PropertyName = "Details")]
-        //public NewEntryDailyOperationSizingDetailCommand Details { get; set; }
     }
 
     public class NewEntryDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
@@ -61,7 +58,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.YarnStrands).NotEmpty().WithMessage("Helai Benang Beam Warping Tidak Boleh 0");
             RuleFor(validator => validator.EmptyWeight).NotEmpty().WithMessage("Berat Kosong Beam Warping Tidak Boleh 0");
             RuleFor(validator => validator.BeamsWarping).NotEmpty();
-            //RuleFor(validator => validator.Details).SetValidator(new NewEntryDailyOperationSizingDetailCommandValidator());
         }
     }
 }

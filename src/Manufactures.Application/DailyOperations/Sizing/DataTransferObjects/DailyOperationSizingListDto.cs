@@ -1,11 +1,12 @@
-﻿using System;
-using Manufactures.Domain.DailyOperations.Warping;
-using Manufactures.Domain.Shared.ValueObjects;
+﻿using Manufactures.Domain.DailyOperations.Sizing;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
+namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
 {
-    public class DailyOperationWarpingListDto
+    public class DailyOperationSizingListDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
@@ -13,11 +14,14 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeMachine { get; private set; }
 
+        [JsonProperty(PropertyName = "MachineNumber")]
+        public string MachineNumber { get; private set; }
+
         [JsonProperty(PropertyName = "OrderProductionNumber")]
         public string OrderProductionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "ConstructionNumber")]
-        public string ConstructionNumber { get; private set; }
+        [JsonProperty(PropertyName = "FabricConstructionNumber")]
+        public string FabricConstructionNumber { get; private set; }
 
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public int WeavingUnitId { get; private set; }
@@ -25,11 +29,16 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; private set; }
 
-        public DailyOperationWarpingListDto(DailyOperationWarpingDocument document)
+        public DailyOperationSizingListDto(DailyOperationSizingDocument document)
         {
             Id = document.Identity;
             DateTimeMachine = document.DateTimeOperation;
             OperationStatus = document.OperationStatus;
+        }
+
+        public void SetMachineNumber(string machineNumber)
+        {
+            MachineNumber = machineNumber;
         }
 
         public void SetOrderProductionNumber(string orderProductionNumber)
@@ -37,9 +46,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
             OrderProductionNumber = orderProductionNumber;
         }
 
-        public void SetConstructionNumber(string constructionNumber)
+        public void SetFabricConstructionNumber(string fabricConstructionNumber)
         {
-            ConstructionNumber = constructionNumber;
+            FabricConstructionNumber = fabricConstructionNumber;
         }
 
         public void SetWeavingUnitId(int weavingUnitId)

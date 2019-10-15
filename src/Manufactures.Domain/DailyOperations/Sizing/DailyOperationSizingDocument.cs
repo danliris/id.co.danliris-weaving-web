@@ -21,11 +21,24 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public int MachineSpeed { get; private set; }
         public string TexSQ { get; private set; }
         public string Visco { get; private set; }
+        public DateTimeOffset DateTimeOperation { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingHistory> SizingHistories { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, MachineId machineDocumentId, OrderId orderDocumentId, List<BeamId> beamsWarping, double emptyWeight, double yarnStrands, string recipeCode, double neReal, int machineSpeed, string texSQ, string visco, string operationStatus) :base(id)
+        public DailyOperationSizingDocument(Guid id, 
+                                            MachineId machineDocumentId, 
+                                            OrderId orderDocumentId, 
+                                            List<BeamId> beamsWarping, 
+                                            double emptyWeight, 
+                                            double yarnStrands, 
+                                            string recipeCode, 
+                                            double neReal, 
+                                            int machineSpeed, 
+                                            string texSQ, 
+                                            string visco,
+                                            DateTimeOffset datetimeOperation,
+                                            string operationStatus) :base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -38,6 +51,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MachineSpeed = machineSpeed;
             TexSQ = texSQ;
             Visco = visco;
+            DateTimeOperation = datetimeOperation;
             OperationStatus = operationStatus;
             SizingBeamProducts = new List<DailyOperationSizingBeamProduct>();
             SizingHistories = new List<DailyOperationSizingHistory>();
@@ -56,6 +70,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 MachineSpeed = this.MachineSpeed,
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
+                DateTimeOperation = this.DateTimeOperation,
                 OperationStatus = this.OperationStatus,
                 SizingBeamProducts = this.SizingBeamProducts.ToList(),
                 SizingHistories = this.SizingHistories.ToList()
@@ -73,6 +88,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
             this.TexSQ = readModel.TexSQ;
             this.Visco = readModel.Visco;
+            this.DateTimeOperation = readModel.DateTimeOperation;
             this.OperationStatus = readModel.OperationStatus;
             this.SizingBeamProducts = readModel.SizingBeamProducts;
             this.SizingHistories = readModel.SizingHistories;
@@ -155,17 +171,15 @@ namespace Manufactures.Domain.DailyOperations.Sizing
 
             //Update Propertynya
             sizingBeamDocument.SetSizingBeamId(beamDocument.SizingBeamId);
-            sizingBeamDocument.SetDateTimeBeamDocument(beamDocument.DateTimeBeamDocument);
-            //sizingBeamDocument.SetCounter(JsonConvert.DeserializeObject<DailyOperationSizingCounterValueObject>(beamDocument.Counter));
-            sizingBeamDocument.SetCounterStart(beamDocument.CounterStart);
-            sizingBeamDocument.SetCounterFinish(beamDocument.CounterFinish);
-            //sizingBeamDocument.SetWeight(JsonConvert.DeserializeObject<DailyOperationSizingWeightValueObject>(beamDocument.Weight));
-            sizingBeamDocument.SetWeightNetto(beamDocument.WeightNetto);
-            sizingBeamDocument.SetWeightBruto(beamDocument.WeightBruto);
-            sizingBeamDocument.SetWeightTheoritical(beamDocument.WeightTheoritical);
-            sizingBeamDocument.SetPISMeter(beamDocument.PISMeter);
-            sizingBeamDocument.SetSPU(beamDocument.SPU);
-            sizingBeamDocument.SetSizingBeamStatus(beamDocument.SizingBeamStatus);
+            sizingBeamDocument.SetLatestDateTimeBeamProduct(beamDocument.LatestDateTimeBeamProduct);
+            sizingBeamDocument.SetCounterStart(beamDocument.CounterStart ??0);
+            sizingBeamDocument.SetCounterFinish(beamDocument.CounterFinish ?? 0);
+            sizingBeamDocument.SetWeightNetto(beamDocument.WeightNetto ?? 0);
+            sizingBeamDocument.SetWeightBruto(beamDocument.WeightBruto ?? 0);
+            sizingBeamDocument.SetWeightTheoritical(beamDocument.WeightTheoritical ?? 0);
+            sizingBeamDocument.SetPISMeter(beamDocument.PISMeter ?? 0);
+            sizingBeamDocument.SetSPU(beamDocument.SPU ?? 0);
+            sizingBeamDocument.SetSizingBeamStatus(beamDocument.BeamStatus);
 
             sizingBeamDocuments[index] = sizingBeamDocument;
             SizingBeamProducts = sizingBeamDocuments;
@@ -232,6 +246,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             Visco = visco;
             ReadModel.Visco = visco;
             MarkModified();
+        }
+
+        public void SetDateTimeOperation(DateTimeOffset value)
+        {
+            if (!DateTimeOperation.Equals(value))
+            {
+                DateTimeOperation = value;
+                ReadModel.DateTimeOperation = DateTimeOperation;
+
+                MarkModified();
+            }
         }
 
         public void SetOperationStatus(string operationStatus)

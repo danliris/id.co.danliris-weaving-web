@@ -44,6 +44,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
             }
 
+            var year = request.PreparationDate.Year;
+            var month = request.PreparationDate.Month;
+            var day = request.PreparationDate.Day;
+            var hour = request.PreparationTime.Hours;
+            var minutes = request.PreparationTime.Minutes;
+            var seconds = request.PreparationTime.Seconds;
+            var dateTimeOperation =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
             var dailyOperationSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
                                                     request.MachineDocumentId,
@@ -56,16 +65,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     0,
                                                     "0",
                                                     "0",
+                                                    dateTimeOperation,
                                                     OperationStatus.ONPROCESS);
-
-            var year = request.PreparationDate.Year;
-            var month = request.PreparationDate.Month;
-            var day = request.PreparationDate.Day;
-            var hour = request.PreparationTime.Hours;
-            var minutes = request.PreparationTime.Minutes;
-            var seconds = request.PreparationTime.Seconds;
-            var dateTimeOperation =
-                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             var newOperationDetail =
                     new DailyOperationSizingHistory(Guid.NewGuid(),
@@ -74,7 +75,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    dateTimeOperation,
                                                    MachineStatus.ONENTRY,
                                                    "-",
-                                                   //new DailyOperationSizingCauseValueObject("0","0"),
                                                    0,
                                                    0,
                                                    " ");

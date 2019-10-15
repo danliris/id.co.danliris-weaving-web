@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Application.DailyOperations.Warping.DTOs
+namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
 {
     public class DailyOperationWarpingHistoryDto
     {

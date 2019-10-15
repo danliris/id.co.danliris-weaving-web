@@ -45,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                .Include(b => b.SizingBeamProducts)
                                                                .Where(sizingDoc => sizingDoc.Identity.Equals(request.Id));
             var existingDailyOperation = _dailyOperationSizingDocumentRepository.Find(query).FirstOrDefault();
-            var existingBeamdocuments = existingDailyOperation.SizingBeamProducts.OrderByDescending(b => b.DateTimeBeamDocument);
+            var existingBeamdocuments = existingDailyOperation.SizingBeamProducts.OrderByDescending(b => b.LatestDateTimeBeamProduct);
             var lastBeamDocument = existingBeamdocuments.FirstOrDefault();
             var existingDetails = existingDailyOperation.SizingHistories.OrderByDescending(e => e.DateTimeMachine);
             var lastDetail = existingDetails.FirstOrDefault();
@@ -54,7 +54,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var countBeamStatus =
                 existingDailyOperation
                     .SizingBeamProducts
-                    .Where(e => e.SizingBeamStatus == BeamStatus.ONPROCESS)
+                    .Where(e => e.BeamStatus == BeamStatus.ONPROCESS)
                     .Count();
 
             if (countBeamStatus != 0)

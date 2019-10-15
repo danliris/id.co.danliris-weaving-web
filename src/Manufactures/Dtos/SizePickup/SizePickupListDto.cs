@@ -1,5 +1,4 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
-using Manufactures.Dtos.DailyOperations.Sizing;
 using Newtonsoft.Json;
 using System;
 
