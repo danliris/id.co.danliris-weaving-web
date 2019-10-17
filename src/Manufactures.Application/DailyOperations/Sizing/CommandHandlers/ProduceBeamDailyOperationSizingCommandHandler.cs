@@ -115,8 +115,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         //Set Detail Value on Daily Operation Sizing Detail
                         var newOperationDetail =
                                 new DailyOperationSizingHistory(Guid.NewGuid(),
-                                                               new ShiftId(request.ProduceBeamShift.Value),
-                                                               new OperatorId(request.ProduceBeamOperator.Value),
+                                                               request.ProduceBeamShift,
+                                                               request.ProduceBeamOperator,
                                                                dateTimeOperation,
                                                                MachineStatus.ONCOMPLETE,
                                                                "-",
