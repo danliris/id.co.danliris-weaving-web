@@ -110,7 +110,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    request.PISMeter,
                                                                                    spu,
                                                                                    BeamStatus.ROLLEDUP);
-                        existingDailyOperation.UpdateDailyOperationSizingBeamDocument(updateBeamDocument);
+                        existingDailyOperation.UpdateDailyOperationSizingBeamProduct(updateBeamDocument);
 
                         //Set Detail Value on Daily Operation Sizing Detail
                         var newOperationDetail =
@@ -123,7 +123,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                lastDetail.BrokenBeam,
                                                                lastDetail.MachineTroubled,
                                                                lastDetail.SizingBeamNumber);
-                        existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
+                        existingDailyOperation.AddDailyOperationSizingHistory(newOperationDetail);
 
                         //Set YarnStrands Value on Master Beam
                         var beamQuery = _beamDocumentRepository

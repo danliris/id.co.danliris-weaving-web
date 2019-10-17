@@ -109,7 +109,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    lastDetail.MachineTroubled,
                                                                    lastDetail.SizingBeamNumber);
 
-                        existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
+                        existingDailyOperation.AddDailyOperationSizingHistory(newOperation);
 
                         await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                         _storage.Save();

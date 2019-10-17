@@ -79,7 +79,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    0,
                                                    " ");
 
-            dailyOperationSizingDocument.AddDailyOperationSizingDetail(newOperationDetail);
+            dailyOperationSizingDocument.AddDailyOperationSizingHistory(newOperationDetail);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
 

@@ -106,7 +106,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                    0,
                                                                                    0,
                                                                                    BeamStatus.ONPROCESS);
-                        existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
+                        existingDailyOperation.AddDailyOperationSizingBeamProduct(newBeamDocument);
                         
                         var newOperationDetail =
                                 new DailyOperationSizingHistory(Guid.NewGuid(),
@@ -118,7 +118,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                lastDetail.BrokenBeam,
                                                                lastDetail.MachineTroubled,
                                                                sizingBeamNumber);
-                        existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
+                        existingDailyOperation.AddDailyOperationSizingHistory(newOperationDetail);
 
                         await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                         _storage.Save();
@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                                        0,
                                                                                        0,
                                                                                        BeamStatus.ONPROCESS);
-                            existingDailyOperation.AddDailyOperationSizingBeamDocument(newBeamDocument);
+                            existingDailyOperation.AddDailyOperationSizingBeamProduct(newBeamDocument);
                             
                             var newOperationDetail =
                                     new DailyOperationSizingHistory(Guid.NewGuid(),
@@ -155,7 +155,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                    lastDetail.BrokenBeam,
                                                                    lastDetail.MachineTroubled,
                                                                    sizingBeamNumber);
-                            existingDailyOperation.AddDailyOperationSizingDetail(newOperationDetail);
+                            existingDailyOperation.AddDailyOperationSizingHistory(newOperationDetail);
 
                             await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
                             _storage.Save();

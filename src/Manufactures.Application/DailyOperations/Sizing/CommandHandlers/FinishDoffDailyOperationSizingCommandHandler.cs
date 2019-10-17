@@ -136,7 +136,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                lastDetail.MachineTroubled,
                                                                "");
 
-                    existingDailyOperation.AddDailyOperationSizingDetail(newOperation);
+                    existingDailyOperation.AddDailyOperationSizingHistory(newOperation);
 
                     await _dailyOperationSizingDocumentRepository.Update(existingDailyOperation);
 
