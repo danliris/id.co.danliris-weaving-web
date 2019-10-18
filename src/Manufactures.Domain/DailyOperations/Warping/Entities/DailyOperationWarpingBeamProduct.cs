@@ -36,37 +36,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
         }
 
-        //public DailyOperationWarpingBeamProduct(Guid identity, 
-        //                                        int brokenThreadsCause, 
-        //                                        int coneDeficient) : base(identity)
-        //{
-        //    Identity = identity;
-        //    BrokenThreadsCause = brokenThreadsCause;
-        //    ConeDeficient = coneDeficient;
-        //}
-
-        //public DailyOperationWarpingBeamProduct(Guid identity, 
-        //                                        int looseThreadsAmount, 
-        //                                        int rightLooseCreel, 
-        //                                        int leftLooseCreel) : base(identity)
-        //{
-        //    LooseThreadsAmount = looseThreadsAmount;
-        //    RightLooseCreel = rightLooseCreel;
-        //    LeftLooseCreel = leftLooseCreel;
-        //}
-
-        //public DailyOperationWarpingBeamProduct(Guid identity, 
-        //                                        double warpingBeamLength, 
-        //                                        int tention, 
-        //                                        int machineSpeed, 
-        //                                        double pressRoll) : base(identity)
-        //{
-        //    WarpingBeamLength = warpingBeamLength;
-        //    Tention = tention;
-        //    MachineSpeed = machineSpeed;
-        //    PressRoll = pressRoll;
-        //}
-
         public void SetBrokenThreadsCause(int value)
         {
             if (BrokenThreadsCause != value)

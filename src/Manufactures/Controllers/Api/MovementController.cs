@@ -133,7 +133,7 @@ namespace Manufactures.Controllers.Api
             return Ok();
         }
 
-        [HttpGet("beam")]
+        [HttpGet("beam-visualization")]
         public async Task<IActionResult> GetBeamLoom(int page = 1,
                                            int size = 25,
                                            string order = "{}",

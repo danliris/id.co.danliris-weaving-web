@@ -20,6 +20,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public int? MachineSpeed { get; internal set; }
         public string TexSQ { get; internal set; }
         public string Visco { get; internal set; }
+        public DateTimeOffset DateTimeOperation { get; internal set; }
         public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; internal set; }
         public List<DailyOperationSizingHistory> SizingHistories { get; internal set; }

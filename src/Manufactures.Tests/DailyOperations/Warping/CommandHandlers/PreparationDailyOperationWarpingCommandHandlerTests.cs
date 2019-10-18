@@ -1,6 +1,7 @@
 using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Application.DailyOperations.Warping.CommandHandlers;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
@@ -16,19 +17,17 @@ using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 {
-    public class PreparationWarpingOperationCommandHandlerTests : IDisposable
+    public class PreparationDailyOperationWarpingCommandHandlerTests : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockWarpingOperationRepo;
 
-
-        public PreparationWarpingOperationCommandHandlerTests()
+        public PreparationDailyOperationWarpingCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
-            this.mockStorage.Setup(x => x.Save());
 
             this.mockWarpingOperationRepo =
                 this.mockRepository.Create<IDailyOperationWarpingRepository>();
@@ -82,6 +81,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             mockWarpingOperationRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationWarpingDocument>());
+            this.mockStorage.Setup(x => x.Save());
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
@@ -108,28 +108,48 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
 
             //Instantiate new Object
-            var materialTypeId = new MaterialTypeId(Guid.NewGuid());
-            var operatorId = new OperatorId(Guid.NewGuid());
-            var shiftId = new ShiftId(Guid.NewGuid());
+            var preparationOrder = new OrderId(Guid.NewGuid());
+            var preparationMaterialType = new MaterialTypeId(Guid.NewGuid());
+            var amountOfCones = 10;
+            var colourOfCone = "Red";
+            var preparationDate = DateTimeOffset.UtcNow;
+            var preparationTime = TimeSpan.Parse("01:00");
+            var preparationShift = new ShiftId(Guid.NewGuid());
+            var preparationOperator = new OperatorId(Guid.NewGuid());
+
+            //Add Existing Warping Document
+            var warpingId = Guid.NewGuid();
+            DailyOperationWarpingDocument existingWarpingDocument =
+                new DailyOperationWarpingDocument
+                (
+                    warpingId,
+                    preparationOrder,
+                    preparationMaterialType,
+                    amountOfCones,
+                    colourOfCone,
+                    preparationDate,
+                    OperationStatus.ONPROCESS
+
+                );
 
             //Create new preparation object
             PreparationDailyOperationWarpingCommand request =
                 new PreparationDailyOperationWarpingCommand
                 {
-                    PreparationMaterialType = materialTypeId,
-                    AmountOfCones = 10,
-                    ColourOfCone = "Red",
-                    PreparationDate = DateTimeOffset.UtcNow,
-                    PreparationTime = TimeSpan.Parse("01:00"),
-                    PreparationOperator = operatorId,
-                    PreparationShift = shiftId,
-                    PreparationOrder = new OrderId(Guid.NewGuid())
+                    PreparationOrder = preparationOrder,
+                    PreparationMaterialType = preparationMaterialType,
+                    AmountOfCones = amountOfCones,
+                    ColourOfCone = colourOfCone,
+                    PreparationDate = preparationDate,
+                    PreparationTime = preparationTime,
+                    PreparationShift = preparationShift,
+                    PreparationOperator = preparationOperator,
                 };
 
             //Setup mock object result for beam repository
             mockWarpingOperationRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
-                .Returns(new List<DailyOperationWarpingDocument>());
+                .Returns(new List<DailyOperationWarpingDocument>() { existingWarpingDocument });
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;

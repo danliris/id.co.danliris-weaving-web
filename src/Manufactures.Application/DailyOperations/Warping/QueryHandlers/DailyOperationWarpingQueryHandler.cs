@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
-using Manufactures.Application.DailyOperations.Warping.DTOs;
-using Manufactures.Application.Helpers;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
@@ -100,7 +99,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var weavingUnit = OrderDocument.UnitId.Value;
 
                 //Set Another Properties with Value
-                operationResult.SetOrderNumber(orderNumber);
+                operationResult.SetOrderProductionNumber(orderNumber);
                 operationResult.SetConstructionNumber(constructionNumber);
                 operationResult.SetWeavingUnitId(weavingUnit);
 
@@ -113,7 +112,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         public async Task<DailyOperationWarpingListDto> GetById(Guid id)
 
         {
-            //Prepare daily operation warping
+            //Prepare Daily Operation Warping
             var query =
                 _dailyOperationWarpingRepository
                     .Query
@@ -122,7 +121,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .Where(doc => doc.Identity.Equals(id))
                     .OrderByDescending(x => x.CreatedDate);
 
-            //Request from query
+            //Get Daily Operation Sizing from Query
             await Task.Yield();
             var dailyOperationWarpingDocument =
                    _dailyOperationWarpingRepository
@@ -163,10 +162,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
             double totalWarpingBeamLength = 0;
             result.SetConstructionNumber(constructionNumber);
-            result.SetMaterialName(materialName);
+            result.SetMaterialType(materialName);
             //result.SetOperator(operatorDocument);
-            result.SetOrderDocumentId(dailyOperationWarpingDocument.OrderDocumentId);
-            result.SetOrderNumber(orderDocument.OrderNumber);
+            //result.SetOrderDocumentId(dailyOperationWarpingDocument.OrderDocumentId);
+            result.SetOrderProductionNumber(orderDocument.OrderNumber);
             result.SetWeavingUnitId(orderDocument.UnitId.Value);
 
             // Add Beam Product to DTO
@@ -181,7 +180,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var beamWarping = new DailyOperationWarpingBeamProductDto(beamProduct, beam);
 
                 await Task.Yield();
-                result.AddDailyOperationBeamProducts(beamWarping);
+                result.AddDailyOperationWarpingBeamProducts(beamWarping);
             }
             result.DailyOperationWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct).ToList();
 

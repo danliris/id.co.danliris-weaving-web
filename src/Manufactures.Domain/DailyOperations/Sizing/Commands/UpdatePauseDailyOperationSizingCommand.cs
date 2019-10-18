@@ -3,8 +3,6 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
@@ -12,9 +10,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
-
-        //[JsonProperty(PropertyName = "SizingDetails")]
-        //public UpdatePauseDailyOperationSizingDetailCommand Details { get; set; }
 
         [JsonProperty(PropertyName = "PauseDate")]
         public DateTimeOffset PauseDate { get; set; }
@@ -48,15 +43,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UpdatePauseDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            //RuleFor(validator => validator.Details).SetValidator(new UpdatePauseDailyOperationSizingDetailCommandValidator());
-            RuleFor(command => command.PauseDate).NotEmpty().WithMessage("Tanggal Berhenti Harus Diisi");
-            RuleFor(command => command.PauseTime).NotEmpty().WithMessage("Waktu Berhenti Harus Diisi");
-            RuleFor(command => command.PauseShift).NotEmpty().WithMessage("Shift Harus Diisi");
-            RuleFor(command => command.PauseOperator).NotEmpty().WithMessage("Operator Harus Diisi");
-            //RuleFor(command => command.BrokenBeam).NotEmpty().Unless(command => string.IsNullOrEmpty(command.MachineTroubled)).WithMessage("Penyebab Berhenti Harus Diisi");
-            //RuleFor(command => command.BrokenBeam).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
-            //RuleFor(command => command.MachineTroubled).NotEmpty().Unless(command => string.IsNullOrEmpty(command.BrokenBeam)).WithMessage("Penyebab Berhenti Harus Diisi");
-            //RuleFor(command => command.MachineTroubled).NotEmpty().WithMessage("Penyebab Berhenti Harus Diisi");
+            RuleFor(validator => validator.PauseDate).NotEmpty().WithMessage("Tanggal Berhenti Harus Diisi");
+            RuleFor(validator => validator.PauseTime).NotEmpty().WithMessage("Waktu Berhenti Harus Diisi");
+            RuleFor(validator => validator.PauseShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(validator => validator.PauseOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

@@ -1,17 +1,16 @@
 ﻿using Manufactures.Domain.DailyOperations.Warping;
-using Manufactures.Domain.Operators;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Application.DailyOperations.Warping.DTOs
+namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
 {
     public class DailyOperationWarpingByIdDto : DailyOperationWarpingListDto
     {
-        [JsonProperty(PropertyName = "OrderDocumentId")]
-        public Guid OrderDocumentId { get; private set; }
+        //[JsonProperty(PropertyName = "OrderDocumentId")]
+        //public Guid OrderDocumentId { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; private set; }
@@ -22,11 +21,11 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
 
-        [JsonProperty(PropertyName = "OperatorName")]
-        public string OperatorName { get; private set; }
+        //[JsonProperty(PropertyName = "OperatorName")]
+        //public string OperatorName { get; private set; }
 
-        [JsonProperty(PropertyName = "OperatorGroup")]
-        public string OperatorGroup { get; private set; }
+        //[JsonProperty(PropertyName = "OperatorGroup")]
+        //public string OperatorGroup { get; private set; }
 
         [JsonProperty(PropertyName = "TotalWarpingBeamLength")]
         public double TotalWarpingBeamLength { get; private set; }
@@ -43,7 +42,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
         {
-            OrderDocumentId = document.OrderDocumentId.Value;
+            //OrderDocumentId = document.OrderDocumentId.Value;
             AmountOfCones = document.AmountOfCones;
             ColourOfCones = document.ColourOfCone;
             DailyOperationWarpingBeamProducts = new List<DailyOperationWarpingBeamProductDto>();
@@ -55,43 +54,43 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         //    WeavingUnitId = value;
         //}
 
-        public void SetOrderDocumentId(OrderId value)
+        //public void SetOrderDocumentId(OrderId value)
+        //{
+        //    OrderDocumentId = value.Value;
+        //}
+
+        //public void SetOperator(OperatorDocument value)
+        //{
+        //    OperatorName = value.CoreAccount.Name;
+        //    OperatorGroup = value.Group;
+        //}
+
+        public void SetMaterialType(string materialType)
         {
-            OrderDocumentId = value.Value;
+            MaterialType = materialType;
         }
 
-        public void SetOperator(OperatorDocument value)
+        public void SetTotalWarpingBeamLength(double totalWarpingBeamLength)
         {
-            OperatorName = value.CoreAccount.Name;
-            OperatorGroup = value.Group;
+            TotalWarpingBeamLength = totalWarpingBeamLength;
         }
 
-        public void SetMaterialName(string value)
+        public void SetCountWarpingBeamProducts(double countWarpingBeamProducts)
         {
-            MaterialType = value;
+            CountWarpingBeamProducts = countWarpingBeamProducts;
         }
 
-        public void SetTotalWarpingBeamLength(double value)
+        public void AddDailyOperationWarpingBeamProducts(DailyOperationWarpingBeamProductDto beamProduct)
         {
-            TotalWarpingBeamLength = value;
-        }
-
-        public void SetCountWarpingBeamProducts(double value)
-        {
-            CountWarpingBeamProducts = value;
-        }
-
-        public void AddDailyOperationBeamProducts(DailyOperationWarpingBeamProductDto value)
-        {
-            if (!DailyOperationWarpingBeamProducts.Any(product => product.Id.Equals(value.Id)))
+            if (!DailyOperationWarpingBeamProducts.Any(product => product.Id.Equals(beamProduct.Id)))
             {
-                DailyOperationWarpingBeamProducts.Add(value);
+                DailyOperationWarpingBeamProducts.Add(beamProduct);
             }
         }
 
-        public void AddDailyOperationWarpingHistories(DailyOperationWarpingHistoryDto value)
+        public void AddDailyOperationWarpingHistories(DailyOperationWarpingHistoryDto history)
         {
-            DailyOperationWarpingHistories.Add(value);
+            DailyOperationWarpingHistories.Add(history);
         }
     }
 }

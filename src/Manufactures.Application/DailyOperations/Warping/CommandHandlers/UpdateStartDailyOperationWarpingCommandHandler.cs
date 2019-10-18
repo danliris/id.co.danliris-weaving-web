@@ -43,7 +43,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .Find(warpingQuery)
                     .FirstOrDefault();
 
-            //Get Daily Operation Detail
+            //Get Daily Operation History
             var existingDailyOperationWarpingHistories = existingDailyOperationWarpingDocument
                 .WarpingHistories
                 .OrderByDescending(detail => detail.DateTimeMachine);

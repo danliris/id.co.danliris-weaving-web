@@ -8,26 +8,24 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
     public class DailyOperationSizingBeamProduct : EntityBase<DailyOperationSizingBeamProduct>
     {
         public Guid SizingBeamId { get; private set; }
+        
+        public double? CounterStart { get; private set; }
 
-        public DateTimeOffset DateTimeBeamDocument { get; private set; }
+        public double? CounterFinish { get; private set; }
 
-        //public string Counter { get; private set; }
-        public double CounterStart { get; private set; }
+        public double? WeightNetto { get; private set; }
 
-        public double CounterFinish { get; private set; }
+        public double? WeightBruto { get; private set; }
 
-        //public string Weight { get; private set; }
-        public double WeightNetto { get; private set; }
+        public double? WeightTheoritical { get; private set; }
 
-        public double WeightBruto { get; private set; }
+        public double? PISMeter { get; private set; }
 
-        public double WeightTheoritical { get; private set; }
+        public double? SPU { get; private set; }
 
-        public double PISMeter { get; private set; }
+        public string BeamStatus { get; private set; }
 
-        public double SPU { get; private set; }
-
-        public string SizingBeamStatus { get; private set; }
+        public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
 
         public Guid DailyOperationSizingDocumentId { get; set; }
 
@@ -38,75 +36,44 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         }
 
         public DailyOperationSizingBeamProduct(Guid identity,
-                                                BeamId sizingBeamId,
-                                                DateTimeOffset dateTimeBeamDocument,
-                                                //DailyOperationSizingCounterValueObject counter,
-                                                double start,
-                                                double finish,
-                                                //DailyOperationSizingWeightValueObject weight,
-                                                double netto,
-                                                double bruto,
-                                                double theoritical,
-                                                double pisMeter,
-                                                double spu,
-                                                string sizingBeamStatus) : this(identity)
+                                               BeamId sizingBeamId,
+                                               DateTimeOffset latestDateTimeBeamProduct,
+                                               double counterStart,
+                                               double counterFinish,
+                                               double weightNetto,
+                                               double weightBruto,
+                                               double weightTheoritical,
+                                               double pisMeter,
+                                               double spu,
+                                               string beamStatus) : base(identity)
         {
             SizingBeamId = sizingBeamId.Value;
-            DateTimeBeamDocument = dateTimeBeamDocument;
-            //Counter = counter.Serialize();
-            CounterStart = start;
-            CounterFinish = finish;
-            //Weight = weight.Serialize();
-            WeightNetto = netto;
-            WeightBruto = bruto;
-            WeightTheoritical = theoritical;
+            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+            CounterStart = counterStart;
+            CounterFinish = counterFinish;
+            WeightNetto = weightNetto;
+            WeightBruto = weightBruto;
+            WeightTheoritical = weightTheoritical;
             PISMeter = pisMeter;
             SPU = spu;
-            SizingBeamStatus = sizingBeamStatus;
-        }
-        public DailyOperationSizingBeamProduct(Guid identity,
-                                                DateTimeOffset dateTimeBeamDocument,
-                                                //DailyOperationSizingCounterValueObject counter,
-                                                double start,
-                                                double finish,
-                                                //DailyOperationSizingWeightValueObject weight,
-                                                double netto,
-                                                double bruto,
-                                                double theoritical,
-                                                double pisMeter,
-                                                double spu,
-                                                string sizingBeamStatus) : this(identity)
-        {
-            DateTimeBeamDocument = dateTimeBeamDocument;
-            //Counter = counter.Serialize();
-            CounterStart = start;
-            CounterFinish = finish;
-            //Weight = weight.Serialize();
-            WeightNetto = netto;
-            WeightBruto = bruto;
-            WeightTheoritical = theoritical;
-            PISMeter = pisMeter;
-            SPU = spu;
-            SizingBeamStatus = sizingBeamStatus;
+            BeamStatus = beamStatus;
         }
 
         public void SetSizingBeamId(Guid sizingBeamId)
         {
-            SizingBeamId = sizingBeamId;
-            MarkModified();
+            if (!SizingBeamId.Equals(sizingBeamId))
+            {
+                SizingBeamId = sizingBeamId;
+
+                MarkModified();
+            }
         }
 
-        public void SetDateTimeBeamDocument(DateTimeOffset dateTimeBeamDocument)
+        public void SetLatestDateTimeBeamProduct(DateTimeOffset latestDateTimeBeamProduct)
         {
-            DateTimeBeamDocument = dateTimeBeamDocument;
+            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             MarkModified();
         }
-
-        //public void SetCounter(DailyOperationSizingCounterValueObject counter)
-        //{
-        //    Counter = counter.Serialize();
-        //    MarkModified();
-        //}
 
         public void SetCounterStart(double counterStart)
         {
@@ -119,12 +86,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             CounterFinish = counterFinish;
             MarkModified();
         }
-
-        //public void SetWeight(DailyOperationSizingWeightValueObject weight)
-        //{
-        //    Weight = weight.Serialize();
-        //    MarkModified();
-        //}
 
         public void SetWeightNetto(double weightNetto)
         {
@@ -156,9 +117,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetSizingBeamStatus(string sizingBeamStatus)
+        public void SetSizingBeamStatus(string beamStatus)
         {
-            SizingBeamStatus = sizingBeamStatus;
+            BeamStatus = beamStatus;
             MarkModified();
         }
 

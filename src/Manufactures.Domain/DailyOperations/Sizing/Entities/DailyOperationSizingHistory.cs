@@ -16,8 +16,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public string MachineStatus { get; private set; }
 
         public string Information { get; private set; }
-
-        //public string Causes { get; private set; }
         public int BrokenBeam { get; private set; }
 
         public int MachineTroubled { get; private set; }
@@ -49,7 +47,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             Information = information;
             BrokenBeam = brokenBeam;
             MachineTroubled = machineTroubled;
-            //Causes = causes.Serialize();
             SizingBeamNumber = sizingBeamNumber;
         }
 
@@ -97,12 +94,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MachineTroubled= machineTroubled;
             MarkModified();
         }
-
-        //public void SetCauses(DailyOperationSizingCauseValueObject causes)
-        //{
-        //    Causes = causes.Serialize();
-        //    MarkModified();
-        //}
 
         public void SetSizingBeamNumber(string sizingBeamNumber)
         {

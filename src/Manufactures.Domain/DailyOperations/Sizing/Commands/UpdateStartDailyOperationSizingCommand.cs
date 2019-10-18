@@ -3,8 +3,6 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
@@ -13,20 +11,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        //[JsonProperty(PropertyName = "SizingBeamDocuments")]
-        //public UpdateStartDailyOperationSizingBeamDocumentCommand SizingBeamDocuments { get; set; }
-
         [JsonProperty(PropertyName = "SizingBeamId")]
         public BeamId SizingBeamId { get; set; }
 
         [JsonProperty(PropertyName = "CounterStart")]
         public double CounterStart { get; set; }
-
-        //[JsonProperty(PropertyName = "Finish")]
-        //public double Finish { get; set; }
-
-        //[JsonProperty(PropertyName = "SizingDetails")]
-        //public UpdateStartDailyOperationSizingDetailCommand SizingDetails { get; set; }
 
         [JsonProperty(PropertyName = "StartDate")]
         public DateTimeOffset StartDate { get; set; }
@@ -51,15 +40,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public AddNewDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            //RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new UpdateStartDailyOperationSizingBeamDocumentCommandValidator());
             RuleFor(validator => validator.SizingBeamId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");
-            RuleFor(validator => validator.CounterStart >= 0);
-            //RuleFor(validator => validator.Finish).NotEmpty().Unless(validator => validator.Start >= 0);
-            //RuleFor(validator => validator.SizingDetails).SetValidator(new UpdateStartDailyOperationSizingDetailCommandValidator());
-            RuleFor(command => command.StartDate).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
-            RuleFor(command => command.StartTime).NotEmpty().WithMessage("Waktu Mulai Harus Diisi");
-            RuleFor(command => command.StartShift).NotEmpty().WithMessage("Shift Harus Diisi");
-            RuleFor(command => command.StartOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(validator => validator.CounterStart).GreaterThanOrEqualTo(0).WithMessage("Counter Awal Harus Lebih Besar atau Sama Dengan 0");
+            RuleFor(validator => validator.StartDate).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
+            RuleFor(validator => validator.StartTime).NotEmpty().WithMessage("Waktu Mulai Harus Diisi");
+            RuleFor(validator => validator.StartShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(validator => validator.StartOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

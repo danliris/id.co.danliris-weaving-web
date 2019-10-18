@@ -1,20 +1,16 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Application.DailyOperations.Warping;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
-using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Domain.StockCard.Events.Warping;
 using Manufactures.Dtos.Beams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +20,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api

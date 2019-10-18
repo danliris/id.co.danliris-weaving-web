@@ -3,8 +3,6 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 {
@@ -12,9 +10,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
-
-        //[JsonProperty(PropertyName = "SizingDetails")]
-        //public UpdateResumeDailyOperationSizingDetailCommand Details { get; set; }
 
         [JsonProperty(PropertyName = "ResumeDate")]
         public DateTimeOffset ResumeDate { get; set; }
@@ -39,11 +34,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public UpdateResumeDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            //RuleFor(validator => validator.Details).SetValidator(new UpdateResumeDailyOperationSizingDetailCommandValidator());
-            RuleFor(command => command.ResumeDate).NotEmpty().WithMessage("Tanggal Lanjutkan Harus Diisi");
-            RuleFor(command => command.ResumeTime).NotEmpty().WithMessage("Waktu Lanjutkan Harus Diisi");
-            RuleFor(command => command.ResumeShift).NotEmpty().WithMessage("Shift Harus Diisi");
-            RuleFor(command => command.ResumeOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(validator => validator.ResumeDate).NotEmpty().WithMessage("Tanggal Lanjutkan Harus Diisi");
+            RuleFor(validator => validator.ResumeTime).NotEmpty().WithMessage("Waktu Lanjutkan Harus Diisi");
+            RuleFor(validator => validator.ResumeShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(validator => validator.ResumeOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

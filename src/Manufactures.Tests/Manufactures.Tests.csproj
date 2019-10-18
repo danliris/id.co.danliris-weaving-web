@@ -18,8 +18,4 @@
     <ProjectReference Include="..\Manufactures.Application\Manufactures.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DailyOperations\Sizing\Controllers\" />
-  </ItemGroup>
-
 </Project>

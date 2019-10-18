@@ -4,7 +4,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Application.DailyOperations.Warping.DTOs
+namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
 {
     public class DailyOperationWarpingBeamProductDto
     {
@@ -44,8 +44,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
         [JsonProperty(PropertyName = "PressRoll")]
         public double PressRoll { get; }
 
-        [JsonProperty(PropertyName = "BeamStatus")]
-        public string BeamStatus { get; }
+        [JsonProperty(PropertyName = "WarpingBeamStatus")]
+        public string WarpingBeamStatus { get; }
 
         public DailyOperationWarpingBeamProductDto(DailyOperationWarpingBeamProduct beamProduct, BeamDocument beamDocument)
         {
@@ -61,7 +61,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DTOs
             Tention = beamProduct.Tention ?? 0;
             MachineSpeed = beamProduct.MachineSpeed ?? 0;
             PressRoll = beamProduct.PressRoll ?? 0;
-            BeamStatus = beamProduct.BeamStatus;
+            WarpingBeamStatus = beamProduct.BeamStatus;
         }
     }
 }
