@@ -68,7 +68,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     dateTimeOperation,
                                                     OperationStatus.ONPROCESS);
 
-            var newOperationDetail =
+            var newOperationHistory =
                     new DailyOperationSizingHistory(Guid.NewGuid(),
                                                    request.PreparationShift,
                                                    request.PreparationOperator,
@@ -79,7 +79,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                    0,
                                                    " ");
 
-            dailyOperationSizingDocument.AddDailyOperationSizingHistory(newOperationDetail);
+            dailyOperationSizingDocument.AddDailyOperationSizingHistory(newOperationHistory);
 
             await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
 
