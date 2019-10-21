@@ -28,6 +28,7 @@ using Manufactures.Domain.StockCard.ReadModels;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
 using Manufactures.Domain.DailyOperations.ReachingTying.ReadModels;
 using Manufactures.Domain.Defects.FabricDefect.ReadModels;
+using Manufactures.Domain.BeamStockMonitoring.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -44,6 +45,15 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(e => e.DefectCode).HasMaxLength(255);
                 etb.Property(e => e.DefectType).HasMaxLength(255);
                 etb.Property(e => e.DefectCategory).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<BeamStockMonitoringReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_BeamStockMonitoringDocuments");
+                etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

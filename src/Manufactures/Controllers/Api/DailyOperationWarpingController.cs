@@ -6,10 +6,12 @@ using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
 using Microsoft.AspNetCore.Authorization;
@@ -367,6 +369,30 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var produceBeamsDailyOperationSizingDocument = await Mediator.Send(command);
+
+            //Get Daily Operation Document Warping
+            var warpingQuery =
+                _dailyOperationWarpingRepository
+                    .Query
+                    .Include(x => x.WarpingHistories)
+                    .Include(x => x.WarpingBeamProducts)
+                    .Where(doc => doc.Identity.Equals(command.Id));
+            var existingDailyOperationWarpingDocument =
+                _dailyOperationWarpingRepository
+                    .Find(warpingQuery)
+                    .FirstOrDefault();
+
+            //Instantiate Beam Stock Command for Sizing
+            var sizingStock = new SizingBeamStockMonitoringCommand
+            {
+                BeamDocumentId = new BeamId(existingDailyOperationWarpingDocument.Identity),
+                SizingEntryDate = command.ProduceBeamsDate,
+                SizingEntryTime = command.ProduceBeamsTime,
+                OrderDocumentId = existingDailyOperationWarpingDocument.OrderDocumentId,
+                SizingLengthStock = command.WarpingBeamLength,
+                LengthUOMId = command.WarpingBeamLengthUOMId
+            };
+            var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 
             return Ok(produceBeamsDailyOperationSizingDocument.Identity);
 
