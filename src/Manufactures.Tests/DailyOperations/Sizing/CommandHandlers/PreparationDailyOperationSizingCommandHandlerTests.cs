@@ -146,8 +146,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     recipeCode, 
                     neReal, 
                     0, 
-                    "0", 
-                    "0", 
+                    0, 
+                    0, 
                     preparationDate, 
                     OperationStatus.ONPROCESS
                  );

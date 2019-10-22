@@ -63,8 +63,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.RecipeCode,
                                                     request.NeReal,
                                                     0,
-                                                    "0",
-                                                    "0",
+                                                    0,
+                                                    0,
                                                     dateTimeOperation,
                                                     OperationStatus.ONPROCESS);
 

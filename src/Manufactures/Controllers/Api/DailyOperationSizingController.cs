@@ -7,6 +7,7 @@ using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
@@ -19,6 +20,7 @@ using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Dtos;
@@ -240,6 +242,38 @@ namespace Manufactures.Controllers.Api
             }
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
+
+            //Get Daily Operation Document Warping
+            var sizingQuery =
+                _dailyOperationSizingRepository
+                    .Query
+                    .Include(x => x.SizingHistories)
+                    .Include(x => x.SizingBeamProducts)
+                    .Where(doc => doc.Identity.Equals(command.Id));
+            var existingDailyOperationSizingDocument =
+                _dailyOperationSizingRepository
+                    .Find(sizingQuery)
+                    .FirstOrDefault();
+
+            //Get Daily Operation Beam Product
+            var existingDailyOperationWarpingBeamProduct =
+                existingDailyOperationSizingDocument
+                    .SizingBeamProducts
+                    .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
+            var lastWarpingBeamProduct =
+                existingDailyOperationWarpingBeamProduct
+                    .FirstOrDefault();
+
+            //Instantiate Beam Stock Command for Sizing
+            var sizingStock = new BeamStockMonitoringCommand
+            {
+                BeamDocumentId = new BeamId(lastWarpingBeamProduct.SizingBeamId),
+                SizingEntryDate = command.ProduceBeamDate,
+                SizingEntryTime = command.ProduceBeamTime,
+                OrderDocumentId = existingDailyOperationSizingDocument.OrderDocumentId,
+                SizingLengthStock = existingDailyOperationSizingDocument.YarnStrands
+            };
+            var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }

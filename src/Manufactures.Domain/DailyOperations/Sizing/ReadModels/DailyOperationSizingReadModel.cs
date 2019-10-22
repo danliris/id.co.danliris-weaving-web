@@ -18,8 +18,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public string RecipeCode { get; internal set; }
         public double NeReal { get; internal set; }
         public int? MachineSpeed { get; internal set; }
-        public string TexSQ { get; internal set; }
-        public string Visco { get; internal set; }
+        public int TexSQ { get; internal set; }
+        public int Visco { get; internal set; }
         public DateTimeOffset DateTimeOperation { get; internal set; }
         public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; internal set; }

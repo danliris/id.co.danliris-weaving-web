@@ -28,7 +28,6 @@ namespace Manufactures.Domain.BeamStockMonitoring
                                            DateTimeOffset sizingEntryDate,
                                            OrderId orderDocumentId,
                                            double sizingLengthStock,
-                                           int lengthUOMId,
                                            int position,
                                            bool loomFinish) : base(id)
         {
@@ -43,7 +42,7 @@ namespace Manufactures.Domain.BeamStockMonitoring
             SizingLengthStock = sizingLengthStock;
             //ReachingLengthStock = reachingLengthStock;
             //LoomLengthStock = loomLengthStock;
-            LengthUOMId = lengthUOMId;
+            //LengthUOMId = lengthUOMId;
             Position = position;
             LoomFinish = loomFinish;
 

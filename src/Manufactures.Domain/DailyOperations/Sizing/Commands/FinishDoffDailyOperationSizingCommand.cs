@@ -17,10 +17,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public int MachineSpeed { get; set; }
 
         [JsonProperty(PropertyName = "TexSQ")]
-        public string TexSQ { get; set; }
+        public int TexSQ { get; set; }
 
         [JsonProperty(PropertyName = "Visco")]
-        public string Visco { get; set; }
+        public int Visco { get; set; }
 
         //[JsonProperty(PropertyName = "SizingDetails")]
         //public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }

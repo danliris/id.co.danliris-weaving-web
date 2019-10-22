@@ -79,8 +79,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -145,8 +145,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow;
             var produceBeamTime = TimeSpan.Parse("01:00");
@@ -206,8 +206,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -272,8 +272,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow;
             var produceBeamTime = TimeSpan.Parse("01:00");
@@ -333,8 +333,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONFINISH;
             var existingSizingDocument =
@@ -399,8 +399,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow;
             var produceBeamTime = TimeSpan.Parse("01:00");
@@ -460,8 +460,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -526,8 +526,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow.AddDays(-1);
             var produceBeamTime = TimeSpan.Parse("01:00");
@@ -587,8 +587,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow.AddMinutes(-1);
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -653,8 +653,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow;
             var produceBeamTime = TimeSpan.Parse("01:00");
@@ -714,8 +714,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -780,8 +780,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Object for New Update Pause Object (Commands)
             var produceBeamMachineSpeed = 1200;
-            var produceBeamTexSQ = "1160";
-            var produceBeamVisco = "40";
+            var produceBeamTexSQ = 1160;
+            var produceBeamVisco = 40;
             var produceBeamOperator = new OperatorId(Guid.NewGuid());
             var produceBeamDate = DateTimeOffset.UtcNow.AddDays(1);
             var produceBeamTime = TimeSpan.Parse("01:00");

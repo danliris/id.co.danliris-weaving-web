@@ -19,8 +19,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public string RecipeCode { get; private set; }
         public double NeReal { get; private set; }
         public int MachineSpeed { get; private set; }
-        public string TexSQ { get; private set; }
-        public string Visco { get; private set; }
+        public int TexSQ { get; private set; }
+        public int Visco { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
@@ -35,8 +35,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                                             string recipeCode, 
                                             double neReal, 
                                             int machineSpeed, 
-                                            string texSQ, 
-                                            string visco,
+                                            int texSQ, 
+                                            int visco,
                                             DateTimeOffset datetimeOperation,
                                             string operationStatus) :base(id)
         {
@@ -234,14 +234,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             MarkModified();
         }
 
-        public void SetTexSQ(string texSQ)
+        public void SetTexSQ(int texSQ)
         {
             TexSQ = texSQ;
             ReadModel.TexSQ = texSQ;
             MarkModified();
         }
 
-        public void SetVisco(string visco)
+        public void SetVisco(int visco)
         {
             Visco = visco;
             ReadModel.Visco = visco;

@@ -370,32 +370,9 @@ namespace Manufactures.Controllers.Api
             command.SetId(documentId);
             var produceBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
-            //Get Daily Operation Document Warping
-            var warpingQuery =
-                _dailyOperationWarpingRepository
-                    .Query
-                    .Include(x => x.WarpingHistories)
-                    .Include(x => x.WarpingBeamProducts)
-                    .Where(doc => doc.Identity.Equals(command.Id));
-            var existingDailyOperationWarpingDocument =
-                _dailyOperationWarpingRepository
-                    .Find(warpingQuery)
-                    .FirstOrDefault();
-
-            //Instantiate Beam Stock Command for Sizing
-            var sizingStock = new SizingBeamStockMonitoringCommand
-            {
-                BeamDocumentId = new BeamId(existingDailyOperationWarpingDocument.Identity),
-                SizingEntryDate = command.ProduceBeamsDate,
-                SizingEntryTime = command.ProduceBeamsTime,
-                OrderDocumentId = existingDailyOperationWarpingDocument.OrderDocumentId,
-                SizingLengthStock = command.WarpingBeamLength,
-                LengthUOMId = command.WarpingBeamLengthUOMId
-            };
-            var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
-
             return Ok(produceBeamsDailyOperationSizingDocument.Identity);
 
+            //Lucky's Work
             //// Sending command to command handler
             //var dailyOperationWarping = await Mediator.Send(command);
 

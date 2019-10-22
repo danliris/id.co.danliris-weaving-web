@@ -11,21 +11,21 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.BeamStockMonitoring.CommandHandlers
 {
-    public class SizingBeamStockMonitoringCommandHandler
-        : ICommandHandler<SizingBeamStockMonitoringCommand, BeamStockMonitoringDocument>
+    public class BeamStockMonitoringCommandHandler
+        : ICommandHandler<BeamStockMonitoringCommand, BeamStockMonitoringDocument>
     {
         private readonly IStorage _storage;
         private readonly IBeamStockMonitoringRepository
             _beamStockMonitoringRepository;
 
-        public SizingBeamStockMonitoringCommandHandler(IStorage storage)
+        public BeamStockMonitoringCommandHandler(IStorage storage)
         {
             _storage = storage;
             _beamStockMonitoringRepository =
                 _storage.GetRepository<IBeamStockMonitoringRepository>();
         }
 
-        public async Task<BeamStockMonitoringDocument> Handle(SizingBeamStockMonitoringCommand request, CancellationToken cancellationToken)
+        public async Task<BeamStockMonitoringDocument> Handle(BeamStockMonitoringCommand request, CancellationToken cancellationToken)
         {
             //Reformat Date Time
             var year = request.SizingEntryDate.Year;
@@ -43,7 +43,6 @@ namespace Manufactures.Application.BeamStockMonitoring.CommandHandlers
                                                               stockSizingDateTime,
                                                               request.OrderDocumentId,
                                                               request.SizingLengthStock,
-                                                              request.LengthUOMId,
                                                               1,
                                                               false);
 

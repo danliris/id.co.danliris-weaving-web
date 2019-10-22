@@ -6,7 +6,7 @@ using System;
 
 namespace Manufactures.Domain.BeamStockMonitoring.Commands
 {
-    public class SizingBeamStockMonitoringCommand : ICommand<BeamStockMonitoringDocument>
+    public class BeamStockMonitoringCommand : ICommand<BeamStockMonitoringDocument>
     {
         [JsonProperty(PropertyName = "BeamDocumentId")]
         public BeamId BeamDocumentId { get; set; }
@@ -23,10 +23,10 @@ namespace Manufactures.Domain.BeamStockMonitoring.Commands
         [JsonProperty(PropertyName = "SizingLengthStock")]
         public double SizingLengthStock { get; set; }
 
-        [JsonProperty(PropertyName = "LengthUOMId")]
-        public int LengthUOMId { get; set; }
+        //[JsonProperty(PropertyName = "LengthUOMId")]
+        //public int LengthUOMId { get; set; }
     }
-    public class SizingBeamStockMonitoringCommandValidator : AbstractValidator<SizingBeamStockMonitoringCommand>
+    public class SizingBeamStockMonitoringCommandValidator : AbstractValidator<BeamStockMonitoringCommand>
     {
         public SizingBeamStockMonitoringCommandValidator()
         {
@@ -35,7 +35,7 @@ namespace Manufactures.Domain.BeamStockMonitoring.Commands
             RuleFor(command => command.SizingEntryTime).NotEmpty();
             RuleFor(command => command.OrderDocumentId).NotEmpty();
             RuleFor(command => command.SizingLengthStock).NotEmpty();
-            RuleFor(command => command.LengthUOMId).NotEmpty();
+            //RuleFor(command => command.LengthUOMId).NotEmpty();
         }
     }
 }
