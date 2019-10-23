@@ -54,6 +54,18 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 .WarpingBeamProducts
                 .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
+            
+            //Validation for Beam Id
+            var countBeamId =
+                existingDailyOperationWarpingDocument
+                    .WarpingBeamProducts
+                    .Where(o => o.WarpingBeamId.Equals(request.WarpingBeamId.Value))
+                    .Count();
+
+            if (!countBeamId.Equals(0))
+            {
+                throw Validator.ErrorValidation(("WarpingBeamId", "No. Beam Warping ini Sudah Digunakan dalam Operasi Harian Warping Ini"));
+            }
 
             //Validation for Beam Status
             var countBeamStatus =

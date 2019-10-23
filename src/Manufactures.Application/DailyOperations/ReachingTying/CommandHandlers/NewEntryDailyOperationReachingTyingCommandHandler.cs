@@ -1,6 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.ReachingTying;
 using Manufactures.Domain.DailyOperations.ReachingTying.Command;
 using Manufactures.Domain.DailyOperations.ReachingTying.Entities;
@@ -17,15 +18,19 @@ namespace Manufactures.Application.DailyOperations.ReachingTying.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingTyingRepository
             _dailyOperationReachingDocumentRepository;
+        private readonly IBeamStockMonitoringRepository
+             _beamStockMonitoringRepository;
 
         public NewEntryDailyOperationReachingTyingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingDocumentRepository =
                 _storage.GetRepository<IDailyOperationReachingTyingRepository>();
+            _beamStockMonitoringRepository =
+                _storage.GetRepository<IBeamStockMonitoringRepository>();
         }
 
-        public async Task<DailyOperationReachingTyingDocument> 
+        public async Task<DailyOperationReachingTyingDocument>
             Handle(NewEntryDailyOperationReachingTyingCommand request, CancellationToken cancellationToken)
         {
             var dailyOperationReachingDocument =

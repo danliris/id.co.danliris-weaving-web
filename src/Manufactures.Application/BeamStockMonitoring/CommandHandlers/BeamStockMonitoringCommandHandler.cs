@@ -28,12 +28,12 @@ namespace Manufactures.Application.BeamStockMonitoring.CommandHandlers
         public async Task<BeamStockMonitoringDocument> Handle(BeamStockMonitoringCommand request, CancellationToken cancellationToken)
         {
             //Reformat Date Time
-            var year = request.SizingEntryDate.Year;
-            var month = request.SizingEntryDate.Month;
-            var day = request.SizingEntryDate.Day;
-            var hour = request.SizingEntryTime.Hours;
-            var minutes = request.SizingEntryTime.Minutes;
-            var seconds = request.SizingEntryTime.Seconds;
+            var year = request.EntryDate.Year;
+            var month = request.EntryDate.Month;
+            var day = request.EntryDate.Day;
+            var hour = request.EntryTime.Hours;
+            var minutes = request.EntryTime.Minutes;
+            var seconds = request.EntryTime.Seconds;
             var stockSizingDateTime =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
@@ -42,7 +42,7 @@ namespace Manufactures.Application.BeamStockMonitoring.CommandHandlers
                                                               request.BeamDocumentId,
                                                               stockSizingDateTime,
                                                               request.OrderDocumentId,
-                                                              request.SizingLengthStock,
+                                                              request.LengthStock,
                                                               1,
                                                               false);
 

@@ -78,7 +78,7 @@ namespace Manufactures.Controllers.Api
             _beamRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
-        public DailyOperationSizingController(IServiceProvider serviceProvider, 
+        public DailyOperationSizingController(IServiceProvider serviceProvider,
                                               IWorkContext workContext,
                                               ISizingQuery<DailyOperationSizingListDto> sizingQuery,
                                               IOperatorQuery<OperatorListDto> operatorQuery,
@@ -91,13 +91,13 @@ namespace Manufactures.Controllers.Api
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
 
-            _dailyOperationSizingRepository = 
+            _dailyOperationSizingRepository =
                 this.Storage.GetRepository<IDailyOperationSizingRepository>();
             _orderDocumentRepository =
                 this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
-            _beamRepository = 
+            _beamRepository =
                 this.Storage.GetRepository<IBeamRepository>();
             _operatorDocumentRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
@@ -107,18 +107,18 @@ namespace Manufactures.Controllers.Api
         //                                         IWorkContext workContext)
         //    : base(serviceProvider)
         //{
-            //_dailyOperationSizingDocumentRepository =
-            //    this.Storage.GetRepository<IDailyOperationSizingRepository>();
-            //_machineRepository =
-            //    this.Storage.GetRepository<IMachineRepository>();
-            //_machineTypeRepository =
-            //    this.Storage.GetRepository<IMachineTypeRepository>();
-            //_shiftDocumentRepository =
-            //    this.Storage.GetRepository<IShiftRepository>();
-            //_beamDocumentRepository =
-            //    this.Storage.GetRepository<IBeamRepository>();
-            //_dailyOperationWarpingDocumentRepository =
-            //    this.Storage.GetRepository<IDailyOperationWarpingRepository>();
+        //_dailyOperationSizingDocumentRepository =
+        //    this.Storage.GetRepository<IDailyOperationSizingRepository>();
+        //_machineRepository =
+        //    this.Storage.GetRepository<IMachineRepository>();
+        //_machineTypeRepository =
+        //    this.Storage.GetRepository<IMachineTypeRepository>();
+        //_shiftDocumentRepository =
+        //    this.Storage.GetRepository<IShiftRepository>();
+        //_beamDocumentRepository =
+        //    this.Storage.GetRepository<IBeamRepository>();
+        //_dailyOperationWarpingDocumentRepository =
+        //    this.Storage.GetRepository<IDailyOperationWarpingRepository>();
         //}
 
         [HttpGet]
@@ -166,6 +166,93 @@ namespace Manufactures.Controllers.Api
             var resultCount = result.Count();
 
             return Ok(result, info: new { page, size, totalRows, resultCount });
+        }
+
+        [HttpGet("get-sizing-beams")]
+        public async Task<IActionResult> GetSizingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
+        {
+            page = page - 1;
+            List<DailyOperationSizingBeamDto> sizingListBeamProducts = new List<DailyOperationSizingBeamDto>();
+            List<BeamDto> sizingBeams = new List<BeamDto>();
+            if (!filter.Contains("{}"))
+            {
+                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+                var OrderDocumentId = filterDictionary["OrderId"].ToString();
+                if (!OrderDocumentId.Equals(null))
+                {
+                    var OrderIdentity = Guid.Parse(OrderDocumentId);
+
+                    await Task.Yield();
+                    var sizingQuery =
+                         _dailyOperationSizingRepository
+                             .Query
+                             .Include(x => x.SizingHistories)
+                             .Include(x => x.SizingBeamProducts)
+                             .OrderByDescending(o => o.DateTimeOperation)
+                    .Where(doc => doc.OrderDocumentId.Equals(OrderIdentity));
+
+                    await Task.Yield();
+                    var existingDailyOperationSizingDocument =
+                        _dailyOperationSizingRepository
+                            .Find(sizingQuery);
+
+                    await Task.Yield();
+                    foreach (var sizingDocument in existingDailyOperationSizingDocument)
+                    {
+                        foreach (var sizingBeamProduct in sizingDocument.SizingBeamProducts)
+                        {
+                            await Task.Yield();
+                            var sizingBeamStatus = sizingBeamProduct.BeamStatus;
+                            if (sizingBeamStatus.Equals(BeamStatus.ROLLEDUP))
+                            {
+                                await Task.Yield();
+                                double counterStart = sizingBeamProduct.CounterStart ?? 0;
+                                double counterFinish = sizingBeamProduct.CounterFinish ?? 0;
+                                double sizingLengthCounter = counterFinish - counterStart;
+                                var warpingBeam = new DailyOperationSizingBeamDto(sizingBeamProduct.SizingBeamId, sizingLengthCounter);
+                                sizingListBeamProducts.Add(warpingBeam);
+                            }
+                        }
+                    }
+
+                    await Task.Yield();
+                    foreach (var sizingBeam in sizingListBeamProducts)
+                    {
+                        await Task.Yield();
+                        var sizingBeamQuery =
+                            _beamRepository
+                                .Query
+                                .Where(beam => beam.Identity.Equals(sizingBeam.Id) &&
+                                               beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                        var sizingBeamDocument =
+                            _beamRepository
+                                .Find(sizingBeamQuery)
+                                .FirstOrDefault();
+
+                        await Task.Yield();
+                        var sizingBeamDto = new BeamDto(sizingBeam, sizingBeamDocument);
+                        sizingBeams.Add(sizingBeamDto);
+                    }
+                }
+                else
+                {
+                    throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
+                }
+            }
+            else
+            {
+                throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
+            }
+
+            var total = sizingBeams.Count();
+            var data = sizingBeams.Skip((page - 1) * size).Take(size);
+
+            return Ok(data, info: new
+            {
+                page,
+                size,
+                total
+            });
         }
 
         [HttpGet("{Id}")]
@@ -243,7 +330,7 @@ namespace Manufactures.Controllers.Api
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
-            //Get Daily Operation Document Warping
+            //Get Daily Operation Document Sizing
             var sizingQuery =
                 _dailyOperationSizingRepository
                     .Query
@@ -256,22 +343,26 @@ namespace Manufactures.Controllers.Api
                     .FirstOrDefault();
 
             //Get Daily Operation Beam Product
-            var existingDailyOperationWarpingBeamProduct =
+            var existingDailyOperationSizingBeamProduct =
                 existingDailyOperationSizingDocument
                     .SizingBeamProducts
                     .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
-            var lastWarpingBeamProduct =
-                existingDailyOperationWarpingBeamProduct
+            var lastSizingBeamProduct =
+                existingDailyOperationSizingBeamProduct
                     .FirstOrDefault();
+
+            var counterStart = lastSizingBeamProduct.CounterStart;
+            var counterFinish = lastSizingBeamProduct.CounterFinish;
+            var sizingLengthStock = counterFinish - counterStart;
 
             //Instantiate Beam Stock Command for Sizing
             var sizingStock = new BeamStockMonitoringCommand
             {
-                BeamDocumentId = new BeamId(lastWarpingBeamProduct.SizingBeamId),
-                SizingEntryDate = command.ProduceBeamDate,
-                SizingEntryTime = command.ProduceBeamTime,
+                BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId),
+                EntryDate = command.ProduceBeamDate,
+                EntryTime = command.ProduceBeamTime,
                 OrderDocumentId = existingDailyOperationSizingDocument.OrderDocumentId,
-                SizingLengthStock = existingDailyOperationSizingDocument.YarnStrands
+                LengthStock = sizingLengthStock ?? 0
             };
             var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 
@@ -453,7 +544,7 @@ namespace Manufactures.Controllers.Api
                     var filteredSizingDocument =
                         _dailyOperationSizingRepository
                             .Find(sizingQuery)
-                            .Where(sizePickup => 
+                            .Where(sizePickup =>
                                    sizePickup.OrderDocumentId.Value.Equals(order.Identity) &&
                                    sizePickup.OperationStatus.Equals(OperationStatus.ONFINISH))
                             .ToList();
@@ -498,7 +589,7 @@ namespace Manufactures.Controllers.Api
                     var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
 
                     var filteredSizingBeamProducts = filteredSizingDocument.SizingBeamProducts
-                                                                .Where(b => b.LatestDateTimeBeamProduct.Month.Equals(month) && 
+                                                                .Where(b => b.LatestDateTimeBeamProduct.Month.Equals(month) &&
                                                                             b.BeamStatus.Equals(BeamStatus.ROLLEDUP));
 
                     if (filteredSizingBeamProducts != null)
@@ -506,11 +597,11 @@ namespace Manufactures.Controllers.Api
                         foreach (var sizingBeamProduct in filteredSizingBeamProducts)
                         {
                             //Get Beam Number from BeamRepository (Master Beam), by Beam Id Used in Beam Product (SizingBeamProduct) of Sizing Document
-                            var beamQuery = 
+                            var beamQuery =
                                 _beamRepository
                                     .Query
                                     .OrderByDescending(item => item.CreatedDate);
-                            var beamDocument = 
+                            var beamDocument =
                                 _beamRepository
                                     .Find(beamQuery)
                                     .Where(b => b.Identity.Equals(sizingBeamProduct.SizingBeamId))
@@ -519,10 +610,10 @@ namespace Manufactures.Controllers.Api
 
                             //Filter Details by Machine Status (COMPLETED), ShiftId (All Shift) and Month from UI (Request), and BeamNumber from BeamRepository Above
                             var historyByAllShiftIndex = 0;
-                            var filteredSizingHistories = 
+                            var filteredSizingHistories =
                                 filteredSizingDocument.SizingHistories
-                                    .Where(d => d.DateTimeMachine.Month.Equals(month) && 
-                                                d.SizingBeamNumber.Equals(beamNumber) && 
+                                    .Where(d => d.DateTimeMachine.Month.Equals(month) &&
+                                                d.SizingBeamNumber.Equals(beamNumber) &&
                                                 d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                             var filteredSizingHistory = filteredSizingHistories.ToList()[historyByAllShiftIndex++];
 
@@ -530,20 +621,20 @@ namespace Manufactures.Controllers.Api
                             {
                                 var historyBySpecifiedShiftIndex = 0;
                                 //Filter Details by Machine Status (COMPLETED), ShiftId (Specified Shift) and Month from UI (Request), and BeamNumber from BeamRepository Above
-                                filteredSizingHistories = 
+                                filteredSizingHistories =
                                     filteredSizingDocument.SizingHistories
-                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) && 
-                                                    d.DateTimeMachine.Month.Equals(month) && 
-                                                    d.SizingBeamNumber.Equals(beamNumber) && 
+                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) &&
+                                                    d.DateTimeMachine.Month.Equals(month) &&
+                                                    d.SizingBeamNumber.Equals(beamNumber) &&
                                                     d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                                 filteredSizingHistory = filteredSizingHistories.ToList()[historyBySpecifiedShiftIndex++];
                             }
 
                             //Get Operator Document from OperatorRepository, relate by filteredDetail.OperatorDocumentId
-                            var operatorQuery = 
+                            var operatorQuery =
                                 _operatorDocumentRepository
                                     .Query.OrderByDescending(item => item.CreatedDate);
-                            var operatorDocument = 
+                            var operatorDocument =
                                 _operatorDocumentRepository
                                     .Find(operatorQuery)
                                     .Where(o => o.Identity.Equals(filteredSizingHistory.OperatorDocumentId))
@@ -561,16 +652,16 @@ namespace Manufactures.Controllers.Api
                                     if (resultPC == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
                                                                         sizingBeamProduct.WeightBruto ?? 0,
-                                                                        pisMeter, 
-                                                                        spu, 
+                                                                        pisMeter,
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
@@ -581,16 +672,16 @@ namespace Manufactures.Controllers.Api
                                     if (resultCVC == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
-                                                                        sizingBeamProduct.WeightBruto ?? 0, 
-                                                                        pisMeter, 
-                                                                        spu, 
+                                                                        sizingBeamProduct.WeightBruto ?? 0,
+                                                                        pisMeter,
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
@@ -601,16 +692,16 @@ namespace Manufactures.Controllers.Api
                                     if (resultCotton == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
                                                                         sizingBeamProduct.WeightBruto ?? 0,
                                                                         pisMeter,
-                                                                        spu, 
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
@@ -621,16 +712,16 @@ namespace Manufactures.Controllers.Api
                                     if (resultPE == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
                                                                         sizingBeamProduct.WeightBruto ?? 0,
-                                                                        pisMeter, 
-                                                                        spu, 
+                                                                        pisMeter,
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
@@ -641,32 +732,32 @@ namespace Manufactures.Controllers.Api
                                     if (resultRayon == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
                                                                         sizingBeamProduct.WeightBruto ?? 0,
-                                                                        pisMeter, 
-                                                                        spu, 
+                                                                        pisMeter,
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
                                     break;
                                 default:
                                     //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                    results = new SizePickupListDto(filteredSizingDocument, 
-                                                                    operatorDocument.CoreAccount.Name, 
-                                                                    operatorDocument.Group, 
+                                    results = new SizePickupListDto(filteredSizingDocument,
+                                                                    operatorDocument.CoreAccount.Name,
+                                                                    operatorDocument.Group,
                                                                     dateTimeSizingBeamProduct,
                                                                     sizingBeamProduct.CounterStart ?? 0,
                                                                     sizingBeamProduct.CounterFinish ?? 0,
                                                                     sizingBeamProduct.WeightNetto ?? 0,
                                                                     sizingBeamProduct.WeightBruto ?? 0,
-                                                                    pisMeter, 
-                                                                    spu, 
+                                                                    pisMeter,
+                                                                    spu,
                                                                     beamNumber);
                                     resultData.Add(results);
                                     break;
@@ -688,7 +779,7 @@ namespace Manufactures.Controllers.Api
                 }
 
                 await Task.Yield();
-                
+
                 if (index.Equals(true))
                 {
                     byte[] xlsInBytes;
@@ -798,7 +889,7 @@ namespace Manufactures.Controllers.Api
                     var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
 
                     var filteredSizingBeamProducts = filteredSizingDocument.SizingBeamProducts
-                                                        .Where(b => b.LatestDateTimeBeamProduct.Date.Equals(convertedDate) && 
+                                                        .Where(b => b.LatestDateTimeBeamProduct.Date.Equals(convertedDate) &&
                                                                     b.BeamStatus.Equals(BeamStatus.ROLLEDUP));
 
                     if (filteredSizingBeamProducts != null)
@@ -806,10 +897,10 @@ namespace Manufactures.Controllers.Api
                         foreach (var sizingBeamProduct in filteredSizingBeamProducts)
                         {
                             //Get Beam Number from BeamRepository (Master Beam), by Beam Id Used in Beam Product (SizingBeamProduct) of Sizing Document
-                            var beamQuery = 
+                            var beamQuery =
                                 _beamRepository
                                     .Query.OrderByDescending(item => item.CreatedDate);
-                            var beamDocument = 
+                            var beamDocument =
                                 _beamRepository
                                     .Find(beamQuery)
                                     .Where(b => b.Identity.Equals(sizingBeamProduct.SizingBeamId))
@@ -818,10 +909,10 @@ namespace Manufactures.Controllers.Api
 
                             //Filter Details by Machine Status (COMPLETED), ShiftId (All Shift) and Date from UI (Request), and BeamNumber from BeamRepository Above
                             var historyByAllShiftIndex = 0;
-                            var filteredSizingHistories = 
+                            var filteredSizingHistories =
                                 filteredSizingDocument.SizingHistories
-                                    .Where(d => d.DateTimeMachine.Date.Equals(convertedDate) && 
-                                                d.SizingBeamNumber.Equals(beamNumber) && 
+                                    .Where(d => d.DateTimeMachine.Date.Equals(convertedDate) &&
+                                                d.SizingBeamNumber.Equals(beamNumber) &&
                                                 d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                             var filteredSizingHistory = filteredSizingHistories.ToList()[historyByAllShiftIndex++];
 
@@ -829,27 +920,27 @@ namespace Manufactures.Controllers.Api
                             {
                                 var historyBySpecifiedShiftlIndex = 0;
                                 //Filter Details by Machine Status (COMPLETED), ShiftId (Specified Shift) and Date from UI (Request), and BeamNumber from BeamRepository Above
-                                filteredSizingHistories = 
+                                filteredSizingHistories =
                                     filteredSizingDocument.SizingHistories
-                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) && 
-                                                    d.DateTimeMachine.Date.Equals(convertedDate) && 
-                                                    d.SizingBeamNumber.Equals(beamNumber) && 
+                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) &&
+                                                    d.DateTimeMachine.Date.Equals(convertedDate) &&
+                                                    d.SizingBeamNumber.Equals(beamNumber) &&
                                                     d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                                 filteredSizingHistory = filteredSizingHistories.ToList()[historyBySpecifiedShiftlIndex++];
                             }
 
                             //Get Operator Document from OperatorRepository, relate by filteredDetail.OperatorDocumentId
-                            var operatorQuery = 
+                            var operatorQuery =
                                 _operatorDocumentRepository
                                     .Query.OrderByDescending(item => item.CreatedDate);
-                            var operatorDocument = 
+                            var operatorDocument =
                                 _operatorDocumentRepository
                                     .Find(operatorQuery)
                                     .Where(o => o.Identity.Equals(filteredSizingHistory.OperatorDocumentId))
                                     .FirstOrDefault();
 
                             var dateTimeSizingBeamProduct = sizingBeamProduct.LatestDateTimeBeamProduct;
-                            double pisMeter = sizingBeamProduct.PISMeter ??0 ;
+                            double pisMeter = sizingBeamProduct.PISMeter ?? 0;
                             double spu = sizingBeamProduct.SPU ?? 0;
 
                             switch (filteredConstructionNumber)
@@ -860,16 +951,16 @@ namespace Manufactures.Controllers.Api
                                     if (resultPC == spuStatus || spuStatus.Equals("All"))
                                     {
                                         //Placing Value as Parameter for SizePickupListDto and add to resultData
-                                        results = new SizePickupListDto(filteredSizingDocument, 
-                                                                        operatorDocument.CoreAccount.Name, 
-                                                                        operatorDocument.Group, 
+                                        results = new SizePickupListDto(filteredSizingDocument,
+                                                                        operatorDocument.CoreAccount.Name,
+                                                                        operatorDocument.Group,
                                                                         dateTimeSizingBeamProduct,
                                                                         sizingBeamProduct.CounterStart ?? 0,
                                                                         sizingBeamProduct.CounterFinish ?? 0,
                                                                         sizingBeamProduct.WeightNetto ?? 0,
                                                                         sizingBeamProduct.WeightBruto ?? 0,
-                                                                        pisMeter, 
-                                                                        spu, 
+                                                                        pisMeter,
+                                                                        spu,
                                                                         beamNumber);
                                         resultData.Add(results);
                                     }
@@ -987,7 +1078,7 @@ namespace Manufactures.Controllers.Api
                 }
 
                 await Task.Yield();
-                
+
                 if (index.Equals(true))
                 {
                     byte[] xlsInBytes;
@@ -1101,8 +1192,8 @@ namespace Manufactures.Controllers.Api
                     var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
 
                     var filteredSizingBeamProducts = filteredSizingDocument.SizingBeamProducts
-                                                        .Where(b => b.LatestDateTimeBeamProduct.DateTime >= convertedStartDate && 
-                                                                    b.LatestDateTimeBeamProduct.DateTime <= convertedEndDate && 
+                                                        .Where(b => b.LatestDateTimeBeamProduct.DateTime >= convertedStartDate &&
+                                                                    b.LatestDateTimeBeamProduct.DateTime <= convertedEndDate &&
                                                                     b.BeamStatus.Equals(BeamStatus.ROLLEDUP));
 
                     if (filteredSizingBeamProducts != null)
@@ -1122,32 +1213,32 @@ namespace Manufactures.Controllers.Api
 
                             //Filter Details by Machine Status (COMPLETED), ShiftId (All Shift) and Date Range from UI (Request), and BeamNumber from BeamRepository Above
                             var historyByAllShiftIndex = 0;
-                            var filteredSizingHistories = 
+                            var filteredSizingHistories =
                                 filteredSizingDocument.SizingHistories
-                                    .Where(d => d.DateTimeMachine.DateTime >= convertedStartDate && 
-                                                d.DateTimeMachine.DateTime <= convertedEndDate && 
-                                                d.SizingBeamNumber.Equals(beamNumber) && 
+                                    .Where(d => d.DateTimeMachine.DateTime >= convertedStartDate &&
+                                                d.DateTimeMachine.DateTime <= convertedEndDate &&
+                                                d.SizingBeamNumber.Equals(beamNumber) &&
                                                 d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                             var filteredDetail = filteredSizingHistories.ToList()[historyByAllShiftIndex++];
                             if (shiftId != "All")
                             {
                                 var detailIndex = 0;
                                 //Filter Details by Machine Status (COMPLETED), ShiftId (Specified Shift) and Date Range from UI (Request), and BeamNumber from BeamRepository Above
-                                filteredSizingHistories = 
+                                filteredSizingHistories =
                                     filteredSizingDocument.SizingHistories
-                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) && 
-                                                    d.DateTimeMachine.DateTime >= convertedStartDate && 
-                                                    d.DateTimeMachine.DateTime <= convertedEndDate && 
-                                                    d.SizingBeamNumber.Equals(beamNumber) && 
+                                        .Where(d => d.ShiftDocumentId.ToString().Equals(shiftId) &&
+                                                    d.DateTimeMachine.DateTime >= convertedStartDate &&
+                                                    d.DateTimeMachine.DateTime <= convertedEndDate &&
+                                                    d.SizingBeamNumber.Equals(beamNumber) &&
                                                     d.MachineStatus.Equals(MachineStatus.ONCOMPLETE));
                                 filteredDetail = filteredSizingHistories.ToList()[detailIndex++];
                             }
 
                             //Get Operator Document from OperatorRepository, relate by filteredDetail.OperatorDocumentId
-                            var operatorQuery = 
+                            var operatorQuery =
                                 _operatorDocumentRepository
                                     .Query.OrderByDescending(item => item.CreatedDate);
-                            var operatorDocument = 
+                            var operatorDocument =
                                 _operatorDocumentRepository
                                     .Find(operatorQuery)
                                     .Where(o => o.Identity.Equals(filteredDetail.OperatorDocumentId))
@@ -1292,7 +1383,7 @@ namespace Manufactures.Controllers.Api
                 }
 
                 await Task.Yield();
-                
+
                 if (index.Equals(true))
                 {
                     byte[] xlsInBytes;

@@ -142,6 +142,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                 lastHistory.SizingBeamNumber);
                         existingDailyOperationSizingDocument.AddDailyOperationSizingHistory(newHistory);
 
+                        await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+
                         //Set YarnStrands Value on Master Beam
                         var beamQuery = 
                             _beamDocumentRepository
@@ -153,7 +155,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                 .FirstOrDefault();
                         beamDocument.SetLatestYarnStrands(existingDailyOperationSizingDocument.YarnStrands);
 
-                        await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+                        await _beamDocumentRepository.Update(beamDocument);
+
                         _storage.Save();
 
                         return existingDailyOperationSizingDocument;
