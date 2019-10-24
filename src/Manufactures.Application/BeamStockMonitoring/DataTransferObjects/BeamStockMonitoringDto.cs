@@ -26,9 +26,22 @@ namespace Manufactures.Application.BeamStockMonitoring.DataTransferObjects
         [JsonProperty(PropertyName = "StockLength")]
         public double StockLength { get; private set; }
 
+        [JsonProperty(PropertyName = "Position")]
+        public int Position { get; private set; }
+
         public void SetBeamStockId(Guid beamStockId)
         {
             Id = beamStockId;
+        }
+        public BeamStockMonitoringDto(Guid id, string beamNumber, DateTimeOffset beamEntryDate, string orderNumber, string constructionNumber, double stockLength, int position)
+        {
+            Id = id;
+            BeamNumber = beamNumber;
+            BeamEntryDate = beamEntryDate;
+            OrderNumber = orderNumber;
+            ConstructionNumber = constructionNumber;
+            StockLength = stockLength;
+            Position = position;
         }
 
         public void SetBeamNumber(string beamNumber)
@@ -54,6 +67,11 @@ namespace Manufactures.Application.BeamStockMonitoring.DataTransferObjects
         public void SetStockLength(double stockLength)
         {
             StockLength = stockLength;
+        }
+
+        public void SetPosition(int position)
+        {
+            Position = position;
         }
     }
 }

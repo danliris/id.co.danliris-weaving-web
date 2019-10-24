@@ -129,6 +129,16 @@ namespace Manufactures.Controllers.Api
             // Sending Command to Command Handler
             var dailyOperationReachingTying = await Mediator.Send(command);
 
+            //Reformat DateTime
+            var year = command.EntryDate.Year;
+            var month = command.EntryDate.Month;
+            var day = command.EntryDate.Day;
+            var hour = command.EntryTime.Hours;
+            var minutes = command.EntryTime.Minutes;
+            var seconds = command.EntryTime.Seconds;
+            var dateTime =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
             //Get Last Beam Stock Monitoring Which Used Same Beam Id
             var beamStockMonitoring =
                 _beamStockMonitoringRepository
@@ -142,9 +152,12 @@ namespace Manufactures.Controllers.Api
                     .Find(beamStockMonitoring)
                     .FirstOrDefault();
 
-            sameBeamIdBeamStockMonitoring.SetReachingEntryDate(command.EntryDate);
+            sameBeamIdBeamStockMonitoring.SetReachingEntryDate(dateTime);
             sameBeamIdBeamStockMonitoring.SetReachingLengthStock(sameBeamIdBeamStockMonitoring.SizingLengthStock);
             sameBeamIdBeamStockMonitoring.SetPosition(2);
+
+            await _beamStockMonitoringRepository.Update(sameBeamIdBeamStockMonitoring);
+            Storage.Save();
 
             //Return Result from Command Handler as Identity(Id)
             return Ok(dailyOperationReachingTying.Identity);
