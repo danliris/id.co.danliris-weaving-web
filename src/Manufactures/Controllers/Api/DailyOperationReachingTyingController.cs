@@ -2,12 +2,20 @@
 using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
+using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BeamStockMonitoring.Commands;
+using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.ReachingTying.Command;
 using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
+using Manufactures.Domain.DailyOperations.ReachingTying.Repositories;
+using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.Operators.Queries;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -25,9 +33,17 @@ namespace Manufactures.Controllers.Api
         private readonly IReachingTyingQuery<DailyOperationReachingTyingListDto> _reachingTyingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
-        
+
+        private readonly IDailyOperationReachingTyingRepository
+            _dailyOperationReachingTyingRepository;
+        private readonly IDailyOperationSizingRepository
+            _dailyOperationSizingRepository;
+        private readonly IBeamStockMonitoringRepository
+            _beamStockMonitoringRepository;
+
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationReachingTyingController(IServiceProvider serviceProvider,
+                                                     IWorkContext workContext,
                                                      IReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
                                                      IOperatorQuery<OperatorListDto> operatorQuery,
                                                      IShiftQuery<ShiftDto> shiftQuery)
@@ -36,6 +52,13 @@ namespace Manufactures.Controllers.Api
             _reachingTyingQuery = reachingTyingQuery ?? throw new ArgumentNullException(nameof(reachingTyingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
+
+            _dailyOperationReachingTyingRepository =
+                this.Storage.GetRepository<IDailyOperationReachingTyingRepository>();
+            _dailyOperationSizingRepository =
+                this.Storage.GetRepository<IDailyOperationSizingRepository>();
+            _beamStockMonitoringRepository =
+                this.Storage.GetRepository<IBeamStockMonitoringRepository>();
         }
 
         [HttpGet]
@@ -105,6 +128,36 @@ namespace Manufactures.Controllers.Api
         {
             // Sending Command to Command Handler
             var dailyOperationReachingTying = await Mediator.Send(command);
+
+            //Reformat DateTime
+            var year = command.EntryDate.Year;
+            var month = command.EntryDate.Month;
+            var day = command.EntryDate.Day;
+            var hour = command.EntryTime.Hours;
+            var minutes = command.EntryTime.Minutes;
+            var seconds = command.EntryTime.Seconds;
+            var dateTime =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
+            //Get Last Beam Stock Monitoring Which Used Same Beam Id
+            var beamStockMonitoring =
+                _beamStockMonitoringRepository
+                    .Query
+                    .Where(o=>o.BeamDocumentId.Equals(command.SizingBeamId.Value) &&
+                           o.OrderDocumentId.Equals(command.OrderDocumentId.Value))
+                    .OrderByDescending(o => o.CreatedDate);
+
+            var sameBeamIdBeamStockMonitoring =
+                _beamStockMonitoringRepository
+                    .Find(beamStockMonitoring)
+                    .FirstOrDefault();
+
+            sameBeamIdBeamStockMonitoring.SetReachingEntryDate(dateTime);
+            sameBeamIdBeamStockMonitoring.SetReachingLengthStock(sameBeamIdBeamStockMonitoring.SizingLengthStock);
+            sameBeamIdBeamStockMonitoring.SetPosition(2);
+
+            await _beamStockMonitoringRepository.Update(sameBeamIdBeamStockMonitoring);
+            Storage.Save();
 
             //Return Result from Command Handler as Identity(Id)
             return Ok(dailyOperationReachingTying.Identity);

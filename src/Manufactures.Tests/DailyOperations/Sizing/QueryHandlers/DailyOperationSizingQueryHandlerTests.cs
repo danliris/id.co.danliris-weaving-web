@@ -263,8 +263,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                        "PCA 133R",
                                                                        40,
                                                                        4000,
-                                                                       "40",
-                                                                       "40",
+                                                                       40,
+                                                                       40,
                                                                        DateTimeOffset.UtcNow,
                                                                        OperationStatus.ONFINISH);
             var firstSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
@@ -301,8 +301,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                        "PCA 133R",
                                                                        40,
                                                                        4000,
-                                                                       "40",
-                                                                       "40",
+                                                                       40,
+                                                                       40,
                                                                        DateTimeOffset.UtcNow,
                                                                        OperationStatus.ONFINISH);
             var secondSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
@@ -555,8 +555,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                        "PCA 133R",
                                                                        40,
                                                                        4000,
-                                                                       "40",
-                                                                       "40",
+                                                                       40,
+                                                                       40,
                                                                        DateTimeOffset.UtcNow,
                                                                        OperationStatus.ONFINISH);
             var firstSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
@@ -593,8 +593,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                        "PCA 133R",
                                                                        40,
                                                                        4000,
-                                                                       "40",
-                                                                       "40",
+                                                                       40,
+                                                                       40,
                                                                        DateTimeOffset.UtcNow,
                                                                        OperationStatus.ONFINISH);
             var secondSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),

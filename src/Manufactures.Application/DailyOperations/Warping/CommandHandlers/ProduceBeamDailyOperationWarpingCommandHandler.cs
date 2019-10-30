@@ -1,6 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
@@ -145,6 +146,14 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
                             await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
                             _storage.Save();
+
+                            //var sizingStock = new SizingBeamStockMonitoringCommand
+                            //{
+                            //    BeamDocumentId = new BeamId(existingDailyOperationWarpingDocument.Identity),
+                            //    SizingEntryDate = request.ProduceBeamsDate,
+                            //    OrderDocumentId = existingDailyOperationWarpingDocument.OrderDocumentId,
+                            //    SizingLengthStock = request.WarpingBeamLength
+                            //};
 
                             return existingDailyOperationWarpingDocument;
                         }

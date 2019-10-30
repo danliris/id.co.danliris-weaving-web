@@ -52,6 +52,25 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
 
+            //Get Daily Operation Beam Product
+            //var existingDailyOperationSizingBeamProduct =
+            //    existingDailyOperationSizingDocument
+            //        .SizingBeamProducts
+            //        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+            //var lastBeamProduct = existingDailyOperationSizingBeamProduct.FirstOrDefault();
+
+            //Validation for Beam Id
+            var countBeamId =
+                existingDailyOperationSizingDocument
+                    .SizingBeamProducts
+                    .Where(o => o.SizingBeamId.Equals(request.SizingBeamId.Value))
+                    .Count();
+
+            if (!countBeamId.Equals(0))
+            {
+                throw Validator.ErrorValidation(("SizingBeamId", "No. Beam Sizing ini Sudah Digunakan dalam Operasi Harian Sizing Ini"));
+            }
+
             //Validation for Beam Status
             var countBeamStatus =
                 existingDailyOperationSizingDocument

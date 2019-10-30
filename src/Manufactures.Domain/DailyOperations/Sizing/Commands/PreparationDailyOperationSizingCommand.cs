@@ -43,9 +43,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public List<BeamId> BeamsWarping { get; set; }
     }
 
-    public class NewEntryDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
+    public class PreparationDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
     {
-        public NewEntryDailyOperationSizingCommandValidator()
+        public PreparationDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.MachineDocumentId).NotEmpty().WithMessage("No. Mesin Harus Diisi");
             RuleFor(validator => validator.OrderDocumentId).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");

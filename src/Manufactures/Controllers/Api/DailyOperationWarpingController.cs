@@ -6,10 +6,12 @@ using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
 using Microsoft.AspNetCore.Authorization;
@@ -370,6 +372,7 @@ namespace Manufactures.Controllers.Api
 
             return Ok(produceBeamsDailyOperationSizingDocument.Identity);
 
+            //Lucky's Work
             //// Sending command to command handler
             //var dailyOperationWarping = await Mediator.Send(command);
 

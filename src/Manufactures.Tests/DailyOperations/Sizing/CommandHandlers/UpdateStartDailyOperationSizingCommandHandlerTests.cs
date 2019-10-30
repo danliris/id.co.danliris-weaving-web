@@ -82,8 +82,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -203,8 +203,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONFINISH;
             var existingSizingDocument =
@@ -324,8 +324,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -445,8 +445,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow.AddMinutes(1);
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -577,8 +577,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -709,8 +709,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =
@@ -841,8 +841,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var recipeCode = "PCA 133R";
             var neReal = 40;
             var machineSpeed = 0;
-            var texSQ = "0";
-            var visco = "0";
+            var texSQ = 0;
+            var visco = 0;
             var datetimeOperation = DateTimeOffset.UtcNow;
             var operationStatus = OperationStatus.ONPROCESS;
             var existingSizingDocument =

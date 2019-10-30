@@ -22,8 +22,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingDocumentRepository;
-        private readonly IMovementRepository
-            _movementRepository;
+        //private readonly IMovementRepository
+        //    _movementRepository;
         private readonly IBeamRepository
             _beamRepository;
 
@@ -32,8 +32,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
-            _movementRepository =
-              _storage.GetRepository<IMovementRepository>();
+            //_movementRepository =
+            //  _storage.GetRepository<IMovementRepository>();
             _beamRepository =
               _storage.GetRepository<IBeamRepository>();
         }
