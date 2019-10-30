@@ -272,9 +272,9 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PreparationDailyOperationSizingCommand command)
         {
-            var newDailyOperationSizingDocument = await Mediator.Send(command);
+            var preparationDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(newDailyOperationSizingDocument.Identity);
+            return Ok(preparationDailyOperationSizingDocument.Identity);
         }
 
         [HttpPut("{Id}/start")]
@@ -381,6 +381,55 @@ namespace Manufactures.Controllers.Api
             var updateDoffDailyOperationSizingDocument = await Mediator.Send(command);
 
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> Delete(string Id)
+        {
+            if (!Guid.TryParse(Id, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            var command = new HistoryRemovePreparationDailyOperationSizingCommand();
+            command.SetId(Identity);
+
+            var dailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(dailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{operationId}/{historyId}/{status}")]
+        public async Task<IActionResult> Put(string operationId,
+                                             string historyId,
+                                             string status,
+                                             [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(operationId, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument.Identity);
+        }
+
+        [HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
+        public async Task<IActionResult> Put(string operationId,
+                                             string historyId,
+                                             string beamProductId,
+                                             string status,
+                                             [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand command)
+        {
+            if (!Guid.TryParse(operationId, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateRemoveStartOrProduceBeamDailyOperationSizingDocument = await Mediator.Send(command);
+
+            return Ok(updateRemoveStartOrProduceBeamDailyOperationSizingDocument.Identity);
         }
 
         [HttpGet("calculate/netto/empty-weight/{emptyWeight}/bruto/{bruto}")]
