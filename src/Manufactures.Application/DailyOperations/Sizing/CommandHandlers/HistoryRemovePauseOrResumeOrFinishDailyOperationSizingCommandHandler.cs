@@ -47,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (lastHistory.Identity.Equals(request.HistoryId))
             {
-                if (request.HistoryStatus.Equals(Helpers.MachineStatus.ONFINISH))
+                if (request.HistoryStatus.Equals(MachineStatus.ONFINISH))
                 {
                     existingDailyOperationSizingDocument.SetMachineSpeed(0);
                     existingDailyOperationSizingDocument.SetVisco(0);
@@ -55,10 +55,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     existingDailyOperationSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
 
                     existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                    //lastHistory.Remove();
                 }
                 else
                 {
                     existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                    //lastHistory.Remove();
                 }
 
                 await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);

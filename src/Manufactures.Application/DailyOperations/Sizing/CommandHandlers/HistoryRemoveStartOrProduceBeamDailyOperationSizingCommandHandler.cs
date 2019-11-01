@@ -65,6 +65,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     if (lastHistory.Identity.Equals(request.HistoryId))
                     {
                         existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                        //lastHistory.Remove();
                     }
                     else
                     {
@@ -74,6 +75,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     if (lastBeamProduct.Identity.Equals(request.BeamProductId))
                     {
                         existingDailyOperationSizingDocument.RemoveDailyOperationSizingBeamProduct(lastBeamProduct.Identity);
+                        //lastBeamProduct.Remove();
                     }
                     else
                     {
@@ -84,6 +86,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     if (lastHistory.Identity.Equals(request.HistoryId))
                     {
                         existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                        //lastHistory.Remove();
                     }
                     else
                     {
