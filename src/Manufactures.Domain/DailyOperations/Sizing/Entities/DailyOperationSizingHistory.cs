@@ -1,7 +1,9 @@
 ﻿using Infrastructure.Domain;
+using Infrastructure.Domain.Events;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
+using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
@@ -30,11 +32,11 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
         }
 
-        public DailyOperationSizingHistory(Guid identity, 
-                                          ShiftId shiftDocumentId, 
-                                          OperatorId operatorDocumentId, 
-                                          DateTimeOffset dateTimeMachine, 
-                                          string machineStatus, 
+        public DailyOperationSizingHistory(Guid identity,
+                                          ShiftId shiftDocumentId,
+                                          OperatorId operatorDocumentId,
+                                          DateTimeOffset dateTimeMachine,
+                                          string machineStatus,
                                           string information,
                                           int brokenBeam,
                                           int machineTroubled,
@@ -89,9 +91,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             MarkModified();
         }
 
-        public void SetMachineTroubled (int machineTroubled)
+        public void SetMachineTroubled(int machineTroubled)
         {
-            MachineTroubled= machineTroubled;
+            MachineTroubled = machineTroubled;
             MarkModified();
         }
 
@@ -104,6 +106,24 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         protected override DailyOperationSizingHistory GetEntity()
         {
             return this;
+        }
+
+        protected override void MarkRemoved()
+        {
+            DeletedBy = "System";
+            Deleted = true;
+            DeletedDate = DateTimeOffset.UtcNow;
+
+            if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityDeleted<DailyOperationSizingHistory>))
+                this.AddDomainEvent(new OnEntityDeleted<DailyOperationSizingHistory>(GetEntity()));
+
+            // clear updated events
+            if (this.DomainEvents.Any(o => o is OnEntityUpdated<DailyOperationSizingHistory>))
+            {
+                this.DomainEvents.Where(o => o is OnEntityUpdated<DailyOperationSizingHistory>)
+                    .ToList()
+                    .ForEach(o => this.RemoveDomainEvent(o));
+            }
         }
     }
 }
