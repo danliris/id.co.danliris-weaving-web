@@ -16,6 +16,8 @@ using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
+using Manufactures.Application.MachinesPlanning.DataTransferObjects;
+using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Operators.QueryHandlers;
 using Manufactures.Application.Shifts.DTOs;
@@ -25,6 +27,7 @@ using Manufactures.Domain.BeamStockMonitoring.Queries;
 using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
+using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
@@ -89,6 +92,7 @@ namespace DanLiris.Admin.Web
             });
 
             //Add query service config
+            services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
             services.AddTransient<IReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();
             services.AddTransient<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();

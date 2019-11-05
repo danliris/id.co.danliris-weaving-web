@@ -12,7 +12,7 @@ namespace Manufactures.Application.MachinesPlanning.DataTransferObjects
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "WeavingUnit")]
-        public string WeavingUnit { get; set; }
+        public int WeavingUnit { get; set; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; set; }
@@ -35,7 +35,12 @@ namespace Manufactures.Application.MachinesPlanning.DataTransferObjects
         [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; set; }
 
-        public MachinesPlanningReportListDto(MachinesPlanningDocument document, string weavingUnit, string machineNumber, string area, string block, string kaizenBlock, string location, string maintenance, string operatorName)
+        public MachinesPlanningReportListDto(MachinesPlanningDocument document, 
+                                             int weavingUnit, 
+                                             string machineNumber, 
+                                             string location, 
+                                             string maintenance, 
+                                             string operatorName)
         {
             Id = document.Identity;
             WeavingUnit = weavingUnit;
