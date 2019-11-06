@@ -383,16 +383,23 @@ namespace Manufactures.Controllers.Api
             return Ok(updateDoffDailyOperationSizingDocument.Identity);
         }
 
-        [HttpDelete("{Id}")]
-        public async Task<IActionResult> Delete(string Id)
+        [HttpDelete("{operationId}/{historyId}")]
+        public async Task<IActionResult> Delete(string operationId,
+                                                string historyId)
         {
-            if (!Guid.TryParse(Id, out Guid Identity))
+            if (!Guid.TryParse(operationId, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            if (!Guid.TryParse(historyId, out Guid HistoryId))
             {
                 return NotFound();
             }
 
             var command = new HistoryRemovePreparationDailyOperationSizingCommand();
             command.SetId(Identity);
+            command.SetHistoryId(HistoryId);
 
             var dailyOperationSizingDocument = await Mediator.Send(command);
 
