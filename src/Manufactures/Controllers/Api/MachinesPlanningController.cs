@@ -262,5 +262,173 @@ namespace Manufactures.Controllers.Api
                 });
             }
         }
+
+        [HttpGet("get-by-machine/{machineId}")]
+        public async Task<IActionResult> GetByMachine(Guid machineId)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetByMachine(machineId);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
+
+        [HttpGet("get-by-block/{block}")]
+        public async Task<IActionResult> GetByBlock(string block)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetByBlock(block);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
+
+        [HttpGet("get-by-weaving-unit-machine/unit/{weavingUnitId}/machine/{machineId}")]
+        public async Task<IActionResult> GetByWeavingUnitMachine(int weavingUnitId, Guid machineId)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetByWeavingUnitMachine(weavingUnitId, machineId);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
+
+        [HttpGet("get-by-weaving-unit-block/unit/{weavingUnitId}/block/{block}")]
+        public async Task<IActionResult> GetByWeavingUnitBlock(int weavingUnitId, string block)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetByWeavingUnitBlock(weavingUnitId, block);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
+
+        [HttpGet("get-by-machine-block/machine/{machineId}/block/{block}")]
+        public async Task<IActionResult> GetByMachineBlock(Guid machineId, string block)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetByMachineBlock(machineId, block);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
+
+        [HttpGet("get-all-specified/unit/{weavingUnitId}/machine/{machineId}/block/{block}")]
+        public async Task<IActionResult> GetAllSpecified(int weavingUnitId, Guid machineId, string block)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var machinePlanning = await _machinesPlanningReportQuery.GetAllSpecified(weavingUnitId, machineId, block);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                MachinePlanningReportXlsTemplate xlsTemplate = new MachinePlanningReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateMachinePlanningReportXls(machinePlanning.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Perencanaan Mesin");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(machinePlanning, info: new
+                {
+                    count = machinePlanning.Count()
+                });
+            }
+        }
     }
 }
