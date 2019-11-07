@@ -111,7 +111,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
             services.AddTransient<IReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();
-            services.AddTransient<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
+            services.AddTransient<IDailyOperationWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
             services.AddTransient<ISizingQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();

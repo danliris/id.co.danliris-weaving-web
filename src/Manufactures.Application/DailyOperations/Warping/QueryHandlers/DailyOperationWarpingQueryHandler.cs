@@ -16,7 +16,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 {
-    public class DailyOperationWarpingQueryHandler : IWarpingQuery<DailyOperationWarpingListDto>
+    public class DailyOperationWarpingQueryHandler : IDailyOperationWarpingQuery<DailyOperationWarpingListDto>
     {
         private readonly IStorage
             _storage;

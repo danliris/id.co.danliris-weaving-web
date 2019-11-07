@@ -36,7 +36,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationWarpingController : ControllerApiBase
     {
-        private readonly IWarpingQuery<DailyOperationWarpingListDto> _warpingQuery;
+        private readonly IDailyOperationWarpingQuery<DailyOperationWarpingListDto> _warpingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
@@ -48,7 +48,7 @@ namespace Manufactures.Controllers.Api
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
-                                               IWarpingQuery<DailyOperationWarpingListDto> warpingQuery,
+                                               IDailyOperationWarpingQuery<DailyOperationWarpingListDto> warpingQuery,
                                                IOperatorQuery<OperatorListDto> operatorQuery,
                                                IShiftQuery<ShiftDto> shiftQuery,
                                                IBeamQuery<BeamListDto> beamQuery)

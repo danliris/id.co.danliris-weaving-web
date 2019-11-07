@@ -2,7 +2,7 @@
 
 namespace Manufactures.Domain.DailyOperations.Warping.Queries
 {
-    public interface IWarpingQuery<TModel> : IQueries<TModel>
+    public interface IDailyOperationWarpingQuery<TModel> : IQueries<TModel>
     {
     }
 }
