@@ -7,6 +7,7 @@ using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Manufactures.Application.Beams.QueryHandlers;
 using Manufactures.Application.BeamStockMonitoring.DataTransferObjects;
 using Manufactures.Application.BeamStockMonitoring.QueryHandlers;
@@ -61,10 +62,20 @@ namespace DanLiris.Admin.Web
             loggerFactory.AddDebug();
         }
 
+        public void RegisterMasterDataSettings()
+        {
+            MasterDataSettings.Endpoint = configuration.GetValue<string>("MasterDataEndpoint") ?? configuration["MasterDataEndpoint"];
+            MasterDataSettings.TokenEndpoint = this.configuration.GetSection("DanLirisSettings").GetValue<string>("TokenEndpoint");
+            MasterDataSettings.Username = this.configuration.GetSection("DanLirisSettings").GetValue<string>("Username");
+            MasterDataSettings.Password = this.configuration.GetSection("DanLirisSettings").GetValue<string>("Password");
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             var secret = configuration.GetValue<string>("SECRET") ?? configuration["SECRET"];
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
+
+            RegisterMasterDataSettings();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -85,13 +96,18 @@ namespace DanLiris.Admin.Web
                 }
             );
 
-            services.Configure<MasterDataSettings>(options =>
-            {
-                options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
-                options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
-            });
+            //services.AddScoped<IIdentityService, IdentityService>();
 
-            //Add query service config
+            services.AddSingleton<ICoreClient, CoreClient>()
+                    .AddSingleton<IHttpClientService, HttpClientService>();
+
+            //services.Configure<MasterDataSettings>(options =>
+            //{
+            //    options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
+            //    options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
+            //});
+
+            //Add Query Service Config
             services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
             services.AddTransient<IReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();

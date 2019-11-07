@@ -1,9 +1,14 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.MachinesPlanning.Repositories;
 using Manufactures.Domain.Operators.Repositories;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +26,11 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
             _operatorRepository;
         private readonly IMachinesPlanningRepository
             _machinePlanningRepository;
+        protected readonly IHttpClientService _http;
 
-        public MachinesPlanningReportQueryHandler(IStorage storage)
+        public MachinesPlanningReportQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
+            _http = serviceProvider.GetService<IHttpClientService>();
             _storage = storage;
             _machineRepository =
                 _storage.GetRepository<IMachineRepository>();
@@ -31,6 +38,22 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 _storage.GetRepository<IOperatorRepository>();
             _machinePlanningRepository =
                 _storage.GetRepository<IMachinesPlanningRepository>();
+        }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
         }
 
         public async Task<IEnumerable<MachinesPlanningReportListDto>> GetAll()
@@ -53,8 +76,12 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 foreach (var document in machinePlanningDocuments)
                 {
                     await Task.Yield();
-                    var weavingUnit = document.UnitDepartementId.Value;
+                    var weavingUnitId = document.UnitDepartementId.Value;
 
+                    SingleUnitResult unitData = GetUnit(weavingUnitId);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -99,7 +126,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -135,6 +162,11 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 {
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
+
+                    SingleUnitResult unitData = GetUnit(weavingUnit);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
 
                     var machineQuery =
                         _machineRepository
@@ -180,7 +212,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -216,7 +248,12 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 foreach (var document in machinePlanningDocuments)
                 {
                     await Task.Yield();
-                    var weavingUnit = document.UnitDepartementId.Value;
+                    var weavingUnitId = document.UnitDepartementId.Value;
+
+                    SingleUnitResult unitData = GetUnit(weavingUnitId);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
 
                     var machineQuery =
                         _machineRepository
@@ -262,7 +299,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -297,7 +334,12 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 foreach (var document in machinePlanningDocuments)
                 {
                     await Task.Yield();
-                    var weavingUnit = document.UnitDepartementId.Value;
+                    var weavingUnitId = document.UnitDepartementId.Value;
+
+                    SingleUnitResult unitData = GetUnit(weavingUnitId);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
 
                     var machineQuery =
                         _machineRepository
@@ -343,7 +385,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -380,6 +422,11 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
+                    SingleUnitResult unitData = GetUnit(weavingUnit);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
+
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -424,7 +471,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -461,6 +508,11 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
+                    SingleUnitResult unitData = GetUnit(weavingUnit);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
+
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -505,7 +557,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -540,7 +592,12 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                 foreach (var document in machinePlanningDocuments)
                 {
                     await Task.Yield();
-                    var weavingUnit = document.UnitDepartementId.Value;
+                    var weavingUnitId = document.UnitDepartementId.Value;
+
+                    SingleUnitResult unitData = GetUnit(weavingUnitId);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
 
                     var machineQuery =
                         _machineRepository
@@ -586,7 +643,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);
@@ -623,6 +680,11 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
+                    SingleUnitResult unitData = GetUnit(weavingUnit);
+                    var weavingUnitName = unitData.data.Name;
+
+                    await Task.Yield();
+
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -667,7 +729,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var userOperatorName = userOperatorDocument.CoreAccount.Name;
 
                     //Instantiate Value to MachinePlanningDto
-                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnit, machineNumber, location, userMaintenanceName, userOperatorName);
+                    var machinePlanning = new MachinesPlanningReportListDto(document, weavingUnitName, machineNumber, location, userMaintenanceName, userOperatorName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(machinePlanning);

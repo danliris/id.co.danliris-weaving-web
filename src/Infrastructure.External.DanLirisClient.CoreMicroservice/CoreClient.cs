@@ -23,8 +23,8 @@ namespace Infrastructure.External.DanLirisClient.CoreMicroservice
 
         protected async Task<string> GetTokenAsync()
         {
-            var response = _http.PostAsync(_settings.TokenEndpoint,
-                new StringContent(JsonConvert.SerializeObject(new { username = _settings.Username, password = _settings.Password }), Encoding.UTF8, "application/json"));
+            var response = _http.PostAsync(MasterDataSettings.TokenEndpoint,
+                new StringContent(JsonConvert.SerializeObject(new { username = MasterDataSettings.Username, password = MasterDataSettings.Password }), Encoding.UTF8, "application/json"));
 
             dynamic tokenResult = new { };
 
