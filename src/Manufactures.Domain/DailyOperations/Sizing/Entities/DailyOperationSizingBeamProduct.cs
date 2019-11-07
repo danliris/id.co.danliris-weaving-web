@@ -1,7 +1,9 @@
 ﻿using Infrastructure.Domain;
+using Infrastructure.Domain.Events;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
+using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Entities
 {
@@ -126,6 +128,24 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         protected override DailyOperationSizingBeamProduct GetEntity()
         {
             return this;
+        }
+
+        protected override void MarkRemoved()
+        {
+            DeletedBy = "System";
+            Deleted = true;
+            DeletedDate = DateTimeOffset.UtcNow;
+
+            if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityDeleted<DailyOperationSizingBeamProduct>))
+                this.AddDomainEvent(new OnEntityDeleted<DailyOperationSizingBeamProduct>(GetEntity()));
+
+            // clear updated events
+            if (this.DomainEvents.Any(o => o is OnEntityUpdated<DailyOperationSizingBeamProduct>))
+            {
+                this.DomainEvents.Where(o => o is OnEntityUpdated<DailyOperationSizingBeamProduct>)
+                    .ToList()
+                    .ForEach(o => this.RemoveDomainEvent(o));
+            }
         }
     }
 }

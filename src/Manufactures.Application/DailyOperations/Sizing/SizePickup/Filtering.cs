@@ -1,7 +1,4 @@
 ﻿using Manufactures.Application.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Sizing.SizePickup
 {

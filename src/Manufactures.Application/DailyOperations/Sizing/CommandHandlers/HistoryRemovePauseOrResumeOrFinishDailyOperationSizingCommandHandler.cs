@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,50 +27,60 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            //Get Daily Operation Document Sizing
-            var sizingQuery =
-                _dailyOperationSizingDocumentRepository
-                        .Query
-                        .Include(d => d.SizingHistories)
-                        .Include(b => b.SizingBeamProducts)
-                        .Where(doc => doc.Identity.Equals(request.Id));
-            var existingDailyOperationSizingDocument =
-                _dailyOperationSizingDocumentRepository
-                        .Find(sizingQuery)
-                        .FirstOrDefault();
-
-            //Get Daily Operation History
-            var existingDailyOperationSizingHistories =
-                existingDailyOperationSizingDocument
-                        .SizingHistories
-                        .OrderByDescending(o => o.DateTimeMachine);
-            var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
-
-            if (lastHistory.Identity.Equals(request.HistoryId))
+            try
             {
-                if (request.HistoryStatus.Equals(Helpers.MachineStatus.ONFINISH))
-                {
-                    existingDailyOperationSizingDocument.SetMachineSpeed(0);
-                    existingDailyOperationSizingDocument.SetVisco(0);
-                    existingDailyOperationSizingDocument.SetTexSQ(0);
-                    existingDailyOperationSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+                //Get Daily Operation Document Sizing
+                var sizingQuery =
+                    _dailyOperationSizingDocumentRepository
+                            .Query
+                            .Include(d => d.SizingHistories)
+                            .Include(b => b.SizingBeamProducts)
+                            .Where(doc => doc.Identity.Equals(request.Id));
+                var existingDailyOperationSizingDocument =
+                    _dailyOperationSizingDocumentRepository
+                            .Find(sizingQuery)
+                            .FirstOrDefault();
 
-                    existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                //Get Daily Operation History
+                var existingDailyOperationSizingHistories =
+                    existingDailyOperationSizingDocument
+                            .SizingHistories
+                            .OrderByDescending(o => o.DateTimeMachine);
+                var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
+
+                if (lastHistory.Identity.Equals(request.HistoryId))
+                {
+                    if (request.HistoryStatus.Equals(MachineStatus.ONFINISH))
+                    {
+                        existingDailyOperationSizingDocument.SetMachineSpeed(0);
+                        existingDailyOperationSizingDocument.SetVisco(0);
+                        existingDailyOperationSizingDocument.SetTexSQ(0);
+                        existingDailyOperationSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+
+                        //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                        lastHistory.Remove();
+                    }
+                    else
+                    {
+                        //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                        lastHistory.Remove();
+                    }
+
+                    await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+
+                    _storage.Save();
+
+                    return existingDailyOperationSizingDocument;
                 }
                 else
                 {
-                    existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                    throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
                 }
-
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
-
-                _storage.Save();
-
-                return existingDailyOperationSizingDocument;
             }
-            else
+            catch (Exception)
             {
-                throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
+
+                throw;
             }
         }
     }

@@ -80,7 +80,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (!countBeamStatus.Equals(0))
             {
-                throw Validator.ErrorValidation(("BeamStatus", "Can's Start. There's ONPROCESS Sizing Beam on this Operation"));
+                throw Validator.ErrorValidation(("BeamStatus", "Can't Start. There's ONPROCESS Sizing Beam on this Operation"));
             }
 
             //Validation for Operation Status
@@ -89,7 +89,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (operationCompleteStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can's Start. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime

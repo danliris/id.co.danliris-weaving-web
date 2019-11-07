@@ -6,6 +6,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -33,87 +34,98 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand request, CancellationToken cancellationToken)
         {
-            //Get Daily Operation Document Sizing
-            var sizingQuery =
-                _dailyOperationSizingDocumentRepository
-                        .Query
-                        .Include(d => d.SizingHistories)
-                        .Include(b => b.SizingBeamProducts)
-                        .Where(doc => doc.Identity.Equals(request.Id));
-            var existingDailyOperationSizingDocument =
-                _dailyOperationSizingDocumentRepository
-                        .Find(sizingQuery)
-                        .FirstOrDefault();
-
-            //Get Daily Operation History
-            var existingDailyOperationSizingHistories =
-                existingDailyOperationSizingDocument
-                        .SizingHistories
-                        .OrderByDescending(o => o.DateTimeMachine);
-            var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
-
-            //Get Daily Operation Beam Product
-            var existingDailyOperationBeamProducts =
-                existingDailyOperationSizingDocument
-                        .SizingBeamProducts
-                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-            var lastBeamProduct = existingDailyOperationBeamProducts.FirstOrDefault();
-
-            switch (request.HistoryStatus)
+            try
             {
-                case "START":
-                    if (lastHistory.Identity.Equals(request.HistoryId))
-                    {
-                        existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
-                    }
-                    else
-                    {
-                        throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
-                    }
+                //Get Daily Operation Document Sizing
+                var sizingQuery =
+                    _dailyOperationSizingDocumentRepository
+                            .Query
+                            .Include(d => d.SizingHistories)
+                            .Include(b => b.SizingBeamProducts)
+                            .Where(doc => doc.Identity.Equals(request.Id));
+                var existingDailyOperationSizingDocument =
+                    _dailyOperationSizingDocumentRepository
+                            .Find(sizingQuery)
+                            .FirstOrDefault();
 
-                    if (lastBeamProduct.Identity.Equals(request.BeamProductId))
-                    {
-                        existingDailyOperationSizingDocument.RemoveDailyOperationSizingBeamProduct(lastBeamProduct.Identity);
-                    }
-                    else
-                    {
-                        throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
-                    }
-                    break;
-                case "COMPLETED":
-                    if (lastHistory.Identity.Equals(request.HistoryId))
-                    {
-                        existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
-                    }
-                    else
-                    {
-                        throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
-                    }
+                //Get Daily Operation History
+                var existingDailyOperationSizingHistories =
+                    existingDailyOperationSizingDocument
+                            .SizingHistories
+                            .OrderByDescending(o => o.DateTimeMachine);
+                var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
 
-                    if (lastBeamProduct.Identity.Equals(request.BeamProductId))
-                    {
-                        lastBeamProduct.SetCounterFinish(0);
-                        lastBeamProduct.SetWeightNetto(0);
-                        lastBeamProduct.SetWeightBruto(0);
-                        lastBeamProduct.SetWeightTheoritical(0);
-                        lastBeamProduct.SetPISMeter(0);
-                        lastBeamProduct.SetSPU(0);
-                        lastBeamProduct.SetSizingBeamStatus(Helpers.BeamStatus.ONPROCESS);
+                //Get Daily Operation Beam Product
+                var existingDailyOperationBeamProducts =
+                    existingDailyOperationSizingDocument
+                            .SizingBeamProducts
+                            .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+                var lastBeamProduct = existingDailyOperationBeamProducts.FirstOrDefault();
 
-                        existingDailyOperationSizingDocument.UpdateDailyOperationSizingBeamProduct(lastBeamProduct);
-                    }
-                    else
-                    {
-                        throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
-                    }
-                    break;
+                switch (request.HistoryStatus)
+                {
+                    case "START":
+                        if (lastHistory.Identity.Equals(request.HistoryId))
+                        {
+                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                            lastHistory.Remove();
+                        }
+                        else
+                        {
+                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
+                        }
+
+                        if (lastBeamProduct.Identity.Equals(request.BeamProductId))
+                        {
+                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingBeamProduct(lastBeamProduct.Identity);
+                            lastBeamProduct.Remove();
+                        }
+                        else
+                        {
+                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
+                        }
+                        break;
+                    case "COMPLETED":
+                        if (lastHistory.Identity.Equals(request.HistoryId))
+                        {
+                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
+                            lastHistory.Remove();
+                        }
+                        else
+                        {
+                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
+                        }
+
+                        if (lastBeamProduct.Identity.Equals(request.BeamProductId))
+                        {
+                            lastBeamProduct.SetCounterFinish(0);
+                            lastBeamProduct.SetWeightNetto(0);
+                            lastBeamProduct.SetWeightBruto(0);
+                            lastBeamProduct.SetWeightTheoritical(0);
+                            lastBeamProduct.SetPISMeter(0);
+                            lastBeamProduct.SetSPU(0);
+                            lastBeamProduct.SetSizingBeamStatus(Helpers.BeamStatus.ONPROCESS);
+
+                            existingDailyOperationSizingDocument.UpdateDailyOperationSizingBeamProduct(lastBeamProduct);
+                        }
+                        else
+                        {
+                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
+                        }
+                        break;
+                }
+
+                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+
+                _storage.Save();
+
+                return existingDailyOperationSizingDocument;
             }
+            catch (Exception)
+            {
 
-            await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
-
-            _storage.Save();
-
-            return existingDailyOperationSizingDocument;
+                throw;
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using ExtCore.WebApplication.Extensions;
 using FluentScheduler;
 using IdentityServer4.AccessTokenValidation;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Manufactures.Application.Beams.QueryHandlers;
 using Manufactures.Application.BeamStockMonitoring.DataTransferObjects;
 using Manufactures.Application.BeamStockMonitoring.QueryHandlers;
@@ -16,6 +17,8 @@ using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
+using Manufactures.Application.MachinesPlanning.DataTransferObjects;
+using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Operators.QueryHandlers;
 using Manufactures.Application.Shifts.DTOs;
@@ -25,6 +28,7 @@ using Manufactures.Domain.BeamStockMonitoring.Queries;
 using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
+using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
@@ -58,10 +62,20 @@ namespace DanLiris.Admin.Web
             loggerFactory.AddDebug();
         }
 
+        public void RegisterMasterDataSettings()
+        {
+            MasterDataSettings.Endpoint = configuration.GetValue<string>("MasterDataEndpoint") ?? configuration["MasterDataEndpoint"];
+            MasterDataSettings.TokenEndpoint = this.configuration.GetSection("DanLirisSettings").GetValue<string>("TokenEndpoint");
+            MasterDataSettings.Username = this.configuration.GetSection("DanLirisSettings").GetValue<string>("Username");
+            MasterDataSettings.Password = this.configuration.GetSection("DanLirisSettings").GetValue<string>("Password");
+        }
+
         public void ConfigureServices(IServiceCollection services)
         {
             var secret = configuration.GetValue<string>("SECRET") ?? configuration["SECRET"];
             var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
+
+            RegisterMasterDataSettings();
 
             services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
@@ -82,13 +96,19 @@ namespace DanLiris.Admin.Web
                 }
             );
 
-            services.Configure<MasterDataSettings>(options =>
-            {
-                options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
-                options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
-            });
+            //services.AddScoped<IIdentityService, IdentityService>();
 
-            //Add query service config
+            services.AddSingleton<ICoreClient, CoreClient>()
+                    .AddSingleton<IHttpClientService, HttpClientService>();
+
+            //services.Configure<MasterDataSettings>(options =>
+            //{
+            //    options.Endpoint = this.configuration.GetSection("DanLiris").GetValue<string>("MasterDataEndpoint");
+            //    options.TokenEndpoint = this.configuration.GetSection("DanLiris").GetValue<string>("TokenEndpoint");
+            //});
+
+            //Add Query Service Config
+            services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
             services.AddTransient<IReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();
             services.AddTransient<IWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();

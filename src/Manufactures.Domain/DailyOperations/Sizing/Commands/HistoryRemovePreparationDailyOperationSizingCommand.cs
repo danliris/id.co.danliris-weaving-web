@@ -9,14 +9,19 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     public class HistoryRemovePreparationDailyOperationSizingCommand : ICommand<DailyOperationSizingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "HistoryId")]
-        public Guid HistoryId { get; private set; }
+        public Guid HistoryId { get; set; }
 
-        public void SetId(Guid Id)
+        public void SetId(Guid id)
         {
-            this.Id = Id;
+            this.Id = id;
+        }
+
+        public void SetHistoryId(Guid historyId)
+        {
+            this.HistoryId = historyId;
         }
     }
 }
