@@ -10,6 +10,7 @@ using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -75,22 +76,61 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             }
         }
 
-        public async Task<IEnumerable<DailyOperationWarpingReportListDto>> GetAll()
+        public async Task<IEnumerable<DailyOperationWarpingReportListDto>> GetReports(string orderId, int unitId, string materialId, DateTimeOffset? startDate, DateTimeOffset? endDate, string operationStatus, int page, int size)
         {
             try
             {
+                //Add Shell (result) for Daily Operation Warping Report Dto
+                var result = new List<DailyOperationWarpingReportListDto>();
+
                 //Query for Daily Operation Warping
                 var dailyOperationWarpingQuery =
                     _dailyOperationWarpingRepository
                         .Query
-                        .OrderByDescending(o => o.CreatedDate);
+                        .Include(o => o.WarpingBeamProducts)
+                        .Include(o => o.WarpingHistories)
+                        .AsQueryable();
+
+                await Task.Yield();
+                //Check if Order Id Null
+                if (!string.IsNullOrEmpty(orderId))
+                {
+                    //Parse if Not Null
+                    if(Guid.TryParse(orderId, out Guid orderGuid))
+                    {
+                        dailyOperationWarpingQuery = dailyOperationWarpingQuery.Where(x => x.OrderDocumentId == orderGuid);
+                    }
+                    else
+                    {
+                        return result;
+                    }
+                    
+                }
+
+                //Check if Material Id Null
+                if (!string.IsNullOrEmpty(materialId))
+                {
+                    //Parse if Not Null
+                    if (Guid.TryParse(materialId, out Guid materialGuid))
+                    {
+                        dailyOperationWarpingQuery = dailyOperationWarpingQuery.Where(x => x.MaterialTypeId == materialGuid);
+                    }
+                    else
+                    {
+                        return result;
+                    }
+                }
+
+                //Check if Operation Status Null
+                if (!string.IsNullOrEmpty(operationStatus))
+                {
+                    dailyOperationWarpingQuery = dailyOperationWarpingQuery.Where(x => x.OperationStatus == operationStatus);
+                }
 
                 //Get Daily Operation Warping Data from Daily Operation Warping Repo
-                await Task.Yield();
                 var dailyOperationWarpingDocuments =
                     _dailyOperationWarpingRepository
-                        .Find(dailyOperationWarpingQuery);
-                var result = new List<DailyOperationWarpingReportListDto>();
+                        .Find(dailyOperationWarpingQuery.OrderByDescending(x => x.CreatedDate));
 
                 foreach (var document in dailyOperationWarpingDocuments)
                 {
@@ -101,11 +141,24 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                         _weavingOrderDocumentRepository
                             .Query
                             .OrderByDescending(o => o.CreatedDate);
-                    var orderDocument =
+
+                    var orderDocuments =
                         _weavingOrderDocumentRepository
                             .Find(orderDocumentQuery)
-                            .Where(o => o.Identity.Equals(orderDocumentId))
-                            .FirstOrDefault();
+                            .Where(o => o.Identity.Equals(orderDocumentId));
+
+                    //Instantiate New Value if Unit Id not 0
+                    if(unitId != 0)
+                    {
+                        orderDocuments = orderDocuments.Where(x => x.UnitId.Value == unitId);
+                    }
+
+                    //Get First Element from Order Documents to Get Order Number
+                    var orderDocument = orderDocuments.FirstOrDefault();
+                    if (orderDocument == null)
+                    {
+                        continue;
+                    }
                     var orderNumber = orderDocument.OrderNumber;
 
                     //Get Construction Number
@@ -149,10 +202,43 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Get Colour of Cones
                     var colourOfCones = document.ColourOfCone;
 
+                    //Get Histories
+                    var warpingHistories = document.WarpingHistories.OrderByDescending(x => x.CreatedDate);
+
+                    //Get First History, if Histories = null, skip This Document
+                    var firstHistory = warpingHistories.LastOrDefault();     //Use This History to Get History at Preparation State
+                    if (firstHistory == null)
+                    {
+                        continue;
+                    }
+
+                    if (startDate != null && endDate != null)
+                    {
+                        if (!(startDate.Value.Date <= firstHistory.DateTimeMachine.Date && firstHistory.DateTimeMachine.Date <= endDate.Value.Date))
+                        {
+                            continue;
+                        }
+                    }
+                    else if (startDate != null && endDate == null)
+                    {
+                        if (startDate.Value.Date > firstHistory.DateTimeMachine.Date)
+                        {
+                            continue;
+                        }
+                    }
+                    else if (startDate == null && endDate != null)
+                    {
+                        if (firstHistory.DateTimeMachine.Date > endDate.Value.Date)
+                        {
+                            continue;
+                        }
+                    }
+
+                    //Get Preparation Date (First History (PreparationState))
+                    var preparationDate = firstHistory.DateTimeMachine;
+
                     //Get Latest History
-                    var warpingHistories = document.WarpingHistories.OrderByDescending(o => o.CreatedDate);
-                    var firstHistory = warpingHistories.Last();     //Use This History to Get History at Preparation State
-                    var latestHistory = warpingHistories.First();   //Use This History to Get Latest History
+                    var latestHistory = warpingHistories.FirstOrDefault();   //Use This History to Get Latest History
 
                     //Get Operator Name (Latest History)
                     var operatorId = latestHistory.OperatorDocumentId;
@@ -170,9 +256,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Get Warping Operator Group (Latest History)
                     var warpingOperatorGroup = operatorDocument.Group;
 
-                    //Get Preparation Date (First History (PreparationState))
-                    var preparationDate = firstHistory.DateTimeMachine;
-
                     //Get Shift (Latest History)
                     var shiftId = latestHistory.ShiftDocumentId;
                     var shiftQuery =
@@ -187,152 +270,27 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     var shiftName = shiftDocument.Name;
 
                     //Instantiate Value to DailyOperationWarpingReportListDto
-                    var dailyOperationWarpingReport = new DailyOperationWarpingReportListDto(document, 
-                                                                                             orderNumber, 
-                                                                                             constructionNumber, 
-                                                                                             weavingUnitName, 
-                                                                                             materialTypeName, 
-                                                                                             operatorName, 
-                                                                                             warpingOperatorGroup, 
-                                                                                             preparationDate, 
+                    var dailyOperationWarpingReport = new DailyOperationWarpingReportListDto(document,
+                                                                                             orderNumber,
+                                                                                             constructionNumber,
+                                                                                             weavingUnitName,
+                                                                                             materialTypeName,
+                                                                                             operatorName,
+                                                                                             warpingOperatorGroup,
+                                                                                             preparationDate,
                                                                                              shiftName);
 
                     //Add MachinePlanningDto to List of MachinePlanningDto
                     result.Add(dailyOperationWarpingReport);
                 }
 
-                return result;
+                return result.Skip((page - 1) * size).Take(size);
             }
             catch (Exception)
             {
 
                 throw;
             }
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetAllSpecified(Guid orderId, int weavingUnitId, Guid materialTypeId, DateTimeOffset startDate, DateTimeOffset endDate, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByDateRange(DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByDateRangeOperationStatus(DateTimeOffset startDate, DateTimeOffset endDate, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByMaterialType(Guid materialTypeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByMaterialTypeDateRange(Guid materialTypeId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByMaterialTypeDateRangeOperationStatus(Guid materialTypeId, DateTimeOffset startDate, DateTimeOffset endDate, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByMaterialTypeOperationStatus(Guid materialTypeId, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOperationStatus(string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrder(Guid orderId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderDateRange(Guid orderId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderDateRangeOperationStatus(Guid orderId, DateTimeOffset startDate, DateTimeOffset endDate, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderMaterialType(Guid orderId, Guid materialTypeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderMaterialTypeDateRange(Guid orderId, Guid materialTypeId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderMaterialTypeOperationStatus(Guid orderId, Guid materialTypeId, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderOperationStatus(Guid orderId, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderWeavingUnit(Guid orderId, int weavingUnitId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderWeavingUnitDateRange(Guid orderId, int weavingUnitId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderWeavingUnitMaterialType(Guid orderId, int weavingUnitId, Guid materialTypeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByOrderWeavingUnitOperationStatus(Guid orderId, int weavingUnitId, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnit(int weavingUnitId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnitDateRange(int weavingUnitId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnitMaterialType(int weavingUnitId, Guid materialTypeId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnitMaterialTypeDateRange(int weavingUnitId, Guid materialTypeId, DateTimeOffset startDate, DateTimeOffset endDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnitMaterialTypeOperationStatus(int weavingUnitId, Guid materialTypeId, string operationStatus)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<DailyOperationWarpingReportListDto>> GetByWeavingUnitOperationStatus(int weavingUnitId, string operationStatus)
-        {
-            throw new NotImplementedException();
         }
     }
 }
