@@ -2,7 +2,7 @@
 
 namespace Manufactures.Domain.DailyOperations.Sizing.Queries
 {
-    public interface ISizingQuery<TModel> : IQueries<TModel>
+    public interface IDailyOperationSizingQuery<TModel> : IQueries<TModel>
     {
     }
 }

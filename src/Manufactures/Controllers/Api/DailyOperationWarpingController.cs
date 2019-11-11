@@ -1,4 +1,5 @@
 ﻿using Barebone.Controllers;
+using Infrastructure.Domain.Queries;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
 using Manufactures.Application.DailyOperations.Warping.DTOs;
@@ -10,6 +11,7 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
+using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shared.ValueObjects;

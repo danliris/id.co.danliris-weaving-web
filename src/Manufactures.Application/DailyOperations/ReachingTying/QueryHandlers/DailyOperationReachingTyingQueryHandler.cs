@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers
 {
-    public class DailyOperationReachingTyingQueryHandler : IReachingTyingQuery<DailyOperationReachingTyingListDto>
+    public class DailyOperationReachingTyingQueryHandler : IDailyOperationReachingTyingQuery<DailyOperationReachingTyingListDto>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingTyingRepository

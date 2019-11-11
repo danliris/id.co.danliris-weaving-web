@@ -30,7 +30,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationReachingTyingController : ControllerApiBase
     {
-        private readonly IReachingTyingQuery<DailyOperationReachingTyingListDto> _reachingTyingQuery;
+        private readonly IDailyOperationReachingTyingQuery<DailyOperationReachingTyingListDto> _reachingTyingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
 
@@ -44,7 +44,7 @@ namespace Manufactures.Controllers.Api
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationReachingTyingController(IServiceProvider serviceProvider,
                                                      IWorkContext workContext,
-                                                     IReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
+                                                     IDailyOperationReachingTyingQuery<DailyOperationReachingTyingListDto> reachingTyingQuery,
                                                      IOperatorQuery<OperatorListDto> operatorQuery,
                                                      IShiftQuery<ShiftDto> shiftQuery)
             : base(serviceProvider)
