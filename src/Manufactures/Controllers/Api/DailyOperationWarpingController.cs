@@ -469,12 +469,12 @@ namespace Manufactures.Controllers.Api
 
         //Controller for Daily Operation Warping Report
         [HttpGet("get-report")]
-        public async Task<IActionResult> GetReport(string orderId, string materialId, string status, DateTimeOffset? dateFrom = null, DateTimeOffset? dateTo = null, int weavingId = 0, int page = 1, int size = 25)
+        public async Task<IActionResult> GetReport(string orderId, string materialId, string operationStatus, int weavingId = 0, DateTimeOffset? dateFrom = null, DateTimeOffset? dateTo = null, int page = 1, int size = 25)
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, weavingId, materialId, dateFrom, dateTo, status, page, size);
+            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, weavingId, materialId, dateFrom, dateTo, operationStatus, page, size);
 
             await Task.Yield();
             if (index.Equals(true))
