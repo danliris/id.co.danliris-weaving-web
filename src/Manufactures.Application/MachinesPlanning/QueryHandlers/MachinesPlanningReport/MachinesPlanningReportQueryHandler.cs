@@ -66,7 +66,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Query
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -75,12 +75,14 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnitId = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnitId);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
                     var machineQuery =
                         _machineRepository
@@ -96,6 +98,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -110,7 +113,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -151,7 +154,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o=>o.UnitDepartementId.Value.Equals(weavingUnitId))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -160,14 +163,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnit);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -182,6 +186,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location??"Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -196,7 +201,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -238,7 +243,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.MachineId.Value.Equals(machineId))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -247,14 +252,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnitId = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnitId);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -269,6 +275,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -283,7 +290,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -324,7 +331,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.Blok.Equals(block))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -333,14 +340,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnitId = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnitId);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -355,6 +363,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -369,7 +378,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -410,7 +419,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.UnitDepartementId.Value.Equals(weavingUnitId) && o.MachineId.Value.Equals(machineId))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -419,14 +428,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnit);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -441,6 +451,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -455,7 +466,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -496,7 +507,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.UnitDepartementId.Value.Equals(weavingUnitId) && o.Blok.Equals(block))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -505,14 +516,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnit);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -527,6 +539,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -541,7 +554,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -582,7 +595,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.MachineId.Value.Equals(machineId) && o.Blok.Equals(block))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -591,14 +604,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnitId = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnitId);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -613,6 +627,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -627,7 +642,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
@@ -668,7 +683,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                         .Where(o => o.UnitDepartementId.Value.Equals(weavingUnitId)&& o.MachineId.Value.Equals(machineId) && o.Blok.Equals(block))
                         .OrderByDescending(o => o.CreatedDate);
 
-                //Get Machine Planning Data from Machine Planning
+                //Get Machine Planning Data from Machine Planning Repo
                 await Task.Yield();
                 var machinePlanningDocuments =
                     _machinePlanningRepository
@@ -677,14 +692,15 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
 
                 foreach (var document in machinePlanningDocuments)
                 {
+                    //Get Weaving Unit Name
                     await Task.Yield();
                     var weavingUnit = document.UnitDepartementId.Value;
 
                     SingleUnitResult unitData = GetUnit(weavingUnit);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Machine Number & Location
                     await Task.Yield();
-
                     var machineQuery =
                         _machineRepository
                             .Query
@@ -699,6 +715,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                     var machineNumber = machineDocument.MachineNumber ?? "Machine Number Not Found";
                     var location = machineDocument.Location ?? "Location Not Found";
 
+                    //Get User Maintenance Name
                     await Task.Yield();
                     var userMaintenanceQuery =
                         _operatorRepository
@@ -713,7 +730,7 @@ namespace Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanni
                             .FirstOrDefault();
                     var userMaintenanceName = userMaintenanceDocument.CoreAccount.Name;
 
-
+                    //Get User Operator Name
                     await Task.Yield();
                     var userOperatorQuery =
                         _operatorRepository
