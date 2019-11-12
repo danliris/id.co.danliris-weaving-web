@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 {
-    public class DailyOperationSizingQueryHandler : ISizingQuery<DailyOperationSizingListDto>
+    public class DailyOperationSizingQueryHandler : IDailyOperationSizingQuery<DailyOperationSizingListDto>
     {
         private readonly IStorage
             _storage;

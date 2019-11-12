@@ -1,6 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Sizing.Calculations;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
 using Manufactures.Application.DailyOperations.Sizing.SizePickup;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
@@ -12,6 +13,7 @@ using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
+using Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
@@ -67,10 +69,11 @@ namespace Manufactures.Controllers.Api
         //private readonly IDailyOperationWarpingRepository
         //    _dailyOperationWarpingDocumentRepository;
 
-        private readonly ISizingQuery<DailyOperationSizingListDto> _sizingQuery;
+        private readonly IDailyOperationSizingQuery<DailyOperationSizingListDto> _sizingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
+        private readonly IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> _dailyOperationSizingReportQuery;
 
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingRepository;
@@ -80,16 +83,18 @@ namespace Manufactures.Controllers.Api
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationSizingController(IServiceProvider serviceProvider,
                                               IWorkContext workContext,
-                                              ISizingQuery<DailyOperationSizingListDto> sizingQuery,
+                                              IDailyOperationSizingQuery<DailyOperationSizingListDto> sizingQuery,
                                               IOperatorQuery<OperatorListDto> operatorQuery,
                                               IShiftQuery<ShiftDto> shiftQuery,
-                                              IBeamQuery<BeamListDto> beamQuery)
+                                              IBeamQuery<BeamListDto> beamQuery,
+                                              IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> dailyOperationSizingReportQuery)
             : base(serviceProvider)
         {
             _sizingQuery = sizingQuery ?? throw new ArgumentNullException(nameof(sizingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
+            _dailyOperationSizingReportQuery = dailyOperationSizingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationSizingReportQuery));
 
             _dailyOperationSizingRepository =
                 this.Storage.GetRepository<IDailyOperationSizingRepository>();
@@ -1474,6 +1479,35 @@ namespace Manufactures.Controllers.Api
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        //Controller for Daily Operation Sizing Report
+        [HttpGet("get-report")]
+        public async Task<IActionResult> GetReport(string machineId, string orderId, string operationStatus, int weavingId = 0, DateTimeOffset? dateFrom = null, DateTimeOffset? dateTo = null, int page = 1, int size = 25)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var dailyOperationSizingReport = await _dailyOperationSizingReportQuery.GetReports(machineId, orderId, weavingId, dateFrom, dateTo, operationStatus, page, size);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                DailyOperationSizingReportXlsTemplate xlsTemplate = new DailyOperationSizingReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationSizingReportXls(dailyOperationSizingReport.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Sizing");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(dailyOperationSizingReport, info: new
+                {
+                    count = dailyOperationSizingReport.Count()
+                });
             }
         }
     }

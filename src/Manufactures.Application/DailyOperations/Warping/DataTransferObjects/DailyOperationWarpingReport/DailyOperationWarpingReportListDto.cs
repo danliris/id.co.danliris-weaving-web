@@ -38,6 +38,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
         [JsonProperty(PropertyName = "PreparationDate")]
         public DateTimeOffset PreparationDate { get; set; }
 
+        [JsonProperty(PropertyName = "LastModifiedTime")]
+        public TimeSpan LastModifiedTime { get; set; }
+
         [JsonProperty(PropertyName = "Shift")]
         public string Shift { get; set; }
 
@@ -48,7 +51,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
                                                   string materialType, 
                                                   string operatorName, 
                                                   string warpingOperatorGroup, 
-                                                  DateTimeOffset preparationDate, 
+                                                  DateTimeOffset preparationDate,
+                                                  TimeSpan lastModifiedTime,
                                                   string shift)
         {
             Id = document.Identity;
@@ -61,6 +65,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
             OperatorName = operatorName;
             WarpingOperatorGroup = warpingOperatorGroup;
             PreparationDate = preparationDate;
+            LastModifiedTime = lastModifiedTime;
             Shift = shift;
         }
     }

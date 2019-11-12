@@ -1,9 +1,11 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure.Domain.Queries;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
+using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Materials.Repositories;
@@ -76,7 +78,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             }
         }
 
-        public async Task<IEnumerable<DailyOperationWarpingReportListDto>> GetReports(string orderId, int unitId, string materialId, DateTimeOffset? startDate, DateTimeOffset? endDate, string operationStatus, int page, int size)
+        public async Task<IEnumerable<DailyOperationWarpingReportListDto>> GetReports(string orderId, 
+                                                                                      int unitId, 
+                                                                                      string materialId, 
+                                                                                      DateTimeOffset? startDate, 
+                                                                                      DateTimeOffset? endDate, 
+                                                                                      string operationStatus, 
+                                                                                      int page, 
+                                                                                      int size)
         {
             try
             {
@@ -103,8 +112,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     else
                     {
                         return result;
-                    }
-                    
+                    }                    
                 }
 
                 //Check if Material Id Null
@@ -240,6 +248,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Get Latest History
                     var latestHistory = warpingHistories.FirstOrDefault();   //Use This History to Get Latest History
 
+                    //Get Last Modified Time
+                    var lastModifiedTime = latestHistory.DateTimeMachine.TimeOfDay;
+
                     //Get Operator Name (Latest History)
                     var operatorId = latestHistory.OperatorDocumentId;
                     var operatorQuery =
@@ -278,9 +289,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                                                                                              operatorName,
                                                                                              warpingOperatorGroup,
                                                                                              preparationDate,
+                                                                                             lastModifiedTime,
                                                                                              shiftName);
 
-                    //Add MachinePlanningDto to List of MachinePlanningDto
+                    //Add DailyOperationWarpingDto to List of DailyOperationWarpingDto
                     result.Add(dailyOperationWarpingReport);
                 }
 
