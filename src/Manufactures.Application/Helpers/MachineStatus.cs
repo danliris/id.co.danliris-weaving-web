@@ -11,11 +11,11 @@
         public static string ONCOMPLETE = "COMPLETED";
         public static string ONCHANGESHIFT = "CHANGE-SHIFT";
 
-        //Daily Operation Machine Status (Reaching, Tying)
-        public static string ONSTARTREACHING = "REACHING-START";
-        public static string ONFINISHREACHING = "REACHING-FINISH";
-        public static string CHANGEOPERATORREACHING = "REACHING-CHANGE-OPERATOR";
-        public static string ONSTARTTYING= "TYING-START";
-        public static string ONFINISHTYING= "TYING-FINISH";
+        //Daily Operation - Machine Status (Reaching)
+        public static string ONSTARTREACHINGIN = "REACHING-IN-START";
+        public static string ONFINISHREACHINGIN = "REACHING-IN-FINISH";
+        public static string CHANGEOPERATORREACHINGIN = "REACHING-IN-CHANGE-OPERATOR";
+        public static string ONSTARTCOMB= "COMB-START";
+        public static string ONFINISHCOMB= "COMB-FINISH";
     }
 }
