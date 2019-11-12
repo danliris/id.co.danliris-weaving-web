@@ -248,6 +248,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Get Latest History
                     var latestHistory = warpingHistories.FirstOrDefault();   //Use This History to Get Latest History
 
+                    //Get Last Modified Time
+                    var lastModifiedTime = latestHistory.DateTimeMachine.TimeOfDay;
+
                     //Get Operator Name (Latest History)
                     var operatorId = latestHistory.OperatorDocumentId;
                     var operatorQuery =
@@ -286,6 +289,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                                                                                              operatorName,
                                                                                              warpingOperatorGroup,
                                                                                              preparationDate,
+                                                                                             lastModifiedTime,
                                                                                              shiftName);
 
                     //Add DailyOperationWarpingDto to List of DailyOperationWarpingDto

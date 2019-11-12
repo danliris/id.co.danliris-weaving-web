@@ -38,6 +38,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Da
         [JsonProperty(PropertyName = "PreparationDate")]
         public DateTimeOffset PreparationDate { get; set; }
 
+        [JsonProperty(PropertyName = "LastModifiedTime")]
+        public TimeSpan LastModifiedTime { get; set; }
+
         [JsonProperty(PropertyName = "Shift")]
         public string Shift { get; set; }
 
@@ -55,6 +58,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Da
                                                  string operatorName, 
                                                  string sizingOperatorGroup, 
                                                  DateTimeOffset preparationDate, 
+                                                 TimeSpan lastModifiedTime,
                                                  string shift, 
                                                  double yarnStrands, 
                                                  double emptyWeight)
@@ -69,6 +73,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Da
             OperatorName = operatorName;
             SizingOperatorGroup = sizingOperatorGroup;
             PreparationDate = preparationDate;
+            LastModifiedTime = lastModifiedTime;
             Shift = shift;
             YarnStrands = yarnStrands;
             EmptyWeight = emptyWeight;

@@ -208,11 +208,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                         _machineRepository
                             .Query
                             .OrderByDescending(o => o.CreatedDate);
-                    var machineDocument =
+                    var machineDocuments =
                         _machineRepository
                             .Find(weavingMachineQuery)
-                            .Where(o => o.Identity.Equals(weavingMachineId))
-                            .FirstOrDefault();
+                            .Where(o => o.Identity.Equals(weavingMachineId));
+
+                    //Get First Element from Machine Documents to Get Machine Number
+                    var machineDocument = machineDocuments.FirstOrDefault();
+                    if (orderDocument == null)
+                    {
+                        continue;
+                    }
+
                     var machineNumber = machineDocument.MachineNumber;
 
                     //Get Recipe Code
@@ -258,6 +265,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
 
                     //Get Latest History
                     var latestHistory = sizingHistories.FirstOrDefault();   //Use This History to Get Latest History
+
+                    //Get Last Modified Time
+                    var lastModifiedTime = latestHistory.DateTimeMachine.TimeOfDay;
 
                     //Get Operator Name (Latest History)
                     var operatorId = latestHistory.OperatorDocumentId;
@@ -352,6 +362,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                                                                                            operatorName,
                                                                                            sizingOperatorGroup,
                                                                                            preparationDate,
+                                                                                           lastModifiedTime,
                                                                                            shiftName,
                                                                                            yarnStrands,
                                                                                            emptyWeight);
