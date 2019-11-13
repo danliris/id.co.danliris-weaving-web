@@ -45,7 +45,6 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
             RuleFor(validator => validator.Id).NotEmpty();
             RuleFor(validator => validator.ReachingInWidth).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
             RuleFor(validator => validator.ReachingInFinishDate).NotEmpty();
             RuleFor(validator => validator.ReachingInFinishTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();

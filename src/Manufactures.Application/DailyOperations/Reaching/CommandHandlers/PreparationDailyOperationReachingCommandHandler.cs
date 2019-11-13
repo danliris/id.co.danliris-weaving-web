@@ -49,14 +49,14 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            var newOperationDetail =
+            var newHistory =
                     new DailyOperationReachingHistory(Guid.NewGuid(),
                                                           new OperatorId(request.OperatorDocumentId.Value),
                                                           dateTimeOperation,
                                                           new ShiftId(request.ShiftDocumentId.Value),
                                                           MachineStatus.ONENTRY);
 
-            dailyOperationReachingDocument.AddDailyOperationReachingHistory(newOperationDetail);
+            dailyOperationReachingDocument.AddDailyOperationReachingHistory(newHistory);
 
             await _dailyOperationReachingDocumentRepository.Update(dailyOperationReachingDocument);
 

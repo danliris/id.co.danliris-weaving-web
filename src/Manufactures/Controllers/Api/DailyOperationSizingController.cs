@@ -260,6 +260,12 @@ namespace Manufactures.Controllers.Api
             });
         }
 
+        //[HttpGet("get-sizing-beam-product")]
+        //public async Task<IActionResult> GetSizingBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
+        //{
+
+        //}
+
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {

@@ -179,7 +179,7 @@ namespace Manufactures.Controllers.Api
             return Ok(updateReachingInStartDailyOperationReachingDocument.Identity);
         }
 
-        [HttpPut("{Id}/change-operator")]
+        [HttpPut("{Id}/reaching-in-change-operator")]
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]ChangeOperatorReachingInDailyOperationReachingCommand command)
         {

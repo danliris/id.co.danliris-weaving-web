@@ -36,13 +36,13 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
     {
         public PreparationDailyOperationReachingCommandValidator()
         {
-            RuleFor(validator => validator.MachineDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.OrderDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
-            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.PreparationDate).NotEmpty();
-            RuleFor(validator => validator.PreparationTime).NotEmpty();
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.MachineDocumentId).NotEmpty().WithMessage("No. Mesin Harus Diisi");
+            RuleFor(validator => validator.OrderDocumentId).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
+            RuleFor(validator => validator.SizingBeamId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");
+            RuleFor(validator => validator.OperatorDocumentId).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(validator => validator.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
+            RuleFor(validator => validator.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
+            RuleFor(validator => validator.ShiftDocumentId).NotEmpty().WithMessage("Shift Tidak Boleh Kosong");
         }
     }
 }
