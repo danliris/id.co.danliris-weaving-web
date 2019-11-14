@@ -1,24 +1,24 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingReport;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
-using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
+using Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationReachingReport;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.Operators.Queries;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
+using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -33,6 +33,7 @@ namespace Manufactures.Controllers.Api
         private readonly IDailyOperationReachingQuery<DailyOperationReachingListDto> _reachingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
+        private readonly IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto> _dailyOperationReachingReportQuery;
 
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
@@ -46,12 +47,14 @@ namespace Manufactures.Controllers.Api
                                                 IWorkContext workContext,
                                                 IDailyOperationReachingQuery<DailyOperationReachingListDto> reachingQuery,
                                                 IOperatorQuery<OperatorListDto> operatorQuery,
-                                                IShiftQuery<ShiftDto> shiftQuery)
+                                                IShiftQuery<ShiftDto> shiftQuery,
+                                                IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto> dailyOperationReachingReportQuery)
             : base(serviceProvider)
         {
             _reachingQuery = reachingQuery ?? throw new ArgumentNullException(nameof(reachingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
+            _dailyOperationReachingReportQuery = dailyOperationReachingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationReachingReportQuery));
 
             _dailyOperationReachingRepository =
                 this.Storage.GetRepository<IDailyOperationReachingRepository>();
@@ -235,6 +238,55 @@ namespace Manufactures.Controllers.Api
             var updateCombFinishDailyOperationReachingDocument = await Mediator.Send(command);
 
             return Ok(updateCombFinishDailyOperationReachingDocument.Identity);
+        }
+
+        //Controller for Daily Operation Reaching Report
+        [HttpGet("get-report")]
+        public async Task<IActionResult> GetReport(string machineId, 
+                                                   string orderId, 
+                                                   string constructionId, 
+                                                   string beamId, 
+                                                   string operationStatus, 
+                                                   int unitId = 0, 
+                                                   DateTimeOffset? dateFrom = null, 
+                                                   DateTimeOffset? dateTo = null, 
+                                                   int page = 1, 
+                                                   int size = 25,
+                                                   string order = "{}")
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var dailyOperationReachingReport = await _dailyOperationReachingReportQuery.GetReports(machineId, 
+                                                                                                   orderId, 
+                                                                                                   constructionId, 
+                                                                                                   beamId, 
+                                                                                                   operationStatus, 
+                                                                                                   unitId, 
+                                                                                                   dateFrom, 
+                                                                                                   dateTo, 
+                                                                                                   page, 
+                                                                                                   size,
+                                                                                                   order);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                DailyOperationReachingReportXlsTemplate xlsTemplate = new DailyOperationReachingReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationReachingReportXls(dailyOperationReachingReport.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Reaching");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(dailyOperationReachingReport, info: new
+                {
+                    count = dailyOperationReachingReport.Count()
+                });
+            }
         }
     }
 }

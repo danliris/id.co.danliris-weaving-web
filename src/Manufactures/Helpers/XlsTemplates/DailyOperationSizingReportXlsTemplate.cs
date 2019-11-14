@@ -24,6 +24,7 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Grup Sizing", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pasang", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Waktu Terakhir Diubah", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Total Helai Benang", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Total Berat Kosong Beam Warping", DataType = typeof(string) });
@@ -46,10 +47,12 @@ namespace Manufactures.Helpers.XlsTemplates
                     var operatorName = item.OperatorName;
                     var sizingOperatorGroup = item.SizingOperatorGroup;
                     var preparationDate = item.PreparationDate;
+                    var lastModifiedTime = item.LastModifiedTime;
                     var shift = item.Shift;
                     var yarnStrands = item.YarnStrands;
                     var emptyWeight = item.EmptyWeight;
                     dt.Rows.Add(index++,
+                                machineNumber,
                                 orderProductionNumber,
                                 constructionNumber,
                                 weavingUnit,
@@ -58,6 +61,7 @@ namespace Manufactures.Helpers.XlsTemplates
                                 operatorName,
                                 sizingOperatorGroup,
                                 preparationDate,
+                                lastModifiedTime,
                                 shift,
                                 yarnStrands,
                                 emptyWeight);

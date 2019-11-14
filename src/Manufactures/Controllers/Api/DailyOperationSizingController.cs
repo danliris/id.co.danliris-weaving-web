@@ -15,16 +15,12 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
 using Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
-using Manufactures.Domain.Machines.Repositories;
-using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Dtos;
 using Manufactures.Dtos.Beams;
 using Manufactures.Helpers.XlsTemplates;
@@ -260,10 +256,104 @@ namespace Manufactures.Controllers.Api
             });
         }
 
-        //[HttpGet("get-sizing-beam-product")]
+        //[HttpGet("get-sizing-beam-products")]
         //public async Task<IActionResult> GetSizingBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
         //{
+        //    page = page - 1;
+        //    List<BeamDto> sizingListBeamProducts = new List<BeamDto>();
+        //    List<BeamId> listOfSizingBeamProductId = new List<BeamId>();
 
+        //    await Task.Yield();
+        //    var sizingQuery =
+        //         _dailyOperationSizingRepository
+        //             .Query
+        //             .Include(x => x.SizingHistories)
+        //             .Include(x => x.SizingBeamProducts)
+        //             .OrderByDescending(o => o.DateTimeOperation);
+
+        //    await Task.Yield();
+        //    var existingDailyOperationSizingDocument =
+        //        _dailyOperationSizingRepository
+        //            .Find(sizingQuery);
+
+        //    await Task.Yield();
+        //    foreach (var sizingDocument in existingDailyOperationSizingDocument)
+        //    {
+        //        foreach (var sizingBeamProduct in sizingDocument.SizingBeamProducts)
+        //        {
+        //            await Task.Yield();
+        //            var sizingBeamStatus = sizingBeamProduct.BeamStatus;
+        //            if (sizingBeamStatus.Equals(BeamStatus.ROLLEDUP))
+        //            {
+        //                listOfSizingBeamProductId.Add(new BeamId(sizingBeamProduct.SizingBeamId));
+
+        //                //await Task.Yield();
+        //                //var beamQuery =
+        //                //    _beamRepository
+        //                //        .Query
+        //                //        .OrderByDescending(o => o.CreatedDate)
+        //                //        .AsQueryable();
+
+        //                //if (!string.IsNullOrEmpty(keyword))
+        //                //{
+        //                //    beamQuery = beamQuery.Where(o => o.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+        //                //}
+
+        //                //await Task.Yield();
+        //                //var beamDocument =
+        //                //    _beamRepository
+        //                //        .Find(beamQuery)
+        //                //        .Where(o => o.Identity.Equals(sizingBeamProduct.SizingBeamId))
+        //                //        .FirstOrDefault();
+
+        //                //await Task.Yield();
+        //                //var sizingBeam = new DailyOperationSizingBeamProductDto(sizingBeamProduct, beamDocument);
+        //                //sizingListBeamProducts.Add(sizingBeam);
+        //            }
+        //        }
+        //    }
+
+        //    foreach (var beam in listOfSizingBeamProductId)
+        //    {
+        //        await Task.Yield();
+        //        var beamQuery =
+        //            _beamRepository
+        //                .Query
+        //                .OrderByDescending(o => o.CreatedDate)
+        //                .AsQueryable();
+
+        //        if (!string.IsNullOrEmpty(keyword))
+        //        {
+        //            beamQuery = beamQuery.Where(o => o.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+        //        }
+
+        //        await Task.Yield();
+        //        var beamDocument =
+        //            _beamRepository
+        //                .Find(beamQuery)
+        //                .Where(o => o.Identity.Equals(beam.Value))
+        //                .FirstOrDefault();
+
+        //        await Task.Yield();
+
+        //        if(beamDocument == null)
+        //        {
+        //            continue;
+        //        }
+        //        var sizingBeam = new BeamDto(beamDocument);
+        //        sizingListBeamProducts.Add(sizingBeam);
+        //    }
+        //    sizingListBeamProducts = sizingListBeamProducts.GroupBy(x => new { x.Id, x.Number })
+        //        .Select(x => x.First()).ToList();
+        //    var total = sizingListBeamProducts.Count();
+        //    var data = sizingListBeamProducts.Skip((page - 1) * size).Take(size);
+
+        //    return Ok(data, info: new
+        //    {
+        //        page,
+        //        size,
+        //        total
+        //    });
         //}
 
         [HttpGet("{Id}")]
