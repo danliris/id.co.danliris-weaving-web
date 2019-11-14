@@ -1580,12 +1580,28 @@ namespace Manufactures.Controllers.Api
 
         //Controller for Daily Operation Sizing Report
         [HttpGet("get-report")]
-        public async Task<IActionResult> GetReport(string machineId, string orderId, string operationStatus, int weavingId = 0, DateTimeOffset? dateFrom = null, DateTimeOffset? dateTo = null, int page = 1, int size = 25)
+        public async Task<IActionResult> GetReport(string machineId, 
+                                                   string orderId, 
+                                                   string operationStatus, 
+                                                   int unitId = 0, 
+                                                   DateTimeOffset? dateFrom = null, 
+                                                   DateTimeOffset? dateTo = null, 
+                                                   int page = 1, 
+                                                   int size = 25,
+                                                   string order = "{}")
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationSizingReport = await _dailyOperationSizingReportQuery.GetReports(machineId, orderId, weavingId, dateFrom, dateTo, operationStatus, page, size);
+            var dailyOperationSizingReport = await _dailyOperationSizingReportQuery.GetReports(machineId, 
+                                                                                               orderId,
+                                                                                               operationStatus,
+                                                                                               unitId, 
+                                                                                               dateFrom, 
+                                                                                               dateTo,
+                                                                                               page,
+                                                                                               size, 
+                                                                                               order);
 
             await Task.Yield();
             if (index.Equals(true))
@@ -1593,16 +1609,16 @@ namespace Manufactures.Controllers.Api
                 byte[] xlsInBytes;
 
                 DailyOperationSizingReportXlsTemplate xlsTemplate = new DailyOperationSizingReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateDailyOperationSizingReportXls(dailyOperationSizingReport.ToList());
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationSizingReportXls(dailyOperationSizingReport.Item1.ToList());
                 xlsInBytes = xls.ToArray();
                 var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Sizing");
                 return xlsFile;
             }
             else
             {
-                return Ok(dailyOperationSizingReport, info: new
+                return Ok(dailyOperationSizingReport.Item1, info: new
                 {
-                    count = dailyOperationSizingReport.Count()
+                    count = dailyOperationSizingReport.Item2
                 });
             }
         }

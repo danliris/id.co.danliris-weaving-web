@@ -80,17 +80,17 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             }
         }
 
-        public async Task<IEnumerable<DailyOperationReachingReportListDto>> GetReports(string machineId,
-                                                                                       string orderId,
-                                                                                       string constructionId,
-                                                                                       string beamId,
-                                                                                       string operationStatus,
-                                                                                       int unitId,
-                                                                                       DateTimeOffset? dateFrom,
-                                                                                       DateTimeOffset? dateTo,
-                                                                                       int page,
-                                                                                       int size,
-                                                                                       string order = "{}")
+        public async Task<(IEnumerable<DailyOperationReachingReportListDto>, int)> GetReports(string machineId,
+                                                                                              string orderId,
+                                                                                              string constructionId,
+                                                                                              string beamId,
+                                                                                              string operationStatus,
+                                                                                              int unitId,
+                                                                                              DateTimeOffset? dateFrom,
+                                                                                              DateTimeOffset? dateTo,
+                                                                                              int page,
+                                                                                              int size,
+                                                                                              string order = "{}")
         {
             try
             {
@@ -115,7 +115,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     }
                     else
                     {
-                        return result;
+                        return (result, result.Count);
                     }
                 }
 
@@ -130,7 +130,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     }
                     else
                     {
-                        return result;
+                        return (result, result.Count);
                     }
                 }
 
@@ -144,7 +144,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     }
                     else
                     {
-                        return result;
+                        return (result, result.Count);
                     }
                 }
 
@@ -363,7 +363,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                         result = result.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                     }
                 }
-                    return result.Skip((page - 1) * size).Take(size);
+
+                var pagedResult = result.Skip((page - 1) * size).Take(size);
+
+                return (pagedResult, result.Count);
             }
             catch (Exception)
             {

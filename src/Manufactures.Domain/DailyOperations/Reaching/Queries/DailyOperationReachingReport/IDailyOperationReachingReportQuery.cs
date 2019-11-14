@@ -7,16 +7,16 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationRea
 {
     public interface IDailyOperationReachingReportQuery<TModel>
     {
-        Task<IEnumerable<TModel>> GetReports(string machineId,
-                                             string orderId,
-                                             string constructionId,
-                                             string beamId,
-                                             string operationStatus,
-                                             int unitId,
-                                             DateTimeOffset? dateFrom,
-                                             DateTimeOffset? dateTo,
-                                             int page,
-                                             int size,
-                                             string order);
+        Task<(IEnumerable<TModel>, int)> GetReports(string machineId,
+                                                    string orderId,
+                                                    string constructionId,
+                                                    string beamId,
+                                                    string operationStatus,
+                                                    int unitId,
+                                                    DateTimeOffset? dateFrom,
+                                                    DateTimeOffset? dateTo,
+                                                    int page,
+                                                    int size,
+                                                    string order);
     }
 }

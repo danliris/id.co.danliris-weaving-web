@@ -7,13 +7,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizin
 {
     public interface IDailyOperationSizingReportQuery<TModel>
     {
-        Task<IEnumerable<TModel>> GetReports(string machineId,
-                                             string orderId,
-                                             int unitId,
-                                             DateTimeOffset? dateFrom,
-                                             DateTimeOffset? dateTo,
-                                             string operationStatus,
-                                             int page,
-                                             int size);
+        Task<(IEnumerable<TModel>, int)> GetReports(string machineId,
+                                                    string orderId,
+                                                    string operationStatus,
+                                                    int unitId,
+                                                    DateTimeOffset? dateFrom,
+                                                    DateTimeOffset? dateTo,
+                                                    int page,
+                                                    int size,
+                                                    string order);
     }
 }

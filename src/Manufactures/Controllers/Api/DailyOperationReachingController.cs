@@ -275,16 +275,16 @@ namespace Manufactures.Controllers.Api
                 byte[] xlsInBytes;
 
                 DailyOperationReachingReportXlsTemplate xlsTemplate = new DailyOperationReachingReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateDailyOperationReachingReportXls(dailyOperationReachingReport.ToList());
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationReachingReportXls(dailyOperationReachingReport.Item1.ToList());
                 xlsInBytes = xls.ToArray();
                 var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Reaching");
                 return xlsFile;
             }
             else
             {
-                return Ok(dailyOperationReachingReport, info: new
+                return Ok(dailyOperationReachingReport.Item1, info: new
                 {
-                    count = dailyOperationReachingReport.Count()
+                    count = dailyOperationReachingReport.Item2
                 });
             }
         }

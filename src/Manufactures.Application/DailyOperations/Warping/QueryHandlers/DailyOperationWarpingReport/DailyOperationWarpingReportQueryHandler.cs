@@ -1,10 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
-using Infrastructure.Domain.Queries;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
-using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
@@ -18,7 +16,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport
@@ -79,14 +76,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
         }
 
         public async Task<(IEnumerable<DailyOperationWarpingReportListDto>, int)> GetReports(string orderId,
-                                                                                      int unitId,
-                                                                                      string materialId,
-                                                                                      DateTimeOffset? startDate,
-                                                                                      DateTimeOffset? endDate,
-                                                                                      string operationStatus,
-                                                                                      int page,
-                                                                                      int size,
-                                                                                      string order = "{}")
+                                                                                             int unitId,
+                                                                                             string materialId,
+                                                                                             DateTimeOffset? startDate,
+                                                                                             DateTimeOffset? endDate,
+                                                                                             string operationStatus,
+                                                                                             int page,
+                                                                                             int size,
+                                                                                             string order = "{}")
         {
             try
             {

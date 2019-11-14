@@ -1,20 +1,16 @@
 ﻿using Barebone.Controllers;
-using Infrastructure.Domain.Queries;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
-using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
 using Manufactures.Helpers.XlsTemplates;
@@ -474,9 +470,9 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> GetReport(string orderId, 
                                                    string materialId, 
                                                    string operationStatus, 
-                                                   int weavingId = 0, 
-                                                   DateTimeOffset? dateFrom = null, 
-                                                   DateTimeOffset? dateTo = null, 
+                                                   int unitId = 0, 
+                                                   DateTimeOffset? startDate = null, 
+                                                   DateTimeOffset? endDate = null, 
                                                    int page = 1, 
                                                    int size = 25,
                                                    string order = "{}")
@@ -484,7 +480,15 @@ namespace Manufactures.Controllers.Api
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, weavingId, materialId, dateFrom, dateTo, operationStatus, page, size, order);
+            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, 
+                                                                                                 unitId, 
+                                                                                                 materialId, 
+                                                                                                 startDate, 
+                                                                                                 endDate, 
+                                                                                                 operationStatus, 
+                                                                                                 page, 
+                                                                                                 size, 
+                                                                                                 order);
 
             await Task.Yield();
             if (index.Equals(true))
