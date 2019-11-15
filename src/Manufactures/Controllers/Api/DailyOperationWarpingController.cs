@@ -471,8 +471,8 @@ namespace Manufactures.Controllers.Api
                                                    string materialId, 
                                                    string operationStatus, 
                                                    int unitId = 0, 
-                                                   DateTimeOffset? startDate = null, 
-                                                   DateTimeOffset? endDate = null, 
+                                                   DateTimeOffset? dateFrom = null, 
+                                                   DateTimeOffset? dateTo = null, 
                                                    int page = 1, 
                                                    int size = 25,
                                                    string order = "{}")
@@ -481,11 +481,11 @@ namespace Manufactures.Controllers.Api
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
             var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, 
-                                                                                                 unitId, 
-                                                                                                 materialId, 
-                                                                                                 startDate, 
-                                                                                                 endDate, 
-                                                                                                 operationStatus, 
+                                                                                                 materialId,
+                                                                                                 operationStatus,
+                                                                                                 unitId,
+                                                                                                 dateFrom, 
+                                                                                                 dateTo, 
                                                                                                  page, 
                                                                                                  size, 
                                                                                                  order);

@@ -76,11 +76,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
         }
 
         public async Task<(IEnumerable<DailyOperationWarpingReportListDto>, int)> GetReports(string orderId,
-                                                                                             int unitId,
                                                                                              string materialId,
-                                                                                             DateTimeOffset? startDate,
-                                                                                             DateTimeOffset? endDate,
                                                                                              string operationStatus,
+                                                                                             int unitId,
+                                                                                             DateTimeOffset? dateFrom,
+                                                                                             DateTimeOffset? dateTo,
                                                                                              int page,
                                                                                              int size,
                                                                                              string order = "{}")
@@ -218,23 +218,23 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                         continue;
                     }
 
-                    if (startDate != null && endDate != null)
+                    if (dateFrom != null && dateTo != null)
                     {
-                        if (!(startDate.Value.Date <= firstHistory.DateTimeMachine.Date && firstHistory.DateTimeMachine.Date <= endDate.Value.Date))
+                        if (!(dateFrom.Value.Date <= firstHistory.DateTimeMachine.Date && firstHistory.DateTimeMachine.Date <= dateTo.Value.Date))
                         {
                             continue;
                         }
                     }
-                    else if (startDate != null && endDate == null)
+                    else if (dateFrom != null && dateTo == null)
                     {
-                        if (startDate.Value.Date > firstHistory.DateTimeMachine.Date)
+                        if (dateFrom.Value.Date > firstHistory.DateTimeMachine.Date)
                         {
                             continue;
                         }
                     }
-                    else if (startDate == null && endDate != null)
+                    else if (dateFrom == null && dateTo != null)
                     {
-                        if (firstHistory.DateTimeMachine.Date > endDate.Value.Date)
+                        if (firstHistory.DateTimeMachine.Date > dateTo.Value.Date)
                         {
                             continue;
                         }
