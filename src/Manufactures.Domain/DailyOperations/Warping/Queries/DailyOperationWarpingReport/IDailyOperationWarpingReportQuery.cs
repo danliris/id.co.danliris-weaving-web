@@ -7,13 +7,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarp
 {
     public interface IDailyOperationWarpingReportQuery<TModel>
     {
-        Task<IEnumerable<TModel>> GetReports(string orderId, 
-                                             int weavingUnitId, 
-                                             string materialTypeId, 
-                                             DateTimeOffset? dateFrom, 
-                                             DateTimeOffset? dateTo, 
-                                             string operationStatus, 
-                                             int page, 
-                                             int size);
+        Task<(IEnumerable<TModel>, int)> GetReports(string orderId, 
+                                                    string materialTypeId,
+                                                    string operationStatus,
+                                                    int unitId,
+                                                    DateTimeOffset? dateFrom, 
+                                                    DateTimeOffset? dateTo, 
+                                                    int page, 
+                                                    int size,
+                                                    string order);
     }
 }

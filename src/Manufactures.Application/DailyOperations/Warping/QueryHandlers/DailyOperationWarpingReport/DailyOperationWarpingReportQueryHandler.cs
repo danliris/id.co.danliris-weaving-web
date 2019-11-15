@@ -1,10 +1,8 @@
 ﻿using ExtCore.Data.Abstractions;
-using Infrastructure.Domain.Queries;
 using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
-using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
@@ -18,7 +16,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport
@@ -78,14 +75,15 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             }
         }
 
-        public async Task<IEnumerable<DailyOperationWarpingReportListDto>> GetReports(string orderId, 
-                                                                                      int unitId, 
-                                                                                      string materialId, 
-                                                                                      DateTimeOffset? startDate, 
-                                                                                      DateTimeOffset? endDate, 
-                                                                                      string operationStatus, 
-                                                                                      int page, 
-                                                                                      int size)
+        public async Task<(IEnumerable<DailyOperationWarpingReportListDto>, int)> GetReports(string orderId,
+                                                                                             string materialId,
+                                                                                             string operationStatus,
+                                                                                             int unitId,
+                                                                                             DateTimeOffset? dateFrom,
+                                                                                             DateTimeOffset? dateTo,
+                                                                                             int page,
+                                                                                             int size,
+                                                                                             string order = "{}")
         {
             try
             {
@@ -105,14 +103,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                 if (!string.IsNullOrEmpty(orderId))
                 {
                     //Parse if Not Null
-                    if(Guid.TryParse(orderId, out Guid orderGuid))
+                    if (Guid.TryParse(orderId, out Guid orderGuid))
                     {
                         dailyOperationWarpingQuery = dailyOperationWarpingQuery.Where(x => x.OrderDocumentId == orderGuid);
                     }
                     else
                     {
-                        return result;
-                    }                    
+                        return (result, result.Count);
+                    }
                 }
 
                 //Check if Material Id Null
@@ -125,7 +123,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     }
                     else
                     {
-                        return result;
+                        return (result, result.Count);
                     }
                 }
 
@@ -156,7 +154,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                             .Where(o => o.Identity.Equals(orderDocumentId));
 
                     //Instantiate New Value if Unit Id not 0
-                    if(unitId != 0)
+                    if (unitId != 0)
                     {
                         orderDocuments = orderDocuments.Where(x => x.UnitId.Value == unitId);
                     }
@@ -220,23 +218,23 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                         continue;
                     }
 
-                    if (startDate != null && endDate != null)
+                    if (dateFrom != null && dateTo != null)
                     {
-                        if (!(startDate.Value.Date <= firstHistory.DateTimeMachine.Date && firstHistory.DateTimeMachine.Date <= endDate.Value.Date))
+                        if (!(dateFrom.Value.Date <= firstHistory.DateTimeMachine.Date && firstHistory.DateTimeMachine.Date <= dateTo.Value.Date))
                         {
                             continue;
                         }
                     }
-                    else if (startDate != null && endDate == null)
+                    else if (dateFrom != null && dateTo == null)
                     {
-                        if (startDate.Value.Date > firstHistory.DateTimeMachine.Date)
+                        if (dateFrom.Value.Date > firstHistory.DateTimeMachine.Date)
                         {
                             continue;
                         }
                     }
-                    else if (startDate == null && endDate != null)
+                    else if (dateFrom == null && dateTo != null)
                     {
-                        if (firstHistory.DateTimeMachine.Date > endDate.Value.Date)
+                        if (firstHistory.DateTimeMachine.Date > dateTo.Value.Date)
                         {
                             continue;
                         }
@@ -296,7 +294,27 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     result.Add(dailyOperationWarpingReport);
                 }
 
-                return result.Skip((page - 1) * size).Take(size);
+                if (!order.Contains("{}"))
+                {
+                    Dictionary<string, string> orderDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              orderDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(DailyOperationWarpingReportListDto).GetProperty(key);
+
+                    if (orderDictionary.Values.Contains("asc"))
+                    {
+                        result = result.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    }
+                    else
+                    {
+                        result = result.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    }
+                }
+
+                var pagedResult = result.Skip((page - 1) * size).Take(size);
+
+                return (pagedResult, result.Count);
             }
             catch (Exception)
             {

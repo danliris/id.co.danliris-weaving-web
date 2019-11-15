@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport
+namespace Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationReachingReport
 {
-    public interface IDailyOperationSizingReportQuery<TModel>
+    public interface IDailyOperationReachingReportQuery<TModel>
     {
         Task<(IEnumerable<TModel>, int)> GetReports(string machineId,
                                                     string orderId,
+                                                    string constructionId,
+                                                    string beamId,
                                                     string operationStatus,
                                                     int unitId,
                                                     DateTimeOffset? dateFrom,

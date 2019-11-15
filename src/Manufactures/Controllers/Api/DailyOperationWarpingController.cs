@@ -1,20 +1,16 @@
 ﻿using Barebone.Controllers;
-using Infrastructure.Domain.Queries;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
-using Manufactures.Application.DailyOperations.Warping.DTOs;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
 using Manufactures.Helpers.XlsTemplates;
@@ -471,12 +467,28 @@ namespace Manufactures.Controllers.Api
 
         //Controller for Daily Operation Warping Report
         [HttpGet("get-report")]
-        public async Task<IActionResult> GetReport(string orderId, string materialId, string operationStatus, int weavingId = 0, DateTimeOffset? dateFrom = null, DateTimeOffset? dateTo = null, int page = 1, int size = 25)
+        public async Task<IActionResult> GetReport(string orderId, 
+                                                   string materialId, 
+                                                   string operationStatus, 
+                                                   int unitId = 0, 
+                                                   DateTimeOffset? dateFrom = null, 
+                                                   DateTimeOffset? dateTo = null, 
+                                                   int page = 1, 
+                                                   int size = 25,
+                                                   string order = "{}")
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, weavingId, materialId, dateFrom, dateTo, operationStatus, page, size);
+            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, 
+                                                                                                 materialId,
+                                                                                                 operationStatus,
+                                                                                                 unitId,
+                                                                                                 dateFrom, 
+                                                                                                 dateTo, 
+                                                                                                 page, 
+                                                                                                 size, 
+                                                                                                 order);
 
             await Task.Yield();
             if (index.Equals(true))
@@ -484,16 +496,16 @@ namespace Manufactures.Controllers.Api
                 byte[] xlsInBytes;
 
                 DailyOperationWarpingReportXlsTemplate xlsTemplate = new DailyOperationWarpingReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateDailyOperationWarpingReportXls(dailyOperationWarpingReport.ToList());
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationWarpingReportXls(dailyOperationWarpingReport.Item1.ToList());
                 xlsInBytes = xls.ToArray();
                 var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Warping");
                 return xlsFile;
             }
             else
             {
-                return Ok(dailyOperationWarpingReport, info: new
+                return Ok(dailyOperationWarpingReport.Item1, info: new
                 {
-                    count = dailyOperationWarpingReport.Count()
+                    count = dailyOperationWarpingReport.Item2
                 });
             }
         }

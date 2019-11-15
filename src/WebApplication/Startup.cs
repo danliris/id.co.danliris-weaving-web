@@ -12,8 +12,10 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Manufactures.Application.Beams.QueryHandlers;
 using Manufactures.Application.BeamStockMonitoring.DataTransferObjects;
 using Manufactures.Application.BeamStockMonitoring.QueryHandlers;
-using Manufactures.Application.DailyOperations.ReachingTying.DataTransferObjects;
-using Manufactures.Application.DailyOperations.ReachingTying.QueryHandlers;
+using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingReport;
+using Manufactures.Application.DailyOperations.Reaching.QueryHandlers;
+using Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyOperationReachingReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
 using Manufactures.Application.DailyOperations.Sizing.QueryHandlers;
@@ -30,7 +32,8 @@ using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Application.Shifts.QueryHandlers;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.BeamStockMonitoring.Queries;
-using Manufactures.Domain.DailyOperations.ReachingTying.Queries;
+using Manufactures.Domain.DailyOperations.Reaching.Queries;
+using Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationReachingReport;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
 using Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
@@ -115,11 +118,12 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
             services.AddTransient<IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>, DailyOperationWarpingReportQueryHandler>();
             services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
-            services.AddTransient<IDailyOperationReachingTyingQuery<DailyOperationReachingTyingListDto>, DailyOperationReachingTyingQueryHandler>();
+            services.AddTransient<IDailyOperationReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
             services.AddTransient<IDailyOperationWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
             services.AddTransient<IDailyOperationSizingQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
