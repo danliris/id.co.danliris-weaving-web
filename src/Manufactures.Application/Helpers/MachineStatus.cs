@@ -16,6 +16,7 @@
         public static string ONFINISHREACHINGIN = "REACHING-IN-FINISH";
         public static string CHANGEOPERATORREACHINGIN = "REACHING-IN-CHANGE-OPERATOR";
         public static string ONSTARTCOMB= "COMB-START";
+        public static string CHANGEOPERATORCOMB = "COMB-CHANGE-OPERATOR";
         public static string ONFINISHCOMB= "COMB-FINISH";
     }
 }

@@ -11,12 +11,6 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "OperatorDocumentId")]
-        public OperatorId OperatorDocumentId { get; set; }
-
-        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
-        public int YarnStrandsProcessed { get; set; }
-
         [JsonProperty(PropertyName = "ChangeOperatorReachingInDate")]
         public DateTimeOffset ChangeOperatorReachingInDate { get; set; }
 
@@ -25,6 +19,12 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
 
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
+
+        [JsonProperty(PropertyName = "OperatorDocumentId")]
+        public OperatorId OperatorDocumentId { get; set; }
+
+        [JsonProperty(PropertyName = "YarnStrandsProcessed")]
+        public int YarnStrandsProcessed { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -37,11 +37,11 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         public ChangeOperatorReachingInDailyOperationReachingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.OperatorDocumentId.Value).NotEmpty();
-            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
             RuleFor(validator => validator.ChangeOperatorReachingInDate).NotEmpty();
             RuleFor(validator => validator.ChangeOperatorReachingInTime).NotEmpty();
-            RuleFor(validator => validator.ShiftDocumentId.Value).NotEmpty();
+            RuleFor(validator => validator.ShiftDocumentId).NotEmpty();
+            RuleFor(validator => validator.OperatorDocumentId).NotEmpty();
+            RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();
         }
     }
 }

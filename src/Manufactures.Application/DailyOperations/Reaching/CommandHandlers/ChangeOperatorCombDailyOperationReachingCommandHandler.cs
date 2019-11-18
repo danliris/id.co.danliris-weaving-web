@@ -8,33 +8,34 @@ using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
-using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 {
-    public class ChangeOperatorReachingInDailyOperationReachingCommandHandler : ICommandHandler<ChangeOperatorReachingInDailyOperationReachingCommand, DailyOperationReachingDocument>
+    public class ChangeOperatorCombDailyOperationReachingCommandHandler : ICommandHandler<ChangeOperatorCombDailyOperationReachingCommand, DailyOperationReachingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingDocumentRepository;
 
-        public ChangeOperatorReachingInDailyOperationReachingCommandHandler(IStorage storage)
+        public ChangeOperatorCombDailyOperationReachingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingDocumentRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
         }
 
-        public async Task<DailyOperationReachingDocument> Handle(ChangeOperatorReachingInDailyOperationReachingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationReachingDocument> Handle(ChangeOperatorCombDailyOperationReachingCommand request, CancellationToken cancellationToken)
         {
             var query =
-                _dailyOperationReachingDocumentRepository.Query
-                                                         .Include(d => d.ReachingHistories)
-                                                         .Where(doc => doc.Identity.Equals(request.Id));
+                   _dailyOperationReachingDocumentRepository.Query
+                                                            .Include(d => d.ReachingHistories)
+                                                            .Where(doc => doc.Identity.Equals(request.Id));
             var existingReachingDocument = _dailyOperationReachingDocumentRepository.Find(query).FirstOrDefault();
             var existingReachingHistories =
                 existingReachingDocument.ReachingHistories
@@ -45,48 +46,53 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
             var operationStatus = existingReachingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
-            var year = request.ChangeOperatorReachingInDate.Year;
-            var month = request.ChangeOperatorReachingInDate.Month;
-            var day = request.ChangeOperatorReachingInDate.Day;
-            var hour = request.ChangeOperatorReachingInTime.Hours;
-            var minutes = request.ChangeOperatorReachingInTime.Minutes;
-            var seconds = request.ChangeOperatorReachingInTime.Seconds;
+            var year = request.CombFinishDate.Year;
+            var month = request.CombFinishDate.Month;
+            var day = request.CombFinishDate.Day;
+            var hour = request.CombFinishTime.Hours;
+            var minutes = request.CombFinishTime.Minutes;
+            var seconds = request.CombFinishTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastReachingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var reachingChangeOperatorDateMachineLogUtc = new DateTimeOffset(request.ChangeOperatorReachingInDate.Date, new TimeSpan(+7, 0, 0));
+            var combChangeOperatorDateMachineLogUtc = new DateTimeOffset(request.CombFinishDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (reachingChangeOperatorDateMachineLogUtc < lastDateMachineLogUtc)
+            if (combChangeOperatorDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("ReachingChangeOperator", "Change Operator date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("ChangeOperatorCombDate", "Change operator date cannot less than latest date log"));
             }
             else
             {
                 if (dateTimeOperation <= lastReachingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ReachingChangeOperator", "Change Operator time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("ChangeOperatorCombTime", "Change operator time cannot less than or equal latest time log"));
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTREACHINGIN) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
                     {
                         existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
                         existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
                         existingReachingDocument.SetReachingInWidth(existingReachingDocument.ReachingInWidth);
 
+                        existingReachingDocument.SetCombEdgeStitching(existingReachingDocument.CombEdgeStitching);
+                        existingReachingDocument.SetCombNumber(existingReachingDocument.CombNumber);
+
+                        existingReachingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+
                         var newHistory =
                             new DailyOperationReachingHistory(Guid.NewGuid(),
-                                                                  new OperatorId(request.OperatorDocumentId.Value),
-                                                                  request.YarnStrandsProcessed,
-                                                                  dateTimeOperation,
-                                                                  new ShiftId(request.ShiftDocumentId.Value),
-                                                                  MachineStatus.CHANGEOPERATORREACHINGIN);
+                                                              new OperatorId(request.OperatorDocumentId.Value),
+                                                              request.YarnStrandsProcessed,
+                                                              dateTimeOperation,
+                                                              new ShiftId(request.ShiftDocumentId.Value),
+                                                              MachineStatus.CHANGEOPERATORCOMB);
                         existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
 
                         await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
@@ -104,13 +110,15 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                         existingReachingDocument.SetCombEdgeStitching(existingReachingDocument.CombEdgeStitching);
                         existingReachingDocument.SetCombNumber(existingReachingDocument.CombNumber);
 
+                        existingReachingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+
                         var newHistory =
                             new DailyOperationReachingHistory(Guid.NewGuid(),
-                                                                  new OperatorId(request.OperatorDocumentId.Value),
-                                                                  request.YarnStrandsProcessed,
-                                                                  dateTimeOperation,
-                                                                  new ShiftId(request.ShiftDocumentId.Value),
-                                                                  MachineStatus.CHANGEOPERATORREACHINGIN);
+                                                              new OperatorId(request.OperatorDocumentId.Value),
+                                                              request.YarnStrandsProcessed,
+                                                              dateTimeOperation,
+                                                              new ShiftId(request.ShiftDocumentId.Value),
+                                                              MachineStatus.CHANGEOPERATORCOMB);
                         existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
 
                         await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
@@ -121,7 +129,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTREACHINGIN or CHANGEOPERATORREACHINGIN"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTCOMB"));
                     }
                 }
             }

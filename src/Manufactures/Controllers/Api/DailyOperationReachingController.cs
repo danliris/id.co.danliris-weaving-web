@@ -226,6 +226,22 @@ namespace Manufactures.Controllers.Api
             return Ok(updateCombStartDailyOperationReachingDocument.Identity);
         }
 
+        [HttpPut("{Id}/comb-change-operator")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]ChangeOperatorCombDailyOperationReachingCommand command)
+        {
+            //Parse Id
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+
+            var changeOperatorCombDailyOperationReachingDocument = await Mediator.Send(command);
+
+            return Ok(changeOperatorCombDailyOperationReachingDocument.Identity);
+        }
+
         [HttpPut("{Id}/comb-finish")]
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateCombFinishDailyOperationReachingCommand command)
