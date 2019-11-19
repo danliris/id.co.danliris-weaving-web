@@ -74,10 +74,28 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTREACHINGIN) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
                     {
-                        existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
-                        existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
+                        existingReachingDocument.SetCombEdgeStitching(request.CombEdgeStitching);
+                        existingReachingDocument.SetCombNumber(request.CombNumber);
+
+                        var newHistory =
+                            new DailyOperationReachingHistory(Guid.NewGuid(),
+                                                              new OperatorId(request.OperatorDocumentId.Value),
+                                                              request.YarnStrandsProcessed,
+                                                              dateTimeOperation,
+                                                              new ShiftId(request.ShiftDocumentId.Value),
+                                                              MachineStatus.ONSTARTCOMB);
+                        existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
+
+                        await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
+
+                        _storage.Save();
+
+                        return existingReachingDocument;
+                    }
+                    else if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
+                    {
                         existingReachingDocument.SetReachingInWidth(existingReachingDocument.ReachingInWidth);
 
                         existingReachingDocument.SetCombEdgeStitching(request.CombEdgeStitching);

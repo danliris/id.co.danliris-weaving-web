@@ -8,28 +8,29 @@ using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
-using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 {
-    public class UpdateCombFinishDailyOperationReachingCommandHandler : ICommandHandler<UpdateCombFinishDailyOperationReachingCommand, DailyOperationReachingDocument>
+    public class ChangeOperatorCombDailyOperationReachingCommandHandler : ICommandHandler<ChangeOperatorCombDailyOperationReachingCommand, DailyOperationReachingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingDocumentRepository;
 
-        public UpdateCombFinishDailyOperationReachingCommandHandler(IStorage storage)
+        public ChangeOperatorCombDailyOperationReachingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingDocumentRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
         }
 
-        public async Task<DailyOperationReachingDocument> Handle(UpdateCombFinishDailyOperationReachingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationReachingDocument> Handle(ChangeOperatorCombDailyOperationReachingCommand request, CancellationToken cancellationToken)
         {
             var query =
                    _dailyOperationReachingDocumentRepository.Query
@@ -60,21 +61,24 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastReachingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var combFinishDateMachineLogUtc = new DateTimeOffset(request.CombFinishDate.Date, new TimeSpan(+7, 0, 0));
+            var combChangeOperatorDateMachineLogUtc = new DateTimeOffset(request.CombFinishDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (combFinishDateMachineLogUtc < lastDateMachineLogUtc)
+            if (combChangeOperatorDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("CombFinishDate", "Finish date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("ChangeOperatorCombDate", "Change operator date cannot less than latest date log"));
             }
             else
             {
                 if (dateTimeOperation <= lastReachingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("CombFinishTime", "Finish time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("ChangeOperatorCombTime", "Change operator time cannot less than or equal latest time log"));
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB))
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN)|| 
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) ||
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB) ||
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
                     {
                         existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
                         existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
@@ -82,17 +86,16 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 
                         existingReachingDocument.SetCombEdgeStitching(existingReachingDocument.CombEdgeStitching);
                         existingReachingDocument.SetCombNumber(existingReachingDocument.CombNumber);
-                        existingReachingDocument.SetCombWidth(request.CombWidth);
 
-                        existingReachingDocument.SetOperationStatus(OperationStatus.ONFINISH);
+                        existingReachingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
 
                         var newHistory =
                             new DailyOperationReachingHistory(Guid.NewGuid(),
-                                                                  new OperatorId(request.OperatorDocumentId.Value),
-                                                                  request.YarnStrandsProcessed,
-                                                                  dateTimeOperation,
-                                                                  new ShiftId(request.ShiftDocumentId.Value),
-                                                                  MachineStatus.ONFINISHCOMB);
+                                                              new OperatorId(request.OperatorDocumentId.Value),
+                                                              request.YarnStrandsProcessed,
+                                                              dateTimeOperation,
+                                                              new ShiftId(request.ShiftDocumentId.Value),
+                                                              MachineStatus.CHANGEOPERATORCOMB);
                         existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
 
                         await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
@@ -103,7 +106,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status not ONSTARTCOMB"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTCOMB"));
                     }
                 }
             }

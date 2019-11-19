@@ -95,6 +95,30 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 
                         return existingReachingDocument;
                     }
+                    else if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB))
+                    {
+                        existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
+                        existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
+                        existingReachingDocument.SetReachingInWidth(existingReachingDocument.ReachingInWidth);
+
+                        existingReachingDocument.SetCombEdgeStitching(existingReachingDocument.CombEdgeStitching);
+                        existingReachingDocument.SetCombNumber(existingReachingDocument.CombNumber);
+
+                        var newHistory =
+                            new DailyOperationReachingHistory(Guid.NewGuid(),
+                                                                  new OperatorId(request.OperatorDocumentId.Value),
+                                                                  request.YarnStrandsProcessed,
+                                                                  dateTimeOperation,
+                                                                  new ShiftId(request.ShiftDocumentId.Value),
+                                                                  MachineStatus.CHANGEOPERATORREACHINGIN);
+                        existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
+
+                        await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
+
+                        _storage.Save();
+
+                        return existingReachingDocument;
+                    }
                     else
                     {
                         throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTREACHINGIN or CHANGEOPERATORREACHINGIN"));
