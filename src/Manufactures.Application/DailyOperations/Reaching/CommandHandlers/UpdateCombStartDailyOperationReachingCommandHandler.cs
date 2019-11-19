@@ -76,9 +76,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 {
                     if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTREACHINGIN) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
                     {
-                        existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
-                        existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
-
                         existingReachingDocument.SetCombEdgeStitching(request.CombEdgeStitching);
                         existingReachingDocument.SetCombNumber(request.CombNumber);
 
@@ -99,8 +96,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                     }
                     else if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
                     {
-                        existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
-                        existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
                         existingReachingDocument.SetReachingInWidth(existingReachingDocument.ReachingInWidth);
 
                         existingReachingDocument.SetCombEdgeStitching(request.CombEdgeStitching);

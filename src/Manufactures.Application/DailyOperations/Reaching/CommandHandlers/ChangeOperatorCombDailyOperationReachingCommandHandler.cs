@@ -75,33 +75,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
-                    {
-                        existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
-                        existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
-                        existingReachingDocument.SetReachingInWidth(existingReachingDocument.ReachingInWidth);
-
-                        existingReachingDocument.SetCombEdgeStitching(existingReachingDocument.CombEdgeStitching);
-                        existingReachingDocument.SetCombNumber(existingReachingDocument.CombNumber);
-
-                        existingReachingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
-
-                        var newHistory =
-                            new DailyOperationReachingHistory(Guid.NewGuid(),
-                                                              new OperatorId(request.OperatorDocumentId.Value),
-                                                              request.YarnStrandsProcessed,
-                                                              dateTimeOperation,
-                                                              new ShiftId(request.ShiftDocumentId.Value),
-                                                              MachineStatus.CHANGEOPERATORCOMB);
-                        existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
-
-                        await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
-
-                        _storage.Save();
-
-                        return existingReachingDocument;
-                    }
-                    else if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB))
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN)|| 
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) ||
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB) ||
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
                     {
                         existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
                         existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
