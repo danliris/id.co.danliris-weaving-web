@@ -4,6 +4,7 @@ using Manufactures.Domain.Suppliers.Repositories;
 using Manufactures.Dtos.WeavingSupplier;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -142,6 +143,30 @@ namespace Manufactures.Controllers.Api
             var SupplierDocument = await Mediator.Send(command);
 
             return Ok(SupplierDocument.Identity);
+        }
+
+        [HttpGet("get-code/{id}")]
+        public async Task<IActionResult> GetSupplierName(string id)
+        {
+            var supplierId = new Guid(id);
+
+            var supplierDocument =
+                _weavingSupplierRepository
+                    .Find(e => e.Identity.Equals(supplierId))
+                    .FirstOrDefault();
+            var supplierCode = supplierDocument.Code;
+
+            if (supplierDocument != null)
+            {
+                await Task.Yield();
+                return Ok(supplierCode);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+                throw Validator.ErrorValidation(("WarpOrigin", "Can't Find Supplier Code"),("WeftOrigin", "Can't Find Supplier Code"));
+            }
         }
     }
 }
