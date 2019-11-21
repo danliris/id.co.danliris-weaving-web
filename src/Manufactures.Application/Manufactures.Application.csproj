@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Manufactures.Data.EntityFrameworkCore.SqlServer\Manufactures.Data.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DailyOperations\Loom\DataTransferObjects\" />
+    <Folder Include="DailyOperations\Loom\QueryHandlers\" />
+  </ItemGroup>
+
 </Project>

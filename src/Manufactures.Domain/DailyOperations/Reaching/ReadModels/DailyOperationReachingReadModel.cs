@@ -7,9 +7,6 @@ namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
 {
     public class DailyOperationReachingReadModel : ReadModelBase
     {
-        public DailyOperationReachingReadModel(Guid identity) : base(identity)
-        {
-        }
         public Guid? MachineDocumentId { get; internal set; }
         public Guid? OrderDocumentId { get; internal set; }
         public Guid? SizingBeamId { get; internal set; }
@@ -21,5 +18,8 @@ namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
         public double CombWidth { get; internal set; }
         public string OperationStatus { get; internal set; }
         public List<DailyOperationReachingHistory> ReachingHistories { get; internal set; }
+        public DailyOperationReachingReadModel(Guid identity) : base(identity)
+        {
+        }
     }
 }

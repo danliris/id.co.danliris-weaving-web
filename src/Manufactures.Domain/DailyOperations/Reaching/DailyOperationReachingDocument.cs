@@ -20,20 +20,20 @@ namespace Manufactures.Domain.DailyOperations.Reaching
         public int CombEdgeStitching { get; private set; }
         public int CombNumber { get; private set; }
         public double CombWidth { get; private set; }
-        public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationReachingHistory> ReachingHistories { get; private set; }
+        public string OperationStatus { get; private set; }
 
         public DailyOperationReachingDocument(Guid id, 
-                                                   MachineId machineDocumentId, 
-                                                   OrderId orderDocumentId, 
-                                                   BeamId sizingBeamId, 
-                                                   string reachingInTypeInput, 
-                                                   string reachingInTypeOutput, 
-                                                   double reachingInWidth, 
-                                                   int combEdgeStitching, 
-                                                   int combNumber, 
-                                                   double combWidth,
-                                                   string operationStatus) : base(id)
+                                              MachineId machineDocumentId, 
+                                              OrderId orderDocumentId, 
+                                              BeamId sizingBeamId, 
+                                              string reachingInTypeInput, 
+                                              string reachingInTypeOutput, 
+                                              double reachingInWidth, 
+                                              int combEdgeStitching, 
+                                              int combNumber, 
+                                              double combWidth,
+                                              string operationStatus) : base(id)
         {
             Identity = id;
             MachineDocumentId = machineDocumentId;
@@ -157,10 +157,10 @@ namespace Manufactures.Domain.DailyOperations.Reaching
                     .FirstOrDefault();
 
             //Update History Properties
-            reachingHistory.SetShiftId(new ShiftId(reachingHistory.ShiftDocumentId));
-            reachingHistory.SetOperatorDocumentId(new OperatorId(reachingHistory.OperatorDocumentId));
-            reachingHistory.SetDateTimeMachine(reachingHistory.DateTimeMachine);
-            reachingHistory.SetMachineStatus(reachingHistory.MachineStatus);
+            reachingHistory.SetShiftId(new ShiftId(history.ShiftDocumentId));
+            reachingHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
+            reachingHistory.SetDateTimeMachine(history.DateTimeMachine);
+            reachingHistory.SetMachineStatus(history.MachineStatus);
 
             reachingHistories[index] = reachingHistory;
             ReachingHistories = reachingHistories;

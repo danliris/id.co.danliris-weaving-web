@@ -230,6 +230,11 @@ namespace Manufactures.Controllers.Api
                                 .Find(sizingBeamQuery)
                                 .FirstOrDefault();
 
+                        if (sizingBeamDocument == null)
+                        {
+                            continue;
+                        }
+
                         await Task.Yield();
                         var sizingBeamDto = new BeamDto(sizingBeam, sizingBeamDocument);
                         sizingBeams.Add(sizingBeamDto);
