@@ -21,6 +21,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public string Process { get; private set; }
 
+        public double? GreigeLength { get; private set; }
+
         public string Information { get; private set; }
 
         public string MachineStatus { get; private set; }
@@ -87,6 +89,12 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         public void SetProcess(string process)
         {
             Process = process;
+            MarkModified();
+        }
+
+        public void SetGreigeLength(double greigeLength)
+        {
+            GreigeLength = greigeLength;
             MarkModified();
         }
 

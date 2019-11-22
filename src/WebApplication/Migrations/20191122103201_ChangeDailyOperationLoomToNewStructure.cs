@@ -15,11 +15,11 @@ namespace DanLiris.Admin.Web.Migrations
                 table: "Weaving_DailyOperationLoomDocuments");
 
             migrationBuilder.DropColumn(
-                name: "MachineId",
+                name: "DailyOperationMonitoringId",
                 table: "Weaving_DailyOperationLoomDocuments");
 
             migrationBuilder.DropColumn(
-                name: "OrderId",
+                name: "MachineId",
                 table: "Weaving_DailyOperationLoomDocuments");
 
             migrationBuilder.DropColumn(
@@ -31,43 +31,14 @@ namespace DanLiris.Admin.Web.Migrations
                 table: "Weaving_DailyOperationLoomDocuments");
 
             migrationBuilder.RenameColumn(
-                name: "DailyOperationStatus",
-                table: "Weaving_DailyOperationLoomDocuments",
-                newName: "OperationStatus");
-
-            migrationBuilder.RenameColumn(
-                name: "DailyOperationMonitoringId",
+                name: "OrderId",
                 table: "Weaving_DailyOperationLoomDocuments",
                 newName: "OrderDocumentId");
 
-            migrationBuilder.CreateTable(
-                name: "Weaving_DailyOperationLoomBeamProducts",
-                columns: table => new
-                {
-                    Identity = table.Column<Guid>(nullable: false),
-                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
-                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
-                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
-                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
-                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
-                    Deleted = table.Column<bool>(nullable: true),
-                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
-                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
-                    GreigeLength = table.Column<double>(nullable: true),
-                    LatestDateTimeBeamProduct = table.Column<DateTimeOffset>(nullable: false),
-                    BeamProductStatus = table.Column<string>(nullable: true),
-                    DailyOperationLoomDocumentId = table.Column<Guid>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Weaving_DailyOperationLoomBeamProducts", x => x.Identity);
-                    table.ForeignKey(
-                        name: "FK_Weaving_DailyOperationLoomBeamProducts_Weaving_DailyOperationLoomDocuments_DailyOperationLoomDocumentId",
-                        column: x => x.DailyOperationLoomDocumentId,
-                        principalTable: "Weaving_DailyOperationLoomDocuments",
-                        principalColumn: "Identity",
-                        onDelete: ReferentialAction.Cascade);
-                });
+            migrationBuilder.RenameColumn(
+                name: "DailyOperationStatus",
+                table: "Weaving_DailyOperationLoomDocuments",
+                newName: "OperationStatus");
 
             migrationBuilder.CreateTable(
                 name: "Weaving_DailyOperationLoomHistories",
@@ -88,6 +59,7 @@ namespace DanLiris.Admin.Web.Migrations
                     DateTimeMachine = table.Column<DateTimeOffset>(nullable: false),
                     ShiftDocumentId = table.Column<Guid>(nullable: false),
                     Process = table.Column<string>(nullable: true),
+                    GreigeLength = table.Column<double>(nullable: true),
                     Information = table.Column<string>(nullable: true),
                     MachineStatus = table.Column<string>(nullable: true),
                     DailyOperationLoomDocumentId = table.Column<Guid>(nullable: false)
@@ -104,11 +76,6 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Weaving_DailyOperationLoomBeamProducts_DailyOperationLoomDocumentId",
-                table: "Weaving_DailyOperationLoomBeamProducts",
-                column: "DailyOperationLoomDocumentId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Weaving_DailyOperationLoomHistories_DailyOperationLoomDocumentId",
                 table: "Weaving_DailyOperationLoomHistories",
                 column: "DailyOperationLoomDocumentId");
@@ -117,15 +84,12 @@ namespace DanLiris.Admin.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Weaving_DailyOperationLoomBeamProducts");
-
-            migrationBuilder.DropTable(
                 name: "Weaving_DailyOperationLoomHistories");
 
             migrationBuilder.RenameColumn(
                 name: "OrderDocumentId",
                 table: "Weaving_DailyOperationLoomDocuments",
-                newName: "DailyOperationMonitoringId");
+                newName: "OrderId");
 
             migrationBuilder.RenameColumn(
                 name: "OperationStatus",
@@ -139,13 +103,12 @@ namespace DanLiris.Admin.Web.Migrations
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
             migrationBuilder.AddColumn<Guid>(
-                name: "MachineId",
+                name: "DailyOperationMonitoringId",
                 table: "Weaving_DailyOperationLoomDocuments",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                nullable: true);
 
             migrationBuilder.AddColumn<Guid>(
-                name: "OrderId",
+                name: "MachineId",
                 table: "Weaving_DailyOperationLoomDocuments",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));

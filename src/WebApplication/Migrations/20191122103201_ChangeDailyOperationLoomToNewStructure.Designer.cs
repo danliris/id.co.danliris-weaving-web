@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    [Migration("20191121121616_ChangeDailyOperationLoomToNewStructure")]
+    [Migration("20191122103201_ChangeDailyOperationLoomToNewStructure")]
     partial class ChangeDailyOperationLoomToNewStructure
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,6 +147,8 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
+                    b.Property<double?>("GreigeLength");
+
                     b.Property<string>("Information");
 
                     b.Property<Guid>("MachineDocumentId");
@@ -175,48 +177,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationLoomHistories");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
-                {
-                    b.Property<Guid>("Identity")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("BeamProductStatus");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset>("CreatedDate");
-
-                    b.Property<Guid>("DailyOperationLoomDocumentId");
-
-                    b.Property<bool?>("Deleted");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("DeletedDate");
-
-                    b.Property<double?>("GreigeLength");
-
-                    b.Property<DateTimeOffset>("LatestDateTimeBeamProduct");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("ModifiedDate");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.HasKey("Identity");
-
-                    b.HasIndex("DailyOperationLoomDocumentId");
-
-                    b.ToTable("Weaving_DailyOperationLoomBeamProducts");
-                });
-
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
@@ -242,7 +202,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("OperationStatus");
 
-                    b.Property<Guid?>("OrderDocumentId");
+                    b.Property<Guid>("OrderDocumentId");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -1392,14 +1352,6 @@ namespace DanLiris.Admin.Web.Migrations
                 {
                     b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
                         .WithMany("LoomBeamHistories")
-                        .HasForeignKey("DailyOperationLoomDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
-                        .WithMany("LoomBeamProducts")
                         .HasForeignKey("DailyOperationLoomDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

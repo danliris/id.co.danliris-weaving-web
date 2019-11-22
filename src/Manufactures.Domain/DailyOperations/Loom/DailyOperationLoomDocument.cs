@@ -14,7 +14,6 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public OrderId OrderDocumentId { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomBeamHistory> LoomBeamHistories { get; private set; }
-        public IReadOnlyCollection<DailyOperationLoomBeamProduct> LoomBeamProducts { get; private set; }
 
         public DailyOperationLoomDocument(Guid id, OrderId orderDocumentId, string operationStatus) : base(id)
         {
@@ -22,7 +21,6 @@ namespace Manufactures.Domain.DailyOperations.Loom
             OrderDocumentId = orderDocumentId;
             OperationStatus = operationStatus;
             LoomBeamHistories = new List<DailyOperationLoomBeamHistory>();
-            LoomBeamProducts = new List<DailyOperationLoomBeamProduct>();
 
             this.MarkTransient();
 
@@ -33,10 +31,13 @@ namespace Manufactures.Domain.DailyOperations.Loom
             };
         }
 
+        //Constructor for Mapping Object from Database to Domain
         public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
         {
-            OrderDocumentId = readModel.OrderDocumentId.HasValue ? new OrderId(readModel.OrderDocumentId.Value) : null;
-            OperationStatus = readModel.OperationStatus;
+            //Instantiate object from database
+            this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
+            this.OperationStatus = readModel.OperationStatus;
+            this.LoomBeamHistories = readModel.LoomBeamHistories;
         }
 
         public void AddDailyOperationLoomHistory(DailyOperationLoomBeamHistory history)
@@ -85,52 +86,6 @@ namespace Manufactures.Domain.DailyOperations.Loom
             list.Remove(history);
             LoomBeamHistories = list;
             ReadModel.LoomBeamHistories = LoomBeamHistories.ToList();
-
-            MarkModified();
-        }
-
-        public void AddDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct loomBeamProduct)
-        {
-            var list = LoomBeamProducts.ToList();
-            list.Add(loomBeamProduct);
-            LoomBeamProducts = list;
-            ReadModel.LoomBeamProducts = LoomBeamProducts.ToList();
-
-            MarkModified();
-        }
-
-        public void UpdateDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
-        {
-            var loomBeamProducts = LoomBeamProducts.ToList();
-
-            //Get Sizing Beam Update
-            var index =
-                loomBeamProducts
-                    .FindIndex(x => x.Identity.Equals(beamProduct.Identity));
-            var loomBeamProduct =
-                loomBeamProducts
-                    .Where(x => x.Identity.Equals(beamProduct.Identity))
-                    .FirstOrDefault();
-
-            //Update Propertynya
-            loomBeamProduct.SetGreigeLength(beamProduct.GreigeLength ?? 0);
-            loomBeamProduct.SetLatestDateTimeBeamProduct(beamProduct.LatestDateTimeBeamProduct);
-            loomBeamProduct.SetBeamProductStatus(beamProduct.BeamProductStatus);
-
-            loomBeamProducts[index] = loomBeamProduct;
-            LoomBeamProducts = loomBeamProducts;
-            ReadModel.LoomBeamProducts = loomBeamProducts;
-            MarkModified();
-        }
-
-        public void RemoveDailyOperationLoomBeamProduct(Guid identity)
-        {
-            var beamProduct = LoomBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = LoomBeamProducts.ToList();
-
-            list.Remove(beamProduct);
-            LoomBeamProducts = list;
-            ReadModel.LoomBeamProducts = LoomBeamProducts.ToList();
 
             MarkModified();
         }

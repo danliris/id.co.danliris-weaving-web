@@ -64,7 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         public DailyOperationWarpingDocument(DailyOperationWarpingReadModel readModel) : base(readModel)
         {
             //Instantiate object from database
-            this.OrderDocumentId = new OrderId(ReadModel.OrderDocumentId);
+            this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
             this.MaterialTypeId = new MaterialTypeId(readModel.MaterialTypeId);
             this.AmountOfCones = readModel.AmountOfCones;
             this.ColourOfCone = readModel.ColourOfCone;
