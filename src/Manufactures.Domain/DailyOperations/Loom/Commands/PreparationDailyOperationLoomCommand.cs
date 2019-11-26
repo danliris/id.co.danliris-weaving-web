@@ -13,8 +13,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "OrderDocumentId")]
         public OrderId OrderDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "LoomBeamProducts")]
+        public List<PreparationDailyOperationLoomBeamProductCommand> LoomBeamProducts { get; set; }
+
         [JsonProperty(PropertyName = "LoomBeamHistories")]
-        public List<DailyOperationLoomBeamHistoryCommand> LoomBeamHistories { get; set; }
+        public List<PreparationDailyOperationLoomBeamHistoryCommand> LoomBeamHistories { get; set; }
     }
 
     public class PreparationDailyOperationLoomCommandValidator : AbstractValidator<PreparationDailyOperationLoomCommand>
@@ -23,7 +26,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         {
             RuleFor(validator => validator.OrderDocumentId).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
             RuleFor(validator => validator.LoomBeamHistories).Must(list => list.Count > 0).WithMessage("Beam Sizing Yang Diproses Tidak Boleh Kosong");
-            RuleForEach(validator => validator.LoomBeamHistories).SetValidator(new DailyOperationLoomBeamHistoryCommandValidator());
+            RuleForEach(validator => validator.LoomBeamHistories).SetValidator(new PreparationDailyOperationLoomBeamHistoryCommandValidator());
+            RuleFor(validator => validator.LoomBeamProducts).Must(list => list.Count > 0).WithMessage("Beam Sizing Yang Diproses Tidak Boleh Kosong");
+            RuleForEach(validator => validator.LoomBeamProducts).SetValidator(new PreparationDailyOperationLoomBeamProductCommandValidator());
         }
     }
 }

@@ -39,8 +39,34 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                request.OrderDocumentId,
                                                OperationStatus.ONPROCESS);
 
-            foreach(var beamHistory in request.LoomBeamHistories)
+            foreach (var beamProduct in request.LoomBeamProducts)
             {
+                var year = beamProduct.DateBeamProduct.Year;
+                var month = beamProduct.DateBeamProduct.Month;
+                var day = beamProduct.DateBeamProduct.Day;
+                var hour = beamProduct.TimeBeamProduct.Hours;
+                var minutes = beamProduct.TimeBeamProduct.Minutes;
+                var seconds = beamProduct.TimeBeamProduct.Seconds;
+                var dateTimeBeamProduct =
+                    new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
+                var newBeamProduct =
+                    new DailyOperationLoomBeamProduct(Guid.NewGuid(),
+                                                      new BeamId(beamProduct.BeamDocumentId.Value),
+                                                      new MachineId(beamProduct.MachineDocumentId.Value),
+                                                      dateTimeBeamProduct,
+                                                      beamProduct.LoomProcess,
+                                                      BeamStatus.ONPROCESS);
+
+                dailyOperationLoomDocument.AddDailyOperationLoomBeamProduct(newBeamProduct);
+            }
+
+            foreach (var beamHistory in request.LoomBeamHistories)
+            {
+                var beamNumber = beamHistory.BeamNumber;
+
+                var machineNumber = beamHistory.MachineNumber;
+
                 var year = beamHistory.DateMachine.Year;
                 var month = beamHistory.DateMachine.Month;
                 var day = beamHistory.DateMachine.Day;
@@ -52,14 +78,18 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
                 var newBeamHistory =
                         new DailyOperationLoomBeamHistory(Guid.NewGuid(),
-                                                          new BeamId(beamHistory.BeamDocumentId.Value),
-                                                          new MachineId(beamHistory.MachineDocumentId.Value),
+                                                          beamNumber,
+                                                          machineNumber,
                                                           new OperatorId(beamHistory.OperatorDocumentId.Value),
                                                           dateTimeBeamHistory,
                                                           new ShiftId(beamHistory.ShiftDocumentId.Value),
-                                                          beamHistory.Process,
                                                           beamHistory.Information,
                                                           MachineStatus.ONENTRY);
+
+                newBeamHistory.SetWarpBrokenThreads(0);
+                newBeamHistory.SetWeftBrokenThreads(0);
+                newBeamHistory.SetLenoBrokenThreads(0);
+                newBeamHistory.SetReprocessTo("-");
 
                 dailyOperationLoomDocument.AddDailyOperationLoomHistory(newBeamHistory);
             }

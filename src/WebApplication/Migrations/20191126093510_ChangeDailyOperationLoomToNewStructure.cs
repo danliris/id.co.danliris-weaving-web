@@ -41,7 +41,7 @@ namespace DanLiris.Admin.Web.Migrations
                 newName: "OperationStatus");
 
             migrationBuilder.CreateTable(
-                name: "Weaving_DailyOperationLoomHistories",
+                name: "Weaving_DailyOperationLoomBeamProducts",
                 columns: table => new
                 {
                     Identity = table.Column<Guid>(nullable: false),
@@ -55,11 +55,44 @@ namespace DanLiris.Admin.Web.Migrations
                     DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
                     BeamDocumentId = table.Column<Guid>(nullable: false),
                     MachineDocumentId = table.Column<Guid>(nullable: false),
+                    LatestDateTimeBeamProduct = table.Column<DateTimeOffset>(nullable: false),
+                    LoomProcess = table.Column<string>(nullable: true),
+                    BeamProductStatus = table.Column<string>(nullable: true),
+                    DailyOperationLoomDocumentId = table.Column<Guid>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Weaving_DailyOperationLoomBeamProducts", x => x.Identity);
+                    table.ForeignKey(
+                        name: "FK_Weaving_DailyOperationLoomBeamProducts_Weaving_DailyOperationLoomDocuments_DailyOperationLoomDocumentId",
+                        column: x => x.DailyOperationLoomDocumentId,
+                        principalTable: "Weaving_DailyOperationLoomDocuments",
+                        principalColumn: "Identity",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Weaving_DailyOperationLoomHistories",
+                columns: table => new
+                {
+                    Identity = table.Column<Guid>(nullable: false),
+                    RowVersion = table.Column<byte[]>(rowVersion: true, nullable: true),
+                    CreatedBy = table.Column<string>(maxLength: 32, nullable: false),
+                    CreatedDate = table.Column<DateTimeOffset>(nullable: false),
+                    ModifiedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    ModifiedDate = table.Column<DateTimeOffset>(nullable: true),
+                    Deleted = table.Column<bool>(nullable: true),
+                    DeletedDate = table.Column<DateTimeOffset>(nullable: true),
+                    DeletedBy = table.Column<string>(maxLength: 32, nullable: true),
+                    BeamNumber = table.Column<string>(nullable: true),
+                    MachineNumber = table.Column<string>(nullable: true),
                     OperatorDocumentId = table.Column<Guid>(nullable: false),
                     DateTimeMachine = table.Column<DateTimeOffset>(nullable: false),
                     ShiftDocumentId = table.Column<Guid>(nullable: false),
-                    Process = table.Column<string>(nullable: true),
-                    GreigeLength = table.Column<double>(nullable: true),
+                    WarpBrokenThreads = table.Column<int>(nullable: true),
+                    WeftBrokenThreads = table.Column<int>(nullable: true),
+                    LenoBrokenThreads = table.Column<int>(nullable: true),
+                    ReprocessTo = table.Column<string>(nullable: true),
                     Information = table.Column<string>(nullable: true),
                     MachineStatus = table.Column<string>(nullable: true),
                     DailyOperationLoomDocumentId = table.Column<Guid>(nullable: false)
@@ -76,6 +109,11 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Weaving_DailyOperationLoomBeamProducts_DailyOperationLoomDocumentId",
+                table: "Weaving_DailyOperationLoomBeamProducts",
+                column: "DailyOperationLoomDocumentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Weaving_DailyOperationLoomHistories_DailyOperationLoomDocumentId",
                 table: "Weaving_DailyOperationLoomHistories",
                 column: "DailyOperationLoomDocumentId");
@@ -83,6 +121,9 @@ namespace DanLiris.Admin.Web.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Weaving_DailyOperationLoomBeamProducts");
+
             migrationBuilder.DropTable(
                 name: "Weaving_DailyOperationLoomHistories");
 

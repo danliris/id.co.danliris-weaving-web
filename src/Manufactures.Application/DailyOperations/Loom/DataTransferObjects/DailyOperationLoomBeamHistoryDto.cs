@@ -11,7 +11,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         public string BeamNumber { get; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
-        public string MachineNumber { get; set; }
+        public string MachineNumber { get; }
 
         [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; }
@@ -25,8 +25,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
 
-        [JsonProperty(PropertyName = "GreigeLength")]
-        public string GreigeLength { get; set; }
+        [JsonProperty(PropertyName = "ReprocessTo")]
+        public string ReprocessTo { get; }
 
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; }
@@ -34,13 +34,14 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
-        public DailyOperationLoomBeamHistoryDto(string beamNumber, 
-                                                string machineNumber, 
+        public DailyOperationLoomBeamHistoryDto(
+                                                string beamNumber,
+                                                string machineNumber,
                                                 string operatorName, 
                                                 string operatorGroup, 
                                                 DateTimeOffset dateTimeMachine, 
                                                 string shiftName, 
-                                                string greigeLength,
+                                                string reprocessTo,
                                                 string information, 
                                                 string machineStatus)
         {
@@ -50,6 +51,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             OperatorGroup = operatorGroup;
             DateTimeMachine = dateTimeMachine;
             ShiftName = shiftName;
+            ReprocessTo = reprocessTo;
             Information = information;
             MachineStatus = machineStatus;
         }

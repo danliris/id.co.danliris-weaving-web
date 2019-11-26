@@ -36,6 +36,14 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DailyOperationLoomBeamProduct>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationLoomBeamProducts");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
             modelBuilder.Entity<DailyOperationLoomBeamHistory>(etb =>
             {
@@ -51,6 +59,9 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationLoomDocuments");
                 etb.HasKey(e => e.Identity);
 
+                etb.HasMany(e => e.LoomBeamProducts)
+                    .WithOne(e => e.DailyOperationLoomDocument)
+                    .HasForeignKey(e => e.DailyOperationLoomDocumentId);
                 etb.HasMany(e => e.LoomBeamHistories)
                     .WithOne(e => e.DailyOperationLoomDocument)
                     .HasForeignKey(e => e.DailyOperationLoomDocumentId);

@@ -13,6 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
 
         public OrderId OrderDocumentId { get; private set; }
         public string OperationStatus { get; private set; }
+        public IReadOnlyCollection<DailyOperationLoomBeamProduct> LoomBeamProducts { get; private set; }
         public IReadOnlyCollection<DailyOperationLoomBeamHistory> LoomBeamHistories { get; private set; }
 
         public DailyOperationLoomDocument(Guid id, OrderId orderDocumentId, string operationStatus) : base(id)
@@ -20,6 +21,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
             Identity = id;
             OrderDocumentId = orderDocumentId;
             OperationStatus = operationStatus;
+            LoomBeamProducts = new List<DailyOperationLoomBeamProduct>();
             LoomBeamHistories = new List<DailyOperationLoomBeamHistory>();
 
             this.MarkTransient();
@@ -27,7 +29,9 @@ namespace Manufactures.Domain.DailyOperations.Loom
             ReadModel = new DailyOperationLoomReadModel(Identity)
             {
                 OrderDocumentId = OrderDocumentId.Value,
-                OperationStatus = OperationStatus
+                OperationStatus = OperationStatus,
+                LoomBeamProducts = LoomBeamProducts.ToList(),
+                LoomBeamHistories = LoomBeamHistories.ToList()
             };
         }
 
@@ -38,6 +42,55 @@ namespace Manufactures.Domain.DailyOperations.Loom
             this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
             this.OperationStatus = readModel.OperationStatus;
             this.LoomBeamHistories = readModel.LoomBeamHistories;
+            this.LoomBeamProducts = readModel.LoomBeamProducts;
+        }
+
+        public void AddDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
+        {
+            var list = LoomBeamProducts.ToList();
+            list.Add(beamProduct);
+            LoomBeamProducts = list;
+            ReadModel.LoomBeamProducts = LoomBeamProducts.ToList();
+
+            MarkModified();
+        }
+
+        public void UpdateDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
+        {
+            var loomBeamProducts = LoomBeamProducts.ToList();
+
+            //Get Loom Beam Product Update
+            var index =
+                loomBeamProducts
+                    .FindIndex(x => x.Identity.Equals(beamProduct.Identity));
+            var loomBeamProduct =
+                loomBeamProducts
+                    .Where(x => x.Identity.Equals(beamProduct.Identity))
+                    .FirstOrDefault();
+
+            //Update Beam Product Properties
+            loomBeamProduct.SetBeamDocumentId(new BeamId(beamProduct.BeamDocumentId));
+            loomBeamProduct.SetMachineDocumentId(new MachineId(beamProduct.MachineDocumentId));
+            loomBeamProduct.SetLatestDateTimeBeamProduct(beamProduct.LatestDateTimeBeamProduct);
+            loomBeamProduct.SetLoomProcess(beamProduct.LoomProcess);
+            loomBeamProduct.SetBeamProductStatus(beamProduct.BeamProductStatus);
+
+            loomBeamProducts[index] = loomBeamProduct;
+            LoomBeamProducts = loomBeamProducts;
+            ReadModel.LoomBeamProducts= loomBeamProducts;
+            MarkModified();
+        }
+
+        public void RemoveDailyOperationLoomBeamProduct(Guid identity)
+        {
+            var beamProduct = LoomBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
+            var list = LoomBeamProducts.ToList();
+
+            list.Remove(beamProduct);
+            LoomBeamProducts = list;
+            ReadModel.LoomBeamProducts= LoomBeamProducts.ToList();
+
+            MarkModified();
         }
 
         public void AddDailyOperationLoomHistory(DailyOperationLoomBeamHistory history)
@@ -50,11 +103,11 @@ namespace Manufactures.Domain.DailyOperations.Loom
             MarkModified();
         }
 
-        public void UpdateDailyOperationReachingHistory(DailyOperationLoomBeamHistory history)
+        public void UpdateDailyOperationLoomHistory(DailyOperationLoomBeamHistory history)
         {
             var loomHistories = LoomBeamHistories.ToList();
 
-            //Get Reaching History Update
+            //Get Loom History Update
             var index =
                 loomHistories
                     .FindIndex(x => x.Identity.Equals(history.Identity));
@@ -64,11 +117,13 @@ namespace Manufactures.Domain.DailyOperations.Loom
                     .FirstOrDefault();
 
             //Update History Properties
-            loomHistory.SetBeamDocumentId(new BeamId(history.BeamDocumentId));
-            loomHistory.SetMachineDocumentId(new MachineId(history.MachineDocumentId));
             loomHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
             loomHistory.SetDateTimeMachine(history.DateTimeMachine);
             loomHistory.SetShiftDocumentId(new ShiftId(history.ShiftDocumentId));
+            loomHistory.SetWarpBrokenThreads(history.WarpBrokenThreads ?? 0);
+            loomHistory.SetWeftBrokenThreads(history.WeftBrokenThreads ?? 0);
+            loomHistory.SetLenoBrokenThreads(history.LenoBrokenThreads ?? 0);
+            loomHistory.SetReprocessTo(history.ReprocessTo);
             loomHistory.SetInformation(history.Information);
             loomHistory.SetMachineStatus(history.MachineStatus);
 

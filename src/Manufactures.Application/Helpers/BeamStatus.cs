@@ -7,6 +7,7 @@
         public static string WARPING = "Warping";
 
         //Daily Operation - Beam Status
+        public static string END = "END";
         public static string ROLLEDUP = "ROLLED-UP";
         public static string ONPROCESS = "ON-PROCESS";
     }

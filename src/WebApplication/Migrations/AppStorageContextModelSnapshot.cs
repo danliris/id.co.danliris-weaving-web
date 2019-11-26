@@ -126,7 +126,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid>("BeamDocumentId");
+                    b.Property<string>("BeamNumber");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -145,11 +145,11 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<double?>("GreigeLength");
-
                     b.Property<string>("Information");
 
-                    b.Property<Guid>("MachineDocumentId");
+                    b.Property<int?>("LenoBrokenThreads");
+
+                    b.Property<string>("MachineNumber");
 
                     b.Property<string>("MachineStatus");
 
@@ -160,7 +160,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("OperatorDocumentId");
 
-                    b.Property<string>("Process");
+                    b.Property<string>("ReprocessTo");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
@@ -168,11 +168,61 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("ShiftDocumentId");
 
+                    b.Property<int?>("WarpBrokenThreads");
+
+                    b.Property<int?>("WeftBrokenThreads");
+
                     b.HasKey("Identity");
 
                     b.HasIndex("DailyOperationLoomDocumentId");
 
                     b.ToTable("Weaving_DailyOperationLoomHistories");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("BeamDocumentId");
+
+                    b.Property<string>("BeamProductStatus");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<Guid>("DailyOperationLoomDocumentId");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<DateTimeOffset>("LatestDateTimeBeamProduct");
+
+                    b.Property<string>("LoomProcess");
+
+                    b.Property<Guid>("MachineDocumentId");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("Identity");
+
+                    b.HasIndex("DailyOperationLoomDocumentId");
+
+                    b.ToTable("Weaving_DailyOperationLoomBeamProducts");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", b =>
@@ -1350,6 +1400,14 @@ namespace DanLiris.Admin.Web.Migrations
                 {
                     b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
                         .WithMany("LoomBeamHistories")
+                        .HasForeignKey("DailyOperationLoomDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
+                {
+                    b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
+                        .WithMany("LoomBeamProducts")
                         .HasForeignKey("DailyOperationLoomDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

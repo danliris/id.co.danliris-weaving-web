@@ -9,9 +9,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
     public class DailyOperationLoomBeamHistory : EntityBase<DailyOperationLoomBeamHistory>
     {
-        public Guid BeamDocumentId { get; private set; }
+        public string BeamNumber { get; private set; }
 
-        public Guid MachineDocumentId { get; private set; }
+        public string MachineNumber { get; private set; }
 
         public Guid OperatorDocumentId { get; private set; }
 
@@ -19,9 +19,13 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public Guid ShiftDocumentId { get; private set; }
 
-        public string Process { get; private set; }
+        public int? WarpBrokenThreads { get; private set; }
 
-        public double? GreigeLength { get; private set; }
+        public int? WeftBrokenThreads { get; private set; }
+
+        public int? LenoBrokenThreads { get; private set; }
+
+        public string ReprocessTo { get; private set; }
 
         public string Information { get; private set; }
 
@@ -36,35 +40,32 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         }
 
         public DailyOperationLoomBeamHistory(Guid identity,
-                                             BeamId beamDocumentId, 
-                                             MachineId machineDocumentId, 
+                                             string beamNumber,
+                                             string machineNumber,
                                              OperatorId operatorDocumentId, 
                                              DateTimeOffset dateTimeMachine, 
                                              ShiftId shiftDocumentId,
-                                             string process,
                                              string information, 
                                              string machineStatus) : base(identity)
         {
-            Identity = identity;
-            BeamDocumentId = beamDocumentId.Value;
-            MachineDocumentId = machineDocumentId.Value;
+            BeamNumber = beamNumber;
+            MachineNumber = machineNumber;
             OperatorDocumentId = operatorDocumentId.Value;
             DateTimeMachine = dateTimeMachine;
             ShiftDocumentId = shiftDocumentId.Value;
-            Process = process;
             Information = information;
             MachineStatus = machineStatus;
         }
 
-        public void SetBeamDocumentId(BeamId beamDocumentId)
+        public void SetBeamNumber(string beamNumber)
         {
-            BeamDocumentId = beamDocumentId.Value;
+            BeamNumber = beamNumber;
             MarkModified();
         }
 
-        public void SetMachineDocumentId(MachineId machineDocumentId)
+        public void SetMachineNumber(string machineNumber)
         {
-            MachineDocumentId = machineDocumentId.Value;
+            MachineNumber = machineNumber;
             MarkModified();
         }
 
@@ -86,15 +87,27 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             MarkModified();
         }
 
-        public void SetProcess(string process)
+        public void SetWarpBrokenThreads(int warpBrokenThreads)
         {
-            Process = process;
+            WarpBrokenThreads = warpBrokenThreads;
             MarkModified();
         }
 
-        public void SetGreigeLength(double greigeLength)
+        public void SetWeftBrokenThreads(int weftBrokenThreads)
         {
-            GreigeLength = greigeLength;
+            WeftBrokenThreads = weftBrokenThreads;
+            MarkModified();
+        }
+
+        public void SetLenoBrokenThreads(int lenoBrokenThreads)
+        {
+            LenoBrokenThreads= lenoBrokenThreads;
+            MarkModified();
+        }
+
+        public void SetReprocessTo(string reprocessTo)
+        {
+            ReprocessTo = reprocessTo;
             MarkModified();
         }
 

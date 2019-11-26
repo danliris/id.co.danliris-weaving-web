@@ -163,6 +163,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 _dailyOperationLoomRepository
                     .Query
                     .Include(o => o.LoomBeamHistories)
+                    .Include(o=>o.LoomBeamProducts)
                     .Where(o=>o.Identity.Equals(id))
                     .OrderByDescending(x => x.CreatedDate);
 
@@ -238,35 +239,59 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             result.SetWarpOrigin(warpCode);
             result.SetWeftOrigin(weftCode);
 
-            foreach(var loomBeamHistory in dailyOperationLoomDocument.LoomBeamHistories)
+            foreach(var loomBeamProduct in dailyOperationLoomDocument.LoomBeamProducts)
             {
                 //Get Beam Number
                 await Task.Yield();
-                var beamId = loomBeamHistory.BeamDocumentId;
                 var beamQuery =
                     _beamRepository
                         .Query
-                        .Where(o => o.Identity.Equals(beamId))
                         .OrderByDescending(o => o.CreatedDate);
                 var beamNumber =
                     _beamRepository
                         .Find(beamQuery)
+                        .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
                         .FirstOrDefault()
                         .Number;
 
                 //Get Machine Number
                 await Task.Yield();
-                var machineId = loomBeamHistory.MachineDocumentId;
                 var machineQuery =
                     _machineRepository
                         .Query
-                        .Where(o => o.Identity.Equals(machineId))
                         .OrderByDescending(o => o.CreatedDate);
                 var machineNumber =
                     _machineRepository
                         .Find(machineQuery)
+                        .Where(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
                         .FirstOrDefault()
                         .MachineNumber;
+
+                //Get Date Time Beam Product
+                await Task.Yield();
+                var dateTimeBeamProduct = loomBeamProduct.LatestDateTimeBeamProduct;
+
+                //Get Beam Product Status
+                var beamStatus = loomBeamProduct.BeamProductStatus;
+
+                await Task.Yield();
+                var loomBeamProductDto = new DailyOperationLoomBeamProductDto(beamNumber,
+                                                                              machineNumber,
+                                                                              dateTimeBeamProduct,
+                                                                              beamStatus);
+
+                await Task.Yield();
+                result.AddDailyOperationLoomBeamProducts(loomBeamProductDto);
+            }
+            result.DailyOperationLoomBeamProducts = result.DailyOperationLoomBeamProducts.OrderByDescending(o => o.DateTimeBeamProduct).ToList();
+
+            foreach(var loomBeamHistory in dailyOperationLoomDocument.LoomBeamHistories)
+            {
+                //Get Beam Number
+                var beamNumber = loomBeamHistory.BeamNumber;
+
+                //Get Machine Number
+                var machineNumber = loomBeamHistory.MachineNumber;
 
                 //Get Operator Name and Group
                 await Task.Yield();
@@ -301,24 +326,15 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                         .FirstOrDefault()
                         .Name;
 
-                //Get Information
+                //Get Reprocess To
                 await Task.Yield();
+                var reprocessTo = loomBeamHistory.ReprocessTo;
+
+                //Get Information
                 var information = loomBeamHistory.Information;
 
                 //Get Machine Status
                 var machineStatus = loomBeamHistory.MachineStatus;
-
-                //Get Greige Length
-                var greige = loomBeamHistory.GreigeLength;
-                var greigeLength = "";
-                if (greige == null)
-                {
-                    greigeLength = "Dalam Proses, Belum Ada Panjang Greige";
-                }
-                else
-                {
-                    greigeLength = greige.ToString();
-                }
 
                 await Task.Yield();
                 var loomBeamHistoryDto = new DailyOperationLoomBeamHistoryDto(beamNumber,
@@ -327,7 +343,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                                                               operatorGroup,
                                                                               dateTimeMachine,
                                                                               shiftName,
-                                                                              greigeLength,
+                                                                              reprocessTo,
                                                                               information,
                                                                               machineStatus);
 

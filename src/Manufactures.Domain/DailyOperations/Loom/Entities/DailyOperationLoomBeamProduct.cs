@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Domain;
 using Infrastructure.Domain.Events;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +11,13 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
     public class DailyOperationLoomBeamProduct : EntityBase<DailyOperationLoomBeamProduct>
     {
-        public double? GreigeLength { get; private set; }
+        public Guid BeamDocumentId { get; private set; }
+
+        public Guid MachineDocumentId { get; private set; }
 
         public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
+
+        public string LoomProcess { get; private set; }
 
         public string BeamProductStatus { get; private set; }
 
@@ -24,25 +29,41 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         {
         }
 
-        public DailyOperationLoomBeamProduct(Guid identity, 
-                                             double? greigeLength, 
-                                             DateTimeOffset latestDateTimeBeamProduct, 
+        public DailyOperationLoomBeamProduct(Guid identity,
+                                             BeamId beamDocumentId,
+                                             MachineId machineDocumentId,
+                                             DateTimeOffset latestDateTimeBeamProduct,
+                                             string loomProcess,
                                              string beamProductStatus) : base(identity)
         {
-            GreigeLength = greigeLength;
+            BeamDocumentId = beamDocumentId.Value;
+            MachineDocumentId = machineDocumentId.Value;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+            LoomProcess = loomProcess;
             BeamProductStatus = beamProductStatus;
         }
 
-        public void SetGreigeLength(double greigeLength)
+        public void SetBeamDocumentId(BeamId beamDocumentId)
         {
-            GreigeLength = greigeLength;
+            BeamDocumentId = beamDocumentId.Value;
+            MarkModified();
+        }
+
+        public void SetMachineDocumentId(MachineId machineDocumentId)
+        {
+            MachineDocumentId = machineDocumentId.Value;
             MarkModified();
         }
 
         public void SetLatestDateTimeBeamProduct(DateTimeOffset latestDateTimeBeamProduct)
         {
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+            MarkModified();
+        }
+
+        public void SetLoomProcess(string loomProcess)
+        {
+            LoomProcess = loomProcess;
             MarkModified();
         }
 
@@ -54,7 +75,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         protected override DailyOperationLoomBeamProduct GetEntity()
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         protected override void MarkRemoved()

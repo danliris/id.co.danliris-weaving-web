@@ -7,13 +7,13 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class DailyOperationLoomBeamHistoryCommand
+    public class PreparationDailyOperationLoomBeamHistoryCommand
     {
-        [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; set; }
+        [JsonProperty(PropertyName = "BeamNumber")]
+        public string BeamNumber { get; set; }
 
-        [JsonProperty(PropertyName = "MachineDocumentId")]
-        public MachineId MachineDocumentId { get; set; }
+        [JsonProperty(PropertyName = "MachineNumber")]
+        public string MachineNumber { get; set; }
 
         [JsonProperty(PropertyName = "OperatorDocumentId")]
         public OperatorId OperatorDocumentId { get; set; }
@@ -27,24 +27,20 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "Process")]
-        public string Process { get; set; }
-
         [JsonProperty(PropertyName = "Information")]
         public string Information { get; set; }
     }
 
-    public class DailyOperationLoomBeamHistoryCommandValidator : AbstractValidator<DailyOperationLoomBeamHistoryCommand>
+    public class PreparationDailyOperationLoomBeamHistoryCommandValidator : AbstractValidator<PreparationDailyOperationLoomBeamHistoryCommand>
     {
-        public DailyOperationLoomBeamHistoryCommandValidator()
+        public PreparationDailyOperationLoomBeamHistoryCommandValidator()
         {
-            RuleFor(validator => validator.BeamDocumentId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");
-            RuleFor(validator => validator.MachineDocumentId).NotEmpty().WithMessage("No. Mesin Harus Diisi");
+            RuleFor(validator => validator.BeamNumber).NotEmpty();
+            RuleFor(validator => validator.MachineNumber).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId).NotEmpty().WithMessage("Operator Harus Diisi");
             RuleFor(validator => validator.DateMachine).NotEmpty().WithMessage("Tanggal Harus Diisi");
             RuleFor(validator => validator.TimeMachine).NotEmpty().WithMessage("Jam Harus Diisi");
             RuleFor(validator => validator.ShiftDocumentId).NotEmpty().WithMessage("Shift Tidak Boleh Kosong");
-            RuleFor(validator => validator.Process).NotEmpty().WithMessage("Proses Harus Diisi");
         }
     }
 }
