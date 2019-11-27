@@ -16,14 +16,23 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; }
 
-        [JsonProperty(PropertyName = "OperatorGroup")]
-        public string OperatorGroup { get; }
+        [JsonProperty(PropertyName = "LoomOperatorGroup")]
+        public string LoomOperatorGroup { get; }
 
         [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeMachine { get; }
 
         [JsonProperty(PropertyName = "ShiftName")]
         public string ShiftName { get; }
+
+        [JsonProperty(PropertyName = "WarpBrokenThreads")]
+        public int WarpBrokenThreads { get; set; }
+
+        [JsonProperty(PropertyName = "WeftBrokenThreads")]
+        public int WeftBrokenThreads { get; set; }
+
+        [JsonProperty(PropertyName = "LenoBrokenThreads")]
+        public int LenoBrokenThreads { get; set; }
 
         [JsonProperty(PropertyName = "ReprocessTo")]
         public string ReprocessTo { get; }
@@ -38,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
                                                 string beamNumber,
                                                 string machineNumber,
                                                 string operatorName, 
-                                                string operatorGroup, 
+                                                string loomOperatorGroup, 
                                                 DateTimeOffset dateTimeMachine, 
                                                 string shiftName, 
                                                 string reprocessTo,
@@ -48,7 +57,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             BeamNumber = beamNumber;
             MachineNumber = machineNumber;
             OperatorName = operatorName;
-            OperatorGroup = operatorGroup;
+            LoomOperatorGroup = loomOperatorGroup;
             DateTimeMachine = dateTimeMachine;
             ShiftName = shiftName;
             ReprocessTo = reprocessTo;
@@ -56,9 +65,19 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             MachineStatus = machineStatus;
         }
 
-        //public void SetGreigeLength(string greigeLength)
-        //{
-        //    GreigeLength = greigeLength;
-        //}
+        public void SetWarpBrokenThreads(int warpBrokenThreads)
+        {
+            WarpBrokenThreads = warpBrokenThreads;
+        }
+
+        public void SetWeftBrokenThreads(int weftBrokenThreads)
+        {
+            WeftBrokenThreads = weftBrokenThreads;
+        }
+
+        public void SetLenoBrokenThreads(int lenoBrokenThreads)
+        {
+            LenoBrokenThreads = lenoBrokenThreads;
+        }
     }
 }

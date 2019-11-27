@@ -13,20 +13,25 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
-        [JsonProperty(PropertyName = "DateTimeBeamProduct")]
-        public DateTimeOffset DateTimeBeamProduct { get; }
+        [JsonProperty(PropertyName = "LatestDateTimeBeamProduct")]
+        public DateTimeOffset LatestDateTimeBeamProduct { get; }
+
+        [JsonProperty(PropertyName = "LoomProcess")]
+        public string LoomProcess { get; }
 
         [JsonProperty(PropertyName = "BeamProductStatus")]
         public string BeamProductStatus { get; }
 
         public DailyOperationLoomBeamProductDto(string beamNumber, 
                                                 string machineNumber, 
-                                                DateTimeOffset dateTimeBeamProduct, 
+                                                DateTimeOffset latestDateTimeBeamProduct,
+                                                string loomProcess,
                                                 string beamProductStatus)
         {
             BeamNumber = beamNumber;
             MachineNumber = machineNumber;
-            DateTimeBeamProduct = dateTimeBeamProduct;
+            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+            LoomProcess = loomProcess;
             BeamProductStatus = beamProductStatus;
         }
     }

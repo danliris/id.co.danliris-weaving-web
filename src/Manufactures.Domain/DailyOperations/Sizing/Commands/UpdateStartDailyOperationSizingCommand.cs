@@ -35,9 +35,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         }
     }
 
-    public class AddNewDailyOperationSizingCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingCommand>
+    public class UpdateStartDailyOperationSizingCommandValidator : AbstractValidator<UpdateStartDailyOperationSizingCommand>
     {
-        public AddNewDailyOperationSizingCommandValidator()
+        public UpdateStartDailyOperationSizingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
             RuleFor(validator => validator.SizingBeamId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");

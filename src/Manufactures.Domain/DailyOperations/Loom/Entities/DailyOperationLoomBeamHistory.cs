@@ -45,7 +45,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
                                              OperatorId operatorDocumentId, 
                                              DateTimeOffset dateTimeMachine, 
                                              ShiftId shiftDocumentId,
-                                             string information, 
                                              string machineStatus) : base(identity)
         {
             BeamNumber = beamNumber;
@@ -53,7 +52,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             OperatorDocumentId = operatorDocumentId.Value;
             DateTimeMachine = dateTimeMachine;
             ShiftDocumentId = shiftDocumentId.Value;
-            Information = information;
             MachineStatus = machineStatus;
         }
 

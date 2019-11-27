@@ -163,8 +163,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 _dailyOperationLoomRepository
                     .Query
                     .Include(o => o.LoomBeamHistories)
-                    .Include(o=>o.LoomBeamProducts)
-                    .Where(o=>o.Identity.Equals(id))
+                    .Include(o => o.LoomBeamProducts)
+                    .Where(o => o.Identity.Equals(id))
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
@@ -172,7 +172,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     _dailyOperationLoomRepository
                         .Find(loomQuery)
                         .FirstOrDefault();
-            
+
             //Get Order Number
             await Task.Yield();
             var orderQuery =
@@ -239,7 +239,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             result.SetWarpOrigin(warpCode);
             result.SetWeftOrigin(weftCode);
 
-            foreach(var loomBeamProduct in dailyOperationLoomDocument.LoomBeamProducts)
+            foreach (var loomBeamProduct in dailyOperationLoomDocument.LoomBeamProducts)
             {
                 //Get Beam Number
                 await Task.Yield();
@@ -271,6 +271,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 await Task.Yield();
                 var dateTimeBeamProduct = loomBeamProduct.LatestDateTimeBeamProduct;
 
+                //Get Beam Process Status
+                var beamProductProcess = loomBeamProduct.LoomProcess;
+
                 //Get Beam Product Status
                 var beamStatus = loomBeamProduct.BeamProductStatus;
 
@@ -278,14 +281,15 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 var loomBeamProductDto = new DailyOperationLoomBeamProductDto(beamNumber,
                                                                               machineNumber,
                                                                               dateTimeBeamProduct,
+                                                                              beamProductProcess,
                                                                               beamStatus);
 
                 await Task.Yield();
                 result.AddDailyOperationLoomBeamProducts(loomBeamProductDto);
             }
-            result.DailyOperationLoomBeamProducts = result.DailyOperationLoomBeamProducts.OrderByDescending(o => o.DateTimeBeamProduct).ToList();
+            result.DailyOperationLoomBeamProducts = result.DailyOperationLoomBeamProducts.OrderByDescending(o => o.LatestDateTimeBeamProduct).ToList();
 
-            foreach(var loomBeamHistory in dailyOperationLoomDocument.LoomBeamHistories)
+            foreach (var loomBeamHistory in dailyOperationLoomDocument.LoomBeamHistories)
             {
                 //Get Beam Number
                 var beamNumber = loomBeamHistory.BeamNumber;
@@ -328,10 +332,10 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Reprocess To
                 await Task.Yield();
-                var reprocessTo = loomBeamHistory.ReprocessTo;
+                var reprocessTo = loomBeamHistory.ReprocessTo ?? "-";
 
                 //Get Information
-                var information = loomBeamHistory.Information;
+                var information = loomBeamHistory.Information ?? "-";
 
                 //Get Machine Status
                 var machineStatus = loomBeamHistory.MachineStatus;
@@ -346,6 +350,10 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                                                               reprocessTo,
                                                                               information,
                                                                               machineStatus);
+
+                loomBeamHistoryDto.SetWarpBrokenThreads(loomBeamHistory.WarpBrokenThreads ?? 0);
+                loomBeamHistoryDto.SetWeftBrokenThreads(loomBeamHistory.WeftBrokenThreads ?? 0);
+                loomBeamHistoryDto.SetLenoBrokenThreads(loomBeamHistory.LenoBrokenThreads ?? 0);
 
                 await Task.Yield();
                 result.AddDailyOperationLoomBeamHistories(loomBeamHistoryDto);

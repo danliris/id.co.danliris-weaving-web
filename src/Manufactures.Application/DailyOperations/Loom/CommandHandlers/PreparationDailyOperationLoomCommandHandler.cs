@@ -76,22 +76,22 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 var dateTimeBeamHistory =
                     new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-                var newBeamHistory =
+                var newLoomHistory =
                         new DailyOperationLoomBeamHistory(Guid.NewGuid(),
                                                           beamNumber,
                                                           machineNumber,
                                                           new OperatorId(beamHistory.OperatorDocumentId.Value),
                                                           dateTimeBeamHistory,
                                                           new ShiftId(beamHistory.ShiftDocumentId.Value),
-                                                          beamHistory.Information,
                                                           MachineStatus.ONENTRY);
 
-                newBeamHistory.SetWarpBrokenThreads(0);
-                newBeamHistory.SetWeftBrokenThreads(0);
-                newBeamHistory.SetLenoBrokenThreads(0);
-                newBeamHistory.SetReprocessTo("-");
+                newLoomHistory.SetWarpBrokenThreads(0);
+                newLoomHistory.SetWeftBrokenThreads(0);
+                newLoomHistory.SetLenoBrokenThreads(0);
+                newLoomHistory.SetReprocessTo("");
+                newLoomHistory.SetInformation(beamHistory.Information ?? "");
 
-                dailyOperationLoomDocument.AddDailyOperationLoomHistory(newBeamHistory);
+                dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
             }
 
             await _dailyOperationLoomDocumentRepository.Update(dailyOperationLoomDocument);
