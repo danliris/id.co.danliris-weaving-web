@@ -7,6 +7,9 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
 {
     public class DailyOperationLoomBeamHistoryDto
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; set; }
+
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; }
 
@@ -43,7 +46,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
-        public DailyOperationLoomBeamHistoryDto(
+        public DailyOperationLoomBeamHistoryDto(Guid identity,
                                                 string beamNumber,
                                                 string machineNumber,
                                                 string operatorName, 
@@ -54,6 +57,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
                                                 string information, 
                                                 string machineStatus)
         {
+            Id = identity;
             BeamNumber = beamNumber;
             MachineNumber = machineNumber;
             OperatorName = operatorName;

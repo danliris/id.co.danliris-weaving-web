@@ -6,9 +6,12 @@
         public static string SIZING = "Sizing";
         public static string WARPING = "Warping";
 
-        //Daily Operation - Beam Status
-        public static string END = "END";
+        //Daily Operation - Beam Status (Warping, Sizing)
         public static string ROLLEDUP = "ROLLED-UP";
         public static string ONPROCESS = "ON-PROCESS";
+
+        //Daily Operation - Beam Status (Loom)
+        public static string END = "END";
+        public static string COMPLETED = "COMPLETED";
     }
 }

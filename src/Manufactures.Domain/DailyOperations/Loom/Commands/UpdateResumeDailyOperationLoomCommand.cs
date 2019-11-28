@@ -13,6 +13,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
+        [JsonProperty(PropertyName = "ResumeBeamProductBeamId")]
+        public Guid ResumeBeamProductBeamId { get; set; }
+
         [JsonProperty(PropertyName = "ResumeBeamNumber")]
         public string ResumeBeamNumber { get; set; }
 
@@ -42,6 +45,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public UpdateResumeDailyOperationLoomCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.ResumeBeamProductBeamId).NotEmpty();
             RuleFor(validator => validator.ResumeBeamNumber).NotEmpty();
             RuleFor(validator => validator.ResumeMachineNumber).NotEmpty();
             RuleFor(validator => validator.ResumeDateMachine).NotEmpty().WithMessage("Tanggal Lanjutkan Harus Diisi");

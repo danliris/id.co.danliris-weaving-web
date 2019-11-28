@@ -51,13 +51,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                         .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingDailyOperationLoomHistories.FirstOrDefault();
 
-            //Get Daily Operation Loom History
+            //Get Daily Operation Loom Beam Product
             var existingDailyOperationLoomBeamProducts =
                 existingDailyOperationLoomDocument
                         .LoomBeamProducts
-                        .Where(o => o.Identity.Equals(request.PauseBeamNumber))
-                        .OrderByDescending(o => o.DateTimeMachine);
-            var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
+                        .Where(o => o.BeamDocumentId.Equals(request.PauseBeamProductBeamId))
+                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+            var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime
             var year = request.PauseDateMachine.Year;
@@ -66,7 +66,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var hour = request.PauseTimeMachine.Hours;
             var minutes = request.PauseTimeMachine.Minutes;
             var seconds = request.PauseTimeMachine.Seconds;
-            var dateTimeHistory =
+            var pauseDateTime =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
@@ -75,13 +75,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             if (pauseDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("PauseDate", "Start date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("PauseDate", "Pause date cannot less than latest date log"));
             }
             else
             {
-                if (dateTimeHistory <= lastHistory.DateTimeMachine)
+                if (pauseDateTime <= lastHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("PauseTime", "Start time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("PauseTime", "Pause time cannot less than or equal latest time log"));
                 }
                 else
                 {
@@ -94,17 +94,18 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                   request.PauseBeamNumber,
                                                                   request.PauseMachineNumber,
                                                                   new OperatorId(request.PauseOperatorDocumentId.Value),
-                                                                  dateTimeHistory,
+                                                                  pauseDateTime,
                                                                   new ShiftId(request.PauseShiftDocumentId.Value),
-                                                                  MachineStatus.ONSTART);
+                                                                  MachineStatus.ONSTOP);
 
                             newLoomHistory.SetWarpBrokenThreads(request.WarpBrokenThreads ?? 0);
                             newLoomHistory.SetWeftBrokenThreads(request.WeftBrokenThreads ?? 0);
                             newLoomHistory.SetLenoBrokenThreads(request.LenoBrokenThreads ?? 0);
-                            newLoomHistory.SetReprocessTo(request.ReprocessTo);
-                            newLoomHistory.SetInformation(request.Information ?? "");
+                            newLoomHistory.SetInformation(request.Information);
 
                             existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+
+                            lastBeamProduct.SetLatestDateTimeBeamProduct(pauseDateTime);
 
                             await _dailyOperationLoomDocumentRepository.Update(existingDailyOperationLoomDocument);
                             _storage.Save();
@@ -112,21 +113,40 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                         else
                         {
                             var newLoomHistory =
-                                                            new DailyOperationLoomBeamHistory(Guid.NewGuid(),
-                                                                                              request.PauseBeamNumber,
-                                                                                              request.PauseMachineNumber,
-                                                                                              new OperatorId(request.PauseOperatorDocumentId.Value),
-                                                                                              dateTimeHistory,
-                                                                                              new ShiftId(request.PauseShiftDocumentId.Value),
-                                                                                              MachineStatus.ONSTART);
+                                new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                                                                  request.PauseBeamNumber,
+                                                                  request.PauseMachineNumber,
+                                                                  new OperatorId(request.PauseOperatorDocumentId.Value),
+                                                                  pauseDateTime,
+                                                                  new ShiftId(request.PauseShiftDocumentId.Value),
+                                                                  MachineStatus.ONCOMPLETE);
 
                             newLoomHistory.SetWarpBrokenThreads(request.WarpBrokenThreads ?? 0);
                             newLoomHistory.SetWeftBrokenThreads(request.WeftBrokenThreads ?? 0);
                             newLoomHistory.SetLenoBrokenThreads(request.LenoBrokenThreads ?? 0);
-                            newLoomHistory.SetReprocessTo(request.ReprocessTo??"");
-                            newLoomHistory.SetInformation(request.Information ?? "");
+                            newLoomHistory.SetReprocessTo(request.ReprocessTo);
+                            newLoomHistory.SetInformation(request.Information);
 
                             existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+
+                            lastBeamProduct.SetLatestDateTimeBeamProduct(pauseDateTime);
+                            lastBeamProduct.SetBeamProductStatus(BeamStatus.END);
+
+                            await Task.Yield();
+                            var isAllBeamProductProcessed = 0;
+                            foreach (var beamProduct in existingDailyOperationLoomDocument.LoomBeamProducts)
+                            {
+                                if (beamProduct.BeamProductStatus == BeamStatus.ONPROCESS)
+                                {
+                                    isAllBeamProductProcessed++;
+                                }
+                            };
+
+                            await Task.Yield();
+                            if (isAllBeamProductProcessed == 0)
+                            {
+                                existingDailyOperationLoomDocument.SetOperationStatus(OperationStatus.ONFINISH);
+                            }
 
                             await _dailyOperationLoomDocumentRepository.Update(existingDailyOperationLoomDocument);
                             _storage.Save();
@@ -136,7 +156,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't pause, latest machine status must ONSTART or ONRESUME"));
                     }
                 }
             }

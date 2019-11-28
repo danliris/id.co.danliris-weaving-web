@@ -13,8 +13,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "BeamProductId")]
-        public Guid BeamProductId { get; set; }
+        [JsonProperty(PropertyName = "PauseBeamProductBeamId")]
+        public Guid PauseBeamProductBeamId { get; set; }
 
         [JsonProperty(PropertyName = "PauseBeamNumber")]
         public string PauseBeamNumber { get; set; }
@@ -60,6 +60,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public UpdatePauseDailyOperationLoomCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.PauseBeamProductBeamId).NotEmpty();
             RuleFor(validator => validator.PauseBeamNumber).NotEmpty();
             RuleFor(validator => validator.PauseMachineNumber).NotEmpty();
             RuleFor(validator => validator.PauseDateMachine).NotEmpty().WithMessage("Tanggal Jeda Harus Diisi");

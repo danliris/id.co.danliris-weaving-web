@@ -278,11 +278,14 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 var beamStatus = loomBeamProduct.BeamProductStatus;
 
                 await Task.Yield();
-                var loomBeamProductDto = new DailyOperationLoomBeamProductDto(beamNumber,
+                var loomBeamProductDto = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
+                                                                              beamNumber,
                                                                               machineNumber,
                                                                               dateTimeBeamProduct,
                                                                               beamProductProcess,
                                                                               beamStatus);
+
+                loomBeamProductDto.SetBeamDocumentId(loomBeamProduct.BeamDocumentId);
 
                 await Task.Yield();
                 result.AddDailyOperationLoomBeamProducts(loomBeamProductDto);
@@ -341,7 +344,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 var machineStatus = loomBeamHistory.MachineStatus;
 
                 await Task.Yield();
-                var loomBeamHistoryDto = new DailyOperationLoomBeamHistoryDto(beamNumber,
+                var loomBeamHistoryDto = new DailyOperationLoomBeamHistoryDto(loomBeamHistory.Identity,
+                                                                              beamNumber,
                                                                               machineNumber,
                                                                               operatorName,
                                                                               operatorGroup,

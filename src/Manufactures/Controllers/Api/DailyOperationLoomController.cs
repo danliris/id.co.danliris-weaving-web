@@ -165,7 +165,14 @@ namespace Manufactures.Controllers.Api
                             var loomProcess = loomBeamProduct.LoomProcess;
                             var beamProductStatus = loomBeamProduct.BeamProductStatus;
 
-                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(beamNumber, machineNumber, latestDateTimeBeamProduct, loomProcess, beamProductStatus);
+                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity, 
+                                                                                      beamNumber, 
+                                                                                      machineNumber, 
+                                                                                      latestDateTimeBeamProduct, 
+                                                                                      loomProcess, 
+                                                                                      beamProductStatus);
+                            loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId);
+
                             loomListBeamProducts.Add(loomSizingBeam);
                         }
                     }
@@ -264,9 +271,9 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
             command.SetId(documentId);
-            var updateDoffDailyOperationLoomDocument = await Mediator.Send(command);
+            var finishDailyOperationLoomDocument = await Mediator.Send(command);
 
-            return Ok(updateDoffDailyOperationLoomDocument.Identity);
+            return Ok(finishDailyOperationLoomDocument.Identity);
         }
     }
 }

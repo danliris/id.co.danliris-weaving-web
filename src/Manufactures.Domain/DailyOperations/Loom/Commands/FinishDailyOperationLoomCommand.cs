@@ -13,6 +13,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
+        [JsonProperty(PropertyName = "FinishBeamProductBeamId")]
+        public Guid FinishBeamProductBeamId { get; set; }
+
         [JsonProperty(PropertyName = "FinishBeamNumber")]
         public string FinishBeamNumber { get; set; }
 
@@ -42,6 +45,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public FinishDailyOperationLoomCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.FinishBeamProductBeamId).NotEmpty();
             RuleFor(validator => validator.FinishBeamNumber).NotEmpty();
             RuleFor(validator => validator.FinishMachineNumber).NotEmpty();
             RuleFor(validator => validator.FinishDateMachine).NotEmpty().WithMessage("Tanggal Selesai Harus Diisi");
