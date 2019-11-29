@@ -165,6 +165,11 @@ namespace Manufactures.Controllers.Api
                         var warpingBeamQuery = _beamRepository.Query.Where(beam => beam.Identity.Equals(warpingBeam.Id) && beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
                         var warpingBeamDocument = _beamRepository.Find(warpingBeamQuery).FirstOrDefault();
 
+                        if (warpingBeamDocument == null)
+                        {
+                            continue;
+                        }
+
                         await Task.Yield();
                         var warpingBeamDto = new BeamDto(warpingBeam, warpingBeamDocument);
                         warpingBeams.Add(warpingBeamDto);

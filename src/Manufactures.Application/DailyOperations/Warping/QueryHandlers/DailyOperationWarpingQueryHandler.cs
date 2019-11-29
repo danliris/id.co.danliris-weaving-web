@@ -151,20 +151,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .FirstOrDefault()
                     .Name;
 
-            //Get Operator
-            //await Task.Yield();
-            //var operatorDocument =
-            //    _operatorRepository
-            //        .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.OperatorId.Value))
-            //        .FirstOrDefault();
-
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
             double totalWarpingBeamLength = 0;
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialType(materialName);
-            //result.SetOperator(operatorDocument);
-            //result.SetOrderDocumentId(dailyOperationWarpingDocument.OrderDocumentId);
             result.SetOrderProductionNumber(orderDocument.OrderNumber);
             result.SetWeavingUnitId(orderDocument.UnitId.Value);
 
