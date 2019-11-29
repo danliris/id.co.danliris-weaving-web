@@ -35,10 +35,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
         {
             var dailyOperationReachingDocument =
                 new DailyOperationReachingDocument(Guid.NewGuid(),
-                                                        new MachineId(request.MachineDocumentId.Value),
-                                                        new OrderId(request.OrderDocumentId.Value),
-                                                        new BeamId(request.SizingBeamId.Value),
-                                                        OperationStatus.ONPROCESS);
+                                                   new MachineId(request.MachineDocumentId.Value),
+                                                   new OrderId(request.OrderDocumentId.Value),
+                                                   new BeamId(request.SizingBeamId.Value),
+                                                   OperationStatus.ONPROCESS);
 
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;

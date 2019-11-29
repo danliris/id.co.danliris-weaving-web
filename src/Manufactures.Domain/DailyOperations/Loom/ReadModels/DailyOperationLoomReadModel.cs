@@ -7,18 +7,16 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
 {
     public class DailyOperationLoomReadModel : ReadModelBase
     {
-        public int UnitId { get; internal set; }
-        public Guid MachineId { get; internal set; }
-        public Guid BeamId { get; internal set; }
-        public Guid OrderId { get; internal set; }
-        public string DailyOperationStatus { get; internal set; }
-        public Guid? DailyOperationMonitoringId { get; internal set; }
-        public List<DailyOperationLoomDetail> DailyOperationLoomDetails { get; internal set; }
-        public double? UsedYarn { get; internal set; }
+        public Guid OrderDocumentId { get; internal set; }
+
+        public string OperationStatus { get; internal set; }
+
+        public List<DailyOperationLoomBeamHistory> LoomBeamHistories { get; internal set; }
+
+        public List<DailyOperationLoomBeamProduct> LoomBeamProducts { get; internal set; }
 
         public DailyOperationLoomReadModel(Guid identity) : base(identity)
         {
         }
-
     }
 }

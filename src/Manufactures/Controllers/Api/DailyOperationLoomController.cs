@@ -4,20 +4,22 @@ using Manufactures.Domain.DailyOperations.Loom.Commands;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Dtos.DailyOperations.Loom;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Manufactures.Application.Helpers;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
+using Manufactures.Domain.DailyOperations.Loom.Queries;
+using System.Linq;
+using System.Collections.Generic;
+using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
+using Manufactures.Application.Helpers;
+using Moonlay;
 
 namespace Manufactures.Controllers.Api
 {
@@ -27,39 +29,27 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationLoomController : ControllerApiBase
     {
+        private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto> _loomQuery;
+
         private readonly IDailyOperationLoomRepository
-            _dailyOperationalDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository
-            _weavingOrderDocumentRepository;
-        private readonly IFabricConstructionRepository
-            _constructionDocumentRepository;
-        private readonly IMachineRepository
-            _machineRepository;
-        private readonly IOperatorRepository
-            _operatorRepository;
+            _dailyOperationLoomRepository;
         private readonly IBeamRepository
             _beamRepository;
-        private readonly IShiftRepository
-            _shiftRepository;
+        private readonly IMachineRepository
+            _machineRepository;
 
+        //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
-                                                 IWorkContext workContext)
-            : base(serviceProvider)
+                                            IDailyOperationLoomQuery<DailyOperationLoomListDto> loomQuery) : base(serviceProvider)
         {
-            _dailyOperationalDocumentRepository =
+            _loomQuery = loomQuery ?? throw new ArgumentNullException(nameof(loomQuery));
+
+            _dailyOperationLoomRepository =
                 this.Storage.GetRepository<IDailyOperationLoomRepository>();
-            _weavingOrderDocumentRepository =
-                this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
-            _constructionDocumentRepository =
-                this.Storage.GetRepository<IFabricConstructionRepository>();
-            _machineRepository =
-                this.Storage.GetRepository<IMachineRepository>();
-            _operatorRepository =
-                this.Storage.GetRepository<IOperatorRepository>();
             _beamRepository =
                 this.Storage.GetRepository<IBeamRepository>();
-            _shiftRepository =
-                this.Storage.GetRepository<IShiftRepository>();
+            _machineRepository =
+                this.Storage.GetRepository<IMachineRepository>();
         }
 
         [HttpGet]
@@ -69,387 +59,221 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
-            //Set page
-            page = page - 1;
-            //Add query
-            var query =
-                _dailyOperationalDocumentRepository
-                    .Query
-                    .Include(d => d.DailyOperationLoomDetails)
-                    .OrderByDescending(item => item.CreatedDate);
-            //Execute existing daily operation
-            var dailyOperationalMachineDocuments =
-                _dailyOperationalDocumentRepository
-                    .Find(query);
-            //Initiate new List 
-            var dailyOperationLooms = new List<DailyOperationLoomListDto>();
-            //Extract information from latest existing daily operation
-            foreach (var dailyOperation in dailyOperationalMachineDocuments)
-            {
-                var dateOperated = new DateTimeOffset();
+            var dailyOperationLoomDocuments = await _loomQuery.GetAll();
 
-                var machineDocument =
-                    await _machineRepository
-                        .Query
-                        .Where(d => d.Identity.Equals(dailyOperation.MachineId.Value))
-                        .FirstOrDefaultAsync();
-                var orderDocument =
-                       await _weavingOrderDocumentRepository
-                           .Query
-                           .Where(o => o.Identity.Equals(dailyOperation.OrderId.Value))
-                           .FirstOrDefaultAsync();
-
-                foreach (var detail in dailyOperation.DailyOperationMachineDetails)
-                {
-
-                    if (detail.OperationStatus == MachineStatus.ONENTRY)
-                    {
-                        dateOperated = detail.DateTimeOperation;
-                    }
-                }
-
-                var dto =
-                    new DailyOperationLoomListDto(dailyOperation,
-                                                  orderDocument.OrderNumber,
-                                                  machineDocument.MachineNumber,
-                                                  dateOperated);
-
-                dailyOperationLooms.Add(dto);
-            }
-            //Search by keyword
             if (!string.IsNullOrEmpty(keyword))
             {
-                dailyOperationLooms =
-                    dailyOperationLooms.Where(entity => entity
-                                                .OrderNumber
-                                                .Contains(keyword,
-                                                          StringComparison
-                                                            .OrdinalIgnoreCase) ||
-                                              entity
-                                                .MachineNumber
-                                                .Contains(keyword,
-                                                          StringComparison
-                                                            .OrdinalIgnoreCase))
-                             .ToList();
+                await Task.Yield();
+                dailyOperationLoomDocuments =
+                    dailyOperationLoomDocuments
+                        .Where(x => x.FabricConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
-            //Order by
+
             if (!order.Contains("{}"))
             {
                 Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key =
-                    orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                    orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop =
-                    typeof(DailyOperationLoomListDto).GetProperty(key);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(DailyOperationLoomListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    dailyOperationLooms =
-                        dailyOperationLooms
-                            .OrderBy(x => prop.GetValue(x, null))
-                            .ToList();
+                    await Task.Yield();
+                    dailyOperationLoomDocuments =
+                        dailyOperationLoomDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    dailyOperationLooms =
-                        dailyOperationLooms
-                            .OrderByDescending(x => prop.GetValue(x, null))
-                            .ToList();
+                    await Task.Yield();
+                    dailyOperationLoomDocuments =
+                        dailyOperationLoomDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
-            //Give to final result
-            var ResultDailyOperationLooms =
-                dailyOperationLooms.Skip(page * size).Take(size).ToList();
-            int totalRows = dailyOperationLooms.Count();
-            int resultCount = ResultDailyOperationLooms.Count();
-            page = page + 1;
 
-            await Task.Yield();
-            //Return to end point
-            return Ok(ResultDailyOperationLooms, info: new
+            //int totalRows = dailyOperationLoomDocuments.Count();
+            var result = dailyOperationLoomDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+
+        [HttpGet("get-loom-beam-products")]
+        public async Task<IActionResult> GetLoomBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
+        {
+            page = page - 1;
+            List<DailyOperationLoomBeamProductDto> loomListBeamProducts = new List<DailyOperationLoomBeamProductDto>();
+            if (!filter.Contains("{}"))
+            {
+                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+                var LoomOperationId = filterDictionary["LoomOperationId"].ToString();
+                if (!LoomOperationId.Equals(null))
+                {
+                    var LoomOperationGuid = Guid.Parse(LoomOperationId);
+
+                    await Task.Yield();
+                    var loomQuery =
+                         _dailyOperationLoomRepository
+                             .Query
+                             .Include(o => o.LoomBeamHistories)
+                             .Include(o => o.LoomBeamProducts)
+                             .OrderByDescending(o => o.CreatedDate);
+
+                    await Task.Yield();
+                    var existingDailyOperationLoomDocument =
+                        _dailyOperationLoomRepository
+                            .Find(loomQuery)
+                            .Where(o => o.Identity.Equals(LoomOperationGuid))
+                            .FirstOrDefault();
+
+                    await Task.Yield();
+                    foreach (var loomBeamProduct in existingDailyOperationLoomDocument.LoomBeamProducts)
+                    {
+                        await Task.Yield();
+                        var sizingBeamStatus = loomBeamProduct.BeamProductStatus;
+                        if (sizingBeamStatus.Equals(BeamStatus.ONPROCESS))
+                        {
+                            //Get Beam Number
+                            await Task.Yield();
+                            var beamQuery =
+                                _beamRepository
+                                    .Query
+                                    .OrderByDescending(o => o.CreatedDate);
+                            var beamNumber =
+                                _beamRepository
+                                    .Find(beamQuery)
+                                    .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
+                                    .FirstOrDefault()
+                                    .Number;
+
+                            //Get Machine Number
+                            await Task.Yield();
+                            var machineQuery =
+                                _machineRepository
+                                    .Query
+                                    .OrderByDescending(o => o.CreatedDate);
+                            var machineNumber =
+                                _machineRepository
+                                    .Find(machineQuery)
+                                    .Where(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
+                                    .FirstOrDefault()
+                                    .MachineNumber;
+
+                            await Task.Yield();
+                            var latestDateTimeBeamProduct = loomBeamProduct.LatestDateTimeBeamProduct;
+                            var loomProcess = loomBeamProduct.LoomProcess;
+                            var beamProductStatus = loomBeamProduct.BeamProductStatus;
+
+                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity, 
+                                                                                      beamNumber, 
+                                                                                      machineNumber, 
+                                                                                      latestDateTimeBeamProduct, 
+                                                                                      loomProcess, 
+                                                                                      beamProductStatus);
+                            loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId);
+
+                            loomListBeamProducts.Add(loomSizingBeam);
+                        }
+                    }
+                }
+                else
+                {
+                    throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
+                }
+            }
+            else
+            {
+                throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
+            }
+
+            var total = loomListBeamProducts.Count();
+            var data = loomListBeamProducts.Skip((page - 1) * size).Take(size);
+
+            return Ok(data, info: new
             {
                 page,
                 size,
-                total = totalRows,
-                count = resultCount
+                total
             });
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> Get(string Id)
+        public async Task<IActionResult> GetById(string Id)
         {
-            var Identity = Guid.Parse(Id);
-            var query =
-                _dailyOperationalDocumentRepository
-                    .Query
-                    .Include(p => p.DailyOperationLoomDetails)
-                    .Where(o => o.Identity == Identity);
-            var dailyOperationalLoom =
-                _dailyOperationalDocumentRepository
-                    .Find(query)
-                    .FirstOrDefault();
-            var operationDate = new DateTimeOffset();
-            var machineNumber =
-                _machineRepository
-                    .Find(o => o.Identity.Equals(dailyOperationalLoom.MachineId.Value))
-                    .FirstOrDefault()
-                    .MachineNumber;
-            var order =
-                _weavingOrderDocumentRepository
-                    .Find(o => o.Identity.Equals(dailyOperationalLoom.OrderId.Value))
-                    .FirstOrDefault();
-            var orderNumber = order.OrderNumber;
-            var fabricConstructionNumber =
-                _constructionDocumentRepository
-                    .Find(o => o.Identity.Equals(order.ConstructionId.Value))
-                    .FirstOrDefault()
-                    .ConstructionNumber;
-            var beamNumber =
-                _beamRepository
-                    .Find(o => o.Identity.Equals(dailyOperationalLoom.BeamId.Value))
-                    .FirstOrDefault()
-                    .Number;
-            var historys = new List<DailyOperationLoomHistoryDto>();
+            var identity = Guid.Parse(Id);
+            var dailyOperationLoomDocument = await _loomQuery.GetById(identity);
 
-            foreach (var detail in dailyOperationalLoom.DailyOperationMachineDetails)
+            if (dailyOperationLoomDocument == null)
             {
-                var beamOperator =
-                    _operatorRepository
-                        .Find(o => o.Identity.Equals(detail.BeamOperatorId))
-                        .FirstOrDefault();
-                var shiftName =
-                    _shiftRepository
-                        .Find(o => o.Identity.Equals(detail.ShiftId))
-                        .FirstOrDefault()
-                        .Name;
-
-                if (detail.OperationStatus == MachineStatus.ONENTRY)
-                {
-                    operationDate = detail.DateTimeOperation;
-                }
-
-                var history =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-
-                historys.Add(history);
+                return NotFound(identity);
             }
 
-            var result =
-                new DailyOperationLoomByIdDto(dailyOperationalLoom.Identity,
-                                              operationDate,
-                                              dailyOperationalLoom.UnitId.Value,
-                                              machineNumber,
-                                              beamNumber,
-                                              orderNumber,
-                                              fabricConstructionNumber);
+            return Ok(dailyOperationLoomDocument);
+        }
 
-            if (historys.Count > 0)
-            {
-                historys =
-                  historys
-                   .OrderByDescending(field => field.DateTimeOperation)
-                   .ToList();
-                result.LoomHistory = historys;
-            }
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]PreparationDailyOperationLoomCommand command)
+        {
+            var preparationDailyOperationLoomDocument = await Mediator.Send(command);
 
-            await Task.Yield();
+            return Ok(preparationDailyOperationLoomDocument.Identity);
+        }
 
-            if (Identity == null || result == null)
+        [HttpPut("{Id}/start")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]UpdateStartDailyOperationLoomCommand command)
+        {
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
-            else
-            {
-                return Ok(result);
-            }
+            command.SetId(documentId);
+            var updateStartDailyOperationLoomDocument = await Mediator.Send(command);
+
+            return Ok(updateStartDailyOperationLoomDocument.Identity);
         }
 
-        [HttpPost("entry-process")]
-        public async Task<IActionResult> EntryPost([FromBody]AddNewDailyOperationLoomCommand command)
+        [HttpPut("{Id}/pause")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdatePauseDailyOperationLoomCommand command)
         {
-            var dailyOperationLoom = await Mediator.Send(command);
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updatePauseDailyOperationLoomDocument = await Mediator.Send(command);
 
-            var dailyOperationLoomDetailAsHistory = dailyOperationLoom.DailyOperationMachineDetails;
-
-            return Ok(dailyOperationLoom.Identity);
+            return Ok(updatePauseDailyOperationLoomDocument.Identity);
         }
 
-        [HttpPut("start-process")]
-        public async Task<IActionResult> StartPost([FromBody]StartDailyOperationLoomCommand command)
+        [HttpPut("{Id}/resume")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]UpdateResumeDailyOperationLoomCommand command)
         {
-            var dailyOperationLoom = await Mediator.Send(command);
-            var historys = new List<DailyOperationLoomHistoryDto>();
-
-            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
-                var beamOperator =
-                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
-                                       .FirstOrDefault();
-                var shiftName =
-                    _shiftRepository
-                        .Find(o => o.Identity.Equals(detail.ShiftId))
-                        .FirstOrDefault()
-                        .Name;
-
-                var result =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-                historys.Add(result);
+                return NotFound();
             }
+            command.SetId(documentId);
+            var updateResumeDailyOperationLoomDocument = await Mediator.Send(command);
 
-            historys =
-                historys
-                    .OrderByDescending(field => field.DateTimeOperation)
-                    .ToList();
-
-            return Ok(historys);
+            return Ok(updateResumeDailyOperationLoomDocument.Identity);
         }
 
-        [HttpPut("stop-process")]
-        public async Task<IActionResult> StopPost([FromBody]StopDailyOperationLoomCommand command)
+        [HttpPut("{Id}/finish")]
+        public async Task<IActionResult> Put(string Id,
+                                             [FromBody]FinishDailyOperationLoomCommand command)
         {
-            var dailyOperationLoom = await Mediator.Send(command);
-            var historys = new List<DailyOperationLoomHistoryDto>();
-
-            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
+            if (!Guid.TryParse(Id, out Guid documentId))
             {
-                var beamOperator =
-                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
-                                       .FirstOrDefault();
-                var shiftName =
-                    _shiftRepository
-                        .Find(o => o.Identity.Equals(detail.ShiftId))
-                        .FirstOrDefault()
-                        .Name;
-                var result =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-                historys.Add(result);
+                return NotFound();
             }
+            command.SetId(documentId);
+            var finishDailyOperationLoomDocument = await Mediator.Send(command);
 
-            historys =
-               historys
-                   .OrderByDescending(field => field.DateTimeOperation)
-                   .ToList();
-
-            return Ok(historys);
-        }
-
-        [HttpPut("resume-process")]
-        public async Task<IActionResult> ResumePost([FromBody]ResumeDailyOperationLoomCommand command)
-        {
-            var dailyOperationLoom = await Mediator.Send(command);
-            var historys = new List<DailyOperationLoomHistoryDto>();
-
-            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
-            {
-                var beamOperator =
-                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
-                                       .FirstOrDefault();
-                var shiftName =
-                   _shiftRepository
-                       .Find(o => o.Identity.Equals(detail.ShiftId))
-                       .FirstOrDefault()
-                       .Name;
-                var result =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-                historys.Add(result);
-            }
-
-            historys =
-               historys
-                   .OrderByDescending(field => field.DateTimeOperation)
-                   .ToList();
-
-            return Ok(historys);
-        }
-
-        [HttpPut("finish-process")]
-        public async Task<IActionResult> FinishPost([FromBody]FinishDailyOperationLoomCommand command)
-        {
-            var dailyOperationLoom = await Mediator.Send(command);
-            var historys = new List<DailyOperationLoomHistoryDto>();
-
-            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
-            {
-                var beamOperator =
-                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
-                                       .FirstOrDefault();
-                var shiftName =
-                   _shiftRepository
-                       .Find(o => o.Identity.Equals(detail.ShiftId))
-                       .FirstOrDefault()
-                       .Name;
-                var result =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-                historys.Add(result);
-            }
-
-            historys =
-               historys
-                   .OrderByDescending(field => field.DateTimeOperation)
-                   .ToList();
-
-            return Ok(historys);
-        }
-
-        [HttpPut("update-loom-shift")]
-        public async Task<IActionResult> UpdateShift([FromBody]UpdateShiftDailyOperationLoomCommand command)
-        {
-            var dailyOperationLoom = await Mediator.Send(command);
-            var historys = new List<DailyOperationLoomHistoryDto>();
-
-            foreach (var detail in dailyOperationLoom.DailyOperationMachineDetails)
-            {
-                var beamOperator =
-                    _operatorRepository.Find(e => e.Identity.Equals(detail.BeamOperatorId))
-                                       .FirstOrDefault();
-                var shiftName =
-                   _shiftRepository
-                       .Find(o => o.Identity.Equals(detail.ShiftId))
-                       .FirstOrDefault()
-                       .Name;
-                var result =
-                    new DailyOperationLoomHistoryDto(detail.Identity,
-                                                     beamOperator.CoreAccount.Name,
-                                                     beamOperator.Group,
-                                                     detail.DateTimeOperation,
-                                                     detail.OperationStatus,
-                                                     shiftName);
-                historys.Add(result);
-            }
-
-            historys =
-               historys
-                   .OrderByDescending(field => field.DateTimeOperation)
-                   .ToList();
-            await Task.Yield();
-
-            return Ok(historys);
+            return Ok(finishDailyOperationLoomDocument.Identity);
         }
     }
 }

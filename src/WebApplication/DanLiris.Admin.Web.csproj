@@ -66,6 +66,12 @@
     <Compile Remove="Migrations\20191010123516_ChangePropertiesNameAndStructureOnDailyOperationSizing.Designer.cs" />
     <Compile Remove="Migrations\20191015035702_AddDateOperationOnSizingDocumentAndLatestDateOnSizingBeamProduct.cs" />
     <Compile Remove="Migrations\20191015035702_AddDateOperationOnSizingDocumentAndLatestDateOnSizingBeamProduct.Designer.cs" />
+    <Compile Remove="Migrations\20191121121616_ChangeDailyOperationLoomToNewStructure.cs" />
+    <Compile Remove="Migrations\20191121121616_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
+    <Compile Remove="Migrations\20191122034231_ChangeDailyOperationLoomToNewStructure.cs" />
+    <Compile Remove="Migrations\20191122034231_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
+    <Compile Remove="Migrations\20191122103201_ChangeDailyOperationLoomToNewStructure.cs" />
+    <Compile Remove="Migrations\20191122103201_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

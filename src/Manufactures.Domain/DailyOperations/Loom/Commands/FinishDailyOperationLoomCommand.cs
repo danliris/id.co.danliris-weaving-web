@@ -3,41 +3,55 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class FinishDailyOperationLoomCommand 
-        : ICommand<DailyOperationLoomDocument>
+    public class FinishDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "FinishDate")]
-        public DateTimeOffset FinishDate { get; set; }
+        [JsonProperty(PropertyName = "FinishBeamProductBeamId")]
+        public Guid FinishBeamProductBeamId { get; set; }
 
-        [JsonProperty(PropertyName = "FinishTime")]
-        public TimeSpan FinishTime { get; set; }
+        [JsonProperty(PropertyName = "FinishBeamNumber")]
+        public string FinishBeamNumber { get; set; }
 
-        [JsonProperty(PropertyName = "ShiftId")]
-        public ShiftId ShiftId { get; set; }
+        [JsonProperty(PropertyName = "FinishMachineNumber")]
+        public string FinishMachineNumber { get; set; }
 
-        [JsonProperty(PropertyName = "OperatorId")]
-        public OperatorId OperatorId { get; set; }
+        [JsonProperty(PropertyName = "FinishDateMachine")]
+        public DateTimeOffset FinishDateMachine { get; set; }
 
-        [JsonProperty(PropertyName = "YarnUsedOnLength")]
-        public double YarnUsedOnLength { get; set; }
+        [JsonProperty(PropertyName = "FinishTimeMachine")]
+        public TimeSpan FinishTimeMachine { get; set; }
+
+        [JsonProperty(PropertyName = "FinishShiftDocumentId")]
+        public ShiftId FinishShiftDocumentId { get; set; }
+
+        [JsonProperty(PropertyName = "FinishOperatorDocumentId")]
+        public OperatorId FinishOperatorDocumentId { get; set; }
+
+        public void SetId(Guid Id)
+        {
+            this.Id = Id;
+        }
     }
 
-    public class FinishDailyOperationLoomCommandValidator 
-        : AbstractValidator<FinishDailyOperationLoomCommand>
+    public class FinishDailyOperationLoomCommandValidator : AbstractValidator<FinishDailyOperationLoomCommand>
     {
         public FinishDailyOperationLoomCommandValidator()
         {
-            RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.FinishDate).NotEmpty();
-            RuleFor(command => command.FinishTime).NotEmpty();
-            RuleFor(command => command.ShiftId).NotEmpty();
-            RuleFor(command => command.OperatorId).NotEmpty();
+            RuleFor(validator => validator.Id).NotEmpty();
+            RuleFor(validator => validator.FinishBeamProductBeamId).NotEmpty();
+            RuleFor(validator => validator.FinishBeamNumber).NotEmpty();
+            RuleFor(validator => validator.FinishMachineNumber).NotEmpty();
+            RuleFor(validator => validator.FinishDateMachine).NotEmpty().WithMessage("Tanggal Selesai Harus Diisi");
+            RuleFor(validator => validator.FinishTimeMachine).NotEmpty().WithMessage("Waktu Selesai Harus Diisi");
+            RuleFor(validator => validator.FinishShiftDocumentId).NotEmpty().WithMessage("Shift Tidak Boleh Kosong");
+            RuleFor(validator => validator.FinishOperatorDocumentId).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

@@ -162,11 +162,11 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            int totalRows = dailyOperationSizingDocuments.Count();
+            //int totalRows = dailyOperationSizingDocuments.Count();
             var result = dailyOperationSizingDocuments.Skip((page - 1) * size).Take(size);
-            var resultCount = result.Count();
+            var total = result.Count();
 
-            return Ok(result, info: new { page, size, totalRows, resultCount });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("get-sizing-beams")]
@@ -229,6 +229,11 @@ namespace Manufactures.Controllers.Api
                             _beamRepository
                                 .Find(sizingBeamQuery)
                                 .FirstOrDefault();
+
+                        if (sizingBeamDocument == null)
+                        {
+                            continue;
+                        }
 
                         await Task.Yield();
                         var sizingBeamDto = new BeamDto(sizingBeam, sizingBeamDocument);

@@ -75,7 +75,9 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTREACHINGIN) || lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.ONENTRY) || 
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTREACHINGIN) || 
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN))
                     {
                         existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
                         existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);

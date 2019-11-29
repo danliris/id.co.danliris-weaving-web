@@ -107,11 +107,11 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            int totalRows = dailyOperationWarpingDocuments.Count();
+            //int totalRows = dailyOperationWarpingDocuments.Count();
             var result = dailyOperationWarpingDocuments.Skip((page - 1) * size).Take(size);
-            var resultCount = result.Count();
+            var total = result.Count();
 
-            return Ok(result, info: new { page, size, totalRows, resultCount });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("get-warping-beams")]

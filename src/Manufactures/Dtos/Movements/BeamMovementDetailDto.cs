@@ -27,11 +27,11 @@ namespace Manufactures.Dtos.Movements
             Information = detail.MachineStatus;
         }
 
-        public BeamMovementDetailDto(DailyOperationLoomDetail detail)
+        public BeamMovementDetailDto(DailyOperationLoomBeamHistory detail)
         {
             Id = detail.Identity;
-            DateTimeOperation = detail.DateTimeOperation;
-            Information = detail.OperationStatus;
+            DateTimeOperation = detail.DateTimeMachine;
+            Information = detail.Information;
         }
     }
 }

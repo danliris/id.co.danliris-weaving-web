@@ -9,25 +9,27 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
-    public class FinishDailyOperationLoomCommandHandler : ICommandHandler<FinishDailyOperationLoomCommand, DailyOperationLoomDocument>
+    public class UpdateResumeDailyOperationLoomCommandHandler : ICommandHandler<UpdateResumeDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomDocumentRepository;
 
-        public FinishDailyOperationLoomCommandHandler(IStorage storage)
+        public UpdateResumeDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationLoomDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
         }
 
-        public async Task<DailyOperationLoomDocument> Handle(FinishDailyOperationLoomCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationLoomDocument> Handle(UpdateResumeDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Loom
             var loomQuery =
@@ -45,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomHistories =
                 existingDailyOperationLoomDocument
                         .LoomBeamHistories
-                        .Where(o => o.BeamNumber.Equals(request.FinishBeamNumber))
+                        .Where(o => o.BeamNumber.Equals(request.ResumeBeamNumber))
                         .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingDailyOperationLoomHistories.FirstOrDefault();
 
@@ -53,46 +55,46 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomBeamProducts =
                 existingDailyOperationLoomDocument
                         .LoomBeamProducts
-                        .Where(o => o.BeamDocumentId.Equals(request.FinishBeamProductBeamId))
+                        .Where(o => o.BeamDocumentId.Equals(request.ResumeBeamProductBeamId))
                         .OrderByDescending(o => o.LatestDateTimeBeamProduct);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime
-            var year = request.FinishDateMachine.Year;
-            var month = request.FinishDateMachine.Month;
-            var day = request.FinishDateMachine.Day;
-            var hour = request.FinishTimeMachine.Hours;
-            var minutes = request.FinishTimeMachine.Minutes;
-            var seconds = request.FinishTimeMachine.Seconds;
-            var finishDateTime =
+            var year = request.ResumeDateMachine.Year;
+            var month = request.ResumeDateMachine.Month;
+            var day = request.ResumeDateMachine.Day;
+            var hour = request.ResumeTimeMachine.Hours;
+            var minutes = request.ResumeTimeMachine.Minutes;
+            var seconds = request.ResumeTimeMachine.Seconds;
+            var resumeDateTime =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var finishDateMachineLogUtc = new DateTimeOffset(request.FinishDateMachine.Date, new TimeSpan(+7, 0, 0));
+            var resumeDateMachineLogUtc = new DateTimeOffset(request.ResumeDateMachine.Date, new TimeSpan(+7, 0, 0));
 
-            if (finishDateMachineLogUtc < lastDateMachineLogUtc)
+            if (resumeDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("FinishDate", "Resume date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("ResumeDate", "Resume date cannot less than latest date log"));
             }
             else
             {
-                if (finishDateTime <= lastHistory.DateTimeMachine)
+                if (resumeDateTime <= lastHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("FinishTime", "Resume time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("ResumeTime", "Resume time cannot less than or equal latest time log"));
                 }
                 else
                 {
-                    if (lastHistory.MachineStatus == MachineStatus.ONSTART || lastHistory.MachineStatus == MachineStatus.ONRESUME)
+                    if (lastHistory.MachineStatus == MachineStatus.ONSTOP)
                     {
                         var newLoomHistory =
                             new DailyOperationLoomBeamHistory(Guid.NewGuid(),
-                                                              request.FinishBeamNumber,
-                                                              request.FinishMachineNumber,
-                                                              new OperatorId(request.FinishOperatorDocumentId.Value),
-                                                              finishDateTime,
-                                                              new ShiftId(request.FinishShiftDocumentId.Value),
-                                                              MachineStatus.ONCOMPLETE);
+                                                              request.ResumeBeamNumber,
+                                                              request.ResumeMachineNumber,
+                                                              new OperatorId(request.ResumeOperatorDocumentId.Value),
+                                                              resumeDateTime,
+                                                              new ShiftId(request.ResumeShiftDocumentId.Value),
+                                                              MachineStatus.ONRESUME);
 
                         newLoomHistory.SetWarpBrokenThreads(lastHistory.WarpBrokenThreads ?? 0);
                         newLoomHistory.SetWeftBrokenThreads(lastHistory.WeftBrokenThreads ?? 0);
@@ -100,23 +102,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
                         existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
 
-                        lastBeamProduct.SetLatestDateTimeBeamProduct(finishDateTime);
-                        lastBeamProduct.SetBeamProductStatus(BeamStatus.COMPLETED);
-
-                        await Task.Yield();
-                        var isAllBeamProductProcessed = 0;
-                        foreach (var beamProduct in existingDailyOperationLoomDocument.LoomBeamProducts)
-                        {
-                            if (beamProduct.BeamProductStatus == BeamStatus.ONPROCESS) {
-                                isAllBeamProductProcessed++;
-                            }
-                        };
-
-                        await Task.Yield();
-                        if (isAllBeamProductProcessed==0)
-                        {
-                            existingDailyOperationLoomDocument.SetOperationStatus(OperationStatus.ONFINISH);
-                        }
+                        lastBeamProduct.SetLatestDateTimeBeamProduct(resumeDateTime);
 
                         await _dailyOperationLoomDocumentRepository.Update(existingDailyOperationLoomDocument);
                         _storage.Save();
@@ -125,7 +111,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Can't finish, latest machine status must ONSTART or ONRESUME"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't resume, latest machine status must ONSTOP"));
                     }
                 }
             }
