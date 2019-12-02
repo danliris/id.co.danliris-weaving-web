@@ -13,11 +13,11 @@ namespace Manufactures.Dtos.YarnNumber
         public string Code { get; private set; }
 
         [JsonProperty(PropertyName = "Number")]
-        public int Number { get; private set; }
+        public string Number { get; private set; }
 
 
         [JsonProperty(PropertyName = "AdditionalNumber")]
-        public int AdditionalNumber { get; private set; }
+        public string AdditionalNumber { get; private set; }
 
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; private set; }

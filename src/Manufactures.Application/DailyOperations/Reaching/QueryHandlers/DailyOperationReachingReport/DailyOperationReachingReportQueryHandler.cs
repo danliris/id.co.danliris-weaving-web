@@ -155,7 +155,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     dailyOperationReachingQuery = dailyOperationReachingQuery.Where(x => x.OperationStatus == operationStatus);
                 }
 
-                //Get Daily Operation Sizing Data from Daily Operation Sizing Repo
+                //Get Daily Operation Reaching Data from Daily Operation Reaching Repo
                 var dailyOperationReachingDocuments =
                     _dailyOperationReachingRepository
                         .Find(dailyOperationReachingQuery.OrderByDescending(x => x.CreatedDate));
@@ -313,7 +313,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                             .FirstOrDefault();
                     var operatorName = operatorDocument.CoreAccount.Name;
 
-                    //Get Sizing Operator Group (Latest History)
+                    //Get Reaching Operator Group (Latest History)
                     var reachingOperatorGroup = operatorDocument.Group;
 
                     //Get Shift (Latest History)

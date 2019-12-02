@@ -14,10 +14,10 @@ namespace Manufactures.Domain.GlobalValueObjects
         public string Code { get; private set; }
 
         [JsonProperty(PropertyName = "Number")]
-        public int Number { get; private set; }
+        public string Number { get; private set; }
 
         [JsonProperty(PropertyName = "AdditionalNumber")]
-        public int AdditionalNumber { get; private set; }
+        public string AdditionalNumber { get; private set; }
 
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; private set; }
@@ -25,7 +25,7 @@ namespace Manufactures.Domain.GlobalValueObjects
         [JsonProperty(PropertyName = "FullNumber")]
         public string FullNumber { get; private set; }
 
-        public YarnNumberValueObject(Guid id, string code, int number, string ringType, int additionalNumber)
+        public YarnNumberValueObject(Guid id, string code, string number, string ringType, string additionalNumber)
         {
             Id = id;
             Code = code;
@@ -33,13 +33,13 @@ namespace Manufactures.Domain.GlobalValueObjects
             RingType = ringType;
             AdditionalNumber = additionalNumber;
 
-            if (AdditionalNumber != 0)
-            {
-                FullNumber = Number.ToString() + "\\" + AdditionalNumber.ToString(); 
-            } else
-            {
-                FullNumber = Number.ToString();
-            }
+            //if (AdditionalNumber != 0)
+            //{
+            //    FullNumber = Number.ToString() + "\\" + AdditionalNumber.ToString(); 
+            //} else
+            //{
+            //    FullNumber = Number.ToString();
+            //}
             
         }
         

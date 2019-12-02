@@ -9,14 +9,14 @@ namespace Manufactures.Domain.YarnNumbers
     public class YarnNumberDocument : AggregateRoot<YarnNumberDocument, YarnNumberDocumentReadModel>
     {
         public string Code { get; private set; }
-        public int Number { get; private set; }
-        public int AdditionalNumber { get; private set; }
+        public string Number { get; private set; }
+        public string AdditionalNumber { get; private set; }
         public string RingType { get; private set; }
         public string Description { get; private set; }
 
         public YarnNumberDocument(Guid identity,
                             string code,
-                            int number,
+                            string number,
                             string ringType,
                             string description) : base(identity)
         {
@@ -46,11 +46,10 @@ namespace Manufactures.Domain.YarnNumbers
             this.Number = readModel.Number;
             this.Description = readModel.Description;
             this.RingType = readModel.RingType;
-            this.AdditionalNumber = 
-                readModel.AdditionalNumber.HasValue ? readModel.AdditionalNumber.Value : 0;
+            this.AdditionalNumber =  readModel.AdditionalNumber;
         }
 
-        public void AddAditionalNumber(int number)
+        public void AddAditionalNumber(string number)
         {
             if (AdditionalNumber != number)
             {
@@ -72,7 +71,7 @@ namespace Manufactures.Domain.YarnNumbers
             }
         }
 
-        public void SetNumber(int number)
+        public void SetNumber(string number)
         {
             if (number != Number)
             {

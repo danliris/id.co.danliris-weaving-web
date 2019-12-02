@@ -20,6 +20,10 @@ using Newtonsoft.Json;
 using Microsoft.EntityFrameworkCore;
 using Manufactures.Application.Helpers;
 using Moonlay;
+using Manufactures.Domain.DailyOperations.Loom.Queries.DailyOperationLoomReport;
+using Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomReport;
+using Manufactures.Helpers.XlsTemplates;
+using System.IO;
 
 namespace Manufactures.Controllers.Api
 {
@@ -30,6 +34,7 @@ namespace Manufactures.Controllers.Api
     public class DailyOperationLoomController : ControllerApiBase
     {
         private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto> _loomQuery;
+        private readonly IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> _dailyOperationLoomReportQuery;
 
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
@@ -40,9 +45,11 @@ namespace Manufactures.Controllers.Api
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
-                                            IDailyOperationLoomQuery<DailyOperationLoomListDto> loomQuery) : base(serviceProvider)
+                                            IDailyOperationLoomQuery<DailyOperationLoomListDto> loomQuery,
+                                            IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> dailyOperationLoomReportQuery) : base(serviceProvider)
         {
             _loomQuery = loomQuery ?? throw new ArgumentNullException(nameof(loomQuery));
+            _dailyOperationLoomReportQuery = dailyOperationLoomReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationLoomReportQuery));
 
             _dailyOperationLoomRepository =
                 this.Storage.GetRepository<IDailyOperationLoomRepository>();
@@ -274,6 +281,51 @@ namespace Manufactures.Controllers.Api
             var finishDailyOperationLoomDocument = await Mediator.Send(command);
 
             return Ok(finishDailyOperationLoomDocument.Identity);
+        }
+
+        //Controller for Daily Operation Reaching Report
+        [HttpGet("get-report")]
+        public async Task<IActionResult> GetReport(string orderId,
+                                                   string constructionId,
+                                                   string operationStatus,
+                                                   int unitId = 0,
+                                                   DateTimeOffset? dateFrom = null,
+                                                   DateTimeOffset? dateTo = null,
+                                                   int page = 1,
+                                                   int size = 25,
+                                                   string order = "{}")
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var dailyOperationLoomReport = await _dailyOperationLoomReportQuery.GetReports(orderId,
+                                                                                           constructionId,
+                                                                                           operationStatus,
+                                                                                           unitId,
+                                                                                           dateFrom,
+                                                                                           dateTo,
+                                                                                           page,
+                                                                                           size,
+                                                                                           order);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                DailyOperationLoomReportXlsTemplate xlsTemplate = new DailyOperationLoomReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationLoomReportXls(dailyOperationLoomReport.Item1.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Reaching");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(dailyOperationLoomReport.Item1, info: new
+                {
+                    count = dailyOperationLoomReport.Item2
+                });
+            }
         }
     }
 }

@@ -62,7 +62,7 @@ namespace Manufactures.Tests.YarnNumbers.CommandHandlers
             AddNewYarnNumberCommand request = new AddNewYarnNumberCommand
             {
                 Code = "unit-test-01",
-                Number = 80,
+                Number = "80",
                 Description = "unit-test"
             };
 
