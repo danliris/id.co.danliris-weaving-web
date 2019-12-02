@@ -75,10 +75,10 @@ namespace Manufactures.Application.YarnNumbers.CommandHandlers
             yarnNumberDocument.SetRingType(request.RingType);
             yarnNumberDocument.SetDescription(request.Description);
 
-            if (request.AdditionalNumber != 0)
-            {
+            //if (request.AdditionalNumber != 0)
+            //{
                 yarnNumberDocument.AddAditionalNumber(request.AdditionalNumber);
-            }
+            //}
 
             await _YarnNumberRepository.Update(yarnNumberDocument);
 

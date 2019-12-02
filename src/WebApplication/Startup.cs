@@ -13,7 +13,9 @@ using Manufactures.Application.Beams.QueryHandlers;
 using Manufactures.Application.BeamStockMonitoring.DataTransferObjects;
 using Manufactures.Application.BeamStockMonitoring.QueryHandlers;
 using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomReport;
 using Manufactures.Application.DailyOperations.Loom.QueryHandlers;
+using Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOperationLoomReport;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingReport;
 using Manufactures.Application.DailyOperations.Reaching.QueryHandlers;
@@ -35,6 +37,7 @@ using Manufactures.Application.Shifts.QueryHandlers;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.BeamStockMonitoring.Queries;
 using Manufactures.Domain.DailyOperations.Loom.Queries;
+using Manufactures.Domain.DailyOperations.Loom.Queries.DailyOperationLoomReport;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
 using Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationReachingReport;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
@@ -121,6 +124,7 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
             services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
             services.AddTransient<IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>, DailyOperationWarpingReportQueryHandler>();

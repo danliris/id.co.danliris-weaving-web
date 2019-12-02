@@ -23,19 +23,20 @@ namespace Manufactures.Dtos.YarnNumber
         {
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
+            Number = ringDocument.Number;
 
-            if (ringDocument.AdditionalNumber != 0)
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append(ringDocument.Number.ToString());
-                sb.Append("/");
-                sb.Append(ringDocument.AdditionalNumber.ToString());
+            //if (ringDocument.AdditionalNumber != 0)
+            //{
+            //    StringBuilder sb = new StringBuilder();
+            //    sb.Append(ringDocument.Number.ToString());
+            //    sb.Append("/");
+            //    sb.Append(ringDocument.AdditionalNumber.ToString());
 
-                Number =  sb.ToString();
-            } else
-            {
-                Number = ringDocument.Number.ToString();
-            }
+            //    Number =  sb.ToString();
+            //} else
+            //{
+            //    Number = ringDocument.Number.ToString();
+            //}
 
             RingType = ringDocument.RingType;
         }

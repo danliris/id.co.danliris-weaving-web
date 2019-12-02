@@ -15,10 +15,10 @@ namespace Manufactures.Domain.YarnNumbers.Commands
         public string Code { get; set; }
         
         [JsonProperty(PropertyName = "Number")]
-        public int Number { get; set; }
+        public string Number { get; set; }
 
         [JsonProperty(PropertyName = "AdditionalNumber")]
-        public int AdditionalNumber { get; private set; }
+        public string AdditionalNumber { get; private set; }
 
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; set; }
