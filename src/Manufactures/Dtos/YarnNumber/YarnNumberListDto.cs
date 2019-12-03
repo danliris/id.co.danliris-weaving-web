@@ -16,6 +16,9 @@ namespace Manufactures.Dtos.YarnNumber
         [JsonProperty(PropertyName = "Number")]
         public string Number { get; }
 
+        [JsonProperty(PropertyName = "AdditionalNumber")]
+        public string AdditionalNumber { get; }
+
         [JsonProperty(PropertyName = "RingType")]
         public string RingType { get; }
 
@@ -24,6 +27,7 @@ namespace Manufactures.Dtos.YarnNumber
             Id = ringDocument.Identity;
             Code = ringDocument.Code;
             Number = ringDocument.Number;
+            AdditionalNumber = ringDocument.AdditionalNumber;
 
             //if (ringDocument.AdditionalNumber != 0)
             //{

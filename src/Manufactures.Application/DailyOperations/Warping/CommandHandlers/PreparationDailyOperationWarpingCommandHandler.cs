@@ -37,14 +37,14 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                           CancellationToken cancellationToken)
         {
             //Check if any Daily Operation using Selected Order (SOP)
-            var existingDailyOperationWarpingDocument = _dailyOperationWarpingRepository
-                                                        .Find(o => o.OrderDocumentId.Equals(request.PreparationOrder.Value))
-                                                        .Any();
+            //var existingDailyOperationWarpingDocument = _dailyOperationWarpingRepository
+            //                                            .Find(o => o.OrderDocumentId.Equals(request.PreparationOrder.Value))
+            //                                            .Any();
 
-            if (existingDailyOperationWarpingDocument == true)
-            {
-                throw Validator.ErrorValidation(("PreparationOrder", "Please Input Daily Operation With Different Order"));
-            }
+            //if (existingDailyOperationWarpingDocument == true)
+            //{
+            //    throw Validator.ErrorValidation(("PreparationOrder", "No. Order Produksi ini Telah Digunakan"));
+            //}
 
             //Set date time when user operate
             var year = request.PreparationDate.Year;
