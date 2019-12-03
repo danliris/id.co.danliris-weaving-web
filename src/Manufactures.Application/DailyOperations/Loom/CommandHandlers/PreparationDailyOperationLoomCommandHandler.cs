@@ -88,7 +88,6 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 newLoomHistory.SetWarpBrokenThreads(0);
                 newLoomHistory.SetWeftBrokenThreads(0);
                 newLoomHistory.SetLenoBrokenThreads(0);
-                newLoomHistory.SetReprocessTo("");
                 newLoomHistory.SetInformation(beamHistory.Information ?? "");
 
                 dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);

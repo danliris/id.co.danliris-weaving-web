@@ -1,8 +1,9 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Sizing.Calculations;
+using Manufactures.Application.DailyOperations.Sizing.Calculations.SizePickupReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
-using Manufactures.Application.DailyOperations.Sizing.SizePickup;
+using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport;
 using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
@@ -14,6 +15,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
 using Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport;
+using Manufactures.Domain.DailyOperations.Sizing.Queries.SizePickupReport;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Operators.Queries;
@@ -69,6 +71,7 @@ namespace Manufactures.Controllers.Api
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
+        private readonly ISizePickupReportQuery<SizePickupReportListDto> _sizePickupReportQuery;
         private readonly IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> _dailyOperationSizingReportQuery;
 
         private readonly IDailyOperationSizingRepository
@@ -83,6 +86,7 @@ namespace Manufactures.Controllers.Api
                                               IOperatorQuery<OperatorListDto> operatorQuery,
                                               IShiftQuery<ShiftDto> shiftQuery,
                                               IBeamQuery<BeamListDto> beamQuery,
+                                              ISizePickupReportQuery<SizePickupReportListDto> sizePickupReportQuery,
                                               IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> dailyOperationSizingReportQuery)
             : base(serviceProvider)
         {
@@ -90,6 +94,7 @@ namespace Manufactures.Controllers.Api
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
+            _sizePickupReportQuery = sizePickupReportQuery ?? throw new ArgumentNullException(nameof(sizePickupReportQuery));
             _dailyOperationSizingReportQuery = dailyOperationSizingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationSizingReportQuery));
 
             _dailyOperationSizingRepository =
@@ -1584,28 +1589,75 @@ namespace Manufactures.Controllers.Api
         }
 
         //Controller for Daily Operation Sizing Report
+        [HttpGet("size-pickup-report")]
+        public async Task<IActionResult> GetSizePickupReport(string shiftId,
+                                                             string spuStatus,
+                                                             int unitId = 0,
+                                                             DateTimeOffset? date = null,
+                                                             DateTimeOffset? dateFrom = null,
+                                                             DateTimeOffset? dateTo = null,
+                                                             int? month = 0,
+                                                             int page = 1,
+                                                             int size = 25,
+                                                             string order = "{}")
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var sizePickupReport = await _sizePickupReportQuery.GetReports(shiftId,
+                                                                           spuStatus,
+                                                                           unitId,
+                                                                           date,
+                                                                           dateFrom,
+                                                                           dateTo,
+                                                                           month,
+                                                                           page,
+                                                                           size,
+                                                                           order);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                byte[] xlsInBytes;
+
+                SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(sizePickupReport.Item1.ToList());
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Sizing");
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(sizePickupReport.Item1, info: new
+                {
+                    count = sizePickupReport.Item2
+                });
+            }
+        }
+
+        //Controller for Daily Operation Sizing Report
         [HttpGet("get-report")]
-        public async Task<IActionResult> GetReport(string machineId, 
-                                                   string orderId, 
-                                                   string operationStatus, 
-                                                   int unitId = 0, 
-                                                   DateTimeOffset? dateFrom = null, 
-                                                   DateTimeOffset? dateTo = null, 
-                                                   int page = 1, 
+        public async Task<IActionResult> GetReport(string machineId,
+                                                   string orderId,
+                                                   string operationStatus,
+                                                   int unitId = 0,
+                                                   DateTimeOffset? dateFrom = null,
+                                                   DateTimeOffset? dateTo = null,
+                                                   int page = 1,
                                                    int size = 25,
                                                    string order = "{}")
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationSizingReport = await _dailyOperationSizingReportQuery.GetReports(machineId, 
+            var dailyOperationSizingReport = await _dailyOperationSizingReportQuery.GetReports(machineId,
                                                                                                orderId,
                                                                                                operationStatus,
-                                                                                               unitId, 
-                                                                                               dateFrom, 
+                                                                                               unitId,
+                                                                                               dateFrom,
                                                                                                dateTo,
                                                                                                page,
-                                                                                               size, 
+                                                                                               size,
                                                                                                order);
 
             await Task.Yield();
