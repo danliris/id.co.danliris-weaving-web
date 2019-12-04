@@ -81,5 +81,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
             SPU = spu;
             BeamNumber = beamNumber;
         }
+
+        public SizePickupReportListDto()
+        {
+        }
     }
 }

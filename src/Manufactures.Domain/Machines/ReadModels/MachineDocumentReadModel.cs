@@ -13,5 +13,7 @@ namespace Manufactures.Domain.Machines.ReadModels
         public int? WeavingUnitId { get; internal set; }
         public Guid? MachineTypeId { get; internal set; }
         public string Location { get; internal set; }
+        public int? Cutmark{ get; internal set; }
+        public int? CutmarkUomId { get; internal set; }
     }
 }

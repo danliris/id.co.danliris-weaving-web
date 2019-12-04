@@ -100,13 +100,17 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "32",
                 "Timur",
                 new MachineTypeId(new Guid("E6655428-E60B-4923-AF39-875B5BA61CFB")),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             var secondMachine = new MachineDocument(
                 new Guid("8B9EAB2D-9F2E-459F-89E0-E512F6244851"),
                 "102",
                 "Utara",
                 new MachineTypeId(new Guid("D8D99957-D4E5-4337-B4A7-AAE99D51A372")),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             //mockMachineRepo.Setup(x => x.Query)
             //    .Returns(new List<MachineDocumentReadModel>()
             //    .AsQueryable());
@@ -281,13 +285,17 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "32",
                 "Timur",
                 new MachineTypeId(new Guid("E6655428-E60B-4923-AF39-875B5BA61CFB")),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             var secondMachine = new MachineDocument(
                 new Guid("8B9EAB2D-9F2E-459F-89E0-E512F6244851"),
                 "102",
                 "Utara",
                 new MachineTypeId(new Guid("D8D99957-D4E5-4337-B4A7-AAE99D51A372")),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { firstMachine, secondMachine });
 

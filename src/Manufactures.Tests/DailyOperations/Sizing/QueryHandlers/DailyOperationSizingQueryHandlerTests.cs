@@ -189,13 +189,17 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(firstMachineTypeDocument.Identity),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             var secondMachineDocument = new MachineDocument(
                 new Guid("7CC36BC1-EAF5-4BED-BBA1-5ECA177F30F8"),
                 "124",
                 "Selatan",
                 new MachineTypeId(secondMachineTypeDocument.Identity),
-                new UnitId(14));
+                new UnitId(14),
+                33,
+                new UomId(195));
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { firstMachineDocument, secondMachineDocument });
 
@@ -424,13 +428,17 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(firstMachineTypeDocument.Identity),
-                new UnitId(11));
+                new UnitId(11),
+                33,
+                new UomId(195));
             var secondMachineDocument = new MachineDocument(
                 new Guid("7CC36BC1-EAF5-4BED-BBA1-5ECA177F30F8"),
                 "124",
                 "Selatan",
                 new MachineTypeId(secondMachineTypeDocument.Identity),
-                new UnitId(14));
+                new UnitId(14),
+                33,
+                new UomId(195));
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { firstMachineDocument, secondMachineDocument });
 

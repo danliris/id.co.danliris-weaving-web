@@ -22,6 +22,12 @@ namespace Manufactures.Domain.Machines.Commands
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public string WeavingUnitId { get; set; }
 
+        [JsonProperty(PropertyName = "Cutmark")]
+        public int? Cutmark { get; set; }
+
+        [JsonProperty(PropertyName = "CutmarkUomId")]
+        public string CutmarkUomId { get; set; }
+
         public void SetId(Guid Id)
         {
             this.Id = Id;
@@ -37,6 +43,8 @@ namespace Manufactures.Domain.Machines.Commands
             RuleFor(r => r.Location).NotEmpty();
             RuleFor(r => r.MachineTypeId).NotEmpty();
             RuleFor(r => r.WeavingUnitId).NotEmpty();
+            RuleFor(r => r.Cutmark).NotEmpty();
+            RuleFor(r => r.CutmarkUomId).NotEmpty();
         }
     }
 }
