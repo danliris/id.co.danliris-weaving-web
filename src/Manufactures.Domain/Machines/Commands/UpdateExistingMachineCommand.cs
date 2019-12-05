@@ -43,8 +43,6 @@ namespace Manufactures.Domain.Machines.Commands
             RuleFor(r => r.Location).NotEmpty();
             RuleFor(r => r.MachineTypeId).NotEmpty();
             RuleFor(r => r.WeavingUnitId).NotEmpty();
-            RuleFor(r => r.Cutmark).NotEmpty();
-            RuleFor(r => r.CutmarkUomId).NotEmpty();
         }
     }
 }

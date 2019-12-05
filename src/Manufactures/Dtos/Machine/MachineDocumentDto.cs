@@ -25,10 +25,10 @@ namespace Manufactures.Dtos.Machine
         [JsonProperty(propertyName: "Cutmark")]
         public int Cutmark { get; private set; }
 
-        [JsonProperty(propertyName: "CutmarkUom")]
-        public string CutmarkUom { get; private set; }
+        [JsonProperty(propertyName: "CutmarkUomId")]
+        public UomId CutmarkUomId { get; private set; }
 
-        public MachineDocumentDto(MachineDocument document, string cutmarkUom)
+        public MachineDocumentDto(MachineDocument document)
         {
             Id = document.Identity;
             MachineNumber = document.MachineNumber;
@@ -36,7 +36,7 @@ namespace Manufactures.Dtos.Machine
             MachineTypeId = document.MachineTypeId;
             WeavingUnitId = document.WeavingUnitId;
             Cutmark = document.Cutmark;
-            CutmarkUom = cutmarkUom;
+            CutmarkUomId = document.CutmarkUomId;
         }
 
         //public MachineDocumentDto(MachineDocument machine, 

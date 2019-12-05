@@ -53,7 +53,17 @@ namespace Manufactures.Application.Machines.CommandHandlers
             existingMachine.SetMachineTypeId(new MachineTypeId(Guid.Parse(request.MachineTypeId)));
             existingMachine.SetWeavingUnitId(new UnitId(int.Parse(request.WeavingUnitId)));
             existingMachine.SetCutmark(request.Cutmark ?? 0);
-            existingMachine.SetCutmarkUomId(new UomId(int.Parse(request.CutmarkUomId)) ?? null);
+
+            int cutmarkUomParsedResult;
+            var isCutmarkUomParsed = int.TryParse(request.CutmarkUomId, out cutmarkUomParsedResult);
+            if (isCutmarkUomParsed == true)
+            {
+                existingMachine.SetCutmarkUomId(new UomId(int.Parse(request.CutmarkUomId)));
+            }
+            else
+            {
+                existingMachine.SetCutmarkUomId(new UomId(0));
+            }
 
             await _machineRepository.Update(existingMachine);
 
