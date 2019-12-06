@@ -7,9 +7,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
 {
     public class DailyOperationSizingReadModel : ReadModelBase
     {
-        public DailyOperationSizingReadModel(Guid identity) : base(identity)
-        {
-        }
         public Guid? MachineDocumentId { get; internal set; }
         public Guid? OrderDocumentId { get; internal set; }
         public string BeamsWarping { get; internal set; }
@@ -24,5 +21,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public string OperationStatus { get; internal set; }
         public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; internal set; }
         public List<DailyOperationSizingHistory> SizingHistories { get; internal set; }
+
+        public DailyOperationSizingReadModel(Guid identity) : base(identity)
+        {
+        }
     }
 }
