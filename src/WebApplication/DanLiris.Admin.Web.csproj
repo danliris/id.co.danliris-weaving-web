@@ -72,6 +72,8 @@
     <Compile Remove="Migrations\20191122034231_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
     <Compile Remove="Migrations\20191122103201_ChangeDailyOperationLoomToNewStructure.cs" />
     <Compile Remove="Migrations\20191122103201_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
+    <Compile Remove="Migrations\20191204093945_AddCutmarkAndCutmarkUomOnMachines.cs" />
+    <Compile Remove="Migrations\20191204093945_AddCutmarkAndCutmarkUomOnMachines.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

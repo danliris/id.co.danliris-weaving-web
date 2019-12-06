@@ -1,10 +1,12 @@
 ﻿using Manufactures.Domain.DailyOperations.Sizing;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Manufactures.Dtos
+namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport
 {
-    public class SizePickupListDto
+    public class SizePickupReportListDto
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
@@ -51,7 +53,17 @@ namespace Manufactures.Dtos
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
 
-        public SizePickupListDto(DailyOperationSizingDocument document, string operatorName, string operatorGroup, DateTimeOffset dateTimeDoff, double counterStart, double counterFinish, double weightNetto, double weightBruto, double pisMeter, double spu, string beamNumber)
+        public SizePickupReportListDto(DailyOperationSizingDocument document, 
+                                       string operatorName, 
+                                       string operatorGroup, 
+                                       DateTimeOffset dateTimeDoff, 
+                                       double counterStart, 
+                                       double counterFinish, 
+                                       double weightNetto, 
+                                       double weightBruto, 
+                                       double pisMeter, 
+                                       double spu, 
+                                       string beamNumber)
         {
             Id = document.Identity;
             RecipeCode = document.RecipeCode;
@@ -70,7 +82,7 @@ namespace Manufactures.Dtos
             BeamNumber = beamNumber;
         }
 
-        public SizePickupListDto()
+        public SizePickupReportListDto()
         {
         }
     }

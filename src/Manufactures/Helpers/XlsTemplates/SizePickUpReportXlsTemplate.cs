@@ -1,5 +1,5 @@
 ﻿using Barebone.Util;
-using Manufactures.Dtos;
+using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -8,7 +8,7 @@ namespace Manufactures.Helpers.XlsTemplates
 {
     public class SizePickupReportXlsTemplate
     {
-        public MemoryStream GenerateSizePickupReportXls(List<SizePickupListDto> sizePickupModel)
+        public MemoryStream GenerateSizePickupReportXls(List<SizePickupReportListDto> sizePickupModel)
         {
             DataTable dt = new DataTable();
 
@@ -53,12 +53,26 @@ namespace Manufactures.Helpers.XlsTemplates
                     var bruto = item.WeightBruto;
                     var spu = item.SPU.ToString();
                     var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
-                    dt.Rows.Add(index++, date, operatorGroup, operatorName, recipeCode, machineSpeed,
-                        texSQ, visco, beamNumber, pism, counterStart, counterFinish, netto, bruto, spu, doffingTime);
+                    dt.Rows.Add(index++, 
+                                date, 
+                                operatorGroup, 
+                                operatorName, 
+                                recipeCode, 
+                                machineSpeed,
+                                texSQ, 
+                                visco, 
+                                beamNumber, 
+                                pism, 
+                                counterStart, 
+                                counterFinish, 
+                                netto, 
+                                bruto, 
+                                spu, 
+                                doffingTime);
                 }
             }
 
-            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Size Pickup") }, true);
+            return Excel.CreateExcel(new List<KeyValuePair<DataTable, string>>() { new KeyValuePair<DataTable, string>(dt, "Size Pickup Report") }, true);
         }
     }
 }

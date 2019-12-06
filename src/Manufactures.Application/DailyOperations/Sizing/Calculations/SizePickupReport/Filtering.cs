@@ -1,6 +1,6 @@
 ﻿using Manufactures.Application.Helpers;
 
-namespace Manufactures.Application.DailyOperations.Sizing.SizePickup
+namespace Manufactures.Application.DailyOperations.Sizing.Calculations.SizePickupReport
 {
     public class Filtering
     {

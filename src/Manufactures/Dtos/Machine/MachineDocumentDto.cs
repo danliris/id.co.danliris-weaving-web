@@ -1,6 +1,4 @@
-﻿using Manufactures.Domain.GlobalValueObjects;
-using Manufactures.Domain.Machines;
-using Manufactures.Domain.Machines.ValueObjects;
+﻿using Manufactures.Domain.Machines;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
@@ -24,6 +22,12 @@ namespace Manufactures.Dtos.Machine
         [JsonProperty(propertyName: "WeavingUnitId")]
         public UnitId WeavingUnitId { get; private set; }
 
+        [JsonProperty(propertyName: "Cutmark")]
+        public int Cutmark { get; private set; }
+
+        [JsonProperty(propertyName: "CutmarkUomId")]
+        public UomId CutmarkUomId { get; private set; }
+
         public MachineDocumentDto(MachineDocument document)
         {
             Id = document.Identity;
@@ -31,13 +35,15 @@ namespace Manufactures.Dtos.Machine
             Location = document.Location;
             MachineTypeId = document.MachineTypeId;
             WeavingUnitId = document.WeavingUnitId;
+            Cutmark = document.Cutmark;
+            CutmarkUomId = document.CutmarkUomId;
         }
 
-        public MachineDocumentDto(MachineDocument machine, 
-                                  MachineTypeValueObject machineTypeValueObject, 
-                                  WeavingUnit weavingUnitValueObject)
-        {
+        //public MachineDocumentDto(MachineDocument machine, 
+        //                          MachineTypeValueObject machineTypeValueObject, 
+        //                          WeavingUnit weavingUnitValueObject)
+        //{
 
-        }
+        //}
     }
 }

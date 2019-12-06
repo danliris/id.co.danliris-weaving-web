@@ -22,6 +22,12 @@ namespace Manufactures.Domain.Machines.Commands
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public string WeavingUnitId { get; set; }
 
+        [JsonProperty(PropertyName = "Cutmark")]
+        public int? Cutmark { get; set; }
+
+        [JsonProperty(PropertyName = "CutmarkUomId")]
+        public string CutmarkUomId { get; set; }
+
         public void SetId(Guid Id)
         {
             this.Id = Id;

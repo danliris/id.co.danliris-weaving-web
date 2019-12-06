@@ -1,10 +1,14 @@
 ﻿using Barebone.Controllers;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Domain.Machines.Commands;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Dtos.Machine;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,18 +23,36 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class MachineDocumentController : ControllerApiBase
     {
+        //protected readonly IHttpClientService _http;
         private readonly IMachineRepository _machineRepository;
         private readonly IMachineTypeRepository 
             _machineTypeRepository;
 
-        public MachineDocumentController(IServiceProvider serviceProvider) 
-            : base(serviceProvider)
+        public MachineDocumentController(IServiceProvider serviceProvider) : base(serviceProvider)
         {
+            //_http =
+            //    serviceProvider.GetService<IHttpClientService>();
             _machineRepository = 
                 this.Storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =
                 this.Storage.GetRepository<IMachineTypeRepository>();
         }
+
+        //protected SingleUomResult GetUom(int id)
+        //{
+        //    var masterUnitUri = MasterDataSettings.Endpoint + $"master/uoms/{id}";
+        //    var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+        //    if (unitResponse.IsSuccessStatusCode)
+        //    {
+        //        SingleUomResult uomResult = JsonConvert.DeserializeObject<SingleUomResult>(unitResponse.Content.ReadAsStringAsync().Result);
+        //        return uomResult;
+        //    }
+        //    else
+        //    {
+        //        return new SingleUomResult();
+        //    }
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
@@ -110,7 +132,6 @@ namespace Manufactures.Controllers.Api
                                   .FirstOrDefault();
 
             await Task.Yield();
-
             if (machine == null)
             {
                 return NotFound();

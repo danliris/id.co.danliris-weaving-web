@@ -37,11 +37,13 @@ namespace Manufactures.Application.Machines.CommandHandlers
             }
 
 
-            var machineDocument = new MachineDocument(Guid.NewGuid(), 
-                                                      request.MachineNumber, 
-                                                      request.Location, 
-                                                      new MachineTypeId(Guid.Parse(request.MachineTypeId)), 
-                                                      new UnitId(int.Parse(request.WeavingUnitId)));
+            var machineDocument = new MachineDocument(Guid.NewGuid(),
+                                                      request.MachineNumber,
+                                                      request.Location,
+                                                      new MachineTypeId(Guid.Parse(request.MachineTypeId)),
+                                                      new UnitId(int.Parse(request.WeavingUnitId)),
+                                                      request.Cutmark ?? 0,
+                                                      new UomId(int.Parse(request.CutmarkUomId)) ?? null);
 
             await _machineRepository.Update(machineDocument);
 
