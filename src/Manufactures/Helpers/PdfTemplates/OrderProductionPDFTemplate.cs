@@ -1,17 +1,14 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
-using Manufactures.Dtos;
-using Manufactures.Dtos.Order;
-using System;
+using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace Manufactures.Helpers.PdfTemplates
 {
-    public class OrderProductionPDFTemplate
+    public class OrderProductionPdfTemplate
     {
         #region Static Data
 
@@ -65,7 +62,7 @@ namespace Manufactures.Helpers.PdfTemplates
 
         #endregion
 
-        public OrderProductionPDFTemplate(List<OrderReportBySearchDto> reportModel)
+        public OrderProductionPdfTemplate(List<OrderReportListDto> reportModel)
         {
             //#region Header
 

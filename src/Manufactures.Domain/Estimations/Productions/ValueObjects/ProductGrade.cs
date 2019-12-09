@@ -12,7 +12,7 @@ namespace Manufactures.Domain.Estimations.Productions.ValueObjects
             GradeA = gradeA;
             GradeB = gradeB;
             GradeC = gradeC;
-            GradeD = GradeD;
+            GradeD = gradeD;
         }
 
         public int GradeA { get; private set; }

@@ -136,8 +136,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                         //Filter Construction Number to Calculate SPU Constants
                         string[] splittedConstructionNumber = constructionNumber.Split(" ");
-                        var digits = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
-                        var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(digits);
+                        var charToTrim = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '/' };
+                        var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(charToTrim);
 
                         //Get Shift (Latest History)
                         var shiftQuery =

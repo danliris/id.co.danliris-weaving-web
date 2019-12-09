@@ -34,6 +34,8 @@ using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Operators.QueryHandlers;
+using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
+using Manufactures.Application.Orders.QueryHandlers.OrderReport;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Application.Shifts.QueryHandlers;
 using Manufactures.Domain.Beams.Queries;
@@ -49,6 +51,7 @@ using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.Operators.Queries;
+using Manufactures.Domain.Orders.Queries.OrderReport;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.Dtos.Beams;
 using MediatR;
@@ -127,6 +130,7 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
             services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
             services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
