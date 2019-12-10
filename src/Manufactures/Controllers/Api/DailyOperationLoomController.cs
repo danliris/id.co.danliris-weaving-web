@@ -172,8 +172,10 @@ namespace Manufactures.Controllers.Api
                             var loomProcess = loomBeamProduct.LoomProcess;
                             var beamProductStatus = loomBeamProduct.BeamProductStatus;
 
-                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity, 
-                                                                                      beamNumber, 
+                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
+                                                                                      loomBeamProduct.BeamOrigin,
+                                                                                      beamNumber,
+                                                                                      loomBeamProduct.CombNumber,
                                                                                       machineNumber, 
                                                                                       latestDateTimeBeamProduct, 
                                                                                       loomProcess, 

@@ -242,7 +242,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 await Task.Yield();
                 var loomBeamProductDto = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
+                                                                              loomBeamProduct.BeamOrigin,
                                                                               beamNumber,
+                                                                              loomBeamProduct.CombNumber,
                                                                               machineNumber,
                                                                               dateTimeBeamProduct,
                                                                               beamProductProcess,

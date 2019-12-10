@@ -132,6 +132,7 @@ namespace DanLiris.Admin.Web
             //Add Query Service Config
             services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
             services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
+            services.AddTransient<IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto>, DailyOperationReachingBeamQueryHandler>();
             services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
             services.AddTransient<ISizePickupReportQuery<SizePickupReportListDto>, SizePickupReportQueryHandler>();

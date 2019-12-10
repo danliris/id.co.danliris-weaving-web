@@ -1,6 +1,5 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Sizing.Calculations;
-using Manufactures.Application.DailyOperations.Sizing.Calculations.SizePickupReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport;
@@ -10,7 +9,6 @@ using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.BeamStockMonitoring.Commands;
-using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
@@ -23,7 +21,6 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Dtos;
 using Manufactures.Dtos.Beams;
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
@@ -34,10 +31,8 @@ using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api

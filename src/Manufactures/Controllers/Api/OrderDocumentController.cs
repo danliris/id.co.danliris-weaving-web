@@ -364,13 +364,8 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             if (index.Equals(true))
             {
-                //byte[] pdfInBytes;
-
                 OrderProductionPdfTemplate pdfTemplate = new OrderProductionPdfTemplate(orderProductionReport.Item1.ToList());
                 MemoryStream orderPdf = pdfTemplate.GeneratePdfTemplate();
-                //pdfInBytes = orderPdf.ToArray();
-                //var pdfFile = File(pdfInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Sizing");
-                //return pdfFile;
                 return new FileStreamResult(orderPdf, "application/pdf")
                 {
                     FileDownloadName = string.Format("Laporan Surat Order Produksi.pdf")

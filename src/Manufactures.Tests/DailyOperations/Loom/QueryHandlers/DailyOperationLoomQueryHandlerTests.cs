@@ -222,7 +222,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
                                                               new OrderId(orderDocument.Identity),
                                                               OperationStatus.ONPROCESS);
             var loomBeamProduct = new DailyOperationLoomBeamProduct(new Guid("BD127989-0CFF-447E-9B26-59AF5210D619"),
+                                                                    "Reaching",
                                                                     new BeamId(firstBeam.Identity),
+                                                                    44,
                                                                     new MachineId(firstMachineDocument.Identity),
                                                                     DateTimeOffset.UtcNow,
                                                                     "Normal",

@@ -213,13 +213,5 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
             return result;
         }
-
-        //public async Task<DailyOperationReachingListDto> GetReachingBeams(string keyword,
-        //                                                 string filter,
-        //                                                 int page,
-        //                                                 int size,
-        //                                                 string order)
-        //{
-        //}
     }
 }
