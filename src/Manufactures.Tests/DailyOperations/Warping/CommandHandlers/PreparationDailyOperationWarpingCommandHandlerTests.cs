@@ -44,8 +44,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
         private PreparationDailyOperationWarpingCommandHandler
             CreateAddNewWarpingOperationCommandHandler()
         {
-            return
-                new PreparationDailyOperationWarpingCommandHandler(this.mockStorage.Object);
+            return new PreparationDailyOperationWarpingCommandHandler(this.mockStorage.Object);
         }
 
         /**
@@ -59,7 +58,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
 
             //Instantiate new Object
-            var materialTypeId = new MaterialTypeId(Guid.NewGuid());
             var operatorId = new OperatorId(Guid.NewGuid());
             var shiftId = new ShiftId(Guid.NewGuid());
 
@@ -67,9 +65,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             PreparationDailyOperationWarpingCommand request =
                 new PreparationDailyOperationWarpingCommand
                 {
-                    PreparationMaterialType = materialTypeId,
                     AmountOfCones = 10,
-                    ColourOfCone = "Red",
                     PreparationDate = DateTimeOffset.UtcNow,
                     PreparationTime = TimeSpan.Parse("01:00"),
                     PreparationOperator = operatorId,
@@ -78,9 +74,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 };
 
             //Setup mock object result for beam repository
-            mockWarpingOperationRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
-                .Returns(new List<DailyOperationWarpingDocument>());
+            //mockWarpingOperationRepo
+            //    .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
+            //    .Returns(new List<DailyOperationWarpingDocument>());
             this.mockStorage.Setup(x => x.Save());
 
             //Set Cancellation Token
@@ -109,9 +105,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Instantiate new Object
             var preparationOrder = new OrderId(Guid.NewGuid());
-            var preparationMaterialType = new MaterialTypeId(Guid.NewGuid());
             var amountOfCones = 10;
-            var colourOfCone = "Red";
             var preparationDate = DateTimeOffset.UtcNow;
             var preparationTime = TimeSpan.Parse("01:00");
             var preparationShift = new ShiftId(Guid.NewGuid());
@@ -124,9 +118,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 (
                     warpingId,
                     preparationOrder,
-                    preparationMaterialType,
                     amountOfCones,
-                    colourOfCone,
                     preparationDate,
                     OperationStatus.ONPROCESS
 
@@ -137,9 +129,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new PreparationDailyOperationWarpingCommand
                 {
                     PreparationOrder = preparationOrder,
-                    PreparationMaterialType = preparationMaterialType,
                     AmountOfCones = amountOfCones,
-                    ColourOfCone = colourOfCone,
                     PreparationDate = preparationDate,
                     PreparationTime = preparationTime,
                     PreparationShift = preparationShift,
@@ -147,9 +137,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 };
 
             //Setup mock object result for beam repository
-            mockWarpingOperationRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
-                .Returns(new List<DailyOperationWarpingDocument>() { existingWarpingDocument });
+            //mockWarpingOperationRepo
+            //    .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingReadModel, bool>>>()))
+            //    .Returns(new List<DailyOperationWarpingDocument>() { existingWarpingDocument });
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;

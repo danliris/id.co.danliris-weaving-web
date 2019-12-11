@@ -59,9 +59,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -132,9 +130,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONFINISH);
 
@@ -205,9 +201,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -278,9 +272,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -351,9 +343,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -420,9 +410,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -489,9 +477,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Assign Property to DailyOperationWarpingDocument
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
-                                                                           new MaterialTypeId(Guid.NewGuid()),
                                                                            40,
-                                                                           "Biru",
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 

@@ -20,7 +20,6 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Unit Weaving", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Jenis Material", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Jumlah Cone", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "Warna Cone", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Grup Warping", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Pasang", DataType = typeof(string) });
@@ -29,7 +28,7 @@ namespace Manufactures.Helpers.XlsTemplates
 
             if (dailyOperationWarpingReportModel.Count == 0)
             {
-                dt.Rows.Add("", "", "", "", "", "", "", "", "", "", "");
+                dt.Rows.Add("", "", "", "", "", "", "", "", "", "");
             }
             else
             {
@@ -41,7 +40,6 @@ namespace Manufactures.Helpers.XlsTemplates
                     var weavingUnit = item.WeavingUnit;
                     var materialType = item.MaterialType;
                     var amountOfCones = item.AmountOfCones;
-                    var colourOfCones = item.ColourOfCones;
                     var operatorName = item.OperatorName;
                     var warpingOperatorGroup = item.WarpingOperatorGroup;
                     var preparationDate = item.PreparationDate;
@@ -53,7 +51,6 @@ namespace Manufactures.Helpers.XlsTemplates
                                 weavingUnit, 
                                 materialType, 
                                 amountOfCones, 
-                                colourOfCones, 
                                 operatorName, 
                                 warpingOperatorGroup, 
                                 preparationDate,

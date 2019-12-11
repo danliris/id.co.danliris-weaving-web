@@ -26,9 +26,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
         [JsonProperty(PropertyName = "AmountOfCones")]
         public double AmountOfCones { get; set; }
 
-        [JsonProperty(PropertyName = "ColourOfCones")]
-        public string ColourOfCones { get; set; }
-
         [JsonProperty(PropertyName = "OperatorName")]
         public string OperatorName { get; set; }
 
@@ -48,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
                                                   string orderProductionNumber, 
                                                   string constructionNumber, 
                                                   string weavingUnit, 
-                                                  string materialType, 
+                                                  List<string> materialType, 
                                                   string operatorName, 
                                                   string warpingOperatorGroup, 
                                                   DateTimeOffset preparationDate,
@@ -59,9 +56,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.D
             OrderProductionNumber = orderProductionNumber;
             ConstructionNumber = constructionNumber;
             WeavingUnit = weavingUnit;
-            MaterialType = materialType;
+            MaterialType = string.Join(", ", materialType);
             AmountOfCones = document.AmountOfCones;
-            ColourOfCones = document.ColourOfCone;
             OperatorName = operatorName;
             WarpingOperatorGroup = warpingOperatorGroup;
             PreparationDate = preparationDate;

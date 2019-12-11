@@ -46,39 +46,39 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
             var operationStatus = existingReachingDocument.OperationStatus;
             if (operationStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status already FINISHED"));
             }
 
             //Reformat DateTime
-            var year = request.CombFinishDate.Year;
-            var month = request.CombFinishDate.Month;
-            var day = request.CombFinishDate.Day;
-            var hour = request.CombFinishTime.Hours;
-            var minutes = request.CombFinishTime.Minutes;
-            var seconds = request.CombFinishTime.Seconds;
+            var year = request.ChangeOperatorCombDate.Year;
+            var month = request.ChangeOperatorCombDate.Month;
+            var day = request.ChangeOperatorCombDate.Day;
+            var hour = request.ChangeOperatorCombTime.Hours;
+            var minutes = request.ChangeOperatorCombTime.Minutes;
+            var seconds = request.ChangeOperatorCombTime.Seconds;
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastReachingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var combChangeOperatorDateMachineLogUtc = new DateTimeOffset(request.CombFinishDate.Date, new TimeSpan(+7, 0, 0));
+            var combChangeOperatorDateMachineLogUtc = new DateTimeOffset(request.ChangeOperatorCombDate.Date, new TimeSpan(+7, 0, 0));
 
             if (combChangeOperatorDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("ChangeOperatorCombDate", "Change operator date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("ChangeOperatorCombDate", "Change Operator date cannot less than latest date log"));
             }
             else
             {
                 if (dateTimeOperation <= lastReachingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ChangeOperatorCombTime", "Change operator time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("ChangeOperatorCombTime", "Change Operator time cannot less than or equal latest time log"));
                 }
                 else
                 {
-                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN)|| 
+                    if (lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORREACHINGIN) ||
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN) || 
                         lastReachingHistory.MachineStatus.Equals(MachineStatus.ONSTARTCOMB) ||
-                        lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB) ||
-                        lastReachingHistory.MachineStatus.Equals(MachineStatus.ONFINISHREACHINGIN))
+                        lastReachingHistory.MachineStatus.Equals(MachineStatus.CHANGEOPERATORCOMB))
                     {
                         existingReachingDocument.SetReachingInTypeInput(existingReachingDocument.ReachingInTypeInput);
                         existingReachingDocument.SetReachingInTypeOutput(existingReachingDocument.ReachingInTypeOutput);
@@ -106,7 +106,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not ONSTARTCOMB"));
+                        throw Validator.ErrorValidation(("OperationStatus", "Can't Change Operator. This operation's status not CHANGEOPERATORREACHINGIN, ONSTARTCOMB, CHANGEOPERATORCOMB or ONFINISHREACHINGIN"));
                     }
                 }
             }

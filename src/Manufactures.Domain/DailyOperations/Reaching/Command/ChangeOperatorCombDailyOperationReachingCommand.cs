@@ -12,10 +12,10 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "ChangeOperatorCombDate")]
-        public DateTimeOffset CombFinishDate { get; set; }
+        public DateTimeOffset ChangeOperatorCombDate { get; set; }
 
         [JsonProperty(PropertyName = "ChangeOperatorCombTime")]
-        public TimeSpan CombFinishTime { get; set; }
+        public TimeSpan ChangeOperatorCombTime { get; set; }
 
         [JsonProperty(PropertyName = "ShiftDocumentId")]
         public ShiftId ShiftDocumentId { get; set; }
@@ -37,8 +37,8 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Command
         public ChangeOperatorCombDailyOperationReachingCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.CombFinishDate).NotEmpty();
-            RuleFor(validator => validator.CombFinishTime).NotEmpty();
+            RuleFor(validator => validator.ChangeOperatorCombDate).NotEmpty();
+            RuleFor(validator => validator.ChangeOperatorCombTime).NotEmpty();
             RuleFor(validator => validator.ShiftDocumentId).NotEmpty();
             RuleFor(validator => validator.OperatorDocumentId).NotEmpty();
             RuleFor(validator => validator.YarnStrandsProcessed).NotEmpty();

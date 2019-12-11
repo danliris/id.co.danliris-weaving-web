@@ -9,23 +9,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
 {
     public class DailyOperationWarpingByIdDto : DailyOperationWarpingListDto
     {
-        //[JsonProperty(PropertyName = "OrderDocumentId")]
-        //public Guid OrderDocumentId { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; private set; }
 
-        [JsonProperty(PropertyName = "ColourOfCones")]
-        public string ColourOfCones { get; private set; }
-
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
-
-        //[JsonProperty(PropertyName = "OperatorName")]
-        //public string OperatorName { get; private set; }
-
-        //[JsonProperty(PropertyName = "OperatorGroup")]
-        //public string OperatorGroup { get; private set; }
 
         [JsonProperty(PropertyName = "TotalWarpingBeamLength")]
         public double TotalWarpingBeamLength { get; private set; }
@@ -42,28 +31,10 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public DailyOperationWarpingByIdDto(DailyOperationWarpingDocument document)
             : base(document)
         {
-            //OrderDocumentId = document.OrderDocumentId.Value;
             AmountOfCones = document.AmountOfCones;
-            ColourOfCones = document.ColourOfCone;
             DailyOperationWarpingBeamProducts = new List<DailyOperationWarpingBeamProductDto>();
             DailyOperationWarpingHistories = new List<DailyOperationWarpingHistoryDto>();
         }
-
-        //public void SetWeavingUnit(UnitId value)
-        //{
-        //    WeavingUnitId = value;
-        //}
-
-        //public void SetOrderDocumentId(OrderId value)
-        //{
-        //    OrderDocumentId = value.Value;
-        //}
-
-        //public void SetOperator(OperatorDocument value)
-        //{
-        //    OperatorName = value.CoreAccount.Name;
-        //    OperatorGroup = value.Group;
-        //}
 
         public void SetMaterialType(string materialType)
         {
