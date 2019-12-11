@@ -12,14 +12,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "PreparationOrder")]
         public OrderId PreparationOrder { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationMaterialType")]
-        public MaterialTypeId PreparationMaterialType { get; set; }
-
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; set; }
-
-        [JsonProperty(PropertyName = "ColourOfCone")]
-        public string ColourOfCone { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
         public DateTimeOffset PreparationDate { get; set; }
@@ -40,9 +34,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public PreparationDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.PreparationOrder).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
-            RuleFor(command => command.PreparationMaterialType).NotEmpty().WithMessage("Jenis Material Harus Diisi");
             RuleFor(command => command.AmountOfCones).NotEmpty().WithMessage("Jumlah Cone Harus Diisi");
-            RuleFor(command => command.ColourOfCone).NotEmpty().WithMessage("Warna Cone Harus Diisi");
             RuleFor(command => command.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
             RuleFor(command => command.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
             RuleFor(command => command.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");

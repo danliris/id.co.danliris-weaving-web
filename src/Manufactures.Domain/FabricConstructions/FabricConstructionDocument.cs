@@ -22,7 +22,7 @@ namespace Manufactures.Domain.FabricConstructions
         public double TotalYarn { get; private set; }
         public string MaterialTypeName { get; private set; }
         public int ReedSpace { get; private set; }
-        //JUmlah Helai benang
+        //Jumlah Helai benang
         public int TotalEnds { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
         public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }

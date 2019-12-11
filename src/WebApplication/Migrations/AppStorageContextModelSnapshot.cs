@@ -186,7 +186,11 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("BeamDocumentId");
 
+                    b.Property<string>("BeamOrigin");
+
                     b.Property<string>("BeamProductStatus");
+
+                    b.Property<double>("CombNumber");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -640,8 +644,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<int>("AmountOfCones");
 
-                    b.Property<string>("ColourOfCone");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(32);
@@ -656,8 +658,6 @@ namespace DanLiris.Admin.Web.Migrations
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("DeletedDate");
-
-                    b.Property<Guid>("MaterialTypeId");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);

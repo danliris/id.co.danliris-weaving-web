@@ -14,8 +14,14 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "BeamDocumentId")]
         public Guid BeamDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "BeamOrigin")]
+        public string BeamOrigin { get; }
+
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; }
+
+        [JsonProperty(PropertyName = "CombNumber")]
+        public double CombNumber { get; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
@@ -35,14 +41,18 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         }
 
         public DailyOperationLoomBeamProductDto(Guid identity,
+                                                string beamOrigin,
                                                 string beamNumber, 
+                                                double combNumber,
                                                 string machineNumber, 
                                                 DateTimeOffset latestDateTimeBeamProduct,
                                                 string loomProcess,
                                                 string beamProductStatus)
         {
             Id = identity;
+            BeamOrigin = beamOrigin;
             BeamNumber = beamNumber;
+            CombNumber = combNumber;
             MachineNumber = machineNumber;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             LoomProcess = loomProcess;

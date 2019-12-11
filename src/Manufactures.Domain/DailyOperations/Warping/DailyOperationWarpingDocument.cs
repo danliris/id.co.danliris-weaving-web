@@ -12,15 +12,11 @@ namespace Manufactures.Domain.DailyOperations.Warping
      * Domain for Daily Operation Warping
      * Read Model : DailyOperationWarpingReadModel
      * **/
-    public class DailyOperationWarpingDocument
-        : AggregateRoot<DailyOperationWarpingDocument,
-                        DailyOperationWarpingReadModel>
+    public class DailyOperationWarpingDocument : AggregateRoot<DailyOperationWarpingDocument, DailyOperationWarpingReadModel>
     {
         //Properties
         public OrderId OrderDocumentId { get; private set; }
-        public MaterialTypeId MaterialTypeId { get; private set; }
         public int AmountOfCones { get; private set; }
-        public string ColourOfCone { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingHistory> WarpingHistories { get; private set; }
@@ -29,18 +25,14 @@ namespace Manufactures.Domain.DailyOperations.Warping
         //Main Constructor
         public DailyOperationWarpingDocument(Guid id,
                                              OrderId orderDocumentId,
-                                             MaterialTypeId materialTypeId,
                                              int amountOfCones,
-                                             string colourOfCone,
                                              DateTimeOffset datetimeOperation,
                                              string operationStatus) : base(id)
         {
             //Instantiate Properties from Parameter Variable
             Identity = id;
             OrderDocumentId = orderDocumentId;
-            MaterialTypeId = materialTypeId;
             AmountOfCones = amountOfCones;
-            ColourOfCone = colourOfCone;
             DateTimeOperation = datetimeOperation;
             OperationStatus = operationStatus;
             WarpingHistories = new List<DailyOperationWarpingHistory>();
@@ -52,9 +44,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             ReadModel = new DailyOperationWarpingReadModel(Identity)
             {
                 OrderDocumentId = this.OrderDocumentId.Value,
-                MaterialTypeId = this.MaterialTypeId.Value,
                 AmountOfCones = this.AmountOfCones,
-                ColourOfCone = this.ColourOfCone,
                 DateTimeOperation = this.DateTimeOperation,
                 OperationStatus = this.OperationStatus
             };
@@ -65,9 +55,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         {
             //Instantiate object from database
             this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
-            this.MaterialTypeId = new MaterialTypeId(readModel.MaterialTypeId);
             this.AmountOfCones = readModel.AmountOfCones;
-            this.ColourOfCone = readModel.ColourOfCone;
             this.DateTimeOperation = readModel.DateTimeOperation;
             this.OperationStatus = readModel.OperationStatus;
             this.WarpingHistories = readModel.WarpingHistories;

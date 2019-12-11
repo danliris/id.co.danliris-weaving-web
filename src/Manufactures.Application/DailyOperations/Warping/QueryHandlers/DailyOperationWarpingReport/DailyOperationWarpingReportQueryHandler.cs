@@ -5,6 +5,7 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
@@ -113,20 +114,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     }
                 }
 
-                //Check if Material Id Null
-                if (!string.IsNullOrEmpty(materialId))
-                {
-                    //Parse if Not Null
-                    if (Guid.TryParse(materialId, out Guid materialGuid))
-                    {
-                        dailyOperationWarpingQuery = dailyOperationWarpingQuery.Where(x => x.MaterialTypeId == materialGuid);
-                    }
-                    else
-                    {
-                        return (result, result.Count);
-                    }
-                }
-
                 //Check if Operation Status Null
                 if (!string.IsNullOrEmpty(operationStatus))
                 {
@@ -172,13 +159,33 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     var fabricConstructionId = orderDocument.ConstructionId.Value;
                     var fabricConstructionQuery =
                         _fabricConstructionRepository
-                            .Query
-                            .OrderBy(o => o.CreatedDate);
-                    var fabricConstructionDocument =
-                        _fabricConstructionRepository
-                            .Find(fabricConstructionQuery)
-                            .Where(O => O.Identity.Equals(fabricConstructionId))
-                            .FirstOrDefault();
+                            .Query;
+
+                    //Check if Material Id Null
+                    //if (!string.IsNullOrEmpty(materialId))
+                    //{
+                    //    fabricConstructionQuery = fabricConstructionQuery.Where(x => x.ListOfWarp.Contains(materialId));
+                    //}
+                    FabricConstructionDocument fabricConstructionDocument;
+
+                    if (!string.IsNullOrEmpty(materialId))
+                    {
+
+                        fabricConstructionDocument =
+                            _fabricConstructionRepository
+                                .Find(fabricConstructionQuery)
+                                .Where(O => O.Identity.Equals(fabricConstructionId) && O.ListOfWarp.Any(x => x.YarnId.Value.ToString() == materialId))
+                                .FirstOrDefault();
+                    }
+                    else
+                    {
+
+                        fabricConstructionDocument =
+                            _fabricConstructionRepository
+                                .Find(fabricConstructionQuery)
+                                .Where(O => O.Identity.Equals(fabricConstructionId))
+                                .FirstOrDefault();
+                    }
                     var constructionNumber = fabricConstructionDocument.ConstructionNumber;
 
                     //Get Weaving Unit
@@ -190,7 +197,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
 
                     //Get Material Type
                     await Task.Yield();
-                    var materialTypeId = document.MaterialTypeId.Value;
+                    var materialTypeId = fabricConstructionDocument.ListOfWarp.Select(x => x.YarnId.Value);
                     var materialTypeQuery =
                         _materialTypeRepository
                             .Query
@@ -198,15 +205,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     var materialTypeDocument =
                         _materialTypeRepository
                             .Find(materialTypeQuery)
-                            .Where(o => o.Identity.Equals(materialTypeId))
-                            .FirstOrDefault();
-                    var materialTypeName = materialTypeDocument.Name;
+                            .Where(o => materialTypeId.Contains(o.Identity));
+                    var materialTypeName = materialTypeDocument.Select(o=>o.Name);
 
                     //Get Amount of Cones
                     var amountOfCones = document.AmountOfCones;
-
-                    //Get Colour of Cones
-                    var colourOfCones = document.ColourOfCone;
 
                     //Get Histories
                     var warpingHistories = document.WarpingHistories.OrderByDescending(x => x.CreatedDate);
@@ -283,7 +286,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                                                                                              orderNumber,
                                                                                              constructionNumber,
                                                                                              weavingUnitName,
-                                                                                             materialTypeName,
+                                                                                             materialTypeName.ToList(),
                                                                                              operatorName,
                                                                                              warpingOperatorGroup,
                                                                                              preparationDate,

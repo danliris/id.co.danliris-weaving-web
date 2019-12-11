@@ -58,12 +58,10 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             //Instantiate new Daily Operation warping
             var newWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                          new OrderId(request.PreparationOrder.Value),
-                                                                          new MaterialTypeId(request.PreparationMaterialType.Value),
-                                                                          request.AmountOfCones,
-                                                                          request.ColourOfCone,
-                                                                          warpingDateTime,
-                                                                          OperationStatus.ONPROCESS);
+                                                                       new OrderId(request.PreparationOrder.Value),
+                                                                       request.AmountOfCones,
+                                                                       warpingDateTime,
+                                                                       OperationStatus.ONPROCESS);
 
             //Add daily operation history
             var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),

@@ -52,7 +52,9 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
                 var newBeamProduct =
                     new DailyOperationLoomBeamProduct(Guid.NewGuid(),
+                                                      beamProduct.BeamOrigin,
                                                       new BeamId(beamProduct.BeamDocumentId.Value),
+                                                      beamProduct.CombNumber,
                                                       new MachineId(beamProduct.MachineDocumentId.Value),
                                                       dateTimeBeamProduct,
                                                       beamProduct.LoomProcess,

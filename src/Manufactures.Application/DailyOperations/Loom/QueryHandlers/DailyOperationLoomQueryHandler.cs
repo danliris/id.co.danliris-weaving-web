@@ -206,27 +206,26 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             {
                 //Get Beam Number
                 await Task.Yield();
-                var beamQuery =
-                    _beamRepository
-                        .Query
-                        .OrderByDescending(o => o.CreatedDate);
+                //var beamQuery =
+                //    _beamRepository
+                //        .Query
+                //        .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
+                //        .OrderByDescending(o => o.CreatedDate);
                 var beamNumber =
                     _beamRepository
-                        .Find(beamQuery)
-                        .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
+                        .Find(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
                         .FirstOrDefault()
                         .Number;
 
                 //Get Machine Number
                 await Task.Yield();
-                var machineQuery =
-                    _machineRepository
-                        .Query
-                        .OrderByDescending(o => o.CreatedDate);
+                //var machineQuery =
+                //    _machineRepository
+                //        .Query
+                //        .OrderByDescending(o => o.CreatedDate);
                 var machineNumber =
                     _machineRepository
-                        .Find(machineQuery)
-                        .Where(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
+                        .Find(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
                         .FirstOrDefault()
                         .MachineNumber;
 
@@ -242,7 +241,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 await Task.Yield();
                 var loomBeamProductDto = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
+                                                                              loomBeamProduct.BeamOrigin,
                                                                               beamNumber,
+                                                                              loomBeamProduct.CombNumber,
                                                                               machineNumber,
                                                                               dateTimeBeamProduct,
                                                                               beamProductProcess,
@@ -266,14 +267,14 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 //Get Operator Name and Group
                 await Task.Yield();
                 var operatorId = loomBeamHistory.OperatorDocumentId;
-                var operatorQuery =
-                    _operatorRepository
-                        .Query
-                        .Where(o => o.Identity.Equals(operatorId))
-                        .OrderByDescending(o => o.CreatedDate);
+                //var operatorQuery =
+                //    _operatorRepository
+                //        .Query
+                //        .Where(o => o.Identity.Equals(operatorId))
+                //        .OrderByDescending(o => o.CreatedDate);
                 var operatorDocument =
                     _operatorRepository
-                        .Find(operatorQuery)
+                        .Find(o => o.Identity.Equals(operatorId))
                         .FirstOrDefault();
                 var operatorName = operatorDocument.CoreAccount.Name;
                 var operatorGroup = operatorDocument.Group;
@@ -285,14 +286,14 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 //Get Shift Name
                 await Task.Yield();
                 var shiftId = loomBeamHistory.ShiftDocumentId;
-                var shiftQuery =
-                    _shiftRepository
-                        .Query
-                        .Where(o => o.Identity.Equals(shiftId))
-                        .OrderByDescending(o => o.CreatedDate);
+                //var shiftQuery =
+                //    _shiftRepository
+                //        .Query
+                //        .Where(o => o.Identity.Equals(shiftId))
+                //        .OrderByDescending(o => o.CreatedDate);
                 var shiftName =
                     _shiftRepository
-                        .Find(shiftQuery)
+                        .Find(o => o.Identity.Equals(shiftId))
                         .FirstOrDefault()
                         .Name;
 

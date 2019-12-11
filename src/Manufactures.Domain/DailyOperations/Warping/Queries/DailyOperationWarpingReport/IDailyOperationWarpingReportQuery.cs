@@ -8,7 +8,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarp
     public interface IDailyOperationWarpingReportQuery<TModel>
     {
         Task<(IEnumerable<TModel>, int)> GetReports(string orderId, 
-                                                    string materialTypeId,
+                                                    string materialId,
                                                     string operationStatus,
                                                     int unitId,
                                                     DateTimeOffset? dateFrom, 

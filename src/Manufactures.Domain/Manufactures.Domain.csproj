@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Orders\Entities\**" />
+    <EmbeddedResource Remove="Orders\Entities\**" />
+    <None Remove="Orders\Entities\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Orders\Repositories\IGoodsCompositionRepository.cs" />
   </ItemGroup>
 
@@ -19,7 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Orders\Entities\" />
+    <Folder Include="ProductionResults\Commands\" />
   </ItemGroup>
 
 </Project>

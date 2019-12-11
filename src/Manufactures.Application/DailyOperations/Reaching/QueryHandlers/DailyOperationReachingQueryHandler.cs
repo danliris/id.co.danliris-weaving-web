@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
@@ -53,6 +52,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
         }
+
         public async Task<IEnumerable<DailyOperationReachingListDto>> GetAll()
         {
             var query =

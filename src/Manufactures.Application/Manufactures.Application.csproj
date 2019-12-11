@@ -15,4 +15,8 @@
     <ProjectReference Include="..\Manufactures.Data.EntityFrameworkCore.SqlServer\Manufactures.Data.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProductionResults\CommandHandlers\" />
+  </ItemGroup>
+
 </Project>

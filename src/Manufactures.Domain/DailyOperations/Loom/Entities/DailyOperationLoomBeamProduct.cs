@@ -11,7 +11,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
     public class DailyOperationLoomBeamProduct : EntityBase<DailyOperationLoomBeamProduct>
     {
+        public string BeamOrigin { get; private set; }
+
         public Guid BeamDocumentId { get; private set; }
+
+        public double CombNumber { get; private set; }
 
         public Guid MachineDocumentId { get; private set; }
 
@@ -30,22 +34,38 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         }
 
         public DailyOperationLoomBeamProduct(Guid identity,
+                                             string beamOrigin,
                                              BeamId beamDocumentId,
+                                             double combNumber,
                                              MachineId machineDocumentId,
                                              DateTimeOffset latestDateTimeBeamProduct,
                                              string loomProcess,
                                              string beamProductStatus) : base(identity)
         {
+            BeamOrigin = beamOrigin;
             BeamDocumentId = beamDocumentId.Value;
+            CombNumber = combNumber;
             MachineDocumentId = machineDocumentId.Value;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             LoomProcess = loomProcess;
             BeamProductStatus = beamProductStatus;
         }
 
+        public void SetBeamOrigin(string beamOrigin)
+        {
+            BeamOrigin = beamOrigin;
+            MarkModified();
+        }
+
         public void SetBeamDocumentId(BeamId beamDocumentId)
         {
             BeamDocumentId = beamDocumentId.Value;
+            MarkModified();
+        }
+
+        public void SetCombNumber(double combNumber)
+        {
+            CombNumber = combNumber;
             MarkModified();
         }
 

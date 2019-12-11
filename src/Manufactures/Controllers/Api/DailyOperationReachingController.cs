@@ -31,6 +31,7 @@ namespace Manufactures.Controllers.Api
     public class DailyOperationReachingController : ControllerApiBase
     {
         private readonly IDailyOperationReachingQuery<DailyOperationReachingListDto> _reachingQuery;
+        private readonly IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto> _reachingBeamQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto> _dailyOperationReachingReportQuery;
@@ -46,12 +47,14 @@ namespace Manufactures.Controllers.Api
         public DailyOperationReachingController(IServiceProvider serviceProvider,
                                                 IWorkContext workContext,
                                                 IDailyOperationReachingQuery<DailyOperationReachingListDto> reachingQuery,
+                                                IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto> reachingBeamQuery,
                                                 IOperatorQuery<OperatorListDto> operatorQuery,
                                                 IShiftQuery<ShiftDto> shiftQuery,
                                                 IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto> dailyOperationReachingReportQuery)
             : base(serviceProvider)
         {
             _reachingQuery = reachingQuery ?? throw new ArgumentNullException(nameof(reachingQuery));
+            _reachingBeamQuery = reachingBeamQuery ?? throw new ArgumentNullException(nameof(reachingBeamQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _dailyOperationReachingReportQuery = dailyOperationReachingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationReachingReportQuery));
@@ -303,6 +306,26 @@ namespace Manufactures.Controllers.Api
                     count = dailyOperationReachingReport.Item2
                 });
             }
+        }
+
+        [HttpGet("get-reaching-beam-products")]
+        public async Task<IActionResult> GetReachingBeamProductsByOrder(string orderId,
+                                                                        string keyword = null,
+                                                                        string filter = "{}",
+                                                                        int page = 1,
+                                                                        int size = 25,
+                                                                        string order = "{}")
+        {
+            var dailyOperationReachingBeamDocuments = await _reachingBeamQuery.GetReachingBeamProductsByOrder(orderId,
+                                                                                                              keyword,
+                                                                                                              filter, 
+                                                                                                              page, 
+                                                                                                              size, 
+                                                                                                              order);
+            return Ok(dailyOperationReachingBeamDocuments.Item1, info: new
+            {
+                count = dailyOperationReachingBeamDocuments.Item2
+            });
         }
     }
 }

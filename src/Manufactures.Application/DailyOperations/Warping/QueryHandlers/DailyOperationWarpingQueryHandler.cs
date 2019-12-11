@@ -144,18 +144,18 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     .ConstructionNumber;
 
             //Get MaterialName 
-            await Task.Yield();
-            var materialName =
-                _materialTypeRepository
-                    .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.MaterialTypeId.Value))
-                    .FirstOrDefault()
-                    .Name;
+            //await Task.Yield();
+            //var materialName =
+            //    _materialTypeRepository
+            //        .Find(o => o.Identity.Equals(dailyOperationWarpingDocument.MaterialTypeId.Value))
+            //        .FirstOrDefault()
+            //        .Name;
 
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
             double totalWarpingBeamLength = 0;
             result.SetConstructionNumber(constructionNumber);
-            result.SetMaterialType(materialName);
+            //result.SetMaterialType(materialName);
             result.SetOrderProductionNumber(orderDocument.OrderNumber);
             result.SetWeavingUnitId(orderDocument.UnitId.Value);
 

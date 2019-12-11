@@ -215,9 +215,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //First Warping Document Object
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
-                                                                         new MaterialTypeId(firstMaterialType.Identity),
                                                                          40,
-                                                                         "Biru",
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -237,9 +235,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                         new MaterialTypeId(secondMaterialType.Identity),
                                                                          40,
-                                                                         "Biru",
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -393,9 +389,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //First Warping Document Object
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
-                                                                         new MaterialTypeId(firstMaterialType.Identity),
                                                                          40,
-                                                                         "Biru",
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -415,9 +409,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
-                                                                          new MaterialTypeId(secondMaterialType.Identity),
                                                                           40,
-                                                                          "Biru",
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -571,9 +563,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //First Warping Document Object
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
-                                                                         new MaterialTypeId(firstMaterialType.Identity),
                                                                          40,
-                                                                         "Biru",
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -593,9 +583,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
-                                                                          new MaterialTypeId(secondMaterialType.Identity),
                                                                           40,
-                                                                          "Biru",
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -749,9 +737,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //First Warping Document Object
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
-                                                                         new MaterialTypeId(firstMaterialType.Identity),
                                                                          40,
-                                                                         "Biru",
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -771,9 +757,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
-                                                                          new MaterialTypeId(secondMaterialType.Identity),
                                                                           40,
-                                                                          "Biru",
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
