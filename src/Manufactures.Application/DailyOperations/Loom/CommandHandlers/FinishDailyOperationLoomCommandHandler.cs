@@ -73,13 +73,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             if (finishDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("FinishDate", "Resume date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("FinishDate", "Finish date cannot less than latest date log"));
             }
             else
             {
                 if (finishDateTime <= lastHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("FinishTime", "Resume time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("FinishTime", "Finish time cannot less than or equal latest time log"));
                 }
                 else
                 {

@@ -336,8 +336,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                              "CTN",
                                                              "Cotton",
                                                              "-");
-            mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-                .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
+            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
 
             //Operator Object
             var firstOperator = new OperatorDocument(
@@ -510,8 +510,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                              "CTN",
                                                              "Cotton",
                                                              "-");
-            mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-                .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
+            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
 
             //Operator Object
             var firstOperator = new OperatorDocument(
@@ -684,8 +684,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                              "CTN",
                                                              "Cotton",
                                                              "-");
-            mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-                .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
+            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
 
             //Operator Object
             var firstOperator = new OperatorDocument(
