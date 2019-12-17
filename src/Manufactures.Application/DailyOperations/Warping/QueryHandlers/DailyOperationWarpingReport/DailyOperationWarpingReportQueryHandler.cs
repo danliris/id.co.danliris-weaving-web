@@ -179,7 +179,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     }
                     else
                     {
-
                         fabricConstructionDocument =
                             _fabricConstructionRepository
                                 .Find(fabricConstructionQuery)
@@ -198,15 +197,15 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Get Material Type
                     await Task.Yield();
                     var materialTypeId = fabricConstructionDocument.ListOfWarp.Select(x => x.YarnId.Value);
-                    var materialTypeQuery =
-                        _materialTypeRepository
-                            .Query
-                            .OrderBy(o => o.CreatedDate);
+                    //var materialTypeQuery =
+                    //    _materialTypeRepository
+                    //        .Query
+                    //        .OrderBy(o => o.CreatedDate);
                     var materialTypeDocument =
                         _materialTypeRepository
-                            .Find(materialTypeQuery)
-                            .Where(o => materialTypeId.Contains(o.Identity));
-                    var materialTypeName = materialTypeDocument.Select(o=>o.Name);
+                            .Find(o => materialTypeId.Contains(o.Identity));
+                    //.Where(o => materialTypeId.Contains(o.Identity));
+                    var materialTypeName = materialTypeDocument.Select(o => o.Name);
 
                     //Get Amount of Cones
                     var amountOfCones = document.AmountOfCones;

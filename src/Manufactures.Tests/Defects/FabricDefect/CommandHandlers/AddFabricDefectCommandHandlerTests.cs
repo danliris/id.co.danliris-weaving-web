@@ -39,8 +39,7 @@ namespace Manufactures.Tests.Defects.FabricDefect.CommandHandlers
 
         private AddFabricDefectCommandHandler CreateAddYarnDefectCommandHandler()
         {
-            return new AddFabricDefectCommandHandler(
-                this.mockStorage.Object);
+            return new AddFabricDefectCommandHandler(this.mockStorage.Object);
         }
 
         [Fact]

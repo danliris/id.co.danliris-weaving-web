@@ -29,6 +29,7 @@ using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.Defects.FabricDefect.ReadModels;
 using Manufactures.Domain.BeamStockMonitoring.ReadModels;
+using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -36,6 +37,19 @@ namespace Manufactures.Data.EntityFrameworkCore
     {
         public void RegisterEntities(ModelBuilder modelBuilder)
         {
+
+            modelBuilder.Entity<WarpingBrokenCauseReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_WarpingBrokenCauseDocuments");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(e => e.WarpingBrokenCauseName).HasMaxLength(255);
+                etb.Property(e => e.Information).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationLoomBeamProduct>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomBeamProducts");

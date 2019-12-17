@@ -13,9 +13,9 @@ namespace Manufactures.Domain.Defects.FabricDefect
         public string DefectCategory { get; private set; }
 
         public FabricDefectDocument(Guid identity,
-                                  string defectCode,
-                                  string defectType,
-                                  string defectCategory) : base(identity)
+                                    string defectCode,
+                                    string defectType,
+                                    string defectCategory) : base(identity)
         {
             Identity = identity;
             DefectCode = defectCode;

@@ -12,6 +12,8 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Manufactures.Application.Beams.QueryHandlers;
 using Manufactures.Application.BeamStockMonitoring.DataTransferObjects;
 using Manufactures.Application.BeamStockMonitoring.QueryHandlers;
+using Manufactures.Application.BrokenCauses.Warping.DataTransferObjects;
+using Manufactures.Application.BrokenCauses.Warping.QueryHandlers;
 using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomReport;
 using Manufactures.Application.DailyOperations.Loom.QueryHandlers;
@@ -40,6 +42,7 @@ using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Application.Shifts.QueryHandlers;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.BeamStockMonitoring.Queries;
+using Manufactures.Domain.BrokenCauses.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Loom.Queries;
 using Manufactures.Domain.DailyOperations.Loom.Queries.DailyOperationLoomReport;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
@@ -130,6 +133,7 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
             services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
             services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
             services.AddTransient<IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto>, DailyOperationReachingBeamQueryHandler>();
