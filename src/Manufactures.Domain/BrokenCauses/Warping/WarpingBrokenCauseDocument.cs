@@ -61,20 +61,14 @@ namespace Manufactures.Domain.BrokenCauses.Warping
             }
         }
 
-        public void SetIsOthers(string value)
+        public void SetIsOthers(bool value)
         {
-            switch (value)
+            if (IsOthers != value)
             {
-                case "Umum":
-                    IsOthers = false;
-                    ReadModel.IsOthers = IsOthers;
-                    MarkModified();
-                    break;
-                case "Lain-lain":
-                    IsOthers = true;
-                    ReadModel.IsOthers = IsOthers;
-                    MarkModified();
-                    break;
+                IsOthers = value;
+                ReadModel.IsOthers = IsOthers;
+
+                MarkModified();
             }
         }
 

@@ -74,6 +74,8 @@
     <Compile Remove="Migrations\20191122103201_ChangeDailyOperationLoomToNewStructure.Designer.cs" />
     <Compile Remove="Migrations\20191204093945_AddCutmarkAndCutmarkUomOnMachines.cs" />
     <Compile Remove="Migrations\20191204093945_AddCutmarkAndCutmarkUomOnMachines.Designer.cs" />
+    <Compile Remove="Migrations\20191217041512_AddWarpingBrokenCauseModule.cs" />
+    <Compile Remove="Migrations\20191217041512_AddWarpingBrokenCauseModule.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

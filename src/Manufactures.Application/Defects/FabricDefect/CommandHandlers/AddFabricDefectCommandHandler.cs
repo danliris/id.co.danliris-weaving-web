@@ -27,9 +27,10 @@ namespace Manufactures.Application.Defects.FabricDefect.CommandHandlers
 
         public async Task<FabricDefectDocument> Handle(AddFabricDefectCommand request, CancellationToken cancellationToken)
         {
-            var existingFabricDefectByCode = _fabricDefectRepository
-                                                .Find(y => y.DefectCode.Equals(request.DefectCode))
-                                                .FirstOrDefault();
+            var existingFabricDefectByCode = 
+                _fabricDefectRepository
+                    .Find(y => y.DefectCode.Equals(request.DefectCode))
+                    .FirstOrDefault();
 
             if (existingFabricDefectByCode != null)
             {
@@ -50,9 +51,9 @@ namespace Manufactures.Application.Defects.FabricDefect.CommandHandlers
             }
 
             var newFabricDefect = new FabricDefectDocument(Guid.NewGuid(),
-                                                       request.DefectCode,
-                                                       request.DefectType,
-                                                       defectCategory);
+                                                           request.DefectCode,
+                                                           request.DefectType,
+                                                           defectCategory);
 
             await _fabricDefectRepository.Update(newFabricDefect);
             _storage.Save();
