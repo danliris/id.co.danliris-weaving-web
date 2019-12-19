@@ -128,14 +128,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                             //                                                          request.PressRoll);
                             lastWarpingBeamProduct.SetWarpingBeamId(lastWarpingBeamProduct.WarpingBeamId);
 
-                            lastWarpingBeamProduct.SetBrokenThreadsCause(lastWarpingBeamProduct.BrokenThreadsCause ?? 0);
-                            lastWarpingBeamProduct.SetConeDeficient(lastWarpingBeamProduct.ConeDeficient ?? 0);
-                            lastWarpingBeamProduct.SetLooseThreadsAmount(lastWarpingBeamProduct.LooseThreadsAmount ?? 0);
-                            lastWarpingBeamProduct.SetRightLooseCreel(lastWarpingBeamProduct.RightLooseCreel ?? 0);
-                            lastWarpingBeamProduct.SetLeftLooseCreel(lastWarpingBeamProduct.LeftLooseCreel ?? 0);
-
-                            lastWarpingBeamProduct.SetWarpingBeamLength(request.WarpingBeamLength);
-                            lastWarpingBeamProduct.SetWarpingBeamLengthUOMId(request.WarpingBeamLengthUOMId);
+                            lastWarpingBeamProduct.SetWarpingTotalBeamLength(request.WarpingBeamLength);
+                            lastWarpingBeamProduct.SetWarpingBeamLengthUomId(request.WarpingBeamLengthUOMId);
                             lastWarpingBeamProduct.SetTention(request.Tention);
                             lastWarpingBeamProduct.SetMachineSpeed(request.MachineSpeed);
                             lastWarpingBeamProduct.SetPressRoll(request.PressRoll);

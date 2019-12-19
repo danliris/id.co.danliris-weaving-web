@@ -216,6 +216,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -236,6 +237,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                          new OrderId(secondOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -390,6 +392,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -410,6 +413,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -564,6 +568,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -584,6 +589,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -738,6 +744,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -758,6 +765,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 

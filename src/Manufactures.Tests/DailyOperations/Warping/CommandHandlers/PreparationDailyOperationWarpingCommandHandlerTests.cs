@@ -106,6 +106,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             //Instantiate new Object
             var preparationOrder = new OrderId(Guid.NewGuid());
             var amountOfCones = 10;
+            var beamProductResult = 11;
             var preparationDate = DateTimeOffset.UtcNow;
             var preparationTime = TimeSpan.Parse("01:00");
             var preparationShift = new ShiftId(Guid.NewGuid());
@@ -119,6 +120,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     warpingId,
                     preparationOrder,
                     amountOfCones,
+                    beamProductResult,
                     preparationDate,
                     OperationStatus.ONPROCESS
 

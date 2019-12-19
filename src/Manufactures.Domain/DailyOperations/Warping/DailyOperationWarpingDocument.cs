@@ -17,6 +17,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         //Properties
         public OrderId OrderDocumentId { get; private set; }
         public int AmountOfCones { get; private set; }
+        public int BeamProductResult { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
         public string OperationStatus { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingHistory> WarpingHistories { get; private set; }
@@ -26,6 +27,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
         public DailyOperationWarpingDocument(Guid id,
                                              OrderId orderDocumentId,
                                              int amountOfCones,
+                                             int beamProductResult,
                                              DateTimeOffset datetimeOperation,
                                              string operationStatus) : base(id)
         {
@@ -33,6 +35,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             Identity = id;
             OrderDocumentId = orderDocumentId;
             AmountOfCones = amountOfCones;
+            BeamProductResult = beamProductResult;
             DateTimeOperation = datetimeOperation;
             OperationStatus = operationStatus;
             WarpingHistories = new List<DailyOperationWarpingHistory>();
@@ -45,6 +48,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             {
                 OrderDocumentId = this.OrderDocumentId.Value,
                 AmountOfCones = this.AmountOfCones,
+                BeamProductResult = this.BeamProductResult,
                 DateTimeOperation = this.DateTimeOperation,
                 OperationStatus = this.OperationStatus
             };
@@ -56,6 +60,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
             //Instantiate object from database
             this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
             this.AmountOfCones = readModel.AmountOfCones;
+            this.BeamProductResult = readModel.BeamProductResult;
             this.DateTimeOperation = readModel.DateTimeOperation;
             this.OperationStatus = readModel.OperationStatus;
             this.WarpingHistories = readModel.WarpingHistories;
@@ -143,12 +148,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
                 
                 //Update Properties When Not Same
                 warpingBeamProduct.SetWarpingBeamId(value.Identity);
-                warpingBeamProduct.SetBrokenThreadsCause(value.BrokenThreadsCause ?? 0);
-                warpingBeamProduct.SetConeDeficient(value.ConeDeficient ?? 0);
-                warpingBeamProduct.SetLooseThreadsAmount(value.LooseThreadsAmount?? 0);
-                warpingBeamProduct.SetRightLooseCreel(value.RightLooseCreel?? 0);
-                warpingBeamProduct.SetLeftLooseCreel(value.LeftLooseCreel?? 0);
-                warpingBeamProduct.SetWarpingBeamLength(value.WarpingBeamLength ?? 0);
+                warpingBeamProduct.SetWarpingTotalBeamLength(value.WarpingTotalBeamLength ?? 0);
                 warpingBeamProduct.SetTention(value.Tention ?? 0);
                 warpingBeamProduct.SetMachineSpeed(value.MachineSpeed ?? 0);
                 warpingBeamProduct.SetPressRoll(value.PressRoll ?? 0);

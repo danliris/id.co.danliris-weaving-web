@@ -9,9 +9,11 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
 {
     public class DailyOperationWarpingByIdDto : DailyOperationWarpingListDto
     {
-
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; private set; }
+
+        [JsonProperty(PropertyName = "BeamProductResult")]
+        public int BeamProductResult { get; private set; }
 
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
@@ -20,7 +22,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public double TotalWarpingBeamLength { get; private set; }
 
         [JsonProperty(PropertyName = "CountWarpingBeamProducts")]
-        public double CountWarpingBeamProducts { get; private set; }
+        public int CountWarpingBeamProducts { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
         public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; set; }
@@ -46,7 +48,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
             TotalWarpingBeamLength = totalWarpingBeamLength;
         }
 
-        public void SetCountWarpingBeamProducts(double countWarpingBeamProducts)
+        public void SetBeamProductResult(int beamProductResult)
+        {
+            BeamProductResult = beamProductResult;
+        }
+
+        public void SetCountWarpingBeamProducts(int countWarpingBeamProducts)
         {
             CountWarpingBeamProducts = countWarpingBeamProducts;
         }

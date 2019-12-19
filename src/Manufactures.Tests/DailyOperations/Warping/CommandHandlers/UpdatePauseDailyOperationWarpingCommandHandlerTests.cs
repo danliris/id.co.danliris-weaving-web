@@ -59,6 +59,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONFINISH);
 
@@ -138,6 +139,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -217,6 +219,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -296,6 +299,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -375,6 +379,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -450,6 +455,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -525,6 +531,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -600,6 +607,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -675,6 +683,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -750,6 +759,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -825,6 +835,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 

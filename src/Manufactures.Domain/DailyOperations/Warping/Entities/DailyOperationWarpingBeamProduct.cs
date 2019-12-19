@@ -2,24 +2,22 @@
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
+using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
     public class DailyOperationWarpingBeamProduct : EntityBase<DailyOperationWarpingBeamProduct>
     {
         public Guid WarpingBeamId { get; private set; }
-        public int? BrokenThreadsCause { get; private set; }
-        public int? ConeDeficient { get; private set; }
-        public int? LooseThreadsAmount { get; private set; }
-        public int? RightLooseCreel { get; private set; }
-        public int? LeftLooseCreel { get; private set; }
-        public double? WarpingBeamLength { get; private set; }
-        public int? WarpingBeamLengthUOMId { get; private set; }
-        public int? Tention { get; private set; }
+        public double? WarpingTotalBeamLength { get; private set; }
+        public int? WarpingTotalBeamLengthUomId { get; private set; }
+        public double? Tention { get; private set; }
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
+        public int? PressRollUomId { get; private set; }
         public string BeamStatus { get; private set; }
         public DateTimeOffset LatestDateTimeBeamProduct{ get; private set; }
+        public IReadOnlyCollection<DailyOperationWarpingBrokenCause> WarpingBrokenThreadsCauses { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
@@ -32,58 +30,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         {
             Identity = identity;
             WarpingBeamId = warpingBeamId.Value;
-            BeamStatus = beamStatus;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
-        }
-
-        public void SetBrokenThreadsCause(int value)
-        {
-            if (BrokenThreadsCause != value)
-            {
-                BrokenThreadsCause = value;
-
-                MarkModified();
-            }
-        }
-
-        public void SetConeDeficient(int value)
-        {
-            if (ConeDeficient != value)
-            {
-                ConeDeficient = value;
-
-                MarkModified();
-            }
-        }
-
-        public void SetLooseThreadsAmount(int value)
-        {
-            if (LooseThreadsAmount != value)
-            {
-                LooseThreadsAmount = value;
-
-                MarkModified();
-            }
-        }
-
-        public void SetRightLooseCreel(int value)
-        {
-            if (RightLooseCreel != value)
-            {
-                RightLooseCreel = value;
-
-                MarkModified();
-            }
-        }
-
-        public void SetLeftLooseCreel(int value)
-        {
-            if (LeftLooseCreel != value)
-            {
-                LeftLooseCreel = value;
-
-                MarkModified();
-            }
+            BeamStatus = beamStatus;
         }
 
         public void SetWarpingBeamId(Guid value)
@@ -96,27 +44,27 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             }
         }
 
-        public void SetWarpingBeamLength(double value)
+        public void SetWarpingTotalBeamLength(double value)
         {
-            if (WarpingBeamLength != value)
+            if (WarpingTotalBeamLength != value)
             {
-                WarpingBeamLength = value;
+                WarpingTotalBeamLength = value;
 
                 MarkModified();
             }
         }
 
-        public void SetWarpingBeamLengthUOMId(int value)
+        public void SetWarpingBeamLengthUomId(int value)
         {
-            if (WarpingBeamLengthUOMId != value)
+            if (WarpingTotalBeamLengthUomId != value)
             {
-                WarpingBeamLengthUOMId = value;
+                WarpingTotalBeamLengthUomId = value;
 
                 MarkModified();
             }
         }
 
-        public void SetTention(int value)
+        public void SetTention(double value)
         {
             if (Tention != value)
             {
@@ -141,6 +89,16 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (PressRoll != value)
             {
                 PressRoll = value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetPressRollUomId(int value)
+        {
+            if (PressRollUomId != value)
+            {
+                PressRollUomId = value;
 
                 MarkModified();
             }

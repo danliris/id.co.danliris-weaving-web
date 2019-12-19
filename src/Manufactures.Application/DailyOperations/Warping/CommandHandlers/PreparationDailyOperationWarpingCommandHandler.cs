@@ -36,16 +36,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
         public async Task<DailyOperationWarpingDocument> Handle(PreparationDailyOperationWarpingCommand request, 
                                                           CancellationToken cancellationToken)
         {
-            //Check if any Daily Operation using Selected Order (SOP)
-            //var existingDailyOperationWarpingDocument = _dailyOperationWarpingRepository
-            //                                            .Find(o => o.OrderDocumentId.Equals(request.PreparationOrder.Value))
-            //                                            .Any();
-
-            //if (existingDailyOperationWarpingDocument == true)
-            //{
-            //    throw Validator.ErrorValidation(("PreparationOrder", "No. Order Produksi ini Telah Digunakan"));
-            //}
-
             //Set date time when user operate
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
@@ -60,6 +50,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var newWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                        new OrderId(request.PreparationOrder.Value),
                                                                        request.AmountOfCones,
+                                                                       request.BeamProductResult,
                                                                        warpingDateTime,
                                                                        OperationStatus.ONPROCESS);
 

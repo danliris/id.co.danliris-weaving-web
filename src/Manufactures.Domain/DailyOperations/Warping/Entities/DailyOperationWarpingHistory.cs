@@ -13,6 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public string MachineStatus { get; private set; }
         public string Information { get; private set; }
         public string WarpingBeamNumber { get; private set; }
+        public double WarpingBeamLengthPerOperator { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
