@@ -116,8 +116,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                               new ShiftId(request.ProduceBeamsShift.Value),
                                                                               new OperatorId(request.ProduceBeamsOperator.Value),
                                                                               warpingDateTime,
-                                                                              MachineStatus.ONCOMPLETE,
-                                                                              lastWarpingHistory.WarpingBeamNumber);
+                                                                              MachineStatus.ONCOMPLETE);
+                            newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
                             existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
                             //Assign Value to Warping Beam Product and Add to Warping Document

@@ -23,6 +23,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; }
 
+        [JsonProperty(PropertyName = "WarpingBeamLengthPerOperator")]
+        public string WarpingBeamLengthPerOperator { get; }
+
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
@@ -32,6 +35,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
                                                string shiftName,
                                                string operatorName,
                                                string operatorGroup,
+                                               string warpingBeamLengthPerOperator,
                                                string machineStatus)
         {
             Id = id;
@@ -40,6 +44,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
             ShiftName = shiftName;
             OperatorName = operatorName;
             OperatorGroup = operatorGroup;
+            WarpingBeamLengthPerOperator = warpingBeamLengthPerOperator;
             MachineStatus = machineStatus;
         }
     }

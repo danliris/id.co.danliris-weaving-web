@@ -67,8 +67,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONCOMPLETE,
-                                                                         "TS122");
+                                                                         MachineStatus.ONCOMPLETE);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -143,8 +142,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -219,8 +217,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -295,8 +292,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -371,8 +367,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTART,
-                                                                         "TS122");
+                                                                         MachineStatus.ONSTART);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -443,8 +438,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -515,8 +509,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTOP,
-                                                                         "TS122");
+                                                                         MachineStatus.ONSTOP);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),

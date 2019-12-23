@@ -2,7 +2,6 @@
 using Manufactures.Application.BrokenCauses.Warping.DataTransferObjects;
 using Manufactures.Domain.BrokenCauses.Warping.Commands;
 using Manufactures.Domain.BrokenCauses.Warping.Queries;
-using Manufactures.Domain.BrokenCauses.Warping.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

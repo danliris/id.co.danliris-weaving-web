@@ -179,7 +179,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             foreach(var beam in result.DailyOperationWarpingBeamProducts)
             {
-                totalWarpingBeamLength = beam.WarpingBeamLength + totalWarpingBeamLength;
+                totalWarpingBeamLength = beam.WarpingTotalBeamLength + totalWarpingBeamLength;
             }
             result.SetTotalWarpingBeamLength(totalWarpingBeamLength);
             int countWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.Count();
@@ -188,20 +188,46 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             //Add History to DTO
             foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
             {
-                var beamNumber = history.WarpingBeamNumber;
+                var warpingBeamDocument =
+                    _beamRepository
+                        .Find(o => o.Identity.Equals(history.WarpingBeamId))
+                        .FirstOrDefault();
 
-                switch (history.MachineStatus)
+                var warpingBeamNumber = "";
+
+                if (warpingBeamDocument != null)
                 {
-                    case "ENTRY":
-                        beamNumber = "Belum ada Beam yang Diproses";
-                        break;
-                    case "FINISH":
-                        beamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
-                        break;
-                    default:
-                        beamNumber = history.WarpingBeamNumber;
-                        break;
+                    switch (history.MachineStatus)
+                    {
+                        case "ENTRY":
+                            warpingBeamNumber = "Belum ada Beam yang Diproses";
+                            break;
+                        case "FINISH":
+                            warpingBeamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
+                            break;
+                        default:
+                            warpingBeamNumber = warpingBeamDocument.Number;
+                            break;
+                    }
                 }
+                else
+                {
+                    switch (history.MachineStatus)
+                    {
+                        case "ENTRY":
+                            warpingBeamNumber = "Belum ada Beam yang Diproses";
+                            break;
+                        case "FINISH":
+                            warpingBeamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
+                            break;
+                    }
+                }
+
+                await Task.Yield();
+                var shiftName =
+                    _shiftRepository
+                        .Find(entity => entity.Identity.Equals(history.ShiftDocumentId))
+                        .FirstOrDefault().Name ?? "Shift Not Found";
 
                 await Task.Yield();
                 var operatorBeam =
@@ -210,18 +236,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .FirstOrDefault();
 
                 await Task.Yield();
-                var shiftName =
-                    _shiftRepository
-                        .Find(entity => entity.Identity.Equals(history.ShiftDocumentId))
-                        .FirstOrDefault().Name ?? "Shift Not Found";
+                var warpingBeamLengthPerOperator = history.WarpingBeamLengthPerOperator.ToString() ?? "Belum ada Beam yang Diproses Operator";
 
                 var dailyHistory =
                     new DailyOperationWarpingHistoryDto(history.Identity,
-                                                        beamNumber,
+                                                        warpingBeamNumber,
                                                         history.DateTimeMachine,
                                                         shiftName,
                                                         operatorBeam.CoreAccount.Name,
                                                         operatorBeam.Group,
+                                                        warpingBeamLengthPerOperator,
                                                         history.MachineStatus);
 
                 await Task.Yield();

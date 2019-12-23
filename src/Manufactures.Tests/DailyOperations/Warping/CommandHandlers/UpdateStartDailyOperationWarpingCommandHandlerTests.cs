@@ -68,8 +68,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY,
-                                                                         "TS122");
+                                                                         MachineStatus.ONENTRY);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -85,7 +84,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS122";
+            //var warpingBeamNumber = "TS122";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -97,7 +96,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -140,8 +139,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONFINISH,
-                                                                         "TS122");
+                                                                         MachineStatus.ONFINISH);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -157,7 +155,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -169,7 +167,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -212,8 +210,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY,
-                                                                         "TS122");
+                                                                         MachineStatus.ONENTRY);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -229,7 +226,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -241,7 +238,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -284,8 +281,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY,
-                                                                         "TS122");
+                                                                         MachineStatus.ONENTRY);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -301,7 +297,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -313,7 +309,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -356,8 +352,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY,
-                                                                         "TS122");
+                                                                         MachineStatus.ONENTRY);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -373,7 +368,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -385,7 +380,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -424,8 +419,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONCOMPLETE,
-                                                                         "TS122");
+                                                                         MachineStatus.ONCOMPLETE);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -441,7 +435,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -453,7 +447,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo
@@ -492,8 +486,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTART,
-                                                                         "TS122");
+                                                                         MachineStatus.ONSTART);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -509,7 +502,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var startShift = new ShiftId(Guid.NewGuid());
             var startOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamId = new BeamId(Guid.NewGuid());
-            var warpingBeamNumber = "TS123";
+            //var warpingBeamNumber = "TS123";
 
             //Create Update Start Object
             UpdateStartDailyOperationWarpingCommand request =
@@ -521,7 +514,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     StartShift = startShift,
                     StartOperator = startOperator,
                     WarpingBeamId = warpingBeamId,
-                    WarpingBeamNumber = warpingBeamNumber
+                    //WarpingBeamNumber = warpingBeamNumber
                 };
 
             //Setup Mock Object for Warping Repo

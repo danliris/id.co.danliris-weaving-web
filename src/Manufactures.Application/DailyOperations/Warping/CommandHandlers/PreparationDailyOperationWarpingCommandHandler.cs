@@ -56,10 +56,10 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             //Add daily operation history
             var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                          new ShiftId(request.PreparationShift.Value),
-                                                          new OperatorId(request.PreparationOperator.Value), 
-                                                          warpingDateTime,
-                                                          MachineStatus.ONENTRY);
+                                                              new ShiftId(request.PreparationShift.Value),
+                                                              new OperatorId(request.PreparationOperator.Value), 
+                                                              warpingDateTime,
+                                                              MachineStatus.ONENTRY);
             newWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
             
             //Update and save

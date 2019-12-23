@@ -103,7 +103,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
                 warpingHistory.SetDateTimeMachine(history.DateTimeMachine);
                 warpingHistory.SetMachineStatus(history.MachineStatus);
                 warpingHistory.SetInformation(history.Information);
-                warpingHistory.SetWarpingBeamNumber(history.WarpingBeamNumber);
+                warpingHistory.SetWarpingBeamId(new BeamId(history.WarpingBeamId));
 
                 //Replace to Update Warping Product
                 dailyOperationWarpingHistories[index] = warpingHistory;
