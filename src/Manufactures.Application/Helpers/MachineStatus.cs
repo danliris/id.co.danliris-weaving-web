@@ -5,12 +5,13 @@
         //Daily Operation - Machine Status (Loom, Sizing, Warping)
         public static string ONENTRY = "ENTRY";
         public static string ONSTART = "START";
-        public static string ONFINISH = "FINISH";
+        public static string ONPROCESSBEAM = "ON-PROCESS-BEAM";
         public static string ONCOMPLETE = "COMPLETED";
 
         //Daily Operation - Machine Status (Loom, Sizing)
         public static string ONSTOP = "STOP";
         public static string ONRESUME = "CONTINUE";
+        public static string ONFINISH = "FINISH";
 
         //Daily Operation - Machine Status (Reaching)
         public static string ONSTARTREACHINGIN = "REACHING-IN-START";

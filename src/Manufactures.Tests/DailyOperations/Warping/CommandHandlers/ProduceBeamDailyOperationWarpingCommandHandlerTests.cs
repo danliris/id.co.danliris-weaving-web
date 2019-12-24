@@ -83,9 +83,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -96,10 +93,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -158,9 +152,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -171,10 +162,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -233,9 +221,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -246,10 +231,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -308,9 +290,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -321,10 +300,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -383,9 +359,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -396,10 +369,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -454,9 +424,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -467,10 +434,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -525,9 +489,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -538,10 +499,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -600,9 +558,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -613,10 +568,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -675,9 +627,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -688,10 +637,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo

@@ -88,10 +88,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo
@@ -155,10 +155,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo
@@ -222,10 +222,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo
@@ -289,10 +289,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo
@@ -356,10 +356,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo
@@ -423,10 +423,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                 new FinishDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
-                    FinishDate = finishDate,
-                    FinishTime = finishTime,
-                    FinishShift = finishShift,
-                    FinishOperator = finishOperator
+                    ProduceBeamsDate = finishDate,
+                    ProduceBeamsTime = finishTime,
+                    ProduceBeamsShift = finishShift,
+                    ProduceBeamsOperator = finishOperator
                 };
 
             //Setup Mock Object for Warping Repo

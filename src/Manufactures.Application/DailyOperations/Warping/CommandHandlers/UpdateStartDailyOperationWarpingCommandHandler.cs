@@ -114,7 +114,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     }
                     else if (lastWarpingHistory.MachineStatus == MachineStatus.ONCOMPLETE)
                     {
-                        if (request.WarpingBeamId.Value == lastWarpingBeamProduct.WarpingBeamId)
+                        if (request.WarpingBeamId.Value != lastWarpingBeamProduct.WarpingBeamId)
                         {
                             existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
 
@@ -141,7 +141,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("BeamStatus", "Beam Sebelumnya masih diproses, harus Input Beam yang sama"));
+                            throw Validator.ErrorValidation(("BeamStatus", "Beam yang dipilih telah selesai diproses, harus Input Beam yang beda"));
                         }
                     }
                     else

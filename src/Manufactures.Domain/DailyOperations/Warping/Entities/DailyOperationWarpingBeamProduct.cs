@@ -3,6 +3,7 @@ using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
@@ -14,7 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public double? Tention { get; private set; }
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
-        public int? PressRollUomId { get; private set; }
+        public string PressRollUom { get; private set; }
         public string BeamStatus { get; private set; }
         public DateTimeOffset LatestDateTimeBeamProduct{ get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingBrokenCause> WarpingBrokenThreadsCauses { get; private set; }
@@ -94,11 +95,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             }
         }
 
-        public void SetPressRollUomId(int value)
+        public void SetPressRollUom(string value)
         {
-            if (PressRollUomId != value)
+            if (PressRollUom != value)
             {
-                PressRollUomId = value;
+                PressRollUom = value;
 
                 MarkModified();
             }
@@ -122,6 +123,21 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
                 MarkModified();
             }
+        }
+
+        //Add Warping Broken Threads Causes
+        public void AddWarpingBrokenThreadsCause(DailyOperationWarpingBrokenCause cause)
+        {
+            //Modified Existing List of Detail
+            var dailyOperationWarpingBrokenCauses = WarpingBrokenThreadsCauses.ToList();
+
+            //Add New Detail
+            dailyOperationWarpingBrokenCauses.Add(cause);
+
+            //Update Old List
+            WarpingBrokenThreadsCauses = dailyOperationWarpingBrokenCauses;
+
+            MarkModified();
         }
 
         protected override DailyOperationWarpingBeamProduct GetEntity()
