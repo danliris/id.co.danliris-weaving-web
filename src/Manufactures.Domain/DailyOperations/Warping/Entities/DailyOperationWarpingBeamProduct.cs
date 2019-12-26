@@ -10,19 +10,22 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
     public class DailyOperationWarpingBeamProduct : EntityBase<DailyOperationWarpingBeamProduct>
     {
         public Guid WarpingBeamId { get; private set; }
-        public double? WarpingTotalBeamLength { get; private set; }
-        public int? WarpingTotalBeamLengthUomId { get; private set; }
+        public double WarpingTotalBeamLength { get; private set; }
+        public int WarpingTotalBeamLengthUomId { get; private set; }
         public double? Tention { get; private set; }
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
         public string PressRollUom { get; private set; }
         public string BeamStatus { get; private set; }
-        public DateTimeOffset LatestDateTimeBeamProduct{ get; private set; }
+        public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
         public IReadOnlyCollection<DailyOperationWarpingBrokenCause> WarpingBrokenThreadsCauses { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
         public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
-        public DailyOperationWarpingBeamProduct(Guid identity) : base(identity) { }
+        public DailyOperationWarpingBeamProduct(Guid identity) : base(identity)
+        {
+            WarpingBrokenThreadsCauses = new List<DailyOperationWarpingBrokenCause>();
+        }
 
         public DailyOperationWarpingBeamProduct(Guid identity,
                                                 BeamId warpingBeamId,
@@ -33,6 +36,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             WarpingBeamId = warpingBeamId.Value;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             BeamStatus = beamStatus;
+            WarpingBrokenThreadsCauses = new List<DailyOperationWarpingBrokenCause>();
         }
 
         public void SetWarpingBeamId(Guid value)

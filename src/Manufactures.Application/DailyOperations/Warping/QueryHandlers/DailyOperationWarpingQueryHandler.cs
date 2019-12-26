@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BrokenCauses.Warping.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
@@ -34,6 +35,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             _materialTypeRepository;
         private readonly IWeavingOrderDocumentRepository
             _weavingOrderDocumentRepository;
+        private readonly IWarpingBrokenCauseRepository
+            _warpingBrokenCauseRepository;
 
         public DailyOperationWarpingQueryHandler(IStorage storage)
         {
@@ -52,6 +55,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _storage.GetRepository<IShiftRepository>();
             _materialTypeRepository =
                 _storage.GetRepository<IMaterialTypeRepository>();
+            _warpingBrokenCauseRepository =
+                _storage.GetRepository<IWarpingBrokenCauseRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
@@ -117,6 +122,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _dailyOperationWarpingRepository
                     .Query
                     .Include(o => o.WarpingBeamProducts)
+                    .ThenInclude(o => o.WarpingBrokenThreadsCauses)
                     .Include(o => o.WarpingHistories)
                     .Where(doc => doc.Identity.Equals(id))
                     .OrderByDescending(x => x.CreatedDate);
@@ -154,14 +160,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             //Not complete for detail
             var result = new DailyOperationWarpingByIdDto(dailyOperationWarpingDocument);
-            double totalWarpingBeamLength = 0;
+            //double totalWarpingBeamLength = 0;
             result.SetBeamProductResult(beamProductResult);
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialType(warpMaterialName);
             result.SetOrderProductionNumber(orderDocument.OrderNumber);
             result.SetWeavingUnitId(orderDocument.UnitId.Value);
 
-            // Add Beam Product to DTO
+            // Add Beam Product to Data Transfer Objects
             foreach (var beamProduct in dailyOperationWarpingDocument.WarpingBeamProducts)
             {
                 await Task.Yield();
@@ -172,20 +178,39 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                 var beamWarping = new DailyOperationWarpingBeamProductDto(beamProduct, beam);
 
+                foreach (var brokenCauseDocument in beamProduct.WarpingBrokenThreadsCauses)
+                {
+                    await Task.Yield();
+                    var brokenCause =
+                        _warpingBrokenCauseRepository
+                            .Find(o => o.Identity.Equals(brokenCauseDocument.BrokenCauseId))
+                            .FirstOrDefault();
+
+                    beamWarping.BrokenCauses.Add(new WarpingBrokenThreadsCausesDto(brokenCauseDocument, brokenCause.WarpingBrokenCauseName));
+                }
+
                 await Task.Yield();
                 result.AddDailyOperationWarpingBeamProducts(beamWarping);
             }
             result.DailyOperationWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct).ToList();
 
-            foreach(var beam in result.DailyOperationWarpingBeamProducts)
-            {
-                totalWarpingBeamLength = beam.WarpingTotalBeamLength + totalWarpingBeamLength;
-            }
-            result.SetTotalWarpingBeamLength(totalWarpingBeamLength);
-            int countWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.Count();
-            result.SetCountWarpingBeamProducts(countWarpingBeamProducts);
+            //int beamProductLength = result.DailyOperationWarpingBeamProducts.Count();
+            //var isFinishFlagBeamProduct = false;
+            //if(beamProductLength == result.BeamProductResult)
+            //{
+            //    isFinishFlagBeamProduct = true;
+            //}
+            //result.SetIsFinishFlag(isFinishFlagBeamProduct);
 
-            //Add History to DTO
+            //foreach(var beam in result.DailyOperationWarpingBeamProducts)
+            //{
+            //    totalWarpingBeamLength = beam.WarpingTotalBeamLength + totalWarpingBeamLength;
+            //}
+            //result.SetTotalWarpingBeamLength(totalWarpingBeamLength);
+            //int countWarpingBeamProducts = result.DailyOperationWarpingBeamProducts.Count();
+            //result.SetCountWarpingBeamProducts(countWarpingBeamProducts);
+
+            //Add History to Data Transfer Objects
             foreach (var history in dailyOperationWarpingDocument.WarpingHistories)
             {
                 var warpingBeamDocument =

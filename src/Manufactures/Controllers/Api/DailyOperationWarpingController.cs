@@ -393,17 +393,17 @@ namespace Manufactures.Controllers.Api
         }
 
         //Finish Warping Daily Operation Request
-        [HttpPut("{Id}/finish-process")]
-        public async Task<IActionResult> Finish(string Id, [FromBody]FinishDailyOperationWarpingCommand command)
+        [HttpPut("{Id}/completed-process")]
+        public async Task<IActionResult> Finish(string Id, [FromBody]CompletedDailyOperationWarpingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
             command.SetId(documentId);
-            var finishDailyOperationSizingDocument = await Mediator.Send(command);
+            var completedDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(finishDailyOperationSizingDocument.Identity);
+            return Ok(completedDailyOperationSizingDocument.Identity);
         }
 
         //Controller for Daily Operation Warping Report

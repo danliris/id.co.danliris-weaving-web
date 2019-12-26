@@ -41,9 +41,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private FinishDailyOperationWarpingCommandHandler CreateFinishDailyOperationWarpingCommandHandler()
+        private CompletedDailyOperationWarpingCommandHandler CreateFinishDailyOperationWarpingCommandHandler()
         {
-            return new FinishDailyOperationWarpingCommandHandler(
+            return new CompletedDailyOperationWarpingCommandHandler(
                 this.mockStorage.Object);
         }
 
@@ -84,8 +84,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,
@@ -151,8 +151,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,
@@ -218,8 +218,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,
@@ -285,8 +285,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,
@@ -352,8 +352,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,
@@ -419,8 +419,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var finishOperator = new OperatorId(Guid.NewGuid());
 
             //Create Update Start Object
-            FinishDailyOperationWarpingCommand request =
-                new FinishDailyOperationWarpingCommand
+            CompletedDailyOperationWarpingCommand request =
+                new CompletedDailyOperationWarpingCommand
                 {
                     Id = warpingDocumentTestId,
                     ProduceBeamsDate = finishDate,

@@ -148,7 +148,7 @@ namespace Manufactures.Domain.DailyOperations.Warping
                 
                 //Update Properties When Not Same
                 warpingBeamProduct.SetWarpingBeamId(value.Identity);
-                warpingBeamProduct.SetWarpingTotalBeamLength(value.WarpingTotalBeamLength ?? 0);
+                warpingBeamProduct.SetWarpingTotalBeamLength(value.WarpingTotalBeamLength);
                 warpingBeamProduct.SetTention(value.Tention ?? 0);
                 warpingBeamProduct.SetMachineSpeed(value.MachineSpeed ?? 0);
                 warpingBeamProduct.SetPressRoll(value.PressRoll ?? 0);

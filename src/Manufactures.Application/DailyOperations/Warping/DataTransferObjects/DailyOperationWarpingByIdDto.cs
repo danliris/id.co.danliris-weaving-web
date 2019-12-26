@@ -18,11 +18,14 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
 
-        [JsonProperty(PropertyName = "TotalWarpingBeamLength")]
-        public double TotalWarpingBeamLength { get; private set; }
+        //[JsonProperty(PropertyName = "TotalWarpingBeamLength")]
+        //public double TotalWarpingBeamLength { get; private set; }
 
-        [JsonProperty(PropertyName = "CountWarpingBeamProducts")]
-        public int CountWarpingBeamProducts { get; private set; }
+        //[JsonProperty(PropertyName = "CountWarpingBeamProducts")]
+        //public int CountWarpingBeamProducts { get; private set; }
+
+        //[JsonProperty(PropertyName = "IsFinishFlag")]
+        //public bool IsFinishFlag { get; private set; }
 
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
         public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; set; }
@@ -38,25 +41,30 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
             DailyOperationWarpingHistories = new List<DailyOperationWarpingHistoryDto>();
         }
 
-        public void SetMaterialType(string materialType)
-        {
-            MaterialType = materialType;
-        }
-
-        public void SetTotalWarpingBeamLength(double totalWarpingBeamLength)
-        {
-            TotalWarpingBeamLength = totalWarpingBeamLength;
-        }
-
         public void SetBeamProductResult(int beamProductResult)
         {
             BeamProductResult = beamProductResult;
         }
 
-        public void SetCountWarpingBeamProducts(int countWarpingBeamProducts)
+        public void SetMaterialType(string materialType)
         {
-            CountWarpingBeamProducts = countWarpingBeamProducts;
+            MaterialType = materialType;
         }
+
+        //public void SetIsFinishFlag (bool isFinishFlag)
+        //{
+        //    IsFinishFlag = isFinishFlag;
+        //}
+
+        //public void SetTotalWarpingBeamLength(double totalWarpingBeamLength)
+        //{
+        //    TotalWarpingBeamLength = totalWarpingBeamLength;
+        //}
+
+        //public void SetCountWarpingBeamProducts(int countWarpingBeamProducts)
+        //{
+        //    CountWarpingBeamProducts = countWarpingBeamProducts;
+        //}
 
         public void AddDailyOperationWarpingBeamProducts(DailyOperationWarpingBeamProductDto beamProduct)
         {

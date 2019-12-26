@@ -132,6 +132,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                                       new BeamId(request.WarpingBeamId.Value),
                                                                                       warpingDateTime,
                                                                                       BeamStatus.ONPROCESS);
+                            newBeamProduct.SetWarpingTotalBeamLength(0);
                             existingDailyOperationWarpingDocument.AddDailyOperationWarpingBeamProduct(newBeamProduct);
 
                             await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);

@@ -118,12 +118,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           warpingDateTime,
                                                                           MachineStatus.ONPROCESSBEAM);
                         newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
+                        newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);
 
-                        var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingHistory.WarpingBeamLengthPerOperator;
+                        var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
                         lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
 
                         lastWarpingBeamProduct.SetWarpingBeamLengthUomId(request.WarpingBeamLengthUomId);

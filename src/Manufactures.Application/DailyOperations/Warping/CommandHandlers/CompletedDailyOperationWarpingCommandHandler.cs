@@ -15,21 +15,21 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 {
-    public class FinishDailyOperationWarpingCommandHandler
-        : ICommandHandler<FinishDailyOperationWarpingCommand, DailyOperationWarpingDocument>
+    public class CompletedDailyOperationWarpingCommandHandler
+        : ICommandHandler<CompletedDailyOperationWarpingCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
 
-        public FinishDailyOperationWarpingCommandHandler(IStorage storage)
+        public CompletedDailyOperationWarpingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
-        public async Task<DailyOperationWarpingDocument> Handle(FinishDailyOperationWarpingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationWarpingDocument> Handle(CompletedDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Warping
             var warpingQuery =
@@ -112,22 +112,35 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     if (lastWarpingHistory.MachineStatus != MachineStatus.ONENTRY)
                     {
                         existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
-                        existingDailyOperationWarpingDocument.SetOperationStatus(OperationStatus.ONFINISH);
+                        if (request.IsFinishFlag == true)
+                        {
+                            existingDailyOperationWarpingDocument.SetOperationStatus(OperationStatus.ONFINISH);
+                        }
+                        else
+                        {
+                            existingDailyOperationWarpingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+                        }
 
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                           new ShiftId(request.ProduceBeamsShift.Value),
                                                                           new OperatorId(request.ProduceBeamsOperator.Value),
                                                                           warpingDateTime,
-                                                                          MachineStatus.ONFINISH);
+                                                                          MachineStatus.ONCOMPLETE);
+                        newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
+                        newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
+
+                        var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
+                        lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
 
                         lastWarpingBeamProduct.SetTention(request.Tention);
                         lastWarpingBeamProduct.SetMachineSpeed(request.MachineSpeed);
                         lastWarpingBeamProduct.SetPressRoll(request.PressRoll);
                         lastWarpingBeamProduct.SetPressRollUom(request.PressRollUom);
+                        lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ROLLEDUP);
 
-                        foreach(var brokenCause in request.BrokenCauses)
+                        foreach (var brokenCause in request.BrokenCauses)
                         {
                             var newBrokenCause = new DailyOperationWarpingBrokenCause(Guid.NewGuid(),
                                                                                       new BrokenCauseId(brokenCause.WarpingBrokenCauseId),
