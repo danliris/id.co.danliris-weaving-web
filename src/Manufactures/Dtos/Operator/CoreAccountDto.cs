@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Dtos.Operator
+namespace Manufactures.DataTransferObjects.Operator
 {
     public class CoreAccountDto
     {

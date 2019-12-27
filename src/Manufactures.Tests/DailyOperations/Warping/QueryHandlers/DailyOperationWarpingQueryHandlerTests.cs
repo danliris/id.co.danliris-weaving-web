@@ -5,6 +5,9 @@ using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.BrokenCauses.Warping;
+using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
+using Manufactures.Domain.BrokenCauses.Warping.Repositories;
 using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
@@ -54,6 +57,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             mockShiftRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
+        private readonly Mock<IWarpingBrokenCauseRepository>
+            mockWarpingBrokenCauseRepo;
 
         public DailyOperationWarpingQueryHandlerTests()
         {
@@ -67,6 +72,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
             this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
+            this.mockWarpingBrokenCauseRepo = this.mockRepository.Create<IWarpingBrokenCauseRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockDailyOperationWarpingRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
@@ -75,6 +81,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IWarpingBrokenCauseRepository>()).Returns(mockWarpingBrokenCauseRepo.Object);
         }
 
         public void Dispose()
@@ -216,6 +223,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -236,6 +244,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                          new OrderId(secondOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -390,6 +399,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -410,6 +420,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -559,11 +570,18 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
                 .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
 
+            //Broken Cause Object
+            var firstBrokenCause = new WarpingBrokenCauseDocument(new Guid("D2B3DC1D-1082-4C21-9369-643FE873B699"),"Slub","-",false);
+            var secondBrokenCause = new WarpingBrokenCauseDocument(new Guid("08271D60-387D-4D01-924D-9F15A8B58E3B"),"Untwisted","-",false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { firstBrokenCause, secondBrokenCause });
+
             //Warping Document Object
             //First Warping Document Object
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -578,12 +596,15 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                                         new BeamId(firstBeam.Identity),
                                                                         DateTimeOffset.UtcNow,
                                                                         BeamStatus.ONPROCESS);
+            var firstWarpingBroken = new DailyOperationWarpingBrokenCause(new Guid("9C5E54F4-350E-47C8-A6C7-F9D2DB3C2C5F"), new BrokenCauseId(firstBrokenCause.Identity), 1);
+            firstBeamProduct.AddWarpingBrokenThreadsCause(firstWarpingBroken);
             firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
 
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 
@@ -598,7 +619,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                                          new BeamId(secondBeam.Identity),
                                                                          DateTimeOffset.UtcNow,
                                                                          BeamStatus.ONPROCESS);
+            var secondWarpingBroken = new DailyOperationWarpingBrokenCause(new Guid("0BE69563-4F94-4E24-BB1E-30FA82E158D3"), new BrokenCauseId(secondBrokenCause.Identity), 2);
+            secondBeamProduct.AddWarpingBrokenThreadsCause(secondWarpingBroken);
             secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
+
             mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
             mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
@@ -738,6 +762,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
                                                                          new OrderId(firstOrderDocument.Identity),
                                                                          40,
+                                                                         1,
                                                                          DateTimeOffset.UtcNow,
                                                                          OperationStatus.ONPROCESS);
 
@@ -758,6 +783,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
                                                                           new OrderId(secondOrderDocument.Identity),
                                                                           40,
+                                                                          1,
                                                                           DateTimeOffset.UtcNow,
                                                                           OperationStatus.ONPROCESS);
 

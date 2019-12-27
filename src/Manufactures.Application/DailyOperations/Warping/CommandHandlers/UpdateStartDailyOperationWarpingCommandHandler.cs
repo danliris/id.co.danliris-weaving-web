@@ -28,8 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
 
-        public async Task<DailyOperationWarpingDocument> Handle(UpdateStartDailyOperationWarpingCommand request,
-                                                          CancellationToken cancellationToken)
+        public async Task<DailyOperationWarpingDocument> Handle(UpdateStartDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Warping
             var warpingQuery =
@@ -54,30 +53,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 .WarpingBeamProducts
                 .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
-            
-            //Validation for Beam Id
-            var countBeamId =
-                existingDailyOperationWarpingDocument
-                    .WarpingBeamProducts
-                    .Where(o => o.WarpingBeamId.Equals(request.WarpingBeamId.Value))
-                    .Count();
-
-            if (!countBeamId.Equals(0))
-            {
-                throw Validator.ErrorValidation(("WarpingBeamId", "No. Beam Warping ini Sudah Digunakan dalam Operasi Harian Warping Ini"));
-            }
-
-            //Validation for Beam Status
-            var countBeamStatus =
-                existingDailyOperationWarpingDocument
-                    .WarpingBeamProducts
-                    .Where(beamProduct => beamProduct.BeamStatus == BeamStatus.ONPROCESS)
-                    .Count();
-
-            if (!countBeamStatus.Equals(0))
-            {
-                throw Validator.ErrorValidation(("WarpingBeamProductStatus", "Can's Start. There's ONPROCESS Warping Beam on this Operation"));
-            }
 
             //Validation for Operation Status
             var operationStatus = existingDailyOperationWarpingDocument.OperationStatus;
@@ -121,8 +96,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           new ShiftId(request.StartShift.Value),
                                                                           new OperatorId(request.StartOperator.Value),
                                                                           warpingDateTime,
-                                                                          MachineStatus.ONSTART,
-                                                                          request.WarpingBeamNumber);
+                                                                          MachineStatus.ONSTART);
+                        newHistory.SetWarpingBeamId(request.WarpingBeamId);
                         existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
@@ -139,36 +114,37 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     }
                     else if (lastWarpingHistory.MachineStatus == MachineStatus.ONCOMPLETE)
                     {
-                        //if (lastWarpingBeamProduct.BeamStatus.Equals(BeamStatus.ROLLEDUP))
-                        //{
-                        existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
+                        if (request.WarpingBeamId.Value != lastWarpingBeamProduct.WarpingBeamId)
+                        {
+                            existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
 
-                        //Assign Value to Warping History and Add to Warping Document
-                        var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                          new ShiftId(request.StartShift.Value),
-                                                                          new OperatorId(request.StartOperator.Value),
-                                                                          warpingDateTime,
-                                                                          MachineStatus.ONSTART,
-                                                                          request.WarpingBeamNumber);
-                        existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
+                            //Assign Value to Warping History and Add to Warping Document
+                            var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                                              new ShiftId(request.StartShift.Value),
+                                                                              new OperatorId(request.StartOperator.Value),
+                                                                              warpingDateTime,
+                                                                              MachineStatus.ONSTART);
+                            newHistory.SetWarpingBeamId(request.WarpingBeamId);
+                            existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
 
-                        //Assign Value to Warping Beam Product and Add to Warping Document
-                        var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                                  new BeamId(request.WarpingBeamId.Value),
-                                                                                  warpingDateTime,
-                                                                                  BeamStatus.ONPROCESS);
-                        existingDailyOperationWarpingDocument.AddDailyOperationWarpingBeamProduct(newBeamProduct);
+                            //Assign Value to Warping Beam Product and Add to Warping Document
+                            var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                                                      new BeamId(request.WarpingBeamId.Value),
+                                                                                      warpingDateTime,
+                                                                                      BeamStatus.ONPROCESS);
+                            newBeamProduct.SetWarpingTotalBeamLength(0);
+                            existingDailyOperationWarpingDocument.AddDailyOperationWarpingBeamProduct(newBeamProduct);
 
-                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
-                        _storage.Save();
+                            await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
+                            _storage.Save();
 
-                        return existingDailyOperationWarpingDocument;
+                            return existingDailyOperationWarpingDocument;
+                        }
+                        else
+                        {
+                            throw Validator.ErrorValidation(("BeamStatus", "Beam yang dipilih telah selesai diproses, harus Input Beam yang beda"));
+                        }
                     }
-                    //else
-                    //{
-                    //    throw Validator.ErrorValidation(("BeamStatus", "Can't start, latest beam status must ROLLED-UP"));
-                    //}
-                    //}
                     else
                     {
                         throw Validator.ErrorValidation(("MachineStatus", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));

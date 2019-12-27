@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Dtos.WeavingSupplier
+namespace Manufactures.DataTransferObjects.WeavingSupplier
 {
     public class SupplierListDto
     {

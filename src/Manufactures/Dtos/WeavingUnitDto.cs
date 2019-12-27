@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Dtos
+namespace Manufactures.DataTransferObjects
 {
     public class WeavingUnitDto
     {

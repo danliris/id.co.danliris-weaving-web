@@ -64,18 +64,18 @@ namespace Manufactures.Application.Materials.CommandHandlers
 
                 foreach (var requestRing in request.RingDocuments)
                 {
-                    var exsistingRing = materialType.RingDocuments.Where(e => e.Code.Equals(requestRing.Code) && e.Number.Equals(requestRing.Number)).FirstOrDefault();
+                    var existingRing = materialType.RingDocuments.Where(e => e.Code.Equals(requestRing.Code) && e.Number.Equals(requestRing.Number)).FirstOrDefault();
 
-                    if (exsistingRing == null)
+                    if (existingRing == null)
                     {
                         materialType.SetRingNumber(requestRing);
                     }
                 }
             } else
             {
-                foreach (var exsistingRing in materialType.RingDocuments)
+                foreach (var existingRing in materialType.RingDocuments)
                 {
-                    materialType.RemoveRingNumber(exsistingRing);
+                    materialType.RemoveRingNumber(existingRing);
                 }
             }
 

@@ -3,7 +3,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.MachinesPlanning
+namespace Manufactures.DataTransferObjects.MachinesPlanning
 {
     public class MachinesPlanningDocumentDto
     {

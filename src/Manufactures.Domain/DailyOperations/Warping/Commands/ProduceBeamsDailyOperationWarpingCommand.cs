@@ -24,20 +24,11 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "ProduceBeamsOperator")]
         public OperatorId ProduceBeamsOperator { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamLength")]
-        public double WarpingBeamLength { get; set; }
+        [JsonProperty(PropertyName = "WarpingBeamLengthPerOperator")]
+        public double WarpingBeamLengthPerOperator { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamLengthUOMId")]
-        public int WarpingBeamLengthUOMId { get; set; }
-
-        [JsonProperty(PropertyName = "Tention")]
-        public int Tention { get; set; }
-
-        [JsonProperty(PropertyName = "MachineSpeed")]
-        public int MachineSpeed { get; set; }
-
-        [JsonProperty(PropertyName = "PressRoll")]
-        public double PressRoll { get; set; }
+        [JsonProperty(PropertyName = "WarpingBeamLengthUomId")]
+        public int WarpingBeamLengthUomId { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -55,11 +46,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.ProduceBeamsTime).NotEmpty().WithMessage("Waktu Produksi Beam Harus Diisi");
             RuleFor(command => command.ProduceBeamsShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(command => command.ProduceBeamsOperator).NotEmpty().WithMessage("Operator Harus Diisi");
-            RuleFor(command => command.WarpingBeamLength).NotEmpty().WithMessage("Panjang Beam Warping Harus Diisi");
-            RuleFor(command => command.WarpingBeamLengthUOMId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
-            RuleFor(command => command.Tention).NotEmpty().WithMessage("Tention Harus Diisi");
-            RuleFor(command => command.MachineSpeed).NotEmpty().WithMessage("Machine Speed Harus Diisi");
-            RuleFor(command => command.PressRoll).NotEmpty().WithMessage("Press Roll Harus Diisi");
+            RuleFor(command => command.WarpingBeamLengthPerOperator).NotEmpty().WithMessage("Panjang Beam Warping Harus Diisi");
+            RuleFor(command => command.WarpingBeamLengthUomId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
         }
     }
 }

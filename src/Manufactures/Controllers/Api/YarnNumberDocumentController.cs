@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.YarnNumbers.Commands;
 using Manufactures.Domain.YarnNumbers.Repositories;
-using Manufactures.Dtos.YarnNumber;
+using Manufactures.DataTransferObjects.YarnNumber;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;

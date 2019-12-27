@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.YarnNumber
+namespace Manufactures.DataTransferObjects.YarnNumber
 {
     public class YarnNumberDocumentDto
     {

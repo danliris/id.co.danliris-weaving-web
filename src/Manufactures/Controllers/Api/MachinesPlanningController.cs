@@ -4,7 +4,7 @@ using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.MachinesPlanning.Commands;
 using Manufactures.Domain.MachinesPlanning.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Dtos.MachinesPlanning;
+using Manufactures.DataTransferObjects.MachinesPlanning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

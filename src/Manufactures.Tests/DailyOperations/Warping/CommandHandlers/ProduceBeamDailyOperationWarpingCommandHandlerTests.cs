@@ -48,156 +48,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
         }
 
         [Fact]
-        public async Task Handle_MachineStatusOnComplete_ThrowError()
-        {
-            // Arrange
-            // Set Update Start Command Handler Object
-            var unitUnderTest = this.CreateProduceBeamDailyOperationWarpingCommandHandler();
-
-            //Instantiate Current Object
-            //Assign Property to DailyOperationWarpingDocument
-            var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                           new OrderId(Guid.NewGuid()),
-                                                                           40,
-                                                                           DateTimeOffset.UtcNow,
-                                                                           OperationStatus.ONPROCESS);
-
-            var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONCOMPLETE,
-                                                                         "TS122");
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
-
-            var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                          new BeamId(Guid.NewGuid()),
-                                                                          DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
-
-            //Instantiate Incoming Object
-            var warpingDocumentTestId = Guid.NewGuid();
-            var produceBeamsDate = DateTimeOffset.UtcNow;
-            var produceBeamsTime = new TimeSpan(7);
-            var produceBeamsShift = new ShiftId(Guid.NewGuid());
-            var produceBeamsOperator = new OperatorId(Guid.NewGuid());
-            var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
-
-            //Create Update Start Object
-            ProduceBeamsDailyOperationWarpingCommand request =
-                new ProduceBeamsDailyOperationWarpingCommand
-                {
-                    Id = warpingDocumentTestId,
-                    ProduceBeamsDate = produceBeamsDate,
-                    ProduceBeamsTime = produceBeamsTime,
-                    ProduceBeamsShift = produceBeamsShift,
-                    ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
-                };
-
-            //Setup Mock Object for Warping Repo
-            mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
-                 .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't Produce Beam. This current Operation status already ONCOMPLETE", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_OperationStatusOnFinish_ThrowError()
-        {
-            // Arrange
-            // Set Update Start Command Handler Object
-            var unitUnderTest = this.CreateProduceBeamDailyOperationWarpingCommandHandler();
-
-            //Instantiate Current Object
-            //Assign Property to DailyOperationWarpingDocument
-            var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                           new OrderId(Guid.NewGuid()),
-                                                                           40,
-                                                                           DateTimeOffset.UtcNow,
-                                                                           OperationStatus.ONFINISH);
-
-            var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
-
-            var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                          new BeamId(Guid.NewGuid()),
-                                                                          DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
-
-            //Instantiate Incoming Object
-            var warpingDocumentTestId = Guid.NewGuid();
-            var produceBeamsDate = DateTimeOffset.UtcNow;
-            var produceBeamsTime = new TimeSpan(7);
-            var produceBeamsShift = new ShiftId(Guid.NewGuid());
-            var produceBeamsOperator = new OperatorId(Guid.NewGuid());
-            var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
-
-            //Create Update Start Object
-            ProduceBeamsDailyOperationWarpingCommand request =
-                new ProduceBeamsDailyOperationWarpingCommand
-                {
-                    Id = warpingDocumentTestId,
-                    ProduceBeamsDate = produceBeamsDate,
-                    ProduceBeamsTime = produceBeamsTime,
-                    ProduceBeamsShift = produceBeamsShift,
-                    ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
-                };
-
-            //Setup Mock Object for Warping Repo
-            mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
-                 .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Produce Beam. This operation's status already FINISHED", messageException.Message);
-            }
-        }
-
-        [Fact]
         public async Task Handle_WarpingProduceBeamDateLessThanLatestDate_ThrowError()
         {
             // Arrange
@@ -209,6 +59,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -216,8 +67,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -233,9 +83,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -246,10 +93,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -284,6 +128,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -291,8 +136,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
+                                                                         MachineStatus.ONRESUME);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -308,9 +152,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -321,10 +162,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -359,6 +197,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -366,8 +205,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTART,
-                                                                         "TS122");
+                                                                         MachineStatus.ONSTART);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -383,9 +221,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -396,87 +231,14 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
             mockDailyOperationWarpingRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
                  .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            // Act
-            var result = await unitUnderTest.Handle(request, cancellationToken);
-
-            // Assert
-            result.Identity.Should().NotBeEmpty();
-            result.Should().NotBeNull();
-        }
-
-        [Fact]
-        public async Task Handle_MachineStatusOnResume_DataUpdated()
-        {
-            // Arrange
-            // Set Update Start Command Handler Object
-            var unitUnderTest = this.CreateProduceBeamDailyOperationWarpingCommandHandler();
-
-            //Instantiate Current Object
-            //Assign Property to DailyOperationWarpingDocument
-            var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                           new OrderId(Guid.NewGuid()),
-                                                                           40,
-                                                                           DateTimeOffset.UtcNow,
-                                                                           OperationStatus.ONPROCESS);
-
-            var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME,
-                                                                         "TS122");
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
-
-            var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                          new BeamId(Guid.NewGuid()),
-                                                                          DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
-
-            //Instantiate Incoming Object
-            var warpingDocumentTestId = Guid.NewGuid();
-            var produceBeamsDate = DateTimeOffset.UtcNow.AddDays(1);
-            var produceBeamsTime = new TimeSpan(7);
-            var produceBeamsShift = new ShiftId(Guid.NewGuid());
-            var produceBeamsOperator = new OperatorId(Guid.NewGuid());
-            var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
-
-            //Create Update Start Object
-            ProduceBeamsDailyOperationWarpingCommand request =
-                new ProduceBeamsDailyOperationWarpingCommand
-                {
-                    Id = warpingDocumentTestId,
-                    ProduceBeamsDate = produceBeamsDate,
-                    ProduceBeamsTime = produceBeamsTime,
-                    ProduceBeamsShift = produceBeamsShift,
-                    ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
-                };
-
-            //Setup Mock Object for Warping Repo
-            mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
-                 .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
+            this.mockStorage.Setup(x => x.Save());
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;
@@ -501,6 +263,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                            new OrderId(Guid.NewGuid()),
                                                                            40,
+                                                                           1,
                                                                            DateTimeOffset.UtcNow,
                                                                            OperationStatus.ONPROCESS);
 
@@ -508,8 +271,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTOP,
-                                                                         "TS122");
+                                                                         MachineStatus.ONSTOP);
             currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
@@ -525,9 +287,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var produceBeamsShift = new ShiftId(Guid.NewGuid());
             var produceBeamsOperator = new OperatorId(Guid.NewGuid());
             var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
 
             //Create Update Start Object
             ProduceBeamsDailyOperationWarpingCommand request =
@@ -538,10 +297,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsTime = produceBeamsTime,
                     ProduceBeamsShift = produceBeamsShift,
                     ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
+                    WarpingBeamLengthPerOperator = warpingBeamLength
                 };
 
             //Setup Mock Object for Warping Repo
@@ -561,154 +317,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             {
                 // Assert
                 Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't Produce Beam, latest status is not ONSTART or ONRESUME", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_NoOnProcessBeam_ThrowError()
-        {
-            // Arrange
-            // Set Update Start Command Handler Object
-            var unitUnderTest = this.CreateProduceBeamDailyOperationWarpingCommandHandler();
-
-            //Instantiate Current Object
-            //Assign Property to DailyOperationWarpingDocument
-            var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                           new OrderId(Guid.NewGuid()),
-                                                                           40,
-                                                                           DateTimeOffset.UtcNow,
-                                                                           OperationStatus.ONPROCESS);
-
-            var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
-
-            //var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-            //                                                              new BeamId(Guid.NewGuid()),
-            //                                                              DateTimeOffset.UtcNow,
-            //                                                              BeamStatus.ONPROCESS);
-            //currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
-
-            //Instantiate Incoming Object
-            var warpingDocumentTestId = Guid.NewGuid();
-            var produceBeamsDate = DateTimeOffset.UtcNow;
-            var produceBeamsTime = new TimeSpan(7);
-            var produceBeamsShift = new ShiftId(Guid.NewGuid());
-            var produceBeamsOperator = new OperatorId(Guid.NewGuid());
-            var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
-
-            //Create Update Start Object
-            ProduceBeamsDailyOperationWarpingCommand request =
-                new ProduceBeamsDailyOperationWarpingCommand
-                {
-                    Id = warpingDocumentTestId,
-                    ProduceBeamsDate = produceBeamsDate,
-                    ProduceBeamsTime = produceBeamsTime,
-                    ProduceBeamsShift = produceBeamsShift,
-                    ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
-                };
-
-            //Setup Mock Object for Warping Repo
-            mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
-                 .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- WarpingBeamProductStatus: Can't Produce Beam. There isn't ONPROCESS Warping Beam on this Operation", messageException.Message);
-            }
-        }
-
-        [Fact]
-        public async Task Handle_BeamStatusRolledUp_ThrowError()
-        {
-            // Arrange
-            // Set Update Start Command Handler Object
-            var unitUnderTest = this.CreateProduceBeamDailyOperationWarpingCommandHandler();
-
-            //Instantiate Current Object
-            //Assign Property to DailyOperationWarpingDocument
-            var currentWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                           new OrderId(Guid.NewGuid()),
-                                                                           40,
-                                                                           DateTimeOffset.UtcNow,
-                                                                           OperationStatus.ONPROCESS);
-
-            var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
-
-            var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
-                                                                          new BeamId(Guid.NewGuid()),
-                                                                          DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ROLLEDUP);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
-
-            //Instantiate Incoming Object
-            var warpingDocumentTestId = Guid.NewGuid();
-            var produceBeamsDate = DateTimeOffset.UtcNow;
-            var produceBeamsTime = new TimeSpan(7);
-            var produceBeamsShift = new ShiftId(Guid.NewGuid());
-            var produceBeamsOperator = new OperatorId(Guid.NewGuid());
-            var warpingBeamLength = 400;
-            var tention = 10;
-            var machineSpeed = 3500;
-            var pressRoll = 40;
-
-            //Create Update Start Object
-            ProduceBeamsDailyOperationWarpingCommand request =
-                new ProduceBeamsDailyOperationWarpingCommand
-                {
-                    Id = warpingDocumentTestId,
-                    ProduceBeamsDate = produceBeamsDate,
-                    ProduceBeamsTime = produceBeamsTime,
-                    ProduceBeamsShift = produceBeamsShift,
-                    ProduceBeamsOperator = produceBeamsOperator,
-                    WarpingBeamLength = warpingBeamLength,
-                    Tention = tention,
-                    MachineSpeed = machineSpeed,
-                    PressRoll = pressRoll
-                };
-
-            //Setup Mock Object for Warping Repo
-            mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
-                 .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
-
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
-
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- WarpingBeamProductStatus: Can't Produce Beam. There isn't ONPROCESS Warping Beam on this Operation", messageException.Message);
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Suppliers.Commands;
 using Manufactures.Domain.Suppliers.Repositories;
-using Manufactures.Dtos.WeavingSupplier;
+using Manufactures.DataTransferObjects.WeavingSupplier;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

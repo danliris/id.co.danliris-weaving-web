@@ -5,7 +5,7 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Domain.Machines.Commands;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
-using Manufactures.Dtos.Machine;
+using Manufactures.DataTransferObjects.Machine;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

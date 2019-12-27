@@ -56,118 +56,75 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
 
-            //Validation for Beam Status
-            var countBeamStatusOnProcess =
-                existingDailyOperationWarpingDocument
-                    .WarpingBeamProducts
-                    .Where(beamProduct => beamProduct.BeamStatus == BeamStatus.ONPROCESS)
-                    .Count();
+            //Reformat DateTime
+            var year = request.ProduceBeamsDate.Year;
+            var month = request.ProduceBeamsDate.Month;
+            var day = request.ProduceBeamsDate.Day;
+            var hour = request.ProduceBeamsTime.Hours;
+            var minutes = request.ProduceBeamsTime.Minutes;
+            var seconds = request.ProduceBeamsTime.Seconds;
+            var warpingDateTime =
+                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            if (!countBeamStatusOnProcess.Equals(0))
+            //Validation for Start Date
+            var lastWarpingDateLogUtc = new DateTimeOffset(lastWarpingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var warpingProduceBeamsDateLogUtc = new DateTimeOffset(request.ProduceBeamsDate.Date, new TimeSpan(+7, 0, 0));
+
+            if (warpingProduceBeamsDateLogUtc < lastWarpingDateLogUtc)
             {
-                //Validation for Machine Status (History)
-                var currentMachineStatus = lastWarpingHistory.MachineStatus;
-
-                if (currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
-                {
-                    throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam. This current Operation status already ONCOMPLETE"));
-                }
-
-                //Validation for Operation Status
-                var currentOperationStatus = existingDailyOperationWarpingDocument.OperationStatus;
-
-                if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
-                {
-                    throw Validator.ErrorValidation(("OperationStatus", "Can't Produce Beam. This operation's status already FINISHED"));
-                }
-
-                //Reformat DateTime
-                var year = request.ProduceBeamsDate.Year;
-                var month = request.ProduceBeamsDate.Month;
-                var day = request.ProduceBeamsDate.Day;
-                var hour = request.ProduceBeamsTime.Hours;
-                var minutes = request.ProduceBeamsTime.Minutes;
-                var seconds = request.ProduceBeamsTime.Seconds;
-                var warpingDateTime =
-                    new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
-
-                //Validation for Start Date
-                var lastWarpingDateLogUtc = new DateTimeOffset(lastWarpingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-                var warpingProduceBeamsDateLogUtc = new DateTimeOffset(request.ProduceBeamsDate.Date, new TimeSpan(+7, 0, 0));
-
-                if (warpingProduceBeamsDateLogUtc < lastWarpingDateLogUtc)
-                {
-                    throw Validator.ErrorValidation(("ProduceBeamsDate", "Produce Beams date cannot less than latest date log"));
-                }
-                else
-                {
-                    if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
-                    {
-                        throw Validator.ErrorValidation(("ProduceBeamsTime", "Produce Beams time cannot less than or equal latest time log"));
-                    }
-                    else
-                    {
-                        if (lastWarpingHistory.MachineStatus == MachineStatus.ONSTART || lastWarpingHistory.MachineStatus == MachineStatus.ONRESUME)
-                        {
-                            existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
-
-                            //Assign Value to Warping History and Add to Warping Document
-                            var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                              new ShiftId(request.ProduceBeamsShift.Value),
-                                                                              new OperatorId(request.ProduceBeamsOperator.Value),
-                                                                              warpingDateTime,
-                                                                              MachineStatus.ONCOMPLETE,
-                                                                              lastWarpingHistory.WarpingBeamNumber);
-                            existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
-
-                            //Assign Value to Warping Beam Product and Add to Warping Document
-                            //var newBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(), 
-                            //                                                          request.WarpingBeamLength, 
-                            //                                                          request.Tention, 
-                            //                                                          request.MachineSpeed, 
-                            //                                                          request.PressRoll);
-                            lastWarpingBeamProduct.SetWarpingBeamId(lastWarpingBeamProduct.WarpingBeamId);
-
-                            lastWarpingBeamProduct.SetBrokenThreadsCause(lastWarpingBeamProduct.BrokenThreadsCause ?? 0);
-                            lastWarpingBeamProduct.SetConeDeficient(lastWarpingBeamProduct.ConeDeficient ?? 0);
-                            lastWarpingBeamProduct.SetLooseThreadsAmount(lastWarpingBeamProduct.LooseThreadsAmount ?? 0);
-                            lastWarpingBeamProduct.SetRightLooseCreel(lastWarpingBeamProduct.RightLooseCreel ?? 0);
-                            lastWarpingBeamProduct.SetLeftLooseCreel(lastWarpingBeamProduct.LeftLooseCreel ?? 0);
-
-                            lastWarpingBeamProduct.SetWarpingBeamLength(request.WarpingBeamLength);
-                            lastWarpingBeamProduct.SetWarpingBeamLengthUOMId(request.WarpingBeamLengthUOMId);
-                            lastWarpingBeamProduct.SetTention(request.Tention);
-                            lastWarpingBeamProduct.SetMachineSpeed(request.MachineSpeed);
-                            lastWarpingBeamProduct.SetPressRoll(request.PressRoll);
-
-                            lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ROLLEDUP);
-                            lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);
-                            //existingDailyOperationWarpingDocument.UpdateDailyOperationWarpingBeamProduct(newBeamProduct);
-
-                            await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
-                            _storage.Save();
-
-                            //var sizingStock = new SizingBeamStockMonitoringCommand
-                            //{
-                            //    BeamDocumentId = new BeamId(existingDailyOperationWarpingDocument.Identity),
-                            //    SizingEntryDate = request.ProduceBeamsDate,
-                            //    OrderDocumentId = existingDailyOperationWarpingDocument.OrderDocumentId,
-                            //    SizingLengthStock = request.WarpingBeamLength
-                            //};
-
-                            return existingDailyOperationWarpingDocument;
-                        }
-                        else
-                        {
-                            throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam, latest status is not ONSTART or ONRESUME"));
-                        }
-                    }
-                }
+                throw Validator.ErrorValidation(("ProduceBeamsDate", "Produce Beams date cannot less than latest date log"));
             }
             else
             {
-                throw Validator.ErrorValidation(("WarpingBeamProductStatus", "Can't Produce Beam. There isn't ONPROCESS Warping Beam on this Operation"));
+                if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
+                {
+                    throw Validator.ErrorValidation(("ProduceBeamsTime", "Produce Beams time cannot less than or equal latest time log"));
+                }
+                else
+                {
+                    if (lastWarpingHistory.MachineStatus == MachineStatus.ONSTART || lastWarpingHistory.MachineStatus == MachineStatus.ONPROCESSBEAM)
+                    {
+                        existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
+
+                        //Assign Value to Warping History and Add to Warping Document
+                        var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                                          new ShiftId(request.ProduceBeamsShift.Value),
+                                                                          new OperatorId(request.ProduceBeamsOperator.Value),
+                                                                          warpingDateTime,
+                                                                          MachineStatus.ONPROCESSBEAM);
+                        newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
+                        newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
+                        existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
+
+                        //Assign Value to Warping Beam Product and Add to Warping Document
+                        lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);
+
+                        var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
+                        lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
+
+                        lastWarpingBeamProduct.SetWarpingBeamLengthUomId(request.WarpingBeamLengthUomId);
+                        lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ONPROCESS);
+
+                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
+                        _storage.Save();
+
+                        //var sizingStock = new SizingBeamStockMonitoringCommand
+                        //{
+                        //    BeamDocumentId = new BeamId(existingDailyOperationWarpingDocument.Identity),
+                        //    SizingEntryDate = request.ProduceBeamsDate,
+                        //    OrderDocumentId = existingDailyOperationWarpingDocument.OrderDocumentId,
+                        //    SizingLengthStock = request.WarpingBeamLength
+                        //};
+
+                        return existingDailyOperationWarpingDocument;
+                    }
+                    else
+                    {
+                        throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam, latest status is not ONSTART or ONRESUME"));
+                    }
+                }
             }
         }
     }
 }
+

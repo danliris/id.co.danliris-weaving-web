@@ -574,10 +574,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("BeamStatus");
 
-                    b.Property<int?>("BrokenThreadsCause");
-
-                    b.Property<int?>("ConeDeficient");
-
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(32);
@@ -595,10 +591,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset>("LatestDateTimeBeamProduct");
 
-                    b.Property<int?>("LeftLooseCreel");
-
-                    b.Property<int?>("LooseThreadsAmount");
-
                     b.Property<int?>("MachineSpeed");
 
                     b.Property<string>("ModifiedBy")
@@ -608,25 +600,65 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<double?>("PressRoll");
 
-                    b.Property<int?>("RightLooseCreel");
+                    b.Property<string>("PressRollUom");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int?>("Tention");
+                    b.Property<double?>("Tention");
 
                     b.Property<Guid>("WarpingBeamId");
 
-                    b.Property<double?>("WarpingBeamLength");
+                    b.Property<double?>("WarpingTotalBeamLength");
 
-                    b.Property<int?>("WarpingBeamLengthUOMId");
+                    b.Property<int?>("WarpingTotalBeamLengthUomId");
 
                     b.HasKey("Identity");
 
                     b.HasIndex("DailyOperationWarpingDocumentId");
 
                     b.ToTable("Weaving_DailyOperationWarpingBeamProducts");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBrokenCause", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("BrokenCauseId");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<Guid>("DailyOperationWarpingBeamProductId");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<int>("TotalBroken");
+
+                    b.HasKey("Identity");
+
+                    b.HasIndex("DailyOperationWarpingBeamProductId");
+
+                    b.ToTable("Weaving_DailyOperationWarpingBrokenCauses");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingHistory", b =>
@@ -668,7 +700,9 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("ShiftDocumentId");
 
-                    b.Property<string>("WarpingBeamNumber");
+                    b.Property<Guid>("WarpingBeamId");
+
+                    b.Property<double>("WarpingBeamLengthPerOperator");
 
                     b.HasKey("Identity");
 
@@ -683,6 +717,8 @@ namespace DanLiris.Admin.Web.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("AmountOfCones");
+
+                    b.Property<int>("BeamProductResult");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -1485,6 +1521,14 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasOne("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingReadModel", "DailyOperationWarpingDocument")
                         .WithMany("WarpingBeamProducts")
                         .HasForeignKey("DailyOperationWarpingDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBrokenCause", b =>
+                {
+                    b.HasOne("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct", "DailyOperationWarpingBeamProduct")
+                        .WithMany("WarpingBrokenThreadsCauses")
+                        .HasForeignKey("DailyOperationWarpingBeamProductId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

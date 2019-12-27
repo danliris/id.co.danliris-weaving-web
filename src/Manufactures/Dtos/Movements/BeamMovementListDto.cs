@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Movements
+namespace Manufactures.DataTransferObjects.Movements
 {
     public class BeamMovementListDto
     {

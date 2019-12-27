@@ -4,7 +4,7 @@ using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Commands;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

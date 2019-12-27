@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Materials.Commands;
 using Manufactures.Domain.Materials.Repositories;
-using Manufactures.Dtos.MaterialType;
+using Manufactures.DataTransferObjects.MaterialType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;

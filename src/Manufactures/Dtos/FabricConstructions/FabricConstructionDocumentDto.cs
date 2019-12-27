@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.FabricConstructions
+namespace Manufactures.DataTransferObjects.FabricConstructions
 {
     public class FabricConstructionDocumentDto
     {

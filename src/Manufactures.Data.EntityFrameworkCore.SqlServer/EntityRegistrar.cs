@@ -137,10 +137,23 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
+            modelBuilder.Entity<DailyOperationWarpingBrokenCause>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationWarpingBrokenCauses");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 etb.HasKey(e => e.Identity);
+
+                etb.HasMany(e => e.WarpingBrokenThreadsCauses)
+                    .WithOne(e => e.DailyOperationWarpingBeamProduct)
+                    .HasForeignKey(e => e.DailyOperationWarpingBeamProductId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

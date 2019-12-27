@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Shift
+namespace Manufactures.DataTransferObjects.Shift
 {
     public class ShiftDto
     {

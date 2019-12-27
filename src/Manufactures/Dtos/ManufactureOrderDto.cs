@@ -2,7 +2,7 @@
 using Manufactures.Domain.Orders.ValueObjects;
 using System;
 
-namespace Manufactures.Dtos
+namespace Manufactures.DataTransferObjects
 {
     public class ManufactureOrderDto
     {

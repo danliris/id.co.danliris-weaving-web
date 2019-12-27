@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.Dtos.Movements
+namespace Manufactures.DataTransferObjects.Movements
 {
     public class BeamMovementDetailDto
     {

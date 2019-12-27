@@ -2,7 +2,7 @@
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.Commands;
 using Manufactures.Domain.Shifts.Repositories;
-using Manufactures.Dtos.Shift;
+using Manufactures.DataTransferObjects.Shift;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

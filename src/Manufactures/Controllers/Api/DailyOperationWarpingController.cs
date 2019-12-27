@@ -12,7 +12,7 @@ using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingR
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -276,97 +276,33 @@ namespace Manufactures.Controllers.Api
             //return Ok(result);
         }
 
-        //Pause Warping Daily Operation Request
-        [HttpPut("{Id}/pause-process")]
-        public async Task<IActionResult> Pause(string Id, [FromBody]UpdatePauseDailyOperationWarpingCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
+        ////Pause Warping Daily Operation Request
+        //[HttpPut("{Id}/pause-process")]
+        //public async Task<IActionResult> Pause(string Id, [FromBody]UpdatePauseDailyOperationWarpingCommand command)
+        //{
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updatePauseDailyOperationSizingDocument.Identity);
+        //    return Ok(updatePauseDailyOperationSizingDocument.Identity);
+        //}
 
-            //// Sending command to command handler
-            //var dailyOperationWarping = await Mediator.Send(command);
+        ////Resume Warping Daily Operation Request
+        //[HttpPut("{Id}/resume-process")]
+        //public async Task<IActionResult> Resume(string Id, [FromBody]UpdateResumeDailyOperationWarpingCommand command)
+        //{
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
 
-            ////Return result from command handler as Identity(Id)
-            //var warpingHistory =
-            //    dailyOperationWarping
-            //        .WarpingHistories;
-
-            //var result = new List<DailyOperationHistory>();
-
-            //foreach(var history in warpingHistory)
-            //{
-            //    await Task.Yield();
-            //    var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
-
-            //    await Task.Yield();
-            //    var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
-
-            //    var operationHistory =
-            //        new DailyOperationHistory(history.Identity, 
-            //                                  history.WarpingBeamNumber, 
-            //                                  operatorById.Username, 
-            //                                  operatorById.Group, 
-            //                                  history.DateTimeMachine, 
-            //                                  history.MachineStatus, 
-            //                                  shiftById.Name);
-
-            //    result.Add(operationHistory);
-            //}
-
-            //return Ok(result);
-        }
-
-        //Resume Warping Daily Operation Request
-        [HttpPut("{Id}/resume-process")]
-        public async Task<IActionResult> Resume(string Id, [FromBody]UpdateResumeDailyOperationWarpingCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
-
-            return Ok(updateResumeDailyOperationSizingDocument.Identity);
-            //// Sending command to command handler
-            //var dailyOperationWarping = await Mediator.Send(command);
-
-            ////Extract history
-            //await Task.Yield();
-            //var warpingHistory =
-            //    dailyOperationWarping
-            //        .WarpingHistories;
-
-            //var result = new List<DailyOperationHistory>();
-
-            //foreach (var history in warpingHistory)
-            //{
-            //    await Task.Yield();
-            //    var operatorById = await _operatorQuery.GetById(history.OperatorDocumentId);
-
-            //    await Task.Yield();
-            //    var shiftById = await _shiftQuery.GetById(history.ShiftDocumentId);
-
-            //    var operationHistory =
-            //        new DailyOperationHistory(history.Identity,
-            //                                  history.WarpingBeamNumber,
-            //                                  operatorById.Username,
-            //                                  operatorById.Group,
-            //                                  history.DateTimeMachine,
-            //                                  history.MachineStatus,
-            //                                  shiftById.Name);
-
-            //    result.Add(operationHistory);
-            //}
-
-            //return Ok(result);
-        }
+        //    return Ok(updateResumeDailyOperationSizingDocument.Identity);
+        //}
 
         //Produce Beams Warping Daily Operation Request
         [HttpPut("{Id}/produce-beams-process")]
@@ -457,17 +393,17 @@ namespace Manufactures.Controllers.Api
         }
 
         //Finish Warping Daily Operation Request
-        [HttpPut("{Id}/finish-process")]
-        public async Task<IActionResult> Finish(string Id, [FromBody]FinishDailyOperationWarpingCommand command)
+        [HttpPut("{Id}/completed-process")]
+        public async Task<IActionResult> Finish(string Id, [FromBody]CompletedDailyOperationWarpingCommand command)
         {
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
             }
             command.SetId(documentId);
-            var finishDailyOperationSizingDocument = await Mediator.Send(command);
+            var completedDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(finishDailyOperationSizingDocument.Identity);
+            return Ok(completedDailyOperationSizingDocument.Identity);
         }
 
         //Controller for Daily Operation Warping Report
