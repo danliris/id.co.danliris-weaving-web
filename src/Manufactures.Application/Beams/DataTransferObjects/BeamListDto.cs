@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Beams
+namespace Manufactures.DataTransferObjects.Beams
 {
     public class BeamListDto
     {

@@ -3,7 +3,7 @@ using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.Commands;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Dtos.Operator;
+using Manufactures.DataTransferObjects.Operator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

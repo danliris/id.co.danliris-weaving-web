@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Dtos.Movements
+namespace Manufactures.DataTransferObjects.Movements
 {
     public class BeamMovementDto
     {

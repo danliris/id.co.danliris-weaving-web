@@ -12,7 +12,7 @@ using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingR
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

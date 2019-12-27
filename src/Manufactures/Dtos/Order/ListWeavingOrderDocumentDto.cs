@@ -4,7 +4,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Order
+namespace Manufactures.DataTransferObjects.Order
 {
     public class ListWeavingOrderDocumentDto
     {

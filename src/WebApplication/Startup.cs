@@ -56,7 +56,7 @@ using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Orders.Queries.OrderReport;
 using Manufactures.Domain.Shifts.Queries;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

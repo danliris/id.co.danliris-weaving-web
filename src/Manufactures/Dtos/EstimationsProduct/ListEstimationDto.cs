@@ -3,7 +3,7 @@ using Manufactures.Domain.GlobalValueObjects;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.EstimationsProduct
+namespace Manufactures.DataTransferObjects.EstimationsProduct
 {
     public class ListEstimationDto
     {

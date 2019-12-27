@@ -1,7 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using System;
 using System.Collections.Generic;
 using System.Linq;

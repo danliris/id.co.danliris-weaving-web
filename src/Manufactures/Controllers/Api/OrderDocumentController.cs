@@ -5,7 +5,7 @@ using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Dtos.Order;
+using Manufactures.DataTransferObjects.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

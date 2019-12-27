@@ -4,7 +4,7 @@ using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.Dtos.Yarn;
+using Manufactures.DataTransferObjects.Yarn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

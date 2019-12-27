@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
-namespace Manufactures.Dtos.EstimationsProduct
+namespace Manufactures.DataTransferObjects.EstimationsProduct
 {
     public class EstimationByIdDto
     {

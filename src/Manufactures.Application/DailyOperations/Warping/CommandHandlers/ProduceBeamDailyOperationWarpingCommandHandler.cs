@@ -56,31 +56,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
 
-            //Validation for Beam Status
-            //var countBeamStatusOnProcess =
-            //    existingDailyOperationWarpingDocument
-            //        .WarpingBeamProducts
-            //        .Where(beamProduct => beamProduct.BeamStatus == BeamStatus.ONPROCESS)
-            //        .Count();
-
-            //if (!countBeamStatusOnProcess.Equals(0))
-            //{
-            //Validation for Machine Status (History)
-            //var currentMachineStatus = lastWarpingHistory.MachineStatus;
-
-            //if (currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
-            //{
-            //    throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam. This current Operation status already ONCOMPLETE"));
-            //}
-
-            //Validation for Operation Status
-            //var currentOperationStatus = existingDailyOperationWarpingDocument.OperationStatus;
-
-            //if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
-            //{
-            //    throw Validator.ErrorValidation(("OperationStatus", "Can't Produce Beam. This operation's status already FINISHED"));
-            //}
-
             //Reformat DateTime
             var year = request.ProduceBeamsDate.Year;
             var month = request.ProduceBeamsDate.Month;
@@ -150,10 +125,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 }
             }
         }
-        //else
-        //{
-        //    throw Validator.ErrorValidation(("WarpingBeamProductStatus", "Can't Produce Beam. There isn't ONPROCESS Warping Beam on this Operation"));
-        //}
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.MachineTypes.Commands;
 using Manufactures.Domain.MachineTypes.Repositories;
-using Manufactures.Dtos.MachineType;
+using Manufactures.DataTransferObjects.MachineType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

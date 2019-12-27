@@ -5,7 +5,7 @@ using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.Dtos.FabricConstructions;
+using Manufactures.DataTransferObjects.FabricConstructions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;

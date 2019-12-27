@@ -73,7 +73,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.PressRoll).NotEmpty().WithMessage("Press Roll Harus Diisi");
             RuleFor(command => command.PressRollUom).NotEmpty().WithMessage("Satuan Press Roll Harus Diisi");
             RuleFor(command => command.BrokenCauses).NotEmpty();
-            RuleFor(command => command.IsFinishFlag).NotEmpty();
+            RuleFor(command => command.IsFinishFlag).NotNull();
         }
     }
 }

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using FabricConstructionDocument = Manufactures.Domain.FabricConstructions.FabricConstructionDocument;
 
-namespace Manufactures.Dtos.Order
+namespace Manufactures.DataTransferObjects.Order
 {
     public class OrderReportBySearchDto
     {

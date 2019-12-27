@@ -32,10 +32,7 @@ namespace Manufactures.Application.Beams.CommandHandlers
 
             if (existingBeam == null)
             {
-                Validator
-                    .ErrorValidation(("Number",
-                                      "Beam not available with number " +
-                                        existingBeam.Number));
+                throw Validator.ErrorValidation(("Number", "Beam not available with number " + request.Number));
             }
 
             var existingBeamCode =
@@ -43,11 +40,9 @@ namespace Manufactures.Application.Beams.CommandHandlers
                   .Find(x => x.Number.Equals(request.Number))
                   .FirstOrDefault();
 
-            if (request.Number == existingBeam.Number && existingBeamCode != null)
+            if (existingBeamCode != null && request.Number == existingBeam.Number)
             {
-                Validator
-                    .ErrorValidation(("Number",
-                                      "Beam Number has available"));
+                throw Validator.ErrorValidation(("Number", "Beam Number has available"));
             }
 
             existingBeam.SetBeamNumber(request.Number);

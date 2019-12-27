@@ -1,6 +1,6 @@
 ﻿using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Dtos;
+using Manufactures.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;

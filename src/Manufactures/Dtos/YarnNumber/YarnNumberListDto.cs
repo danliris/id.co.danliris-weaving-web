@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Text;
 
-namespace Manufactures.Dtos.YarnNumber
+namespace Manufactures.DataTransferObjects.YarnNumber
 {
     public class YarnNumberListDto
     {

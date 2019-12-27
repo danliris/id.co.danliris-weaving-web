@@ -35,8 +35,9 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             var warpingQuery =
                 _dailyOperationWarpingRepository
                     .Query
-                    .Include(x => x.WarpingHistories)
-                    .Include(x => x.WarpingBeamProducts)
+                    .Include(o => o.WarpingHistories)
+                    .Include(o => o.WarpingBeamProducts)
+                    .ThenInclude(o => o.WarpingBrokenThreadsCauses)
                     .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationWarpingDocument =
                 _dailyOperationWarpingRepository
@@ -54,34 +55,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 .WarpingBeamProducts
                 .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
-
-            //Validation for Beam Status
-            //var countBeamStatus =
-            //    existingDailyOperationWarpingDocument
-            //        .WarpingBeamProducts
-            //        .Where(e => e.BeamStatus == BeamStatus.ONPROCESS)
-            //        .Count();
-
-            //if (countBeamStatus != 0)
-            //{
-            //    throw Validator.ErrorValidation(("WarpingBeamProductStatus", "Can's Start. There's ONPROCESS Warping Beam on this Operation"));
-            //}
-
-            //Validation for Machine Status
-            //var currentMachineStatus = lastWarpingHistory.MachineStatus;
-
-            //if (currentMachineStatus != MachineStatus.ONCOMPLETE)
-            //{
-            //    throw Validator.ErrorValidation(("MachineStatus", "Can't Finish. This Machine's Operation is not ONCOMPLETE"));
-            //}
-
-            //Validation for Finished Operation Status
-            //var currentOperationStatus = existingDailyOperationWarpingDocument.OperationStatus;
-
-            //if (currentOperationStatus == OperationStatus.ONFINISH)
-            //{
-            //    throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation's status already FINISHED"));
-            //}
 
             //Reformat DateTime
             var year = request.ProduceBeamsDate.Year;

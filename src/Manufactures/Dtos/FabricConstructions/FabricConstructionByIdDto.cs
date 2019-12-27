@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Dtos.FabricConstructions
+namespace Manufactures.DataTransferObjects.FabricConstructions
 {
     public class FabricConstructionByIdDto
     {

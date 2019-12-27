@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.MachineType
+namespace Manufactures.DataTransferObjects.MachineType
 {
     public class MachineTypeDocumentDto
     {
