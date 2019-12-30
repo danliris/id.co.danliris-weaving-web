@@ -706,7 +706,7 @@ namespace Manufactures.Controllers.Api
                 SizePickupReportXlsTemplate xlsTemplate = new SizePickupReportXlsTemplate();
                 MemoryStream xls = xlsTemplate.GenerateSizePickupReportXls(sizePickupReport.Item1.ToList());
                 xlsInBytes = xls.ToArray();
-                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Operasional Mesin Harian Sizing");
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Size Pickup");
                 return xlsFile;
             }
             else
