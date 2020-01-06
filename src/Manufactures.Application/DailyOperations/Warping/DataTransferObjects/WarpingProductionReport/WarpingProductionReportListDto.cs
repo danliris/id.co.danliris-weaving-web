@@ -7,44 +7,48 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingProductionReportListDto
     {
-        [JsonProperty(PropertyName = "ProductionDate")]
-        public int ProductionDate { get; set; }
+        [JsonProperty(PropertyName = "AGroupTotal")]
+        public double? AGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "AGroup")]
-        public int AGroup { get; set; }
+        [JsonProperty(PropertyName = "BGroupTotal")]
+        public double? BGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "BGroup")]
-        public int BGroup { get; set; }
+        [JsonProperty(PropertyName = "CGroupTotal")]
+        public double? CGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "CGroup")]
-        public int CGroup { get; set; }
+        [JsonProperty(PropertyName = "DGroupTotal")]
+        public double? DGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "DGroup")]
-        public int DGroup { get; set; }
+        [JsonProperty(PropertyName = "EGroupTotal")]
+        public double? EGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "EGroup")]
-        public int EGroup { get; set; }
+        [JsonProperty(PropertyName = "FGroupTotal")]
+        public double? FGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "FGroup")]
-        public int FGroup { get; set; }
+        [JsonProperty(PropertyName = "GGroupTotal")]
+        public double? GGroupTotal { get; set; }
 
-        [JsonProperty(PropertyName = "GGroup")]
-        public int GGroup { get; set; }
+        [JsonProperty(PropertyName = "TotalAll")]
+        public double TotalAll { get; set; }
 
-        [JsonProperty(PropertyName = "Total")]
-        public int Total { get; set; }
+        [JsonProperty(PropertyName = "PerOperatorList")]
+        public List<PerOperatorProductionListDto> PerOperatorList { get; set; }
 
-        public WarpingProductionReportListDto(int productionDate, int aGroup, int bGroup, int cGroup, int dGroup, int eGroup, int fGroup, int gGroup, int total)
+        public WarpingProductionReportListDto(double aGroupTotal, double bGroupTotal, double cGroupTotal, double dGroupTotal, double eGroupTotal, double fGroupTotal, double gGroupTotal, double totalAll, List<PerOperatorProductionListDto> perOperatorList)
         {
-            ProductionDate = productionDate;
-            AGroup = aGroup;
-            BGroup = bGroup;
-            CGroup = cGroup;
-            DGroup = dGroup;
-            EGroup = eGroup;
-            FGroup = fGroup;
-            GGroup = gGroup;
-            Total = total;
+            AGroupTotal = aGroupTotal;
+            BGroupTotal = bGroupTotal;
+            CGroupTotal = cGroupTotal;
+            DGroupTotal = dGroupTotal;
+            EGroupTotal = eGroupTotal;
+            FGroupTotal = fGroupTotal;
+            GGroupTotal = gGroupTotal;
+            TotalAll = totalAll;
+            PerOperatorList = perOperatorList;
+        }
+
+        public WarpingProductionReportListDto()
+        {
         }
     }
 }

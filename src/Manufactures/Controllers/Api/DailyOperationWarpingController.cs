@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 
 namespace Manufactures.Controllers.Api
 {
@@ -456,36 +458,34 @@ namespace Manufactures.Controllers.Api
 
         //Controller for Daily Operation Warping Report
         [HttpGet("get-warping-production-report")]
-        public async Task<IActionResult> GetWarpingProductionReport(int month = 0,
+        public async Task<IActionResult> GetWarpingProductionReport(int month = 0, 
+                                                                    int year = 0,
                                                                     int page = 1,
-                                                                    int size = 25,
+                                                                    int size = 31,
                                                                     string order = "{}")
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
             var productionWarpingReport = await _warpingProductionReportQuery.GetReports(month,
-                                                                                         page,
-                                                                                         size,
-                                                                                         order);
+                                                                                         year);
 
             await Task.Yield();
             if (index.Equals(true))
             {
+                var fileName = "Laporan Produksi Warping Per Operator_" + month + "_" + year;
+
                 byte[] xlsInBytes;
 
                 WarpingProductionReportXlsTemplate xlsTemplate = new WarpingProductionReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateWarpingProductionReportXls(productionWarpingReport.Item1.ToList());
+                MemoryStream xls = xlsTemplate.GenerateWarpingProductionReportXls(productionWarpingReport);
                 xlsInBytes = xls.ToArray();
-                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Laporan Produksi Warping Per Operator");
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
                 return xlsFile;
             }
             else
             {
-                return Ok(productionWarpingReport.Item1, info: new
-                {
-                    count = productionWarpingReport.Item2
-                });
+                return Ok(productionWarpingReport);
             }
         }
     }

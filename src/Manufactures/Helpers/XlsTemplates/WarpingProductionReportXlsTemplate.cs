@@ -10,7 +10,7 @@ namespace Manufactures.Helpers.XlsTemplates
 {
     public class WarpingProductionReportXlsTemplate
     {
-        public MemoryStream GenerateWarpingProductionReportXls(List<WarpingProductionReportListDto> warpingProductionReportListDto)
+        public MemoryStream GenerateWarpingProductionReportXls(WarpingProductionReportListDto warpingProductionReportListDto)
         {
             DataTable dt = new DataTable();
 
@@ -25,14 +25,14 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Total", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Paraf", DataType = typeof(string) });
 
-            if (warpingProductionReportListDto.Count == 0)
+            if (warpingProductionReportListDto.PerOperatorList.Count == 0)
             {
                 dt.Rows.Add("", "", "", "", "", "", "", "", "", "");
             }
             else
             {
                 int index = 1;
-                foreach (var item in warpingProductionReportListDto)
+                foreach (var item in warpingProductionReportListDto.PerOperatorList)
                 {
                     var aGroup = item.AGroup;
                     var bGroup = item.BGroup;
