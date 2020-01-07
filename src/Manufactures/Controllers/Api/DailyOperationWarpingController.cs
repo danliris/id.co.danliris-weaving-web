@@ -24,6 +24,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 
 namespace Manufactures.Controllers.Api
 {
@@ -42,6 +44,7 @@ namespace Manufactures.Controllers.Api
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
         private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> _dailyOperationWarpingReportQuery;
+        private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto> _warpingProductionReportQuery;
 
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -54,7 +57,8 @@ namespace Manufactures.Controllers.Api
                                                IOperatorQuery<OperatorListDto> operatorQuery,
                                                IShiftQuery<ShiftDto> shiftQuery,
                                                IBeamQuery<BeamListDto> beamQuery,
-                                               IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> dailyOperationWarpingReportQuery)
+                                               IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> dailyOperationWarpingReportQuery,
+                                               IWarpingProductionReportQuery<WarpingProductionReportListDto> warpingProductionReportQuery)
             : base(serviceProvider)
         {
             _warpingQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
@@ -62,6 +66,7 @@ namespace Manufactures.Controllers.Api
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
             _dailyOperationWarpingReportQuery = dailyOperationWarpingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationWarpingReportQuery));
+            _warpingProductionReportQuery = warpingProductionReportQuery ?? throw new ArgumentNullException(nameof(warpingProductionReportQuery));
 
             _dailyOperationWarpingRepository = this.Storage.GetRepository<IDailyOperationWarpingRepository>();
             _beamRepository = this.Storage.GetRepository<IBeamRepository>();
@@ -408,27 +413,27 @@ namespace Manufactures.Controllers.Api
 
         //Controller for Daily Operation Warping Report
         [HttpGet("get-report")]
-        public async Task<IActionResult> GetReport(string orderId, 
-                                                   string materialId, 
-                                                   string operationStatus, 
-                                                   int unitId = 0, 
-                                                   DateTimeOffset? dateFrom = null, 
-                                                   DateTimeOffset? dateTo = null, 
-                                                   int page = 1, 
+        public async Task<IActionResult> GetReport(string orderId,
+                                                   string materialId,
+                                                   string operationStatus,
+                                                   int unitId = 0,
+                                                   DateTimeOffset? dateFrom = null,
+                                                   DateTimeOffset? dateTo = null,
+                                                   int page = 1,
                                                    int size = 25,
                                                    string order = "{}")
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId, 
+            var dailyOperationWarpingReport = await _dailyOperationWarpingReportQuery.GetReports(orderId,
                                                                                                  materialId,
                                                                                                  operationStatus,
                                                                                                  unitId,
-                                                                                                 dateFrom, 
-                                                                                                 dateTo, 
-                                                                                                 page, 
-                                                                                                 size, 
+                                                                                                 dateFrom,
+                                                                                                 dateTo,
+                                                                                                 page,
+                                                                                                 size,
                                                                                                  order);
 
             await Task.Yield();
@@ -448,6 +453,39 @@ namespace Manufactures.Controllers.Api
                 {
                     count = dailyOperationWarpingReport.Item2
                 });
+            }
+        }
+
+        //Controller for Daily Operation Warping Report
+        [HttpGet("get-warping-production-report")]
+        public async Task<IActionResult> GetWarpingProductionReport(int month = 0, 
+                                                                    int year = 0,
+                                                                    int page = 1,
+                                                                    int size = 31,
+                                                                    string order = "{}")
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/xls") > 0;
+
+            var productionWarpingReport = await _warpingProductionReportQuery.GetReports(month,
+                                                                                         year);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                var fileName = "Laporan Produksi Warping Per Operator_" + month + "_" + year;
+
+                byte[] xlsInBytes;
+
+                WarpingProductionReportXlsTemplate xlsTemplate = new WarpingProductionReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateWarpingProductionReportXls(productionWarpingReport);
+                xlsInBytes = xls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return xlsFile;
+            }
+            else
+            {
+                return Ok(productionWarpingReport);
             }
         }
     }
