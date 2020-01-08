@@ -72,13 +72,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (warpingProduceBeamsDateLogUtc < lastWarpingDateLogUtc)
             {
-                throw Validator.ErrorValidation(("ProduceBeamsDate", "Produce Beams date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("ProduceBeamsDate", "Tanggal Tidak Boleh Melebihi Tanggal Sebelumnya"));
             }
             else
             {
                 if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ProduceBeamsTime", "Produce Beams time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("ProduceBeamsTime", "Waktu Tidak Boleh Melebihi Waktu Sebelumnya"));
                 }
                 else
                 {

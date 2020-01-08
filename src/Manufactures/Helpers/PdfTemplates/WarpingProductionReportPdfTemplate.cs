@@ -3,6 +3,7 @@ using iTextSharp.text.pdf;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace Manufactures.Helpers.PdfTemplates
         const string G = "G";
         const string TOTAL = "TOTAL";
         const string INITIALS = "PARAF";
+        const string EMPTY_SPACE = "";
 
         #endregion
 
@@ -40,7 +42,7 @@ namespace Manufactures.Helpers.PdfTemplates
 
         private readonly PdfPTable Title;
         private readonly PdfPTable Header;
-        //private readonly PdfPTable Body;
+        private readonly PdfPTable Body;
 
         #endregion
 
@@ -51,19 +53,19 @@ namespace Manufactures.Helpers.PdfTemplates
             List<string> headerStatic = new List<string> { A, B, C, D, E, F, G, TOTAL };
 
             List<string> headerDynamic = new List<string> { reportModel.AGroupTotal.ToString(),
-                                                                reportModel.BGroupTotal.ToString(),
-                                                                reportModel.CGroupTotal.ToString(),
-                                                                reportModel.DGroupTotal.ToString(),
-                                                                reportModel.EGroupTotal.ToString(),
-                                                                reportModel.FGroupTotal.ToString(),
-                                                                reportModel.GGroupTotal.ToString(),
-                                                                reportModel.TotalAll.ToString() };
+                                                            reportModel.BGroupTotal.ToString(),
+                                                            reportModel.CGroupTotal.ToString(),
+                                                            reportModel.DGroupTotal.ToString(),
+                                                            reportModel.EGroupTotal.ToString(),
+                                                            reportModel.FGroupTotal.ToString(),
+                                                            reportModel.GGroupTotal.ToString(),
+                                                            reportModel.TotalAll.ToString() };
 
             #endregion
 
             #region Body
 
-            List<List<string>> bodyData = new List<List<string>>
+            List<List<string>> productionValue = new List<List<string>>
             {
                 reportModel.PerOperatorList.Select(x => x.ProductionDate.ToString()).ToList(),
                 reportModel.PerOperatorList.Select(x => x.AGroup.ToString()).ToList(),
@@ -74,13 +76,14 @@ namespace Manufactures.Helpers.PdfTemplates
                 reportModel.PerOperatorList.Select(x => x.FGroup.ToString()).ToList(),
                 reportModel.PerOperatorList.Select(x => x.GGroup.ToString()).ToList(),
                 reportModel.PerOperatorList.Select(x => x.Total.ToString()).ToList(),
+                Enumerable.Repeat(string.Empty, reportModel.PerOperatorList.Count).ToList()
             };
 
             #endregion
 
             this.Title = GetTitle();
             this.Header = GetHeader(headerStatic, headerDynamic);
-            //this.Body = GetBody(bodyData);
+            this.Body = GetBody(productionValue);
         }
 
         private PdfPTable GetTitle()
@@ -103,33 +106,51 @@ namespace Manufactures.Helpers.PdfTemplates
 
         private PdfPTable GetHeader(List<string> staticData, List<string> dynamicData)
         {
+            PdfPTable headerTable = new PdfPTable(10);
+            float[] bodyTableWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f };
+            headerTable.SetWidths(bodyTableWidths);
+            headerTable.WidthPercentage = 100;
+
+            PdfPCell headerCell = new PdfPCell() { Border = Rectangle.BOX, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE };
+            PdfPCell headerCellCS2 = new PdfPCell() { Border = Rectangle.BOX, Rowspan = 2, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE };
+
+            headerCellCS2.Phrase = new Phrase(DATE, bold_font);
+            headerTable.AddCell(headerCellCS2);
+
+            foreach (var headerString in staticData)
+            {
+                headerCell.Phrase = new Phrase(headerString, bold_font);
+                headerTable.AddCell(headerCell);
+            }
+
+            headerCellCS2.Phrase = new Phrase(INITIALS, bold_font);
+            headerTable.AddCell(headerCellCS2);
+
+            foreach (var headerValue in dynamicData)
+            {
+                headerCell.Phrase = new Phrase(headerValue, normal_font);
+                headerTable.AddCell(headerCell);
+            }
+
+            return headerTable;
+        }
+
+        private PdfPTable GetBody(List<List<string>> bodyData)
+        {
             PdfPTable bodyTable = new PdfPTable(10);
             float[] bodyTableWidths = new float[] { 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f, 1f };
             bodyTable.SetWidths(bodyTableWidths);
             bodyTable.WidthPercentage = 100;
-
+            
             PdfPCell bodyCell = new PdfPCell() { Border = Rectangle.BOX, HorizontalAlignment = Element.ALIGN_CENTER, VerticalAlignment = Element.ALIGN_MIDDLE };
-            //PdfPCell emptyCell = new PdfPCell() { Border = Rectangle.BOX, FixedHeight = 15f };
-            //emptyCell.Phrase = new Phrase(string.Empty, normal_font);
 
-            bodyCell.Phrase = new Phrase(DATE, bold_font);
-            bodyCell.Rowspan = 2;
-            bodyTable.AddCell(bodyCell);
-
-            foreach (var headerString in staticData)
+            for (int rowNo = 0; rowNo < bodyData.FirstOrDefault().Count; rowNo++)
             {
-                bodyCell.Phrase = new Phrase(headerString, bold_font);
-                bodyTable.AddCell(bodyCell);
-            }
-
-            bodyCell.Phrase = new Phrase(INITIALS, bold_font);
-            bodyCell.Rowspan = 2;
-            bodyTable.AddCell(bodyCell);
-
-            foreach (var headerValue in dynamicData)
-            {
-                bodyCell.Phrase = new Phrase(headerValue, normal_font);
-                bodyTable.AddCell(bodyCell);
+                for (int colNo = 0; colNo < bodyData.Count; colNo++)
+                {
+                    bodyCell.Phrase = new Phrase(bodyData[colNo][rowNo], normal_font);
+                    bodyTable.AddCell(bodyCell);
+                }
             }
 
             return bodyTable;
@@ -145,7 +166,7 @@ namespace Manufactures.Helpers.PdfTemplates
 
             document.Add(Title);
             document.Add(Header);
-            //document.Add(Body);
+            document.Add(Body);
 
             document.Close();
 
