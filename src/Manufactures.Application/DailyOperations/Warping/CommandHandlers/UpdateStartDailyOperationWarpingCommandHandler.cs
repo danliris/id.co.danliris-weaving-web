@@ -77,13 +77,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (warpingStartDateLogUtc < lastWarpingDateLogUtc)
             {
-                throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Melebihi Tanggal Sebelumnya"));
             }
             else
             {
                 if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("StartTime", "Start time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Melebihi Waktu Sebelumnya"));
                 }
                 else
                 {

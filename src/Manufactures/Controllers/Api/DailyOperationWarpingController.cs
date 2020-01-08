@@ -26,6 +26,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
+using Manufactures.Helpers.PdfTemplates;
+using System.Globalization;
 
 namespace Manufactures.Controllers.Api
 {
@@ -459,29 +461,30 @@ namespace Manufactures.Controllers.Api
         //Controller for Daily Operation Warping Report
         [HttpGet("get-warping-production-report")]
         public async Task<IActionResult> GetWarpingProductionReport(int month = 0, 
-                                                                    int year = 0,
-                                                                    int page = 1,
-                                                                    int size = 31,
-                                                                    string order = "{}")
+                                                                    int year = 0)
         {
             var acceptRequest = Request.Headers.Values.ToList();
-            var index = acceptRequest.IndexOf("application/xls") > 0;
+            var index = acceptRequest.IndexOf("application/pdf") > 0;
 
             var productionWarpingReport = await _warpingProductionReportQuery.GetReports(month,
                                                                                          year);
 
             await Task.Yield();
             if (index.Equals(true))
-            {
-                var fileName = "Laporan Produksi Warping Per Operator_" + month + "_" + year;
+            {                
+                var dateTime =
+                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
 
-                byte[] xlsInBytes;
+                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
 
-                WarpingProductionReportXlsTemplate xlsTemplate = new WarpingProductionReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateWarpingProductionReportXls(productionWarpingReport);
-                xlsInBytes = xls.ToArray();
-                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                return xlsFile;
+                var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
+
+                WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
+                MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
+                return new FileStreamResult(productionResultPdf, "application/pdf")
+                {
+                    FileDownloadName = string.Format(fileName)
+                };
             }
             else
             {
