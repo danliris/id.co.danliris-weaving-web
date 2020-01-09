@@ -469,27 +469,27 @@ namespace Manufactures.Controllers.Api
             var productionWarpingReport = await _warpingProductionReportQuery.GetReports(month,
                                                                                          year);
 
-            await Task.Yield();
-            if (index.Equals(true))
-            {                
-                var dateTime =
-                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+            //await Task.Yield();
+            //if (index.Equals(true))
+            //{                
+            //    var dateTime =
+            //        new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
 
-                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+            //    var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
 
-                var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
+            //    var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
 
-                WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
-                MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
-                return new FileStreamResult(productionResultPdf, "application/pdf")
-                {
-                    FileDownloadName = string.Format(fileName)
-                };
-            }
-            else
-            {
+            //    WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
+            //    MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
+            //    return new FileStreamResult(productionResultPdf, "application/pdf")
+            //    {
+            //        FileDownloadName = string.Format(fileName)
+            //    };
+            //}
+            //else
+            //{
                 return Ok(productionWarpingReport);
-            }
+            //}
         }
     }
 }

@@ -44,8 +44,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             {
                 //Add Shell (result) for Daily Operation Warping Report Dto
                 var result = new WarpingProductionReportListDto();
-                var resultPerOperator = new List<PerOperatorProductionListDto>();
 
+                var headers = new List<WarpingProductionReportHeaderDto>();
+                var processedBodyList = new List<WarpingProductionReportProcessedListDto>();
+                
                 if (month == 0)
                 {
                     return (result);
@@ -81,19 +83,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 {
                     for (int i = 1; i <= daysOfMonth; i++)
                     {
-                        double aGroup = 0;
-                        double bGroup = 0;
-                        double cGroup = 0;
-                        double dGroup = 0;
-                        double eGroup = 0;
-                        double fGroup = 0;
-                        double gGroup = 0;
-                        double total = 0;
+                        var dailyProcessedPerOperatorList = new List<DailyProcessedPerOperatorDto>();
 
                         foreach (var warpingHistory in warpingDocument.WarpingHistories
                                                                       .Where(x => x.DateTimeMachine.Day == i &&
-                                                                             x.DateTimeMachine.Month == month &&
-                                                                             x.DateTimeMachine.Year == year))
+                                                                                  x.DateTimeMachine.Month == month &&
+                                                                                  x.DateTimeMachine.Year == year))
                         {
                             //Get Operator Group (Latest History)
                             await Task.Yield();
@@ -110,84 +105,28 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                                     .Where(o => o.Identity.Equals(operatorId))
                                     .FirstOrDefault();
 
-                            switch (operatorDocument.Group)
-                            {
-                                case "A":
-                                    aGroup = aGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "B":
-                                    bGroup = bGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "C":
-                                    cGroup = cGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "D":
-                                    dGroup = dGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "E":
-                                    eGroup = eGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "F":
-                                    fGroup = fGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                                case "G":
-                                    gGroup = gGroup + warpingHistory.WarpingBeamLengthPerOperator;
-                                    break;
-                            }
-
                             await Task.Yield();
-                            total = aGroup + bGroup + cGroup + dGroup + eGroup + fGroup + gGroup;
+                            var dailyProcessedPerOperator = new DailyProcessedPerOperatorDto(operatorDocument.Group, 
+                                                                                             operatorDocument.CoreAccount.Name, 
+                                                                                             warpingHistory.WarpingBeamLengthPerOperator);
+                            dailyProcessedPerOperatorList.Add(dailyProcessedPerOperator);
 
+                            var header = new WarpingProductionReportHeaderDto(operatorDocument.Group,
+                                                                              operatorDocument.CoreAccount.Name);
+                            if (!headers.Any(o => o.Group == header.Group && o.Name == header.Name))
+                            {
+                                headers.Add(header);
+                            }
                         }
+
                         await Task.Yield();
-                        var productionPerOperator = new PerOperatorProductionListDto(i,
-                                                                                     aGroup,
-                                                                                     bGroup,
-                                                                                     cGroup,
-                                                                                     dGroup,
-                                                                                     eGroup,
-                                                                                     fGroup,
-                                                                                     gGroup,
-                                                                                     total);
-                        resultPerOperator.Add(productionPerOperator);
+                        var processedBody = new WarpingProductionReportProcessedListDto(i, dailyProcessedPerOperatorList);
+                        processedBodyList.Add(processedBody);
                     }
-
-                    await Task.Yield();
-                    double totalAGroup = 0;
-                    double totalBGroup = 0;
-                    double totalCGroup = 0;
-                    double totalDGroup = 0;
-                    double totalEGroup = 0;
-                    double totalFGroup = 0;
-                    double totalGGroup = 0;
-                    double totalAll = 0;
-
-                    await Task.Yield();
-                    foreach (var perOperatorLength in resultPerOperator)
-                    {
-                        totalAGroup = totalAGroup + perOperatorLength.AGroup ?? 0;
-                        totalBGroup = totalBGroup + perOperatorLength.BGroup ?? 0;
-                        totalCGroup = totalCGroup + perOperatorLength.CGroup ?? 0;
-                        totalDGroup = totalDGroup + perOperatorLength.DGroup ?? 0;
-                        totalEGroup = totalEGroup + perOperatorLength.EGroup ?? 0;
-                        totalFGroup = totalFGroup + perOperatorLength.FGroup ?? 0;
-                        totalGGroup = totalGGroup + perOperatorLength.GGroup ?? 0;
-                        totalAll = totalAll + perOperatorLength.Total;
-                    }
-
-                    await Task.Yield();
-                    result.AGroupTotal = totalAGroup;
-                    result.BGroupTotal = totalBGroup;
-                    result.CGroupTotal = totalCGroup;
-                    result.DGroupTotal = totalDGroup;
-                    result.EGroupTotal = totalEGroup;
-                    result.FGroupTotal = totalFGroup;
-                    result.GGroupTotal = totalGGroup;
-                    result.TotalAll = totalAll;
-                    result.PerOperatorList = resultPerOperator;
+                    result.Headers = headers;
+                    result.ProcessedList = processedBodyList;
                 }
-
-                return (result);
+                return result;
             }
             catch (Exception)
             {
