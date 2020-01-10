@@ -9,6 +9,7 @@ using Moonlay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 }
                 DateTimeOffset dateTimeFilter =
                     new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+
+                var monthName = dateTimeFilter.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
 
                 //Query for Daily Operation Warping
                 var dailyOperationWarpingQuery =
@@ -123,7 +126,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         var processedBody = new WarpingProductionReportProcessedListDto(i, dailyProcessedPerOperatorList);
                         processedBodyList.Add(processedBody);
                     }
-                    result.Headers = headers;
+                    result.Month = monthName;
+                    result.Year = year.ToString();
+                    result.Headers = headers.OrderBy(o=>o.Group).ToList();
                     result.ProcessedList = processedBodyList;
                 }
                 return result;
