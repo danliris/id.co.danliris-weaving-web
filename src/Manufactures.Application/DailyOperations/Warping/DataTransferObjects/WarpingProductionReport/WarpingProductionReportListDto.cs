@@ -14,14 +14,18 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "Headers")]
         public List<WarpingProductionReportHeaderDto> Headers { get; set; }
 
+        [JsonProperty(PropertyName = "Groups")]
+        public List<WarpingProductionReportGroupDto> Groups { get; set; }
+
         [JsonProperty(PropertyName = "ProcessedList")]
         public List<WarpingProductionReportProcessedListDto> ProcessedList { get; set; }
 
-        public WarpingProductionReportListDto(string month, string year, List<WarpingProductionReportHeaderDto> headers, List<WarpingProductionReportProcessedListDto> processedList)
+        public WarpingProductionReportListDto(string month, string year, List<WarpingProductionReportHeaderDto> headers, List<WarpingProductionReportGroupDto> groups, List<WarpingProductionReportProcessedListDto> processedList)
         {
             Month = month;
             Year = year;
             Headers = headers;
+            Groups = groups;
             ProcessedList = processedList;
         }
 

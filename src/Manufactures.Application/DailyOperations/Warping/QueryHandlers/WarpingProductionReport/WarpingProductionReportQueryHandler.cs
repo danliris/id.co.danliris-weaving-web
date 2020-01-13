@@ -109,18 +109,27 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                                     .FirstOrDefault();
 
                             await Task.Yield();
-                            var dailyProcessedPerOperator = new DailyProcessedPerOperatorDto(operatorDocument.Group, 
-                                                                                             operatorDocument.CoreAccount.Name, 
+                            var dailyProcessedPerOperator = new DailyProcessedPerOperatorDto(operatorDocument.Group,
+                                                                                             operatorDocument.CoreAccount.Name,
                                                                                              warpingHistory.WarpingBeamLengthPerOperator);
-                            dailyProcessedPerOperatorList.Add(dailyProcessedPerOperator);
+                            if (dailyProcessedPerOperator.Total > 0)
+                            {
+                                dailyProcessedPerOperatorList.Add(dailyProcessedPerOperator);
+                            }
+
 
                             var header = new WarpingProductionReportHeaderDto(operatorDocument.Group,
                                                                               operatorDocument.CoreAccount.Name);
-                            if (!headers.Any(o => o.Group == header.Group && o.Name == header.Name))
+
+                            if(warpingHistory.WarpingBeamLengthPerOperator > 0)
                             {
-                                headers.Add(header);
+                                if (!headers.Any(o => o.Group == header.Group && o.Name == header.Name))
+                                {
+                                    headers.Add(header);
+                                }
                             }
                         }
+                        dailyProcessedPerOperatorList = dailyProcessedPerOperatorList.GroupBy(o => new { o.Group, o.Name}).Select(item => new DailyProcessedPerOperatorDto(item.Key.Group, item.Key.Name, item.Sum(x => x.Total))).ToList();
 
                         await Task.Yield();
                         var processedBody = new WarpingProductionReportProcessedListDto(i, dailyProcessedPerOperatorList);
@@ -129,6 +138,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     result.Month = monthName;
                     result.Year = year.ToString();
                     result.Headers = headers.OrderBy(o=>o.Group).ToList();
+                    result.Groups = headers.GroupBy(x => x.Group).Select(x => new WarpingProductionReportGroupDto(x.Key, x.Count())).ToList();
                     result.ProcessedList = processedBodyList;
                 }
                 return result;
