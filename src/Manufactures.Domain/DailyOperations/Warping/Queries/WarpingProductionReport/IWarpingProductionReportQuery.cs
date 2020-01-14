@@ -7,6 +7,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionR
 {
     public interface IWarpingProductionReportQuery<TModel>
     {
-        Task<TModel> GetReports(int month, int year);
+        TModel GetReports(int month, int year);
     }
 }
