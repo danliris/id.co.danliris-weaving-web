@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
+using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Repositories;
@@ -39,15 +40,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 _storage.GetRepository<IShiftRepository>();
         }
 
-        public async Task<WarpingProductionReportListDto> GetReports(int month, int year)
+        public WarpingProductionReportListDto GetReports(int month, int year)
         {
             try
             {
                 //Add Shell (result) for Daily Operation Warping Report Dto
                 var result = new WarpingProductionReportListDto();
-
-                var headers = new List<WarpingProductionReportHeaderDto>();
-                var processedBodyList = new List<WarpingProductionReportProcessedListDto>();
                 
                 if (month == 0)
                 {
@@ -66,88 +64,56 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         .Include(o => o.WarpingHistories)
                         .AsQueryable();
 
-                //Get Daily Operation Sizing Data from Daily Operation Sizing Repo
-                await Task.Yield();
-                var dailyOperationWarpingDocuments =
-                    _dailyOperationWarpingRepository
-                        .Find(dailyOperationWarpingQuery
-                        .Where(o => o.DateTimeOperation.Year == dateTimeFilter.Year && o.DateTimeOperation.Month == dateTimeFilter.Month)
-                        .OrderByDescending(x => x.CreatedDate));
-
-                if (dailyOperationWarpingDocuments == null)
-                {
-                    return (result);
-                }
-
                 var daysOfMonth = DateTime.DaysInMonth(year, month);
 
-                await Task.Yield();
-                foreach (var warpingDocument in dailyOperationWarpingDocuments)
+                var warpingHistories = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery).SelectMany(item => item.WarpingHistories).Where(item => item.DateTimeMachine.Month == month && item.DateTimeMachine.Year == year && item.WarpingBeamLengthPerOperator > 0).ToList();
+                
+                var processedList = new List<WarpingProductionReportProcessedListDto>();
+                for (var i = 0; i < daysOfMonth; i++)
                 {
-                    for (int i = 1; i <= daysOfMonth; i++)
-                    {
-                        var dailyProcessedPerOperatorList = new List<DailyProcessedPerOperatorDto>();
-
-                        foreach (var warpingHistory in warpingDocument.WarpingHistories
-                                                                      .Where(x => x.DateTimeMachine.Day == i &&
-                                                                                  x.DateTimeMachine.Month == month &&
-                                                                                  x.DateTimeMachine.Year == year))
-                        {
-                            //Get Operator Group (Latest History)
-                            await Task.Yield();
-                            var operatorId = warpingHistory.OperatorDocumentId;
-                            var operatorQuery =
-                                _operatorRepository
-                                    .Query
-                                    .OrderByDescending(o => o.CreatedDate);
-
-                            await Task.Yield();
-                            var operatorDocument =
-                                _operatorRepository
-                                    .Find(operatorQuery)
-                                    .Where(o => o.Identity.Equals(operatorId))
-                                    .FirstOrDefault();
-
-                            await Task.Yield();
-                            var dailyProcessedPerOperator = new DailyProcessedPerOperatorDto(operatorDocument.Group,
-                                                                                             operatorDocument.CoreAccount.Name,
-                                                                                             warpingHistory.WarpingBeamLengthPerOperator);
-                            if (dailyProcessedPerOperator.Total > 0)
-                            {
-                                dailyProcessedPerOperatorList.Add(dailyProcessedPerOperator);
-                            }
-
-
-                            var header = new WarpingProductionReportHeaderDto(operatorDocument.Group,
-                                                                              operatorDocument.CoreAccount.Name);
-
-                            if(warpingHistory.WarpingBeamLengthPerOperator > 0)
-                            {
-                                if (!headers.Any(o => o.Group == header.Group && o.Name == header.Name))
-                                {
-                                    headers.Add(header);
-                                }
-                            }
-                        }
-                        dailyProcessedPerOperatorList = dailyProcessedPerOperatorList.GroupBy(o => new { o.Group, o.Name}).Select(item => new DailyProcessedPerOperatorDto(item.Key.Group, item.Key.Name, item.Sum(x => x.Total))).ToList();
-
-                        await Task.Yield();
-                        var processedBody = new WarpingProductionReportProcessedListDto(i, dailyProcessedPerOperatorList);
-                        processedBodyList.Add(processedBody);
-                    }
-                    result.Month = monthName;
-                    result.Year = year.ToString();
-                    result.Headers = headers.OrderBy(o=>o.Group).ToList();
-                    result.Groups = headers.GroupBy(x => x.Group).Select(x => new WarpingProductionReportGroupDto(x.Key, x.Count())).ToList();
-                    result.ProcessedList = processedBodyList;
+                    var selectedHistories = warpingHistories.Where(item => item.DateTimeMachine.Day == i + 1).ToList();
+                    var dailyProcessedPerOperator = GroupWarpingHistoriesByDateAndOperator(selectedHistories);
+                    processedList.Add(new WarpingProductionReportProcessedListDto(i + 1, dailyProcessedPerOperator));
                 }
-                return result;
+
+                var headers = processedList
+                    .SelectMany(s => s.DailyProcessedPerOperator)
+                    .GroupBy(g => new { g.Group, g.Name })
+                    .Select(s => new WarpingProductionReportHeaderDto(s.Key.Group, s.Key.Name))
+                    .ToList();
+
+                var groups = headers
+                    .GroupBy(g => new { g.Group })
+                    .Select(s => new WarpingProductionReportGroupDto(s.Key.Group, s.Count()))
+                    .ToList();
+
+
+                return new WarpingProductionReportListDto(monthName, year.ToString(), headers, groups, processedList);
             }
             catch (Exception)
             {
 
                 throw;
             }
+        }
+
+        private List<DailyProcessedPerOperatorDto> GroupWarpingHistoriesByDateAndOperator(List<DailyOperationWarpingHistory> histories)
+        {
+            var result = new List<DailyProcessedPerOperatorDto>();
+
+            var groupedHistories = histories.GroupBy(item => new { item.OperatorDocumentId }).Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator) });
+
+            var operatorIds = groupedHistories.Select(s => s.OperatorDocumentId).ToList();
+            var operatorQuery = _operatorRepository.Query.Where(w => operatorIds.Contains(w.Identity));
+            var operators = _operatorRepository.Find(operatorQuery);
+
+            foreach (var history in groupedHistories)
+            {
+                var selectedOperator = operators.FirstOrDefault(f => f.Identity == history.OperatorDocumentId);
+                result.Add(new DailyProcessedPerOperatorDto(selectedOperator.Group, selectedOperator.CoreAccount.Name, history.Total));
+            }
+
+            return result;
         }
     }
 }

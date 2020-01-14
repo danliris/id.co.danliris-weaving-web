@@ -466,7 +466,7 @@ namespace Manufactures.Controllers.Api
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
 
-            var productionWarpingReport = await _warpingProductionReportQuery.GetReports(month,
+            var productionWarpingReport = _warpingProductionReportQuery.GetReports(month,
                                                                                          year);
 
             await Task.Yield();

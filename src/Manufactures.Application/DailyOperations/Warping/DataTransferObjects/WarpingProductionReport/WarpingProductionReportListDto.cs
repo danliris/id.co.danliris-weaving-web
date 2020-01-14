@@ -31,6 +31,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 
         public WarpingProductionReportListDto()
         {
+            Headers = new List<WarpingProductionReportHeaderDto>();
+            Groups = new List<WarpingProductionReportGroupDto>();
+            ProcessedList = new List<WarpingProductionReportProcessedListDto>();
         }
     }
 }
