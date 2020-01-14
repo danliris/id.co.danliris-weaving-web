@@ -471,7 +471,7 @@ namespace Manufactures.Controllers.Api
 
             await Task.Yield();
             if (index.Equals(true))
-            {                
+            {
                 var dateTime =
                     new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
 
