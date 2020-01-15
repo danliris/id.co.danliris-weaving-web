@@ -44,7 +44,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             try
             {
-                //Add Shell (result) for Daily Operation Warping Report Dto
+                //Add Shell (result) for Daily Operation Warping Production Report Dto
                 var result = new WarpingProductionReportListDto();
                 
                 if (month == 0)
@@ -66,7 +66,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
                 var daysOfMonth = DateTime.DaysInMonth(year, month);
 
-                var warpingHistories = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery).SelectMany(item => item.WarpingHistories).Where(item => item.DateTimeMachine.Month == month && item.DateTimeMachine.Year == year && item.WarpingBeamLengthPerOperator > 0).ToList();
+                var warpingHistories = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery)
+                                                                       .SelectMany(item => item.WarpingHistories)
+                                                                       .Where(item => item.DateTimeMachine.Month == month && 
+                                                                              item.DateTimeMachine.Year == year && 
+                                                                              item.WarpingBeamLengthPerOperator > 0)
+                                                                       .ToList();
                 
                 var processedList = new List<WarpingProductionReportProcessedListDto>();
                 for (var i = 0; i < daysOfMonth; i++)
@@ -86,7 +91,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     .GroupBy(g => new { g.Group })
                     .Select(s => new WarpingProductionReportGroupDto(s.Key.Group, s.Count()))
                     .ToList();
-
 
                 return new WarpingProductionReportListDto(monthName, year.ToString(), headers, groups, processedList);
             }

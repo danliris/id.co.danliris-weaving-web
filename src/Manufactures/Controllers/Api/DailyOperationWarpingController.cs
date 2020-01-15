@@ -28,6 +28,8 @@ using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionRepor
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 using Manufactures.Helpers.PdfTemplates;
 using System.Globalization;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
 
 namespace Manufactures.Controllers.Api
 {
@@ -47,6 +49,7 @@ namespace Manufactures.Controllers.Api
         private readonly IBeamQuery<BeamListDto> _beamQuery;
         private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> _dailyOperationWarpingReportQuery;
         private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto> _warpingProductionReportQuery;
+        private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> _warpingBrokenReportQuery;
 
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -60,7 +63,8 @@ namespace Manufactures.Controllers.Api
                                                IShiftQuery<ShiftDto> shiftQuery,
                                                IBeamQuery<BeamListDto> beamQuery,
                                                IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> dailyOperationWarpingReportQuery,
-                                               IWarpingProductionReportQuery<WarpingProductionReportListDto> warpingProductionReportQuery)
+                                               IWarpingProductionReportQuery<WarpingProductionReportListDto> warpingProductionReportQuery,
+                                               IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> warpingBrokenReportQuery)
             : base(serviceProvider)
         {
             _warpingQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
@@ -69,6 +73,7 @@ namespace Manufactures.Controllers.Api
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
             _dailyOperationWarpingReportQuery = dailyOperationWarpingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationWarpingReportQuery));
             _warpingProductionReportQuery = warpingProductionReportQuery ?? throw new ArgumentNullException(nameof(warpingProductionReportQuery));
+            _warpingBrokenReportQuery = warpingBrokenReportQuery ?? throw new ArgumentNullException(nameof(warpingBrokenReportQuery));
 
             _dailyOperationWarpingRepository = this.Storage.GetRepository<IDailyOperationWarpingRepository>();
             _beamRepository = this.Storage.GetRepository<IBeamRepository>();
@@ -458,10 +463,44 @@ namespace Manufactures.Controllers.Api
             }
         }
 
-        //Controller for Daily Operation Warping Report
+        //Controller for Daily Operation Warping Production Report
         [HttpGet("get-warping-production-report")]
-        public async Task<IActionResult> GetWarpingProductionReport(int month = 0, 
+        public async Task<IActionResult> GetWarpingProductionReport(int month = 0,
                                                                     int year = 0)
+        {
+            var acceptRequest = Request.Headers.Values.ToList();
+            var index = acceptRequest.IndexOf("application/pdf") > 0;
+
+            var productionWarpingReport = _warpingProductionReportQuery.GetReports(month,
+                                                                                         year);
+
+            await Task.Yield();
+            if (index.Equals(true))
+            {
+                var dateTime =
+                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+
+                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+
+                var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
+
+                WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
+                MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
+                return new FileStreamResult(productionResultPdf, "application/pdf")
+                {
+                    FileDownloadName = string.Format(fileName)
+                };
+            }
+            else
+            {
+                return Ok(productionWarpingReport);
+            }
+        }
+
+        //Controller for Daily Operation Warping Broken Report
+        [HttpGet("get-warping-broken-report")]
+        public async Task<IActionResult> GetWarpingBrokenReport(int month = 0,
+                                                                int year = 0)
         {
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
