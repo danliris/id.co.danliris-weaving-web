@@ -7,6 +7,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThrea
 {
     public interface IWarpingBrokenThreadsReportQuery<TModel>
     {
-        TModel GetReports(int month, int year, string weavingId);
+        TModel GetReports(int month, int year, int weavingId);
     }
 }

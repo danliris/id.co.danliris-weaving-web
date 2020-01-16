@@ -11,12 +11,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public string SpinningUnit { get; set; }
 
         [JsonProperty(PropertyName = "WarpName")]
-        public int WarpName { get; set; }
+        public string WarpName { get; set; }
 
         [JsonProperty(PropertyName = "Span")]
         public int Span { get; set; }
 
-        public WarpingBrokenThreadsReportHeaderWarpDto(string spinningUnit, int warpName, int span)
+        public WarpingBrokenThreadsReportHeaderWarpDto(string spinningUnit, string warpName, int span)
         {
             SpinningUnit = spinningUnit;
             WarpName = warpName;

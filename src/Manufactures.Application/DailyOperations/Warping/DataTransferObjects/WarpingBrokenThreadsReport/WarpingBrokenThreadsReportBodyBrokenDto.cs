@@ -22,5 +22,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
             WarpName = warpName;
             BrokenValue = brokenValue;
         }
+
+        public WarpingBrokenThreadsReportBodyBrokenDto()
+        {
+        }
     }
 }
