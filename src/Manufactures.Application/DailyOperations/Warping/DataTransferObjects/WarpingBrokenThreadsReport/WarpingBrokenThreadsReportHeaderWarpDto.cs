@@ -10,17 +10,19 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "SpinningUnit")]
         public string SpinningUnit { get; set; }
 
+        [JsonProperty(PropertyName = "BrokenName")]
+        public string BrokenName { get; set; }
+
         [JsonProperty(PropertyName = "WarpName")]
         public string WarpName { get; set; }
 
-        [JsonProperty(PropertyName = "Span")]
-        public int Span { get; set; }
-
-        public WarpingBrokenThreadsReportHeaderWarpDto(string spinningUnit, string warpName, int span)
+        public WarpingBrokenThreadsReportHeaderWarpDto(string spinningUnit,
+                                                       string brokenName,
+                                                       string warpName)
         {
             SpinningUnit = spinningUnit;
+            BrokenName = brokenName;
             WarpName = warpName;
-            Span = span;
         }
     }
 }

@@ -81,18 +81,18 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     processedList.Add(new WarpingProductionReportProcessedListDto(i + 1, dailyProcessedPerOperator));
                 }
 
-                var headers = processedList
+                var headerOperatorsName = processedList
                     .SelectMany(s => s.DailyProcessedPerOperator)
                     .GroupBy(g => new { g.Group, g.Name })
                     .Select(s => new WarpingProductionReportHeaderDto(s.Key.Group, s.Key.Name))
                     .ToList();
 
-                var groups = headers
+                var headerGroups = headerOperatorsName
                     .GroupBy(g => new { g.Group })
                     .Select(s => new WarpingProductionReportGroupDto(s.Key.Group, s.Count()))
                     .ToList();
 
-                return new WarpingProductionReportListDto(monthName, year.ToString(), headers, groups, processedList);
+                return new WarpingProductionReportListDto(monthName, year.ToString(), headerOperatorsName, headerGroups, processedList);
             }
             catch (Exception)
             {

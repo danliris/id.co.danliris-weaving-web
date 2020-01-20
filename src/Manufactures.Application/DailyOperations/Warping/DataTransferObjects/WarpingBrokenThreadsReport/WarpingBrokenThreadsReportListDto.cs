@@ -16,6 +16,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "WeavingUnitName")]
         public string WeavingUnitName { get; set; }
 
+        [JsonProperty(PropertyName = "HeaderSuppliers")]
+        public List<WarpingBrokenThreadsReportHeaderSupplierDto> HeaderSuppliers { get; set; }
+
         [JsonProperty(PropertyName = "HeaderWarps")]
         public List<WarpingBrokenThreadsReportHeaderWarpDto> HeaderWarps { get; set; }
 
@@ -27,14 +30,16 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 
         public WarpingBrokenThreadsReportListDto(string month, 
                                                  string year, 
-                                                 string weavingUnitName, 
-                                                 List<WarpingBrokenThreadsReportHeaderWarpDto> headerWarps, 
+                                                 string weavingUnitName,
+                                                 List<WarpingBrokenThreadsReportHeaderSupplierDto> headerSuppliers,
+                                                 List<WarpingBrokenThreadsReportHeaderWarpDto> headerWarps,
                                                  List<WarpingBrokenThreadsReportBodyBrokenDto> bodyBrokens,
                                                  WarpingBrokenThreadsReportFooterDto footers)
         {
             Month = month;
             Year = year;
             WeavingUnitName = weavingUnitName;
+            HeaderSuppliers = headerSuppliers;
             HeaderWarps = headerWarps;
             BodyBrokens = bodyBrokens;
             Footers = footers;
@@ -42,6 +47,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 
         public WarpingBrokenThreadsReportListDto()
         {
+            HeaderSuppliers = new List<WarpingBrokenThreadsReportHeaderSupplierDto>();
             HeaderWarps = new List<WarpingBrokenThreadsReportHeaderWarpDto>();
             BodyBrokens = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
         }

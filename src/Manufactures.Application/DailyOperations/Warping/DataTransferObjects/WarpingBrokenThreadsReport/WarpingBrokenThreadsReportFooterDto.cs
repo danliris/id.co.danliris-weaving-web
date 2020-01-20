@@ -8,7 +8,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
     public class WarpingBrokenThreadsReportFooterDto
     {
         [JsonProperty(PropertyName = "TotalBrokenValue")]
-        public List<double> TotalBrokenValue { get; set; }
+        public List<WarpingBrokenThreadsReportFooterTotalDto> TotalBrokenValue { get; set; }
 
         [JsonProperty(PropertyName = "MaxBrokenValue")]
         public List<double> MaxBrokenValue { get; set; }
@@ -19,15 +19,15 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "LastMonthAverageBrokenValue")]
         public List<double> LastMonthAverageBrokenValue { get; set; }
 
-        public WarpingBrokenThreadsReportFooterDto(List<double> totalBrokenValue, 
+        public WarpingBrokenThreadsReportFooterDto(List<WarpingBrokenThreadsReportFooterTotalDto> totalBrokenValue, 
                                                    List<double> maxBrokenValue, 
-                                                   List<double> minBrokenValue) 
-                                                   //List<double> lastMonthAverageBrokenValue)
+                                                   List<double> minBrokenValue,
+                                                   List<double> lastMonthAverageBrokenValue)
         {
             TotalBrokenValue = totalBrokenValue;
             MaxBrokenValue = maxBrokenValue;
             MinBrokenValue = minBrokenValue;
-            //LastMonthAverageBrokenValue = lastMonthAverageBrokenValue;
+            LastMonthAverageBrokenValue = lastMonthAverageBrokenValue;
         }
     }
 }
