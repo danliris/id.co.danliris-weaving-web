@@ -1,89 +1,158 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingHistory : EntityBase<DailyOperationWarpingHistory>
+    public class DailyOperationWarpingHistory : AggregateRoot<DailyOperationWarpingHistory, DailyOperationWarpingHistoryReadModel>
     {
-        public Guid ShiftDocumentId { get; private set; }
-        public Guid OperatorDocumentId { get; private set; }
+        public ShiftId ShiftDocumentId { get; private set; }
+        public OperatorId OperatorDocumentId { get; private set; }
         public DateTimeOffset DateTimeMachine { get; private set; }
         public string MachineStatus { get; private set; }
         public string Information { get; private set; }
-        public Guid WarpingBeamId { get; private set; }
+        public BeamId WarpingBeamId { get; private set; }
         public double WarpingBeamLengthPerOperator { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
-        public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
 
         public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
 
-        //Constructor for Preparation Process
+        //Constructor (Write)
         public DailyOperationWarpingHistory(Guid identity,
                                             ShiftId shiftDocumentId,
                                             OperatorId operatorDocumentId,
                                             DateTimeOffset dateTimeMachine,
-                                            string machineStatus) : base(identity)
+                                            string machineStatus,
+                                            Guid dailyOperationWarpingDocumentId) : base(identity)
         {
-            ShiftDocumentId = shiftDocumentId.Value;
-            OperatorDocumentId = operatorDocumentId.Value;
+            //Instantiate Properties from Parameter Variable
+            Identity = identity;
+            ShiftDocumentId = shiftDocumentId;
+            OperatorDocumentId = operatorDocumentId;
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
+            DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId;
+
+            MarkTransient();
+
+            ReadModel = new DailyOperationWarpingHistoryReadModel(Identity)
+            {
+                ShiftDocumentId = ShiftDocumentId.Value,
+                OperatorDocumentId = OperatorDocumentId.Value,
+                DateTimeMachine = DateTimeMachine,
+                MachineStatus = MachineStatus,
+                DailyOperationWarpingDocumentId = DailyOperationWarpingDocumentId
+            };
         }
 
-        public void SetShiftId(ShiftId shiftDocumentId)
+        //Constructor for Mapping Object from Database to Domain (Read)
+        public DailyOperationWarpingHistory(DailyOperationWarpingHistoryReadModel readModel) : base(readModel)
         {
-            ShiftDocumentId = shiftDocumentId.Value;
-            MarkModified();
+            //Instantiate object from database
+            ShiftDocumentId = new ShiftId(readModel.ShiftDocumentId);
+            OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId);
+            DateTimeMachine = readModel.DateTimeMachine;
+            MachineStatus = readModel.MachineStatus;
+            Information = readModel.Information;
+            WarpingBeamId = new BeamId(readModel.WarpingBeamId);
+            WarpingBeamLengthPerOperator = readModel.WarpingBeamLengthPerOperator;
+            DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
+        }
+
+        public void SetShiftDocumentId(ShiftId shiftDocumentId)
+        {
+            Validator.ThrowIfNull(() => shiftDocumentId);
+
+            if (shiftDocumentId != ShiftDocumentId)
+            {
+                ShiftDocumentId = shiftDocumentId;
+                ReadModel.ShiftDocumentId = shiftDocumentId.Value;
+
+                MarkModified();
+            }
         }
 
         public void SetOperatorDocumentId(OperatorId operatorDocumentId)
         {
-            if (!OperatorDocumentId.Equals(operatorDocumentId.Value))
+            Validator.ThrowIfNull(() => operatorDocumentId);
+
+            if (operatorDocumentId != OperatorDocumentId)
             {
-                OperatorDocumentId = operatorDocumentId.Value;
+                OperatorDocumentId = operatorDocumentId;
+                ReadModel.OperatorDocumentId = operatorDocumentId.Value;
+
                 MarkModified();
             }
         }
 
         public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
         {
-            DateTimeMachine = dateTimeMachine;
-            MarkModified();
+            Validator.ThrowIfNull(() => dateTimeMachine);
+
+            if (dateTimeMachine != DateTimeMachine)
+            {
+                DateTimeMachine = dateTimeMachine;
+                ReadModel.DateTimeMachine = dateTimeMachine;
+
+                MarkModified();
+            }
         }
 
         public void SetMachineStatus(string machineStatus)
         {
-            MachineStatus = machineStatus;
-            MarkModified();
+            Validator.ThrowIfNull(() => machineStatus);
+
+            if (machineStatus != MachineStatus)
+            {
+                MachineStatus = machineStatus;
+                ReadModel.MachineStatus = machineStatus;
+
+                MarkModified();
+            }
         }
 
         public void SetInformation(string information)
         {
-            if (!Information.Equals(information))
+            Validator.ThrowIfNull(() => information);
+
+            if (information != Information)
             {
                 Information = information;
+                ReadModel.Information = information;
+
                 MarkModified();
             }
         }
 
         public void SetWarpingBeamId(BeamId warpingBeamId)
         {
-            if (!WarpingBeamId.Equals(warpingBeamId))
+            Validator.ThrowIfNull(() => warpingBeamId);
+
+            if (warpingBeamId != WarpingBeamId)
             {
-                WarpingBeamId = warpingBeamId.Value;
+                WarpingBeamId = warpingBeamId;
+                ReadModel.WarpingBeamId = warpingBeamId.Value;
+
                 MarkModified();
             }
         }
 
         public void SetWarpingBeamLengthPerOperator(double warpingBeamLengthPerOperator)
         {
-            if (!WarpingBeamLengthPerOperator.Equals(warpingBeamLengthPerOperator))
+            if (warpingBeamLengthPerOperator != WarpingBeamLengthPerOperator)
             {
                 WarpingBeamLengthPerOperator = warpingBeamLengthPerOperator;
+                ReadModel.WarpingBeamLengthPerOperator = warpingBeamLengthPerOperator;
+
                 MarkModified();
             }
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override DailyOperationWarpingHistory GetEntity()

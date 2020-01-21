@@ -510,37 +510,41 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new ShiftId(firstShift.Identity),
                                                                 new OperatorId(firstOperator.Identity),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+                                                                MachineStatus.ONSTART,
+                                                                firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { firstHistory };
 
             var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
                                                                         new BeamId(firstBeam.Identity),
                                                                         DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+                                                                        BeamStatus.ONPROCESS,
+                                                                        firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { firstBeamProduct };
 
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+                                                                         new OrderId(secondOrderDocument.Identity),
+                                                                         40,
+                                                                         1,
+                                                                         DateTimeOffset.UtcNow,
+                                                                         OperationStatus.ONPROCESS);
 
             var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONSTART);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+                                                                new ShiftId(secondShift.Identity),
+                                                                new OperatorId(secondOperator.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTART,
+                                                                secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { secondHistory };
 
             var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
+                                                                        new BeamId(secondBeam.Identity),
+                                                                        DateTimeOffset.UtcNow,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { secondBeamProduct };
+            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
 
             //Sizing Document Object
@@ -804,37 +808,41 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new ShiftId(firstShift.Identity),
                                                                 new OperatorId(firstOperator.Identity),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+                                                                MachineStatus.ONSTART,
+                                                                firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { firstHistory };
 
             var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
                                                                         new BeamId(firstBeam.Identity),
                                                                         DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+                                                                        BeamStatus.ONPROCESS,
+                                                                        firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { firstBeamProduct };
 
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+                                                                         new OrderId(secondOrderDocument.Identity),
+                                                                         40,
+                                                                         1,
+                                                                         DateTimeOffset.UtcNow,
+                                                                         OperationStatus.ONPROCESS);
 
             var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONSTART);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+                                                                new ShiftId(secondShift.Identity),
+                                                                new OperatorId(secondOperator.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTART,
+                                                                secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { secondHistory };
 
             var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
+                                                                        new BeamId(secondBeam.Identity),
+                                                                        DateTimeOffset.UtcNow,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { secondBeamProduct };
+            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
 
             //Sizing Document Object
@@ -1098,37 +1106,41 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new ShiftId(firstShift.Identity),
                                                                 new OperatorId(firstOperator.Identity),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+                                                                MachineStatus.ONSTART,
+                                                                firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { firstHistory };
 
             var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
                                                                         new BeamId(firstBeam.Identity),
                                                                         DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+                                                                        BeamStatus.ONPROCESS,
+                                                                        firstWarpingDocument.Identity);
+            firstWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { firstBeamProduct };
 
             //Second Warping Document Object
             var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+                                                                         new OrderId(secondOrderDocument.Identity),
+                                                                         40,
+                                                                         1,
+                                                                         DateTimeOffset.UtcNow,
+                                                                         OperationStatus.ONPROCESS);
 
             var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONSTART);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+                                                                new ShiftId(secondShift.Identity),
+                                                                new OperatorId(secondOperator.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTART,
+                                                                secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { secondHistory };
 
             var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
+                                                                        new BeamId(secondBeam.Identity),
+                                                                        DateTimeOffset.UtcNow,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        secondWarpingDocument.Identity);
+            secondWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { secondBeamProduct };
+            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
 
             //Sizing Document Object

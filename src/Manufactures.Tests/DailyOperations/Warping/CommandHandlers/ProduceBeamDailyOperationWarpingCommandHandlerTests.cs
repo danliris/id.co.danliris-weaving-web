@@ -64,17 +64,17 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                            OperationStatus.ONPROCESS);
 
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                         new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
+                                                                          new ShiftId(Guid.NewGuid()),
+                                                                          new OperatorId(Guid.NewGuid()),
+                                                                          DateTimeOffset.UtcNow,
+                                                                          MachineStatus.ONENTRY, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
                                                                           DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
+                                                                          BeamStatus.ROLLEDUP, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct };
 
             //Instantiate Incoming Object
             var warpingDocumentTestId = Guid.NewGuid();
@@ -98,7 +98,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Setup Mock Object for Warping Repo
             mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
 
             //Set Cancellation Token
@@ -136,14 +136,14 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONRESUME);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
+                                                                         MachineStatus.ONENTRY, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
                                                                           DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
+                                                                          BeamStatus.ROLLEDUP, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct };
 
             //Instantiate Incoming Object
             var warpingDocumentTestId = Guid.NewGuid();
@@ -167,7 +167,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Setup Mock Object for Warping Repo
             mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
 
             //Set Cancellation Token
@@ -205,14 +205,14 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTART);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
+                                                                         MachineStatus.ONENTRY, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
                                                                           DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
+                                                                          BeamStatus.ROLLEDUP, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct };
 
             //Instantiate Incoming Object
             var warpingDocumentTestId = Guid.NewGuid();
@@ -236,7 +236,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Setup Mock Object for Warping Repo
             mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
             this.mockStorage.Setup(x => x.Save());
 
@@ -271,14 +271,14 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTOP);
-            currentWarpingDocument.AddDailyOperationWarpingHistory(currentWarpingHistory);
+                                                                         MachineStatus.ONENTRY, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
                                                                           DateTimeOffset.UtcNow,
-                                                                          BeamStatus.ONPROCESS);
-            currentWarpingDocument.AddDailyOperationWarpingBeamProduct(currentBeamProduct);
+                                                                          BeamStatus.ROLLEDUP, currentWarpingDocument.Identity);
+            currentWarpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct };
 
             //Instantiate Incoming Object
             var warpingDocumentTestId = Guid.NewGuid();
@@ -302,7 +302,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Setup Mock Object for Warping Repo
             mockDailyOperationWarpingRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationWarpingDocument>() { currentWarpingDocument });
 
             //Set Cancellation Token

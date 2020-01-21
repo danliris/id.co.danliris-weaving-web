@@ -299,16 +299,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     var shiftName = shiftDocument.Name;
 
                     //Get Daily Operation Warping with Same Order Used in Daily Operation Sizing
-                    var dailyOperationWarpingQuery =
-                        _dailyOperationWarpingRepository
-                            .Query
-                            .Include(o=>o.WarpingBeamProducts)
-                            .Include(o=>o.WarpingHistories)
-                            .Where(o => o.OrderDocumentId.Equals(document.OrderDocumentId.Value))
-                            .OrderByDescending(o => o.CreatedDate);
+                    //var dailyOperationWarpingQuery =
+                    //    _dailyOperationWarpingRepository
+                    //        .Query
+                    //        .Include(o=>o.WarpingBeamProducts)
+                    //        .Include(o=>o.WarpingHistories)
+                    //        .Where(o => o.OrderDocumentId.Equals(document.OrderDocumentId.Value))
+                    //        .OrderByDescending(o => o.CreatedDate);
                     var dailyOperationWarpingDocument =
                         _dailyOperationWarpingRepository
-                            .Find(dailyOperationWarpingQuery);
+                            .Find(x => x.OrderDocumentId == document.OrderDocumentId.Value)
+                            .OrderByDescending(x => x.AuditTrail.CreatedDate);
 
                     //Get ALL BEAM PRODUCT OF WARPING That Used Same Order With Current Sizing Operation And Add to Warping Beam Data Transfer Object
                     List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
@@ -322,7 +323,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                             {
                                 await Task.Yield();
                                 var warpingBeamYarnStrands = warping.AmountOfCones;
-                                var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId, warpingBeamYarnStrands);
+                                var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId.Value, warpingBeamYarnStrands);
                                 warpingListBeamProducts.Add(warpingBeam);
                             }
                         }

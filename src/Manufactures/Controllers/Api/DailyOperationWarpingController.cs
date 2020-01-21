@@ -43,7 +43,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationWarpingController : ControllerApiBase
     {
-        private readonly IDailyOperationWarpingQuery<DailyOperationWarpingListDto> _warpingQuery;
+        private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> _warpingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
@@ -55,10 +55,16 @@ namespace Manufactures.Controllers.Api
             _dailyOperationWarpingRepository;
         private readonly IBeamRepository
             _beamRepository;
+        private readonly IDailyOperationWarpingHistoryRepository
+            _dailyOperationWarpingHistoryRepository;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
+        private readonly IDailyOperationWarpingBrokenCauseRepository
+            _dailyOperationWarpingBrokenCauseRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
-                                               IDailyOperationWarpingQuery<DailyOperationWarpingListDto> warpingQuery,
+                                               IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> warpingQuery,
                                                IOperatorQuery<OperatorListDto> operatorQuery,
                                                IShiftQuery<ShiftDto> shiftQuery,
                                                IBeamQuery<BeamListDto> beamQuery,
@@ -77,6 +83,12 @@ namespace Manufactures.Controllers.Api
 
             _dailyOperationWarpingRepository = this.Storage.GetRepository<IDailyOperationWarpingRepository>();
             _beamRepository = this.Storage.GetRepository<IBeamRepository>();
+            _dailyOperationWarpingHistoryRepository =
+                Storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
+            _dailyOperationWarpingBeamProductRepository =
+                Storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
+            _dailyOperationWarpingBrokenCauseRepository =
+                Storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
         }
 
         [HttpGet]
@@ -141,36 +153,32 @@ namespace Manufactures.Controllers.Api
                     var OrderIdentity = Guid.Parse(OrderDocumentId);
 
                     await Task.Yield();
-                    var warpingQuery =
-                         _dailyOperationWarpingRepository
-                             .Query
-                             .Include(x => x.WarpingHistories)
-                             .Include(x => x.WarpingBeamProducts)
-                             .Where(doc => doc.OrderDocumentId.Equals(OrderIdentity));
 
-                    await Task.Yield();
                     var existingDailyOperationWarpingDocument =
-                        _dailyOperationWarpingRepository
-                            .Find(warpingQuery);
+                        _dailyOperationWarpingRepository.Find(x => x.OrderDocumentId == OrderIdentity);
 
-                    await Task.Yield();
-                    foreach (var warpingDocument in existingDailyOperationWarpingDocument)
+                    foreach (var document in existingDailyOperationWarpingDocument)
                     {
-                        foreach (var warpingBeamProduct in warpingDocument.WarpingBeamProducts)
+                        var beamProducts = _dailyOperationWarpingBeamProductRepository.Find(x => x.DailyOperationWarpingDocumentId == document.Identity);
+                        foreach (var product in beamProducts)
                         {
                             await Task.Yield();
-                            var warpingBeamStatus = warpingBeamProduct.BeamStatus;
+                            var warpingBeamStatus = product.BeamStatus;
                             if (warpingBeamStatus.Equals(BeamStatus.ROLLEDUP))
                             {
                                 await Task.Yield();
-                                var warpingBeamYarnStrands = warpingDocument.AmountOfCones;
-                                var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId, warpingBeamYarnStrands);
+                                var warpingBeamYarnStrands = document.AmountOfCones;
+                                var warpingBeam = new DailyOperationWarpingBeamDto(product.WarpingBeamId.Value, warpingBeamYarnStrands);
                                 warpingListBeamProducts.Add(warpingBeam);
                             }
                         }
-                    }
+                        document.WarpingBeamProducts = beamProducts;
 
+                        
+                    }
                     await Task.Yield();
+                    
+                    
                     foreach (var warpingBeam in warpingListBeamProducts)
                     {
                         await Task.Yield();

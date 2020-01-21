@@ -137,7 +137,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingBrokenCause>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingBrokenCauseReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBrokenCauses");
                 etb.HasKey(e => e.Identity);
@@ -146,20 +146,16 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingBeamProductReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 etb.HasKey(e => e.Identity);
-
-                etb.HasMany(e => e.WarpingBrokenThreadsCauses)
-                    .WithOne(e => e.DailyOperationWarpingBeamProduct)
-                    .HasForeignKey(e => e.DailyOperationWarpingBeamProductId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingHistories");
                 etb.HasKey(e => e.Identity);
@@ -168,18 +164,10 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.HasMany(e => e.WarpingBeamProducts)
-                    .WithOne(e => e.DailyOperationWarpingDocument)
-                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
-
-                etb.HasMany(e => e.WarpingHistories)
-                    .WithOne(e => e.DailyOperationWarpingDocument)
-                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -32,6 +32,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
+        private readonly IDailyOperationWarpingBrokenCauseRepository
+            _dailyOperationWarpingBrokenCauseRepository;
         private readonly IWeavingOrderDocumentRepository
             _orderRepository;
         private readonly IFabricConstructionRepository
@@ -121,13 +125,13 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var dailyOperationWarpingQuery =
                     _dailyOperationWarpingRepository
                         .Query
-                        .Include(h => h.WarpingHistories)
-                        .Include(p => p.WarpingBeamProducts)
-                        .ThenInclude(b => b.WarpingBrokenThreadsCauses)
+                        //.Include(h => h.WarpingHistories)
+                        //.Include(p => p.WarpingBeamProducts)
+                        //.ThenInclude(b => b.WarpingBrokenThreadsCauses)
                         .Where(o => filteredOrderDocumentIds.Contains(o.OrderDocumentId))
                         .AsQueryable();
                 var warpingDocuments = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery);
-
+                
                 //var documentLength = warpingDocuments.Count();
 
                 //Add Shell for (BodyBrokenDto)
@@ -169,7 +173,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     {
                         foreach (var beamProduct in groupedBeamProducts)
                         {
-                            foreach (var broken in beamProduct.WarpingBrokenThreadsCauses)
+                            foreach (var broken in beamProduct.BrokenCauses)
                             {
                                 var brokenName = _warpingBrokenCauseRepository.Find(o => o.Identity == broken.BrokenCauseId).FirstOrDefault().WarpingBrokenCauseName;
 
@@ -274,15 +278,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             var filteredOrderDocumentIds = filteredOrderDocuments.Select(o => o.Identity);
 
             //Preparing Daily Operation Warping Query w/ Filter Identity param equals (filteredOrderDocumentIds)
-            var dailyOperationWarpingQuery =
-                _dailyOperationWarpingRepository
-                    .Query
-                    .Include(h => h.WarpingHistories)
-                    .Include(p => p.WarpingBeamProducts)
-                    .ThenInclude(b => b.WarpingBrokenThreadsCauses)
-                    .Where(o => filteredOrderDocumentIds.Contains(o.OrderDocumentId))
-                    .AsQueryable();
-            var warpingDocuments = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery);
+            
+            var warpingDocuments = _dailyOperationWarpingRepository.Find(x => filteredOrderDocumentIds.Contains(x.OrderDocumentId));
 
             //var documentLength = warpingDocuments.Count();
 
@@ -326,7 +323,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 {
                     foreach (var beamProduct in groupedBeamProducts)
                     {
-                        foreach (var broken in beamProduct.WarpingBrokenThreadsCauses)
+                        foreach (var broken in beamProduct.BrokenCauses)
                         {
                             var brokenName = _warpingBrokenCauseRepository.Find(o => o.Identity == broken.BrokenCauseId).FirstOrDefault().WarpingBrokenCauseName;
 

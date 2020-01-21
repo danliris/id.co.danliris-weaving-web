@@ -1,15 +1,16 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingBeamProduct : EntityBase<DailyOperationWarpingBeamProduct>
+    public class DailyOperationWarpingBeamProduct : AggregateRoot<DailyOperationWarpingBeamProduct, DailyOperationWarpingBeamProductReadModel>
     {
-        public Guid WarpingBeamId { get; private set; }
+        public BeamId WarpingBeamId { get; private set; }
         public double WarpingTotalBeamLength { get; private set; }
         public int WarpingTotalBeamLengthUomId { get; private set; }
         public double? Tention { get; private set; }
@@ -18,130 +19,178 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public string PressRollUom { get; private set; }
         public string BeamStatus { get; private set; }
         public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
-        public IReadOnlyCollection<DailyOperationWarpingBrokenCause> WarpingBrokenThreadsCauses { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
-        public DailyOperationWarpingReadModel DailyOperationWarpingDocument { get; set; }
-
-        public DailyOperationWarpingBeamProduct(Guid identity) : base(identity)
-        {
-            WarpingBrokenThreadsCauses = new List<DailyOperationWarpingBrokenCause>();
-        }
-
+        public List<DailyOperationWarpingBrokenCause> BrokenCauses { get; set; }
+        //Constructor (Write)
         public DailyOperationWarpingBeamProduct(Guid identity,
                                                 BeamId warpingBeamId,
                                                 DateTimeOffset latestDateTimeBeamProduct,
-                                                string beamStatus) : base(identity)
+                                                string beamStatus,
+                                                Guid dailyOperationWarpingDocumentId) : base(identity)
         {
             Identity = identity;
-            WarpingBeamId = warpingBeamId.Value;
+            WarpingBeamId = warpingBeamId;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             BeamStatus = beamStatus;
-            WarpingBrokenThreadsCauses = new List<DailyOperationWarpingBrokenCause>();
+            DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId;
+
+            MarkTransient();
+
+            ReadModel = new DailyOperationWarpingBeamProductReadModel(Identity)
+            {
+
+                WarpingBeamId = WarpingBeamId.Value,
+                WarpingTotalBeamLength = WarpingTotalBeamLength,
+                WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId,
+                Tention = Tention ?? 0,
+                MachineSpeed = MachineSpeed ?? 0,
+                PressRoll = PressRoll ?? 0,
+                PressRollUom = PressRollUom,
+                BeamStatus = BeamStatus,
+                LatestDateTimeBeamProduct = LatestDateTimeBeamProduct,
+                DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId
+            };
         }
 
-        public void SetWarpingBeamId(Guid value)
+        //Constructor for Mapping Object from Database to Domain (Read)
+        public DailyOperationWarpingBeamProduct(DailyOperationWarpingBeamProductReadModel readModel) : base(readModel)
         {
-            if (!WarpingBeamId.Equals(value))
+            //Instantiate Object from Database
+            WarpingBeamId = new BeamId(readModel.WarpingBeamId);
+            LatestDateTimeBeamProduct = readModel.LatestDateTimeBeamProduct;
+            BeamStatus = readModel.BeamStatus;
+            DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
+            WarpingTotalBeamLength = readModel.WarpingTotalBeamLength;
+            WarpingTotalBeamLengthUomId = readModel.WarpingTotalBeamLengthUomId;
+            Tention = readModel.Tention;
+            MachineSpeed = readModel.MachineSpeed;
+            PressRoll = readModel.PressRoll;
+            PressRollUom = readModel.PressRollUom;
+        }
+
+        public void SetWarpingBeamId(BeamId warpingBeamId)
+        {
+            Validator.ThrowIfNull(() => warpingBeamId);
+
+            if (warpingBeamId != WarpingBeamId)
             {
-                WarpingBeamId = value;
+                WarpingBeamId = warpingBeamId;
+                ReadModel.WarpingBeamId = warpingBeamId.Value;
 
                 MarkModified();
             }
         }
 
-        public void SetWarpingTotalBeamLength(double value)
+        public void SetWarpingTotalBeamLength(double warpingTotalBeamLength)
         {
-            if (WarpingTotalBeamLength != value)
+            if (WarpingTotalBeamLength != warpingTotalBeamLength)
             {
-                WarpingTotalBeamLength = value;
+                WarpingTotalBeamLength = warpingTotalBeamLength;
+                ReadModel.WarpingTotalBeamLength = warpingTotalBeamLength;
 
                 MarkModified();
             }
         }
 
-        public void SetWarpingBeamLengthUomId(int value)
+        public void SetWarpingTotalBeamLengthUomId(UomId warpingTotalBeamLengthUomId)
         {
-            if (WarpingTotalBeamLengthUomId != value)
+            if (WarpingTotalBeamLengthUomId != warpingTotalBeamLengthUomId.Value)
             {
-                WarpingTotalBeamLengthUomId = value;
+                WarpingTotalBeamLengthUomId = warpingTotalBeamLengthUomId.Value;
+                ReadModel.WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId;
 
                 MarkModified();
             }
         }
 
-        public void SetTention(double value)
+        public void SetTention(double tention)
         {
-            if (Tention != value)
+            if (Tention != tention)
             {
-                Tention = value;
+                Tention = tention;
+                ReadModel.Tention = tention;
 
                 MarkModified();
             }
         }
 
-        public void SetMachineSpeed(int value)
+        public void SetMachineSpeed(int machineSpeed)
         {
-            if (MachineSpeed != value)
+            if (MachineSpeed != machineSpeed)
             {
-                MachineSpeed = value;
+                MachineSpeed = machineSpeed;
+                ReadModel.MachineSpeed = machineSpeed;
 
                 MarkModified();
             }
         }
 
-        public void SetPressRoll(double value)
+        public void SetPressRoll(double pressRoll)
         {
-            if (PressRoll != value)
+            if (PressRoll != pressRoll)
             {
-                PressRoll = value;
+                PressRoll = pressRoll;
+                ReadModel.PressRoll = pressRoll;
 
                 MarkModified();
             }
         }
 
-        public void SetPressRollUom(string value)
+        public void SetPressRollUom(string pressRollUom)
         {
-            if (PressRollUom != value)
+            Validator.ThrowIfNull(() => pressRollUom);
+
+            if (PressRollUom != pressRollUom)
             {
-                PressRollUom = value;
+                PressRollUom = pressRollUom;
+                ReadModel.PressRollUom = pressRollUom;
 
                 MarkModified();
             }
         }
 
-        public void SetBeamStatus(string value)
+        public void SetBeamStatus(string beamStatus)
         {
-            if (!BeamStatus.Equals(value))
+            Validator.ThrowIfNull(() => beamStatus);
+
+            if (beamStatus != BeamStatus)
             {
-                BeamStatus = value;
+                BeamStatus = beamStatus;
+                ReadModel.BeamStatus = beamStatus;
 
                 MarkModified();
             }
         }
 
-        public void SetLatestDateTimeBeamProduct(DateTimeOffset value)
+        public void SetLatestDateTimeBeamProduct(DateTimeOffset latestDateTimeBeamProduct)
         {
-            if (!LatestDateTimeBeamProduct.Equals(value))
+            if (latestDateTimeBeamProduct != LatestDateTimeBeamProduct)
             {
-                LatestDateTimeBeamProduct = value;
+                LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
+                ReadModel.LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
 
                 MarkModified();
             }
         }
 
-        //Add Warping Broken Threads Causes
-        public void AddWarpingBrokenThreadsCause(DailyOperationWarpingBrokenCause cause)
+        ////Add Warping Broken Threads Causes
+        //public void AddWarpingBrokenThreadsCause(DailyOperationWarpingBrokenCause cause)
+        //{
+        //    //Modified Existing List of Detail
+        //    var dailyOperationWarpingBrokenCauses = WarpingBrokenThreadsCauses.ToList();
+
+        //    //Add New Detail
+        //    dailyOperationWarpingBrokenCauses.Add(cause);
+
+        //    //Update Old List
+        //    WarpingBrokenThreadsCauses = dailyOperationWarpingBrokenCauses;
+
+        //    MarkModified();
+        //}
+
+        public void SetDeleted()
         {
-            //Modified Existing List of Detail
-            var dailyOperationWarpingBrokenCauses = WarpingBrokenThreadsCauses.ToList();
-
-            //Add New Detail
-            dailyOperationWarpingBrokenCauses.Add(cause);
-
-            //Update Old List
-            WarpingBrokenThreadsCauses = dailyOperationWarpingBrokenCauses;
-
-            MarkModified();
+            MarkRemoved();
         }
 
         protected override DailyOperationWarpingBeamProduct GetEntity()

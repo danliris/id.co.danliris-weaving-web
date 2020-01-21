@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Warping.Repositories
 {
-    public class DailyOperationWarpingRepository : AggregateRepostory<DailyOperationWarpingDocument, DailyOperationWarpingReadModel>, IDailyOperationWarpingRepository
+    public class DailyOperationWarpingDocumentRepository : AggregateRepostory<DailyOperationWarpingDocument, DailyOperationWarpingDocumentReadModel>, IDailyOperationWarpingRepository
     {
-        protected override DailyOperationWarpingDocument Map(DailyOperationWarpingReadModel readModel)
+        protected override DailyOperationWarpingDocument Map(DailyOperationWarpingDocumentReadModel readModel)
         {
             return new DailyOperationWarpingDocument(readModel);
         }

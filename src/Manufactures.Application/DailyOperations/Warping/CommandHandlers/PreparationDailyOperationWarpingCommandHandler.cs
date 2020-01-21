@@ -22,19 +22,23 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
         ICommandHandler<PreparationDailyOperationWarpingCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationWarpingRepository 
+        private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
+        private readonly IDailyOperationWarpingHistoryRepository
+            _dailyOperationWarpingHistoryRepository;
 
         public PreparationDailyOperationWarpingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationWarpingRepository = 
+            _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
+            _dailyOperationWarpingHistoryRepository =
+                _storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
         }
 
         //Handle request from User request
         public async Task<DailyOperationWarpingDocument> Handle(PreparationDailyOperationWarpingCommand request, 
-                                                          CancellationToken cancellationToken)
+                                                                CancellationToken cancellationToken)
         {
             //Set date time when user operate
             var year = request.PreparationDate.Year;
@@ -54,16 +58,21 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                        warpingDateTime,
                                                                        OperationStatus.ONPROCESS);
 
+            //Update
+            await _dailyOperationWarpingRepository.Update(newWarpingDocument);
+
             //Add daily operation history
             var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                               new ShiftId(request.PreparationShift.Value),
                                                               new OperatorId(request.PreparationOperator.Value), 
                                                               warpingDateTime,
-                                                              MachineStatus.ONENTRY);
-            newWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
-            
-            //Update and save
-            await _dailyOperationWarpingRepository.Update(newWarpingDocument);
+                                                              MachineStatus.ONENTRY,
+                                                              newWarpingDocument.Identity);
+
+            //Update
+            await _dailyOperationWarpingHistoryRepository.Update(newHistory);
+
+            //Save
             _storage.Save();
 
             //return as object  daily operation

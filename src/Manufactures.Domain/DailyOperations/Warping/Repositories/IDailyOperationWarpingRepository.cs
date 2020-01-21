@@ -5,7 +5,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Repositories
 {
     public interface IDailyOperationWarpingRepository
         : IAggregateRepository<DailyOperationWarpingDocument, 
-                               DailyOperationWarpingReadModel>
+                               DailyOperationWarpingDocumentReadModel>
     {
     }
 }

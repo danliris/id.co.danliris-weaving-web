@@ -197,17 +197,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             //Add Beams Warping Used in Sizing Operation to Data Transfer Object
             //Get Beam Product of Warping That Used Same Order With Current Sizing Operation
             await Task.Yield();
-            var warpingQuery =
-                _dailyOperationWarpingRepository
-                        .Query
-                        .Include(x => x.WarpingHistories)
-                        .Include(x => x.WarpingBeamProducts)
-                        .Where(doc => doc.OrderDocumentId.Equals(dailyOperationSizingDocument.OrderDocumentId.Value));
+            //var warpingQuery =
+            //    _dailyOperationWarpingRepository
+            //            .Query
+            //            .Include(x => x.WarpingHistories)
+            //            .Include(x => x.WarpingBeamProducts)
+            //            .Where(doc => doc.OrderDocumentId.Equals(dailyOperationSizingDocument.OrderDocumentId.Value));
 
             await Task.Yield();
             var warpingDocument =
                 _dailyOperationWarpingRepository
-                        .Find(warpingQuery);
+                        .Find(x => x.OrderDocumentId == dailyOperationSizingDocument.OrderDocumentId.Value);
 
             //Get ALL BEAM PRODUCT OF WARPING That Used Same Order With Current Sizing Operation And Add to Warping Beam Data Transfer Object
             List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
@@ -221,7 +221,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                     {
                         await Task.Yield();
                         var warpingBeamYarnStrands = warping.AmountOfCones;
-                        var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId, warpingBeamYarnStrands);
+                        var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId.Value, warpingBeamYarnStrands);
                         warpingListBeamProducts.Add(warpingBeam);
                     }
                 }
