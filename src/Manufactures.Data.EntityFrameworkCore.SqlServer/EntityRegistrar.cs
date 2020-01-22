@@ -353,6 +353,17 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
+            modelBuilder.Entity<ConstructionYarnDetailReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_ConstructionYarnDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Information).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<FabricConstructionReadModel>(etb =>
             {
                 etb.ToTable("Weaving_ConstructionDocuments");
@@ -362,8 +373,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.WovenType).HasMaxLength(255);
                 etb.Property(p => p.WarpType).HasMaxLength(255);
                 etb.Property(p => p.WeftType).HasMaxLength(255);
-                etb.Property(p => p.ListOfWarp).HasMaxLength(20000);
-                etb.Property(p => p.ListOfWeft).HasMaxLength(20000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -21,8 +21,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
     {
         private readonly IStorage
             _storage;
-        private readonly IDailyOperationWarpingRepository
-            _dailyOperationWarpingRepository;
         private readonly IDailyOperationWarpingHistoryRepository
             _dailyOperationWarpingHistoryRepository;
         private readonly IOperatorRepository

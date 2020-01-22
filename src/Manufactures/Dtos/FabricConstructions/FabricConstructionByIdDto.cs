@@ -63,9 +63,9 @@ namespace Manufactures.DataTransferObjects.FabricConstructions
             WarpTypeForm = document.WarpType;
             WeftTypeForm = document.WeftType;
             TotalYarn = document.TotalYarn;
-            MaterialTypeName = document.MaterialTypeName;
+            MaterialTypeName = document.MaterialType;
             ReedSpace = document.ReedSpace;
-            TotalEnds = document.TotalEnds;
+            TotalEnds = document.YarnStrandsAmount;
             
             ItemsWarp = new List<Warp>();
             ItemsWeft = new List<Weft>();

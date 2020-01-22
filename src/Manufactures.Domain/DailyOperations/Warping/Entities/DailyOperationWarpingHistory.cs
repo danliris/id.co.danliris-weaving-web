@@ -89,8 +89,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
         public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
         {
-            Validator.ThrowIfNull(() => dateTimeMachine);
-
             if (dateTimeMachine != DateTimeMachine)
             {
                 DateTimeMachine = dateTimeMachine;

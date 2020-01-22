@@ -163,22 +163,22 @@ namespace Manufactures.Domain.DailyOperations.Warping
         //    }
         //}
 
-        public void SetOperationStatus(string value)
+        public void SetOperationStatus(string operationStatus)
         {
-            if (!OperationStatus.Equals(value))
+            if (operationStatus != OperationStatus)
             {
-                OperationStatus = value;
+                OperationStatus = operationStatus;
                 ReadModel.OperationStatus = OperationStatus;
 
                 MarkModified();
             }
         }
 
-        public void SetDateTimeOperation(DateTimeOffset value)
+        public void SetDateTimeOperation(DateTimeOffset dateTimeOperation)
         {
-            if (!DateTimeOperation.Equals(value))
+            if (dateTimeOperation != DateTimeOperation)
             {
-                DateTimeOperation = value;
+                DateTimeOperation = dateTimeOperation;
                 ReadModel.DateTimeOperation = DateTimeOperation;
 
                 MarkModified();

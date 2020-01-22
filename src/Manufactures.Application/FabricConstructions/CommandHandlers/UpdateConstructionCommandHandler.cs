@@ -67,19 +67,19 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             constructionDocument.SetAmountOfWeft(request.AmountOfWeft);
             constructionDocument.SetWidth(request.Width);
             constructionDocument.SetWovenType(request.WovenType);
-            constructionDocument.SetWarpType(request.WarpTypeForm);
-            constructionDocument.SetWeftType(request.WeftTypeForm);
+            constructionDocument.SetWarpType(request.WarpType);
+            constructionDocument.SetWeftType(request.WeftType);
             constructionDocument.SetTotalYarn(request.TotalYarn);
-            constructionDocument.SetMaterialTypeName(request.MaterialTypeName);
+            constructionDocument.SetMaterialType(request.MaterialType);
 
             if (request.ReedSpace != 0)
             {
                 constructionDocument.AddReedSpace(request.ReedSpace);
             }
 
-            if (request.TotalEnds != 0)
+            if (request.YarnStrandsAmount != 0)
             {
-                constructionDocument.AddTotalEnds(request.TotalEnds);
+                constructionDocument.AddYarnStrandsAmount(request.YarnStrandsAmount);
             }
 
             // Update exsisting & remove if not has inside request & exsisting data
@@ -87,7 +87,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             {
                 var removedWarp = 
                     request
-                        .ItemsWarp
+                        .ConstructionWarpsDetail
                         .Where(o => o.YarnId == warp.YarnId)
                         .FirstOrDefault();
 
@@ -97,7 +97,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 }
             }
 
-            foreach (var requestWarp in request.ItemsWarp)
+            foreach (var requestWarp in request.ConstructionWarpsDetail)
             {
 
                 var existingWarp = 
@@ -125,7 +125,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             {
                 var removedWeft = 
                     request
-                        .ItemsWeft
+                        .ConstructionWeftsDetail
                         .Where(o => o.YarnId == weft.YarnId)
                         .FirstOrDefault();
 
@@ -135,7 +135,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 }
             }
 
-            foreach (var requestweft in request.ItemsWeft)
+            foreach (var requestweft in request.ConstructionWeftsDetail)
             {
                 var existingWeft = 
                     constructionDocument
