@@ -73,9 +73,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
         {
-
             var result = new List<DailyOperationWarpingListDto>();
-
 
             var query =
                 _dailyOperationWarpingRepository

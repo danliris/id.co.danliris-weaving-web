@@ -10,7 +10,6 @@ namespace Manufactures.Domain.FabricConstructions.Entity
 {
     public class ConstructionYarnDetail : AggregateRoot<ConstructionYarnDetail, ConstructionYarnDetailReadModel>
     {
-
         public YarnId YarnId { get; private set; }
         public double Quantity { get; private set; }
         public string Information { get; private set; }
@@ -99,6 +98,11 @@ namespace Manufactures.Domain.FabricConstructions.Entity
 
                 MarkModified();
             }
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override ConstructionYarnDetail GetEntity()

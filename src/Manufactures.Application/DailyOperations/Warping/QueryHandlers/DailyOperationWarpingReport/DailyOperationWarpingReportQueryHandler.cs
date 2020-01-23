@@ -179,7 +179,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                         fabricConstructionDocument =
                             _fabricConstructionRepository
                                 .Find(fabricConstructionQuery)
-                                .Where(o => o.Identity.Equals(fabricConstructionId) && o.ListOfWarp.Any(x => x.YarnId.Value.ToString() == materialId))
+                                .Where(o => o.Identity.Equals(fabricConstructionId) && o.ConstructionWarpsDetail.Any(x => x.YarnId.Value.ToString() == materialId))
                                 .FirstOrDefault();
                     }
                     else
@@ -199,7 +199,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
 
                     //Get Material Type
                     await Task.Yield();
-                    var yarnIds = fabricConstructionDocument.ListOfWarp.Select(x => x.YarnId.Value).ToList();
+                    var yarnIds = fabricConstructionDocument.ConstructionWarpsDetail.Select(x => x.YarnId.Value).ToList();
                     var yarnDocuments =
                         _yarnRepository
                             .Find(o => yarnIds.Contains(o.Identity));

@@ -1,12 +1,9 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.FabricConstructions.ReadModels;
-using Manufactures.Domain.Events;
-using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Moonlay;
+using Manufactures.Domain.FabricConstructions.Entity;
 
 namespace Manufactures.Domain.FabricConstructions
 {
@@ -25,8 +22,8 @@ namespace Manufactures.Domain.FabricConstructions
         public double YarnStrandsAmount { get; private set; }
         //Jumlah Total Benang
         public double TotalYarn { get; private set; }
-        public List<ConstructionDetail> ListOfWarp { get; private set; }
-        public List<ConstructionDetail> ListOfWeft { get; private set; }
+        public List<ConstructionYarnDetail> ConstructionWarpsDetail { get; private set; }
+        public List<ConstructionYarnDetail> ConstructionWeftsDetail { get; private set; }
 
         public FabricConstructionDocument(Guid id,
                                           string constructionNumber,
@@ -188,7 +185,7 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void AddReedSpace(double reedSpace)
+        public void SetReedSpace(double reedSpace)
         {
             if (reedSpace != ReedSpace)
             {
@@ -199,7 +196,7 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void AddYarnStrandsAmount(double yarnStrandsAmount)
+        public void SetYarnStrandsAmount(double yarnStrandsAmount)
         {
             if (yarnStrandsAmount != YarnStrandsAmount)
             {
@@ -221,17 +218,22 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        //public void RemoveWarp(ConstructionDetail value)
-        //{
-        //    var warps = ListOfWarp.ToList();
-        //    warps.Remove(value);
-        //    ListOfWarp = warps;
-        //    ReadModel.ListOfWarp = ListOfWarp.Serialize();
+        //---------------------------------------------------------------
 
-        //    MarkModified();
+        //public void AddWarp(ConstructionYarnDetail value)
+        //{
+        //    if (!ListOfWarp.Any(o => o.YarnId == value.YarnId))
+        //    {
+        //        var warps = ListOfWarp.ToList();
+        //        warps.Add(value);
+        //        ListOfWarp = warps;
+        //        ReadModel.ListOfWarp = ListOfWarp.Serialize();
+
+        //        MarkModified();
+        //    }
         //}
 
-        //public void UpdateWarp(ConstructionDetail value)
+        //public void UpdateWarp(ConstructionYarnDetail value)
         //{
         //    foreach (var warp in ListOfWarp)
         //    {
@@ -246,30 +248,30 @@ namespace Manufactures.Domain.FabricConstructions
         //    }
         //}
 
-        //public void RemoveWeft(ConstructionDetail value)
+        //public void RemoveWarp(ConstructionYarnDetail value)
         //{
-        //    var wefts = ListOfWeft.ToList();
-        //    wefts.Remove(value);
-        //    ListOfWeft = wefts;
-        //    ReadModel.ListOfWeft = ListOfWeft.Serialize();
+        //    var warps = ListOfWarp.ToList();
+        //    warps.Remove(value);
+        //    ListOfWarp = warps;
+        //    ReadModel.ListOfWarp = ListOfWarp.Serialize();
 
         //    MarkModified();
         //}
 
-        //public void AddWarp(ConstructionDetail value)
+        //public void AddWeft(ConstructionYarnDetail value)
         //{
-        //    if (!ListOfWarp.Any(o => o.YarnId == value.YarnId))
+        //    if (!ListOfWeft.Any(o => o.YarnId == value.YarnId))
         //    {
-        //        var warps = ListOfWarp.ToList();
-        //        warps.Add(value);
-        //        ListOfWarp = warps;
-        //        ReadModel.ListOfWarp = ListOfWarp.Serialize();
+        //        var wefts = ListOfWeft.ToList();
+        //        wefts.Add(value);
+        //        ListOfWeft = wefts;
+        //        ReadModel.ListOfWeft = ListOfWeft.Serialize();
 
         //        MarkModified();
         //    }
         //}
 
-        //public void UpdateWeft(ConstructionDetail value)
+        //public void UpdateWeft(ConstructionYarnDetail value)
         //{
         //    foreach (var weft in ListOfWeft)
         //    {
@@ -284,18 +286,24 @@ namespace Manufactures.Domain.FabricConstructions
         //    }
         //}
 
-        //public void AddWeft(ConstructionDetail value)
+        //public void RemoveWeft(ConstructionYarnDetail value)
         //{
-        //    if (!ListOfWeft.Any(o => o.YarnId == value.YarnId))
-        //    {
-        //        var wefts = ListOfWeft.ToList();
-        //        wefts.Add(value);
-        //        ListOfWeft = wefts;
-        //        ReadModel.ListOfWeft = ListOfWeft.Serialize();
+        //    var wefts = ListOfWeft.ToList();
+        //    wefts.Remove(value);
+        //    ListOfWeft = wefts;
+        //    ReadModel.ListOfWeft = ListOfWeft.Serialize();
 
-        //        MarkModified();
-        //    }
+        //    MarkModified();
         //}
+        public void SetModified()
+        {
+            MarkModified();
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
+        }
 
         protected override FabricConstructionDocument GetEntity()
         {

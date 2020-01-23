@@ -139,7 +139,7 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
                                 .ToList();
 
                         var warpMaterials = new List<string>();
-                        foreach (var item in constructionDocument.ListOfWarp)
+                        foreach (var item in constructionDocument.ConstructionWarpsDetail)
                         {
                             var material = 
                                 _yarnDocumentRepository
@@ -155,7 +155,7 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
                         }
 
                         var weftMaterials = new List<string>();
-                        foreach (var item in constructionDocument.ListOfWarp)
+                        foreach (var item in constructionDocument.ConstructionWarpsDetail)
                         {
                             var material = _yarnDocumentRepository.Find(o => o.Identity == item.YarnId.Value).FirstOrDefault();
                             if (material != null)

@@ -1,11 +1,9 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.FabricConstructions.Commands;
 using Manufactures.Domain.FabricConstructions.Repositories;
-using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.DataTransferObjects.FabricConstructions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;
@@ -15,6 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Application.FabricConstructions.DataTransferObjects;
+using Manufactures.Domain.FabricConstructions.Queries;
 
 namespace Manufactures.Controllers.Api
 {
@@ -29,8 +29,11 @@ namespace Manufactures.Controllers.Api
         private readonly IYarnDocumentRepository _yarnDocumentRepository;
         private readonly IYarnNumberRepository _yarnNumberRepository;
 
-        public FabricConstructionController(IServiceProvider serviceProvider, 
-                                      IWorkContext workContext) : base(serviceProvider)
+        private readonly IFabricConstructionQuery<FabricConstructionListDto> _constructionDocumentQuery;
+
+        public FabricConstructionController(IServiceProvider serviceProvider,
+                                            IFabricConstructionQuery<FabricConstructionListDto> constructionDocumentQuery,
+                                            IWorkContext workContext) : base(serviceProvider)
         {
             _constructionDocumentRepository = 
                 this.Storage.GetRepository<IFabricConstructionRepository>();
@@ -40,6 +43,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IYarnDocumentRepository>();
             _yarnNumberRepository =
                 this.Storage.GetRepository<IYarnNumberRepository>();
+
+            _constructionDocumentQuery = constructionDocumentQuery ?? throw new ArgumentNullException(nameof(constructionDocumentQuery));
         }
 
         [HttpGet]
@@ -49,19 +54,13 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null, 
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query = 
-                _constructionDocumentRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var constructionDocuments = 
-                _constructionDocumentRepository.Find(query)
-                                               .Select(item => new FabricConstructionDocumentDto(item));
+            var constructionDocuments = await _constructionDocumentQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 constructionDocuments = 
                     constructionDocuments
-                        .Where(entity => entity.ConstructionNumber.Contains(keyword, 
-                                                                            StringComparison.OrdinalIgnoreCase));
+                        .Where(o => o.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -70,7 +69,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(FabricConstructionDocumentDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(FabricConstructionListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -84,85 +83,24 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            var ResultConstructionDocuments =
-                constructionDocuments.Skip(page * size).Take(size);
-            int totalRows = constructionDocuments.Count();
-            int resultCount = ResultConstructionDocuments.Count();
-            page = page + 1;
+            var result = constructionDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
 
-            await Task.Yield();
-
-            return Ok(ResultConstructionDocuments, info: new
-            {
-                page,
-                size,
-                total = totalRows,
-                count = resultCount
-            });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
-            var Identity = Guid.Parse(Id);
-            var constructionDocument =
-                _constructionDocumentRepository.Find(o => o.Identity == Identity)
-                                               .FirstOrDefault();
-
-            var result = new FabricConstructionByIdDto(constructionDocument);
-            
-            foreach(var detail in constructionDocument.ListOfWarp)
-            {
-                var yarn = 
-                    _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value)
-                                           .FirstOrDefault();
-                var materialType = 
-                    _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value)
-                                           .FirstOrDefault();
-                var yarnNumber = 
-                    _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
-                                         .FirstOrDefault();
-
-                var yarnValueObject = 
-                    new YarnValueObject(yarn.Identity, 
-                                        yarn.Code, 
-                                        yarn.Name, 
-                                        materialType.Code, 
-                                        yarnNumber.Code);
-
-                var warp = 
-                    new Warp(detail.Quantity, 
-                             detail.Information, 
-                             yarnValueObject);
-
-                result.AddWarp(warp);
-                await Task.Yield();
-            }
-
-            foreach(var detail in constructionDocument.ListOfWeft)
-            {
-                var yarn = _yarnDocumentRepository.Find(o => o.Identity == detail.YarnId.Value).FirstOrDefault();
-                var materialType = _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value).FirstOrDefault();
-                var yarnNumber = _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value).FirstOrDefault();
-
-                var yarnValueObject = new YarnValueObject(yarn.Identity, yarn.Code, yarn.Name, materialType.Code, yarnNumber.Code);
-
-                var weft = new Weft(detail.Quantity, detail.Information, yarnValueObject);
-
-                result.AddWeft(weft);
-                await Task.Yield();
-            }
-
-            await Task.Yield();
+            var identity = Guid.Parse(Id);
+            var constructionDocument = await _constructionDocumentQuery.GetById(identity);
 
             if (constructionDocument == null)
             {
-                return NotFound();
+                return NotFound(identity);
             }
-            else
-            {
-                return Ok(result);
-            }
+
+            return Ok(constructionDocument);
         }
 
         [HttpPost]

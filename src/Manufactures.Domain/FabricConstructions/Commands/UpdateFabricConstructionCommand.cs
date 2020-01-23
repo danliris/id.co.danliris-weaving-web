@@ -46,10 +46,10 @@ namespace Manufactures.Domain.FabricConstructions.Commands
         public double TotalYarn { get; set; }
 
         [JsonProperty(PropertyName = "ConstructionWarpsDetail")]
-        public List<ConstructionYarnDetail> ConstructionWarpsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWarpsDetail { get; set; }
 
         [JsonProperty(PropertyName = "ConstructionWeftsDetail")]
-        public List<ConstructionYarnDetail> ConstructionWeftsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWeftsDetail { get; set; }
 
         public void SetId(Guid Id)
         {

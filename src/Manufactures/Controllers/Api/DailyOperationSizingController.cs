@@ -43,24 +43,12 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationSizingController : ControllerApiBase
     {
-        //private readonly IDailyOperationSizingRepository
-        //    _dailyOperationSizingDocumentRepository;
-        //private readonly IMachineRepository
-        //    _machineRepository;
-        //private readonly IMachineTypeRepository
-        //    _machineTypeRepository;
         private readonly IWeavingOrderDocumentRepository
             _orderDocumentRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
-        //private readonly IShiftRepository
-        //    _shiftDocumentRepository;
-        //private readonly IBeamRepository
-        //    _beamDocumentRepository;
         private readonly IOperatorRepository
             _operatorDocumentRepository;
-        //private readonly IDailyOperationWarpingRepository
-        //    _dailyOperationWarpingDocumentRepository;
 
         private readonly IDailyOperationSizingQuery<DailyOperationSizingListDto> _sizingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
@@ -104,24 +92,6 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IOperatorRepository>();
         }
 
-        //public DailyOperationSizingController(IServiceProvider serviceProvider,
-        //                                         IWorkContext workContext)
-        //    : base(serviceProvider)
-        //{
-        //_dailyOperationSizingDocumentRepository =
-        //    this.Storage.GetRepository<IDailyOperationSizingRepository>();
-        //_machineRepository =
-        //    this.Storage.GetRepository<IMachineRepository>();
-        //_machineTypeRepository =
-        //    this.Storage.GetRepository<IMachineTypeRepository>();
-        //_shiftDocumentRepository =
-        //    this.Storage.GetRepository<IShiftRepository>();
-        //_beamDocumentRepository =
-        //    this.Storage.GetRepository<IBeamRepository>();
-        //_dailyOperationWarpingDocumentRepository =
-        //    this.Storage.GetRepository<IDailyOperationWarpingRepository>();
-        //}
-
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
                                              int size = 25,
@@ -161,8 +131,7 @@ namespace Manufactures.Controllers.Api
                         dailyOperationSizingDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
-
-            //int totalRows = dailyOperationSizingDocuments.Count();
+            
             var result = dailyOperationSizingDocuments.Skip((page - 1) * size).Take(size);
             var total = result.Count();
 

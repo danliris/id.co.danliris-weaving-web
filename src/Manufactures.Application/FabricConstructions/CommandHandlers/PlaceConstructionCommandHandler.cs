@@ -4,6 +4,7 @@ using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.Commands;
 using Manufactures.Domain.FabricConstructions.Entity;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 Validator.ErrorValidation(("ConstructionNumber", request.ConstructionNumber + " Has Available!"));
             }
 
-            var constructionDocument = new FabricConstructionDocument(Guid.NewGuid(),
+            var newConstructionDocument = new FabricConstructionDocument(Guid.NewGuid(),
                                                                       request.ConstructionNumber,
                                                                       request.MaterialType,
                                                                       request.WovenType,
@@ -56,41 +57,24 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                                                                       request.ReedSpace,
                                                                       request.YarnStrandsAmount,
                                                                       request.TotalYarn);
-            await _constructionDocumentRepository.Update(constructionDocument);
+            await _constructionDocumentRepository.Update(newConstructionDocument);
 
             var mergedYarnsDetail = request.ConstructionWarpsDetail.Concat(request.ConstructionWeftsDetail).ToList();
             foreach(var yarnDetail in mergedYarnsDetail)
             {
-                await _constructionYarnDetailRepository.Update(yarnDetail);
+                var newConstructionYarnDetail = new ConstructionYarnDetail(Guid.NewGuid(),
+                                                                           new YarnId(yarnDetail.YarnId),
+                                                                           yarnDetail.Quantity, 
+                                                                           yarnDetail.Information, 
+                                                                           yarnDetail.Type, 
+                                                                           newConstructionDocument.Identity);
+
+                await _constructionYarnDetailRepository.Update(newConstructionYarnDetail);
             }
-            //if (request.ReedSpace != 0)
-            //{
-            //    constructionDocument.AddReedSpace(request.ReedSpace);
-            //}
 
-            //if (request.YarnStrandsAmount != 0)
-            //{
-            //    constructionDocument.AddYarnStrandsAmount(request.YarnStrandsAmount);
-            //}
-
-            //if (request.ConstructionWarpsDetail.Count > 0)
-            //{
-            //    foreach (var warp in request.ConstructionWarpsDetail)
-            //    {
-            //        constructionDocument.AddWarp(warp);
-            //    }
-            //}
-
-            //if (request.ConstructionWeftsDetail.Count > 0)
-            //{
-            //    foreach (var weft in request.ConstructionWeftsDetail)
-            //    {
-            //        constructionDocument.AddWeft(weft);
-            //    }
-            //}
             _storage.Save();
 
-            return constructionDocument;
+            return newConstructionDocument;
         }
     }
 }

@@ -185,6 +185,11 @@ namespace Manufactures.Domain.DailyOperations.Warping
             }
         }
 
+        public void SetDeleted()
+        {
+            MarkRemoved();
+        }
+
         //Get entity
         protected override DailyOperationWarpingDocument GetEntity()
         {

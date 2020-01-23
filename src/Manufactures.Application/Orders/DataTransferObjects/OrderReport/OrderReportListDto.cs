@@ -1,13 +1,11 @@
 ﻿using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.ValueObjects;
-using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Application.Orders.DataTransferObjects.OrderReport
 {

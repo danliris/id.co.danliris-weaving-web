@@ -5,22 +5,18 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.BrokenCauses.Warping.Repositories;
-using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
-using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Suppliers.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingBrokenThreadsReport
 {
@@ -32,10 +28,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
-        private readonly IDailyOperationWarpingBeamProductRepository
-            _dailyOperationWarpingBeamProductRepository;
-        private readonly IDailyOperationWarpingBrokenCauseRepository
-            _dailyOperationWarpingBrokenCauseRepository;
+        //private readonly IDailyOperationWarpingBeamProductRepository
+        //    _dailyOperationWarpingBeamProductRepository;
+        //private readonly IDailyOperationWarpingBrokenCauseRepository
+        //    _dailyOperationWarpingBrokenCauseRepository;
         private readonly IWeavingOrderDocumentRepository
             _orderRepository;
         private readonly IFabricConstructionRepository
@@ -162,7 +158,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                             .FirstOrDefault();
 
                     //Get WarpName using List of Warp Id (warpIds)
-                    var warpIds = constructionDocument.ListOfWarp.Select(o => o.YarnId.Value);
+                    var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
                     var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
                     var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
@@ -312,7 +308,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         .FirstOrDefault();
 
                 //Get WarpName using List of Warp Id (warpIds)
-                var warpIds = constructionDocument.ListOfWarp.Select(o => o.YarnId.Value);
+                var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
                 var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
                 var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
