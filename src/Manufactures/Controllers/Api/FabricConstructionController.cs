@@ -24,10 +24,14 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class FabricConstructionController : ControllerApiBase
     {
-        private readonly IFabricConstructionRepository _constructionDocumentRepository;
-        private readonly IMaterialTypeRepository _materialTypeRepository;
-        private readonly IYarnDocumentRepository _yarnDocumentRepository;
-        private readonly IYarnNumberRepository _yarnNumberRepository;
+        private readonly IFabricConstructionRepository 
+            _constructionDocumentRepository;
+        private readonly IMaterialTypeRepository 
+            _materialTypeRepository;
+        private readonly IYarnDocumentRepository 
+            _yarnDocumentRepository;
+        private readonly IYarnNumberRepository 
+            _yarnNumberRepository;
 
         private readonly IFabricConstructionQuery<FabricConstructionListDto> _constructionDocumentQuery;
 

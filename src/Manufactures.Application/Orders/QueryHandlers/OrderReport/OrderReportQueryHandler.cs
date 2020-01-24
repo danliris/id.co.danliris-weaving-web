@@ -26,7 +26,7 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
             _http;
         private readonly IStorage
             _storage;
-        private readonly IWeavingOrderDocumentRepository 
+        private readonly IOrderRepository 
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
@@ -42,7 +42,7 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
             _storage =
                 storage;
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _estimationProductRepository =

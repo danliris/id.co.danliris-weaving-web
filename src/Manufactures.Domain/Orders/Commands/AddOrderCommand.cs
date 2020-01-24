@@ -8,11 +8,8 @@ using System;
 
 namespace Manufactures.Domain.Orders.Commands
 {
-    public class UpdateOrderCommand : ICommand<OrderDocument>
+    public class AddOrderCommand : ICommand<OrderDocument>
     {
-        [JsonProperty(PropertyName = "Id")]
-        public Guid Id { get; private set; }
-
         [JsonProperty(PropertyName = "Period")]
         public DateTimeOffset Period { get; private set; }
 
@@ -51,18 +48,42 @@ namespace Manufactures.Domain.Orders.Commands
 
         [JsonProperty(PropertyName = "Unit")]
         public UnitId Unit { get; private set; }
+        //-------------------------------------------------------------------------
+        //[JsonProperty(PropertyName = "FabricConstructionDocument")]
+        //public FabricConstructionCommand FabricConstructionDocument { get; set; }
 
-        public void SetId(Guid Id)
-        {
-            this.Id = Id;
-        }
+        //[JsonProperty(PropertyName = "DateOrdered")]
+        //public DateTimeOffset DateOrdered { get; set; }
+
+        //[JsonProperty(PropertyName = "WarpOriginId")]
+        //public string WarpOriginId { get; set; }
+
+        //[JsonProperty(PropertyName = "WeftOriginId")]
+        //public string WeftOriginId { get; set; }
+
+        //[JsonProperty(PropertyName = "WholeGrade")]
+        //public int WholeGrade { get; set; }
+
+        //[JsonProperty(PropertyName = "YarnType")]
+        //public string YarnType { get; set; }
+
+        //[JsonProperty(PropertyName = "Period")]
+        //public Period Period { get; set; }
+
+        //[JsonProperty(PropertyName = "WarpComposition")]
+        //public Composition WarpComposition { get; set; }
+
+        //[JsonProperty(PropertyName = "WeftComposition")]
+        //public Composition WeftComposition { get; set; }
+
+        //[JsonProperty(PropertyName = "WeavingUnit")]
+        //public WeavingUnit WeavingUnit { get; set; }
     }
 
-    public class UpdateWeavingOrderCommandValidator : AbstractValidator<UpdateOrderCommand>
+    public class WeavingOrderCommandValidator : AbstractValidator<AddOrderCommand>
     {
-        public UpdateWeavingOrderCommandValidator()
+        public WeavingOrderCommandValidator()
         {
-            RuleFor(command => command.Id).NotEmpty().WithMessage("Id Harus Valid");
             RuleFor(command => command.Period).NotEmpty().WithMessage("Periode Harus Diisi");
             RuleFor(command => command.ConstructionDocumentId).NotEmpty().WithMessage("Konstruksi Harus Diisi");
             RuleFor(command => command.YarnType).NotEmpty().WithMessage("Jenis Benang Tidak Boleh Kosong");

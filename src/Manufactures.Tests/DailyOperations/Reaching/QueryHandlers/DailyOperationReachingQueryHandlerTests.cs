@@ -50,7 +50,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             mockShiftRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
-        private readonly Mock<IWeavingOrderDocumentRepository>
+        private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
@@ -64,7 +64,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
             this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
-            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
             this.mockDailyOperationReachingTyingRepo = this.mockRepository.Create<IDailyOperationReachingRepository>();
 
@@ -72,7 +72,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>()).Returns(mockDailyOperationReachingTyingRepo.Object);
         }
@@ -175,7 +175,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Instantiate Object for Beam
@@ -354,7 +354,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Instantiate Object for Beam

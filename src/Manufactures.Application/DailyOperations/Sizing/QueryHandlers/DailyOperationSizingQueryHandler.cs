@@ -30,7 +30,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             _machineRepository;
         private readonly IMachineTypeRepository
             _machineTypeRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _orderProductionRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -53,7 +53,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             _machineTypeRepository =
                 _storage.GetRepository<IMachineTypeRepository>();
             _orderProductionRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _shiftRepository =

@@ -21,7 +21,7 @@ namespace Manufactures.Application.BeamStockMonitoring.QueryHandlers
             _beamStockMonitoringRepository;
         private readonly IBeamRepository
             _beamRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _orderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -34,7 +34,7 @@ namespace Manufactures.Application.BeamStockMonitoring.QueryHandlers
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
             _orderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
         }

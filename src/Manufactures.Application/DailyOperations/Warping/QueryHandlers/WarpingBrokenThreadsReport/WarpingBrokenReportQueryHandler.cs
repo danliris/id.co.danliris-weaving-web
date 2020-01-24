@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         //    _dailyOperationWarpingBeamProductRepository;
         //private readonly IDailyOperationWarpingBrokenCauseRepository
         //    _dailyOperationWarpingBrokenCauseRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _orderRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -52,7 +52,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _orderRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _warpingBrokenCauseRepository =

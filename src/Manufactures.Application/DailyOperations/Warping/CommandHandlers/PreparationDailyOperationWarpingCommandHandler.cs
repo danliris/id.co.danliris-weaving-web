@@ -61,7 +61,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             //Update
             await _dailyOperationWarpingRepository.Update(newWarpingDocument);
 
-            //Add daily operation history
+            //Add Daily Operation History
             var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                               new ShiftId(request.PreparationShift.Value),
                                                               new OperatorId(request.PreparationOperator.Value), 

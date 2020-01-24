@@ -391,7 +391,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<OrderDocumentReadModel>(etb =>
+            modelBuilder.Entity<OrderReadModel>(etb =>
             {
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);

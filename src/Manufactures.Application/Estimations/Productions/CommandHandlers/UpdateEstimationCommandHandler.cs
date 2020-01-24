@@ -20,14 +20,14 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
         private readonly IStorage _storage;
         private readonly IEstimationProductRepository _estimationProductRepository;
         private readonly IFabricConstructionRepository _constructionDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
+        private readonly IOrderRepository _weavingOrderDocumentRepository;
 
         public UpdateEstimationCommandHandler(IStorage storage)
         {
             _storage = storage;
             _estimationProductRepository = _storage.GetRepository<IEstimationProductRepository>();
             _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
-            _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
+            _weavingOrderDocumentRepository = _storage.GetRepository<IOrderRepository>();
         }
 
         public async Task<EstimatedProductionDocument> Handle(UpdateEstimationProductCommand request, CancellationToken cancellationToken)

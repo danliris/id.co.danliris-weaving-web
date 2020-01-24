@@ -85,6 +85,14 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 throw Validator.ErrorValidation(("ConstructionNumber", "No. Konstruksi " + request.ConstructionNumber + " Sudah Pernah Dibuat"));
             }
 
+            //Tunggu Jawaban
+            var amountOfWarpLimit = Math.Round(request.AmountOfWarp, 4);
+            var amountOfWeftLimit = Math.Round(request.AmountOfWeft, 4);
+            var widthLimit = Math.Round(request.Width, 4);
+            var reedSpaceLimit = Math.Round(request.ReedSpace, 4);
+            var yarnStrandsAmountLimit = Math.Round(request.YarnStrandsAmount, 4);
+            var totalYarnLimit = Math.Round(request.TotalYarn, 4);
+
             constructionDocument.SetConstructionNumber(request.ConstructionNumber);
             constructionDocument.SetMaterialType(request.MaterialType);
             constructionDocument.SetWovenType(request.WovenType);
@@ -104,6 +112,8 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             foreach(var updatedDetail in updatedDetails)
             {
                 var dbDetail = constructionYarnDetails.Find(o => o.Identity == updatedDetail.Id);
+
+                dbDetail.SetModified();
 
                 await _constructionYarnDetailRepository.Update(dbDetail);
             }

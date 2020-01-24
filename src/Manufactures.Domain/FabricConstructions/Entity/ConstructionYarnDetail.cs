@@ -99,6 +99,10 @@ namespace Manufactures.Domain.FabricConstructions.Entity
                 MarkModified();
             }
         }
+        public void SetModified()
+        {
+            MarkModified();
+        }
 
         public void SetDeleted()
         {

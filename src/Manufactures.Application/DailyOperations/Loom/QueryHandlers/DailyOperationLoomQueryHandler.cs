@@ -24,7 +24,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -45,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _dailyOperationLoomRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _weavingSupplierRepository =

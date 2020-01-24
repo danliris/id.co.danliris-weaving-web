@@ -29,7 +29,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -51,7 +51,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _dailyOperationReachingRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _machineRepository =

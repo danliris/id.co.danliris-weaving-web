@@ -54,7 +54,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             mockMachineRepo;
         private readonly Mock<IMachineTypeRepository>
             mockMachineTypeRepo;
-        private readonly Mock<IWeavingOrderDocumentRepository>
+        private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
@@ -75,7 +75,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             this.mockDailyOperationSizingRepo = this.mockRepository.Create<IDailyOperationSizingRepository>();
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
             this.mockMachineTypeRepo = this.mockRepository.Create<IMachineTypeRepository>();
-            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
@@ -85,7 +85,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingRepository>()).Returns(mockDailyOperationSizingRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMachineRepository>()).Returns(mockMachineRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMachineTypeRepository>()).Returns(mockMachineTypeRepo.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
@@ -166,7 +166,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Machine Type Object
@@ -405,7 +405,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Machine Type Object
@@ -703,7 +703,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Machine Type Object
@@ -1001,7 +1001,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Machine Type Object

@@ -14,14 +14,14 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.FabricConstructions.CommandHandlers
 {
-    public class PlaceConstructionCommandHandler : ICommandHandler<AddFabricConstructionCommand,
+    public class AddConstructionCommandHandler : ICommandHandler<AddFabricConstructionCommand,
                                                                    FabricConstructionDocument>
     {
         private readonly IStorage _storage;
         private readonly IFabricConstructionRepository _constructionDocumentRepository;
         private readonly IConstructionYarnDetailRepository _constructionYarnDetailRepository;
 
-        public PlaceConstructionCommandHandler(IStorage storage)
+        public AddConstructionCommandHandler(IStorage storage)
         {
             _storage = 
                 storage;
@@ -45,18 +45,26 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 Validator.ErrorValidation(("ConstructionNumber", request.ConstructionNumber + " Has Available!"));
             }
 
+            //Tunggu Jawaban
+            var amountOfWarpLimit = Math.Round(request.AmountOfWarp, 4);
+            var amountOfWeftLimit = Math.Round(request.AmountOfWeft, 4);
+            var widthLimit = Math.Round(request.Width, 4);
+            var reedSpaceLimit = Math.Round(request.ReedSpace, 4);
+            var yarnStrandsAmountLimit = Math.Round(request.YarnStrandsAmount, 4);
+            var totalYarnLimit = Math.Round(request.TotalYarn, 4);
+
             var newConstructionDocument = new FabricConstructionDocument(Guid.NewGuid(),
-                                                                      request.ConstructionNumber,
-                                                                      request.MaterialType,
-                                                                      request.WovenType,
-                                                                      request.AmountOfWarp,
-                                                                      request.AmountOfWeft,
-                                                                      request.Width,
-                                                                      request.WarpType,
-                                                                      request.WeftType,
-                                                                      request.ReedSpace,
-                                                                      request.YarnStrandsAmount,
-                                                                      request.TotalYarn);
+                                                                         request.ConstructionNumber,
+                                                                         request.MaterialType,
+                                                                         request.WovenType,
+                                                                         request.AmountOfWarp,
+                                                                         request.AmountOfWeft,
+                                                                         request.Width,
+                                                                         request.WarpType,
+                                                                         request.WeftType,
+                                                                         request.ReedSpace,
+                                                                         request.YarnStrandsAmount,
+                                                                         request.TotalYarn);
             await _constructionDocumentRepository.Update(newConstructionDocument);
 
             var mergedYarnsDetail = request.ConstructionWarpsDetail.Concat(request.ConstructionWeftsDetail).ToList();

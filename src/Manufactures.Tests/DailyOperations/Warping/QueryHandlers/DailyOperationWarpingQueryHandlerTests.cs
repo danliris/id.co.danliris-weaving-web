@@ -45,7 +45,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
-        private readonly Mock<IWeavingOrderDocumentRepository>
+        private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
@@ -66,7 +66,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
             this.mockDailyOperationWarpingRepo = this.mockRepository.Create<IDailyOperationWarpingRepository>();
-            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockMaterialTypeRepo = this.mockRepository.Create<IMaterialTypeRepository>();
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
@@ -75,7 +75,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockWarpingBrokenCauseRepo = this.mockRepository.Create<IWarpingBrokenCauseRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockDailyOperationWarpingRepo.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMaterialTypeRepository>()).Returns(mockMaterialTypeRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
@@ -157,7 +157,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Material Type Object
@@ -337,7 +337,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Material Type Object
@@ -517,7 +517,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Material Type Object
@@ -709,7 +709,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 "Cotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
 
             //Material Type Object

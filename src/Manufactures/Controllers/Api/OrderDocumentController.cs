@@ -1,14 +1,10 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Application.Helpers;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Orders.Commands;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.DataTransferObjects.Order;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
@@ -17,7 +13,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Manufactures.Domain.Estimations.Productions.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Yarns.Repositories;
 using Manufactures.Helpers.PdfTemplates;
 using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
@@ -31,14 +26,14 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class OrderDocumentController : ControllerApiBase
     {
-        private readonly IWeavingOrderDocumentRepository
-                                               _weavingOrderDocumentRepository;
-        private readonly IFabricConstructionRepository
-                                               _constructionDocumentRepository;
-        private readonly IEstimationProductRepository
-                                               _estimationProductRepository;
-        private readonly IYarnDocumentRepository
-                                               _yarnDocumentRepository;
+        private readonly IOrderRepository 
+            _weavingOrderDocumentRepository;
+        private readonly IFabricConstructionRepository 
+            _constructionDocumentRepository;
+        private readonly IEstimationProductRepository 
+            _estimationProductRepository;
+        private readonly IYarnDocumentRepository 
+            _yarnDocumentRepository;
 
         private readonly IOrderReportQuery<OrderReportListDto> _orderProductionReportQuery;
 
@@ -47,7 +42,7 @@ namespace Manufactures.Controllers.Api
                                        IOrderReportQuery<OrderReportListDto> orderProductionReportQuery) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository =
-                this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
+                this.Storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _estimationProductRepository =
@@ -304,7 +299,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PlaceOrderCommand command)
+        public async Task<IActionResult> Post([FromBody]AddOrderCommand command)
         {
             var order = await Mediator.Send(command);
 

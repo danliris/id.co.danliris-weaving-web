@@ -12,7 +12,6 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Yarns.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -32,7 +31,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             _dailyOperationWarpingRepository;
         private readonly IDailyOperationWarpingHistoryRepository
             _dailyOperationWarpingHistoryRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -56,7 +55,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             _dailyOperationWarpingHistoryRepository =
                 _storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _materialTypeRepository =

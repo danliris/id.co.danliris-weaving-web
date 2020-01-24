@@ -13,43 +13,43 @@ namespace Manufactures.Domain.FabricConstructions.Commands
         public Guid Id { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
-        public string ConstructionNumber { get; set; }
+        public string ConstructionNumber { get; private set; }
 
         [JsonProperty(PropertyName = "MaterialType")]
-        public string MaterialType { get; set; }
+        public string MaterialType { get; private set; }
 
         [JsonProperty(PropertyName = "WovenType")]
-        public string WovenType { get; set; }
+        public string WovenType { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWarp")]
-        public int AmountOfWarp { get; set; }
+        public double AmountOfWarp { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWeft")]
-        public int AmountOfWeft { get; set; }
+        public double AmountOfWeft { get; private set; }
 
         [JsonProperty(PropertyName = "Width")]
-        public int Width { get; set; }
+        public double Width { get; private set; }
 
         [JsonProperty(PropertyName = "WarpType")]
-        public string WarpType { get; set; }
+        public string WarpType { get; private set; }
 
         [JsonProperty(PropertyName = "WeftType")]
-        public string WeftType { get; set; }
+        public string WeftType { get; private set; }
 
         [JsonProperty(PropertyName = "ReedSpace")]
-        public int ReedSpace { get; private set; }
+        public double ReedSpace { get; private set; }
 
         [JsonProperty(PropertyName = "YarnStrandsAmount")]
-        public int YarnStrandsAmount { get; private set; }
+        public double YarnStrandsAmount { get; private set; }
 
         [JsonProperty(PropertyName = "TotalYarn")]
-        public double TotalYarn { get; set; }
+        public double TotalYarn { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionWarpsDetail")]
-        public List<ConstructionYarnDetailCommand> ConstructionWarpsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWarpsDetail { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionWeftsDetail")]
-        public List<ConstructionYarnDetailCommand> ConstructionWeftsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWeftsDetail { get; private set; }
 
         public void SetId(Guid Id)
         {
@@ -61,7 +61,7 @@ namespace Manufactures.Domain.FabricConstructions.Commands
     {
         public UpdateConstructionCommandValidator()
         {
-            RuleFor(command => command.Id).NotEmpty().WithMessage("Id Tidak Boleh Kosong");
+            RuleFor(command => command.Id).NotEmpty().WithMessage("Id Harus Valid");
             RuleFor(command => command.ConstructionNumber).NotEmpty().WithMessage("No. Konstruksi Tidak Boleh Kosong");
             RuleFor(command => command.MaterialType).NotEmpty().WithMessage("Jenis Material Harus Diisi");
             RuleFor(command => command.WovenType).NotEmpty().WithMessage("Jenis Anyaman Harus Diisi");

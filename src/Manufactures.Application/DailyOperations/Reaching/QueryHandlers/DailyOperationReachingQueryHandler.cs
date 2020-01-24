@@ -25,7 +25,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _machineRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _orderDocumentRepository;
         private readonly IBeamRepository
             _beamRepository;
@@ -44,7 +44,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _orderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
             _shiftRepository =

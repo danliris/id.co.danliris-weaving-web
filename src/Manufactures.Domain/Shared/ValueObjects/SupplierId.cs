@@ -1,12 +1,14 @@
 ﻿using Moonlay.Domain;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Manufactures.Domain.Shared.ValueObjects
 {
     [JsonConverter(typeof(SingleValueObjectConverter))]
-    public class WeavingUnitId : SingleValueObject<Guid>
+    public class SupplierId : SingleValueObject<Guid>
     {
-        public WeavingUnitId(Guid id) : base(id) { }
+        public SupplierId(Guid id) : base(id) { }
     }
 }

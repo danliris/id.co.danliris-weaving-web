@@ -9,43 +9,43 @@ namespace Manufactures.Domain.FabricConstructions.Commands
     public class AddFabricConstructionCommand : ICommand<FabricConstructionDocument>
     {
         [JsonProperty(PropertyName = "ConstructionNumber")]
-        public string ConstructionNumber { get; set; }
+        public string ConstructionNumber { get; private set; }
 
         [JsonProperty(PropertyName = "MaterialType")]
-        public string MaterialType { get; set; }
+        public string MaterialType { get; private set; }
 
         [JsonProperty(PropertyName = "WovenType")]
-        public string WovenType { get; set; }
+        public string WovenType { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWarp")]
-        public int AmountOfWarp { get; set; }
+        public double AmountOfWarp { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWeft")]
-        public int AmountOfWeft { get; set; }
+        public double AmountOfWeft { get; private set; }
 
         [JsonProperty(PropertyName = "Width")]
-        public int Width { get; set; }
+        public double Width { get; private set; }
 
         [JsonProperty(PropertyName = "WarpType")]
-        public string WarpType { get; set; }
+        public string WarpType { get; private set; }
 
         [JsonProperty(PropertyName = "WeftType")]
-        public string WeftType { get; set; }
+        public string WeftType { get; private set; }
 
         [JsonProperty(PropertyName = "ReedSpace")]
-        public int ReedSpace { get; set; }
+        public double ReedSpace { get; private set; }
 
         [JsonProperty(PropertyName = "YarnStrandsAmount")]
-        public int YarnStrandsAmount { get; set; }
+        public double YarnStrandsAmount { get; private set; }
 
         [JsonProperty(PropertyName = "TotalYarn")]
-        public double TotalYarn { get; set; }
+        public double TotalYarn { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionWarpsDetail")]
-        public List<ConstructionYarnDetailCommand> ConstructionWarpsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWarpsDetail { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionWeftsDetail")]
-        public List<ConstructionYarnDetailCommand> ConstructionWeftsDetail { get; set; }
+        public List<ConstructionYarnDetailCommand> ConstructionWeftsDetail { get; private set; }
     }
 
     public class PlaceConstructionCommandValidator : AbstractValidator<AddFabricConstructionCommand>

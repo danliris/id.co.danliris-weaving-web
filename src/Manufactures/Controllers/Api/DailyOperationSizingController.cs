@@ -43,7 +43,7 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationSizingController : ControllerApiBase
     {
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _orderDocumentRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
@@ -83,7 +83,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationSizingRepository =
                 this.Storage.GetRepository<IDailyOperationSizingRepository>();
             _orderDocumentRepository =
-                this.Storage.GetRepository<IWeavingOrderDocumentRepository>();
+                this.Storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
                 this.Storage.GetRepository<IFabricConstructionRepository>();
             _beamRepository =

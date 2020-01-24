@@ -25,7 +25,7 @@ namespace Manufactures.Domain.FabricConstructions
         public List<ConstructionYarnDetail> ConstructionWarpsDetail { get; private set; }
         public List<ConstructionYarnDetail> ConstructionWeftsDetail { get; private set; }
 
-        public FabricConstructionDocument(Guid id,
+        public FabricConstructionDocument(Guid identity,
                                           string constructionNumber,
                                           string materialType,
                                           string wovenType,
@@ -36,10 +36,10 @@ namespace Manufactures.Domain.FabricConstructions
                                           string weftType,
                                           double reedSpace,
                                           double yarnStrandsAmount,
-                                          double totalYarn) : base(id)
+                                          double totalYarn) : base(identity)
         {
             // Set Properties
-            Identity = id;
+            Identity = identity;
             ConstructionNumber = constructionNumber;
             MaterialType = materialType;
             WovenType = wovenType;

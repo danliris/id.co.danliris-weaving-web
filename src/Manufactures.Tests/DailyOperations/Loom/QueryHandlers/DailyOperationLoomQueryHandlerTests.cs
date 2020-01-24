@@ -48,7 +48,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             mockDailyOperationLoomRepo;
         private readonly Mock<IMachineRepository>
             mockMachineRepo;
-        private readonly Mock<IWeavingOrderDocumentRepository>
+        private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
@@ -68,7 +68,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
 
             this.mockDailyOperationLoomRepo = this.mockRepository.Create<IDailyOperationLoomRepository>();
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
-            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockSupplierRepo = this.mockRepository.Create<IWeavingSupplierRepository>();
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
@@ -77,7 +77,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationLoomRepository>()).Returns(mockDailyOperationLoomRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMachineRepository>()).Returns(mockMachineRepo.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IWeavingSupplierRepository>()).Returns(mockSupplierRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
@@ -133,7 +133,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
                 "PolyCotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
             //Supplier Object
@@ -296,7 +296,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
                 "PolyCotton",
                 new UnitId(11),
                 "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
             //Supplier Object

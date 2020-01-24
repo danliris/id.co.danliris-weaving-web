@@ -12,13 +12,13 @@ namespace Manufactures.Application.Orders.CommandHandlers
 {
     public class RemoveWeavingOrderCommandHandler : ICommandHandler<RemoveOrderCommand, OrderDocument>
     {
-        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
+        private readonly IOrderRepository _weavingOrderDocumentRepository;
         private readonly IStorage _storage;
 
         public RemoveWeavingOrderCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
+            _weavingOrderDocumentRepository = _storage.GetRepository<IOrderRepository>();
         }
 
         public async Task<OrderDocument> Handle(RemoveOrderCommand command, 
