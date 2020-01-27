@@ -7,7 +7,6 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,9 +45,6 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             }
 
             //Tunggu Jawaban
-            var amountOfWarpLimit = Math.Round(request.AmountOfWarp, 4);
-            var amountOfWeftLimit = Math.Round(request.AmountOfWeft, 4);
-            var widthLimit = Math.Round(request.Width, 4);
             var reedSpaceLimit = Math.Round(request.ReedSpace, 4);
             var yarnStrandsAmountLimit = Math.Round(request.YarnStrandsAmount, 4);
             var totalYarnLimit = Math.Round(request.TotalYarn, 4);

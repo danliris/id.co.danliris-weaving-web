@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -9,10 +8,7 @@ using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.Commands;
 using Manufactures.Domain.FabricConstructions.Entity;
 using Manufactures.Domain.FabricConstructions.Repositories;
-using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.Domain.YarnNumbers.Repositories;
-using Manufactures.Domain.Yarns.Repositories;
 using Moonlay;
 
 namespace Manufactures.Application.FabricConstructions.CommandHandlers
@@ -48,23 +44,6 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                 _constructionYarnDetailRepository
                     .Find(o => o.FabricConstructionDocumentId == constructionDocument.Identity && o.Deleted.Equals(false));
 
-            //await Task.Yield();
-            //List<ConstructionYarnDetailCommand> existingYarnDetails = new List<ConstructionYarnDetailCommand>();
-            //foreach (var existingYarnDetail in constructionYarnDetails)
-            //{
-            //    var existingYarnDetailCommand = new ConstructionYarnDetailCommand
-            //    {
-            //        Id = existingYarnDetail.Identity,
-            //        YarnId = existingYarnDetail.YarnId.Value,
-            //        Quantity = existingYarnDetail.Quantity,
-            //        Information = existingYarnDetail.Information,
-            //        Type = existingYarnDetail.Type,
-            //        FabricConstructionDocumentId = constructionDocument.Identity
-            //    };
-
-            //    existingYarnDetails.Add(existingYarnDetailCommand);
-            //}
-
             await Task.Yield();
             //Get Same Construction Number
             var existingConstructionNumber = 
@@ -86,9 +65,6 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             }
 
             //Tunggu Jawaban
-            var amountOfWarpLimit = Math.Round(request.AmountOfWarp, 4);
-            var amountOfWeftLimit = Math.Round(request.AmountOfWeft, 4);
-            var widthLimit = Math.Round(request.Width, 4);
             var reedSpaceLimit = Math.Round(request.ReedSpace, 4);
             var yarnStrandsAmountLimit = Math.Round(request.YarnStrandsAmount, 4);
             var totalYarnLimit = Math.Round(request.TotalYarn, 4);
@@ -113,6 +89,10 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
             {
                 var dbDetail = constructionYarnDetails.Find(o => o.Identity == updatedDetail.Id);
 
+                dbDetail.SetYarnId(new YarnId(updatedDetail.YarnId));
+                dbDetail.SetQuantity(updatedDetail.Quantity);
+                dbDetail.SetInformation(updatedDetail.Information);
+                dbDetail.SetType(updatedDetail.Type);
                 dbDetail.SetModified();
 
                 await _constructionYarnDetailRepository.Update(dbDetail);

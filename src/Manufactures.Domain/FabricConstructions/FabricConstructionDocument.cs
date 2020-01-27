@@ -12,9 +12,9 @@ namespace Manufactures.Domain.FabricConstructions
         public string ConstructionNumber { get; private set; }
         public string MaterialType { get; private set; }
         public string WovenType { get; private set; }
-        public double AmountOfWarp { get; private set; }
-        public double AmountOfWeft { get; private set; }
-        public double Width { get; private set; }
+        public int AmountOfWarp { get; private set; }
+        public int AmountOfWeft { get; private set; }
+        public int Width { get; private set; }
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
         public double ReedSpace { get; private set; }
@@ -29,9 +29,9 @@ namespace Manufactures.Domain.FabricConstructions
                                           string constructionNumber,
                                           string materialType,
                                           string wovenType,
-                                          double amountOfWarp,
-                                          double amountOfWeft,
-                                          double width,
+                                          int amountOfWarp,
+                                          int amountOfWeft,
+                                          int width,
                                           string warpType,
                                           string weftType,
                                           double reedSpace,
@@ -126,7 +126,7 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void SetAmountOfWarp(double amountOfWarp)
+        public void SetAmountOfWarp(int amountOfWarp)
         {
             if (amountOfWarp != AmountOfWarp)
             {
@@ -137,7 +137,7 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void SetAmountOfWeft(double amountOfWeft)
+        public void SetAmountOfWeft(int amountOfWeft)
         {
             if (amountOfWeft != AmountOfWeft)
             {
@@ -148,7 +148,7 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void SetWidth(double width)
+        public void SetWidth(int width)
         {
             if (width != Width)
             {
@@ -295,6 +295,7 @@ namespace Manufactures.Domain.FabricConstructions
 
         //    MarkModified();
         //}
+
         public void SetModified()
         {
             MarkModified();

@@ -99,7 +99,7 @@ namespace Manufactures.Application.BeamStockMonitoring.QueryHandlers
 
                 //Get Construction Number based on Order Used
                 await Task.Yield();
-                var constructionId = orderDocument.ConstructionId;
+                var constructionId = orderDocument.ConstructionDocumentId;
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(construction => construction.Identity.Equals(constructionId.Value))

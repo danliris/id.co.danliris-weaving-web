@@ -111,7 +111,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(entity => entity.Identity
-                        .Equals(OrderDocument.ConstructionId.Value))
+                        .Equals(OrderDocument.ConstructionDocumentId.Value))
                         .FirstOrDefault()
                         .ConstructionNumber ?? "Not Found Construction Number";
 
@@ -161,7 +161,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             await Task.Yield();
             var fabricConstructionNumber =
                 _fabricConstructionRepository
-                    .Find(o => o.Identity.Equals(orderProductionDocument.ConstructionId.Value))
+                    .Find(o => o.Identity.Equals(orderProductionDocument.ConstructionDocumentId.Value))
                     .FirstOrDefault()
                     .ConstructionNumber;
 

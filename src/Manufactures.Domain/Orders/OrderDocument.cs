@@ -1,8 +1,5 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.Events;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Orders.ReadModels;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Moonlay;
 using System;
@@ -24,7 +21,7 @@ namespace Manufactures.Domain.Orders
         public double WeftCompositionCotton { get; private set; }
         public double WeftCompositionOthers { get; private set; }
         public double AllGrade { get; private set; }
-        public UnitId Unit { get; private set; }
+        public UnitId UnitId { get; private set; }
         public string OrderStatus { get; private set; }
 
         public OrderDocument(Guid identity,
@@ -41,7 +38,7 @@ namespace Manufactures.Domain.Orders
                              double weftCompositionCotton, 
                              double weftCompositionOthers, 
                              double allGrade, 
-                             UnitId unit, 
+                             UnitId unitId, 
                              string orderStatus) : base(identity)
         {
             Identity = identity;
@@ -58,7 +55,7 @@ namespace Manufactures.Domain.Orders
             WeftCompositionCotton = weftCompositionCotton;
             WeftCompositionOthers = weftCompositionOthers;
             AllGrade = allGrade;
-            Unit = unit;
+            UnitId = unitId;
             OrderStatus = orderStatus;
 
             MarkTransient();
@@ -78,7 +75,7 @@ namespace Manufactures.Domain.Orders
                 WeftCompositionCotton = WeftCompositionCotton,
                 WeftCompositionOthers = WeftCompositionOthers,
                 AllGrade = AllGrade,
-                Unit = Unit.Value,
+                UnitId = UnitId.Value,
                 OrderStatus = OrderStatus
             };
         }
@@ -98,7 +95,7 @@ namespace Manufactures.Domain.Orders
             WeftCompositionCotton = readModel.WeftCompositionCotton;
             WeftCompositionOthers = readModel.WeftCompositionOthers;
             AllGrade = readModel.AllGrade;
-            Unit = new UnitId(readModel.Unit);
+            UnitId = new UnitId(readModel.UnitId);
             OrderStatus = readModel.OrderStatus;
         }
 
@@ -280,11 +277,11 @@ namespace Manufactures.Domain.Orders
         {
             Validator.ThrowIfNull(() => unit);
 
-            if (unit != Unit)
+            if (unit != UnitId)
             {
 
-                Unit = unit;
-                ReadModel.Unit = Unit.Value;
+                UnitId = unit;
+                ReadModel.UnitId = UnitId.Value;
 
                 MarkModified();
             }

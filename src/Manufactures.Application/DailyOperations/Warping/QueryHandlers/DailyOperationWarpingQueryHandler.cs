@@ -106,7 +106,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(entity => entity.Identity
-                        .Equals(OrderDocument.ConstructionId.Value))
+                        .Equals(OrderDocument.ConstructionDocumentId.Value))
                         .FirstOrDefault()
                         .ConstructionNumber ?? "Not Found Construction Number";
 
@@ -153,7 +153,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             await Task.Yield();
             var constructionNumber =
                 _fabricConstructionRepository
-                    .Find(o => o.Identity.Equals(orderDocument.ConstructionId.Value))
+                    .Find(o => o.Identity.Equals(orderDocument.ConstructionDocumentId.Value))
                     .FirstOrDefault()
                     .ConstructionNumber;
 

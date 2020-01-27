@@ -90,7 +90,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Construction Number
                 await Task.Yield();
-                var constructionId = orderDocument.ConstructionId.Value;
+                var constructionId = orderDocument.ConstructionDocumentId.Value;
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(o => o.Identity.Equals(constructionId))
@@ -168,7 +168,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             //Get Construction Number
             await Task.Yield();
-            var constructionId = orderDocument.ConstructionId.Value;
+            var constructionId = orderDocument.ConstructionDocumentId.Value;
             var constructionNumber =
                 _fabricConstructionRepository
                     .Find(o => o.Identity.Equals(constructionId))

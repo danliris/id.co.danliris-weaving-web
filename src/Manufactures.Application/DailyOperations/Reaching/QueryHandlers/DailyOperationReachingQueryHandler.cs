@@ -89,7 +89,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                         .FirstOrDefault();
 
                 //Get Construction Id
-                var constructionId = orderDocument.ConstructionId.Value;
+                var constructionId = orderDocument.ConstructionDocumentId.Value;
 
                 //Get Weaving Unit Id
                 var weavingUnitId = orderDocument.UnitId;
@@ -153,7 +153,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                     .FirstOrDefault();
 
             //Get Construction Id
-            var constructionId = orderDocument.ConstructionId.Value;
+            var constructionId = orderDocument.ConstructionDocumentId.Value;
 
             //Get Weaving Unit Id
             var weavingUnitId = orderDocument.UnitId;

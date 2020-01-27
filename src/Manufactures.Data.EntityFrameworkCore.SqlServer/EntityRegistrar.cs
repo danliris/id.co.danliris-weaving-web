@@ -288,13 +288,10 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<EstimationProduct>(etb =>
+            modelBuilder.Entity<EstimatedProductionDetailReadModel>(etb =>
             {
-                etb.ToTable("Weaving_EstimationDetails");
+                etb.ToTable("Weaving_EstimationProductDetails");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.OrderDocument).HasMaxLength(2000);
-                etb.Property(e => e.ProductGrade).HasMaxLength(2000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -304,12 +301,6 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_EstimationProductDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.Period).HasMaxLength(255);
-
-                etb.HasMany(e => e.EstimationProducts)
-                    .WithOne(e => e.EstimatedProductionDocument)
-                    .HasForeignKey(e => e.EstimatedProductionDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -396,10 +387,8 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(p => p.ConstructionId).HasMaxLength(255);
+                etb.Property(p => p.ConstructionDocumentId).HasMaxLength(255);
                 etb.Property(p => p.Period).HasMaxLength(255);
-                etb.Property(p => p.WarpComposition).HasMaxLength(255);
-                etb.Property(p => p.WeftComposition).HasMaxLength(255);
                 etb.Property(p => p.OrderStatus).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();

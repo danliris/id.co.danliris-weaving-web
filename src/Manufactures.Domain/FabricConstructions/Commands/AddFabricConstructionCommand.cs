@@ -18,13 +18,13 @@ namespace Manufactures.Domain.FabricConstructions.Commands
         public string WovenType { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWarp")]
-        public double AmountOfWarp { get; private set; }
+        public int AmountOfWarp { get; private set; }
 
         [JsonProperty(PropertyName = "AmountOfWeft")]
-        public double AmountOfWeft { get; private set; }
+        public int AmountOfWeft { get; private set; }
 
         [JsonProperty(PropertyName = "Width")]
-        public double Width { get; private set; }
+        public int Width { get; private set; }
 
         [JsonProperty(PropertyName = "WarpType")]
         public string WarpType { get; private set; }

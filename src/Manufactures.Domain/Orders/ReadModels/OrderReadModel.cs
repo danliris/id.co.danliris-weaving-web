@@ -18,7 +18,7 @@ namespace Manufactures.Domain.Orders.ReadModels
         public double WeftCompositionCotton { get; internal set; }
         public double WeftCompositionOthers { get; internal set; }
         public double AllGrade { get; internal set; }
-        public int Unit { get; internal set; }
+        public int UnitId { get; internal set; }
         public string OrderStatus { get; internal set; }
 
         public OrderReadModel(Guid identity) : base(identity) { }

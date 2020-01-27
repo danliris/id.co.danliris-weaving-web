@@ -12,19 +12,19 @@ namespace Manufactures.Application.Orders.CommandHandlers
 {
     public class RemoveWeavingOrderCommandHandler : ICommandHandler<RemoveOrderCommand, OrderDocument>
     {
-        private readonly IOrderRepository _weavingOrderDocumentRepository;
+        private readonly IOrderRepository _orderRepository;
         private readonly IStorage _storage;
 
         public RemoveWeavingOrderCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _weavingOrderDocumentRepository = _storage.GetRepository<IOrderRepository>();
+            _orderRepository = _storage.GetRepository<IOrderRepository>();
         }
 
         public async Task<OrderDocument> Handle(RemoveOrderCommand command, 
                                                        CancellationToken cancellationToken)
         {
-            var order = _weavingOrderDocumentRepository.Find(entity => entity.Identity == command.Id)
+            var order = _orderRepository.Find(entity => entity.Identity == command.Id)
                                                        .FirstOrDefault();
 
             if (order == null)
@@ -34,7 +34,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
 
             order.Remove();
 
-            await _weavingOrderDocumentRepository.Update(order);
+            await _orderRepository.Update(order);
 
             _storage.Save();
 

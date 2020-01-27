@@ -122,7 +122,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                         //Get Construction Number
                         await Task.Yield();
-                        var fabricConstructionId = orderDocument.ConstructionId.Value;
+                        var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                         var fabricConstructionQuery =
                             _fabricConstructionRepository
                                 .Query

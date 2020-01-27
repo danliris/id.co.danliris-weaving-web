@@ -1,7 +1,6 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Repositories;
-using Manufactures.DataTransferObjects.EstimationsProduct;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -21,13 +19,13 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class EstimationController : ControllerApiBase
     {
-        private readonly IEstimationProductRepository _estimationProductRepository;
+        private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
 
         public EstimationController(IServiceProvider serviceProvider, 
                                     IWorkContext workContext) : base(serviceProvider)
         {
             _estimationProductRepository = 
-                this.Storage.GetRepository<IEstimationProductRepository>();
+                this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
         }
 
         [HttpGet]

@@ -149,7 +149,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     var constructionId =
                         _orderRepository
                             .Find(o => o.Identity.Equals(document.OrderDocumentId.Value))
-                            .FirstOrDefault().ConstructionId.Value;
+                            .FirstOrDefault().ConstructionDocumentId.Value;
 
                     //Get ConstructionDocument using ConstructionId from above, to get List of Warp Id (warpIds)
                     var constructionDocument =
@@ -162,7 +162,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
                     var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
-                    var supplierName = _supplierRepository.Find(o => o.Identity.ToString() == warpOriginId).FirstOrDefault().Name;
+                    var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
 
                     var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();
                     foreach (var warpName in warpNames)
@@ -299,7 +299,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var constructionId =
                     _orderRepository
                         .Find(o => o.Identity.Equals(document.OrderDocumentId.Value))
-                        .FirstOrDefault().ConstructionId.Value;
+                        .FirstOrDefault().ConstructionDocumentId.Value;
 
                 //Get ConstructionDocument using ConstructionId from above, to get List of Warp Id (warpIds)
                 var constructionDocument =
@@ -312,7 +312,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
                 var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
-                var supplierName = _supplierRepository.Find(o => o.Identity.ToString() == warpOriginId).FirstOrDefault().Name;
+                var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
 
                 var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();
                 foreach (var warpName in warpNames)

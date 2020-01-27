@@ -16,14 +16,14 @@ namespace Manufactures.Domain.FabricConstructions.Entity
         public string Type { get; private set; }
         public Guid FabricConstructionDocumentId { get; set; }
 
-        public ConstructionYarnDetail(Guid id,
+        public ConstructionYarnDetail(Guid identity,
                                       YarnId yarnId,
                                       double quantity,
                                       string information,
                                       string type,
-                                      Guid fabricConstructionDocumentId) : base(id)
+                                      Guid fabricConstructionDocumentId) : base(identity)
         {
-            Identity = id;
+            Identity = identity;
             YarnId = yarnId;
             Quantity = quantity;
             Information = information;

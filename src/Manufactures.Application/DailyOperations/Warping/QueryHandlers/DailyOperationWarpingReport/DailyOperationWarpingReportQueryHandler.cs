@@ -150,7 +150,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     //Instantiate New Value if Unit Id not 0
                     if (unitId != 0)
                     {
-                        orderDocumentQuery = orderDocumentQuery.Where(x => x.UnitId.Value == unitId);
+                        orderDocumentQuery = orderDocumentQuery.Where(x => x.UnitId == unitId);
                     }
 
                     //Get First Element from Order Documents to Get Order Number
@@ -166,7 +166,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
 
                     //Get Construction Number
                     await Task.Yield();
-                    var fabricConstructionId = orderDocument.ConstructionId.Value;
+                    var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                     var fabricConstructionQuery =
                         _fabricConstructionRepository
                             .Query;

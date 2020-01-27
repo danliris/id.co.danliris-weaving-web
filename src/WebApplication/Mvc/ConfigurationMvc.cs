@@ -25,7 +25,7 @@ namespace Infrastructure.Mvc
 
             builder.AddFluentValidation(fv =>
             {
-                fv.RegisterValidatorsFromAssemblyContaining<PlaceOrderCommandValidator>();
+                //fv.RegisterValidatorsFromAssemblyContaining<PlaceOrderCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }

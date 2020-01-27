@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                         //Parse if Not Null
                         if (Guid.TryParse(constructionId, out Guid constructionGuid))
                         {
-                            orderDocuments = orderDocuments.Where(x => x.ConstructionId.Value == constructionGuid);
+                            orderDocuments = orderDocuments.Where(x => x.ConstructionDocumentId.Value == constructionGuid);
                         }
                     }
 
@@ -157,7 +157,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                     //Get Construction Number
                     await Task.Yield();
-                    var fabricConstructionId = orderDocument.ConstructionId.Value;
+                    var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                     var fabricConstructionQuery =
                         _fabricConstructionRepository
                             .Query

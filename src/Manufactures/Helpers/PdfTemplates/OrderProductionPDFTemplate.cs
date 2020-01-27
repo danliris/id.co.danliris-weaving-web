@@ -77,25 +77,25 @@ namespace Manufactures.Helpers.PdfTemplates
             List<List<string>> bodyData = new List<List<string>>
             {
                 reportModel.Select(x => x.DateOrdered.Date.ToString("dd/MM/yyyy")).ToList(),
-                reportModel.Select(x => x.FabricConstructionDocument.ConstructionNumber).ToList(),
+                reportModel.Select(x => x.ConstructionNumber).ToList(),
                 reportModel.Select(x => x.YarnNumber).ToList(),
-                reportModel.Select(x => x.WarpComposition.CompositionOfPoly.ToString()).ToList(),
-                reportModel.Select(x => x.WarpComposition.CompositionOfCotton.ToString()).ToList(),
-                reportModel.Select(x => x.WarpComposition.OtherComposition.ToString()).ToList(),
-                reportModel.Select(x => x.WeftComposition.CompositionOfPoly.ToString()).ToList(),
-                reportModel.Select(x => x.WeftComposition.CompositionOfCotton.ToString()).ToList(),
-                reportModel.Select(x => x.WeftComposition.OtherComposition.ToString()).ToList(),
-                reportModel.Select(x => x.EstimatedProductionDocument.GradeA.ToString()).ToList(),
-                reportModel.Select(x => x.EstimatedProductionDocument.GradeB.ToString()).ToList(),
-                reportModel.Select(x => x.EstimatedProductionDocument.GradeC.ToString()).ToList(),
-                reportModel.Select(x => x.EstimatedProductionDocument.GradeD.ToString()).ToList(),
-                reportModel.Select(x => x.EstimatedProductionDocument.WholeGrade.ToString()).ToList(),
-                reportModel.Select(x => x.FabricConstructionDocument.AmountOfWarp.ToString()).ToList(),
-                reportModel.Select(x => x.FabricConstructionDocument.AmountOfWeft.ToString()).ToList(),
-                reportModel.Select(x => x.FabricConstructionDocument.TotalYarn.ToString()).ToList()
+                reportModel.Select(x => x.WarpCompositionPoly.ToString()).ToList(),
+                reportModel.Select(x => x.WarpCompositionCotton.ToString()).ToList(),
+                reportModel.Select(x => x.WarpCompositionOthers.ToString()).ToList(),
+                reportModel.Select(x => x.WeftCompositionPoly.ToString()).ToList(),
+                reportModel.Select(x => x.WeftCompositionCotton.ToString()).ToList(),
+                reportModel.Select(x => x.WeftCompositionOthers.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionGradeA.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionGradeB.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionGradeC.ToString()).ToList(),
+                reportModel.Select(x => x.EstimatedProductionGradeD.ToString()).ToList(),
+                reportModel.Select(x => x.TotalEstimatedProduction.ToString()).ToList(),
+                reportModel.Select(x => x.AmountOfWarp.ToString()).ToList(),
+                reportModel.Select(x => x.AmountOfWeft.ToString()).ToList(),
+                reportModel.Select(x => x.TotalYarn.ToString()).ToList()
             };
 
-            string unitName = reportModel.Select(u => u.WeavingUnitName).FirstOrDefault();
+            string unitName = reportModel.Select(u => u.UnitName).FirstOrDefault();
 
             #endregion
 

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Domain.Estimations.Productions.Repositories
 {
-    public interface IEstimationProductRepository : IAggregateRepository<EstimatedProductionDocument, EstimatedProductionDocumentReadModel>
+    public interface IEstimatedProductionDocumentRepository : IAggregateRepository<EstimatedProductionDocument, EstimatedProductionDocumentReadModel>
     {
-        Task<string> GetEstimationNumber();
+        //Task<string> GetEstimationNumber();
     }
 }

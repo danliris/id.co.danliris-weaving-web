@@ -76,7 +76,7 @@ namespace Manufactures.Application.Orders.QueryHandlers
             {
                 //Get Weaving Unit
                 await Task.Yield();
-                var unitName = GetUnit(order.Unit.Value).data.Name;
+                var unitName = GetUnit(order.UnitId.Value).data.Name;
 
                 var constructionNumber =
                     _fabricConstructionRepository

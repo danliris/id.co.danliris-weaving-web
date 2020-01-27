@@ -7,12 +7,12 @@ namespace Manufactures.Domain.FabricConstructions.Commands
 {
     public class ConstructionYarnDetailCommand
     {
-        public Guid Id { get; set; }
-        public Guid YarnId { get; set; }
-        public double Quantity { get; set; }
-        public string Information { get; set; }
-        public string Type { get; set; }
-        public Guid FabricConstructionDocumentId { get; set; }
+        public Guid Id { get; private set; }
+        public Guid YarnId { get; private set; }
+        public double Quantity { get; private set; }
+        public string Information { get; private set; }
+        public string Type { get; private set; }
+        public Guid FabricConstructionDocumentId { get; private set; }
     }
 
     public class ConstructionYarnDetailCommandValidator : AbstractValidator<ConstructionYarnDetailCommand>

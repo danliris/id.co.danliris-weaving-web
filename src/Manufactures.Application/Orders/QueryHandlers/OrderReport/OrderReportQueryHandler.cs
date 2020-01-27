@@ -27,11 +27,15 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
         private readonly IStorage
             _storage;
         private readonly IOrderRepository 
-            _weavingOrderDocumentRepository;
+            _orderDocumentRepository;
         private readonly IFabricConstructionRepository
             _constructionDocumentRepository;
-        private readonly IEstimationProductRepository
-            _estimationProductRepository;
+        private readonly IConstructionYarnDetailRepository
+            _constructionYarnDetailRepository;
+        private readonly IEstimatedProductionDocumentRepository
+            _estimatedProductionDocumentRepository;
+        private readonly IEstimatedProductionDetailRepository
+            _estimatedProductionDetailRepository;
         private readonly IYarnDocumentRepository
             _yarnDocumentRepository;
 
@@ -41,12 +45,16 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
                 serviceProvider.GetService<IHttpClientService>();
             _storage =
                 storage;
-            _weavingOrderDocumentRepository =
+            _orderDocumentRepository =
                 _storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
-            _estimationProductRepository =
-                _storage.GetRepository<IEstimationProductRepository>();
+            _constructionYarnDetailRepository =
+                _storage.GetRepository<IConstructionYarnDetailRepository>();
+            _estimatedProductionDocumentRepository =
+                _storage.GetRepository<IEstimatedProductionDocumentRepository>();
+            _estimatedProductionDetailRepository =
+                _storage.GetRepository<IEstimatedProductionDetailRepository>();
             _yarnDocumentRepository =
                 _storage.GetRepository<IYarnDocumentRepository>();
         }
@@ -67,7 +75,7 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
             }
         }
 
-        public async Task<(IEnumerable<OrderReportListDto>, int)> GetReports(int weavingUnitId, 
+        public async Task<(IEnumerable<OrderReportListDto>, int)> GetReports(int unitId, 
                                                                              DateTimeOffset? dateFrom, 
                                                                              DateTimeOffset? dateTo, 
                                                                              int page, 
@@ -77,34 +85,47 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
             try
             {
                 var result = new List<OrderReportListDto>();
+
                 var orderQuery =
-                    _weavingOrderDocumentRepository
+                    _orderDocumentRepository
+                        .Query
+                        .AsQueryable();
+                var estimationQuery =
+                    _estimatedProductionDocumentRepository
                         .Query
                         .AsQueryable();
 
                 //Instantiate New Value if Unit Id not 0
-                if (weavingUnitId != 0)
+                if (unitId != 0)
                 {
-                    orderQuery = orderQuery.Where(x => x.UnitId.Value == weavingUnitId);
+                    orderQuery = orderQuery.Where(x => x.UnitId == unitId);
+                    estimationQuery = estimationQuery.Where(o => o.UnitId == unitId);
+                }
+                else
+                {
+                    throw Validator.ErrorValidation(("WeavingUnit", "Unit Weaving Tidak Boleh Kosong"));
                 }
 
                 if (dateFrom != null && dateTo != null)
                 {
-                    orderQuery = orderQuery.Where(x => x.DateOrdered.Date >= dateFrom.Value.Date && x.DateOrdered.Date <= dateTo.Value.Date);
+                    orderQuery = orderQuery.Where(x => x.Period.Date >= dateFrom.Value.Date && x.Period.Date <= dateTo.Value.Date);
+                    estimationQuery = estimationQuery.Where(x => x.Period.Date >= dateFrom.Value.Date && x.Period.Date <= dateTo.Value.Date);
                 }
                 else if (dateFrom != null && dateTo == null)
                 {
-                    orderQuery = orderQuery.Where(x => x.DateOrdered.Date >= dateFrom.Value.Date);
+                    orderQuery = orderQuery.Where(x => x.Period.Date >= dateFrom.Value.Date);
+                    estimationQuery = estimationQuery.Where(x => x.Period.Date >= dateFrom.Value.Date);
                 }
                 else if (dateFrom == null && dateTo != null)
                 {
-                    orderQuery = orderQuery.Where(x => x.DateOrdered.Date <= dateTo.Value.Date);
+                    orderQuery = orderQuery.Where(x => x.Period.Date <= dateTo.Value.Date);
+                    estimationQuery = estimationQuery.Where(x => x.Period.Date <= dateTo.Value.Date);
                 }
 
                 var orderDocuments =
-                    _weavingOrderDocumentRepository
+                    _orderDocumentRepository
                         .Find(orderQuery)
-                        .OrderByDescending(o => o.DateOrdered);
+                        .OrderByDescending(o => o.AuditTrail.CreatedDate);
                 if (orderDocuments == null)
                 {
                     return (result, result.Count);
@@ -115,97 +136,29 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
                     {
                         var constructionDocument =
                             _constructionDocumentRepository
-                                .Find(e => e.Identity.Equals(orderDocument.ConstructionId.Value))
+                                .Find(e => e.Identity == orderDocument.ConstructionDocumentId.Value)
                                 .FirstOrDefault();
 
                         //Get Weaving Unit
                         await Task.Yield();
-                        var orderWeavingUnitId = orderDocument.UnitId.Value;
 
-                        SingleUnitResult unitData = GetUnit(orderWeavingUnitId);
+                        SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
                         var weavingUnitName = unitData.data.Name;
 
-                        var estimationsQuery =
-                            _estimationProductRepository
-                                .Query
-                                .OrderByDescending(item => item.CreatedDate);
-
                         var estimationDocuments =
-                            _estimationProductRepository
-                                .Find(estimationsQuery.Include(o => o.EstimationProducts))
-                                .Where(o => o.Period.Month.Equals(orderDocument.Period.Month) && 
-                                            o.Period.Year.Equals(orderDocument.Period.Year) && 
-                                            o.UnitId.Value.Equals(orderDocument.UnitId.Value))
-                                .ToList();
-
-                        var warpMaterials = new List<string>();
-                        foreach (var item in constructionDocument.ConstructionWarpsDetail)
+                            _estimatedProductionDocumentRepository
+                                .Find(estimationQuery)
+                                .OrderByDescending(o => o.AuditTrail.CreatedDate);
+                        var estimationDetails =
+                            _estimatedProductionDetailRepository
+                                .Find(o => estimationDocuments.Any(e => e.Identity == o.EstimatedProductionDocumentId) && o.OrderId == orderDocument.Identity);
+                        
+                        foreach(var estimationDetail in estimationDetails)
                         {
-                            var material = 
-                                _yarnDocumentRepository
-                                    .Find(o => o.Identity == item.YarnId.Value)
-                                    .FirstOrDefault();
-                            if (material != null)
-                            {
-                                if (!warpMaterials.Contains(material.Name))
-                                {
-                                    warpMaterials.Add(material.Name);
-                                }
-                            }
+                            var newOrderReport = new OrderReportListDto(orderDocument, constructionDocument, estimationDetail, weavingUnitName);
+
+                            result.Add(newOrderReport);
                         }
-
-                        var weftMaterials = new List<string>();
-                        foreach (var item in constructionDocument.ConstructionWarpsDetail)
-                        {
-                            var material = _yarnDocumentRepository.Find(o => o.Identity == item.YarnId.Value).FirstOrDefault();
-                            if (material != null)
-                            {
-                                if (!weftMaterials.Contains(material.Name))
-                                {
-                                    weftMaterials.Add(material.Name);
-                                }
-                            }
-                        }
-
-                        var warpType = "";
-                        foreach (var item in warpMaterials)
-                        {
-                            if (warpType == "")
-                            {
-                                warpType = item;
-                            }
-                            else
-                            {
-                                warpType = warpType + item;
-                            }
-                        }
-
-                        var weftType = "";
-                        foreach (var item in weftMaterials)
-                        {
-                            if (weftType == "")
-                            {
-                                weftType = item;
-                            }
-                            else
-                            {
-                                weftType = item + item;
-                            }
-                        }
-
-                        var yarnNumber = warpType + "X" + weftType;
-
-                        if (constructionDocument == null)
-                        {
-                            throw Validator.ErrorValidation(("Construction Document",
-                                                             "Invalid Construction Document with Order Identity " +
-                                                             orderDocument.Identity +
-                                                             " Not Found"));
-                        }
-
-                        var newOrder = new OrderReportListDto(orderDocument, constructionDocument, estimationDocuments, yarnNumber, weavingUnitName);
-
-                        result.Add(newOrder);
                     }
 
                     if (!order.Contains("{}"))
