@@ -10,25 +10,25 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         : ICommand<DailyOperationWarpingDocument>
     {
         [JsonProperty(PropertyName = "PreparationOrder")]
-        public OrderId PreparationOrder { get; private set; }
+        public OrderId PreparationOrder { get; set; }
 
         [JsonProperty(PropertyName = "AmountOfCones")]
-        public int AmountOfCones { get; private set; }
+        public int AmountOfCones { get; set; }
 
         [JsonProperty(PropertyName = "BeamProductResult")]
-        public int BeamProductResult { get; private set; }
+        public int BeamProductResult { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
-        public DateTimeOffset PreparationDate { get; private set; }
+        public DateTimeOffset PreparationDate { get; set; }
 
         [JsonProperty(PropertyName = "PreparationTime")]
-        public TimeSpan PreparationTime { get; private set; }
+        public TimeSpan PreparationTime { get; set; }
 
         [JsonProperty(PropertyName = "PreparationShift")]
-        public ShiftId PreparationShift { get; private set; }
+        public ShiftId PreparationShift { get; set; }
 
         [JsonProperty(PropertyName = "PreparationOperator")]
-        public OperatorId PreparationOperator { get; private set; }
+        public OperatorId PreparationOperator { get; set; }
     }
 
     public class PreparationDailyOperationWarpingCommandValidator 

@@ -21,7 +21,6 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.ReadModels;

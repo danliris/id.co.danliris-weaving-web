@@ -1,5 +1,7 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Application.Estimations.Productions.DataTransferObjects;
 using Manufactures.Domain.Estimations.Productions.Commands;
+using Manufactures.Domain.Estimations.Productions.Queries;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,11 +23,16 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
 
+        private readonly IEstimatedProductionDocumentQuery<EstimatedProductionListDto> _estimatedProductionDocumentQuery;
+
         public EstimationController(IServiceProvider serviceProvider, 
-                                    IWorkContext workContext) : base(serviceProvider)
+                                    IWorkContext workContext,
+                                    IEstimatedProductionDocumentQuery<EstimatedProductionListDto> estimatedProductionDocumentQuery) : base(serviceProvider)
         {
             _estimationProductRepository = 
                 this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
+
+            _estimatedProductionDocumentQuery = estimatedProductionDocumentQuery ?? throw new ArgumentNullException(nameof(estimatedProductionDocumentQuery));
         }
 
         [HttpGet]
@@ -35,19 +42,13 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null, 
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query = 
-                _estimationProductRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var estimationDocument = 
-                _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
-                                            .Select(item => new ListEstimationDto(item));
+            var estimatedProductionDocuments = await _estimatedProductionDocumentQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                estimationDocument = 
-                    estimationDocument
-                        .Where(entity => entity.EstimationNumber.Contains(keyword, 
-                                                                          StringComparison.OrdinalIgnoreCase));
+                estimatedProductionDocuments = 
+                    estimatedProductionDocuments
+                        .Where(o => o.EstimatedNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -56,56 +57,40 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(ListEstimationDto).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(EstimatedProductionListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    estimationDocument = 
-                        estimationDocument.OrderBy(x => prop.GetValue(x, null));
+                    estimatedProductionDocuments =
+                        estimatedProductionDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    estimationDocument = 
-                        estimationDocument.OrderByDescending(x => prop.GetValue(x, null));
+                    estimatedProductionDocuments =
+                        estimatedProductionDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            var ResultEstimationDocument = 
-                estimationDocument.Skip(page * size).Take(size);
-            int totalRows = estimationDocument.Count();
-            int resultCount = ResultEstimationDocument.Count();
-            page = page + 1;
+            var result = estimatedProductionDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
 
-            await Task.Yield();
-
-            return Ok(ResultEstimationDocument, info: new
-            {
-                page,
-                size,
-                total = totalRows,
-                count = resultCount
-            });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var query = _estimationProductRepository.Query;
-            var estimationDocument = 
-                _estimationProductRepository.Find(query.Include(p => p.EstimationProducts))
-                                            .Where(o => o.Identity == Identity)
-                                            .Select(item => new EstimationByIdDto(item))
-                                            .FirstOrDefault();
-            await Task.Yield();
+            var estimatedProductionDocument = await _estimatedProductionDocumentQuery.GetById(Identity);
 
+            await Task.Yield();
             if (Identity == null)
             {
                 return NotFound();
             }
             else
             {
-                return Ok(estimationDocument);
+                return Ok(estimatedProductionDocument);
             }
         }
 

@@ -1,8 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Estimations.Productions.Entities;
-using Manufactures.Domain.Estimations.Productions.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;

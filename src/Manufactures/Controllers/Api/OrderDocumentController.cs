@@ -72,16 +72,12 @@ namespace Manufactures.Controllers.Api
             {
                 orderDocuments =
                     orderDocuments
-                        .Where(entity => entity.OrderNumber.Contains(keyword,
-                                                                     StringComparison.OrdinalIgnoreCase) ||
-                                         entity.ConstructionNumber.Contains(keyword,
-                                                                            StringComparison.OrdinalIgnoreCase) ||
-                                         entity.Unit.Contains(keyword,
-                                                                          StringComparison.OrdinalIgnoreCase) ||
-                                         entity.Period.Month.ToString("MMMM")
-                                                            .Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                         entity.Period.Year.ToString("yyyy")
-                                                            .Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+                        .Where(o => o.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.Unit.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.Period.Month.ToString("MMMM").Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.Period.Year.ToString("yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
             }
 
             if (!order.Contains("{}"))

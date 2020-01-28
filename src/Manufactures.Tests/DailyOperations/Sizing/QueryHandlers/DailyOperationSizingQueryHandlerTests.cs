@@ -29,7 +29,6 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.ReadModels;
@@ -112,7 +111,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
 
             //Create Mock Object
             //Fabric Construction Object
-            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
+            var fabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
                 new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
                 "Melintang",
@@ -135,13 +134,13 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 2400,
                 "Cotton12");
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction, secondFabricConstruction });
 
             //Order Object
-            var firstOrderDocument = new OrderDocument(
+            var orderDocument = new OrderDocument(
                 new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
                 "0002/08-2019",
-                new ConstructionId(firstFabricConstruction.Identity),
+                new ConstructionId(fabricConstruction.Identity),
                 DateTimeOffset.UtcNow.AddDays(-1),
                 new Period("August", "2019"),
                 new Composition(50, 40, 10),
@@ -167,10 +166,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 new UnitId(11),
                 "OPEN-ORDER");
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
-                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
+                .Returns(new List<OrderDocument>() { orderDocument, secondOrderDocument });
 
             //Machine Type Object
-            var firstMachineTypeDocument = new MachineTypeDocument(
+            var machineTypeDocument = new MachineTypeDocument(
                 new Guid("2C3FECFC-C186-4BAD-B001-D39EE304A17E"),
                 "Kawamoto",
                 4000,
@@ -184,11 +183,11 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             //    .Returns(new List<MachineTypeDocument>() { firstMachineTypeDocument, secondMachineTypeDocument });
 
             //Machine Object
-            var firstMachineDocument = new MachineDocument(
+            var machineDocument = new MachineDocument(
                 new Guid("2401F96A-40B3-4662-A8BB-4C9A605A8173"),
                 "123",
                 "Utara",
-                new MachineTypeId(firstMachineTypeDocument.Identity),
+                new MachineTypeId(machineTypeDocument.Identity),
                 new UnitId(11),
                 33,
                 new UomId(195));
@@ -201,10 +200,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 33,
                 new UomId(195));
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
-                .Returns(new List<MachineDocument>() { firstMachineDocument, secondMachineDocument });
+                .Returns(new List<MachineDocument>() { machineDocument, secondMachineDocument });
 
             //Operator Object
-            var firstOperator = new OperatorDocument(
+            var operatorDocument = new OperatorDocument(
                 new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
                 new UnitId(11),
@@ -222,7 +221,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             //    .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
 
             //Shift Object
-            var firstShift = new ShiftDocument(
+            var shift = new ShiftDocument(
                 new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
                 "Pagi",
                 new TimeSpan(06, 01, 00),
@@ -259,8 +258,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             secondBeamWarping.Add(secondBeamId);
 
             var firstSizingDocument = new DailyOperationSizingDocument(new Guid("aa940723-a563-48f1-b2e8-3f70be633950"),
-                                                                       new MachineId(firstMachineDocument.Identity),
-                                                                       new OrderId(firstOrderDocument.Identity),
+                                                                       new MachineId(machineDocument.Identity),
+                                                                       new OrderId(orderDocument.Identity),
                                                                        firstBeamWarping,
                                                                        46,
                                                                        400,
@@ -272,8 +271,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                        DateTimeOffset.UtcNow,
                                                                        OperationStatus.ONFINISH);
             var firstSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
-                                                                     new ShiftId(firstShift.Identity),
-                                                                     new OperatorId(firstOperator.Identity),
+                                                                     new ShiftId(shift.Identity),
+                                                                     new OperatorId(operatorDocument.Identity),
                                                                      DateTimeOffset.UtcNow,
                                                                      MachineStatus.ONFINISH,
                                                                      "-",

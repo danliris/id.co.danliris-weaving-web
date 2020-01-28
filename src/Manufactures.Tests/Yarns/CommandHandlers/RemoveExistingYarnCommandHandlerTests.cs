@@ -16,13 +16,13 @@ using Xunit;
 
 namespace Manufactures.Tests.Yarns.CommandHandlers
 {
-    public class RemoveExsistingYarnCommandHandlerTests : IDisposable
+    public class RemoveExistingYarnCommandHandlerTests : IDisposable
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IYarnDocumentRepository> mockYarnRepo;
 
-        public RemoveExsistingYarnCommandHandlerTests()
+        public RemoveExistingYarnCommandHandlerTests()
         {
             this.mockRepository = new MockRepository(MockBehavior.Strict);
 
