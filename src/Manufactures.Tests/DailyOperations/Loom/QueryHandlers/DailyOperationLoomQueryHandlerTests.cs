@@ -9,6 +9,7 @@ using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
+using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.GlobalValueObjects;
@@ -102,36 +103,48 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             var dailyOperationLoomQueryHandler = this.CreateDailyOperationLoomQueryHandler();
 
             //Create Mock Object
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
             //Fabric Construction Object
-            var fabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
                 "Melintang",
-                "PLCTD100",
-                "PLCTD100",
                 33,
                 44,
                 55,
-                1000,
-                "PolyCotton100");
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
+                Guid.NewGuid(),
                 "0002/08-2019",
+                DateTime.Now,
                 new ConstructionId(fabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
+                3500,
+                new UnitId(14),
+                Constants.ONORDER);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -265,36 +278,48 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             var dailyOperationLoomQueryHandler = this.CreateDailyOperationLoomQueryHandler();
 
             //Create Mock Object
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
             //Fabric Construction Object
-            var fabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
                 "Melintang",
-                "PLCTD100",
-                "PLCTD100",
                 33,
                 44,
                 55,
-                1000,
-                "PolyCotton100");
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
+                Guid.NewGuid(),
                 "0002/08-2019",
+                DateTime.Now,
                 new ConstructionId(fabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
+                3500,
+                new UnitId(14),
+                Constants.ONORDER);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 

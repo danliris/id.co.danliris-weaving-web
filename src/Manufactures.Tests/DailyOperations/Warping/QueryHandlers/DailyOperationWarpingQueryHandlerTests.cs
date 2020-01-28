@@ -45,6 +45,12 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
+        private readonly Mock<IDailyOperationWarpingHistoryRepository>
+            mockDailyOperationWarpingHistoryRepo;
+        private readonly Mock<IDailyOperationWarpingBeamProductRepository>
+            mockDailyOperationWarpingBeamProductRepo;
+        private readonly Mock<IDailyOperationWarpingBrokenCauseRepository>
+            mockDailyOperationWarpingBrokenCauseRepo;
         private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IFabricConstructionRepository>
@@ -66,6 +72,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
             this.mockDailyOperationWarpingRepo = this.mockRepository.Create<IDailyOperationWarpingRepository>();
+            this.mockDailyOperationWarpingHistoryRepo = this.mockRepository.Create<IDailyOperationWarpingHistoryRepository>();
+            this.mockDailyOperationWarpingBeamProductRepo = this.mockRepository.Create<IDailyOperationWarpingBeamProductRepository>();
+            this.mockDailyOperationWarpingBrokenCauseRepo = this.mockRepository.Create<IDailyOperationWarpingBrokenCauseRepository>();
             this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockMaterialTypeRepo = this.mockRepository.Create<IMaterialTypeRepository>();
@@ -75,6 +84,9 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockWarpingBrokenCauseRepo = this.mockRepository.Create<IWarpingBrokenCauseRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockDailyOperationWarpingRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingHistoryRepository>()).Returns(mockDailyOperationWarpingHistoryRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBeamProductRepository>()).Returns(mockDailyOperationWarpingBeamProductRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBrokenCauseRepository>()).Returns(mockDailyOperationWarpingBrokenCauseRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMaterialTypeRepository>()).Returns(mockMaterialTypeRepo.Object);
@@ -124,7 +136,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 266,
                 122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
@@ -230,6 +242,44 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
+
+            //Operator Object
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
+                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
+                new UnitId(11),
+                "C",
+                "AJL",
+                "Operator");
+            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
+                .Returns(new List<OperatorDocument>() { operatorDocument });
+
+            //Beam Object
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
+                "TS56",
+                "Sizing",
+                6);
+            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
+                .Returns(new List<BeamDocument>() { beam });
+
+            //Broken Cause Object
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
             //Supplier Object
             var supplierDocument = new WeavingSupplierDocument(
                 Guid.NewGuid(),
@@ -252,7 +302,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 266,
                 122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
@@ -275,43 +325,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
-            //Material Type Object
-            var materialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { materialType });
-
-            //Operator Object
-            var operator_ = new OperatorDocument(
-                Guid.NewGuid(),
-                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
-                new UnitId(11),
-                "C",
-                "AJL",
-                "Operator");
-            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { operator_ });
-
-            //Shift Object
-            var shift = new ShiftDocument(
-                Guid.NewGuid(),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { shift });
-
-            //Beam Object
-            var beam = new BeamDocument(
-                Guid.NewGuid(),
-                "TS56",
-                "Sizing",
-                6);
-            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { beam });
-            
             //Warping Document Object
             var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                     new OrderId(orderDocument.Identity),
@@ -322,7 +335,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            new ShiftId(shift.Identity),
-                                                           new OperatorId(operator_.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
                                                            DateTimeOffset.UtcNow,
                                                            MachineStatus.ONSTART,
                                                            warpingDocument.Identity);
@@ -333,16 +346,29 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                                    DateTimeOffset.UtcNow,
                                                                    BeamStatus.ONPROCESS,
                                                                    warpingDocument.Identity);
+            var warpingBroken = new DailyOperationWarpingBrokenCause(
+                Guid.NewGuid(),
+                new BrokenCauseId(brokenCause.Identity),
+                2,
+                beamProduct.Identity);
+            beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
             mockDailyOperationWarpingRepo
-                .Setup(x => x.Query)
-                .Returns(new List<DailyOperationWarpingDocumentReadModel>()
-                .AsQueryable());
-            mockDailyOperationWarpingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
-                .Returns(
-                new List<DailyOperationWarpingDocument>() { warpingDocument });
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
+
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
+
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
+
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
 
             // Act
             var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);
@@ -358,6 +384,44 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
+
+            //Operator Object
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
+                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
+                new UnitId(11),
+                "C",
+                "AJL",
+                "Operator");
+            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
+                .Returns(new List<OperatorDocument>() { operatorDocument });
+
+            //Beam Object
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
+                "TS56",
+                "Sizing",
+                6);
+            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
+                .Returns(new List<BeamDocument>() { beam });
+
+            //Broken Cause Object
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
             //Supplier Object
             var supplierDocument = new WeavingSupplierDocument(
                 Guid.NewGuid(),
@@ -380,7 +444,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 266,
                 122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
@@ -403,48 +467,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
-            //Material Type Object
-            var materialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { materialType });
-
-            //Operator Object
-            var operator_ = new OperatorDocument(
-                Guid.NewGuid(),
-                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
-                new UnitId(11),
-                "C",
-                "AJL",
-                "Operator");
-            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { operator_ });
-
-            //Shift Object
-            var shift = new ShiftDocument(
-                Guid.NewGuid(),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { shift });
-
-            //Beam Object
-            var beam = new BeamDocument(
-                Guid.NewGuid(),
-                "TS56",
-                "Sizing",
-                6);
-            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { beam });
-
-            //Broken Cause Object
-            var brokenCause = new WarpingBrokenCauseDocument(new Guid("D2B3DC1D-1082-4C21-9369-643FE873B699"),"Slub","-",false);
-            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
-                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
-
             //Warping Document Object
             var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                     new OrderId(orderDocument.Identity),
@@ -455,7 +477,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            new ShiftId(shift.Identity),
-                                                           new OperatorId(operator_.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
                                                            DateTimeOffset.UtcNow,
                                                            MachineStatus.ONENTRY,
                                                            warpingDocument.Identity);
@@ -466,20 +488,33 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                                    DateTimeOffset.UtcNow,
                                                                    BeamStatus.ONPROCESS,
                                                                    warpingDocument.Identity);
-
             var warpingBroken = new DailyOperationWarpingBrokenCause(
                 Guid.NewGuid(), 
                 new BrokenCauseId(brokenCause.Identity), 
                 2,
                 beamProduct.Identity);
             beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
-
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
+            mockDailyOperationWarpingRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
 
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
-                new List<DailyOperationWarpingDocument>() { warpingDocument });
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
+
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
+
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
+
+            //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            //mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //    new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             // Act
             var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);
@@ -495,6 +530,44 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
+
+            //Operator Object
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
+                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
+                new UnitId(11),
+                "C",
+                "AJL",
+                "Operator");
+            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
+                .Returns(new List<OperatorDocument>() { operatorDocument });
+
+            //Beam Object
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
+                "TS56",
+                "Sizing",
+                6);
+            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
+                .Returns(new List<BeamDocument>() { beam });
+
+            //Broken Cause Object
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
             //Supplier Object
             var supplierDocument = new WeavingSupplierDocument(
                 Guid.NewGuid(),
@@ -517,7 +590,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                 266,
                 122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { fabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
             var orderDocument = new OrderDocument(
@@ -540,43 +613,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
-            //Material Type Object
-            var materialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { materialType });
-
-            //Operator Object
-            var operator_ = new OperatorDocument(
-                Guid.NewGuid(),
-                new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
-                new UnitId(11),
-                "C",
-                "AJL",
-                "Operator");
-            mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { operator_ });
-
-            //Shift Object
-            var shift = new ShiftDocument(
-                Guid.NewGuid(),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { shift });
-
-            //Beam Object
-            var beam = new BeamDocument(
-                Guid.NewGuid(),
-                "TS56",
-                "Sizing",
-                6);
-            mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { beam });
-
             //Warping Document Object
             var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
                                                                     new OrderId(orderDocument.Identity),
@@ -587,7 +623,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                            new ShiftId(shift.Identity),
-                                                           new OperatorId(operator_.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
                                                            DateTimeOffset.UtcNow,
                                                            MachineStatus.ONFINISH,
                                                            warpingDocument.Identity);
@@ -598,16 +634,29 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
                                                                    DateTimeOffset.UtcNow,
                                                                    BeamStatus.ONPROCESS,
                                                                    warpingDocument.Identity);
+            var warpingBroken = new DailyOperationWarpingBrokenCause(
+                Guid.NewGuid(),
+                new BrokenCauseId(brokenCause.Identity),
+                2,
+                beamProduct.Identity);
+            beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
             mockDailyOperationWarpingRepo
-                .Setup(x => x.Query)
-                .Returns(new List<DailyOperationWarpingDocumentReadModel>()
-                .AsQueryable());
-            mockDailyOperationWarpingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
-                .Returns(
-                new List<DailyOperationWarpingDocument>() { warpingDocument });
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
+
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
+
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
+
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
 
             // Act
             var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);

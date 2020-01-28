@@ -1,0 +1,1272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Manufactures.Application.Beams.CommandHandlers.AddBeamCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Beams\CommandHandlers\AddBeamCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Beams.CommandHandlers.RemoveBeamCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Beams\CommandHandlers\RemoveBeamCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Beams.CommandHandlers.UpdateBeamCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Beams\CommandHandlers\UpdateBeamCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.DataTransferObjects.Beams.BeamListDto" Collapsed="true">
+    <Position X="30" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAEAAAAAIAIAAAAAAAQAAIAAAAAA=</HashCode>
+      <FileName>Beams\DataTransferObjects\BeamListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Beams.QueryHandlers.BeamQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAgAAAAAAgIA=</HashCode>
+      <FileName>Beams\QueryHandlers\BeamQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BeamStockMonitoring.CommandHandlers.BeamStockMonitoringCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAiAA=</HashCode>
+      <FileName>BeamStockMonitoring\CommandHandlers\BeamStockMonitoringCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BeamStockMonitoring.DataTransferObjects.BeamStockMonitoringDto" Collapsed="true">
+    <Position X="14.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIAAAAAAAEigAACAAAAAAAAAhAAADAIAACIAAA=</HashCode>
+      <FileName>BeamStockMonitoring\DataTransferObjects\BeamStockMonitoringDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.BeamStockMonitoring.QueryHandlers.BeamStockMonitoringQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAIAAAAAAAAAAAgAEAAAAiIA=</HashCode>
+      <FileName>BeamStockMonitoring\QueryHandlers\BeamStockMonitoringQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BrokenCauses.Warping.CommandHandlers.AddWarpingBrokenCauseCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAgAA=</HashCode>
+      <FileName>BrokenCauses\Warping\CommandHandlers\AddWarpingBrokenCauseCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BrokenCauses.Warping.CommandHandlers.RemoveWarpingBrokenCauseCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAgAA=</HashCode>
+      <FileName>BrokenCauses\Warping\CommandHandlers\RemoveWarpingBrokenCauseCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BrokenCauses.Warping.CommandHandlers.UpdateWarpingBrokenCauseCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIgAAAAAAAAgAA=</HashCode>
+      <FileName>BrokenCauses\Warping\CommandHandlers\UpdateWarpingBrokenCauseCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.BrokenCauses.Warping.DataTransferObjects.WarpingBrokenCauseDto" Collapsed="true">
+    <Position X="19.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\DataTransferObjects\WarpingBrokenCauseDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.BrokenCauses.Warping.QueryHandlers.WarpingBrokenCauseQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAgAAAAAAgIA=</HashCode>
+      <FileName>BrokenCauses\Warping\QueryHandlers\WarpingBrokenCauseQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.CommandHandlers.FinishDailyOperationLoomCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Loom\CommandHandlers\FinishDailyOperationLoomCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.CommandHandlers.PreparationDailyOperationLoomCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAiAA=</HashCode>
+      <FileName>DailyOperations\Loom\CommandHandlers\PreparationDailyOperationLoomCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.CommandHandlers.UpdatePauseDailyOperationLoomCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Loom\CommandHandlers\UpdatePauseDailyOperationLoomCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.CommandHandlers.UpdateResumeDailyOperationLoomCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Loom\CommandHandlers\UpdateResumeDailyOperationLoomCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.CommandHandlers.UpdateStartDailyOperationLoomCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Loom\CommandHandlers\UpdateStartDailyOperationLoomCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomReport.DailyOperationLoomReportListDto" Collapsed="true">
+    <Position X="16" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACoAAAAAAAAAABAAAECAAAAAAEAIAAAAAAAACAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\DataTransferObjects\DailyOperationLoomReport\DailyOperationLoomReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomBeamHistoryDto" Collapsed="true">
+    <Position X="10.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACICEAAIAAABAAACAAAKAAIAAAAAAgABAAAAAQABAAE=</HashCode>
+      <FileName>DailyOperations\Loom\DataTransferObjects\DailyOperationLoomBeamHistoryDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomBeamProductDto" Collapsed="true">
+    <Position X="12.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAACACAAAAAQCAAIAAAAAAACAABAAAAAQAAA=</HashCode>
+      <FileName>DailyOperations\Loom\DataTransferObjects\DailyOperationLoomBeamProductDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomByIdDto" Collapsed="true">
+    <Position X="3.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAEAAAEAAAAACA=</HashCode>
+      <FileName>DailyOperations\Loom\DataTransferObjects\DailyOperationLoomByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.DataTransferObjects.DailyOperationLoomListDto" Collapsed="true">
+    <Position X="3.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAC4AAEACAAAAADAAAAKAAACAAAIIAAAAAAAAAAACA=</HashCode>
+      <FileName>DailyOperations\Loom\DataTransferObjects\DailyOperationLoomListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOperationLoomReport.DailyOperationLoomReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgIAAAgAAAAAAAAAAAAAAAACAAAIAAYAAgAA=</HashCode>
+      <FileName>DailyOperations\Loom\QueryHandlers\DailyOperationLoomReport\DailyOperationLoomReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOperationLoomQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgEAAAAAAIAAAAACAAAAAgIQAYAAgIA=</HashCode>
+      <FileName>DailyOperations\Loom\QueryHandlers\DailyOperationLoomQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.ChangeOperatorCombDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\ChangeOperatorCombDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.ChangeOperatorReachingInDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\ChangeOperatorReachingInDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.PreparationDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAiAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\PreparationDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.UpdateCombFinishDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\UpdateCombFinishDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.UpdateCombStartDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\UpdateCombStartDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.UpdateReachingInFinishDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\UpdateReachingInFinishDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.CommandHandlers.UpdateReachingInStartDailyOperationReachingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\CommandHandlers\UpdateReachingInStartDailyOperationReachingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingReport.DailyOperationReachingReportListDto" Collapsed="true">
+    <Position X="26.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAAAAAAAgAAAAMCAIAAAAEAAQAQAAAAACAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\DataTransferObjects\DailyOperationReachingReport\DailyOperationReachingReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingBeamDto" Collapsed="true">
+    <Position X="19.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAACAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\DataTransferObjects\DailyOperationReachingBeamDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingByIdDto" Collapsed="true">
+    <Position X="6.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\DataTransferObjects\DailyOperationReachingByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingHistoryDto" Collapsed="true">
+    <Position X="23" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAACAAAACAAAIAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\DataTransferObjects\DailyOperationReachingHistoryDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingListDto" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAgAAAAAAAAIAAAAAAACAQAAAAACAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\DataTransferObjects\DailyOperationReachingListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyOperationReachingReport.DailyOperationReachingReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgIAAAgEAAAAACIAAAAACAACAAAAQAQAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\QueryHandlers\DailyOperationReachingReport\DailyOperationReachingReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyOperationReachingReport.DailyOperationReachingBeamQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACIAAAAAAAAAAAEAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Reaching\QueryHandlers\DailyOperationReachingBeamQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyOperationReachingQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgEAAAAACIAAAAACAAAAAgAUAAAAgIA=</HashCode>
+      <FileName>DailyOperations\Reaching\QueryHandlers\DailyOperationReachingQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.Calculations.SizePickupReport.Filtering" Collapsed="true">
+    <Position X="19.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAAAgACAAAAAAAAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Calculations\SizePickupReport\Filtering.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.Calculations.Netto" Collapsed="true">
+    <Position X="21.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Calculations\Netto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.Calculations.SPU" Collapsed="true">
+    <Position X="14.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Calculations\SPU.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.Calculations.Theoritical" Collapsed="true">
+    <Position X="17.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Calculations\Theoritical.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Calculation.PIS" Collapsed="true">
+    <Position X="10.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Calculations\PIS.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.FinishDoffDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\FinishDoffDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.HistoryRemovePreparationDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\HistoryRemovePreparationDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.PreparationDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAIAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\PreparationDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.ProduceBeamDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\ProduceBeamDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.UpdatePauseDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\UpdatePauseDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.UpdateResumeDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\UpdateResumeDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.CommandHandlers.UpdateStartDailyOperationSizingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAE=</HashCode>
+      <FileName>DailyOperations\Sizing\CommandHandlers\UpdateStartDailyOperationSizingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport.DailyOperationSizingReportListDto" Collapsed="true">
+    <Position X="14.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAIAAAAIAgAAAAMCAIIAAAEAAAAAAAAIACAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingReport\DailyOperationSizingReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport.SizePickupReportListDto" Collapsed="true">
+    <Position X="9" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgACAIAAAEIAJAAAAACKBAAAAIAQAAAAAIAAAAAAEAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\SizePickupReport\SizePickupReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingBeamDto" Collapsed="true">
+    <Position X="30" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingBeamDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingBeamProductDto" Collapsed="true">
+    <Position X="9" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAACAAAEAAIABAAAAAAAAAAAAIAQAAAAQIAAAAAAEAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingBeamProductDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingBeamsWarpingDto" Collapsed="true">
+    <Position X="6.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingBeamsWarpingDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingByIdDto" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABACACAEAIIAgAAAAAAAIAAAABgAgAgAAIAAAACA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingHistoryDto" Collapsed="true">
+    <Position X="10.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAIAEAAAAACAACIAAAAAAAAQgAAQAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingHistoryDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingListDto" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACYAAEAAAAAAADCAAAKAIACAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\DataTransferObjects\DailyOperationSizingListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOperationSizingReport.DailyOperationSizingReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEIAAAgIAAAgEAAAAAAIAAAAACAACAAAAQAQAAgAA=</HashCode>
+      <FileName>DailyOperations\Sizing\QueryHandlers\DailyOperationSizingReport\DailyOperationSizingReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePickupReport.SizePickupReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAIAAAgEAAAAAAIAAAAACAAAAAAAAAQAAgAA=</HashCode>
+      <FileName>DailyOperations\Sizing\QueryHandlers\SizePickupReport\SizePickupReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOperationSizingQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEJAAAAAAAAgEAAAAAAIAAAQACAAAAAgAQAAAAgIA=</HashCode>
+      <FileName>DailyOperations\Sizing\QueryHandlers\DailyOperationSizingQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.CommandHandlers.CompletedDailyOperationWarpingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAIAABAAAAAAAAAAAAAAAAAAAABAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\CommandHandlers\CompletedDailyOperationWarpingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.CommandHandlers.PreparationDailyOperationWarpingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAABAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\CommandHandlers\PreparationDailyOperationWarpingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.CommandHandlers.ProduceBeamDailyOperationWarpingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAIAABAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\CommandHandlers\ProduceBeamDailyOperationWarpingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.CommandHandlers.UpdateStartDailyOperationWarpingCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAIAABAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\CommandHandlers\UpdateStartDailyOperationWarpingCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport.DailyOperationWarpingReportListDto" Collapsed="true">
+    <Position X="23" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACIAAAgAIAAAgAAAAMCAAAAAEEAAAAAAAAAACAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingReport\DailyOperationWarpingReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportBodyBrokenDto" Collapsed="true">
+    <Position X="26.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAABAAAACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportBodyBrokenDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportFooterDto" Collapsed="true">
+    <Position X="28.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAIAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportFooterTotalDto" Collapsed="true">
+    <Position X="30" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterTotalDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportHeaderSupplierDto" Collapsed="true">
+    <Position X="9" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderSupplierDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportHeaderWarpDto" Collapsed="true">
+    <Position X="10.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAABAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderWarpDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport.WarpingBrokenThreadsReportListDto" Collapsed="true">
+    <Position X="12.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACABAACAAAAAAAAAAAAAAAAAAAEEAAAAAAAIgA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport.DailyProcessedPerOperatorDto" Collapsed="true">
+    <Position X="26.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAQAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingProductionReport\WarpingProductionReportDailyProcessedPerOperatorDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport.WarpingProductionReportGroupDto" Collapsed="true">
+    <Position X="14.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingProductionReport\WarpingProductionReportGroupDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport.WarpingProductionReportHeaderDto" Collapsed="true">
+    <Position X="16" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingProductionReport\WarpingProductionReportHeaderDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport.WarpingProductionReportListDto" Collapsed="true">
+    <Position X="17.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAABAAAAAAAAAAAAAAACAAAAAgEAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingProductionReport\WarpingProductionReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport.WarpingProductionReportProcessedListDto" Collapsed="true">
+    <Position X="19.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingProductionReport\WarpingProductionReportProcessedListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingBeamDto" Collapsed="true">
+    <Position X="6.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingBeamDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingBeamProductDto" Collapsed="true">
+    <Position X="17.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQiAIAEAAAAAAAAAIAABAAAAAAgAAAAAAAAAAABAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingBeamProductDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingByIdDto" Collapsed="true">
+    <Position X="3.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIQAAYCAAAAAAAAAAAABgEAEAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingHistoryDto" Collapsed="true">
+    <Position X="19.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAIAEAAAAACAAAIAAAAAAAgAgAAAAAAAAAEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingHistoryDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingListDto" Collapsed="true">
+    <Position X="3.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQAAEAAAAAAADAAAAKAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\DailyOperationWarpingListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsCausesDto" Collapsed="true">
+    <Position X="24.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsCausesDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport.DailyOperationWarpingReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAABgIAAQgEAAAAAAAAAAAACAACAAAAAAQAAwAA=</HashCode>
+      <FileName>DailyOperations\Warping\QueryHandlers\DailyOperationWarpingReport\DailyOperationWarpingReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingBrokenThreadsReport.WarpingBrokenReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAIAAAgIAAQgAAAAAAAAAAAAEAAACgAAAAAhAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\QueryHandlers\WarpingBrokenThreadsReport\WarpingBrokenReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingProductionReport.WarpingProductionReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAABBIAAAAEAAAAAAAAAAAACAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>DailyOperations\Warping\QueryHandlers\WarpingProductionReport\WarpingProductionReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAIAABAAAAAgEAAAAAAIAAAAACBAAgAgAAAQAAwIA=</HashCode>
+      <FileName>DailyOperations\Warping\QueryHandlers\DailyOperationWarpingQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Defects.FabricDefect.CommandHandlers.AddFabricDefectCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Defects\FabricDefect\CommandHandlers\AddFabricDefectCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Defects.FabricDefect.CommandHandlers.RemoveFabricDefectCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Defects\FabricDefect\CommandHandlers\RemoveFabricDefectCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Defects.FabricDefect.CommandHandlers.UpdateFabricDefectCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Defects\FabricDefect\CommandHandlers\UpdateFabricDefectCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Defects.FabricDefect.DataTransferObjects.FabricDefectDto" Collapsed="true">
+    <Position X="16" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\DataTransferObjects\FabricDefectDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Defects.FabricDefect.QueryHandlers.FabricDefectQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAgAAAAAAgIA=</HashCode>
+      <FileName>Defects\FabricDefect\QueryHandlers\FabricDefectQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.CommandHandlers.AddEstimationCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEIAAAhAA=</HashCode>
+      <FileName>Estimations\Productions\CommandHandlers\AddEstimationCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.CommandHandlers.RemoveEstimationCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEIAAAhAA=</HashCode>
+      <FileName>Estimations\Productions\CommandHandlers\RemoveEstimationCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.CommandHandlers.UpdateEstimationCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEIAAAhAA=</HashCode>
+      <FileName>Estimations\Productions\CommandHandlers\UpdateEstimationCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.DataTransferObjects.EstimatedProductionByIdDto" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\DataTransferObjects\EstimatedProductionByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.DataTransferObjects.EstimatedProductionDetailDto" Collapsed="true">
+    <Position X="9" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAGAgAg=</HashCode>
+      <FileName>Estimations\Productions\DataTransferObjects\EstimatedProductionDetailDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.DataTransferObjects.EstimatedProductionListDto" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\DataTransferObjects\EstimatedProductionListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Estimations.Productions.QueryHandlers.EstimatedProductionQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAAAAgAAAAAAAAAAAAAAAACAAgAAIBAAhIA=</HashCode>
+      <FileName>Estimations\Productions\QueryHandlers\EstimatedProductionQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.CommandHandlers.AddConstructionCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAgAA=</HashCode>
+      <FileName>FabricConstructions\CommandHandlers\AddConstructionCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.CommandHandlers.RemoveConstructionCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>FabricConstructions\CommandHandlers\RemoveConstructionCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.CommandHandlers.UpdateConstructionCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAgAA=</HashCode>
+      <FileName>FabricConstructions\CommandHandlers\UpdateConstructionCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.DataTransferObjects.ConstructionYarnDetailDto" Collapsed="true">
+    <Position X="26.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAACAAAAAAAAAAAAAAAAAAAAAAABQAAgAAAAAA=</HashCode>
+      <FileName>FabricConstructions\DataTransferObjects\ConstructionYarnDetailDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.DataTransferObjects.FabricConstructionByIdDto" Collapsed="true">
+    <Position X="3.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACAAAAAIGAAAAAAAAAEAAAAKAAAQAAMAAAEAAACA=</HashCode>
+      <FileName>FabricConstructions\DataTransferObjects\FabricConstructionByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.DataTransferObjects.FabricConstructionListDto" Collapsed="true">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>FabricConstructions\DataTransferObjects\FabricConstructionListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.FabricConstructions.QueryHandlers.FabricConstructionQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAgAAABAAgIA=</HashCode>
+      <FileName>FabricConstructions\QueryHandlers\FabricConstructionQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.BeamStatus" Collapsed="true">
+    <Position X="10.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAgABAAAAAAAAAAAACAgA=</HashCode>
+      <FileName>Helpers\BeamStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.BrokenWarpingConstants" Collapsed="true">
+    <Position X="17.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Helpers\BrokenWarpingConstants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.Constants" Collapsed="true">
+    <Position X="24.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICAAAACCACAAAAAAAAAAAAAAAAACDAGARAAEACAIAAA=</HashCode>
+      <FileName>Helpers\Constants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.FabricDefectCategory" Collapsed="true">
+    <Position X="14.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAQAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\FabricDefectCategory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.MachineStatus" Collapsed="true">
+    <Position X="10.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAIBAAAACEAAAAAIAQAEAAAAAACARAAAA=</HashCode>
+      <FileName>Helpers\MachineStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.MovementStatus" Collapsed="true">
+    <Position X="16" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\MovementStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.OperationStatus" Collapsed="true">
+    <Position X="23" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\OperationStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.SizePickupPeriodStatus" Collapsed="true">
+    <Position X="30" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\SizePickupPeriodStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.SizePickupSPUConstants" Collapsed="true">
+    <Position X="12.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AMAgQAAAAAEIgAAAAQAAAAAAAAAAAABAAAQAAAEAAMA=</HashCode>
+      <FileName>Helpers\SizePickupSPUConstants.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Helpers.StockCardStatus" Collapsed="true">
+    <Position X="16" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\StockCardStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Machines.CommandHandlers.AddNewMachineCommandHandlers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAgAA=</HashCode>
+      <FileName>Machines\CommandHandlers\AddNewMachineCommandHandlers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Machines.CommandHandlers.RemoveExistingMachineCommandHandlers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAgAA=</HashCode>
+      <FileName>Machines\CommandHandlers\RemoveExistingMachineCommandHandlers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Machines.CommandHandlers.UpdateExistingMachineCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAQAAAAgAA=</HashCode>
+      <FileName>Machines\CommandHandlers\UpdateExistingMachineCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachinesPlanning.CommandHandlers.AddNewEnginePlanningCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachinesPlanning\CommandHandlers\AddNewMachinePlanningCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachinesPlanning.CommandHandlers.RemoveEnginePlanningCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachinesPlanning\CommandHandlers\RemoveMachinePlanningCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachinesPlanning.CommandHandlers.UpdateEnginePlanningCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachinesPlanning\CommandHandlers\UpdateMachinePlanningCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachinesPlanning.DataTransferObjects.MachinesPlanningReportListDto" Collapsed="true">
+    <Position X="30" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAGAAAACAAAAAAAAAIMAAIAAAAAAAAAAAACAQAAAAA=</HashCode>
+      <FileName>MachinesPlanning\DataTransferObjects\MachinesPlanningReport\MachinesPlanningReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport.MachinesPlanningReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgIAAAAAAAAAAAAAEAAACAACAAAAQAAAAgAA=</HashCode>
+      <FileName>MachinesPlanning\QueryHandlers\MachinesPlanningReport\MachinesPlanningReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachineTypes.CommandHandlers.AddNewMachineTypeCommandHandlers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachineTypes\CommandHandlers\AddNewMachineTypeCommandHandlers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachineTypes.CommandHandlers.RemoveExistingMachineTypeCommandHandlers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachineTypes\CommandHandlers\RemoveExistingMachineTypeCommandHandlers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.MachineTypes.CommandHandlers.UpdateExistingMachineTypeCommandHandlers" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="10.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>MachineTypes\CommandHandlers\UpdateExistingMachineTypeCommandHandlers.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Materials.CommandHandlers.PlaceMaterialTypeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAwAA=</HashCode>
+      <FileName>Materials\CommandHandlers\PlaceMaterialTypeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Materials.CommandHandlers.RemoveMaterialTypeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAwAA=</HashCode>
+      <FileName>Materials\CommandHandlers\RemoveMaterialTypeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Materials.CommandHandlers.UpdateMaterialTypeCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAwAA=</HashCode>
+      <FileName>Materials\CommandHandlers\UpdateMaterialTypeCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Operators.CommandHandlers.AddOperatorCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Operators\CommandHandlers\AddOperatorCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Operators.CommandHandlers.DeleteOperatorCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Operators\CommandHandlers\DeleteOperatorCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Operators.CommandHandlers.UpdateOperatorCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Operators\CommandHandlers\UpdateOperatorCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Operators.DTOs.OperatorListDto" Collapsed="true">
+    <Position X="24.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAEAAAAAAAAAAAQAAAQAAAAAAAAAAAQAEAAAAAAA=</HashCode>
+      <FileName>Operators\DTOs\OperatorListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Operators.QueryHandlers.OperatorQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAgIA=</HashCode>
+      <FileName>Operators\QueryHandlers\OperatorQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Orders.CommandHandlers.AddOrderCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEAAAAgAA=</HashCode>
+      <FileName>Orders\CommandHandlers\AddOrderCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Orders.CommandHandlers.RemoveWeavingOrderCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAABAAgAA=</HashCode>
+      <FileName>Orders\CommandHandlers\RemoveWeavingOrderCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Orders.CommandHandlers.UpdateOrderCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAEAAAAgAA=</HashCode>
+      <FileName>Orders\CommandHandlers\UpdateOrderCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Orders.DataTransferObjects.OrderReport.OrderReportListDto" Collapsed="true">
+    <Position X="30" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACCAAIAIAQAgiUAQAAAAAAAAAKAQIAAAMAAAACAgAA=</HashCode>
+      <FileName>Orders\DataTransferObjects\OrderReport\OrderReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Orders.DataTransferObjects.OrderByIdDto" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAACAAAAAAAAAAAAAAAAIAACAAAAAAAAAA=</HashCode>
+      <FileName>Orders\DataTransferObjects\OrderByIdDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Orders.DataTransferObjects.OrderListDto" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAIAAAQAAgAAYAAAAAAAAAAAQAAAAMAAAACAAAI=</HashCode>
+      <FileName>Orders\DataTransferObjects\OrderListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Orders.QueryHandlers.OrderReport.OrderReportQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAgIAAAAAAAAAAAAACAAAAAACAAAAEIBAAhAA=</HashCode>
+      <FileName>Orders\QueryHandlers\OrderReport\OrderReportQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Orders.QueryHandlers.OrderQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAgAAAAgAAAAAAAAAAAAAAAACAAgAAABAAgIA=</HashCode>
+      <FileName>Orders\QueryHandlers\OrderQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.ProductionResults.DataTransferObjects.ProductionResultsReport.ProductionResultsReportListDto" Collapsed="true">
+    <Position X="24.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAIEAAAIBAABAAAAECAIAAAAgAAAAAAAAARABgAA=</HashCode>
+      <FileName>ProductionResults\DataTransferObjects\ProductionResultsReport\ProductionResultsReportListDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Shifts.CommandHandlers.AddShiftCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Shifts\CommandHandlers\AddShiftCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Shifts.CommandHandlers.DeleteShiftCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Shifts\CommandHandlers\DeleteShiftCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Shifts.CommandHandlers.UpdateShiftCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Shifts\CommandHandlers\UpdateShiftCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Shifts.DTOs.ShiftDto" Collapsed="true">
+    <Position X="26.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\DTOs\ShiftDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Application.Shifts.QueryHandlers.ShiftQueryHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAgAAAAAAgIA=</HashCode>
+      <FileName>Shifts\QueryHandlers\ShiftQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.StockCards.CommandHandlers.CreateStockAdjustmentCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAAIAIAAAAAAAAAgAA=</HashCode>
+      <FileName>StockCards\CommandHandlers\CreateStockAdjustmentCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizing.MoveInBeamStockSizingEventHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAIAAAAAAIAIAAAAAAAAAkAA=</HashCode>
+      <FileName>StockCards\EventHandlers\DailyOperations\Sizing\MoveInBeamStockSizingEventHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.StockCards.EventHandlers.DailyOperations.Sizing.MoveOutBeamStockSizingEventHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAIAAAAAAIAIAAAAAAAAAkAA=</HashCode>
+      <FileName>StockCards\EventHandlers\DailyOperations\Sizing\MoveOutBeamStockSizingEventHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.StockCards.EventHandlers.Warping.MoveInBeamStockWarpingEventHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAIAAAAAAIAIAAAAAAAAAkAA=</HashCode>
+      <FileName>StockCards\EventHandlers\DailyOperations\Warping\MoveInBeamStockWarpingEventHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.StockCards.EventHandlers.DailyOperations.Warping.MoveOutBeamStockWarpingEventHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAIAAAAAAIAIAAAAAAAAAkAA=</HashCode>
+      <FileName>StockCards\EventHandlers\DailyOperations\Warping\MoveOutBeamStockWarpingEventHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Suppliers.CommandHandlers.CreateNewSupplierCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="28.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAIAAgAA=</HashCode>
+      <FileName>Suppliers\CommandHandlers\CreateNewSupplierCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Suppliers.CommandHandlers.RemoveAvailableSupplierCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAIAAgAA=</HashCode>
+      <FileName>Suppliers\CommandHandlers\RemoveAvailableSupplierCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Suppliers.CommandHandlers.UpdateAvailableSupplierCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAIAAgAA=</HashCode>
+      <FileName>Suppliers\CommandHandlers\UpdateAvailableSupplierCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.YarnNumbers.CommandHandlers.AddNewYarnNumberCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>YarnNumbers\CommandHandlers\AddNewYarnNumberCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.YarnNumbers.CommandHandlers.RemoveYarnNumberCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>YarnNumbers\CommandHandlers\RemoveYarnNumberCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.YarnNumbers.CommandHandlers.UpdateYarnNumberCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>YarnNumbers\CommandHandlers\UpdateYarnNumberCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Yarns.CommandHandlers.CreateNewYarnCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Yarns\CommandHandlers\CreateNewYarnCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Yarns.CommandHandlers.RemoveExsistingYarnCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Yarns\CommandHandlers\RemoveExsistingYarnCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Application.Yarns.CommandHandlers.UpdateExistingYarnCommandHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAACAAAAAAIAAAAAAAAAgAA=</HashCode>
+      <FileName>Yarns\CommandHandlers\UpdateExistingYarnCommandHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

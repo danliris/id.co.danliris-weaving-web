@@ -44,13 +44,9 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
         public async Task<DailyOperationWarpingDocument> Handle(CompletedDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Warping
-            var warpingQuery =
-                _dailyOperationWarpingRepository
-                    .Query
-                    .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationWarpingDocument =
                 _dailyOperationWarpingRepository
-                    .Find(warpingQuery)
+                    .Find(x => x.Identity == request.Id)
                     .FirstOrDefault();
 
             //Get Daily Operation History

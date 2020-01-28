@@ -129,13 +129,22 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         {
             var dailyOperationWarpingDocument =
-                _dailyOperationWarpingRepository.Find(x => x.Identity == id).FirstOrDefault();
+                _dailyOperationWarpingRepository
+                    .Find(x => x.Identity == id).FirstOrDefault();
 
-            var histories = _dailyOperationWarpingHistoryRepository.Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
-            var beamProducts = _dailyOperationWarpingBeamProductRepository.Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
+            var histories = 
+                _dailyOperationWarpingHistoryRepository
+                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
+
+            var beamProducts = 
+                _dailyOperationWarpingBeamProductRepository
+                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
+
             foreach(var product in beamProducts)
             {
-                var brokenCauses = _dailyOperationWarpingBrokenCauseRepository.Find(x => x.DailyOperationWarpingBeamProductId == product.Identity);
+                var brokenCauses = 
+                    _dailyOperationWarpingBrokenCauseRepository
+                        .Find(x => x.DailyOperationWarpingBeamProductId == product.Identity);
                 product.BrokenCauses = brokenCauses;
             }
 
