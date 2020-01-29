@@ -58,9 +58,9 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                                                                          request.Width,
                                                                          request.WarpType,
                                                                          request.WeftType,
-                                                                         request.ReedSpace,
-                                                                         request.YarnStrandsAmount,
-                                                                         request.TotalYarn);
+                                                                         reedSpaceLimit,
+                                                                         yarnStrandsAmountLimit,
+                                                                         totalYarnLimit);
             await _constructionDocumentRepository.Update(newConstructionDocument);
 
             var mergedYarnsDetail = request.ConstructionWarpsDetail.Concat(request.ConstructionWeftsDetail).ToList();

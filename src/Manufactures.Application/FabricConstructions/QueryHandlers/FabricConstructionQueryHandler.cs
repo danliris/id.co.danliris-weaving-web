@@ -2,6 +2,7 @@
 using Manufactures.Application.FabricConstructions.DataTransferObjects;
 using Manufactures.Domain.FabricConstructions.Queries;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Yarns.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace Manufactures.Application.FabricConstructions.QueryHandlers
             _fabricConstructionRepository;
         private readonly IConstructionYarnDetailRepository
             _constructionYarnDetailRepository;
+        private readonly IYarnDocumentRepository
+            _yarnRepository; 
 
         public FabricConstructionQueryHandler(IStorage storage)
         {
@@ -25,6 +28,8 @@ namespace Manufactures.Application.FabricConstructions.QueryHandlers
                 _storage.GetRepository<IFabricConstructionRepository>();
             _constructionYarnDetailRepository =
                 _storage.GetRepository<IConstructionYarnDetailRepository>();
+            _yarnRepository =
+                _storage.GetRepository<IYarnDocumentRepository>();
         }
 
         public async Task<IEnumerable<FabricConstructionListDto>> GetAll()
@@ -67,7 +72,12 @@ namespace Manufactures.Application.FabricConstructions.QueryHandlers
 
             foreach (var constructionYarnDetail in constructionYarnDetails)
             {
-                var resultDetailDto = new ConstructionYarnDetailDto(constructionYarnDetail);
+                var yarnDocument =
+                    _yarnRepository
+                        .Find(o => o.Identity == constructionYarnDetail.YarnId.Value)
+                        .FirstOrDefault();
+
+                var resultDetailDto = new ConstructionYarnDetailDto(constructionDocument, constructionYarnDetail, yarnDocument.Code, yarnDocument.Name);
 
                 await Task.Yield();
                 if (resultDetailDto.Type == "Warp")

@@ -11,6 +11,9 @@ namespace Manufactures.Application.FabricConstructions.DataTransferObjects
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
 
+        [JsonProperty(PropertyName = "DateCreated")]
+        public DateTimeOffset DateCreated { get; }
+
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
 
@@ -20,6 +23,7 @@ namespace Manufactures.Application.FabricConstructions.DataTransferObjects
         public FabricConstructionListDto(FabricConstructionDocument constructionDocument)
         {
             Id = constructionDocument.Identity;
+            DateCreated = constructionDocument.AuditTrail.CreatedDate;
             ConstructionNumber = constructionDocument.ConstructionNumber;
             TotalYarn = constructionDocument.TotalYarn;
         }

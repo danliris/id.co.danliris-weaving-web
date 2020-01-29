@@ -73,8 +73,8 @@ namespace Manufactures.Domain.FabricConstructions.Commands
             RuleFor(command => command.ReedSpace).NotEmpty().WithMessage("Reed Space Harus Diisi");
             RuleFor(command => command.YarnStrandsAmount).NotEmpty().WithMessage("Jumlah Helai Benang Harus Diisi");
             RuleFor(command => command.TotalYarn).NotEmpty().WithMessage("Total Benang Tidak Boleh Kosong");
-            RuleFor(command => command.ConstructionWarpsDetail).NotEmpty().WithMessage("Lusi Harus Diisi");
-            RuleFor(command => command.ConstructionWeftsDetail).NotEmpty().WithMessage("Pakan Harus Diisi");
+            //RuleFor(command => command.ConstructionWarpsDetail).NotEmpty().WithMessage("Lusi Harus Diisi");
+            //RuleFor(command => command.ConstructionWeftsDetail).NotEmpty().WithMessage("Pakan Harus Diisi");
         }
     }
 }
