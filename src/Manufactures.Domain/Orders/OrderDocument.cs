@@ -12,11 +12,11 @@ namespace Manufactures.Domain.Orders
         public DateTime Period { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
         public string YarnType { get; private set; }
-        public SupplierId WarpOrigin { get; private set; }
+        public SupplierId WarpOriginId { get; private set; }
         public double WarpCompositionPoly { get; private set; }
         public double WarpCompositionCotton { get; private set; }
         public double WarpCompositionOthers { get; private set; }
-        public SupplierId WeftOrigin { get; private set; }
+        public SupplierId WeftOriginId { get; private set; }
         public double WeftCompositionPoly { get; private set; }
         public double WeftCompositionCotton { get; private set; }
         public double WeftCompositionOthers { get; private set; }
@@ -29,11 +29,11 @@ namespace Manufactures.Domain.Orders
                              DateTime period, 
                              ConstructionId constructionDocumentId, 
                              string yarnType, 
-                             SupplierId warpOrigin, 
+                             SupplierId warpOriginId, 
                              double warpCompositionPoly, 
                              double warpCompositionCotton, 
                              double warpCompositionOthers, 
-                             SupplierId weftOrigin, 
+                             SupplierId weftOriginId, 
                              double weftCompositionPoly, 
                              double weftCompositionCotton, 
                              double weftCompositionOthers, 
@@ -46,11 +46,11 @@ namespace Manufactures.Domain.Orders
             Period = period;
             ConstructionDocumentId = constructionDocumentId;
             YarnType = yarnType;
-            WarpOrigin = warpOrigin;
+            WarpOriginId = warpOriginId;
             WarpCompositionPoly = warpCompositionPoly;
             WarpCompositionCotton = warpCompositionCotton;
             WarpCompositionOthers = warpCompositionOthers;
-            WeftOrigin = weftOrigin;
+            WeftOriginId = weftOriginId;
             WeftCompositionPoly = weftCompositionPoly;
             WeftCompositionCotton = weftCompositionCotton;
             WeftCompositionOthers = weftCompositionOthers;
@@ -66,11 +66,11 @@ namespace Manufactures.Domain.Orders
                 Period = Period,
                 ConstructionDocumentId = ConstructionDocumentId.Value,
                 YarnType = YarnType,
-                WarpOrigin = WarpOrigin.Value,
+                WarpOriginId = WarpOriginId.Value,
                 WarpCompositionPoly = WarpCompositionPoly,
                 WarpCompositionCotton = WarpCompositionCotton,
                 WarpCompositionOthers = WarpCompositionOthers,
-                WeftOrigin = WeftOrigin.Value,
+                WeftOriginId = WeftOriginId.Value,
                 WeftCompositionPoly = WeftCompositionPoly,
                 WeftCompositionCotton = WeftCompositionCotton,
                 WeftCompositionOthers = WeftCompositionOthers,
@@ -86,11 +86,11 @@ namespace Manufactures.Domain.Orders
             Period = readModel.Period;
             ConstructionDocumentId = new ConstructionId(readModel.ConstructionDocumentId);
             YarnType = readModel.YarnType;
-            WarpOrigin = new SupplierId(readModel.WarpOrigin);
+            WarpOriginId = new SupplierId(readModel.WarpOriginId);
             WarpCompositionPoly = readModel.WarpCompositionPoly;
             WarpCompositionCotton = readModel.WarpCompositionCotton;
             WarpCompositionOthers = readModel.WarpCompositionOthers;
-            WeftOrigin = new SupplierId(readModel.WeftOrigin);
+            WeftOriginId = new SupplierId(readModel.WeftOriginId);
             WeftCompositionPoly = readModel.WeftCompositionPoly;
             WeftCompositionCotton = readModel.WeftCompositionCotton;
             WeftCompositionOthers = readModel.WeftCompositionOthers;
@@ -158,11 +158,11 @@ namespace Manufactures.Domain.Orders
         {
             Validator.ThrowIfNull(() => warpOrigin);
 
-            if (warpOrigin != WarpOrigin)
+            if (warpOrigin != WarpOriginId)
             {
 
-                WarpOrigin = warpOrigin;
-                ReadModel.WarpOrigin = WarpOrigin.Value;
+                WarpOriginId = warpOrigin;
+                ReadModel.WarpOriginId = WarpOriginId.Value;
 
                 MarkModified();
             }
@@ -211,11 +211,11 @@ namespace Manufactures.Domain.Orders
         {
             Validator.ThrowIfNull(() => weftOrigin);
 
-            if (weftOrigin != WeftOrigin)
+            if (weftOrigin != WeftOriginId)
             {
 
-                WeftOrigin = weftOrigin;
-                ReadModel.WeftOrigin = WeftOrigin.Value;
+                WeftOriginId = weftOrigin;
+                ReadModel.WeftOriginId = WeftOriginId.Value;
 
                 MarkModified();
             }

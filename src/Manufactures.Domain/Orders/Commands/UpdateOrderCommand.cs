@@ -11,8 +11,14 @@ namespace Manufactures.Domain.Orders.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "Period")]
-        public DateTimeOffset Period { get; private set; }
+        [JsonProperty(PropertyName = "Year")]
+        public int Year { get; private set; }
+
+        [JsonProperty(PropertyName = "Month")]
+        public int Month { get; private set; }
+
+        [JsonProperty(PropertyName = "Day")]
+        public int Day { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; private set; }
@@ -61,6 +67,8 @@ namespace Manufactures.Domain.Orders.Commands
         public UpdateWeavingOrderCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty().WithMessage("Id Harus Valid");
+            RuleFor(command => command.Period).NotEmpty().WithMessage("Periode Harus Diisi");
+            RuleFor(command => command.Period).NotEmpty().WithMessage("Periode Harus Diisi");
             RuleFor(command => command.Period).NotEmpty().WithMessage("Periode Harus Diisi");
             RuleFor(command => command.ConstructionDocumentId).NotEmpty().WithMessage("Konstruksi Harus Diisi");
             RuleFor(command => command.YarnType).NotEmpty().WithMessage("Jenis Benang Tidak Boleh Kosong");

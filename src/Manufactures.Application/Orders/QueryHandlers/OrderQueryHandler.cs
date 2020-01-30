@@ -85,7 +85,10 @@ namespace Manufactures.Application.Orders.QueryHandlers
                         .FirstOrDefault()
                         .ConstructionNumber;
 
-                var resultDto = new OrderListDto(order, unitName, constructionNumber);
+                var resultDto = new OrderListDto(order);
+
+                resultDto.SetUnit(unitName);
+                resultDto.SetConstructionNumber(constructionNumber);
 
                 resultListDto.Add(resultDto);
             }
@@ -102,19 +105,32 @@ namespace Manufactures.Application.Orders.QueryHandlers
 
             var warpOrigin =
                 _supplierRepository
-                    .Find(o => o.Identity == orderDocument.WarpOrigin.Value)
+                    .Find(o => o.Identity == orderDocument.WarpOriginId.Value)
                     .FirstOrDefault()
                     .Name;
 
             var weftOrigin =
                 _supplierRepository
-                    .Find(o => o.Identity == orderDocument.WeftOrigin.Value)
+                    .Find(o => o.Identity == orderDocument.WeftOriginId.Value)
                     .FirstOrDefault()
                     .Name;
 
-            await Task.Yield();
+            var constructionNumber =
+                _fabricConstructionRepository
+                    .Find(o => o.Identity == orderDocument.ConstructionDocumentId.Value)
+                    .FirstOrDefault()
+                    .ConstructionNumber;
 
-            return new OrderByIdDto(orderDocument, warpOrigin, weftOrigin);
+            var unitName = GetUnit(orderDocument.UnitId.Value).data.Name;
+
+            await Task.Yield();
+            var resultByIdDto = new OrderByIdDto(orderDocument);
+            //resultByIdDto.SetWarpOrigin(warpOrigin);
+            //resultByIdDto.SetWeftOrigin(weftOrigin);
+            resultByIdDto.SetConstructionNumber(constructionNumber);
+            resultByIdDto.SetUnit(unitName);
+
+            return resultByIdDto;
         }
     }
 }

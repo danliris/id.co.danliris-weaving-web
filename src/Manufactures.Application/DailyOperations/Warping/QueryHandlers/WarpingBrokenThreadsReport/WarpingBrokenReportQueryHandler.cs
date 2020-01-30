@@ -161,7 +161,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
                     var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
-                    var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
+                    var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOriginId;
                     var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
 
                     var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();
@@ -311,7 +311,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
                 var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
-                var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOrigin;
+                var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOriginId;
                 var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
 
                 var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();

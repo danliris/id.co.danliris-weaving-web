@@ -32,9 +32,9 @@ namespace Manufactures.Application.Orders.CommandHandlers
                     .OrderByDescending(o => o.CreatedDate);
 
             //Generate Period
-            var year = request.Period.Year;
-            var month = request.Period.Month;
-            var day = request.Period.Day;
+            var year = request.Year;
+            var month = request.Month;
+            var day = request.Day;
             var period = new DateTime(year, month, day);
 
             //Generate Order Number
@@ -59,16 +59,16 @@ namespace Manufactures.Application.Orders.CommandHandlers
                                           period,
                                           request.ConstructionDocumentId,
                                           request.YarnType,
-                                          request.WarpOrigin,
-                                          request.WarpCompositionPoly,
-                                          request.WarpCompositionCotton,
-                                          request.WarpCompositionOthers,
-                                          request.WeftOrigin,
-                                          request.WeftCompositionPoly,
-                                          request.WeftCompositionCotton,
-                                          request.WeftCompositionOthers,
-                                          request.AllGrade,
-                                          request.Unit,
+                                          request.WarpOriginId,
+                                          warpCompositionPolyLimit,
+                                          warpCompositionCottonLimit, 
+                                          warpCompositionOthersLimit,
+                                          request.WeftOriginId, 
+                                          weftCompositionPolyLimit,
+                                          weftCompositionCottonLimit,
+                                          weftCompositionOthersLimit,
+                                          allGradeLimit,
+                                          request.UnitId,
                                           orderStatus);
 
             //Update

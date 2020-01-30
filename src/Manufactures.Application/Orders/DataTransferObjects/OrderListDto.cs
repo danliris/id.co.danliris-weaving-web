@@ -18,10 +18,10 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         public DateTime Period { get; }
 
         [JsonProperty(PropertyName = "Unit")]
-        public string Unit { get; }
+        public string Unit { get; private set; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
-        public string ConstructionNumber { get; }
+        public string ConstructionNumber { get; private set; }
 
         [JsonProperty(PropertyName = "WarpCompositionPoly")]
         public double WarpCompositionPoly { get; }
@@ -41,19 +41,27 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "WeftCompositionOthers")]
         public double WeftCompositionOthers { get; }
 
-        public OrderListDto(OrderDocument orderDocument, string unit, string constructionNumber)
+        public OrderListDto(OrderDocument orderDocument)
         {
             Id = orderDocument.Identity;
             OrderNumber = orderDocument.OrderNumber;
             Period = orderDocument.AuditTrail.CreatedDate.DateTime;
-            Unit = unit;
-            ConstructionNumber = constructionNumber;
             WarpCompositionPoly = orderDocument.WarpCompositionPoly;
             WarpCompositionCotton = orderDocument.WarpCompositionCotton;
             WarpCompositionOthers = orderDocument.WarpCompositionOthers;
             WeftCompositionPoly = orderDocument.WeftCompositionPoly;
             WeftCompositionCotton = orderDocument.WeftCompositionCotton;
             WeftCompositionOthers = orderDocument.WeftCompositionOthers;
+        }
+
+        public void SetUnit(string unit)
+        {
+            Unit = unit;
+        }
+
+        public void SetConstructionNumber(string constructionNumber)
+        {
+            ConstructionNumber = constructionNumber;
         }
     }
 }

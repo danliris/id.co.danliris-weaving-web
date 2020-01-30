@@ -9,11 +9,11 @@ namespace Manufactures.Domain.Orders.ReadModels
         public DateTime Period { get; internal set; }
         public Guid ConstructionDocumentId { get; internal set; }
         public string YarnType { get; internal set; }
-        public Guid WarpOrigin { get; internal set; }
+        public Guid WarpOriginId { get; internal set; }
         public double WarpCompositionPoly { get; internal set; }
         public double WarpCompositionCotton { get; internal set; }
         public double WarpCompositionOthers { get; internal set; }
-        public Guid WeftOrigin { get; internal set; }
+        public Guid WeftOriginId { get; internal set; }
         public double WeftCompositionPoly { get; internal set; }
         public double WeftCompositionCotton { get; internal set; }
         public double WeftCompositionOthers { get; internal set; }
