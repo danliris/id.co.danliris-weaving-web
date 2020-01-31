@@ -24,16 +24,16 @@ namespace Manufactures.Domain.FabricConstructions.Commands
         public string Type { get; private set; }
 
         [JsonProperty(PropertyName = "FabricConstructionDocumentId")]
-        public Guid FabricConstructionDocumentId { get; private set; }
+        public Guid? FabricConstructionDocumentId { get; private set; }
     }
 
     public class ConstructionYarnDetailCommandValidator : AbstractValidator<ConstructionYarnDetailCommand>
     {
         public ConstructionYarnDetailCommandValidator()
         {
-            RuleFor(command => command.YarnId).NotEmpty();
-            RuleFor(command => command.Quantity).NotEmpty();
-            RuleFor(command => command.Type);
+            RuleFor(command => command.YarnId).NotNull().NotEmpty().WithMessage("Id Benang Tidak Ditemukan");
+            RuleFor(command => command.Quantity).NotNull().NotEmpty().WithMessage("Kuantitas Harus Diisi");
+            RuleFor(command => command.Type).NotNull().NotEmpty();
         }
     }
 }

@@ -106,7 +106,7 @@ namespace Manufactures.Application.FabricConstructions.CommandHandlers
                                                         o.Quantity, 
                                                         o.Information, 
                                                         o.Type, 
-                                                        o.FabricConstructionDocumentId))
+                                                        o.FabricConstructionDocumentId.Value))
                 .ToList()
                 .ForEach(async o => await _constructionYarnDetailRepository.Update(o));
 

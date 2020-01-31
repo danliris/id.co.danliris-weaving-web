@@ -39,10 +39,9 @@ namespace Manufactures.Application.Orders.CommandHandlers
             }
 
             //Generate Period
-            var year = request.Period.Year;
-            var month = request.Period.Month;
-            var day = request.Period.Day;
-            var period = new DateTime(year, month, day);
+            var year = request.Year;
+            var month = request.Month;
+            DateTime period = new DateTime(year, month, 1);
 
             //Tunggu Jawaban
             var warpCompositionPolyLimit = Math.Round(request.WarpCompositionPoly, 4);
@@ -57,16 +56,16 @@ namespace Manufactures.Application.Orders.CommandHandlers
             order.SetPeriod(period);
             order.SetConstructionDocumentId(request.ConstructionDocumentId);
             order.SetYarnType(request.YarnType);
-            order.SetWarpOrigin(request.WarpOrigin);
-            order.SetWarpCompositionPoly(request.WarpCompositionPoly);
-            order.SetWarpCompositionCotton(request.WarpCompositionCotton);
-            order.SetWarpCompositionOthers(request.WarpCompositionOthers);
-            order.SetWeftOrigin(request.WeftOrigin);
-            order.SetWeftCompositionPoly(request.WeftCompositionPoly);
-            order.SetWeftCompositionCotton(request.WeftCompositionCotton);
-            order.SetWeftCompositionOthers(request.WeftCompositionOthers);
-            order.SetAllGrade(request.AllGrade);
-            order.SetUnit(request.Unit);
+            order.SetWarpOrigin(request.WarpOriginId);
+            order.SetWarpCompositionPoly(warpCompositionPolyLimit);
+            order.SetWarpCompositionCotton(warpCompositionCottonLimit);
+            order.SetWarpCompositionOthers(warpCompositionOthersLimit);
+            order.SetWeftOrigin(request.WeftOriginId);
+            order.SetWeftCompositionPoly(weftCompositionPolyLimit);
+            order.SetWeftCompositionCotton(weftCompositionCottonLimit);
+            order.SetWeftCompositionOthers(weftCompositionOthersLimit);
+            order.SetAllGrade(allGradeLimit);
+            order.SetUnit(request.UnitId);
 
             //Mark Order Modified
             order.SetModified();

@@ -110,9 +110,16 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]AddFabricConstructionCommand command)
         {
-            var newConstructionDocument = await Mediator.Send(command);
+            try
+            {
+                var newConstructionDocument = await Mediator.Send(command);
 
-            return Ok(newConstructionDocument.Identity);
+                return Ok(newConstructionDocument.Identity);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         [HttpPut("{Id}")]
@@ -167,6 +174,32 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 return NotFound();
                 throw Validator.ErrorValidation(("ConstructionNumber", "Can't Find Construction Number"));
+            }
+        }
+
+        [HttpGet("get-construction/{id}")]
+        public async Task<IActionResult> GetSupplier(string id)
+        {
+            if (!Guid.TryParse(id, out Guid identity))
+            {
+                return NotFound();
+            }
+
+            var constructionDocument =
+                _constructionDocumentRepository
+                    .Find(o => o.Identity == identity)
+                    .Select(o => new FabricConstructionByIdDto(o))
+                    .FirstOrDefault();
+
+            if (constructionDocument != null)
+            {
+                await Task.Yield();
+                return Ok(constructionDocument);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
             }
         }
     }

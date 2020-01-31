@@ -16,7 +16,7 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         [JsonProperty(PropertyName = "Period")]
         public DateTime Period { get; private set; }
 
-        [JsonProperty(PropertyName = "Unit")]
+        [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; private set; }
 
         [JsonProperty(PropertyName = "EstimationProducts")]

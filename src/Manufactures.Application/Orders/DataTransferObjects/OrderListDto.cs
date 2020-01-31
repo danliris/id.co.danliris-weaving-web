@@ -45,7 +45,7 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         {
             Id = orderDocument.Identity;
             OrderNumber = orderDocument.OrderNumber;
-            Period = orderDocument.AuditTrail.CreatedDate.DateTime;
+            Period = orderDocument.Period;
             WarpCompositionPoly = orderDocument.WarpCompositionPoly;
             WarpCompositionCotton = orderDocument.WarpCompositionCotton;
             WarpCompositionOthers = orderDocument.WarpCompositionOthers;

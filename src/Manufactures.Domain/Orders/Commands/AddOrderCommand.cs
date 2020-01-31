@@ -14,9 +14,6 @@ namespace Manufactures.Domain.Orders.Commands
         [JsonProperty(PropertyName = "Month")]
         public int Month { get; private set; }
 
-        [JsonProperty(PropertyName = "Day")]
-        public int Day { get; private set; }
-
         [JsonProperty(PropertyName = "ConstructionDocumentId")]
         public ConstructionId ConstructionDocumentId { get; private set; }
 
@@ -52,45 +49,14 @@ namespace Manufactures.Domain.Orders.Commands
 
         [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; private set; }
-        //-------------------------------------------------------------------------
-        //[JsonProperty(PropertyName = "FabricConstructionDocument")]
-        //public FabricConstructionCommand FabricConstructionDocument { get; set; }
-
-        //[JsonProperty(PropertyName = "DateOrdered")]
-        //public DateTimeOffset DateOrdered { get; set; }
-
-        //[JsonProperty(PropertyName = "WarpOriginId")]
-        //public string WarpOriginId { get; set; }
-
-        //[JsonProperty(PropertyName = "WeftOriginId")]
-        //public string WeftOriginId { get; set; }
-
-        //[JsonProperty(PropertyName = "WholeGrade")]
-        //public int WholeGrade { get; set; }
-
-        //[JsonProperty(PropertyName = "YarnType")]
-        //public string YarnType { get; set; }
-
-        //[JsonProperty(PropertyName = "Period")]
-        //public Period Period { get; set; }
-
-        //[JsonProperty(PropertyName = "WarpComposition")]
-        //public Composition WarpComposition { get; set; }
-
-        //[JsonProperty(PropertyName = "WeftComposition")]
-        //public Composition WeftComposition { get; set; }
-
-        //[JsonProperty(PropertyName = "WeavingUnit")]
-        //public WeavingUnit WeavingUnit { get; set; }
     }
 
-    public class WeavingOrderCommandValidator : AbstractValidator<AddOrderCommand>
+    public class AddOrderCommandValidator : AbstractValidator<AddOrderCommand>
     {
-        public WeavingOrderCommandValidator()
+        public AddOrderCommandValidator()
         {
             RuleFor(command => command.Year).NotEmpty().WithMessage("Tahun Harus Diisi");
             RuleFor(command => command.Month).NotEmpty().WithMessage("Bulan Harus Diisi");
-            RuleFor(command => command.Day).NotEmpty().WithMessage("Hari Harus Diisi");
             RuleFor(command => command.ConstructionDocumentId).NotEmpty().WithMessage("Konstruksi Harus Diisi");
             RuleFor(command => command.YarnType).NotEmpty().WithMessage("Jenis Benang Tidak Boleh Kosong");
             RuleFor(command => command.WarpOriginId).NotEmpty().WithMessage("Asal Lusi Harus Diisi");

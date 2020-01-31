@@ -81,6 +81,9 @@ using Manufactures.Application.FabricConstructions.QueryHandlers;
 using Manufactures.Application.Orders.QueryHandlers;
 using Manufactures.Domain.Orders.Queries;
 using Manufactures.Application.Orders.DataTransferObjects;
+using Manufactures.Application.Estimations.Productions.QueryHandlers;
+using Manufactures.Domain.Estimations.Productions.Queries;
+using Manufactures.Application.Estimations.Productions.DataTransferObjects;
 
 namespace DanLiris.Admin.Web
 {
@@ -145,6 +148,7 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();
             services.AddTransient<IOrderQuery<OrderListDto>, OrderQueryHandler>();
             services.AddTransient<IFabricConstructionQuery<FabricConstructionListDto>, FabricConstructionQueryHandler>();
             services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();

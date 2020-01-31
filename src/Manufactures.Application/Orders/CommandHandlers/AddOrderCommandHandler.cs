@@ -34,8 +34,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
             //Generate Period
             var year = request.Year;
             var month = request.Month;
-            var day = request.Day;
-            var period = new DateTime(year, month, day);
+            var period = new DateTime(year, month, 1);
 
             //Generate Order Number
             var countOrderNumber = (orders.Where(o => o.Period.Year == year).Count() + 1).ToString();

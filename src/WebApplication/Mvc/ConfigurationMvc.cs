@@ -3,6 +3,8 @@ using DanLiris.Admin.Web.Utils;
 using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
+using Manufactures.Domain.Estimations.Productions.Commands;
+using Manufactures.Domain.FabricConstructions.Commands;
 using Manufactures.Domain.Orders.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -25,7 +27,12 @@ namespace Infrastructure.Mvc
 
             builder.AddFluentValidation(fv =>
             {
-                //fv.RegisterValidatorsFromAssemblyContaining<PlaceOrderCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<PlaceConstructionCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateConstructionCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<AddOrderCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateOrderCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateEstimationProductCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<EstimatedProductionDetailCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }
