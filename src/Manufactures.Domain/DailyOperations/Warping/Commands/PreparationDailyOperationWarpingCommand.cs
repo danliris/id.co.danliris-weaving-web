@@ -16,7 +16,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public int AmountOfCones { get; set; }
 
         [JsonProperty(PropertyName = "BeamProductResult")]
-        public int BeamProductResult { get; private set; }
+        public int BeamProductResult { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
         public DateTimeOffset PreparationDate { get; set; }

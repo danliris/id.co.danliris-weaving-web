@@ -42,7 +42,10 @@ namespace Manufactures.Helpers.XlsTemplates
                     var amountOfCones = item.AmountOfCones;
                     var operatorName = item.OperatorName;
                     var warpingOperatorGroup = item.WarpingOperatorGroup;
-                    var preparationDate = item.PreparationDate;
+
+                    var dateFormat = "dd/mm/yyyy";
+                    var preparationDate = item.PreparationDate.ToString(dateFormat);
+
                     var lastModifiedTime = item.LastModifiedTime;
                     var shift = item.Shift;
                     dt.Rows.Add(index++, 

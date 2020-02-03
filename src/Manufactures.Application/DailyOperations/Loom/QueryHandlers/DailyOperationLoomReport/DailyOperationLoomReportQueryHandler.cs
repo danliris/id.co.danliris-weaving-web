@@ -27,7 +27,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
             _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -43,7 +43,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
             _dailyOperationLoomRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _weavingSupplierRepository =
@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                         //Parse if Not Null
                         if (Guid.TryParse(constructionId, out Guid constructionGuid))
                         {
-                            orderDocuments = orderDocuments.Where(x => x.ConstructionId.Value == constructionGuid);
+                            orderDocuments = orderDocuments.Where(x => x.ConstructionDocumentId.Value == constructionGuid);
                         }
                     }
 
@@ -157,7 +157,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                     //Get Construction Number
                     await Task.Yield();
-                    var fabricConstructionId = orderDocument.ConstructionId.Value;
+                    var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                     var fabricConstructionQuery =
                         _fabricConstructionRepository
                             .Query
@@ -178,8 +178,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                     //Get Warp Origin Code and Weft Origin Code
                     await Task.Yield();
-                    var warpId = orderDocument.WarpOrigin;
-                    var weftId = orderDocument.WeftOrigin;
+                    var warpId = orderDocument.WarpOriginId;
+                    var weftId = orderDocument.WeftOriginId;
 
                     await Task.Yield();
                     var warpCode =

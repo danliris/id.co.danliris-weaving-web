@@ -72,6 +72,18 @@ using System.Text;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingProductionReport;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
+using Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingBrokenThreadsReport;
+using Manufactures.Domain.FabricConstructions.Queries;
+using Manufactures.Application.FabricConstructions.DataTransferObjects;
+using Manufactures.Application.FabricConstructions.QueryHandlers;
+using Manufactures.Application.Orders.QueryHandlers;
+using Manufactures.Domain.Orders.Queries;
+using Manufactures.Application.Orders.DataTransferObjects;
+using Manufactures.Application.Estimations.Productions.QueryHandlers;
+using Manufactures.Domain.Estimations.Productions.Queries;
+using Manufactures.Application.Estimations.Productions.DataTransferObjects;
 
 namespace DanLiris.Admin.Web
 {
@@ -136,6 +148,11 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();
+            services.AddTransient<IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto>, OrderQueryHandler>();
+            services.AddTransient<IOrderQuery<OrderListDto>, OrderQueryHandler>();
+            services.AddTransient<IFabricConstructionQuery<FabricConstructionListDto>, FabricConstructionQueryHandler>();
+            services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();
             services.AddTransient<IWarpingProductionReportQuery<WarpingProductionReportListDto>, WarpingProductionReportQueryHandler>();
             services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
             services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
@@ -149,7 +166,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
             services.AddTransient<IDailyOperationLoomQuery<DailyOperationLoomListDto>, DailyOperationLoomQueryHandler>();
             services.AddTransient<IDailyOperationReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
-            services.AddTransient<IDailyOperationWarpingQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
+            services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
             services.AddTransient<IDailyOperationSizingQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();

@@ -1,45 +1,67 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Entities
 {
-    public class DailyOperationWarpingBrokenCause : EntityBase<DailyOperationWarpingBrokenCause>
+    public class DailyOperationWarpingBrokenCause : AggregateRoot<DailyOperationWarpingBrokenCause, DailyOperationWarpingBrokenCauseReadModel>
     {
         public Guid BrokenCauseId { get; private set; }
         public int TotalBroken { get; private set; }
         public Guid DailyOperationWarpingBeamProductId { get; set; }
-        public DailyOperationWarpingBeamProduct DailyOperationWarpingBeamProduct { get; set; }
 
         public DailyOperationWarpingBrokenCause(Guid identity) : base(identity) { }
 
         public DailyOperationWarpingBrokenCause(Guid identity,
-                                                BrokenCauseId brokenCauseId, 
-                                                int totalBroken) : base(identity)
+                                                BrokenCauseId brokenCauseId,
+                                                int totalBroken,
+                                                Guid dailyOperationWarpingBeamProductId) : base(identity)
         {
             Identity = identity;
             BrokenCauseId = brokenCauseId.Value;
             TotalBroken = totalBroken;
+            DailyOperationWarpingBeamProductId = dailyOperationWarpingBeamProductId;
+            MarkTransient();
+            ReadModel = new DailyOperationWarpingBrokenCauseReadModel(Identity)
+            {
+                BrokenCauseId = BrokenCauseId,
+                TotalBroken = TotalBroken,
+                DailyOperationWarpingBeamProductId = DailyOperationWarpingBeamProductId
+            };
         }
 
-        public void SetBrokenCauseId(Guid value)
+        public DailyOperationWarpingBrokenCause(DailyOperationWarpingBrokenCauseReadModel readModel) : base(readModel)
         {
-            if (!BrokenCauseId.Equals(value))
+            BrokenCauseId = readModel.BrokenCauseId;
+            TotalBroken = readModel.TotalBroken;
+            DailyOperationWarpingBeamProductId = readModel.DailyOperationWarpingBeamProductId;
+        }
+
+        public void SetBrokenCauseId(Guid brokenCauseId)
+        {
+            Validator.ThrowIfNull(() => brokenCauseId);
+
+            if (brokenCauseId != BrokenCauseId)
             {
-                BrokenCauseId = value;
+                BrokenCauseId = brokenCauseId;
+                ReadModel.BrokenCauseId = brokenCauseId;
 
                 MarkModified();
             }
         }
 
-        public void SetTotalBroken(int value)
+        public void SetTotalBroken(int totalBroken)
         {
-            if (!TotalBroken.Equals(value))
+            Validator.ThrowIfNull(() => totalBroken);
+
+            if (totalBroken != TotalBroken)
             {
-                TotalBroken = value;
+                TotalBroken = totalBroken;
+                ReadModel.TotalBroken = totalBroken;
 
                 MarkModified();
             }

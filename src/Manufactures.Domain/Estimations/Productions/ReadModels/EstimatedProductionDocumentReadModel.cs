@@ -7,12 +7,11 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
 {
     public class EstimatedProductionDocumentReadModel : ReadModelBase
     {
+        public string EstimatedNumber { get; internal set; }
+        public DateTime Period { get; internal set; }
+        public int UnitId { get; internal set; }
         public EstimatedProductionDocumentReadModel(Guid identity) : base(identity)
         {
         }
-        public string EstimatedNumber { get; internal set; }
-        public string Period { get; internal set; }
-        public int? UnitId { get; internal set; }
-        public List<EstimationProduct> EstimationProducts { get; internal set; }
     }
 }

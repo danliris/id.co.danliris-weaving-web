@@ -17,6 +17,8 @@
 
   <ItemGroup>
     <Folder Include="ProductionResults\CommandHandlers\" />
+    <Folder Include="Yarns\DataTransferObjects\" />
+    <Folder Include="Yarns\QueryHandlers\" />
   </ItemGroup>
 
 </Project>

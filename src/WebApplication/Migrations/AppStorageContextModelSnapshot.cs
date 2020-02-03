@@ -567,7 +567,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationSizingDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingBeamProductReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -591,14 +591,14 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset>("LatestDateTimeBeamProduct");
 
-                    b.Property<int?>("MachineSpeed");
+                    b.Property<int>("MachineSpeed");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<double?>("PressRoll");
+                    b.Property<double>("PressRoll");
 
                     b.Property<string>("PressRollUom");
 
@@ -606,22 +606,20 @@ namespace DanLiris.Admin.Web.Migrations
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<double?>("Tention");
+                    b.Property<double>("Tention");
 
                     b.Property<Guid>("WarpingBeamId");
 
-                    b.Property<double?>("WarpingTotalBeamLength");
+                    b.Property<double>("WarpingTotalBeamLength");
 
-                    b.Property<int?>("WarpingTotalBeamLengthUomId");
+                    b.Property<int>("WarpingTotalBeamLengthUomId");
 
                     b.HasKey("Identity");
-
-                    b.HasIndex("DailyOperationWarpingDocumentId");
 
                     b.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBrokenCause", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingBrokenCauseReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -656,12 +654,52 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.HasIndex("DailyOperationWarpingBeamProductId");
-
                     b.ToTable("Weaving_DailyOperationWarpingBrokenCauses");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingHistory", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingDocumentReadModel", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AmountOfCones");
+
+                    b.Property<int>("BeamProductResult");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<DateTimeOffset>("DateTimeOperation");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<string>("OperationStatus");
+
+                    b.Property<Guid>("OrderDocumentId");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.HasKey("Identity");
+
+                    b.ToTable("Weaving_DailyOperationWarpingDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingHistoryReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -706,51 +744,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.HasIndex("DailyOperationWarpingDocumentId");
-
                     b.ToTable("Weaving_DailyOperationWarpingHistories");
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingReadModel", b =>
-                {
-                    b.Property<Guid>("Identity")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("AmountOfCones");
-
-                    b.Property<int>("BeamProductResult");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset>("CreatedDate");
-
-                    b.Property<DateTimeOffset>("DateTimeOperation");
-
-                    b.Property<bool?>("Deleted");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("DeletedDate");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("ModifiedDate");
-
-                    b.Property<string>("OperationStatus");
-
-                    b.Property<Guid>("OrderDocumentId");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.HasKey("Identity");
-
-                    b.ToTable("Weaving_DailyOperationWarpingDocuments");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Defects.FabricDefect.ReadModels.FabricDefectReadModel", b =>
@@ -794,10 +788,12 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_FabricDefectDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
+            modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.ReadModels.EstimatedProductionDetailReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("ConstructionId");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -814,28 +810,28 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("EstimatedProductionDocumentId");
 
+                    b.Property<double>("GradeA");
+
+                    b.Property<double>("GradeB");
+
+                    b.Property<double>("GradeC");
+
+                    b.Property<double>("GradeD");
+
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<string>("OrderDocument")
-                        .HasMaxLength(2000);
-
-                    b.Property<string>("ProductGrade")
-                        .HasMaxLength(2000);
+                    b.Property<Guid>("OrderId");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<double>("TotalGramEstimation");
-
                     b.HasKey("Identity");
 
-                    b.HasIndex("EstimatedProductionDocumentId");
-
-                    b.ToTable("Weaving_EstimationDetails");
+                    b.ToTable("Weaving_EstimationProductDetails");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.ReadModels.EstimatedProductionDocumentReadModel", b =>
@@ -863,18 +859,60 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<string>("Period")
-                        .HasMaxLength(255);
+                    b.Property<DateTime>("Period");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int?>("UnitId");
+                    b.Property<int>("UnitId");
 
                     b.HasKey("Identity");
 
                     b.ToTable("Weaving_EstimationProductDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.FabricConstructions.ReadModels.ConstructionYarnDetailReadModel", b =>
+                {
+                    b.Property<Guid>("Identity")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset>("CreatedDate");
+
+                    b.Property<bool?>("Deleted");
+
+                    b.Property<string>("DeletedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("DeletedDate");
+
+                    b.Property<Guid>("FabricConstructionDocumentId");
+
+                    b.Property<string>("Information")
+                        .HasMaxLength(255);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasMaxLength(32);
+
+                    b.Property<DateTimeOffset?>("ModifiedDate");
+
+                    b.Property<double>("Quantity");
+
+                    b.Property<byte[]>("RowVersion")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate();
+
+                    b.Property<string>("Type");
+
+                    b.Property<Guid>("YarnId");
+
+                    b.HasKey("Identity");
+
+                    b.ToTable("Weaving_ConstructionYarnDetails");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.FabricConstructions.ReadModels.FabricConstructionReadModel", b =>
@@ -902,26 +940,18 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<string>("ListOfWarp")
-                        .HasMaxLength(20000);
-
-                    b.Property<string>("ListOfWeft")
-                        .HasMaxLength(20000);
-
-                    b.Property<string>("MaterialTypeName");
+                    b.Property<string>("MaterialType");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<int?>("ReedSpace");
+                    b.Property<double>("ReedSpace");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<int?>("TotalEnds");
 
                     b.Property<double>("TotalYarn");
 
@@ -935,6 +965,8 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("WovenType")
                         .HasMaxLength(255);
+
+                    b.Property<double>("YarnStrandsAmount");
 
                     b.HasKey("Identity");
 
@@ -1202,12 +1234,14 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_OperatorDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.Orders.ReadModels.OrderDocumentReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.Orders.ReadModels.OrderReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<Guid?>("ConstructionId")
+                    b.Property<double>("AllGrade");
+
+                    b.Property<Guid>("ConstructionDocumentId")
                         .HasMaxLength(255);
 
                     b.Property<string>("CreatedBy")
@@ -1215,8 +1249,6 @@ namespace DanLiris.Admin.Web.Migrations
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset>("CreatedDate");
-
-                    b.Property<DateTimeOffset>("DateOrdered");
 
                     b.Property<bool?>("Deleted");
 
@@ -1235,26 +1267,30 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<string>("OrderStatus")
                         .HasMaxLength(255);
 
-                    b.Property<string>("Period")
+                    b.Property<DateTime>("Period")
                         .HasMaxLength(255);
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<int?>("UnitId");
+                    b.Property<int>("UnitId");
 
-                    b.Property<string>("WarpComposition")
-                        .HasMaxLength(255);
+                    b.Property<double>("WarpCompositionCotton");
 
-                    b.Property<string>("WarpOrigin");
+                    b.Property<double>("WarpCompositionOthers");
 
-                    b.Property<string>("WeftComposition")
-                        .HasMaxLength(255);
+                    b.Property<double>("WarpCompositionPoly");
 
-                    b.Property<string>("WeftOrigin");
+                    b.Property<Guid>("WarpOriginId");
 
-                    b.Property<int>("WholeGrade");
+                    b.Property<double>("WeftCompositionCotton");
+
+                    b.Property<double>("WeftCompositionOthers");
+
+                    b.Property<double>("WeftCompositionPoly");
+
+                    b.Property<Guid>("WeftOriginId");
 
                     b.Property<string>("YarnType");
 
@@ -1513,38 +1549,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasOne("Manufactures.Domain.DailyOperations.Sizing.ReadModels.DailyOperationSizingReadModel", "DailyOperationSizingDocument")
                         .WithMany("SizingHistories")
                         .HasForeignKey("DailyOperationSizingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingReadModel", "DailyOperationWarpingDocument")
-                        .WithMany("WarpingBeamProducts")
-                        .HasForeignKey("DailyOperationWarpingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBrokenCause", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct", "DailyOperationWarpingBeamProduct")
-                        .WithMany("WarpingBrokenThreadsCauses")
-                        .HasForeignKey("DailyOperationWarpingBeamProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingHistory", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingReadModel", "DailyOperationWarpingDocument")
-                        .WithMany("WarpingHistories")
-                        .HasForeignKey("DailyOperationWarpingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.Entities.EstimationProduct", b =>
-                {
-                    b.HasOne("Manufactures.Domain.Estimations.Productions.ReadModels.EstimatedProductionDocumentReadModel", "EstimatedProductionDocument")
-                        .WithMany("EstimationProducts")
-                        .HasForeignKey("EstimatedProductionDocumentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

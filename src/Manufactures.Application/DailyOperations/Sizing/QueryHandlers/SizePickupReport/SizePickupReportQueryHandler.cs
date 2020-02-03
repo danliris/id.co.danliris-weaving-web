@@ -27,7 +27,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             _storage;
         private readonly IDailyOperationSizingRepository
             _dailyOperationSizingRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -47,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             _dailyOperationSizingRepository =
                 _storage.GetRepository<IDailyOperationSizingRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _beamRepository =
@@ -122,7 +122,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                         //Get Construction Number
                         await Task.Yield();
-                        var fabricConstructionId = orderDocument.ConstructionId.Value;
+                        var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                         var fabricConstructionQuery =
                             _fabricConstructionRepository
                                 .Query

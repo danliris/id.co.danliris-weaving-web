@@ -137,7 +137,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingBrokenCause>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingBrokenCauseReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBrokenCauses");
                 etb.HasKey(e => e.Identity);
@@ -146,20 +146,16 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingBeamProduct>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingBeamProductReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingBeamProducts");
                 etb.HasKey(e => e.Identity);
-
-                etb.HasMany(e => e.WarpingBrokenThreadsCauses)
-                    .WithOne(e => e.DailyOperationWarpingBeamProduct)
-                    .HasForeignKey(e => e.DailyOperationWarpingBeamProductId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingHistories");
                 etb.HasKey(e => e.Identity);
@@ -168,18 +164,10 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationWarpingReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationWarpingDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationWarpingDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.HasMany(e => e.WarpingBeamProducts)
-                    .WithOne(e => e.DailyOperationWarpingDocument)
-                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
-
-                etb.HasMany(e => e.WarpingHistories)
-                    .WithOne(e => e.DailyOperationWarpingDocument)
-                    .HasForeignKey(e => e.DailyOperationWarpingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -300,13 +288,10 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<EstimationProduct>(etb =>
+            modelBuilder.Entity<EstimatedProductionDetailReadModel>(etb =>
             {
-                etb.ToTable("Weaving_EstimationDetails");
+                etb.ToTable("Weaving_EstimationProductDetails");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.OrderDocument).HasMaxLength(2000);
-                etb.Property(e => e.ProductGrade).HasMaxLength(2000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -316,12 +301,6 @@ namespace Manufactures.Data.EntityFrameworkCore
             {
                 etb.ToTable("Weaving_EstimationProductDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.Property(e => e.Period).HasMaxLength(255);
-
-                etb.HasMany(e => e.EstimationProducts)
-                    .WithOne(e => e.EstimatedProductionDocument)
-                    .HasForeignKey(e => e.EstimatedProductionDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -365,6 +344,17 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
+            modelBuilder.Entity<ConstructionYarnDetailReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_ConstructionYarnDetails");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Information).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
             modelBuilder.Entity<FabricConstructionReadModel>(etb =>
             {
                 etb.ToTable("Weaving_ConstructionDocuments");
@@ -374,8 +364,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.Property(p => p.WovenType).HasMaxLength(255);
                 etb.Property(p => p.WarpType).HasMaxLength(255);
                 etb.Property(p => p.WeftType).HasMaxLength(255);
-                etb.Property(p => p.ListOfWarp).HasMaxLength(20000);
-                etb.Property(p => p.ListOfWeft).HasMaxLength(20000);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -394,15 +382,13 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<OrderDocumentReadModel>(etb =>
+            modelBuilder.Entity<OrderReadModel>(etb =>
             {
                 etb.ToTable("Weaving_OrderDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.Property(p => p.ConstructionId).HasMaxLength(255);
+                etb.Property(p => p.ConstructionDocumentId).HasMaxLength(255);
                 etb.Property(p => p.Period).HasMaxLength(255);
-                etb.Property(p => p.WarpComposition).HasMaxLength(255);
-                etb.Property(p => p.WeftComposition).HasMaxLength(255);
                 etb.Property(p => p.OrderStatus).HasMaxLength(255);
 
                 etb.ApplyAuditTrail();

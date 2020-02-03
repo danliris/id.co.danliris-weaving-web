@@ -22,39 +22,45 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
+        private readonly IDailyOperationWarpingHistoryRepository
+            _dailyOperationWarpingHistoryRepository;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
 
         public ProduceBeamDailyOperationWarpingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
+            _dailyOperationWarpingHistoryRepository =
+                _storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
+            _dailyOperationWarpingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
         }
 
         public async Task<DailyOperationWarpingDocument> Handle(ProduceBeamsDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Warping
-            var warpingQuery =
-                _dailyOperationWarpingRepository
-                    .Query
-                    .Include(x => x.WarpingHistories)
-                    .Include(x => x.WarpingBeamProducts)
-                    .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationWarpingDocument =
                 _dailyOperationWarpingRepository
-                    .Find(warpingQuery)
+                    .Find(x => x.Identity == request.Id)
                     .FirstOrDefault();
 
-            //Get Daily Operation Detail
-            var existingDailyOperationWarpingHistories = existingDailyOperationWarpingDocument
-                    .WarpingHistories
+            //Get Daily Operation History
+            var existingDailyOperationWarpingHistories =
+                _dailyOperationWarpingHistoryRepository
+                    .Query
+                    .Where(h => h.DailyOperationWarpingDocumentId.Equals(existingDailyOperationWarpingDocument.Identity))
                     .OrderByDescending(detail => detail.DateTimeMachine);
             var lastWarpingHistory = existingDailyOperationWarpingHistories.FirstOrDefault();
 
             //Get Daily Operation Beam Product
-            var existingDailyOperationWarpingBeamProduct = existingDailyOperationWarpingDocument
-                    .WarpingBeamProducts
-                    .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
-            var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
+            
+            var lastWarpingBeamProduct = 
+                _dailyOperationWarpingBeamProductRepository
+                    .Find(x => x.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
+                    .OrderByDescending(x => x.LatestDateTimeBeamProduct)
+                    .FirstOrDefault();
 
             //Reformat DateTime
             var year = request.ProduceBeamsDate.Year;
@@ -85,27 +91,27 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     if (lastWarpingHistory.MachineStatus == MachineStatus.ONSTART || lastWarpingHistory.MachineStatus == MachineStatus.ONPROCESSBEAM)
                     {
                         existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
+                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
 
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                           new ShiftId(request.ProduceBeamsShift.Value),
                                                                           new OperatorId(request.ProduceBeamsOperator.Value),
                                                                           warpingDateTime,
-                                                                          MachineStatus.ONPROCESSBEAM);
+                                                                          MachineStatus.ONPROCESSBEAM,
+                                                                          existingDailyOperationWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
-                        existingDailyOperationWarpingDocument.AddDailyOperationWarpingHistory(newHistory);
+                        await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
-                        lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);
-
+                        lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);                        
                         var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
                         lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
-
-                        lastWarpingBeamProduct.SetWarpingBeamLengthUomId(request.WarpingBeamLengthUomId);
+                        lastWarpingBeamProduct.SetWarpingTotalBeamLengthUomId(new UomId(request.WarpingBeamLengthUomId));
                         lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ONPROCESS);
+                        await _dailyOperationWarpingBeamProductRepository.Update(lastWarpingBeamProduct);                        
 
-                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
                         _storage.Save();
 
                         //var sizingStock = new SizingBeamStockMonitoringCommand

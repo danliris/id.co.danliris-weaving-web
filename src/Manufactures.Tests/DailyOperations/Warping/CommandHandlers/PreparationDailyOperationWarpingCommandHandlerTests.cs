@@ -23,6 +23,8 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockWarpingOperationRepo;
+        private readonly Mock<IDailyOperationWarpingHistoryRepository>
+            mockWarpingHistoryOperationRepo;
 
         public PreparationDailyOperationWarpingCommandHandlerTests()
         {
@@ -34,6 +36,12 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationWarpingRepository>())
                 .Returns(mockWarpingOperationRepo.Object);
+
+            this.mockWarpingHistoryOperationRepo =
+                this.mockRepository.Create<IDailyOperationWarpingHistoryRepository>();
+            this.mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationWarpingHistoryRepository>())
+                .Returns(mockWarpingHistoryOperationRepo.Object);
         }
 
         public void Dispose()
@@ -91,9 +99,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             //Check if has identity
             result.Identity.Should().NotBeEmpty();
-
-            //check if has history
-            result.WarpingHistories.Should().NotBeEmpty();
         }
     }
 }

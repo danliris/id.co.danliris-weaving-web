@@ -168,5 +168,31 @@ namespace Manufactures.Controllers.Api
                 throw Validator.ErrorValidation(("WarpOrigin", "Can't Find Supplier Code"),("WeftOrigin", "Can't Find Supplier Code"));
             }
         }
+
+        [HttpGet("get-supplier/{id}")]
+        public async Task<IActionResult> GetSupplier(string id)
+        {
+            if (!Guid.TryParse(id, out Guid identity))
+            {
+                return NotFound();
+            }
+
+            var supplierDocument =
+                _weavingSupplierRepository
+                    .Find(o => o.Identity == identity)
+                    .Select(o=>new SupplierDocumentDto(o))
+                    .FirstOrDefault();
+
+            if (supplierDocument != null)
+            {
+                await Task.Yield();
+                return Ok(supplierDocument);
+            }
+            else
+            {
+                await Task.Yield();
+                return NotFound();
+            }
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -51,7 +51,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _dailyOperationReachingRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _machineRepository =
@@ -187,7 +187,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                         //Parse if Not Null
                         if (Guid.TryParse(constructionId, out Guid constructionGuid))
                         {
-                            orderDocuments = orderDocuments.Where(x => x.ConstructionId.Value == constructionGuid);
+                            orderDocuments = orderDocuments.Where(x => x.ConstructionDocumentId.Value == constructionGuid);
                         }
                     }
 
@@ -201,7 +201,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
 
                     //Get Construction Number
                     await Task.Yield();
-                    var fabricConstructionId = orderDocument.ConstructionId.Value;
+                    var fabricConstructionId = orderDocument.ConstructionDocumentId.Value;
                     var fabricConstructionQuery =
                         _fabricConstructionRepository
                             .Query

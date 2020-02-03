@@ -12,11 +12,11 @@ using Manufactures.Domain.DailyOperations.Warping;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Manufactures.Domain.FabricConstructions;
 using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.GlobalValueObjects;
 using Manufactures.Domain.Materials;
-using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.ReadModels;
@@ -24,11 +24,11 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Orders.ValueObjects;
 using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.Domain.Suppliers;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -45,7 +45,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
-        private readonly Mock<IWeavingOrderDocumentRepository>
+        private readonly Mock<IDailyOperationWarpingHistoryRepository>
+            mockDailyOperationWarpingHistoryRepo;
+        private readonly Mock<IDailyOperationWarpingBeamProductRepository>
+            mockDailyOperationWarpingBeamProductRepo;
+        private readonly Mock<IDailyOperationWarpingBrokenCauseRepository>
+            mockDailyOperationWarpingBrokenCauseRepo;
+        private readonly Mock<IOrderRepository>
             mockOrderDocumentRepo;
         private readonly Mock<IFabricConstructionRepository>
             mockFabricConstructionRepo;
@@ -66,7 +72,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
             this.mockDailyOperationWarpingRepo = this.mockRepository.Create<IDailyOperationWarpingRepository>();
-            this.mockOrderDocumentRepo = this.mockRepository.Create<IWeavingOrderDocumentRepository>();
+            this.mockDailyOperationWarpingHistoryRepo = this.mockRepository.Create<IDailyOperationWarpingHistoryRepository>();
+            this.mockDailyOperationWarpingBeamProductRepo = this.mockRepository.Create<IDailyOperationWarpingBeamProductRepository>();
+            this.mockDailyOperationWarpingBrokenCauseRepo = this.mockRepository.Create<IDailyOperationWarpingBrokenCauseRepository>();
+            this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockFabricConstructionRepo = this.mockRepository.Create<IFabricConstructionRepository>();
             this.mockMaterialTypeRepo = this.mockRepository.Create<IMaterialTypeRepository>();
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
@@ -75,7 +84,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             this.mockWarpingBrokenCauseRepo = this.mockRepository.Create<IWarpingBrokenCauseRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockDailyOperationWarpingRepo.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingOrderDocumentRepository>()).Returns(mockOrderDocumentRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingHistoryRepository>()).Returns(mockDailyOperationWarpingHistoryRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBeamProductRepository>()).Returns(mockDailyOperationWarpingBeamProductRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBrokenCauseRepository>()).Returns(mockDailyOperationWarpingBrokenCauseRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IFabricConstructionRepository>()).Returns(mockFabricConstructionRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMaterialTypeRepository>()).Returns(mockMaterialTypeRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
@@ -102,167 +114,119 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
             //Fabric Construction Object
-            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
                 "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
                 "Melintang",
-                "PLCTD100",
-                "PLCTD100",
                 33,
                 44,
                 55,
-                1000,
-                "PolyCotton100");
-            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
-                "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
-                "Lurus",
-                "CTNCD12",
-                "CTNCD12",
-                22,
-                11,
-                54,
-                2400,
-                "Cotton12");
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
             mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
 
             //Order Object
-            var firstOrderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
+            var orderDocument = new OrderDocument(
+                Guid.NewGuid(),
                 "0002/08-2019",
-                new ConstructionId(firstFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            var secondOrderDocument = new OrderDocument(
-                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
-                "0001/08-2019",
-                new ConstructionId(secondFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(30, 50, 20),
-                new Composition(50, 40, 10),
-                "CD",
-                "CM",
+                DateTime.Now,
+                new ConstructionId(fabricConstruction.Identity),
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
                 3500,
-                "Cotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
-                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
+                new UnitId(14),
+                Constants.ONORDER);
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { orderDocument });
 
             //Material Type Object
-            var firstMaterialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
+            var materialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
                                                              "SPX",
                                                              "Spandex",
                                                              "-");
-            var secondMaterialType = new MaterialTypeDocument(new Guid("3C6A3834-99BE-445E-A322-2B92AB428C21"),
-                                                             "CTN",
-                                                             "Cotton",
-                                                             "-");
             //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //    .Returns(new List<MaterialTypeDocument>() { materialType });
 
             //Operator Object
-            var firstOperator = new OperatorDocument(
-                new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
                 new UnitId(11),
                 "C",
                 "AJL",
                 "Operator");
-            var secondOperator = new OperatorDocument(
-                new Guid("B94C2C48-7962-4D7D-A7F5-71D90F828350"),
-                new CoreAccount("5AEAA60D14F4850039294B68", 0, "Ana Kwee"),
-                new UnitId(11),
-                "F",
-                "AJL",
-                "Operator");
             //mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-            //    .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
+            //    .Returns(new List<OperatorDocument>() { operator_ });
 
             //Shift Object
-            var firstShift = new ShiftDocument(
-                new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
                 "Pagi",
                 new TimeSpan(06, 01, 00),
                 new TimeSpan(14, 00, 00));
-            var secondShift = new ShiftDocument(
-                new Guid("BD17BBBC-60BA-42B9-A91D-C85DEF4990D9"),
-                "Siang",
-                new TimeSpan(14, 01, 00),
-                new TimeSpan(22, 00, 00));
             //mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-            //    .Returns(new List<ShiftDocument>() { firstShift, secondShift });
+            //    .Returns(new List<ShiftDocument>() { shift });
 
             //Beam Object
-            var firstBeam = new BeamDocument(
-                new Guid("7C51D68C-9B7B-4FE7-88C3-A1928E810433"),
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
                 "TS56",
                 "Sizing",
                 6);
-            var secondBeam = new BeamDocument(
-                new Guid("47017EF1-7C7A-4238-920E-FC3DF98BBC92"),
-                "TS33",
-                "Sizing",
-                33);
             //mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-            //    .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
+            //    .Returns(new List<BeamDocument>() { beam });
 
             //Warping Document Object
-            //First Warping Document Object
-            var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
-                                                                         new OrderId(firstOrderDocument.Identity),
-                                                                         40,
-                                                                         1,
-                                                                         DateTimeOffset.UtcNow,
-                                                                         OperationStatus.ONPROCESS);
+            var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
+                                                                    new OrderId(orderDocument.Identity),
+                                                                    40,
+                                                                    1,
+                                                                    DateTimeOffset.UtcNow,
+                                                                    OperationStatus.ONPROCESS);
 
-            var firstHistory = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
-                                                                new ShiftId(firstShift.Identity),
-                                                                new OperatorId(firstOperator.Identity),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           new ShiftId(shift.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
+                                                           DateTimeOffset.UtcNow,
+                                                           MachineStatus.ONSTART,
+                                                           warpingDocument.Identity);
+            warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
-            var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(firstBeam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+            var beamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                                   new BeamId(beam.Identity),
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
+            warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            //Second Warping Document Object
-            var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                         new OrderId(secondOrderDocument.Identity),
-                                                                         40,
-                                                                         1,
-                                                                         DateTimeOffset.UtcNow,
-                                                                         OperationStatus.ONPROCESS);
-
-            var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                new ShiftId(secondShift.Identity),
-                                                                new OperatorId(secondOperator.Identity),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
-
-            var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                        new BeamId(secondBeam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
-                new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
+            mockDailyOperationWarpingRepo
+                .Setup(x => x.Query)
+                .Returns(new List<DailyOperationWarpingDocumentReadModel>()
+                .AsQueryable());
+            mockDailyOperationWarpingRepo
+                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>()))
+                .Returns(
+                new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             // Act
             var result = await dailyOperationWarpingQueryHandler.GetAll();
@@ -278,170 +242,136 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
-            //Fabric Construction Object
-            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
-                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
-                "Melintang",
-                "PLCTD100",
-                "PLCTD100",
-                33,
-                44,
-                55,
-                1000,
-                "PolyCotton100");
-            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
-                "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
-                "Lurus",
-                "CTNCD12",
-                "CTNCD12",
-                22,
-                11,
-                54,
-                2400,
-                "Cotton12");
-            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
-
-            //Order Object
-            var firstOrderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
-                "0002/08-2019",
-                new ConstructionId(firstFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            var secondOrderDocument = new OrderDocument(
-                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
-                "0001/08-2019",
-                new ConstructionId(secondFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(30, 50, 20),
-                new Composition(50, 40, 10),
-                "CD",
-                "CM",
-                3500,
-                "Cotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
-                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
-
-            //Material Type Object
-            var firstMaterialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            var secondMaterialType = new MaterialTypeDocument(new Guid("3C6A3834-99BE-445E-A322-2B92AB428C21"),
-                                                             "CTN",
-                                                             "Cotton",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
 
             //Operator Object
-            var firstOperator = new OperatorDocument(
-                new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
                 new UnitId(11),
                 "C",
                 "AJL",
                 "Operator");
-            var secondOperator = new OperatorDocument(
-                new Guid("B94C2C48-7962-4D7D-A7F5-71D90F828350"),
-                new CoreAccount("5AEAA60D14F4850039294B68", 0, "Ana Kwee"),
-                new UnitId(11),
-                "F",
-                "AJL",
-                "Operator");
             mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
-
-            //Shift Object
-            var firstShift = new ShiftDocument(
-                new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            var secondShift = new ShiftDocument(
-                new Guid("BD17BBBC-60BA-42B9-A91D-C85DEF4990D9"),
-                "Siang",
-                new TimeSpan(14, 01, 00),
-                new TimeSpan(22, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { firstShift, secondShift });
+                .Returns(new List<OperatorDocument>() { operatorDocument });
 
             //Beam Object
-            var firstBeam = new BeamDocument(
-                new Guid("7C51D68C-9B7B-4FE7-88C3-A1928E810433"),
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
                 "TS56",
                 "Sizing",
                 6);
-            var secondBeam = new BeamDocument(
-                new Guid("47017EF1-7C7A-4238-920E-FC3DF98BBC92"),
-                "TS33",
-                "Sizing",
-                33);
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
+                .Returns(new List<BeamDocument>() { beam });
+
+            //Broken Cause Object
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
+            //Fabric Construction Object
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
+                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
+                "Melintang",
+                33,
+                44,
+                55,
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
+            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
+
+            //Order Object
+            var orderDocument = new OrderDocument(
+                Guid.NewGuid(),
+                "0002/08-2019",
+                DateTime.Now,
+                new ConstructionId(fabricConstruction.Identity),
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
+                3500,
+                new UnitId(14),
+                Constants.ONORDER);
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { orderDocument });
 
             //Warping Document Object
-            //First Warping Document Object
-            var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
-                                                                         new OrderId(firstOrderDocument.Identity),
-                                                                         40,
-                                                                         1,
-                                                                         DateTimeOffset.UtcNow,
-                                                                         OperationStatus.ONPROCESS);
+            var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
+                                                                    new OrderId(orderDocument.Identity),
+                                                                    40,
+                                                                    1,
+                                                                    DateTimeOffset.UtcNow,
+                                                                    OperationStatus.ONPROCESS);
 
-            var firstHistory = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
-                                                                new ShiftId(firstShift.Identity),
-                                                                new OperatorId(firstOperator.Identity),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           new ShiftId(shift.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
+                                                           DateTimeOffset.UtcNow,
+                                                           MachineStatus.ONSTART,
+                                                           warpingDocument.Identity);
+            warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
-            var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(firstBeam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+            var beamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                                   new BeamId(beam.Identity),
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
+            var warpingBroken = new DailyOperationWarpingBrokenCause(
+                Guid.NewGuid(),
+                new BrokenCauseId(brokenCause.Identity),
+                2,
+                beamProduct.Identity);
+            beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
+            warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            //Second Warping Document Object
-            var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+            mockDailyOperationWarpingRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
 
-            var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONSTART);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
 
-            var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
-                new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
+
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
 
             // Act
-            var result = await dailyOperationWarpingQueryHandler.GetById(firstWarpingDocument.Identity);
+            var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);
 
             // Assert
             result.Should().NotBeNull();
@@ -454,181 +384,140 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
-            //Fabric Construction Object
-            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
-                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
-                "Melintang",
-                "PLCTD100",
-                "PLCTD100",
-                33,
-                44,
-                55,
-                1000,
-                "PolyCotton100");
-            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
-                "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
-                "Lurus",
-                "CTNCD12",
-                "CTNCD12",
-                22,
-                11,
-                54,
-                2400,
-                "Cotton12");
-            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
-
-            //Order Object
-            var firstOrderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
-                "0002/08-2019",
-                new ConstructionId(firstFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            var secondOrderDocument = new OrderDocument(
-                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
-                "0001/08-2019",
-                new ConstructionId(secondFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(30, 50, 20),
-                new Composition(50, 40, 10),
-                "CD",
-                "CM",
-                3500,
-                "Cotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
-                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
-
-            //Material Type Object
-            var firstMaterialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            var secondMaterialType = new MaterialTypeDocument(new Guid("3C6A3834-99BE-445E-A322-2B92AB428C21"),
-                                                             "CTN",
-                                                             "Cotton",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
 
             //Operator Object
-            var firstOperator = new OperatorDocument(
-                new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
                 new UnitId(11),
                 "C",
                 "AJL",
                 "Operator");
-            var secondOperator = new OperatorDocument(
-                new Guid("B94C2C48-7962-4D7D-A7F5-71D90F828350"),
-                new CoreAccount("5AEAA60D14F4850039294B68", 0, "Ana Kwee"),
-                new UnitId(11),
-                "F",
-                "AJL",
-                "Operator");
             mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
-
-            //Shift Object
-            var firstShift = new ShiftDocument(
-                new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            var secondShift = new ShiftDocument(
-                new Guid("BD17BBBC-60BA-42B9-A91D-C85DEF4990D9"),
-                "Siang",
-                new TimeSpan(14, 01, 00),
-                new TimeSpan(22, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { firstShift, secondShift });
+                .Returns(new List<OperatorDocument>() { operatorDocument });
 
             //Beam Object
-            var firstBeam = new BeamDocument(
-                new Guid("7C51D68C-9B7B-4FE7-88C3-A1928E810433"),
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
                 "TS56",
                 "Sizing",
                 6);
-            var secondBeam = new BeamDocument(
-                new Guid("47017EF1-7C7A-4238-920E-FC3DF98BBC92"),
-                "TS33",
-                "Sizing",
-                33);
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
+                .Returns(new List<BeamDocument>() { beam });
 
             //Broken Cause Object
-            var firstBrokenCause = new WarpingBrokenCauseDocument(new Guid("D2B3DC1D-1082-4C21-9369-643FE873B699"),"Slub","-",false);
-            var secondBrokenCause = new WarpingBrokenCauseDocument(new Guid("08271D60-387D-4D01-924D-9F15A8B58E3B"),"Untwisted","-",false);
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
             mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
-                .Returns(new List<WarpingBrokenCauseDocument>() { firstBrokenCause, secondBrokenCause });
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
+            //Fabric Construction Object
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
+                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
+                "Melintang",
+                33,
+                44,
+                55,
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
+            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
+
+            //Order Object
+            var orderDocument = new OrderDocument(
+                Guid.NewGuid(),
+                "0002/08-2019",
+                DateTime.Now,
+                new ConstructionId(fabricConstruction.Identity),
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
+                3500,
+                new UnitId(14),
+                Constants.ONORDER);
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { orderDocument });
 
             //Warping Document Object
-            //First Warping Document Object
-            var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
-                                                                         new OrderId(firstOrderDocument.Identity),
-                                                                         40,
-                                                                         1,
-                                                                         DateTimeOffset.UtcNow,
-                                                                         OperationStatus.ONPROCESS);
+            var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
+                                                                    new OrderId(orderDocument.Identity),
+                                                                    40,
+                                                                    1,
+                                                                    DateTimeOffset.UtcNow,
+                                                                    OperationStatus.ONPROCESS);
 
-            var firstHistory = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
-                                                                new ShiftId(firstShift.Identity),
-                                                                new OperatorId(firstOperator.Identity),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONENTRY);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           new ShiftId(shift.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
+                                                           DateTimeOffset.UtcNow,
+                                                           MachineStatus.ONENTRY,
+                                                           warpingDocument.Identity);
+            warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
-            var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(firstBeam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            var firstWarpingBroken = new DailyOperationWarpingBrokenCause(new Guid("9C5E54F4-350E-47C8-A6C7-F9D2DB3C2C5F"), new BrokenCauseId(firstBrokenCause.Identity), 1);
-            firstBeamProduct.AddWarpingBrokenThreadsCause(firstWarpingBroken);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+            var beamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                                   new BeamId(beam.Identity),
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
+            var warpingBroken = new DailyOperationWarpingBrokenCause(
+                Guid.NewGuid(), 
+                new BrokenCauseId(brokenCause.Identity), 
+                2,
+                beamProduct.Identity);
+            beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
+            warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            //Second Warping Document Object
-            var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+            mockDailyOperationWarpingRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
 
-            var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONENTRY);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
 
-            var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            var secondWarpingBroken = new DailyOperationWarpingBrokenCause(new Guid("0BE69563-4F94-4E24-BB1E-30FA82E158D3"), new BrokenCauseId(secondBrokenCause.Identity), 2);
-            secondBeamProduct.AddWarpingBrokenThreadsCause(secondWarpingBroken);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
 
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
-                new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
+
+            //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            //mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //    new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             // Act
-            var result = await dailyOperationWarpingQueryHandler.GetById(firstWarpingDocument.Identity);
+            var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);
 
             // Assert
             result.Should().NotBeNull();
@@ -641,170 +530,136 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             var dailyOperationWarpingQueryHandler = this.CreateDailyOperationWarpingQueryHandler();
 
             //Create Mock Object
-            //Fabric Construction Object
-            var firstFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("03A861FC-4A97-40CC-B478-70357FDF3065"),
-                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
-                "Melintang",
-                "PLCTD100",
-                "PLCTD100",
-                33,
-                44,
-                55,
-                1000,
-                "PolyCotton100");
-            var secondFabricConstruction = new Domain.FabricConstructions.FabricConstructionDocument(
-                new Guid("37BB78E5-CC70-4FD8-B92D-E3E58BAB575C"),
-                "Cotton12 Lurus 22 11 54 CTNCD12 CTNCD12",
-                "Lurus",
-                "CTNCD12",
-                "CTNCD12",
-                22,
-                11,
-                54,
-                2400,
-                "Cotton12");
-            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
-                .Returns(new List<Domain.FabricConstructions.FabricConstructionDocument>() { firstFabricConstruction, secondFabricConstruction });
-
-            //Order Object
-            var firstOrderDocument = new OrderDocument(
-                new Guid("0121ACFF-A3F6-463B-AC75-51291C920221"),
-                "0002/08-2019",
-                new ConstructionId(firstFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(50, 40, 10),
-                new Composition(30, 50, 20),
-                "PC",
-                "CD",
-                4000,
-                "PolyCotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            var secondOrderDocument = new OrderDocument(
-                new Guid("E14E40B8-B67D-4293-AC24-AB2210BEB815"),
-                "0001/08-2019",
-                new ConstructionId(secondFabricConstruction.Identity),
-                DateTimeOffset.UtcNow.AddDays(-1),
-                new Period("August", "2019"),
-                new Composition(30, 50, 20),
-                new Composition(50, 40, 10),
-                "CD",
-                "CM",
-                3500,
-                "Cotton",
-                new UnitId(11),
-                "OPEN-ORDER");
-            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderDocumentReadModel, bool>>>()))
-                .Returns(new List<OrderDocument>() { firstOrderDocument, secondOrderDocument });
-
-            //Material Type Object
-            var firstMaterialType = new MaterialTypeDocument(new Guid("3F851C30-6082-49AE-9BB6-52896B57BEE0"),
-                                                             "SPX",
-                                                             "Spandex",
-                                                             "-");
-            var secondMaterialType = new MaterialTypeDocument(new Guid("3C6A3834-99BE-445E-A322-2B92AB428C21"),
-                                                             "CTN",
-                                                             "Cotton",
-                                                             "-");
-            //mockMaterialTypeRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MaterialTypeReadModel, bool>>>()))
-            //    .Returns(new List<MaterialTypeDocument>() { firstMaterialType, secondMaterialType });
+            //Shift Object
+            var shift = new ShiftDocument(
+                Guid.NewGuid(),
+                "Pagi",
+                new TimeSpan(06, 01, 00),
+                new TimeSpan(14, 00, 00));
+            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
+                .Returns(new List<ShiftDocument>() { shift });
 
             //Operator Object
-            var firstOperator = new OperatorDocument(
-                new Guid("BF006F72-857D-4968-AD8F-4745568ACD16"),
+            var operatorDocument = new OperatorDocument(
+                Guid.NewGuid(),
                 new CoreAccount("5A7C00B2E796C72AA8446601", 0, "Chairul Anam"),
                 new UnitId(11),
                 "C",
                 "AJL",
                 "Operator");
-            var secondOperator = new OperatorDocument(
-                new Guid("B94C2C48-7962-4D7D-A7F5-71D90F828350"),
-                new CoreAccount("5AEAA60D14F4850039294B68", 0, "Ana Kwee"),
-                new UnitId(11),
-                "F",
-                "AJL",
-                "Operator");
             mockOperatorRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OperatorReadModel, bool>>>()))
-                .Returns(new List<OperatorDocument>() { firstOperator, secondOperator });
-
-            //Shift Object
-            var firstShift = new ShiftDocument(
-                new Guid("3205F07E-933C-4814-8DED-60FF09EC90B9"),
-                "Pagi",
-                new TimeSpan(06, 01, 00),
-                new TimeSpan(14, 00, 00));
-            var secondShift = new ShiftDocument(
-                new Guid("BD17BBBC-60BA-42B9-A91D-C85DEF4990D9"),
-                "Siang",
-                new TimeSpan(14, 01, 00),
-                new TimeSpan(22, 00, 00));
-            mockShiftRepo.Setup(x => x.Find(It.IsAny<Expression<Func<ShiftReadModel, bool>>>()))
-                .Returns(new List<ShiftDocument>() { firstShift, secondShift });
+                .Returns(new List<OperatorDocument>() { operatorDocument });
 
             //Beam Object
-            var firstBeam = new BeamDocument(
-                new Guid("7C51D68C-9B7B-4FE7-88C3-A1928E810433"),
+            var beam = new BeamDocument(
+                Guid.NewGuid(),
                 "TS56",
                 "Sizing",
                 6);
-            var secondBeam = new BeamDocument(
-                new Guid("47017EF1-7C7A-4238-920E-FC3DF98BBC92"),
-                "TS33",
-                "Sizing",
-                33);
             mockBeamRepo.Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { firstBeam, secondBeam });
+                .Returns(new List<BeamDocument>() { beam });
+
+            //Broken Cause Object
+            var brokenCause = new WarpingBrokenCauseDocument(
+                Guid.NewGuid(),
+                "Slub",
+                "-",
+                false);
+            mockWarpingBrokenCauseRepo.Setup(x => x.Find(It.IsAny<Expression<Func<WarpingBrokenCauseReadModel, bool>>>()))
+                .Returns(new List<WarpingBrokenCauseDocument>() { brokenCause });
+
+            //Supplier Object
+            var supplierDocument = new WeavingSupplierDocument(
+                Guid.NewGuid(),
+                "TS",
+                "Test Supplier",
+                "999");
+
+            //Fabric Construction Object
+            var fabricConstruction = new FabricConstructionDocument(
+                Guid.NewGuid(),
+                "PolyCotton100 Melintang 33 44 55 PLCTD100 PLCTD100",
+                "PolyCotton",
+                "Melintang",
+                33,
+                44,
+                55,
+                "MMC75",
+                "RAYON45",
+                100,
+                266,
+                122);
+            mockFabricConstructionRepo.Setup(x => x.Find(It.IsAny<Expression<Func<FabricConstructionReadModel, bool>>>()))
+                .Returns(new List<FabricConstructionDocument>() { fabricConstruction });
+
+            //Order Object
+            var orderDocument = new OrderDocument(
+                Guid.NewGuid(),
+                "0002/08-2019",
+                DateTime.Now,
+                new ConstructionId(fabricConstruction.Identity),
+                "MMCXRAYON30",
+                new SupplierId(supplierDocument.Identity),
+                40,
+                40,
+                20,
+                new SupplierId(supplierDocument.Identity),
+                30,
+                30,
+                40,
+                3500,
+                new UnitId(14),
+                Constants.ONORDER);
+            mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
+                .Returns(new List<OrderDocument>() { orderDocument });
 
             //Warping Document Object
-            //First Warping Document Object
-            var firstWarpingDocument = new DailyOperationWarpingDocument(new Guid("73355D43-0EF0-4FD2-A765-B1ACA1004C81"),
-                                                                         new OrderId(firstOrderDocument.Identity),
-                                                                         40,
-                                                                         1,
-                                                                         DateTimeOffset.UtcNow,
-                                                                         OperationStatus.ONPROCESS);
+            var warpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
+                                                                    new OrderId(orderDocument.Identity),
+                                                                    40,
+                                                                    1,
+                                                                    DateTimeOffset.UtcNow,
+                                                                    OperationStatus.ONPROCESS);
 
-            var firstHistory = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
-                                                                new ShiftId(firstShift.Identity),
-                                                                new OperatorId(firstOperator.Identity),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONFINISH);
-            firstWarpingDocument.AddDailyOperationWarpingHistory(firstHistory);
+            var history = new DailyOperationWarpingHistory(Guid.NewGuid(),
+                                                           new ShiftId(shift.Identity),
+                                                           new OperatorId(operatorDocument.Identity),
+                                                           DateTimeOffset.UtcNow,
+                                                           MachineStatus.ONFINISH,
+                                                           warpingDocument.Identity);
+            warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
-            var firstBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(firstBeam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS);
-            firstWarpingDocument.AddDailyOperationWarpingBeamProduct(firstBeamProduct);
+            var beamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
+                                                                   new BeamId(beam.Identity),
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
+            var warpingBroken = new DailyOperationWarpingBrokenCause(
+                Guid.NewGuid(),
+                new BrokenCauseId(brokenCause.Identity),
+                2,
+                beamProduct.Identity);
+            beamProduct.BrokenCauses = new List<DailyOperationWarpingBrokenCause>() { warpingBroken };
+            warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            //Second Warping Document Object
-            var secondWarpingDocument = new DailyOperationWarpingDocument(new Guid("2C2CE3D7-CB11-4BD3-A7AB-AE15E72BFD56"),
-                                                                          new OrderId(secondOrderDocument.Identity),
-                                                                          40,
-                                                                          1,
-                                                                          DateTimeOffset.UtcNow,
-                                                                          OperationStatus.ONPROCESS);
+            mockDailyOperationWarpingRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingDocument>() { warpingDocument });
 
-            var secondHistory = new DailyOperationWarpingHistory(new Guid("AC4DD641-4899-4020-A1CE-1D91FE22EBE6"),
-                                                                 new ShiftId(secondShift.Identity),
-                                                                 new OperatorId(secondOperator.Identity),
-                                                                 DateTimeOffset.UtcNow,
-                                                                 MachineStatus.ONFINISH);
-            secondWarpingDocument.AddDailyOperationWarpingHistory(secondHistory);
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { history });
 
-            var secondBeamProduct = new DailyOperationWarpingBeamProduct(new Guid("24D50631-592A-4D8D-9188-38EBF4046AA3"),
-                                                                         new BeamId(secondBeam.Identity),
-                                                                         DateTimeOffset.UtcNow,
-                                                                         BeamStatus.ONPROCESS);
-            secondWarpingDocument.AddDailyOperationWarpingBeamProduct(secondBeamProduct);
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingReadModel>>())).Returns(
-                new List<DailyOperationWarpingDocument>() { firstWarpingDocument, secondWarpingDocument });
+            mockDailyOperationWarpingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBeamProduct>() { beamProduct });
+
+            mockDailyOperationWarpingBrokenCauseRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBrokenCauseReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingBrokenCause>() { warpingBroken });
 
             // Act
-            var result = await dailyOperationWarpingQueryHandler.GetById(firstWarpingDocument.Identity);
+            var result = await dailyOperationWarpingQueryHandler.GetById(warpingDocument.Identity);
 
             // Assert
             result.Should().NotBeNull();

@@ -24,7 +24,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
-        private readonly IWeavingOrderDocumentRepository
+        private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
@@ -45,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _dailyOperationLoomRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _weavingOrderDocumentRepository =
-                _storage.GetRepository<IWeavingOrderDocumentRepository>();
+                _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
             _weavingSupplierRepository =
@@ -90,7 +90,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Construction Number
                 await Task.Yield();
-                var constructionId = orderDocument.ConstructionId.Value;
+                var constructionId = orderDocument.ConstructionDocumentId.Value;
                 var constructionNumber =
                     _fabricConstructionRepository
                         .Find(o => o.Identity.Equals(constructionId))
@@ -99,8 +99,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Warp Origin Code and Weft Origin Code
                 await Task.Yield();
-                var warpId = orderDocument.WarpOrigin;
-                var weftId = orderDocument.WeftOrigin;
+                var warpId = orderDocument.WarpOriginId;
+                var weftId = orderDocument.WeftOriginId;
                 
                 await Task.Yield();
                 var warpCode =
@@ -168,7 +168,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             //Get Construction Number
             await Task.Yield();
-            var constructionId = orderDocument.ConstructionId.Value;
+            var constructionId = orderDocument.ConstructionDocumentId.Value;
             var constructionNumber =
                 _fabricConstructionRepository
                     .Find(o => o.Identity.Equals(constructionId))
@@ -177,8 +177,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             //Get Warp Origin Code and Weft Origin Code
             await Task.Yield();
-            var warpId = orderDocument.WarpOrigin;
-            var weftId = orderDocument.WeftOrigin;
+            var warpId = orderDocument.WarpOriginId;
+            var weftId = orderDocument.WeftOriginId;
 
             await Task.Yield();
             var warpCode =
