@@ -149,6 +149,7 @@ namespace DanLiris.Admin.Web
 
             //Add Query Service Config
             services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();
+            services.AddTransient<IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto>, OrderQueryHandler>();
             services.AddTransient<IOrderQuery<OrderListDto>, OrderQueryHandler>();
             services.AddTransient<IFabricConstructionQuery<FabricConstructionListDto>, FabricConstructionQueryHandler>();
             services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();

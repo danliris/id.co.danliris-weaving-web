@@ -37,9 +37,9 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                     .OrderByDescending(o => o.CreatedDate);
 
             //Generate Period
-            var year = request.Period.Year;
-            var month = request.Period.Month;
-            var day = request.Period.Day;
+            var year = request.Year;
+            var month = request.Month;
+            var day = request.Day;
             var period = new DateTime(year, month, day);
 
             //Generate Estimation Number
@@ -53,7 +53,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
 
             await _estimatedProductionDocumentRepository.Update(newEstimationDocument);
 
-            foreach(var estimationDetail in request.EstimationProducts)
+            foreach(var estimationDetail in request.EstimationDetails)
             {
                 var newEstimationDetail = new EstimatedProductionDetail(Guid.NewGuid(),
                                                                         estimationDetail.OrderId,

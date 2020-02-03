@@ -7,6 +7,7 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Orders.Queries;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Suppliers.Repositories;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -17,7 +18,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Orders.QueryHandlers
 {
-    public class OrderQueryHandler : IOrderQuery<OrderListDto>
+    public class OrderQueryHandler : IOrderQuery<OrderListDto>, IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto>
     {
         protected readonly IHttpClientService
             _http;
@@ -125,12 +126,35 @@ namespace Manufactures.Application.Orders.QueryHandlers
 
             await Task.Yield();
             var resultByIdDto = new OrderByIdDto(orderDocument);
-            //resultByIdDto.SetWarpOrigin(warpOrigin);
-            //resultByIdDto.SetWeftOrigin(weftOrigin);
             resultByIdDto.SetConstructionNumber(constructionNumber);
             resultByIdDto.SetUnit(unitName);
 
             return resultByIdDto;
+        }
+
+        public async Task<IEnumerable<OrderByUnitAndPeriodDto>> GetByUnitAndPeriod(int month, int year, int unitId)
+        {
+            var resultListDto = new List<OrderByUnitAndPeriodDto>();
+
+            var orders =
+                _orderRepository
+                    .Find(o=>o.UnitId == unitId && o.Period.Year == year && o.Period.Month == month);
+
+            foreach (var order in orders)
+            {
+                //Get Weaving Unit
+                await Task.Yield();
+                var constructionDocument =
+                    _fabricConstructionRepository
+                        .Find(o => o.Identity == order.ConstructionDocumentId.Value)
+                        .FirstOrDefault();
+
+                var resultDto = new OrderByUnitAndPeriodDto(order, constructionDocument);
+
+                resultListDto.Add(resultDto);
+            }
+
+            return resultListDto;
         }
     }
 }

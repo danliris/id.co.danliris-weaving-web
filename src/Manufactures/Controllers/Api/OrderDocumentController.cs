@@ -38,11 +38,13 @@ namespace Manufactures.Controllers.Api
             _yarnDocumentRepository;
 
         private readonly IOrderQuery<OrderListDto> _orderQuery;
+        private readonly IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto> _orderByUnitAndPeriodQuery;
         private readonly IOrderReportQuery<OrderReportListDto> _orderProductionReportQuery;
 
         public OrderDocumentController(IServiceProvider serviceProvider,
                                        IWorkContext workContext,
                                        IOrderQuery<OrderListDto> orderQuery,
+                                       IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto> orderByUnitAndPeriodQuery,
                                        IOrderReportQuery<OrderReportListDto> orderProductionReportQuery) : base(serviceProvider)
         {
             _weavingOrderDocumentRepository =
@@ -55,6 +57,7 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IYarnDocumentRepository>();
 
             _orderQuery = orderQuery ?? throw new ArgumentNullException(nameof(orderQuery));
+            _orderByUnitAndPeriodQuery = orderByUnitAndPeriodQuery ?? throw new ArgumentNullException(nameof(orderByUnitAndPeriodQuery));
             _orderProductionReportQuery = orderProductionReportQuery ?? throw new ArgumentNullException(nameof(orderProductionReportQuery));
         }
 
@@ -99,6 +102,21 @@ namespace Manufactures.Controllers.Api
                         orderDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
+
+            var result = orderDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+
+        [HttpGet("get-by-unit-period")]
+        public async Task<IActionResult> Get(int month,
+                                             int year,
+                                             int unitId, 
+                                             int page = 1,
+                                             int size = 25)
+        {
+            var orderDocuments = await _orderByUnitAndPeriodQuery.GetByUnitAndPeriod(month, year, unitId);
 
             var result = orderDocuments.Skip((page - 1) * size).Take(size);
             var total = result.Count();
