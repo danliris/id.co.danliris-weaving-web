@@ -79,13 +79,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (warpingFinishDateLogUtc < lastWarpingDateLogUtc)
             {
-                throw Validator.ErrorValidation(("ProduceBeamsDate", "Tanggal Tidak Boleh Melebihi Tanggal Sebelumnya"));
+                throw Validator.ErrorValidation(("ProduceBeamsDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
             }
             else
             {
                 if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("ProduceBeamsTime", "Waktu Tidak Boleh Melebihi Waktu Sebelumnya"));
+                    throw Validator.ErrorValidation(("ProduceBeamsTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Can't Finish, latest status is not ONSTART or ONPROCESSBEAM"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Menyelesaikan Proses, Status Mesin Harus Mulai atau Sedang Proses"));
                     }
                 }
             }
