@@ -6,6 +6,7 @@ using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Linq;
 using System.Threading;
@@ -55,9 +56,14 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
 
             foreach(var estimationDetail in request.EstimationDetails)
             {
+                var order =
+                    _orderDocumentRepository
+                        .Find(o => o.Identity == estimationDetail.OrderId)
+                        .FirstOrDefault();
+
                 var newEstimationDetail = new EstimatedProductionDetail(Guid.NewGuid(),
-                                                                        estimationDetail.OrderId,
-                                                                        estimationDetail.ConstructionId,
+                                                                        new OrderId(estimationDetail.OrderId),
+                                                                        order.ConstructionDocumentId,
                                                                         estimationDetail.GradeA,
                                                                         estimationDetail.GradeB,
                                                                         estimationDetail.GradeC,
@@ -65,11 +71,6 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                                                                         newEstimationDocument.Identity);
 
                 await _estimatedProductionDetailRepository.Update(newEstimationDetail);
-
-                var order =
-                    _orderDocumentRepository
-                        .Find(o => o.Identity == estimationDetail.OrderId.Value)
-                        .FirstOrDefault();
 
                 order.SetOrderStatus(Constants.ONESTIMATED);
 
