@@ -22,8 +22,8 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         [JsonProperty(PropertyName = "UnitId")]
         public UnitId UnitId { get; set; }
 
-        [JsonProperty(PropertyName = "EstimationProducts")]
-        public List<EstimatedProductionDetail> EstimationDetails { get; set; }
+        [JsonProperty(PropertyName = "EstimatedDetails")]
+        public List<AddNewEstimatedProductionDetailCommand> EstimatedDetails { get; set; }
     }
 
     public class AddNewEstimationCommandValidator : AbstractValidator<AddNewEstimationCommand>

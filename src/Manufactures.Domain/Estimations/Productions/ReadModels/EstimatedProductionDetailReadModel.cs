@@ -12,7 +12,7 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
         public double GradeA { get; internal set; }
         public double GradeB { get; internal set; }
         public double GradeC { get; internal set; }
-        public double GradeD { get; internal set; }
+        public double? GradeD { get; internal set; }
         public Guid EstimatedProductionDocumentId { get; internal set; }
         public EstimatedProductionDetailReadModel(Guid identity) : base(identity)
         {

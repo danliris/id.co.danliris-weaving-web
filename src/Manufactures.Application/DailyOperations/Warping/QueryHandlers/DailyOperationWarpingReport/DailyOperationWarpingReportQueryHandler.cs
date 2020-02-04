@@ -35,6 +35,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
+        private readonly IConstructionYarnDetailRepository
+            _constructionYarnDetailRepository;
         private readonly IMaterialTypeRepository
             _materialTypeRepository;
         private readonly IYarnDocumentRepository
@@ -58,6 +60,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                 _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
+            _constructionYarnDetailRepository =
+                _storage.GetRepository<IConstructionYarnDetailRepository>();
             _materialTypeRepository =
                 _storage.GetRepository<IMaterialTypeRepository>();
             _yarnRepository =
@@ -196,9 +200,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                     SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
                     var weavingUnitName = unitData.data.Name;
 
+                    //Get Fabric Construction Detail
+                    var constructionDetails =
+                        _constructionYarnDetailRepository
+                            .Find(o => o.FabricConstructionDocumentId == fabricConstructionDocument.Identity);
+
                     //Get Material Type
                     await Task.Yield();
-                    var yarnIds = fabricConstructionDocument.ConstructionWarpsDetail.Select(x => x.YarnId.Value).ToList();
+                    var yarnIds = constructionDetails.Select(x => x.YarnId.Value).ToList();
                     var yarnDocuments =
                         _yarnRepository
                             .Find(o => yarnIds.Contains(o.Identity));

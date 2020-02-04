@@ -13,7 +13,7 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
         public double GradeA { get; private set; }
         public double GradeB { get; private set; }
         public double GradeC { get; private set; }
-        public double GradeD { get; private set; }
+        public double? GradeD { get; private set; }
         public Guid EstimatedProductionDocumentId { get; set; }
 
         public EstimatedProductionDetail(Guid identity,
@@ -97,8 +97,6 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
 
         public void SetGradeA(double gradeA)
         {
-            Validator.ThrowIfNull(() => gradeA);
-
             if (gradeA != GradeA)
             {
                 GradeA = gradeA;
@@ -110,8 +108,6 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
 
         public void SetGradeB(double gradeB)
         {
-            Validator.ThrowIfNull(() => gradeB);
-
             if (gradeB != GradeB)
             {
                 GradeB = gradeB;
@@ -123,8 +119,6 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
 
         public void SetGradeC(double gradeC)
         {
-            Validator.ThrowIfNull(() => gradeC);
-
             if (gradeC != GradeC)
             {
                 GradeC = gradeC;
@@ -136,8 +130,6 @@ namespace Manufactures.Domain.Estimations.Productions.Entities
 
         public void SetGradeD(double gradeD)
         {
-            Validator.ThrowIfNull(() => gradeD);
-
             if (gradeD != GradeD)
             {
                 GradeD = gradeD;

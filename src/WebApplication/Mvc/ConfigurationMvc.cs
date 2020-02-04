@@ -31,8 +31,10 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateConstructionCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<AddOrderCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateOrderCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<AddNewEstimationCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<AddNewEstimatedProductionDetailCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateEstimationProductCommandValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<EstimatedProductionDetailCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateEstimatedProductionDetailCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }

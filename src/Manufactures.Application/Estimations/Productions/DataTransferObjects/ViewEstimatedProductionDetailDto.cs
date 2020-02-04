@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Application.Estimations.Productions.DataTransferObjects
 {
-    public class EstimatedProductionDetailDto
+    public class ViewEstimatedProductionDetailDto
     {
         [JsonProperty(PropertyName = "DateOrdered")]
         public DateTimeOffset DateOrdered { get; }
@@ -37,7 +37,7 @@ namespace Manufactures.Application.Estimations.Productions.DataTransferObjects
         [JsonProperty(PropertyName = "GradeD")]
         public double GradeD { get; private set; }
 
-        public EstimatedProductionDetailDto(OrderDocument orderDocument, FabricConstructionDocument fabricConstructionDocument, EstimatedProductionDetail estimatedDetail)
+        public ViewEstimatedProductionDetailDto(OrderDocument orderDocument, FabricConstructionDocument fabricConstructionDocument, EstimatedProductionDetail estimatedDetail)
         {
             DateOrdered = orderDocument.AuditTrail.CreatedDate;
             OrderNumber = orderDocument.OrderNumber;
@@ -47,7 +47,7 @@ namespace Manufactures.Application.Estimations.Productions.DataTransferObjects
             GradeA = estimatedDetail.GradeA;
             GradeB = estimatedDetail.GradeB;
             GradeC = estimatedDetail.GradeC;
-            GradeD = estimatedDetail.GradeD;
+            GradeD = estimatedDetail.GradeD ?? 0;
         }
     }
 }

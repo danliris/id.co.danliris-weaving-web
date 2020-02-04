@@ -92,7 +92,7 @@ namespace Manufactures.Application.Orders.DataTransferObjects.OrderReport
             EstimatedProductionGradeA = estimationDetail.GradeA;
             EstimatedProductionGradeB = estimationDetail.GradeB;
             EstimatedProductionGradeC = estimationDetail.GradeC;
-            EstimatedProductionGradeD = estimationDetail.GradeD;
+            EstimatedProductionGradeD = estimationDetail.GradeD ?? 0;
             TotalEstimatedProduction = orderDocument.AllGrade;
             UnitName = unitName;
         }

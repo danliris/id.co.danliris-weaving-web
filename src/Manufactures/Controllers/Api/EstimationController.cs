@@ -94,6 +94,23 @@ namespace Manufactures.Controllers.Api
             }
         }
 
+        [HttpGet("edit/{Id}")]
+        public async Task<IActionResult> GetEdit(string Id)
+        {
+            var Identity = Guid.Parse(Id);
+            var estimatedProductionDocument = await _estimatedProductionDocumentQuery.GetByIdUpdate(Identity);
+
+            await Task.Yield();
+            if (Identity == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(estimatedProductionDocument);
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]AddNewEstimationCommand command)
         {

@@ -83,13 +83,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             if (warpingStartDateLogUtc < lastWarpingDateLogUtc)
             {
-                throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Melebihi Tanggal Sebelumnya"));
+                throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
             }
             else
             {
                 if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Melebihi Waktu Sebelumnya"));
+                    throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                 }
                 else
                 {
@@ -152,7 +152,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("BeamStatus", "Beam yang dipilih telah selesai diproses, harus Input Beam yang beda"));
+                            throw Validator.ErrorValidation(("BeamStatus", "Beam yang Dipilih Telah Selesai Diproses, Harus Input Beam yang Beda"));
                         }
                     }
                     else
