@@ -24,7 +24,6 @@ using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.Defects.FabricDefect.ReadModels;
 using Manufactures.Domain.BeamStockMonitoring.ReadModels;
@@ -100,7 +99,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationReachingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationReachingHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationReachingHistories");
                 etb.HasKey(e => e.Identity);
@@ -114,9 +113,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationReachingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.ReachingHistories)
-                    .WithOne(e => e.DailyOperationReachingDocument)
-                    .HasForeignKey(e => e.DailyOperationReachingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

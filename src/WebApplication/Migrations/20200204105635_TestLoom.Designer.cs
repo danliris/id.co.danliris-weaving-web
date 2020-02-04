@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20200204105635_TestLoom")]
+    partial class TestLoom
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,7 +303,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationLoomDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingHistoryReadModel", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.Entities.DailyOperationReachingHistory", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -341,6 +343,8 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<int>("YarnStrandsProcessed");
 
                     b.HasKey("Identity");
+
+                    b.HasIndex("DailyOperationReachingDocumentId");
 
                     b.ToTable("Weaving_DailyOperationReachingHistories");
                 });
@@ -1504,6 +1508,14 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasKey("Identity");
 
                     b.ToTable("Weaving_YarnDocuments");
+                });
+
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.Entities.DailyOperationReachingHistory", b =>
+                {
+                    b.HasOne("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingReadModel", "DailyOperationReachingDocument")
+                        .WithMany("ReachingHistories")
+                        .HasForeignKey("DailyOperationReachingDocumentId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamProduct", b =>

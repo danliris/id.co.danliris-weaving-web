@@ -18,6 +18,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingRepository>
             mockDailyOperationReachingRepo;
+        private readonly Mock<IDailyOperationReachingHistoryRepository>
+            mockDailyOperationReachingHistoryRepo;
 
         public PreparationDailyOperationReachingCommandHandlerTest()
         {
@@ -26,8 +28,11 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             mockStorage.Setup(x => x.Save());
 
             mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingRepository>();
+            mockDailyOperationReachingHistoryRepo = mockRepository.Create<IDailyOperationReachingHistoryRepository>();
             mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>())
                 .Returns(mockDailyOperationReachingRepo.Object);
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingHistoryRepository>())
+                .Returns(mockDailyOperationReachingHistoryRepo.Object);
         }
 
         public void Dispose()

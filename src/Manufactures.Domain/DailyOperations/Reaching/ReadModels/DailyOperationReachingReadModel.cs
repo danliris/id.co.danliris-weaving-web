@@ -1,5 +1,5 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
+
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +17,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching.ReadModels
         public int CombNumber { get; internal set; }
         public double CombWidth { get; internal set; }
         public string OperationStatus { get; internal set; }
-        public List<DailyOperationReachingHistory> ReachingHistories { get; internal set; }
+
         public DailyOperationReachingReadModel(Guid identity) : base(identity)
         {
         }
