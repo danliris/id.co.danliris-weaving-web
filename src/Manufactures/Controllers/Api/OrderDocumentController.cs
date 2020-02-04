@@ -19,6 +19,7 @@ using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
 using Manufactures.Domain.Orders.Queries.OrderReport;
 using Manufactures.Application.Orders.DataTransferObjects;
 using Manufactures.Domain.Orders.Queries;
+using System.Globalization;
 
 namespace Manufactures.Controllers.Api
 {
@@ -78,8 +79,8 @@ namespace Manufactures.Controllers.Api
                         .Where(o => o.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                     o.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                     o.Unit.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                    o.Period.Month.ToString("MMMM").Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                                    o.Period.Year.ToString("yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                                    o.Period.ToString("MMMM", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.Period.ToString("yyyy").Contains(keyword, StringComparison.OrdinalIgnoreCase))
                         .ToList();
             }
 
