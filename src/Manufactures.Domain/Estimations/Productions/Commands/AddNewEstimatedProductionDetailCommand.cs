@@ -1,12 +1,10 @@
 ﻿using FluentValidation;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.Estimations.Productions.Commands
 {
-    public class EstimatedProductionDetailCommand
+    public class AddNewEstimatedProductionDetailCommand
     {
         [JsonProperty(PropertyName = "OrderId")]
         public Guid OrderId { get; private set; }
@@ -24,9 +22,9 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         public double GradeD { get; private set; }
     }
 
-    public class EstimatedProductionDetailCommandValidator : AbstractValidator<EstimatedProductionDetailCommand>
+    public class AddNewEstimatedProductionDetailCommandValidator : AbstractValidator<AddNewEstimatedProductionDetailCommand>
     {
-        public EstimatedProductionDetailCommandValidator()
+        public AddNewEstimatedProductionDetailCommandValidator()
         {
             RuleFor(command => command.OrderId).NotEmpty();
             RuleFor(command => command.GradeA).NotEmpty();

@@ -13,14 +13,8 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "Period")]
-        public DateTime Period { get; private set; }
-
-        [JsonProperty(PropertyName = "UnitId")]
-        public UnitId UnitId { get; private set; }
-
-        [JsonProperty(PropertyName = "EstimationProducts")]
-        public List<EstimatedProductionDetail> EstimationProducts { get; set; }
+        [JsonProperty(PropertyName = "EstimatedDetails")]
+        public List<UpdateEstimatedProductionDetailCommand> EstimatedDetails { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -33,9 +27,7 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         public UpdateEstimationProductCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
-            RuleFor(command => command.Period).NotEmpty();
-            RuleFor(command => command.UnitId).NotEmpty();
-            RuleFor(command => command.EstimationProducts).NotEmpty();
+            RuleFor(command => command.EstimatedDetails).NotEmpty();
         }
     }
 }
