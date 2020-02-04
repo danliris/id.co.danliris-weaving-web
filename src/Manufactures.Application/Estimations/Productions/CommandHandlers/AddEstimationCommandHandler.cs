@@ -54,7 +54,7 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
 
             await _estimatedProductionDocumentRepository.Update(newEstimationDocument);
 
-            foreach(var estimationDetail in request.EstimationDetails)
+            foreach(var estimationDetail in request.EstimatedDetails)
             {
                 var order =
                     _orderDocumentRepository

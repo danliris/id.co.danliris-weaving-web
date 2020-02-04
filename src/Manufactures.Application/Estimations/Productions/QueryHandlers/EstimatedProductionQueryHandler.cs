@@ -101,7 +101,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
             var weavingUnitName = unitData.data.Name;
 
             await Task.Yield();
-            var resultDto = new EstimatedProductionByIdDto(estimatedProductionDocument, weavingUnitName);
+            var resultDto = new ViewEstimatedProductionByIdDto(estimatedProductionDocument, weavingUnitName);
 
             var estimatedProductionDetails =
                 _estimatedProductionDetailRepository
@@ -119,7 +119,44 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                         .Find(o => o.Identity == estimatedProductionDetail.ConstructionId.Value)
                         .FirstOrDefault();
 
-                var resultDetailDto = new EstimatedProductionDetailDto(order, construction, estimatedProductionDetail);
+                var resultDetailDto = new ViewEstimatedProductionDetailDto(order, construction, estimatedProductionDetail);
+
+                resultDto.EstimatedDetails.Add(resultDetailDto);
+            }
+
+            return resultDto;
+        }
+
+        public async Task<EstimatedProductionListDto> GetByIdUpdate(Guid id)
+        {
+            var estimatedProductionDocument =
+                   _estimatedProductionDocumentRepository
+                       .Find(o => o.Identity == id)
+                       .FirstOrDefault();
+
+            SingleUnitResult unitData = GetUnit(estimatedProductionDocument.UnitId.Value);
+            var weavingUnitName = unitData.data.Name;
+
+            await Task.Yield();
+            var resultDto = new UpdateEstimatedProductionByIdDto(estimatedProductionDocument, weavingUnitName);
+
+            var estimatedProductionDetails =
+                _estimatedProductionDetailRepository
+                    .Find(o => o.EstimatedProductionDocumentId == estimatedProductionDocument.Identity);
+
+            foreach (var estimatedProductionDetail in estimatedProductionDetails)
+            {
+                var order =
+                    _orderRepository
+                        .Find(o => o.Identity == estimatedProductionDetail.OrderId.Value)
+                        .FirstOrDefault();
+
+                var construction =
+                    _fabricConstructionRepository
+                        .Find(o => o.Identity == estimatedProductionDetail.ConstructionId.Value)
+                        .FirstOrDefault();
+
+                var resultDetailDto = new UpdateEstimatedProductionDetailDto(order, construction, estimatedProductionDetail);
 
                 resultDto.EstimatedDetails.Add(resultDetailDto);
             }
