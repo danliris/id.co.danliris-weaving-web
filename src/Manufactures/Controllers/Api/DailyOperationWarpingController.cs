@@ -98,6 +98,7 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
+            VerifyUser();
             var dailyOperationWarpingDocuments = await _warpingQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
@@ -141,6 +142,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("get-warping-beams")]
         public async Task<IActionResult> GetWarpingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
         {
+            VerifyUser();
             page = page - 1;
             List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
             List<BeamDto> warpingBeams = new List<BeamDto>();
@@ -219,6 +221,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {
+            VerifyUser();
             var identity = Guid.Parse(Id);
             var dailyOperationWarpingDocument = await _warpingQuery.GetById(identity);
 
@@ -234,6 +237,7 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PreparationDailyOperationWarpingCommand command)
         {
+            VerifyUser();
             // Sending command to command handler
             var dailyOperationWarping = await Mediator.Send(command);
 
@@ -245,6 +249,7 @@ namespace Manufactures.Controllers.Api
         [HttpPut("{Id}/start-process")]
         public async Task<IActionResult> Start(string Id, [FromBody]UpdateStartDailyOperationWarpingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -328,6 +333,7 @@ namespace Manufactures.Controllers.Api
         [HttpPut("{Id}/produce-beams-process")]
         public async Task<IActionResult> ProduceBeams(string Id, [FromBody]ProduceBeamsDailyOperationWarpingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -416,6 +422,7 @@ namespace Manufactures.Controllers.Api
         [HttpPut("{Id}/completed-process")]
         public async Task<IActionResult> Finish(string Id, [FromBody]CompletedDailyOperationWarpingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -438,6 +445,7 @@ namespace Manufactures.Controllers.Api
                                                    int size = 25,
                                                    string order = "{}")
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
@@ -476,6 +484,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> GetWarpingProductionReport(int month = 0,
                                                                     int year = 0)
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
 
@@ -511,6 +520,7 @@ namespace Manufactures.Controllers.Api
                                                                 int year = 0,
                                                                 int weavingUnitId = 0)
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
 

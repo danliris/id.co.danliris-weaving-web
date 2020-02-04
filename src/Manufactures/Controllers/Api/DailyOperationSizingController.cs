@@ -99,6 +99,7 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
+            VerifyUser();
             var dailyOperationSizingDocuments = await _sizingQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
@@ -141,6 +142,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("get-sizing-beams")]
         public async Task<IActionResult> GetSizingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
         {
+            VerifyUser();
             page = page - 1;
             List<DailyOperationSizingBeamDto> sizingListBeamProducts = new List<DailyOperationSizingBeamDto>();
             List<BeamDto> sizingBeams = new List<BeamDto>();
@@ -333,6 +335,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {
+            VerifyUser();
             var identity = Guid.Parse(Id);
             var dailyOperationSizingDocument = await _sizingQuery.GetById(identity);
 
@@ -347,6 +350,7 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PreparationDailyOperationSizingCommand command)
         {
+            VerifyUser();
             var preparationDailyOperationSizingDocument = await Mediator.Send(command);
 
             return Ok(preparationDailyOperationSizingDocument.Identity);
@@ -356,6 +360,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateStartDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -370,6 +375,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdatePauseDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -398,6 +404,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]ProduceBeamDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -448,6 +455,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]FinishDoffDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -462,6 +470,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Delete(string operationId,
                                                 string historyId)
         {
+            VerifyUser();
             if (!Guid.TryParse(operationId, out Guid Identity))
             {
                 return NotFound();
@@ -487,6 +496,7 @@ namespace Manufactures.Controllers.Api
                                              string status,
                                              [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(operationId, out Guid documentId))
             {
                 return NotFound();
@@ -504,6 +514,7 @@ namespace Manufactures.Controllers.Api
                                              string status,
                                              [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(operationId, out Guid documentId))
             {
                 return NotFound();
@@ -517,6 +528,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("calculate/netto/empty-weight/{emptyWeight}/bruto/{bruto}")]
         public async Task<IActionResult> CalculateNetto(double emptyWeight, double bruto)
         {
+            VerifyUser();
             double nettoCalculationResult;
 
             if (emptyWeight != 0 && bruto != 0)
@@ -538,6 +550,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("calculate/pis-in-meter/start/{counterStart}/finish/{counterFinish}")]
         public async Task<IActionResult> CalculatePISInMeter(double counterStart, double counterFinish)
         {
+            VerifyUser();
             double pisInPieces;
 
             if (counterStart >= 0 && counterFinish > 0)
@@ -580,6 +593,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("calculate/theoritical-kawamoto/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
         public async Task<IActionResult> CalculateTheoriticalKawamoto(double pisMeter, double yarnStrands, double neReal)
         {
+            VerifyUser();
             double kawamotoCalculationResult;
 
             if (pisMeter > 0 && yarnStrands > 0 && neReal > 0)
@@ -601,6 +615,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("calculate/theoritical-sucker-muller/pis/{pisMeter}/yarn-strands/{yarnStrands}/ne-real/{neReal}")]
         public async Task<IActionResult> CalculateTheoriticalSuckerMuller(double pisMeter, double yarnStrands, double neReal)
         {
+            VerifyUser();
             double suckerMullerCalculationResult;
 
             if (pisMeter > 0 && yarnStrands > 0 && neReal > 0)
@@ -622,6 +637,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("calculate/spu/netto/{netto}/theoritical/{theoritical}")]
         public async Task<IActionResult> CalculateSPU(double netto, double theoritical)
         {
+            VerifyUser();
             double spuCalculationResult;
 
             if (netto != 0 && theoritical != 0)
@@ -653,6 +669,7 @@ namespace Manufactures.Controllers.Api
                                                              int size = 25,
                                                              string order = "{}")
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
@@ -699,6 +716,7 @@ namespace Manufactures.Controllers.Api
                                                    int size = 25,
                                                    string order = "{}")
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
