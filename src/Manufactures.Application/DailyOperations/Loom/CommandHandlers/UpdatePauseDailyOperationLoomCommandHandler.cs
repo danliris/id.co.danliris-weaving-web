@@ -3,7 +3,6 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
-using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -22,40 +21,48 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomDocumentRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public UpdatePauseDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationLoomDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(UpdatePauseDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Loom
-            var loomQuery =
-                _dailyOperationLoomDocumentRepository
-                        .Query
-                        .Include(o => o.LoomBeamHistories)
-                        .Include(o => o.LoomBeamProducts)
-                        .Where(doc => doc.Identity.Equals(request.Id));
+            //var loomQuery =
+            //    _dailyOperationLoomDocumentRepository
+            //            .Query
+            //            .Include(o => o.LoomBeamHistories)
+            //            .Include(o => o.LoomBeamProducts)
+            //            .Where(doc => doc.Identity.Equals(request.Id));
             var existingDailyOperationLoomDocument =
                 _dailyOperationLoomDocumentRepository
-                        .Find(loomQuery)
+                        .Find(s => s.Identity == request.Id)
                         .FirstOrDefault();
+            if (existingDailyOperationLoomDocument == null)
+                throw Validator.ErrorValidation(("Id", "Invalid Daily Operation Loom: " + request.Id));
+
+            var loomHistories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+            var loomProducts = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+
 
             //Get Daily Operation Loom History
             var existingDailyOperationLoomHistories =
-                existingDailyOperationLoomDocument
-                        .LoomBeamHistories
+                loomHistories
                         .Where(o => o.BeamNumber.Equals(request.PauseBeamNumber))
                         .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingDailyOperationLoomHistories.FirstOrDefault();
 
             //Get Daily Operation Loom Beam Product
             var existingDailyOperationLoomBeamProducts =
-                existingDailyOperationLoomDocument
-                        .LoomBeamProducts
-                        .Where(o => o.BeamDocumentId.Equals(request.PauseBeamProductBeamId))
+               loomProducts
+                        .Where(o => o.BeamDocumentId.Value == request.PauseBeamProductBeamId)
                         .OrderByDescending(o => o.LatestDateTimeBeamProduct);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
@@ -96,14 +103,16 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                   new OperatorId(request.PauseOperatorDocumentId.Value),
                                                                   pauseDateTime,
                                                                   new ShiftId(request.PauseShiftDocumentId.Value),
-                                                                  MachineStatus.ONSTOP);
+                                                                  MachineStatus.ONSTOP,
+                                                                  existingDailyOperationLoomDocument.Identity);
 
                             newLoomHistory.SetWarpBrokenThreads(request.WarpBrokenThreads ?? 0);
                             newLoomHistory.SetWeftBrokenThreads(request.WeftBrokenThreads ?? 0);
                             newLoomHistory.SetLenoBrokenThreads(request.LenoBrokenThreads ?? 0);
                             newLoomHistory.SetInformation(request.Information);
 
-                            existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                            //existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                            await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
 
                             lastBeamProduct.SetLatestDateTimeBeamProduct(pauseDateTime);
 
@@ -119,7 +128,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                   new OperatorId(request.PauseOperatorDocumentId.Value),
                                                                   pauseDateTime,
                                                                   new ShiftId(request.PauseShiftDocumentId.Value),
-                                                                  MachineStatus.ONCOMPLETE);
+                                                                  MachineStatus.ONCOMPLETE,
+                                                                  existingDailyOperationLoomDocument.Identity);
 
                             newLoomHistory.SetWarpBrokenThreads(request.WarpBrokenThreads ?? 0);
                             newLoomHistory.SetWeftBrokenThreads(request.WeftBrokenThreads ?? 0);
@@ -127,14 +137,15 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                             newLoomHistory.SetReprocessTo(request.ReprocessTo);
                             newLoomHistory.SetInformation(request.Information);
 
-                            existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                            //existingDailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                            await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
 
                             lastBeamProduct.SetLatestDateTimeBeamProduct(pauseDateTime);
                             lastBeamProduct.SetBeamProductStatus(BeamStatus.END);
 
                             await Task.Yield();
                             var isAllBeamProductProcessed = 0;
-                            foreach (var beamProduct in existingDailyOperationLoomDocument.LoomBeamProducts)
+                            foreach (var beamProduct in loomProducts)
                             {
                                 if (beamProduct.BeamProductStatus == BeamStatus.ONPROCESS)
                                 {

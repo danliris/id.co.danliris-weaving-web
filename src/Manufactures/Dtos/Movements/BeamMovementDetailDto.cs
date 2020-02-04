@@ -1,4 +1,4 @@
-﻿using Manufactures.Domain.DailyOperations.Loom.Entities;
+﻿using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Newtonsoft.Json;
 using System;

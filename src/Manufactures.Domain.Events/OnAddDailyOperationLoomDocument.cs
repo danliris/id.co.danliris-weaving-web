@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Manufactures.Domain.Events
 {
-    public class OnAddDailyOperationLoom : IManufactureEvent
+    public class OnAddDailyOperationLoomDocument : IManufactureEvent
     {
         public Guid Id { get; }
 
-        public OnAddDailyOperationLoom(Guid id)
+        public OnAddDailyOperationLoomDocument(Guid id)
         {
             Id = id;
         }

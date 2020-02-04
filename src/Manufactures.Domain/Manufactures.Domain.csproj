@@ -5,8 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DailyOperations\Loom\Entities\**" />
     <Compile Remove="Orders\Entities\**" />
+    <EmbeddedResource Remove="DailyOperations\Loom\Entities\**" />
     <EmbeddedResource Remove="Orders\Entities\**" />
+    <None Remove="DailyOperations\Loom\Entities\**" />
     <None Remove="Orders\Entities\**" />
   </ItemGroup>
 

@@ -33,6 +33,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
             _fabricConstructionRepository;
         private readonly IWeavingSupplierRepository
             _weavingSupplierRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public DailyOperationLoomReportQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
@@ -48,6 +50,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                 _storage.GetRepository<IFabricConstructionRepository>();
             _weavingSupplierRepository =
                 _storage.GetRepository<IWeavingSupplierRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         protected SingleUnitResult GetUnit(int id)
@@ -85,8 +89,6 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                 var dailyOperationLoomQuery =
                     _dailyOperationLoomRepository
                         .Query
-                        .Include(o => o.LoomBeamProducts)
-                        .Include(o => o.LoomBeamHistories)
                         .AsQueryable();
 
                 //Check if Order Id Null
@@ -118,6 +120,10 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                 foreach(var loomDocument in dailyOperationLoomDocuments)
                 {
+                    var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
+                    var histories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
+
+
                     //Get Order Production Number
                     await Task.Yield();
                     var orderDocumentId = loomDocument.OrderDocumentId.Value;
@@ -196,7 +202,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                             .Code;
 
                     //Get Histories
-                    var loomHistories = loomDocument.LoomBeamHistories.OrderByDescending(x => x.CreatedDate);
+                    var loomHistories = histories.OrderByDescending(x => x.AuditTrail.CreatedDate);
 
                     //Get First History, if Histories = null, skip This Document
                     var firstHistory = loomHistories.LastOrDefault();     //Use This History to Get History at Preparation State

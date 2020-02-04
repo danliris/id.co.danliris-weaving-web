@@ -23,6 +23,10 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationLoomRepository>
             mockLoomOperationRepo;
+        private readonly Mock<IDailyOperationLoomBeamProductRepository>
+           mockLoomOperationProductRepo;
+        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+            mockLoomOperationHistoryRepo;
 
         public PreparationDailyOperationLoomCommandHandlerTests()
         {
@@ -31,9 +35,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             this.mockLoomOperationRepo =
                 this.mockRepository.Create<IDailyOperationLoomRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationLoomRepository>())
                 .Returns(mockLoomOperationRepo.Object);
+            mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Returns(mockLoomOperationHistoryRepo.Object);
+
+            mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationLoomBeamProductRepository>())
+                .Returns(mockLoomOperationProductRepo.Object);
         }
 
         public void Dispose()
@@ -109,12 +122,6 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Check if has identity
             result.Identity.Should().NotBeEmpty();
-
-            //check if has history
-            result.LoomBeamHistories.Should().NotBeEmpty();
-
-            //check if has beam product
-            result.LoomBeamProducts.Should().NotBeEmpty();
         }
     }
 }
