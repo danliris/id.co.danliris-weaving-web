@@ -38,6 +38,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _operatorRepository;
         private readonly IShiftRepository
             _shiftRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public DailyOperationLoomQueryHandler(IStorage storage)
         {
@@ -58,6 +60,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
                 _storage.GetRepository<IShiftRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationLoomListDto>> GetAll()
@@ -65,18 +69,18 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             var loomQuery =
                 _dailyOperationLoomRepository
                     .Query
-                    .Include(o => o.LoomBeamProducts)
-                    .Include(o => o.LoomBeamHistories)
                     .OrderByDescending(x => x.CreatedDate);
 
-            await Task.Yield();
             var dailyOperationLoomDocuments =
                     _dailyOperationLoomRepository
                         .Find(loomQuery);
+
             var result = new List<DailyOperationLoomListDto>();
 
             foreach (var loomDocument in dailyOperationLoomDocuments)
             {
+                var histories = _dailyOperationLoomHistoryRepository.Find(x => x.DailyOperationLoomDocumentId == loomDocument.Identity);
+                var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
                 //Get Order Number
                 await Task.Yield();
                 var orderDocument =
@@ -117,7 +121,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                         .Code;
 
                 await Task.Yield();
-                var loomHistories = loomDocument.LoomBeamHistories.OrderByDescending(o => o.CreatedDate);
+                var loomHistories = histories.OrderByDescending(o => o.AuditTrail.CreatedDate);
                 var latestLoomHistory = loomHistories.FirstOrDefault();
 
                 //Get Latest Date Time Machine
@@ -141,19 +145,13 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
         public async Task<DailyOperationLoomListDto> GetById(Guid id)
         {
-            var loomQuery =
-                _dailyOperationLoomRepository
-                    .Query
-                    .Include(o => o.LoomBeamHistories)
-                    .Include(o => o.LoomBeamProducts)
-                    .Where(o => o.Identity.Equals(id))
-                    .OrderByDescending(x => x.CreatedDate);
-
-            await Task.Yield();
             var dailyOperationLoomDocument =
                     _dailyOperationLoomRepository
-                        .Find(loomQuery)
+                        .Find(s => s.Identity == id)
                         .FirstOrDefault();
+
+            var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
+            var histories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
 
             //Get Order Number
             await Task.Yield();
@@ -202,7 +200,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             result.SetWarpOrigin(warpCode);
             result.SetWeftOrigin(weftCode);
 
-            foreach (var loomBeamProduct in dailyOperationLoomDocument.LoomBeamProducts)
+            foreach (var loomBeamProduct in products)
             {
                 //Get Beam Number
                 await Task.Yield();
@@ -249,14 +247,14 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                                                               beamProductProcess,
                                                                               beamStatus);
 
-                loomBeamProductDto.SetBeamDocumentId(loomBeamProduct.BeamDocumentId);
+                loomBeamProductDto.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
 
                 await Task.Yield();
                 result.AddDailyOperationLoomBeamProducts(loomBeamProductDto);
             }
             result.DailyOperationLoomBeamProducts = result.DailyOperationLoomBeamProducts.OrderByDescending(o => o.LatestDateTimeBeamProduct).ToList();
 
-            foreach (var loomBeamHistory in dailyOperationLoomDocument.LoomBeamHistories)
+            foreach (var loomBeamHistory in histories)
             {
                 //Get Beam Number
                 var beamNumber = loomBeamHistory.BeamNumber;

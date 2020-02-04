@@ -4,7 +4,6 @@ using Manufactures.Application.DailyOperations.Loom.CommandHandlers;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
-using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
@@ -14,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq.Expressions;
 using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
@@ -24,6 +24,10 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationLoomRepository>
             mockLoomOperationRepo;
+        private readonly Mock<IDailyOperationLoomBeamProductRepository>
+           mockLoomOperationProductRepo;
+        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+            mockLoomOperationHistoryRepo;
 
         public UpdatePauseDailyOperationLoomCommandHandlerTests()
         {
@@ -32,9 +36,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             this.mockLoomOperationRepo =
                 this.mockRepository.Create<IDailyOperationLoomRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationLoomRepository>())
                 .Returns(mockLoomOperationRepo.Object);
+            mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Returns(mockLoomOperationHistoryRepo.Object);
+
+            mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationLoomBeamProductRepository>())
+                .Returns(mockLoomOperationProductRepo.Object);
         }
 
         public void Dispose()
@@ -77,8 +90,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -95,8 +109,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -107,7 +122,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -123,8 +138,17 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -171,8 +195,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -189,8 +214,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -201,7 +227,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -217,8 +243,17 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -265,8 +300,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -283,8 +319,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -295,7 +332,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -311,9 +348,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
-            this.mockStorage.Setup(x => x.Save());
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
+            this.mockStorage.Setup(x => x.Save()).Verifiable();
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -356,8 +402,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -374,8 +421,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -386,7 +434,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -402,9 +450,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
-                 .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
-            this.mockStorage.Setup(x => x.Save());
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
+            this.mockStorage.Setup(x => x.Save()).Verifiable();
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -447,8 +504,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -465,8 +523,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -477,7 +536,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -493,9 +552,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
-            this.mockStorage.Setup(x => x.Save());
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
+            this.mockStorage.Setup(x => x.Save()).Verifiable();
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -538,8 +606,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -556,8 +625,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -568,7 +638,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -584,9 +654,18 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
-            this.mockStorage.Setup(x => x.Save());
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
+            this.mockStorage.Setup(x => x.Save()).Verifiable();
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -629,8 +708,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               machineDocumentId,
                                                                                               latestDateTimeBeamProduct,
                                                                                               loomProcess,
-                                                                                              beamProductStatus);
-            loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
+                                                                                              beamProductStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomBeamProduct(loomBeamProduct);
 
             //Mocking Loom History Object
             var historyId = Guid.NewGuid();
@@ -647,8 +727,9 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
                                                                                               operatorDocumentId,
                                                                                               dateTimeMachine,
                                                                                               shiftDocumentId,
-                                                                                              machineStatus);
-            loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
+                                                                                              machineStatus,
+                                                                                              loomDocument.Identity);
+            //loomDocument.AddDailyOperationLoomHistory(loomBeamHistory);
 
             //Instantiate Value to Command Object
             var warpBrokenThreads = 1;
@@ -659,7 +740,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdatePauseDailyOperationLoomCommand request = new UpdatePauseDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId,
+                PauseBeamProductBeamId = loomBeamProduct.BeamDocumentId.Value,
                 PauseBeamNumber = loomBeamHistory.BeamNumber,
                 PauseMachineNumber = loomBeamHistory.MachineNumber,
                 WarpBrokenThreads = warpBrokenThreads,
@@ -675,8 +756,17 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             //Setup Mock Object for Loom Repo
             mockLoomOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationLoomReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomReadModel, bool>>>()))
                  .Returns(new List<DailyOperationLoomDocument>() { loomDocument });
+
+            mockLoomOperationProductRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamProductReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamProduct>() { loomBeamProduct });
+
+            mockLoomOperationHistoryRepo
+                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationLoomBeamHistoryReadModel, bool>>>()))
+                  .Returns(new List<DailyOperationLoomBeamHistory>() { loomBeamHistory });
+
 
             CancellationToken cancellationToken = CancellationToken.None;
 

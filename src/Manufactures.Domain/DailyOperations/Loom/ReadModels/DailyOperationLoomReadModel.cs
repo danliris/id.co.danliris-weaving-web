@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Domain.ReadModels;
-using Manufactures.Domain.DailyOperations.Loom.Entities;
 using System;
 using System.Collections.Generic;
 
@@ -11,9 +10,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
 
         public string OperationStatus { get; internal set; }
 
-        public List<DailyOperationLoomBeamHistory> LoomBeamHistories { get; internal set; }
+        //public List<DailyOperationLoomBeamHistory> LoomBeamHistories { get; internal set; }
 
-        public List<DailyOperationLoomBeamProduct> LoomBeamProducts { get; internal set; }
+        //public List<DailyOperationLoomBeamProduct> LoomBeamProducts { get; internal set; }
 
         public DailyOperationLoomReadModel(Guid identity) : base(identity)
         {

@@ -41,6 +41,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _shiftRepository;
         private readonly IBeamRepository
             _beamRepository;
+        private readonly IDailyOperationReachingHistoryRepository
+           _dailyOperationReachingHistoryRepository;
 
         public DailyOperationReachingReportQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
@@ -62,6 +64,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                 _storage.GetRepository<IShiftRepository>();
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
+            _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
         }
 
         protected SingleUnitResult GetUnit(int id)
@@ -101,7 +104,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                 var dailyOperationReachingQuery =
                     _dailyOperationReachingRepository
                         .Query
-                        .Include(o => o.ReachingHistories)
                         .AsQueryable();
 
                 //Check if Machine Id Null
@@ -162,6 +164,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
 
                 foreach(var document in dailyOperationReachingDocuments)
                 {
+                    var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == document.Identity);
                     //Get Order Production Number
                     await Task.Yield();
                     var orderDocumentId = document.OrderDocumentId.Value;
@@ -260,7 +263,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     var machineNumber = machineDocument.MachineNumber;
 
                     //Get Histories
-                    var reachingHistories = document.ReachingHistories.OrderByDescending(x => x.CreatedDate);
+                    var reachingHistories = histories.OrderByDescending(x => x.AuditTrail.CreatedDate);
 
                     //Get First History, if Histories = null, skip This Document
                     var firstHistory = reachingHistories.LastOrDefault();     //Use This History to Get History at Preparation State
@@ -368,10 +371,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
 
                 return (pagedResult, result.Count);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
     }

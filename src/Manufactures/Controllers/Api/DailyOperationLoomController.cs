@@ -42,6 +42,8 @@ namespace Manufactures.Controllers.Api
             _beamRepository;
         private readonly IMachineRepository
             _machineRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
@@ -57,6 +59,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IBeamRepository>();
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
+            _dailyOperationLoomHistoryRepository = Storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository = Storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         [HttpGet]
@@ -66,6 +70,7 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
+            VerifyUser();
             var dailyOperationLoomDocuments = await _loomQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
@@ -109,6 +114,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("get-loom-beam-products")]
         public async Task<IActionResult> GetLoomBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
         {
+            VerifyUser();
             page = page - 1;
             List<DailyOperationLoomBeamProductDto> loomListBeamProducts = new List<DailyOperationLoomBeamProductDto>();
             if (!filter.Contains("{}"))
@@ -120,22 +126,18 @@ namespace Manufactures.Controllers.Api
                     var LoomOperationGuid = Guid.Parse(LoomOperationId);
 
                     await Task.Yield();
-                    var loomQuery =
-                         _dailyOperationLoomRepository
-                             .Query
-                             .Include(o => o.LoomBeamHistories)
-                             .Include(o => o.LoomBeamProducts)
-                             .OrderByDescending(o => o.CreatedDate);
-
+                    
                     await Task.Yield();
                     var existingDailyOperationLoomDocument =
                         _dailyOperationLoomRepository
-                            .Find(loomQuery)
-                            .Where(o => o.Identity.Equals(LoomOperationGuid))
+                            .Find(s => s.Identity == LoomOperationGuid)
                             .FirstOrDefault();
 
+                    var loomHistories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+                    var loomProducts = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+
                     await Task.Yield();
-                    foreach (var loomBeamProduct in existingDailyOperationLoomDocument.LoomBeamProducts)
+                    foreach (var loomBeamProduct in loomProducts)
                     {
                         await Task.Yield();
                         var sizingBeamStatus = loomBeamProduct.BeamProductStatus;
@@ -180,7 +182,7 @@ namespace Manufactures.Controllers.Api
                                                                                       latestDateTimeBeamProduct, 
                                                                                       loomProcess, 
                                                                                       beamProductStatus);
-                            loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId);
+                            loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
 
                             loomListBeamProducts.Add(loomSizingBeam);
                         }
@@ -210,6 +212,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {
+            VerifyUser();
             var identity = Guid.Parse(Id);
             var dailyOperationLoomDocument = await _loomQuery.GetById(identity);
 
@@ -224,6 +227,7 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PreparationDailyOperationLoomCommand command)
         {
+            VerifyUser();
             var preparationDailyOperationLoomDocument = await Mediator.Send(command);
 
             return Ok(preparationDailyOperationLoomDocument.Identity);
@@ -233,6 +237,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateStartDailyOperationLoomCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -247,6 +252,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdatePauseDailyOperationLoomCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -261,6 +267,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdateResumeDailyOperationLoomCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -275,6 +282,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                              [FromBody]FinishDailyOperationLoomCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -297,6 +305,7 @@ namespace Manufactures.Controllers.Api
                                                    int size = 25,
                                                    string order = "{}")
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 

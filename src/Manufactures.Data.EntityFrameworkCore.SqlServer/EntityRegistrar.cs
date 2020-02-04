@@ -14,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Manufactures.Domain.Machines.ReadModels;
 using Manufactures.Domain.MachineTypes.ReadModels;
 using Manufactures.Domain.MachinesPlanning.ReadModels;
-using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Operators.ReadModels;
@@ -25,11 +24,11 @@ using Manufactures.Domain.Movements.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.StockCard.ReadModels;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.Defects.FabricDefect.ReadModels;
 using Manufactures.Domain.BeamStockMonitoring.ReadModels;
 using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
+using Manufactures.Domain.DailyOperations.Loom;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -50,7 +49,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationLoomBeamProduct>(etb =>
+            modelBuilder.Entity<DailyOperationLoomBeamProductReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomBeamProducts");
                 etb.HasKey(e => e.Identity);
@@ -59,7 +58,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationLoomBeamHistory>(etb =>
+            modelBuilder.Entity<DailyOperationLoomBeamHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomHistories");
                 etb.HasKey(e => e.Identity);
@@ -73,12 +72,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationLoomDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.LoomBeamProducts)
-                    .WithOne(e => e.DailyOperationLoomDocument)
-                    .HasForeignKey(e => e.DailyOperationLoomDocumentId);
-                etb.HasMany(e => e.LoomBeamHistories)
-                    .WithOne(e => e.DailyOperationLoomDocument)
-                    .HasForeignKey(e => e.DailyOperationLoomDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
@@ -106,7 +99,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationReachingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationReachingHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationReachingHistories");
                 etb.HasKey(e => e.Identity);
@@ -120,9 +113,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_DailyOperationReachingDocuments");
                 etb.HasKey(e => e.Identity);
 
-                etb.HasMany(e => e.ReachingHistories)
-                    .WithOne(e => e.DailyOperationReachingDocument)
-                    .HasForeignKey(e => e.DailyOperationReachingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

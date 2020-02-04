@@ -4,7 +4,6 @@ using Manufactures.Application.DailyOperations.Reaching.CommandHandlers;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Reaching;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
@@ -15,6 +14,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
+using System.Linq.Expressions;
 
 namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
 {
@@ -24,6 +24,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
         private Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationReachingRepository>
             mockDailyOperationReachingRepo;
+        private readonly Mock<IDailyOperationReachingHistoryRepository>
+            mockDailyOperationReachingHistoryRepo;
 
         public UpdateCombFinishDailyOperationReachingCommandHandlerTests()
         {
@@ -32,8 +34,11 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
             this.mockDailyOperationReachingRepo = mockRepository.Create<IDailyOperationReachingRepository>();
+            mockDailyOperationReachingHistoryRepo = mockRepository.Create<IDailyOperationReachingHistoryRepository>();
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>())
                 .Returns(mockDailyOperationReachingRepo.Object);
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingHistoryRepository>())
+                .Returns(mockDailyOperationReachingHistoryRepo.Object);
         }
 
         public void Dispose()
@@ -86,13 +91,18 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var machineStatus = MachineStatus.ONSTARTCOMB;
 
             //Assign Property to DailyOperationReachingHistory
-            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
+            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus, resultModel.Identity);
+            //resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
 
             //Mocking Repository
             mockDailyOperationReachingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>()))
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationReachingDocument>() { resultModel });
+
+            mockDailyOperationReachingHistoryRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { resultHistoryModel });
+
 
             //Instantiate Incoming Object Update
             var updateCombFinishCommand = new UpdateCombFinishDailyOperationReachingCommand
@@ -165,13 +175,18 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var machineStatus = MachineStatus.ONSTARTCOMB;
 
             //Assign Property to DailyOperationReachingHistory
-            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
+            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus, resultModel.Identity);
+            //resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
 
             //Mocking Repository
             mockDailyOperationReachingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>()))
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationReachingDocument>() { resultModel });
+
+            mockDailyOperationReachingHistoryRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { resultHistoryModel });
+
 
             //Instantiate Incoming Object Update
             var updateCombFinishCommand = new UpdateCombFinishDailyOperationReachingCommand
@@ -244,13 +259,18 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var machineStatus = MachineStatus.ONSTARTCOMB;
 
             //Assign Property to DailyOperationReachingHistory
-            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
+            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus, resultModel.Identity);
+            //resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
 
             //Mocking Repository
             mockDailyOperationReachingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>()))
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationReachingDocument>() { resultModel });
+
+            mockDailyOperationReachingHistoryRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { resultHistoryModel });
+
 
             //Instantiate Incoming Object Update
             var updateCombFinishCommand = new UpdateCombFinishDailyOperationReachingCommand
@@ -324,13 +344,19 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var machineStatus = MachineStatus.ONSTARTCOMB;
 
             //Assign Property to DailyOperationReachingHistory
-            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
+            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus, resultModel.Identity);
+            //resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
 
             //Mocking Repository
             mockDailyOperationReachingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>()))
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationReachingDocument>() { resultModel });
+
+            mockDailyOperationReachingHistoryRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { resultHistoryModel });
+
+            mockStorage.Setup(s => s.Save()).Verifiable();
 
             //Instantiate Incoming Object Update
             var updateCombFinishCommand = new UpdateCombFinishDailyOperationReachingCommand
@@ -399,13 +425,17 @@ namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
             var machineStatus = MachineStatus.ONENTRY;
 
             //Assign Property to DailyOperationReachingHistory
-            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus);
-            resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
+            var resultHistoryModel = new DailyOperationReachingHistory(reachingHistoryTestId, operatorDocumentId, yarnStrandsProcessed, dateTimeMachine, shiftId, machineStatus, resultModel.Identity);
+            //resultModel.AddDailyOperationReachingHistory(resultHistoryModel);
 
             //Mocking Repository
             mockDailyOperationReachingRepo
-                .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>()))
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>()))
                 .Returns(new List<DailyOperationReachingDocument>() { resultModel });
+
+            mockDailyOperationReachingHistoryRepo
+                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { resultHistoryModel });
 
             //Instantiate Incoming Object Update
             var updateCombFinishCommand = new UpdateCombFinishDailyOperationReachingCommand

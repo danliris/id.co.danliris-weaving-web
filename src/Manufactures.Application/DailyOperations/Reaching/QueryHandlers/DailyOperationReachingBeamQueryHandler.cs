@@ -26,12 +26,15 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
             _dailyOperationReachingRepository;
         private readonly IBeamRepository
             _beamRepository;
+        private readonly IDailyOperationReachingHistoryRepository
+            _dailyOperationReachingHistoryRepository;
 
         public DailyOperationReachingBeamQueryHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
+            _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
             _beamRepository =
                 _storage.GetRepository<IBeamRepository>();
         }
@@ -52,7 +55,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                 var reachingBeamQuery =
                     _dailyOperationReachingRepository
                         .Query
-                        .Include(o => o.ReachingHistories)
                         .Where(o=>o.OperationStatus.Equals(OperationStatus.ONFINISH))
                         .AsQueryable();
 
@@ -78,6 +80,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
 
                 foreach (var reachingDocument in dailyOperationReachingDocuments)
                 {
+                    var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == reachingDocument.Identity);
                     //Get Beam Number
                     await Task.Yield();
                     var reachingBeamDocument =
@@ -130,10 +133,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
 
                 return (pagedResult, result.Count);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
         }
     }

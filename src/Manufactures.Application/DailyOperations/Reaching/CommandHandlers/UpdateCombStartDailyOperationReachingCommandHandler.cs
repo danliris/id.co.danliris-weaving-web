@@ -3,7 +3,6 @@ using Infrastructure.Domain.Commands;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.DailyOperations.Reaching;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -21,23 +20,26 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingDocumentRepository;
+        private readonly IDailyOperationReachingHistoryRepository
+            _dailyOperationReachingHistoryRepository;
 
         public UpdateCombStartDailyOperationReachingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationReachingDocumentRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
+            _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
         }
 
         public async Task<DailyOperationReachingDocument> Handle(UpdateCombStartDailyOperationReachingCommand request, CancellationToken cancellationToken)
         {
-            var query =
-                _dailyOperationReachingDocumentRepository.Query
-                                                         .Include(d => d.ReachingHistories)
-                                                         .Where(doc => doc.Identity.Equals(request.Id));
-            var existingReachingDocument = _dailyOperationReachingDocumentRepository.Find(query).FirstOrDefault();
+            var existingReachingDocument = _dailyOperationReachingDocumentRepository.Find(s => s.Identity == request.Id).FirstOrDefault();
+            if (existingReachingDocument == null)
+                throw Validator.ErrorValidation(("Id", "Invalid Daily Operation Reaching: " + request.Id));
+
+            var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == existingReachingDocument.Identity);
             var existingReachingHistories =
-                existingReachingDocument.ReachingHistories
+                histories
                 .OrderByDescending(d => d.DateTimeMachine);
             var lastReachingHistory = existingReachingHistories.FirstOrDefault();
 
@@ -85,9 +87,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                                                               request.YarnStrandsProcessed,
                                                               dateTimeOperation,
                                                               new ShiftId(request.ShiftDocumentId.Value),
-                                                              MachineStatus.ONSTARTCOMB);
-                        existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
-
+                                                              MachineStatus.ONSTARTCOMB,
+                                                              existingReachingDocument.Identity);
+                        //existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
+                        await _dailyOperationReachingHistoryRepository.Update(newHistory);
                         await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
 
                         _storage.Save();
@@ -107,9 +110,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                                                               request.YarnStrandsProcessed,
                                                               dateTimeOperation,
                                                               new ShiftId(request.ShiftDocumentId.Value),
-                                                              MachineStatus.ONSTARTCOMB);
-                        existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
-
+                                                              MachineStatus.ONSTARTCOMB,
+                                                              existingReachingDocument.Identity);
+                        //existingReachingDocument.AddDailyOperationReachingHistory(newHistory);
+                        await _dailyOperationReachingHistoryRepository.Update(newHistory);
                         await _dailyOperationReachingDocumentRepository.Update(existingReachingDocument);
 
                         _storage.Save();
