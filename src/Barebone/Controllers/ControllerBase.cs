@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Net;
 
 namespace Barebone.Controllers
@@ -55,6 +56,13 @@ namespace Barebone.Controllers
             {
                 return new SingleUnitResult();
             }
+        }
+
+        protected void VerifyUser()
+        {
+            WorkContext.Token = Request.Headers["Authorization"].FirstOrDefault().Replace("Bearer ", "");
+            WorkContext.UserName = User.Claims.ToArray().SingleOrDefault(p => p.Type.Equals("username")).Value;
+            WorkContext.TimezoneOffset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
         }
 
         protected IActionResult Ok<T>(T data, object info = null, string message = null)

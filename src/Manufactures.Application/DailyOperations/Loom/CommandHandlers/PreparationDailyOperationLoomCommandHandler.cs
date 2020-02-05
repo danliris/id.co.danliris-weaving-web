@@ -4,7 +4,6 @@ using Manufactures.Application.Helpers;
 using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.DailyOperations.Loom.Commands;
-using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
@@ -22,6 +21,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             _dailyOperationLoomDocumentRepository;
         private readonly IBeamStockMonitoringRepository
              _beamStockMonitoringRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public PreparationDailyOperationLoomCommandHandler(IStorage storage)
         {
@@ -30,6 +31,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _beamStockMonitoringRepository =
                 _storage.GetRepository<IBeamStockMonitoringRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(PreparationDailyOperationLoomCommand request, CancellationToken cancellationToken)
@@ -38,7 +41,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 new DailyOperationLoomDocument(Guid.NewGuid(),
                                                request.OrderDocumentId,
                                                OperationStatus.ONPROCESS);
-
+            await _dailyOperationLoomDocumentRepository.Update(dailyOperationLoomDocument);
             foreach (var beamProduct in request.LoomBeamProducts)
             {
                 var year = beamProduct.DateBeamProduct.Year;
@@ -58,9 +61,11 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                       new MachineId(beamProduct.MachineDocumentId.Value),
                                                       dateTimeBeamProduct,
                                                       beamProduct.LoomProcess,
-                                                      BeamStatus.ONPROCESS);
+                                                      BeamStatus.ONPROCESS,
+                                                      dailyOperationLoomDocument.Identity);
 
-                dailyOperationLoomDocument.AddDailyOperationLoomBeamProduct(newBeamProduct);
+                //dailyOperationLoomDocument.AddDailyOperationLoomBeamProduct(newBeamProduct);
+                await _dailyOperationLoomProductRepository.Update(newBeamProduct);
             }
 
             foreach (var beamHistory in request.LoomBeamHistories)
@@ -85,17 +90,17 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                           new OperatorId(beamHistory.OperatorDocumentId.Value),
                                                           dateTimeBeamHistory,
                                                           new ShiftId(beamHistory.ShiftDocumentId.Value),
-                                                          MachineStatus.ONENTRY);
+                                                          MachineStatus.ONENTRY,
+                                                          dailyOperationLoomDocument.Identity);
 
                 newLoomHistory.SetWarpBrokenThreads(0);
                 newLoomHistory.SetWeftBrokenThreads(0);
                 newLoomHistory.SetLenoBrokenThreads(0);
                 newLoomHistory.SetInformation(beamHistory.Information ?? "");
 
-                dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                //dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+                await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
             }
-
-            await _dailyOperationLoomDocumentRepository.Update(dailyOperationLoomDocument);
 
             _storage.Save();
 

@@ -74,6 +74,7 @@ namespace Manufactures.Controllers.Api
                                             string keyword = null,
                                             string filter = "{}")
         {
+            VerifyUser();
             var dailyOperationReachingDocuments = await _reachingQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
@@ -118,6 +119,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {
+            VerifyUser();
             var identity = Guid.Parse(Id);
             var dailyOperationReachingDocument = await _reachingQuery.GetById(identity);
 
@@ -132,6 +134,7 @@ namespace Manufactures.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]PreparationDailyOperationReachingCommand command)
         {
+            VerifyUser();
             // Sending Command to Command Handler
             var dailyOperationReaching = await Mediator.Send(command);
 
@@ -173,6 +176,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateReachingInStartDailyOperationReachingCommand command)
         {
+            VerifyUser();
             //Parse Id
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -189,6 +193,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]ChangeOperatorReachingInDailyOperationReachingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -203,6 +208,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateReachingInFinishDailyOperationReachingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -217,6 +223,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateCombStartDailyOperationReachingCommand command)
         {
+            VerifyUser();
             //Parse Id
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -233,6 +240,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]ChangeOperatorCombDailyOperationReachingCommand command)
         {
+            VerifyUser();
             //Parse Id
             if (!Guid.TryParse(Id, out Guid documentId))
             {
@@ -249,6 +257,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Put(string Id,
                                             [FromBody]UpdateCombFinishDailyOperationReachingCommand command)
         {
+            VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
             {
                 return NotFound();
@@ -273,6 +282,7 @@ namespace Manufactures.Controllers.Api
                                                    int size = 25,
                                                    string order = "{}")
         {
+            VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
@@ -316,6 +326,7 @@ namespace Manufactures.Controllers.Api
                                                                         int size = 25,
                                                                         string order = "{}")
         {
+            VerifyUser();
             var dailyOperationReachingBeamDocuments = await _reachingBeamQuery.GetReachingBeamProductsByOrder(orderId,
                                                                                                               keyword,
                                                                                                               filter, 

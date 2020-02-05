@@ -33,6 +33,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _shiftRepository;
         private readonly IOperatorRepository
             _operatorRepository;
+        private readonly IDailyOperationReachingHistoryRepository
+           _dailyOperationReachingHistoryRepository;
 
         public DailyOperationReachingQueryHandler(IStorage storage)
         {
@@ -51,6 +53,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                 _storage.GetRepository<IShiftRepository>();
             _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
+            _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
         }
 
         public async Task<IEnumerable<DailyOperationReachingListDto>> GetAll()
@@ -58,7 +61,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             var query =
                 _dailyOperationReachingRepository
                     .Query
-                    .Include(o => o.ReachingHistories)
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
@@ -69,7 +71,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
             foreach (var operation in dailyOperationReachingDocuments)
             {
-                var reachingDetail = operation.ReachingHistories.OrderByDescending(d => d.DateTimeMachine).FirstOrDefault();
+                var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == operation.Identity);
+                var reachingDetail = histories.OrderByDescending(d => d.DateTimeMachine).FirstOrDefault();
 
                 //Get Machine Number
                 await Task.Yield();
@@ -122,18 +125,19 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
         public async Task<DailyOperationReachingListDto> GetById(Guid id)
         {
-            var query =
-                _dailyOperationReachingRepository.Query
-                    .Include(o => o.ReachingHistories)
-                    .OrderByDescending(x => x.CreatedDate);
+            //var query =
+            //    _dailyOperationReachingRepository.Query
+            //        .OrderByDescending(x => x.CreatedDate);
 
             //Get Daily Operation Reaching Document
             await Task.Yield();
             var dailyOperationReachingTyingDocument =
                    _dailyOperationReachingRepository
-                       .Find(query)
-                       .Where(x => x.Identity.Equals(id))
+                       .Find(x => x.Identity == id)
                        .FirstOrDefault();
+
+            var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == dailyOperationReachingTyingDocument.Identity);
+
 
             //Get Machine Number
             await Task.Yield();
@@ -179,15 +183,14 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             //Get Daily Operation Reaching Detail
             await Task.Yield();
             var dailyOperationReachingTyingDetail =
-                dailyOperationReachingTyingDocument
-                    .ReachingHistories
+                histories
                     .OrderByDescending(e => e.DateTimeMachine)
                     .FirstOrDefault();
 
             //Assign Parameter to Object Result
             var result = new DailyOperationReachingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber, sizingYarnStrands);
 
-            foreach (var detail in dailyOperationReachingTyingDocument.ReachingHistories)
+            foreach (var detail in histories)
             {
                 //Get Operator Name
                 await Task.Yield();

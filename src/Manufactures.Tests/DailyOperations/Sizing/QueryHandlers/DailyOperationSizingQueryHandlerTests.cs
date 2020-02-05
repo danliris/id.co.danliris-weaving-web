@@ -398,8 +398,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                         warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            //mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //    new List<DailyOperationWarpingDocument>() { warpingDocument });
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             //Sizing Document Object
@@ -586,8 +588,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                         warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            //mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //    new List<DailyOperationWarpingDocument>() { warpingDocument });
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             //Sizing Document Object
@@ -774,8 +778,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                         warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
-            mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
-            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
+            //mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationWarpingDocumentReadModel>>())).Returns(
+            //    new List<DailyOperationWarpingDocument>() { warpingDocument });
+            mockDailyOperationWarpingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingDocumentReadModel, bool>>>())).Returns(
                 new List<DailyOperationWarpingDocument>() { warpingDocument });
 
             //Sizing Document Object

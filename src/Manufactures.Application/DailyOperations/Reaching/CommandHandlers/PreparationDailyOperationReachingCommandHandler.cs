@@ -4,7 +4,6 @@ using Manufactures.Application.Helpers;
 using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
@@ -20,6 +19,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
             _dailyOperationReachingDocumentRepository;
         private readonly IBeamStockMonitoringRepository
              _beamStockMonitoringRepository;
+        private readonly IDailyOperationReachingHistoryRepository
+            _dailyOperationReachingHistoryRepository;
 
         public PreparationDailyOperationReachingCommandHandler(IStorage storage)
         {
@@ -28,6 +29,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                 _storage.GetRepository<IDailyOperationReachingRepository>();
             _beamStockMonitoringRepository =
                 _storage.GetRepository<IBeamStockMonitoringRepository>();
+            _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
         }
 
         public async Task<DailyOperationReachingDocument>
@@ -40,6 +42,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
                                                    new BeamId(request.SizingBeamId.Value),
                                                    OperationStatus.ONPROCESS);
 
+
+            await _dailyOperationReachingDocumentRepository.Update(dailyOperationReachingDocument);
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
             var day = request.PreparationDate.Day;
@@ -52,13 +56,15 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
             var newHistory =
                     new DailyOperationReachingHistory(Guid.NewGuid(),
                                                           new OperatorId(request.OperatorDocumentId.Value),
+                                                          0,
                                                           dateTimeOperation,
                                                           new ShiftId(request.ShiftDocumentId.Value),
-                                                          MachineStatus.ONENTRY);
+                                                          MachineStatus.ONENTRY,
+                                                          dailyOperationReachingDocument.Identity);
 
-            dailyOperationReachingDocument.AddDailyOperationReachingHistory(newHistory);
+            //dailyOperationReachingDocument.AddDailyOperationReachingHistory(newHistory);
+            await _dailyOperationReachingHistoryRepository.Update(newHistory);
 
-            await _dailyOperationReachingDocumentRepository.Update(dailyOperationReachingDocument);
 
             _storage.Save();
 

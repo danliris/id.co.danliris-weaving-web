@@ -6,7 +6,6 @@ using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching;
-using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.FabricConstructions;
@@ -55,6 +54,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             mockOrderDocumentRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
+        private readonly Mock<IDailyOperationReachingHistoryRepository>
+            mockDailyOperationReachingHistoryRepo;
 
         public DailyOperationReachingQueryHandlerTests()
         {
@@ -68,6 +69,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
             this.mockDailyOperationReachingTyingRepo = this.mockRepository.Create<IDailyOperationReachingRepository>();
+            mockDailyOperationReachingHistoryRepo = mockRepository.Create<IDailyOperationReachingHistoryRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IMachineRepository>()).Returns(mockMachineRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOperatorRepository>()).Returns(mockOperatorRepo.Object);
@@ -76,6 +78,8 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingRepository>()).Returns(mockDailyOperationReachingTyingRepo.Object);
+            mockStorage.Setup(x => x.GetRepository<IDailyOperationReachingHistoryRepository>())
+                .Returns(mockDailyOperationReachingHistoryRepo.Object);
         }
 
         public void Dispose()
@@ -202,12 +206,16 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(shift.Identity),
-                MachineStatus.ONCOMPLETE);
-            document.AddDailyOperationReachingHistory(detail);
+                MachineStatus.ONCOMPLETE,
+                document.Identity);
+            //document.AddDailyOperationReachingHistory(detail);
             
             mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingReadModel>().AsQueryable());
             mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>())).Returns(
                 new List<DailyOperationReachingDocument>() { document });
+
+            mockDailyOperationReachingHistoryRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { detail });
 
             // Act
             var result = await dailyOperationReachingTyingQueryHandler.GetAll();
@@ -327,12 +335,14 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 100,
                 DateTimeOffset.UtcNow,
                 new ShiftId(shift.Identity),
-                MachineStatus.ONCOMPLETE);
-            document.AddDailyOperationReachingHistory(detail);
+                MachineStatus.ONCOMPLETE,
+                document.Identity);
+            //document.AddDailyOperationReachingHistory(detail);
             
-            mockDailyOperationReachingTyingRepo.Setup(x => x.Query).Returns(new List<DailyOperationReachingReadModel>().AsQueryable());
-            mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationReachingReadModel>>())).Returns(
+            mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingReadModel, bool>>>())).Returns(
                 new List<DailyOperationReachingDocument>() { document });
+            mockDailyOperationReachingHistoryRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingHistoryReadModel, bool>>>()))
+                .Returns(new List<DailyOperationReachingHistory>() { detail });
             //mockDailyOperationReachingTyingRepo.Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationReachingTyingReadModel, bool>>>())).Returns(
             //    new List<DailyOperationReachingTyingDocument>() { firstDocument, secondDocument });
 

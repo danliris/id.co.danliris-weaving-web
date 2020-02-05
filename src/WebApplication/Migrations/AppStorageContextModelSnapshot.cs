@@ -161,7 +161,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_WarpingBrokenCauseDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamHistory", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomBeamHistoryReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -214,12 +214,10 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.HasIndex("DailyOperationLoomDocumentId");
-
                     b.ToTable("Weaving_DailyOperationLoomHistories");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomBeamProductReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -264,8 +262,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.HasKey("Identity");
 
-                    b.HasIndex("DailyOperationLoomDocumentId");
-
                     b.ToTable("Weaving_DailyOperationLoomBeamProducts");
                 });
 
@@ -305,7 +301,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationLoomDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.Entities.DailyOperationReachingHistory", b =>
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingHistoryReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
@@ -345,8 +341,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<int>("YarnStrandsProcessed");
 
                     b.HasKey("Identity");
-
-                    b.HasIndex("DailyOperationReachingDocumentId");
 
                     b.ToTable("Weaving_DailyOperationReachingHistories");
                 });
@@ -1510,30 +1504,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.HasKey("Identity");
 
                     b.ToTable("Weaving_YarnDocuments");
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamHistory", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
-                        .WithMany("LoomBeamHistories")
-                        .HasForeignKey("DailyOperationLoomDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel", "DailyOperationLoomDocument")
-                        .WithMany("LoomBeamProducts")
-                        .HasForeignKey("DailyOperationLoomDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.Entities.DailyOperationReachingHistory", b =>
-                {
-                    b.HasOne("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingReadModel", "DailyOperationReachingDocument")
-                        .WithMany("ReachingHistories")
-                        .HasForeignKey("DailyOperationReachingDocumentId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamProduct", b =>

@@ -175,18 +175,10 @@ namespace Manufactures.Tests.Materials.CommandHandlers
 
             CancellationToken cancellationToken = CancellationToken.None;
 
-            try
-            {
-                // Act
-                var result = await updateMaterialTypeCommandHandler.Handle(
+            await Assert.ThrowsAnyAsync<Exception>(() => updateMaterialTypeCommandHandler.Handle(
                 request,
-                cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- Code: Code with " + request.Code + " has available", messageException.Message);
-            }
+                cancellationToken));
+
         }
     }
 }
