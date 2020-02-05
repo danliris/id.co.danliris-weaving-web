@@ -49,7 +49,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IDailyOperationSizingRepository>
+        private readonly Mock<IDailyOperationSizingDocumentRepository>
             mockDailyOperationSizingRepo;
         private readonly Mock<IMachineRepository>
             mockMachineRepo;
@@ -73,7 +73,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
-            this.mockDailyOperationSizingRepo = this.mockRepository.Create<IDailyOperationSizingRepository>();
+            this.mockDailyOperationSizingRepo = this.mockRepository.Create<IDailyOperationSizingDocumentRepository>();
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
             this.mockMachineTypeRepo = this.mockRepository.Create<IMachineTypeRepository>();
             this.mockOrderDocumentRepo = this.mockRepository.Create<IOrderRepository>();
@@ -83,7 +83,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
             this.mockDailyOperationWarpingRepo = this.mockRepository.Create<IDailyOperationWarpingRepository>();
 
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingRepository>()).Returns(mockDailyOperationSizingRepo.Object);
+            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationSizingDocumentRepository>()).Returns(mockDailyOperationSizingRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMachineRepository>()).Returns(mockMachineRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IMachineTypeRepository>()).Returns(mockMachineTypeRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IOrderRepository>()).Returns(mockOrderDocumentRepo.Object);
@@ -256,8 +256,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                              BeamStatus.ROLLEDUP);
             sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
 
-            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingReadModel>().AsQueryable());
-            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>())).Returns(
+            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
+            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
                 new List<DailyOperationSizingDocument>() { sizingDocument });
 
             // Act
@@ -446,8 +446,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                              BeamStatus.ROLLEDUP);
             sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
 
-            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingReadModel>().AsQueryable());
-            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>())).Returns(
+            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
+            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
                 new List<DailyOperationSizingDocument>() { sizingDocument });
 
             // Act
@@ -636,8 +636,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                              BeamStatus.ROLLEDUP);
             sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
 
-            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingReadModel>().AsQueryable());
-            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>())).Returns(
+            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
+            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
                 new List<DailyOperationSizingDocument>() { sizingDocument });
 
             // Act
@@ -826,8 +826,8 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                              BeamStatus.ROLLEDUP);
             firstSizingDocument.AddDailyOperationSizingBeamProduct(firstSizingBeamProduct);
 
-            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingReadModel>().AsQueryable());
-            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>())).Returns(
+            mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
+            mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
                 new List<DailyOperationSizingDocument>() { firstSizingDocument });
 
             // Act

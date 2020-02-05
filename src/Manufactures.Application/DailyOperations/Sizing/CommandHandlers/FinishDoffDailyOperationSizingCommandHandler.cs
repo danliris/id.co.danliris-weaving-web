@@ -20,7 +20,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class FinishDoffDailyOperationSizingCommandHandler : ICommandHandler<FinishDoffDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
         //private readonly IMovementRepository
         //    _movementRepository;
@@ -31,7 +31,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             //_movementRepository =
             //  _storage.GetRepository<IMovementRepository>();
             _beamRepository =

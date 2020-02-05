@@ -33,8 +33,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         }
     }
 
-    public class UpdateStartDailyOperationWarpingCommandValidator
-        : AbstractValidator<UpdateStartDailyOperationWarpingCommand>
+    public class UpdateStartDailyOperationWarpingCommandValidator : AbstractValidator<UpdateStartDailyOperationWarpingCommand>
     {
         public UpdateStartDailyOperationWarpingCommandValidator()
         {

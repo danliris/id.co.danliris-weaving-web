@@ -20,11 +20,11 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 {
-    public class DailyOperationSizingQueryHandler : IDailyOperationSizingQuery<DailyOperationSizingListDto>
+    public class DailyOperationSizingQueryHandler : IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>
     {
         private readonly IStorage
             _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
         private readonly IMachineRepository
             _machineRepository;
@@ -47,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
         {
             _storage = storage;
             _dailyOperationSizingRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _machineRepository =
                 _storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =

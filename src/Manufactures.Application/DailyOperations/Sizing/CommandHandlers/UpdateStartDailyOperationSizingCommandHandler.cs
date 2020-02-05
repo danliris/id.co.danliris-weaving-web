@@ -19,7 +19,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class UpdateStartDailyOperationSizingCommandHandler : ICommandHandler<UpdateStartDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
         private readonly IBeamRepository
             _beamDocumentRepository;
@@ -27,7 +27,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         public UpdateStartDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _beamDocumentRepository = _storage.GetRepository<IBeamRepository>();
         }
 

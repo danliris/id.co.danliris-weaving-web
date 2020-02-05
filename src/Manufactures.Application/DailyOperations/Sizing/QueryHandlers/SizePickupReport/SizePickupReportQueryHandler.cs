@@ -25,7 +25,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
         //    _http;
         private readonly IStorage
             _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
         private readonly IOrderRepository
             _weavingOrderDocumentRepository;
@@ -45,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             _storage =
                 storage;
             _dailyOperationSizingRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _weavingOrderDocumentRepository =
                 _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =

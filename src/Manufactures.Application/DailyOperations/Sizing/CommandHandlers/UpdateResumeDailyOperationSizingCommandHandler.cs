@@ -18,13 +18,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class UpdateResumeDailyOperationSizingCommandHandler : ICommandHandler<UpdateResumeDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
 
         public UpdateResumeDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(UpdateResumeDailyOperationSizingCommand request, CancellationToken cancellationToken)

@@ -167,7 +167,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IDailyOperationLoomQuery<DailyOperationLoomListDto>, DailyOperationLoomQueryHandler>();
             services.AddTransient<IDailyOperationReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
             services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
-            services.AddTransient<IDailyOperationSizingQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
+            services.AddTransient<IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();

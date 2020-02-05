@@ -3,11 +3,13 @@ using DanLiris.Admin.Web.Utils;
 using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
+using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.FabricConstructions.Commands;
 using Manufactures.Domain.Orders.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using static Manufactures.Domain.DailyOperations.Warping.Commands.WarpingBrokenThreadsCausesCommand;
 
 namespace Infrastructure.Mvc
 {
@@ -35,6 +37,11 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<AddNewEstimatedProductionDetailCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateEstimationProductCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateEstimatedProductionDetailCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateStartDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<ProduceBeamsDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<CompletedDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<WarpingBrokenThreadsCausesCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }

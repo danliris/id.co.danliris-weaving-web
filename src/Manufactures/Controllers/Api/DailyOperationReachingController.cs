@@ -18,6 +18,7 @@ using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,7 +39,7 @@ namespace Manufactures.Controllers.Api
 
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
         private readonly IBeamStockMonitoringRepository
             _beamStockMonitoringRepository;
@@ -62,7 +63,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationReachingRepository =
                 this.Storage.GetRepository<IDailyOperationReachingRepository>();
             _dailyOperationSizingRepository =
-                this.Storage.GetRepository<IDailyOperationSizingRepository>();
+                this.Storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _beamStockMonitoringRepository =
                 this.Storage.GetRepository<IBeamStockMonitoringRepository>();
         }
@@ -82,8 +83,10 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 dailyOperationReachingDocuments =
                     dailyOperationReachingDocuments
-                        .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                        .Where(x => x.DateTimeOperation.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.MachineNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.SizingBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 

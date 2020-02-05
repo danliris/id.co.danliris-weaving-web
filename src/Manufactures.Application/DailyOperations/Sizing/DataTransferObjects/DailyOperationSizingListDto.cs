@@ -11,8 +11,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DateTimeMachine")]
-        public DateTimeOffset DateTimeMachine { get; private set; }
+        [JsonProperty(PropertyName = "DateTimeOperation")]
+        public DateTimeOffset DateTimeOperation { get; private set; }
 
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; private set; }
@@ -23,8 +23,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "FabricConstructionNumber")]
         public string FabricConstructionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnitId")]
-        public int WeavingUnitId { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnit")]
+        public string WeavingUnit { get; private set; }
 
         [JsonProperty(PropertyName = "OperationStatus")]
         public string OperationStatus { get; private set; }
@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         public DailyOperationSizingListDto(DailyOperationSizingDocument document)
         {
             Id = document.Identity;
-            DateTimeMachine = document.DateTimeOperation;
+            DateTimeOperation = document.DateTimeOperation;
             OperationStatus = document.OperationStatus;
         }
 
@@ -51,9 +51,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
             FabricConstructionNumber = fabricConstructionNumber;
         }
 
-        public void SetWeavingUnitId(int weavingUnitId)
+        public void SetWeavingUnit(string weavingUnitId)
         {
-            WeavingUnitId = weavingUnitId;
+            WeavingUnit = weavingUnitId;
         }
     }
 }

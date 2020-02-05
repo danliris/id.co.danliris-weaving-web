@@ -40,7 +40,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double EmptyWeight { get; set; }
 
         [JsonProperty(PropertyName = "BeamsWarping")]
-        public List<BeamId> BeamsWarping { get; set; }
+        public List<PreparationDailyOperationSizingBeamsWarpingCommand> BeamsWarping { get; set; }
     }
 
     public class PreparationDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
@@ -57,7 +57,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.YarnStrands).NotEmpty().WithMessage("Helai Benang Beam Warping Tidak Boleh 0");
             RuleFor(validator => validator.EmptyWeight).NotEmpty().WithMessage("Berat Kosong Beam Warping Tidak Boleh 0");
-            RuleFor(validator => validator.BeamsWarping).NotEmpty();
+            RuleFor(validator => validator.BeamsWarping).NotEmpty().WithMessage("Beam Warping Tidak Boleh Kosong");
         }
     }
 }

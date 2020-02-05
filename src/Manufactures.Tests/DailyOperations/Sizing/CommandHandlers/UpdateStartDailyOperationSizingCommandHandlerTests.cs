@@ -26,7 +26,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IDailyOperationSizingRepository>
+        private readonly Mock<IDailyOperationSizingDocumentRepository>
             mockSizingOperationRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
@@ -37,9 +37,9 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             this.mockStorage = this.mockRepository.Create<IStorage>();
 
             this.mockSizingOperationRepo =
-                this.mockRepository.Create<IDailyOperationSizingRepository>();
+                this.mockRepository.Create<IDailyOperationSizingDocumentRepository>();
             this.mockStorage
-                .Setup(x => x.GetRepository<IDailyOperationSizingRepository>())
+                .Setup(x => x.GetRepository<IDailyOperationSizingDocumentRepository>())
                 .Returns(mockSizingOperationRepo.Object);
 
             this.mockBeamRepo =
@@ -164,7 +164,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -286,7 +286,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -408,7 +408,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -530,7 +530,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -652,7 +652,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -784,7 +784,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
             mockBeamRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
@@ -917,7 +917,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
             mockBeamRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
@@ -1050,7 +1050,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
             //mockBeamRepo
             //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))

@@ -56,8 +56,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         }
     }
 
-    public class CompletedDailyOperationWarpingCommandValidator
-         : AbstractValidator<CompletedDailyOperationWarpingCommand>
+    public class CompletedDailyOperationWarpingCommandValidator : AbstractValidator<CompletedDailyOperationWarpingCommand>
     {
         public CompletedDailyOperationWarpingCommandValidator()
         {

@@ -18,8 +18,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         [JsonProperty(PropertyName = "MachineNumber")]
         public string MachineNumber { get; }
 
-        [JsonProperty(PropertyName = "WeavingUnitDocumentId")]
-        public UnitId WeavingUnitDocumentId { get; }
+        [JsonProperty(PropertyName = "WeavingUnit")]
+        public string WeavingUnit { get; }
 
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; }
@@ -30,14 +30,14 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         public DailyOperationReachingListDto(DailyOperationReachingDocument document, 
                                              DailyOperationReachingHistory history, 
                                              string machineNumber, 
-                                             UnitId weavingUnitDocumentId, 
+                                             string weavingUnitDocumentId, 
                                              string constructionNumber, 
                                              string sizingBeamNumber)
         {
             Id = document.Identity;
             DateTimeOperation = history.DateTimeMachine;
             MachineNumber = machineNumber;
-            WeavingUnitDocumentId = weavingUnitDocumentId;
+            WeavingUnit = weavingUnitDocumentId;
             ConstructionNumber = constructionNumber;
             SizingBeamNumber = sizingBeamNumber;
         }

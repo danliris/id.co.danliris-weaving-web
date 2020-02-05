@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Data.EntityFrameworkCore;
 using Manufactures.Domain.DailyOperations.Sizing;
+using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using System;
@@ -8,11 +9,11 @@ using System.Text;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Sizing.Repositories
 {
-    public class DailyOperationSizingRepository : AggregateRepostory<DailyOperationSizingDocument, DailyOperationSizingReadModel>, IDailyOperationSizingRepository
+    public class DailyOperationSizingHistoryRepository : AggregateRepostory<DailyOperationSizingHistory, DailyOperationSizingHistoryReadModel>, IDailyOperationSizingHistoryRepository
     {
-        protected override DailyOperationSizingDocument Map(DailyOperationSizingReadModel readModel)
+        protected override DailyOperationSizingHistory Map(DailyOperationSizingHistoryReadModel readModel)
         {
-            return new DailyOperationSizingDocument(readModel);
+            return new DailyOperationSizingHistory(readModel);
         }
     }
 }

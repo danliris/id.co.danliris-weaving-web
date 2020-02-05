@@ -15,13 +15,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class HistoryRemovePreparationDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemovePreparationDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
 
         public HistoryRemovePreparationDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemovePreparationDailyOperationSizingCommand request, CancellationToken cancellationToken)

@@ -17,7 +17,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public double WarpingBeamLengthPerOperator { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
 
-        public DailyOperationWarpingHistory(Guid identity) : base(identity) { }
+        public DailyOperationWarpingHistory(Guid identity) : base(identity)
+        {
+        }
 
         //Constructor (Write)
         public DailyOperationWarpingHistory(Guid identity,

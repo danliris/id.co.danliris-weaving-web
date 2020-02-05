@@ -202,7 +202,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationSizingDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);

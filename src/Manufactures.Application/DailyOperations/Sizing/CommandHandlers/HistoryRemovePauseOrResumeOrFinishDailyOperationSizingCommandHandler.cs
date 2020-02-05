@@ -16,13 +16,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
 
         public HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)

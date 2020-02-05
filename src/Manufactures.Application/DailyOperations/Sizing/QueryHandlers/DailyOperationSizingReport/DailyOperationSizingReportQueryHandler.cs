@@ -30,7 +30,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
             _http;
         private readonly IStorage
             _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -54,7 +54,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
             _storage =
                 storage;
             _dailyOperationSizingRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _weavingOrderDocumentRepository =

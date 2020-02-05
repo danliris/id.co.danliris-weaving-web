@@ -16,7 +16,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
         private readonly IBeamRepository
             _beamRepository;
@@ -25,7 +25,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             //_movementRepository =
             //  _storage.GetRepository<IMovementRepository>();
             _beamRepository =
