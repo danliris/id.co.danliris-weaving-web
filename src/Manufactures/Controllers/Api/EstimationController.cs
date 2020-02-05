@@ -10,6 +10,7 @@ using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,7 +49,8 @@ namespace Manufactures.Controllers.Api
             {
                 estimatedProductionDocuments = 
                     estimatedProductionDocuments
-                        .Where(o => o.EstimatedNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                        .Where(o => o.EstimatedNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    o.DateEstimated.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
