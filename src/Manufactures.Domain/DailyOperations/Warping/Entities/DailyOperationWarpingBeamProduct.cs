@@ -75,7 +75,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (warpingBeamId != WarpingBeamId)
             {
                 WarpingBeamId = warpingBeamId;
-                ReadModel.WarpingBeamId = warpingBeamId.Value;
+                ReadModel.WarpingBeamId = WarpingBeamId.Value;
 
                 MarkModified();
             }
@@ -86,7 +86,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (WarpingTotalBeamLength != warpingTotalBeamLength)
             {
                 WarpingTotalBeamLength = warpingTotalBeamLength;
-                ReadModel.WarpingTotalBeamLength = warpingTotalBeamLength;
+                ReadModel.WarpingTotalBeamLength = WarpingTotalBeamLength;
 
                 MarkModified();
             }
@@ -108,7 +108,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (Tention != tention)
             {
                 Tention = tention;
-                ReadModel.Tention = tention;
+                ReadModel.Tention = Tention ?? 0;
 
                 MarkModified();
             }
@@ -119,7 +119,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (MachineSpeed != machineSpeed)
             {
                 MachineSpeed = machineSpeed;
-                ReadModel.MachineSpeed = machineSpeed;
+                ReadModel.MachineSpeed = MachineSpeed ?? 0;
 
                 MarkModified();
             }
@@ -130,7 +130,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (PressRoll != pressRoll)
             {
                 PressRoll = pressRoll;
-                ReadModel.PressRoll = pressRoll;
+                ReadModel.PressRoll = PressRoll ?? 0;
 
                 MarkModified();
             }
@@ -143,7 +143,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (PressRollUom != pressRollUom)
             {
                 PressRollUom = pressRollUom;
-                ReadModel.PressRollUom = pressRollUom;
+                ReadModel.PressRollUom = PressRollUom;
 
                 MarkModified();
             }

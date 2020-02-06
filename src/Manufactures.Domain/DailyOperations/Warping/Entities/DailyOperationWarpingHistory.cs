@@ -15,6 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public string Information { get; private set; }
         public BeamId WarpingBeamId { get; private set; }
         public double WarpingBeamLengthPerOperator { get; private set; }
+        public UomId WarpingBeamLengthPerOperatorUomId { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
 
         public DailyOperationWarpingHistory(Guid identity) : base(identity)
@@ -60,6 +61,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             Information = readModel.Information;
             WarpingBeamId = new BeamId(readModel.WarpingBeamId);
             WarpingBeamLengthPerOperator = readModel.WarpingBeamLengthPerOperator;
+            WarpingBeamLengthPerOperatorUomId = new UomId(readModel.WarpingBeamLengthPerOperatorUomId);
             DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
         }
 
@@ -70,7 +72,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (shiftDocumentId != ShiftDocumentId)
             {
                 ShiftDocumentId = shiftDocumentId;
-                ReadModel.ShiftDocumentId = shiftDocumentId.Value;
+                ReadModel.ShiftDocumentId = ShiftDocumentId.Value;
 
                 MarkModified();
             }
@@ -83,7 +85,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (operatorDocumentId != OperatorDocumentId)
             {
                 OperatorDocumentId = operatorDocumentId;
-                ReadModel.OperatorDocumentId = operatorDocumentId.Value;
+                ReadModel.OperatorDocumentId = OperatorDocumentId.Value;
 
                 MarkModified();
             }
@@ -94,7 +96,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (dateTimeMachine != DateTimeMachine)
             {
                 DateTimeMachine = dateTimeMachine;
-                ReadModel.DateTimeMachine = dateTimeMachine;
+                ReadModel.DateTimeMachine = DateTimeMachine;
 
                 MarkModified();
             }
@@ -107,7 +109,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (machineStatus != MachineStatus)
             {
                 MachineStatus = machineStatus;
-                ReadModel.MachineStatus = machineStatus;
+                ReadModel.MachineStatus = MachineStatus;
 
                 MarkModified();
             }
@@ -120,7 +122,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (information != Information)
             {
                 Information = information;
-                ReadModel.Information = information;
+                ReadModel.Information = Information;
 
                 MarkModified();
             }
@@ -133,7 +135,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (warpingBeamId != WarpingBeamId)
             {
                 WarpingBeamId = warpingBeamId;
-                ReadModel.WarpingBeamId = warpingBeamId.Value;
+                ReadModel.WarpingBeamId = WarpingBeamId.Value;
 
                 MarkModified();
             }
@@ -144,7 +146,18 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (warpingBeamLengthPerOperator != WarpingBeamLengthPerOperator)
             {
                 WarpingBeamLengthPerOperator = warpingBeamLengthPerOperator;
-                ReadModel.WarpingBeamLengthPerOperator = warpingBeamLengthPerOperator;
+                ReadModel.WarpingBeamLengthPerOperator = WarpingBeamLengthPerOperator;
+
+                MarkModified();
+            }
+        }
+
+        public void SetWarpingBeamLengthPerOperatorUomId(UomId warpingBeamLengthPerOperatorUomId)
+        {
+            if (warpingBeamLengthPerOperatorUomId != WarpingBeamLengthPerOperatorUomId)
+            {
+                WarpingBeamLengthPerOperatorUomId = warpingBeamLengthPerOperatorUomId;
+                ReadModel.WarpingBeamLengthPerOperatorUomId = WarpingBeamLengthPerOperatorUomId.Value;
 
                 MarkModified();
             }

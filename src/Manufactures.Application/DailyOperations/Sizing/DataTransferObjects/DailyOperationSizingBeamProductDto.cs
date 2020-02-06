@@ -43,12 +43,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
             Id = beamProduct.Identity;
             SizingBeamNumber = beamDocument.Number;
             LatestDateTimeBeamProduct = beamProduct.LatestDateTimeBeamProduct;
-            CounterStart = beamProduct.CounterStart ?? 0;
-            CounterFinish = beamProduct.CounterFinish ?? 0;
-            WeightNetto = beamProduct.WeightNetto ?? 0;
-            WeightBruto = beamProduct.WeightBruto ?? 0;
-            PISMeter = beamProduct.PISMeter ?? 0;
-            SPU = beamProduct.SPU ?? 0;
+            CounterStart = beamProduct.CounterStart;
+            CounterFinish = beamProduct.CounterFinish;
+            WeightNetto = beamProduct.WeightNetto;
+            WeightBruto = beamProduct.WeightBruto;
+            PISMeter = beamProduct.PISMeter;
+            SPU = beamProduct.SPU;
             SizingBeamStatus = beamProduct.BeamStatus;
         }
     }

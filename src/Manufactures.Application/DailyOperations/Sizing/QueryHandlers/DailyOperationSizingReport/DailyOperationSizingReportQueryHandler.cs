@@ -32,6 +32,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
             _storage;
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
+        private readonly IDailyOperationSizingBeamsWarpingRepository
+            _dailyOperationBeamsWarpingRepository;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
         private readonly IOrderRepository
@@ -55,6 +57,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                 storage;
             _dailyOperationSizingRepository =
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationBeamsWarpingRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamsWarpingRepository>();
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _weavingOrderDocumentRepository =
@@ -104,11 +108,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
 
                 //Query for Daily Operation Sizing
                 var dailyOperationSizingQuery =
-                    _dailyOperationSizingRepository
-                        .Query
-                        .Include(o => o.SizingBeamProducts)
-                        .Include(o => o.SizingHistories)
-                        .AsQueryable();
+                    _dailyOperationSizingRepository.Query;
 
                 //Check if Machine Id Null
                 await Task.Yield();
@@ -229,7 +229,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     var neReal = document.NeReal;
 
                     //Get Histories
-                    var sizingHistories = document.SizingHistories.OrderByDescending(x => x.CreatedDate);
+                    var sizingHistories = document.SizingHistories.OrderByDescending(x => x.AuditTrail.CreatedDate);
 
                     //Get First History, if Histories = null, skip This Document
                     var firstHistory = sizingHistories.LastOrDefault();     //Use This History to Get History at Preparation State
@@ -332,19 +332,25 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     var yarnStrands = 0;
                     double emptyWeight = 0;
 
+
+                    var sizingBeamsWarping =
+                        _dailyOperationBeamsWarpingRepository
+                            .Find(o => o.DailyOperationSizingDocumentId == document.Identity)
+                            .OrderByDescending(x => x.AuditTrail.CreatedDate);
+
                     //Get ONLY BEAM PRODUCT OF WARPING Used in The Current Sizing Operation And Incremented YarnStrands and EmptyWeight Value using Short Hand Operators
                     foreach (var warpingBeamProduct in warpingListBeamProducts)
                     {
-                        foreach (var beamWarpingId in document.BeamsWarping)
+                        foreach (var beamWarpingId in sizingBeamsWarping)
                         {
                             await Task.Yield();
-                            if (warpingBeamProduct.Id.Equals(beamWarpingId.Value))
+                            if (warpingBeamProduct.Id.Equals(beamWarpingId.Identity))
                             {
                                 //Get Beam Document
                                 await Task.Yield();
                                 var beamDocument =
                                     _beamRepository
-                                        .Find(o => o.Identity.Equals(beamWarpingId.Value))
+                                        .Find(o => o.Identity.Equals(beamWarpingId.Identity))
                                         .FirstOrDefault();
 
                                 await Task.Yield();

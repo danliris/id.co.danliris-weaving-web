@@ -51,9 +51,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
             FabricConstructionNumber = fabricConstructionNumber;
         }
 
-        public void SetWeavingUnit(string weavingUnitId)
+        public void SetWeavingUnit(string weavingUnit)
         {
-            WeavingUnit = weavingUnitId;
+            WeavingUnit = weavingUnit;
         }
     }
 }

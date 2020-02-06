@@ -18,11 +18,17 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
 
         public HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandHandler(IStorage storage)
         {
-            _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _storage = 
+                storage;
+            _dailyOperationSizingDocumentRepository = 
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand request, CancellationToken cancellationToken)
@@ -30,32 +36,26 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             try
             {
                 //Get Daily Operation Document Sizing
-                var sizingQuery =
+                var existingSizingDocument =
                     _dailyOperationSizingDocumentRepository
-                            .Query
-                            .Include(d => d.SizingHistories)
-                            .Include(b => b.SizingBeamProducts)
-                            .Where(doc => doc.Identity.Equals(request.Id));
-                var existingDailyOperationSizingDocument =
-                    _dailyOperationSizingDocumentRepository
-                            .Find(sizingQuery)
+                            .Find(o=>o.Identity == request.Id)
                             .FirstOrDefault();
 
                 //Get Daily Operation History
-                var existingDailyOperationSizingHistories =
-                    existingDailyOperationSizingDocument
-                            .SizingHistories
-                            .OrderByDescending(o => o.DateTimeMachine);
-                var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
+                var existingSizingHistories =
+                    _dailyOperationSizingHistoryRepository
+                        .Find(o=>o.DailyOperationSizingDocumentId==existingSizingDocument.Identity)
+                        .OrderByDescending(o => o.DateTimeMachine);
+                var lastHistory = existingSizingHistories.FirstOrDefault();
 
                 if (lastHistory.Identity.Equals(request.HistoryId))
                 {
                     if (request.HistoryStatus.Equals(MachineStatus.ONFINISH))
                     {
-                        existingDailyOperationSizingDocument.SetMachineSpeed(0);
-                        existingDailyOperationSizingDocument.SetVisco(0);
-                        existingDailyOperationSizingDocument.SetTexSQ(0);
-                        existingDailyOperationSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+                        existingSizingDocument.SetMachineSpeed(0);
+                        existingSizingDocument.SetVisco(0);
+                        existingSizingDocument.SetTexSQ(0);
+                        existingSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
 
                         //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
                         lastHistory.Remove();
@@ -66,11 +66,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         lastHistory.Remove();
                     }
 
-                    await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+                    await _dailyOperationSizingDocumentRepository.Update(existingSizingDocument);
 
                     _storage.Save();
 
-                    return existingDailyOperationSizingDocument;
+                    return existingSizingDocument;
                 }
                 else
                 {

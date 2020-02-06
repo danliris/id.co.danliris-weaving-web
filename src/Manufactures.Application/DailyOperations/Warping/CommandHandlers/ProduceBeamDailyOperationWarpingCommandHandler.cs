@@ -102,6 +102,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           existingDailyOperationWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
+                        newHistory.SetWarpingBeamLengthPerOperatorUomId(new UomId(request.WarpingBeamLengthUomId));
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document

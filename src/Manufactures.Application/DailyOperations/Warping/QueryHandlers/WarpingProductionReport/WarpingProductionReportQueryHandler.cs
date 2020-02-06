@@ -5,15 +5,10 @@ using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionRepor
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Moonlay;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingProductionReport
 {
@@ -23,6 +18,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             _storage;
         private readonly IDailyOperationWarpingHistoryRepository
             _dailyOperationWarpingHistoryRepository;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
         private readonly IOperatorRepository
             _operatorRepository;
         private readonly IShiftRepository
@@ -34,6 +31,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 storage;
             _dailyOperationWarpingHistoryRepository =
                 _storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
+            _dailyOperationWarpingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
@@ -46,7 +45,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             {
                 //Add Shell (result) for Daily Operation Warping Production Report Dto
                 var result = new WarpingProductionReportListDto();
-                
+
                 if (month == 0)
                 {
                     return (result);
@@ -57,19 +56,19 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var monthName = dateTimeFilter.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
 
                 //Query for Daily Operation Warping History
-                var dailyOperationWarpingHistoryQuery =
+                var warpingHistoryQuery =
                     _dailyOperationWarpingHistoryRepository
                         .Query
                         .AsQueryable();
 
                 var daysOfMonth = DateTime.DaysInMonth(year, month);
 
-                var warpingHistories = _dailyOperationWarpingHistoryRepository.Find(dailyOperationWarpingHistoryQuery)
-                                                                              .Where(item => item.DateTimeMachine.Month == month && 
-                                                                                     item.DateTimeMachine.Year == year && 
+                var warpingHistories = _dailyOperationWarpingHistoryRepository.Find(warpingHistoryQuery)
+                                                                              .Where(item => item.DateTimeMachine.Month == month &&
+                                                                                     item.DateTimeMachine.Year == year &&
                                                                                      item.WarpingBeamLengthPerOperator > 0)
                                                                               .ToList();
-                
+
                 var processedList = new List<WarpingProductionReportProcessedListDto>();
                 for (var i = 0; i < daysOfMonth; i++)
                 {
@@ -102,7 +101,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             var result = new List<DailyProcessedPerOperatorDto>();
 
-            var groupedHistories = histories.GroupBy(item => new { item.OperatorDocumentId }).Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator) });
+            var groupedHistories = histories.GroupBy(item => new { item.OperatorDocumentId, item.WarpingBeamLengthPerOperatorUomId }).Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator), Uom = s.Key.WarpingBeamLengthPerOperatorUomId });
 
             var operatorIds = groupedHistories.Select(s => s.OperatorDocumentId.Value).ToList();
             var operatorQuery = _operatorRepository.Query.Where(w => operatorIds.Contains(w.Identity));
@@ -111,7 +110,15 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             foreach (var history in groupedHistories)
             {
                 var selectedOperator = operators.FirstOrDefault(f => f.Identity == history.OperatorDocumentId.Value);
-                result.Add(new DailyProcessedPerOperatorDto(selectedOperator.Group, selectedOperator.CoreAccount.Name, history.Total));
+                if (history.Uom.Value == 136){
+                    var totalLimit = Math.Round(history.Total, 4);
+                    result.Add(new DailyProcessedPerOperatorDto(selectedOperator.Group, selectedOperator.CoreAccount.Name, totalLimit));
+                } else if(history.Uom.Value == 195)
+                {
+                    var meterToYardConvertion = history.Total * 1.09361;
+                    var conversionValueLimit = Math.Round(meterToYardConvertion, 4);
+                    result.Add(new DailyProcessedPerOperatorDto(selectedOperator.Group, selectedOperator.CoreAccount.Name, conversionValueLimit));
+                }
             }
 
             return result;

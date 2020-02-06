@@ -59,6 +59,8 @@ namespace Manufactures.Controllers.Api
 
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
+        private readonly IDailyOperationSizingBeamProductRepository
+            _dailyOperationSizingBeamProductRepository;
         private readonly IBeamRepository
             _beamRepository;
 
@@ -82,6 +84,8 @@ namespace Manufactures.Controllers.Api
 
             _dailyOperationSizingRepository =
                 this.Storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingBeamProductRepository =
+                this.Storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
             _orderDocumentRepository =
                 this.Storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
@@ -416,24 +420,16 @@ namespace Manufactures.Controllers.Api
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
             //Get Daily Operation Document Sizing
-            var sizingQuery =
+            var existingSizingDocument =
                 _dailyOperationSizingRepository
-                    .Query
-                    .Include(x => x.SizingHistories)
-                    .Include(x => x.SizingBeamProducts)
-                    .Where(doc => doc.Identity.Equals(command.Id));
-            var existingDailyOperationSizingDocument =
-                _dailyOperationSizingRepository
-                    .Find(sizingQuery)
+                    .Find(o=>o.Identity == command.Id)
                     .FirstOrDefault();
 
             //Get Daily Operation Beam Product
-            var existingDailyOperationSizingBeamProduct =
-                existingDailyOperationSizingDocument
-                    .SizingBeamProducts
-                    .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
             var lastSizingBeamProduct =
-                existingDailyOperationSizingBeamProduct
+                _dailyOperationSizingBeamProductRepository
+                    .Find(o => o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                    .OrderByDescending(x => x.LatestDateTimeBeamProduct)
                     .FirstOrDefault();
 
             var counterStart = lastSizingBeamProduct.CounterStart;
@@ -443,11 +439,11 @@ namespace Manufactures.Controllers.Api
             //Instantiate Beam Stock Command for Sizing
             var sizingStock = new BeamStockMonitoringCommand
             {
-                BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId),
+                BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId.Value),
                 EntryDate = command.ProduceBeamDate,
                 EntryTime = command.ProduceBeamTime,
-                OrderDocumentId = existingDailyOperationSizingDocument.OrderDocumentId,
-                LengthStock = sizingLengthStock ?? 0
+                OrderDocumentId = existingSizingDocument.OrderDocumentId,
+                LengthStock = sizingLengthStock
             };
             var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 

@@ -1,4 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.Helpers;
@@ -13,6 +16,8 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,10 +27,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 {
     public class DailyOperationSizingQueryHandler : IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>
     {
+        protected readonly IHttpClientService
+            _http;
         private readonly IStorage
             _storage;
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
+        private readonly IDailyOperationSizingBeamsWarpingRepository
+            _dailyOperationBeamsWarpingRepository;
         private readonly IMachineRepository
             _machineRepository;
         private readonly IMachineTypeRepository
@@ -43,11 +52,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
 
-        public DailyOperationSizingQueryHandler(IStorage storage)
+        public DailyOperationSizingQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
-            _storage = storage;
+            _http =
+                serviceProvider.GetService<IHttpClientService>();
+            _storage =
+                storage;
             _dailyOperationSizingRepository =
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationBeamsWarpingRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamsWarpingRepository>();
             _machineRepository =
                 _storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =
@@ -65,22 +79,38 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
         }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
+        }
+
         public async Task<IEnumerable<DailyOperationSizingListDto>> GetAll()
         {
-            var query =
+            var sizingDocumentQuery =
                 _dailyOperationSizingRepository
                     .Query
-                    .Include(o => o.SizingBeamProducts)
-                    .Include(o => o.SizingHistories)
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
-            var dailyOperationSizingDocuments =
+            var sizingDocuments =
                     _dailyOperationSizingRepository
-                        .Find(query);
+                        .Find(sizingDocumentQuery);
+
             var result = new List<DailyOperationSizingListDto>();
 
-            foreach (var operation in dailyOperationSizingDocuments)
+            foreach (var operation in sizingDocuments)
             {
                 //initiate Operation Result
                 var operationResult = new DailyOperationSizingListDto(operation);
@@ -117,13 +147,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 
                 //Get Weaving Unit
                 await Task.Yield();
-                var weavingUnit = OrderDocument.UnitId.Value;
+                SingleUnitResult unitData = GetUnit(OrderDocument.UnitId.Value);
+                var weavingUnitName = unitData.data.Name;
 
                 //Set Another Properties with Value
                 operationResult.SetMachineNumber(machineNumber);
                 operationResult.SetOrderProductionNumber(orderNumber);
                 operationResult.SetFabricConstructionNumber(constructionNumber);
-                operationResult.SetWeavingUnitId(weavingUnit);
+                operationResult.SetWeavingUnit(weavingUnitName);
 
                 result.Add(operationResult);
             }
@@ -133,27 +164,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 
         public async Task<DailyOperationSizingListDto> GetById(Guid id)
         {
-            //Prepare Daily Operation Sizing
-            var query =
-                _dailyOperationSizingRepository
-                    .Query
-                    .Include(o => o.SizingBeamProducts)
-                    .Include(o => o.SizingHistories)
-                    .Where(doc => doc.Identity.Equals(id))
-                    .OrderByDescending(x => x.CreatedDate);
-
-            //Get Daily Operation Sizing from Query
+            //Get Daily Operation Sizing
             await Task.Yield();
             var dailyOperationSizingDocument =
                    _dailyOperationSizingRepository
-                       .Find(query)
+                       .Find(o => o.Identity == id)
                        .FirstOrDefault();
 
             //Get Order Production Number
             await Task.Yield();
             var orderProductionDocument =
                 _orderProductionRepository
-                    .Find(o => o.Identity.Equals(dailyOperationSizingDocument.OrderDocumentId.Value))
+                    .Find(o => o.Identity == dailyOperationSizingDocument.OrderDocumentId.Value)
                     .FirstOrDefault();
             var orderProductionNumber = orderProductionDocument.OrderNumber;
 
@@ -161,7 +183,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             await Task.Yield();
             var fabricConstructionNumber =
                 _fabricConstructionRepository
-                    .Find(o => o.Identity.Equals(orderProductionDocument.ConstructionDocumentId.Value))
+                    .Find(o => o.Identity == orderProductionDocument.ConstructionDocumentId.Value)
                     .FirstOrDefault()
                     .ConstructionNumber;
 
@@ -169,7 +191,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             await Task.Yield();
             var machineDocument =
                 _machineRepository
-                    .Find(o => o.Identity.Equals(dailyOperationSizingDocument.MachineDocumentId.Value))
+                    .Find(o => o.Identity == dailyOperationSizingDocument.MachineDocumentId.Value)
                     .FirstOrDefault();
             var machineNumber = machineDocument.MachineNumber;
 
@@ -177,16 +199,21 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             await Task.Yield();
             var machineTypeName =
                 _machineTypeRepository
-                    .Find(o => o.Identity.Equals(machineDocument.MachineTypeId.Value))
+                    .Find(o => o.Identity == machineDocument.MachineTypeId.Value)
                     .FirstOrDefault()
                     .TypeName;
+
+            //Get Weaving Unit
+            await Task.Yield();
+            SingleUnitResult unitData = GetUnit(orderProductionDocument.UnitId.Value);
+            var weavingUnitName = unitData.data.Name;
 
             //Not complete for detail
             var result = new DailyOperationSizingByIdDto(dailyOperationSizingDocument);
             //double totalWarpingBeamLength = 0;
             result.SetOrderProductionNumber(orderProductionNumber);
             result.SetFabricConstructionNumber(fabricConstructionNumber);
-            result.SetWeavingUnitId(orderProductionDocument.UnitId.Value);
+            result.SetWeavingUnit(weavingUnitName);
             result.SetMachineNumber(machineNumber);
 
             result.SetMachineType(machineTypeName);
@@ -197,14 +224,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             //Add Beams Warping Used in Sizing Operation to Data Transfer Object
             //Get Beam Product of Warping That Used Same Order With Current Sizing Operation
             await Task.Yield();
-            //var warpingQuery =
-            //    _dailyOperationWarpingRepository
-            //            .Query
-            //            .Include(x => x.WarpingHistories)
-            //            .Include(x => x.WarpingBeamProducts)
-            //            .Where(doc => doc.OrderDocumentId.Equals(dailyOperationSizingDocument.OrderDocumentId.Value));
-
-            await Task.Yield();
             var warpingDocument =
                 _dailyOperationWarpingRepository
                         .Find(x => x.OrderDocumentId == dailyOperationSizingDocument.OrderDocumentId.Value);
@@ -213,7 +232,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
             foreach (var warping in warpingDocument)
             {
-                foreach(var warpingBeamProduct in warping.WarpingBeamProducts)
+                foreach (var warpingBeamProduct in warping.WarpingBeamProducts)
                 {
                     await Task.Yield();
                     var warpingBeamStatus = warpingBeamProduct.BeamStatus;
@@ -227,19 +246,23 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 }
             }
 
+            var sizingBeamsWarping =
+                _dailyOperationBeamsWarpingRepository
+                    .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity)
+                    .OrderByDescending(x => x.AuditTrail.CreatedDate);
             //Get ONLY BEAM PRODUCT OF WARPING Used in The Current Sizing Operation And Add to Warping Beam Warping Used in Sizing Data Transfer Object
             foreach (var warpingBeamProduct in warpingListBeamProducts)
             {
-                foreach(var beamWarpingId in dailyOperationSizingDocument.BeamsWarping)
+                foreach (var beamWarpingId in sizingBeamsWarping)
                 {
                     await Task.Yield();
-                    if (warpingBeamProduct.Id.Equals(beamWarpingId.Value))
+                    if (warpingBeamProduct.Id == beamWarpingId.Identity)
                     {
                         //Get Beam Document
                         await Task.Yield();
                         var beamDocument =
                             _beamRepository
-                                .Find(o => o.Identity.Equals(beamWarpingId.Value))
+                                .Find(o => o.Identity == beamWarpingId.Identity)
                                 .FirstOrDefault();
 
                         await Task.Yield();
@@ -288,13 +311,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 await Task.Yield();
                 var shiftName =
                     _shiftRepository
-                        .Find(entity => entity.Identity.Equals(history.ShiftDocumentId))
+                        .Find(entity => entity.Identity == history.ShiftDocumentId.Value)
                         .FirstOrDefault().Name ?? "Shift Not Found";
 
                 await Task.Yield();
                 var operatorDocument =
                     _operatorRepository
-                        .Find(entity => entity.Identity.Equals(history.OperatorDocumentId))
+                        .Find(entity => entity.Identity == history.OperatorDocumentId.Value)
                         .FirstOrDefault();
 
                 var dailyHistory =

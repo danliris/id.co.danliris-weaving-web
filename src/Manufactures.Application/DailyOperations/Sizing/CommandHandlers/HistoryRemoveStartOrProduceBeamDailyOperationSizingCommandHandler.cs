@@ -18,6 +18,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
+        private readonly IDailyOperationSizingBeamProductRepository
+            _dailyOperationSizingBeamProductRepository;
         private readonly IBeamRepository
             _beamRepository;
 
@@ -26,6 +30,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
+            _dailyOperationSizingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
             //_movementRepository =
             //  _storage.GetRepository<IMovementRepository>();
             _beamRepository =
@@ -37,37 +45,30 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             try
             {
                 //Get Daily Operation Document Sizing
-                var sizingQuery =
+                var existingSizingDocument =
                     _dailyOperationSizingDocumentRepository
-                            .Query
-                            .Include(d => d.SizingHistories)
-                            .Include(b => b.SizingBeamProducts)
-                            .Where(doc => doc.Identity.Equals(request.Id));
-                var existingDailyOperationSizingDocument =
-                    _dailyOperationSizingDocumentRepository
-                            .Find(sizingQuery)
+                            .Find(o=>o.Identity == request.Id)
                             .FirstOrDefault();
 
                 //Get Daily Operation History
-                var existingDailyOperationSizingHistories =
-                    existingDailyOperationSizingDocument
-                            .SizingHistories
-                            .OrderByDescending(o => o.DateTimeMachine);
-                var lastHistory = existingDailyOperationSizingHistories.FirstOrDefault();
+                var existingSizingHistories =
+                    _dailyOperationSizingHistoryRepository
+                        .Find(o=>o.Identity == existingSizingDocument.Identity)
+                        .OrderByDescending(o => o.DateTimeMachine);
+                var lastHistory = existingSizingHistories.FirstOrDefault();
 
                 //Get Daily Operation Beam Product
-                var existingDailyOperationBeamProducts =
-                    existingDailyOperationSizingDocument
-                            .SizingBeamProducts
-                            .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-                var lastBeamProduct = existingDailyOperationBeamProducts.FirstOrDefault();
+                var existingSizingBeamProducts =
+                    _dailyOperationSizingBeamProductRepository
+                        .Find(o=>o.Identity == existingSizingDocument.Identity)
+                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+                var lastBeamProduct = existingSizingBeamProducts.FirstOrDefault();
 
                 switch (request.HistoryStatus)
                 {
                     case "START":
                         if (lastHistory.Identity.Equals(request.HistoryId))
                         {
-                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
                             lastHistory.Remove();
                         }
                         else
@@ -77,7 +78,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                         if (lastBeamProduct.Identity.Equals(request.BeamProductId))
                         {
-                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingBeamProduct(lastBeamProduct.Identity);
                             lastBeamProduct.Remove();
                         }
                         else
@@ -88,7 +88,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     case "COMPLETED":
                         if (lastHistory.Identity.Equals(request.HistoryId))
                         {
-                            //existingDailyOperationSizingDocument.RemoveDailyOperationSizingHistory(lastHistory.Identity);
                             lastHistory.Remove();
                         }
                         else
@@ -106,7 +105,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                             lastBeamProduct.SetSPU(0);
                             lastBeamProduct.SetSizingBeamStatus(Helpers.BeamStatus.ONPROCESS);
 
-                            existingDailyOperationSizingDocument.UpdateDailyOperationSizingBeamProduct(lastBeamProduct);
+                            await _dailyOperationSizingBeamProductRepository.Update(lastBeamProduct);
                         }
                         else
                         {
@@ -115,11 +114,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         break;
                 }
 
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
-
                 _storage.Save();
 
-                return existingDailyOperationSizingDocument;
+                return existingSizingDocument;
             }
             catch (Exception)
             {

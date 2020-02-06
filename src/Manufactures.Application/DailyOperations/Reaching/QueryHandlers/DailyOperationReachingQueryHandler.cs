@@ -1,4 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
@@ -9,6 +12,8 @@ using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +23,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 {
     public class DailyOperationReachingQueryHandler : IDailyOperationReachingQuery<DailyOperationReachingListDto>
     {
+        protected readonly IHttpClientService
+            _http;
         private readonly IStorage _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
@@ -36,8 +43,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
         private readonly IDailyOperationReachingHistoryRepository
            _dailyOperationReachingHistoryRepository;
 
-        public DailyOperationReachingQueryHandler(IStorage storage)
+        public DailyOperationReachingQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
+            _http =
+                serviceProvider.GetService<IHttpClientService>();
             _storage = storage;
             _dailyOperationReachingRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
@@ -54,6 +63,22 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
             _dailyOperationReachingHistoryRepository = _storage.GetRepository<IDailyOperationReachingHistoryRepository>();
+        }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
         }
 
         public async Task<IEnumerable<DailyOperationReachingListDto>> GetAll()
@@ -95,7 +120,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                 var constructionId = orderDocument.ConstructionDocumentId.Value;
 
                 //Get Weaving Unit Id
-                var weavingUnitId = orderDocument.UnitId;
+                SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
+                var weavingUnitName = unitData.data.Name;
 
                 //Get Contruction Number
                 await Task.Yield();
@@ -114,7 +140,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                         .FirstOrDefault()
                         .Number ?? "Not Found Sizing Beam Number";
 
-                var operationResult = new DailyOperationReachingListDto(operation, reachingDetail, machineNumber, weavingUnitId,
+                var operationResult = new DailyOperationReachingListDto(operation, reachingDetail, machineNumber, weavingUnitName,
                     constructionNumber, sizingBeamNumber);
 
                 result.Add(operationResult);
@@ -160,7 +186,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             var constructionId = orderDocument.ConstructionDocumentId.Value;
 
             //Get Weaving Unit Id
-            var weavingUnitId = orderDocument.UnitId;
+            SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
+            var weavingUnitName = unitData.data.Name;
 
             //Get Contruction Number
             await Task.Yield();
@@ -188,7 +215,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                     .FirstOrDefault();
 
             //Assign Parameter to Object Result
-            var result = new DailyOperationReachingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitId, constructionNumber, sizingBeamNumber, sizingYarnStrands);
+            var result = new DailyOperationReachingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitName, constructionNumber, sizingBeamNumber, sizingYarnStrands);
 
             foreach (var detail in histories)
             {

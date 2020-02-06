@@ -12,12 +12,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
     {
         public BeamId SizingBeamId { get; private set; }
         public double CounterStart { get; private set; }
-        public double? CounterFinish { get; private set; }
-        public double? WeightNetto { get; private set; }
-        public double? WeightBruto { get; private set; }
-        public double? WeightTheoritical { get; private set; }
-        public double? PISMeter { get; private set; }
-        public double? SPU { get; private set; }
+        public double CounterFinish { get; private set; }
+        public double WeightNetto { get; private set; }
+        public double WeightBruto { get; private set; }
+        public double WeightTheoritical { get; private set; }
+        public double PISMeter { get; private set; }
+        public double SPU { get; private set; }
         public string BeamStatus { get; private set; }
         public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
@@ -29,12 +29,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public DailyOperationSizingBeamProduct(Guid identity,
                                                BeamId sizingBeamId,
                                                double counterStart,
-                                               double counterFinish,
-                                               double weightNetto,
-                                               double weightBruto,
-                                               double weightTheoritical,
-                                               double pisMeter,
-                                               double spu,
+                                               //double counterFinish,
+                                               //double weightNetto,
+                                               //double weightBruto,
+                                               //double weightTheoritical,
+                                               //double pisMeter,
+                                               //double spu,
                                                string beamStatus,
                                                DateTimeOffset latestDateTimeBeamProduct,
                                                Guid dailyOperationSizingDocumentId) : base(identity)
@@ -42,12 +42,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             Identity = identity;
             SizingBeamId = sizingBeamId;
             CounterStart = counterStart;
-            CounterFinish = counterFinish;
-            WeightNetto = weightNetto;
-            WeightBruto = weightBruto;
-            WeightTheoritical = weightTheoritical;
-            PISMeter = pisMeter;
-            SPU = spu;
+            //CounterFinish = counterFinish;
+            //WeightNetto = weightNetto;
+            //WeightBruto = weightBruto;
+            //WeightTheoritical = weightTheoritical;
+            //PISMeter = pisMeter;
+            //SPU = spu;
             BeamStatus = beamStatus;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             DailyOperationSizingDocumentId = dailyOperationSizingDocumentId;

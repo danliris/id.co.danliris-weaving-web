@@ -148,28 +148,39 @@ namespace DanLiris.Admin.Web
             //});
 
             //Add Query Service Config
+            //Beam Stock Monitoring
+            services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
+
+            //Loom and Loom's Report
+            services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
+            services.AddTransient<IDailyOperationLoomQuery<DailyOperationLoomListDto>, DailyOperationLoomQueryHandler>();
+
+            //Reaching and Reaching's Report
+            services.AddTransient<IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto>, DailyOperationReachingBeamQueryHandler>();
+            services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
+            services.AddTransient<IDailyOperationReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
+
+            //Sizing and Sizing's Report
+            services.AddTransient<ISizePickupReportQuery<SizePickupReportListDto>, SizePickupReportQueryHandler>();
+            services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
+            services.AddTransient<IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
+
+            //Warping and Warping's Report
+            services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();
+            services.AddTransient<IWarpingProductionReportQuery<WarpingProductionReportListDto>, WarpingProductionReportQueryHandler>();
+            services.AddTransient<IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>, DailyOperationWarpingReportQueryHandler>();
+            services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
+
+            //Master Weaving
+            services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
+            services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();
+            services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
             services.AddTransient<IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto>, OrderQueryHandler>();
             services.AddTransient<IOrderQuery<OrderListDto>, OrderQueryHandler>();
             services.AddTransient<IFabricConstructionQuery<FabricConstructionListDto>, FabricConstructionQueryHandler>();
-            services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();
-            services.AddTransient<IWarpingProductionReportQuery<WarpingProductionReportListDto>, WarpingProductionReportQueryHandler>();
-            services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
-            services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
-            services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
-            services.AddTransient<IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto>, DailyOperationReachingBeamQueryHandler>();
-            services.AddTransient<IDailyOperationReachingReportQuery<DailyOperationReachingReportListDto>, DailyOperationReachingReportQueryHandler>();
-            services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
-            services.AddTransient<ISizePickupReportQuery<SizePickupReportListDto>, SizePickupReportQueryHandler>();
-            services.AddTransient<IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>, DailyOperationWarpingReportQueryHandler>();
-            services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
-            services.AddTransient<IBeamStockMonitoringQuery<BeamStockMonitoringDto>, BeamStockMonitoringQueryHandler>();
-            services.AddTransient<IDailyOperationLoomQuery<DailyOperationLoomListDto>, DailyOperationLoomQueryHandler>();
-            services.AddTransient<IDailyOperationReachingQuery<DailyOperationReachingListDto>, DailyOperationReachingQueryHandler>();
-            services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
-            services.AddTransient<IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
-            services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IOperatorQuery<OperatorListDto>, OperatorQueryHandler>();
+            services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);

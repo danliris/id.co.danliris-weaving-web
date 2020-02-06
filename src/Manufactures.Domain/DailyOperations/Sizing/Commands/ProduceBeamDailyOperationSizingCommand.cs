@@ -13,14 +13,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        //[JsonProperty(PropertyName = "SizingBeamDocuments")]
-        //public ProduceBeamBeamDocumentDailyOperationSizingCommand SizingBeamDocuments { get; set; }
-
         [JsonProperty(PropertyName = "CounterFinish")]
         public double CounterFinish { get; set; }
-
-        //[JsonProperty(PropertyName = "Weight")]
-        //public DailyOperationSizingWeightCommand Weight { get; set; }
 
         [JsonProperty(PropertyName = "WeightNetto")]
         public double WeightNetto { get; set; }
@@ -36,9 +30,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
-
-        //[JsonProperty(PropertyName = "SizingDetails")]
-        //public ProduceBeamDetailDailyOperationSizingCommand SizingDetails { get; set; }
 
         [JsonProperty(PropertyName = "ProduceBeamOperator")]
         public OperatorId ProduceBeamOperator { get; set; }
@@ -62,22 +53,13 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
     {
         public ProduceBeamDailyOperationSizingCommandValidator()
         {
-            //RuleFor(validator => validator.SizingBeamId.Value).NotEmpty();
-            //RuleFor(validator => validator.CounterFinish).NotEmpty();
-            //RuleFor(validator => validator.WeightNetto).NotEmpty();
-            //RuleFor(validator => validator.WeightBruto).NotEmpty();
-            //RuleFor(validator => validator.WeightTheoretical).NotEmpty();
-            //RuleFor(validator => validator.SPU).NotEmpty();
             RuleFor(validator => validator.Id).NotEmpty();
-            //RuleFor(validator => validator.SizingBeamDocuments).SetValidator(new ProduceBeamBeamDocumentDailyOperationSizingCommandValidator());
             RuleFor(validator => validator.CounterFinish).NotEmpty().WithMessage("Counter Akhir Harus Diisi");
-            //RuleFor(validator => validator.Weight).SetValidator(new DailyOperationSizingWeightCommandValidator());
             RuleFor(validator => validator.WeightNetto).NotEmpty().WithMessage("Netto Harus Diisi");
             RuleFor(validator => validator.WeightBruto).NotEmpty().WithMessage("Bruto Harus Diisi");
             RuleFor(validator => validator.WeightTheoritical).NotEmpty().WithMessage("Berat Teoritis Harus Diisi");
             RuleFor(validator => validator.PISMeter).NotEmpty().WithMessage("PIS Harus Diisi");
             RuleFor(validator => validator.SPU).NotEmpty().WithMessage("SPU Harus Diisi");
-            //RuleFor(validator => validator.SizingDetails).SetValidator(new ProduceBeamDetailDailyOperationSizingCommandValidator());
             RuleFor(validator => validator.ProduceBeamOperator).NotEmpty().WithMessage("Operator Harus Diisi");
             RuleFor(validator => validator.ProduceBeamShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.ProduceBeamDate).NotEmpty().WithMessage("Tanggal Produksi Beam Harus Diisi");
