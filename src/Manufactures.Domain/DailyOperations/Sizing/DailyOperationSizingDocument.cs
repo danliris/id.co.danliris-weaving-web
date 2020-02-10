@@ -22,6 +22,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public int TexSQ { get; private set; }
         public int Visco { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
+        public int BeamProductResult { get; private set; }
         public string OperationStatus { get; private set; }
         public List<DailyOperationSizingBeamsWarping> BeamsWarping { get; private set; }
         public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
@@ -35,6 +36,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                                             string recipeCode,
                                             double neReal,
                                             DateTimeOffset datetimeOperation,
+                                            int beamProductResult,
                                             string operationStatus) : base(identity)
         {
             Identity = identity;
@@ -45,6 +47,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             RecipeCode = recipeCode;
             NeReal = neReal;
             DateTimeOperation = datetimeOperation;
+            BeamProductResult = beamProductResult;
             OperationStatus = operationStatus;
 
             this.MarkTransient();
@@ -61,6 +64,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
                 DateTimeOperation = this.DateTimeOperation,
+                BeamProductResult = this.BeamProductResult,
                 OperationStatus = this.OperationStatus,
             };
         }
@@ -76,6 +80,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
             this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
             this.DateTimeOperation = readModel.DateTimeOperation;
+            this.BeamProductResult = readModel.BeamProductResult;
             this.OperationStatus = readModel.OperationStatus;
         }
 
@@ -267,6 +272,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing
             {
                 DateTimeOperation = dateTimeOperation;
                 ReadModel.DateTimeOperation = DateTimeOperation;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBeamProductResult(int beamProductResult)
+        {
+            if (beamProductResult != BeamProductResult)
+            {
+                BeamProductResult = beamProductResult;
+                ReadModel.BeamProductResult = BeamProductResult;
 
                 MarkModified();
             }

@@ -6,8 +6,6 @@ using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
-using Manufactures.Domain.Shared.ValueObjects;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using System;
 using System.Linq;
@@ -141,7 +139,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                 dateTimeOperation,
                                                                 MachineStatus.ONSTART,
                                                                 "",
-                                                                lastHistory.BrokenBeam,
+                                                                lastHistory.BrokenPerShift,
                                                                 lastHistory.MachineTroubled,
                                                                 request.SizingBeamNumber,
                                                                 existingSizingDocument.Identity);

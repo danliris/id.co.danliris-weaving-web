@@ -2,6 +2,7 @@ using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Application.DailyOperations.Sizing.CommandHandlers;
 using Manufactures.Application.Helpers;
+using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
@@ -66,102 +67,61 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Existing Object
             //Assign Property to DailyOperationSizingDocument
-            var sizingId = Guid.NewGuid();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var existingBeamDocument =
+                new BeamDocument(Guid.NewGuid(),
+                                 "S123",
+                                 "Sizing",
+                                 23);
 
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(Guid.NewGuid()),
+                                                                  new OrderId(Guid.NewGuid()),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONFINISH);
 
-            var emptyWeight = 13;
-            var yarnStrands = 400;
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var machineSpeed = 0;
-            var texSQ = 0;
-            var visco = 0;
-            var datetimeOperation = DateTimeOffset.UtcNow;
-            var operationStatus = OperationStatus.ONFINISH;
-            var existingSizingDocument =
-                new DailyOperationSizingDocument(sizingId,
-                                                 machineDocumentId,
-                                                 orderDocumentId,
-                                                 beamsWarping,
-                                                 emptyWeight,
-                                                 yarnStrands,
-                                                 recipeCode,
-                                                 neReal, machineSpeed,
-                                                 texSQ,
-                                                 visco,
-                                                 datetimeOperation,
-                                                 operationStatus);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(Guid.NewGuid()),
+                                                                new OperatorId(Guid.NewGuid()),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONCOMPLETE,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingHistoryId = Guid.NewGuid();
-            var shiftDocumentId = new ShiftId(Guid.NewGuid());
-            var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var dateTimeMachine = DateTimeOffset.UtcNow;
-            var machineStatus = MachineStatus.ONCOMPLETE;
-            var information = "-";
-            var brokenBeam = 1;
-            var machineTroubled = 1;
-            var sizingBeamNumber = "S123";
-            var existingSizingHistory =
-                new DailyOperationSizingHistory(sizingHistoryId,
-                                                shiftDocumentId,
-                                                operatorDocumentId,
-                                                dateTimeMachine,
-                                                machineStatus,
-                                                information,
-                                                brokenBeam,
-                                                machineTroubled,
-                                                sizingBeamNumber);
-            existingSizingDocument.AddDailyOperationSizingHistory(existingSizingHistory);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(Guid.NewGuid()),
+                                                                        0,
+                                                                        BeamStatus.ROLLEDUP,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
-            var sizingBeamProduct = Guid.NewGuid();
-            var sizingBeamId = new BeamId(Guid.NewGuid());
-            var latestDateTimeBeamProduct = DateTimeOffset.UtcNow;
-            var counterStart = 0;
-            var counterFinish = 1200;
-            var weightNetto = 0;
-            var weightBruto = 0;
-            var weightTheoritical = 0;
-            var pisMeter = 0;
-            var spu = 0;
-            var beamStatus = BeamStatus.ROLLEDUP;
-            var existingSizingBeamProduct =
-                new DailyOperationSizingBeamProduct(sizingBeamProduct,
-                                                    sizingBeamId,
-                                                    latestDateTimeBeamProduct,
-                                                    counterStart,
-                                                    counterFinish,
-                                                    weightNetto,
-                                                    weightBruto,
-                                                    weightTheoritical,
-                                                    pisMeter,
-                                                    spu,
-                                                    beamStatus);
-            existingSizingDocument.AddDailyOperationSizingBeamProduct(existingSizingBeamProduct);
+            var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                                          sizingBeamProduct.SizingBeamId,
+                                                                          120,
+                                                                          32,
+                                                                          sizingDocument.Identity);
 
             //Instantiate Object for New Update Resume Object (Commands)
-            var resumeOperator = new OperatorId(Guid.NewGuid());
-            var resumeDate = DateTimeOffset.UtcNow;
-            var resumeTime = TimeSpan.Parse("01:00");
-            var resumeShift = new ShiftId(Guid.NewGuid());
-
-            UpdateResumeDailyOperationSizingCommand request = new UpdateResumeDailyOperationSizingCommand
+            var request = new UpdateResumeDailyOperationSizingCommand
             {
-                Id = existingSizingDocument.Identity,
-                ResumeDate = resumeDate,
-                ResumeTime = resumeTime,
-                ResumeShift = resumeShift,
-                ResumeOperator = resumeOperator
+                Id = sizingDocument.Identity,
+                ResumeDate = DateTimeOffset.UtcNow,
+                ResumeTime = TimeSpan.Parse("01:00"),
+                ResumeShift = new ShiftId(Guid.NewGuid()),
+                ResumeOperator = new OperatorId(Guid.NewGuid())
             };
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                 .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -186,82 +146,46 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Existing Object
             //Assign Property to DailyOperationSizingDocument
-            var sizingId = Guid.NewGuid();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var existingBeamDocument =
+                new BeamDocument(Guid.NewGuid(),
+                                 "S123",
+                                 "Sizing",
+                                 23);
 
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(Guid.NewGuid()),
+                                                                  new OrderId(Guid.NewGuid()),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONPROCESS);
 
-            var emptyWeight = 13;
-            var yarnStrands = 400;
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var machineSpeed = 0;
-            var texSQ = 0;
-            var visco = 0;
-            var datetimeOperation = DateTimeOffset.UtcNow;
-            var operationStatus = OperationStatus.ONPROCESS;
-            var existingSizingDocument =
-                new DailyOperationSizingDocument(sizingId,
-                                                 machineDocumentId,
-                                                 orderDocumentId,
-                                                 beamsWarping,
-                                                 emptyWeight,
-                                                 yarnStrands,
-                                                 recipeCode,
-                                                 neReal, machineSpeed,
-                                                 texSQ,
-                                                 visco,
-                                                 datetimeOperation,
-                                                 operationStatus);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(Guid.NewGuid()),
+                                                                new OperatorId(Guid.NewGuid()),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTOP,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingHistoryId = Guid.NewGuid();
-            var shiftDocumentId = new ShiftId(Guid.NewGuid());
-            var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var dateTimeMachine = DateTimeOffset.UtcNow;
-            var machineStatus = MachineStatus.ONSTOP;
-            var information = "-";
-            var brokenBeam = 1;
-            var machineTroubled = 1;
-            var sizingBeamNumber = "S123";
-            var existingSizingHistory =
-                new DailyOperationSizingHistory(sizingHistoryId,
-                                                shiftDocumentId,
-                                                operatorDocumentId,
-                                                dateTimeMachine,
-                                                machineStatus,
-                                                information,
-                                                brokenBeam,
-                                                machineTroubled,
-                                                sizingBeamNumber);
-            existingSizingDocument.AddDailyOperationSizingHistory(existingSizingHistory);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(Guid.NewGuid()),
+                                                                        0,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
-            var sizingBeamProduct = Guid.NewGuid();
-            var sizingBeamId = new BeamId(Guid.NewGuid());
-            var latestDateTimeBeamProduct = DateTimeOffset.UtcNow;
-            var counterStart = 0;
-            var counterFinish = 1200;
-            var weightNetto = 0;
-            var weightBruto = 0;
-            var weightTheoritical = 0;
-            var pisMeter = 0;
-            var spu = 0;
-            var beamStatus = BeamStatus.ONPROCESS;
-            var existingSizingBeamProduct =
-                new DailyOperationSizingBeamProduct(sizingBeamProduct,
-                                                    sizingBeamId,
-                                                    latestDateTimeBeamProduct,
-                                                    counterStart,
-                                                    counterFinish,
-                                                    weightNetto,
-                                                    weightBruto,
-                                                    weightTheoritical,
-                                                    pisMeter,
-                                                    spu,
-                                                    beamStatus);
-            existingSizingDocument.AddDailyOperationSizingBeamProduct(existingSizingBeamProduct);
+            var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                                          sizingBeamProduct.SizingBeamId,
+                                                                          120,
+                                                                          32,
+                                                                          sizingDocument.Identity);
 
             //Instantiate Object for New Update Resume Object (Commands)
             var resumeOperator = new OperatorId(Guid.NewGuid());
@@ -269,19 +193,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var resumeTime = TimeSpan.Parse("01:00");
             var resumeShift = new ShiftId(Guid.NewGuid());
 
-            UpdateResumeDailyOperationSizingCommand request = new UpdateResumeDailyOperationSizingCommand
+            var request = new UpdateResumeDailyOperationSizingCommand
             {
-                Id = existingSizingDocument.Identity,
-                ResumeDate = resumeDate,
-                ResumeTime = resumeTime,
-                ResumeShift = resumeShift,
-                ResumeOperator = resumeOperator
+                Id = sizingDocument.Identity,
+                ResumeDate = DateTimeOffset.UtcNow.AddDays(-1),
+                ResumeTime = TimeSpan.Parse("01:00"),
+                ResumeShift = new ShiftId(Guid.NewGuid()),
+                ResumeOperator = new OperatorId(Guid.NewGuid())
             };
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                 .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -306,82 +230,46 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Existing Object
             //Assign Property to DailyOperationSizingDocument
-            var sizingId = Guid.NewGuid();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var existingBeamDocument =
+                new BeamDocument(Guid.NewGuid(),
+                                 "S123",
+                                 "Sizing",
+                                 23);
 
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(Guid.NewGuid()),
+                                                                  new OrderId(Guid.NewGuid()),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONPROCESS);
 
-            var emptyWeight = 13;
-            var yarnStrands = 400;
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var machineSpeed = 0;
-            var texSQ = 0;
-            var visco = 0;
-            var datetimeOperation = DateTimeOffset.UtcNow.AddMinutes(-1);
-            var operationStatus = OperationStatus.ONPROCESS;
-            var existingSizingDocument =
-                new DailyOperationSizingDocument(sizingId,
-                                                 machineDocumentId,
-                                                 orderDocumentId,
-                                                 beamsWarping,
-                                                 emptyWeight,
-                                                 yarnStrands,
-                                                 recipeCode,
-                                                 neReal, machineSpeed,
-                                                 texSQ,
-                                                 visco,
-                                                 datetimeOperation,
-                                                 operationStatus);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(Guid.NewGuid()),
+                                                                new OperatorId(Guid.NewGuid()),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTOP,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingHistoryId = Guid.NewGuid();
-            var shiftDocumentId = new ShiftId(Guid.NewGuid());
-            var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var dateTimeMachine = DateTimeOffset.UtcNow.AddMinutes(-1);
-            var machineStatus = MachineStatus.ONSTOP;
-            var information = "-";
-            var brokenBeam = 1;
-            var machineTroubled = 1;
-            var sizingBeamNumber = "S123";
-            var existingSizingHistory =
-                new DailyOperationSizingHistory(sizingHistoryId,
-                                                shiftDocumentId,
-                                                operatorDocumentId,
-                                                dateTimeMachine,
-                                                machineStatus,
-                                                information,
-                                                brokenBeam,
-                                                machineTroubled,
-                                                sizingBeamNumber);
-            existingSizingDocument.AddDailyOperationSizingHistory(existingSizingHistory);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(Guid.NewGuid()),
+                                                                        0,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
-            var sizingBeamProduct = Guid.NewGuid();
-            var sizingBeamId = new BeamId(Guid.NewGuid());
-            var latestDateTimeBeamProduct = DateTimeOffset.UtcNow.AddMinutes(-1);
-            var counterStart = 0;
-            var counterFinish = 1200;
-            var weightNetto = 0;
-            var weightBruto = 0;
-            var weightTheoritical = 0;
-            var pisMeter = 0;
-            var spu = 0;
-            var beamStatus = BeamStatus.ONPROCESS;
-            var existingSizingBeamProduct =
-                new DailyOperationSizingBeamProduct(sizingBeamProduct,
-                                                    sizingBeamId,
-                                                    latestDateTimeBeamProduct,
-                                                    counterStart,
-                                                    counterFinish,
-                                                    weightNetto,
-                                                    weightBruto,
-                                                    weightTheoritical,
-                                                    pisMeter,
-                                                    spu,
-                                                    beamStatus);
-            existingSizingDocument.AddDailyOperationSizingBeamProduct(existingSizingBeamProduct);
+            var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                                          sizingBeamProduct.SizingBeamId,
+                                                                          120,
+                                                                          32,
+                                                                          sizingDocument.Identity);
 
             //Instantiate Object for New Update Resume Object (Commands)
             var resumeOperator = new OperatorId(Guid.NewGuid());
@@ -389,19 +277,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var resumeTime = TimeSpan.Parse("01:00");
             var resumeShift = new ShiftId(Guid.NewGuid());
 
-            UpdateResumeDailyOperationSizingCommand request = new UpdateResumeDailyOperationSizingCommand
+            var request = new UpdateResumeDailyOperationSizingCommand
             {
-                Id = existingSizingDocument.Identity,
-                ResumeDate = resumeDate,
-                ResumeTime = resumeTime,
-                ResumeShift = resumeShift,
-                ResumeOperator = resumeOperator
+                Id = sizingDocument.Identity,
+                ResumeDate = DateTimeOffset.UtcNow,
+                ResumeTime = TimeSpan.Parse("01:00"),
+                ResumeShift = new ShiftId(Guid.NewGuid()),
+                ResumeOperator = new OperatorId(Guid.NewGuid())
             };
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                 .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -426,82 +314,46 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Existing Object
             //Assign Property to DailyOperationSizingDocument
-            var sizingId = Guid.NewGuid();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var existingBeamDocument =
+                new BeamDocument(Guid.NewGuid(),
+                                 "S123",
+                                 "Sizing",
+                                 23);
 
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(Guid.NewGuid()),
+                                                                  new OrderId(Guid.NewGuid()),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONPROCESS);
 
-            var emptyWeight = 13;
-            var yarnStrands = 400;
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var machineSpeed = 0;
-            var texSQ = 0;
-            var visco = 0;
-            var datetimeOperation = DateTimeOffset.UtcNow;
-            var operationStatus = OperationStatus.ONPROCESS;
-            var existingSizingDocument =
-                new DailyOperationSizingDocument(sizingId,
-                                                 machineDocumentId,
-                                                 orderDocumentId,
-                                                 beamsWarping,
-                                                 emptyWeight,
-                                                 yarnStrands,
-                                                 recipeCode,
-                                                 neReal, machineSpeed,
-                                                 texSQ,
-                                                 visco,
-                                                 datetimeOperation,
-                                                 operationStatus);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(Guid.NewGuid()),
+                                                                new OperatorId(Guid.NewGuid()),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTOP,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingHistoryId = Guid.NewGuid();
-            var shiftDocumentId = new ShiftId(Guid.NewGuid());
-            var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var dateTimeMachine = DateTimeOffset.UtcNow;
-            var machineStatus = MachineStatus.ONSTOP;
-            var information = "-";
-            var brokenBeam = 1;
-            var machineTroubled = 1;
-            var sizingBeamNumber = "S123";
-            var existingSizingHistory =
-                new DailyOperationSizingHistory(sizingHistoryId,
-                                                shiftDocumentId,
-                                                operatorDocumentId,
-                                                dateTimeMachine,
-                                                machineStatus,
-                                                information,
-                                                brokenBeam,
-                                                machineTroubled,
-                                                sizingBeamNumber);
-            existingSizingDocument.AddDailyOperationSizingHistory(existingSizingHistory);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(Guid.NewGuid()),
+                                                                        0,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
-            var sizingBeamProduct = Guid.NewGuid();
-            var sizingBeamId = new BeamId(Guid.NewGuid());
-            var latestDateTimeBeamProduct = DateTimeOffset.UtcNow;
-            var counterStart = 0;
-            var counterFinish = 1200;
-            var weightNetto = 0;
-            var weightBruto = 0;
-            var weightTheoritical = 0;
-            var pisMeter = 0;
-            var spu = 0;
-            var beamStatus = BeamStatus.ONPROCESS;
-            var existingSizingBeamProduct =
-                new DailyOperationSizingBeamProduct(sizingBeamProduct,
-                                                    sizingBeamId,
-                                                    latestDateTimeBeamProduct,
-                                                    counterStart,
-                                                    counterFinish,
-                                                    weightNetto,
-                                                    weightBruto,
-                                                    weightTheoritical,
-                                                    pisMeter,
-                                                    spu,
-                                                    beamStatus);
-            existingSizingDocument.AddDailyOperationSizingBeamProduct(existingSizingBeamProduct);
+            var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                                          sizingBeamProduct.SizingBeamId,
+                                                                          120,
+                                                                          32,
+                                                                          sizingDocument.Identity);
 
             //Instantiate Object for New Update Resume Object (Commands)
             var resumeOperator = new OperatorId(Guid.NewGuid());
@@ -509,19 +361,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var resumeTime = TimeSpan.Parse("01:00");
             var resumeShift = new ShiftId(Guid.NewGuid());
 
-            UpdateResumeDailyOperationSizingCommand request = new UpdateResumeDailyOperationSizingCommand
+            var request = new UpdateResumeDailyOperationSizingCommand
             {
-                Id = existingSizingDocument.Identity,
-                ResumeDate = resumeDate,
-                ResumeTime = resumeTime,
-                ResumeShift = resumeShift,
-                ResumeOperator = resumeOperator
+                Id = sizingDocument.Identity,
+                ResumeDate = DateTimeOffset.UtcNow.AddDays(1),
+                ResumeTime = TimeSpan.Parse("01:00"),
+                ResumeShift = new ShiftId(Guid.NewGuid()),
+                ResumeOperator = new OperatorId(Guid.NewGuid())
             };
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                 .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
             this.mockStorage.Setup(x => x.Save());
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -543,82 +395,46 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Instantiate Existing Object
             //Assign Property to DailyOperationSizingDocument
-            var sizingId = Guid.NewGuid();
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
+            var existingBeamDocument =
+                new BeamDocument(Guid.NewGuid(),
+                                 "S123",
+                                 "Sizing",
+                                 23);
 
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(Guid.NewGuid()),
+                                                                  new OrderId(Guid.NewGuid()),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONPROCESS);
 
-            var emptyWeight = 13;
-            var yarnStrands = 400;
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var machineSpeed = 0;
-            var texSQ = 0;
-            var visco = 0;
-            var datetimeOperation = DateTimeOffset.UtcNow;
-            var operationStatus = OperationStatus.ONPROCESS;
-            var existingSizingDocument =
-                new DailyOperationSizingDocument(sizingId,
-                                                 machineDocumentId,
-                                                 orderDocumentId,
-                                                 beamsWarping,
-                                                 emptyWeight,
-                                                 yarnStrands,
-                                                 recipeCode,
-                                                 neReal, machineSpeed,
-                                                 texSQ,
-                                                 visco,
-                                                 datetimeOperation,
-                                                 operationStatus);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(Guid.NewGuid()),
+                                                                new OperatorId(Guid.NewGuid()),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTART,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingHistoryId = Guid.NewGuid();
-            var shiftDocumentId = new ShiftId(Guid.NewGuid());
-            var operatorDocumentId = new OperatorId(Guid.NewGuid());
-            var dateTimeMachine = DateTimeOffset.UtcNow;
-            var machineStatus = MachineStatus.ONSTART;
-            var information = "-";
-            var brokenBeam = 1;
-            var machineTroubled = 1;
-            var sizingBeamNumber = "S123";
-            var existingSizingHistory =
-                new DailyOperationSizingHistory(sizingHistoryId,
-                                                shiftDocumentId,
-                                                operatorDocumentId,
-                                                dateTimeMachine,
-                                                machineStatus,
-                                                information,
-                                                brokenBeam,
-                                                machineTroubled,
-                                                sizingBeamNumber);
-            existingSizingDocument.AddDailyOperationSizingHistory(existingSizingHistory);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(Guid.NewGuid()),
+                                                                        0,
+                                                                        BeamStatus.ONPROCESS,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
-            var sizingBeamProduct = Guid.NewGuid();
-            var sizingBeamId = new BeamId(Guid.NewGuid());
-            var latestDateTimeBeamProduct = DateTimeOffset.UtcNow;
-            var counterStart = 0;
-            var counterFinish = 1200;
-            var weightNetto = 0;
-            var weightBruto = 0;
-            var weightTheoritical = 0;
-            var pisMeter = 0;
-            var spu = 0;
-            var beamStatus = BeamStatus.ONPROCESS;
-            var existingSizingBeamProduct =
-                new DailyOperationSizingBeamProduct(sizingBeamProduct,
-                                                    sizingBeamId,
-                                                    latestDateTimeBeamProduct,
-                                                    counterStart,
-                                                    counterFinish,
-                                                    weightNetto,
-                                                    weightBruto,
-                                                    weightTheoritical,
-                                                    pisMeter,
-                                                    spu,
-                                                    beamStatus);
-            existingSizingDocument.AddDailyOperationSizingBeamProduct(existingSizingBeamProduct);
+            var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                                          sizingBeamProduct.SizingBeamId,
+                                                                          120,
+                                                                          32,
+                                                                          sizingDocument.Identity);
 
             //Instantiate Object for New Update Resume Object (Commands)
             var resumeOperator = new OperatorId(Guid.NewGuid());
@@ -626,19 +442,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             var resumeTime = TimeSpan.Parse("01:00");
             var resumeShift = new ShiftId(Guid.NewGuid());
 
-            UpdateResumeDailyOperationSizingCommand request = new UpdateResumeDailyOperationSizingCommand
+            var request = new UpdateResumeDailyOperationSizingCommand
             {
-                Id = existingSizingDocument.Identity,
-                ResumeDate = resumeDate,
-                ResumeTime = resumeTime,
-                ResumeShift = resumeShift,
-                ResumeOperator = resumeOperator
+                Id = sizingDocument.Identity,
+                ResumeDate = DateTimeOffset.UtcNow.AddDays(1),
+                ResumeTime = TimeSpan.Parse("01:00"),
+                ResumeShift = new ShiftId(Guid.NewGuid()),
+                ResumeOperator = new OperatorId(Guid.NewGuid())
             };
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
                  .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
-                 .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                 .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 

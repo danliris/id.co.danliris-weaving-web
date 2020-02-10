@@ -17,6 +17,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public int? TexSQ { get; internal set; }
         public int? Visco { get; internal set; }
         public DateTimeOffset DateTimeOperation { get; internal set; }
+        public int BeamProductResult { get; internal set; }
         public string OperationStatus { get; internal set; }
 
         public DailyOperationSizingDocumentReadModel(Guid identity) : base(identity)

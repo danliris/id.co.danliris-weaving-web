@@ -15,8 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public DateTimeOffset DateTimeMachine { get; private set; }
         public string MachineStatus { get; private set; }
         public string Information { get; private set; }
-        public int BrokenBeam { get; private set; }
-        public int MachineTroubled { get; private set; }
+        public int BrokenPerShift { get; private set; }
         public string SizingBeamNumber { get; private set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
 
@@ -32,7 +31,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                                            string machineStatus,
                                            string information,
                                            int brokenBeam,
-                                           int machineTroubled,
                                            string sizingBeamNumber,
                                            Guid dailyOperationSizingDocumentId) : base(identity)
         {
@@ -42,8 +40,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             Information = information;
-            BrokenBeam = brokenBeam;
-            MachineTroubled = machineTroubled;
+            BrokenPerShift = brokenBeam;
             SizingBeamNumber = sizingBeamNumber;
             DailyOperationSizingDocumentId = dailyOperationSizingDocumentId;
 
@@ -56,8 +53,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
                 Information = Information,
-                BrokenBeam = BrokenBeam,
-                MachineTroubled = MachineTroubled,
+                BrokenPerShift = BrokenPerShift,
                 SizingBeamNumber = SizingBeamNumber,
                 DailyOperationSizingDocumentId = DailyOperationSizingDocumentId
             };
@@ -72,8 +68,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             DateTimeMachine = readModel.DateTimeMachine;
             MachineStatus = readModel.MachineStatus;
             Information = readModel.Information;
-            BrokenBeam = readModel.BrokenBeam;
-            MachineTroubled = readModel.MachineTroubled;
+            BrokenPerShift = readModel.BrokenPerShift;
             SizingBeamNumber = readModel.SizingBeamNumber;
             DailyOperationSizingDocumentId = readModel.DailyOperationSizingDocumentId;
         }
@@ -137,23 +132,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetBrokenBeam(int brokenBeam)
+        public void SetBrokenPerShift(int brokenPerShift)
         {
-            if (brokenBeam != BrokenBeam)
+            if (brokenPerShift != BrokenPerShift)
             {
-                BrokenBeam = brokenBeam;
-                ReadModel.BrokenBeam = BrokenBeam;
-
-                MarkModified();
-            }
-        }
-
-        public void SetMachineTroubled(int machineTroubled)
-        {
-            if (machineTroubled != MachineTroubled)
-            {
-                MachineTroubled = machineTroubled;
-                ReadModel.MachineTroubled = MachineTroubled;
+                BrokenPerShift = brokenPerShift;
+                ReadModel.BrokenPerShift = BrokenPerShift;
 
                 MarkModified();
             }

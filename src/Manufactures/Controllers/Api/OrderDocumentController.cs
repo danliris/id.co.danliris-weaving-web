@@ -110,6 +110,50 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
 
+        [HttpGet("order-by-number")]
+        public async Task<IActionResult> GetOrderByNumber(int page = 1,
+                                                          int size = 25,
+                                                          string order = "{}",
+                                                          string keyword = null,
+                                                          string filter = "{}")
+        {
+            var orderDocuments = await _orderQuery.GetAll();
+
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                orderDocuments =
+                    orderDocuments
+                        .Where(o => o.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(OrderListDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    orderDocuments =
+                        orderDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
+                }
+                else
+                {
+                    orderDocuments =
+                        orderDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                }
+            }
+
+            var result = orderDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+
         [HttpGet("get-by-unit-period")]
         public async Task<IActionResult> Get(int month,
                                              int year,

@@ -82,8 +82,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     PreparationTime = preparationTime,
                     PreparationShift = preparationShift,
                     YarnStrands = yarnStrands,
-                    EmptyWeight = emptyWeight,
-                    BeamsWarping = beamsWarping,
+                    EmptyWeight = emptyWeight
                 };
 
             //Setup Mock Object for Sizing Repository
@@ -134,21 +133,18 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Add Existing Sizing Document
             var sizingId = Guid.NewGuid();
-            DailyOperationSizingDocument existingSizingDocument = 
+            var sizingDocument = 
                 new DailyOperationSizingDocument 
                 (
-                    sizingId,
-                    machineDocumentId, 
-                    orderDocumentId, 
-                    beamsWarping,
-                    emptyWeight, 
-                    yarnStrands, 
-                    recipeCode, 
-                    neReal, 
-                    0, 
-                    0, 
-                    0, 
-                    preparationDate, 
+                    Guid.NewGuid(),
+                    new MachineId(Guid.NewGuid()),
+                    new OrderId(Guid.NewGuid()),
+                    46,
+                    400,
+                    "PCA 133R",
+                    2,
+                    DateTimeOffset.UtcNow,
+                    2,
                     OperationStatus.ONPROCESS
                  );
 
@@ -165,14 +161,13 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     PreparationTime = preparationTime,
                     PreparationShift = preparationShift,
                     YarnStrands = yarnStrands,
-                    EmptyWeight = emptyWeight,
-                    BeamsWarping = beamsWarping,
+                    EmptyWeight = emptyWeight
                 };
 
             //Setup Mock Object for Sizing Repository
             mockSizingOperationRepo
                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
-                .Returns(new List<DailyOperationSizingDocument>() { existingSizingDocument });
+                .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             //Set Cancellation Token
             CancellationToken cancellationToken = CancellationToken.None;

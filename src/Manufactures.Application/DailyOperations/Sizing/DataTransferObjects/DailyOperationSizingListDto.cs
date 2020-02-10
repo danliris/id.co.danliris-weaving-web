@@ -14,11 +14,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "DateTimeOperation")]
         public DateTimeOffset DateTimeOperation { get; private set; }
 
-        [JsonProperty(PropertyName = "MachineNumber")]
-        public string MachineNumber { get; private set; }
-
         [JsonProperty(PropertyName = "OrderProductionNumber")]
         public string OrderProductionNumber { get; private set; }
+
+        [JsonProperty(PropertyName = "MachineNumber")]
+        public string MachineNumber { get; private set; }
 
         [JsonProperty(PropertyName = "FabricConstructionNumber")]
         public string FabricConstructionNumber { get; private set; }

@@ -13,11 +13,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public BeamId SizingBeamId { get; private set; }
         public double CounterStart { get; private set; }
         public double CounterFinish { get; private set; }
+        public double PISMeter { get; private set; }
         public double WeightNetto { get; private set; }
         public double WeightBruto { get; private set; }
         public double WeightTheoritical { get; private set; }
-        public double PISMeter { get; private set; }
         public double SPU { get; private set; }
+        public int TotalBroken { get; private set; }
         public string BeamStatus { get; private set; }
         public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
@@ -60,11 +61,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                 SizingBeamId = SizingBeamId.Value,
                 CounterStart = CounterStart,
                 CounterFinish = CounterFinish,
+                PISMeter = PISMeter,
                 WeightNetto = WeightNetto,
                 WeightBruto = WeightBruto,
                 WeightTheoritical = WeightTheoritical,
-                PISMeter = PISMeter,
                 SPU = SPU,
+                TotalBroken = TotalBroken,
                 BeamStatus = BeamStatus,
                 LatestDateTimeBeamProduct = LatestDateTimeBeamProduct,
                 DailyOperationSizingDocumentId = DailyOperationSizingDocumentId
@@ -76,11 +78,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             SizingBeamId = new BeamId(readModel.SizingBeamId);
             CounterStart = readModel.CounterStart;
             CounterFinish = readModel.CounterFinish;
+            PISMeter = readModel.PISMeter;
             WeightNetto = readModel.WeightNetto;
             WeightBruto = readModel.WeightBruto;
             WeightTheoritical = readModel.WeightTheoritical;
-            PISMeter = readModel.PISMeter;
             SPU = readModel.SPU;
+            TotalBroken = readModel.TotalBroken;
             BeamStatus = readModel.BeamStatus;
             LatestDateTimeBeamProduct = readModel.LatestDateTimeBeamProduct;
             DailyOperationSizingDocumentId = readModel.DailyOperationSizingDocumentId;
@@ -120,6 +123,17 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
+        public void SetPISMeter(double pisMeter)
+        {
+            if (pisMeter != PISMeter)
+            {
+                PISMeter = pisMeter;
+                ReadModel.PISMeter = PISMeter;
+
+                MarkModified();
+            }
+        }
+
         public void SetWeightNetto(double weightNetto)
         {
             if (weightNetto != WeightNetto)
@@ -153,23 +167,23 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             }
         }
 
-        public void SetPISMeter(double pisMeter)
-        {
-            if (pisMeter != PISMeter)
-            {
-                PISMeter = pisMeter;
-                ReadModel.PISMeter = PISMeter;
-
-                MarkModified();
-            }
-        }
-
         public void SetSPU(double spu)
         {
             if (spu != SPU)
             {
                 SPU = spu;
                 ReadModel.SPU = SPU;
+
+                MarkModified();
+            }
+        }
+
+        public void SetTotalBroken(int totalBroken)
+        {
+            if (totalBroken != SPU)
+            {
+                TotalBroken = totalBroken;
+                ReadModel.TotalBroken = TotalBroken;
 
                 MarkModified();
             }

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExtCore.Data.Abstractions;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.BrokenCauses.Warping.Repositories;
@@ -13,12 +16,15 @@ using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 {
     public class DailyOperationWarpingQueryHandler : IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>
     {
+        protected readonly IHttpClientService
+            _http;
         private readonly IStorage
             _storage;
         private readonly IDailyOperationWarpingRepository
@@ -44,9 +50,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         private readonly IDailyOperationWarpingBrokenCauseRepository
             _dailyOperationWarpingBrokenCauseRepository;
 
-        public DailyOperationWarpingQueryHandler(IStorage storage)
+        public DailyOperationWarpingQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
-            _storage = storage;
+            _http =
+                serviceProvider.GetService<IHttpClientService>();
+            _storage = 
+                storage;
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _weavingOrderDocumentRepository =
@@ -69,6 +78,22 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _dailyOperationWarpingBrokenCauseRepository =
                 _storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
+        }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
         }
 
         public async Task<IEnumerable<DailyOperationWarpingListDto>> GetAll()
@@ -112,12 +137,13 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                 //Get Weaving Unit
                 await Task.Yield();
-                var weavingUnit = OrderDocument.UnitId.Value;
+                SingleUnitResult unitData = GetUnit(OrderDocument.UnitId.Value);
+                var weavingUnitName = unitData.data.Name;
 
                 //Set Another Properties with Value
                 operationResult.SetOrderProductionNumber(orderNumber);
                 operationResult.SetConstructionNumber(constructionNumber);
-                operationResult.SetWeavingUnitId(weavingUnit);
+                operationResult.SetWeavingUnit(weavingUnitName);
 
                 result.Add(operationResult);
             }
@@ -171,6 +197,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             var splittedConstruction = constructionNumber.Split(" ");
             var warpMaterialName = splittedConstruction[splittedConstruction.Length - 2];
 
+            //Get Weaving Unit
+            await Task.Yield();
+            SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
+            var weavingUnitName = unitData.data.Name;
+
             //Get BeamProductResult
             await Task.Yield();
             var beamProductResult = dailyOperationWarpingDocument.BeamProductResult;
@@ -182,7 +213,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             result.SetConstructionNumber(constructionNumber);
             result.SetMaterialType(warpMaterialName);
             result.SetOrderProductionNumber(orderDocument.OrderNumber);
-            result.SetWeavingUnitId(orderDocument.UnitId.Value);
+            result.SetWeavingUnit(weavingUnitName);
 
             // Add Beam Product to Data Transfer Objects
             foreach (var beamProduct in dailyOperationWarpingDocument.WarpingBeamProducts)

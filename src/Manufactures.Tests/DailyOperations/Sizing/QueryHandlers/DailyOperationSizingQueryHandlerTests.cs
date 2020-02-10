@@ -49,6 +49,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
+        private readonly Mock<IServiceProvider> mockServiceProvider;
         private readonly Mock<IDailyOperationSizingDocumentRepository>
             mockDailyOperationSizingRepo;
         private readonly Mock<IMachineRepository>
@@ -72,6 +73,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
+            this.mockServiceProvider = this.mockRepository.Create<IServiceProvider>();
 
             this.mockDailyOperationSizingRepo = this.mockRepository.Create<IDailyOperationSizingDocumentRepository>();
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
@@ -101,8 +103,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
 
         private DailyOperationSizingQueryHandler CreateDailyOperationSizingQueryHandler()
         {
-            return new DailyOperationSizingQueryHandler(
-                this.mockStorage.Object);
+            return new DailyOperationSizingQueryHandler(this.mockStorage.Object, this.mockServiceProvider.Object);
         }
 
         [Fact]
@@ -219,42 +220,33 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             var beamId = new BeamId(new Guid("a955050e-752b-4b96-8e54-f31db9971c66"));
             beamWarping.Add(beamId);
 
-            var sizingDocument = new DailyOperationSizingDocument(new Guid("aa940723-a563-48f1-b2e8-3f70be633950"),
-                                                                       new MachineId(machineDocument.Identity),
-                                                                       new OrderId(orderDocument.Identity),
-                                                                       beamWarping,
-                                                                       46,
-                                                                       400,
-                                                                       "PCA 133R",
-                                                                       40,
-                                                                       4000,
-                                                                       40,
-                                                                       40,
-                                                                       DateTimeOffset.UtcNow,
-                                                                       OperationStatus.ONFINISH);
-            var sizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
-                                                                     new ShiftId(shift.Identity),
-                                                                     new OperatorId(operatorDocument.Identity),
-                                                                     DateTimeOffset.UtcNow,
-                                                                     MachineStatus.ONFINISH,
-                                                                     "-",
-                                                                     1,
-                                                                     1,
-                                                                     "S123");
-            sizingDocument.AddDailyOperationSizingHistory(sizingHistory);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(machineDocument.Identity),
+                                                                  new OrderId(orderDocument.Identity),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONFINISH);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(shift.Identity),
+                                                                new OperatorId(operatorDocument.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONFINISH,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingBeamProduct = new DailyOperationSizingBeamProduct(new Guid("bd5403f0-b2a7-4966-9e78-e1622fd7f6d3"),
-                                                                             new BeamId(beam.Identity),
-                                                                             DateTimeOffset.UtcNow,
-                                                                             0,
-                                                                             1200,
-                                                                             40,
-                                                                             56,
-                                                                             50,
-                                                                             40,
-                                                                             40,
-                                                                             BeamStatus.ROLLEDUP);
-            sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(beam.Identity),
+                                                                        120,
+                                                                        BeamStatus.ROLLEDUP,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
             mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
             mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
@@ -409,42 +401,33 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             var beamId = new BeamId(new Guid("a955050e-752b-4b96-8e54-f31db9971c66"));
             beamsWarping.Add(beamId);
 
-            var sizingDocument = new DailyOperationSizingDocument(new Guid("aa940723-a563-48f1-b2e8-3f70be633950"),
-                                                                       new MachineId(machineDocument.Identity),
-                                                                       new OrderId(orderDocument.Identity),
-                                                                       beamsWarping,
-                                                                       46,
-                                                                       400,
-                                                                       "PCA 133R",
-                                                                       40,
-                                                                       4000,
-                                                                       40,
-                                                                       40,
-                                                                       DateTimeOffset.UtcNow,
-                                                                       OperationStatus.ONFINISH);
-            var sizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
-                                                                     new ShiftId(shift.Identity),
-                                                                     new OperatorId(operatorDocument.Identity),
-                                                                     DateTimeOffset.UtcNow,
-                                                                     MachineStatus.ONFINISH,
-                                                                     "-",
-                                                                     1,
-                                                                     1,
-                                                                     "S123");
-            sizingDocument.AddDailyOperationSizingHistory(sizingHistory);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(machineDocument.Identity),
+                                                                  new OrderId(orderDocument.Identity),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONFINISH);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(shift.Identity),
+                                                                new OperatorId(operatorDocument.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONFINISH,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingBeamProduct = new DailyOperationSizingBeamProduct(new Guid("bd5403f0-b2a7-4966-9e78-e1622fd7f6d3"),
-                                                                             new BeamId(beam.Identity),
-                                                                             DateTimeOffset.UtcNow,
-                                                                             0,
-                                                                             1200,
-                                                                             40,
-                                                                             56,
-                                                                             50,
-                                                                             40,
-                                                                             40,
-                                                                             BeamStatus.ROLLEDUP);
-            sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(beam.Identity),
+                                                                        120,
+                                                                        BeamStatus.ROLLEDUP,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
             mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
             mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
@@ -599,42 +582,33 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             var beamId = new BeamId(new Guid("a955050e-752b-4b96-8e54-f31db9971c66"));
             beamsWarping.Add(beamId);
 
-            var sizingDocument = new DailyOperationSizingDocument(new Guid("aa940723-a563-48f1-b2e8-3f70be633950"),
-                                                                       new MachineId(machineDocument.Identity),
-                                                                       new OrderId(orderDocument.Identity),
-                                                                       beamsWarping,
-                                                                       46,
-                                                                       400,
-                                                                       "PCA 133R",
-                                                                       40,
-                                                                       4000,
-                                                                       40,
-                                                                       40,
-                                                                       DateTimeOffset.UtcNow,
-                                                                       OperationStatus.ONFINISH);
-            var sizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
-                                                                     new ShiftId(shift.Identity),
-                                                                     new OperatorId(operatorDocument.Identity),
-                                                                     DateTimeOffset.UtcNow,
-                                                                     MachineStatus.ONENTRY,
-                                                                     "-",
-                                                                     1,
-                                                                     1,
-                                                                     "S123");
-            sizingDocument.AddDailyOperationSizingHistory(sizingHistory);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(machineDocument.Identity),
+                                                                  new OrderId(orderDocument.Identity),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONFINISH);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(shift.Identity),
+                                                                new OperatorId(operatorDocument.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONENTRY,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var sizingBeamProduct = new DailyOperationSizingBeamProduct(new Guid("bd5403f0-b2a7-4966-9e78-e1622fd7f6d3"),
-                                                                             new BeamId(beam.Identity),
-                                                                             DateTimeOffset.UtcNow,
-                                                                             0,
-                                                                             1200,
-                                                                             40,
-                                                                             56,
-                                                                             50,
-                                                                             40,
-                                                                             40,
-                                                                             BeamStatus.ROLLEDUP);
-            sizingDocument.AddDailyOperationSizingBeamProduct(sizingBeamProduct);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(beam.Identity),
+                                                                        120,
+                                                                        BeamStatus.ROLLEDUP,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
             mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
             mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
@@ -789,49 +763,40 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
             var beamId = new BeamId(new Guid("a955050e-752b-4b96-8e54-f31db9971c66"));
             beamsWarping.Add(beamId);
 
-            var firstSizingDocument = new DailyOperationSizingDocument(new Guid("aa940723-a563-48f1-b2e8-3f70be633950"),
-                                                                       new MachineId(machineDocument.Identity),
-                                                                       new OrderId(orderDocument.Identity),
-                                                                       beamsWarping,
-                                                                       46,
-                                                                       400,
-                                                                       "PCA 133R",
-                                                                       40,
-                                                                       4000,
-                                                                       40,
-                                                                       40,
-                                                                       DateTimeOffset.UtcNow,
-                                                                       OperationStatus.ONFINISH);
-            var firstSizingHistory = new DailyOperationSizingHistory(new Guid("a85d6656-dc86-40c4-a94a-477c4e1eed66"),
-                                                                     new ShiftId(shift.Identity),
-                                                                     new OperatorId(operatorDocument.Identity),
-                                                                     DateTimeOffset.UtcNow,
-                                                                     MachineStatus.ONSTOP,
-                                                                     "-",
-                                                                     1,
-                                                                     1,
-                                                                     "S123");
-            firstSizingDocument.AddDailyOperationSizingHistory(firstSizingHistory);
+            var sizingDocument = new DailyOperationSizingDocument(Guid.NewGuid(),
+                                                                  new MachineId(machineDocument.Identity),
+                                                                  new OrderId(orderDocument.Identity),
+                                                                  46,
+                                                                  400,
+                                                                  "PCA 133R",
+                                                                  2,
+                                                                  DateTimeOffset.UtcNow,
+                                                                  2,
+                                                                  OperationStatus.ONFINISH);
+            var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
+                                                                new ShiftId(shift.Identity),
+                                                                new OperatorId(operatorDocument.Identity),
+                                                                DateTimeOffset.UtcNow,
+                                                                MachineStatus.ONSTOP,
+                                                                "-",
+                                                                1,
+                                                                1,
+                                                                "S123",
+                                                                sizingDocument.Identity);
 
-            var firstSizingBeamProduct = new DailyOperationSizingBeamProduct(new Guid("bd5403f0-b2a7-4966-9e78-e1622fd7f6d3"),
-                                                                             new BeamId(beam.Identity),
-                                                                             DateTimeOffset.UtcNow,
-                                                                             0,
-                                                                             1200,
-                                                                             40,
-                                                                             56,
-                                                                             50,
-                                                                             40,
-                                                                             40,
-                                                                             BeamStatus.ROLLEDUP);
-            firstSizingDocument.AddDailyOperationSizingBeamProduct(firstSizingBeamProduct);
+            var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
+                                                                        new BeamId(beam.Identity),
+                                                                        120,
+                                                                        BeamStatus.ROLLEDUP,
+                                                                        DateTimeOffset.UtcNow,
+                                                                        sizingDocument.Identity);
 
             mockDailyOperationSizingRepo.Setup(x => x.Query).Returns(new List<DailyOperationSizingDocumentReadModel>().AsQueryable());
             mockDailyOperationSizingRepo.Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>())).Returns(
-                new List<DailyOperationSizingDocument>() { firstSizingDocument });
+                new List<DailyOperationSizingDocument>() { sizingDocument });
 
             // Act
-            var result = await unitUnderTest.GetById(firstSizingDocument.Identity);
+            var result = await unitUnderTest.GetById(sizingDocument.Identity);
 
             // Assert
             result.Should().NotBeNull();

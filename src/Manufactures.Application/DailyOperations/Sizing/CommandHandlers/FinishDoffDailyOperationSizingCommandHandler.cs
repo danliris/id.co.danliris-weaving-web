@@ -144,7 +144,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                         dateTimeOperation,
                                                         MachineStatus.ONFINISH,
                                                         "",
-                                                        lastHistory.BrokenBeam,
+                                                        lastHistory.BrokenPerShift,
                                                         lastHistory.MachineTroubled,
                                                         "",
                                                         existingSizingDocument.Identity);

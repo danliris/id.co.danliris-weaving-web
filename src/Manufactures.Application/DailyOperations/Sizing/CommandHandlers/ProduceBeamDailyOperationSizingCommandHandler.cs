@@ -146,7 +146,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                 dateTimeOperation,
                                                                 MachineStatus.ONCOMPLETE,
                                                                 "",
-                                                                lastHistory.BrokenBeam,
+                                                                lastHistory.BrokenPerShift,
                                                                 lastHistory.MachineTroubled,
                                                                 lastHistory.SizingBeamNumber,
                                                                 existingSizingDocument.Identity);

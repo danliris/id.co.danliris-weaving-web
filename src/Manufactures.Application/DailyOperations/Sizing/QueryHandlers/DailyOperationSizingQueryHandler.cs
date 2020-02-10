@@ -15,7 +15,6 @@ using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
@@ -220,7 +219,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             result.SetEmptyWeight(dailyOperationSizingDocument.EmptyWeight);
             result.SetYarnStrands(dailyOperationSizingDocument.YarnStrands);
             result.SetNeReal(dailyOperationSizingDocument.NeReal);
-
+                    
             //Add Beams Warping Used in Sizing Operation to Data Transfer Object
             //Get Beam Product of Warping That Used Same Order With Current Sizing Operation
             await Task.Yield();
@@ -329,7 +328,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                                                        operatorDocument.Group,
                                                        history.MachineStatus,
                                                        history.Information,
-                                                       history.BrokenBeam,
+                                                       history.BrokenPerShift,
                                                        history.MachineTroubled);
 
                 await Task.Yield();

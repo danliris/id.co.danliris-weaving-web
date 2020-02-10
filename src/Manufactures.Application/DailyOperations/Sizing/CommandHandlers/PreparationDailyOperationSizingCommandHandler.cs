@@ -47,10 +47,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                         .Find(o => o.OrderDocumentId.Equals(request.OrderDocumentId.Value))
                                                         .Any();
 
-            if (existingDailyOperationWarpingDocument == true)
-            {
-                throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
-            }
+            //if (existingDailyOperationWarpingDocument == true)
+            //{
+            //    throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
+            //}
 
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
@@ -70,6 +70,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                  request.RecipeCode,
                                                  request.NeReal,
                                                  dateTimeOperation,
+                                                 request.BeamProductResult,
                                                  OperationStatus.ONPROCESS);
 
             await _dailyOperationSizingDocumentRepository.Update(newSizingDocument);
@@ -95,7 +96,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     "-",
                                                     0,
                                                     0,
-                                                    " ",
+                                                    "",
                                                     newSizingDocument.Identity);
 
             await _dailyOperationSizingHistoryRepository.Update(newSizingHistory);

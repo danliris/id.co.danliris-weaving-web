@@ -40,6 +40,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
+        private readonly Mock<IServiceProvider> mockServiceProvider;
         private readonly Mock<IDailyOperationReachingRepository>
             mockDailyOperationReachingTyingRepo;
         private readonly Mock<IMachineRepository>
@@ -61,6 +62,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
+            this.mockServiceProvider = this.mockRepository.Create<IServiceProvider>();
 
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
@@ -90,7 +92,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
         private DailyOperationReachingQueryHandler CreateDailyOperationReachingTyingQueryHandler()
         {
             return new DailyOperationReachingQueryHandler(
-                this.mockStorage.Object);
+                this.mockStorage.Object, this.mockServiceProvider.Object);
         }
 
         [Fact]

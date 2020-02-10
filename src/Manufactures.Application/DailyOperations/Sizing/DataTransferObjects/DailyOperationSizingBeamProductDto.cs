@@ -22,33 +22,36 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "CounterFinish")]
         public double CounterFinish { get; }
 
+        [JsonProperty(PropertyName = "PISMeter")]
+        public double PISMeter { get; }
+
         [JsonProperty(PropertyName = "WeightNetto")]
         public double WeightNetto { get; }
 
         [JsonProperty(PropertyName = "WeightBruto")]
         public double WeightBruto { get; }
 
-        [JsonProperty(PropertyName = "PISMeter")]
-        public double PISMeter { get; }
-
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; }
+
+        [JsonProperty(PropertyName = "TotalBroken")]
+        public int TotalBroken { get; }
 
         [JsonProperty(PropertyName = "SizingBeamStatus")]
         public string SizingBeamStatus { get; }
 
-        public DailyOperationSizingBeamProductDto(DailyOperationSizingBeamProduct beamProduct,
-                                                  BeamDocument beamDocument)
+        public DailyOperationSizingBeamProductDto(DailyOperationSizingBeamProduct beamProduct, string sizingBeamNumber)
         {
             Id = beamProduct.Identity;
-            SizingBeamNumber = beamDocument.Number;
+            SizingBeamNumber = sizingBeamNumber;
             LatestDateTimeBeamProduct = beamProduct.LatestDateTimeBeamProduct;
             CounterStart = beamProduct.CounterStart;
             CounterFinish = beamProduct.CounterFinish;
+            PISMeter = beamProduct.PISMeter;
             WeightNetto = beamProduct.WeightNetto;
             WeightBruto = beamProduct.WeightBruto;
-            PISMeter = beamProduct.PISMeter;
             SPU = beamProduct.SPU;
+            TotalBroken = beamProduct.TotalBroken;
             SizingBeamStatus = beamProduct.BeamStatus;
         }
     }

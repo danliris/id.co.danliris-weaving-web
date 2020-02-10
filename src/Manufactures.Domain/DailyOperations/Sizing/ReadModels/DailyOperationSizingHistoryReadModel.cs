@@ -12,8 +12,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public DateTimeOffset DateTimeMachine { get; internal set; }
         public string MachineStatus { get; internal set; }
         public string Information { get; internal set; }
-        public int BrokenBeam { get; internal set; }
-        public int MachineTroubled { get; internal set; }
+        public int BrokenPerShift { get; internal set; }
         public string SizingBeamNumber { get; internal set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
 

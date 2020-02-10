@@ -15,6 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.ReadModels
         public double WeightTheoritical { get; internal set; }
         public double PISMeter { get; internal set; }
         public double SPU { get; internal set; }
+        public int TotalBroken { get; internal set; }
         public string BeamStatus { get; internal set; }
         public DateTimeOffset LatestDateTimeBeamProduct { get; internal set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
