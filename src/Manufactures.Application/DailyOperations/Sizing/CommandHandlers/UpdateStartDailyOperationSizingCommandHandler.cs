@@ -63,8 +63,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             //Validation for Beam Id
             var countBeamId =
-                existingSizingDocument
-                    .SizingBeamProducts
+                existingSizingBeamProduct
                     .Where(o => o.SizingBeamId.Equals(request.SizingBeamId.Value))
                     .Count();
 
@@ -74,9 +73,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             }
 
             //Validation for Beam Status
-            var countBeamStatus =
-                existingSizingDocument
-                    .SizingBeamProducts
+            var countBeamStatus = 
+                existingSizingBeamProduct
                     .Where(e => e.BeamStatus == BeamStatus.ONPROCESS)
                     .Count();
 
@@ -138,11 +136,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                 request.StartOperator,
                                                                 dateTimeOperation,
                                                                 MachineStatus.ONSTART,
-                                                                "",
-                                                                lastHistory.BrokenPerShift,
-                                                                lastHistory.MachineTroubled,
-                                                                request.SizingBeamNumber,
                                                                 existingSizingDocument.Identity);
+                        newHistory.SetSizingBeamNumber(request.SizingBeamNumber);
+
                         await _dailyOperationSizingHistoryRepository.Update(newHistory);
                         
                         _storage.Save();

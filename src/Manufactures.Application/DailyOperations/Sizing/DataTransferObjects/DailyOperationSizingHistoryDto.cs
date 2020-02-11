@@ -25,9 +25,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; }
 
-        [JsonProperty(PropertyName = "Information")]
-        public string Information { get; }
-
         [JsonProperty(PropertyName = "BrokenPerShift")]
         public int BrokenPerShift { get; }
 
@@ -36,16 +33,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
 
         public DailyOperationSizingHistoryDto(DailyOperationSizingHistory history,
                                               OperatorDocument operatorDocument,
+                                              string sizingBeamNumber,
                                               string shiftName)
         {
             Id = history.Identity;
-            SizingBeamNumber = history.SizingBeamNumber;
+            SizingBeamNumber = sizingBeamNumber;
             DateTimeMachine = history.DateTimeMachine;
             ShiftName = shiftName;
             OperatorName = operatorDocument.CoreAccount.Name;
             OperatorGroup = operatorDocument.Group;
             MachineStatus = history.MachineStatus;
-            Information = history.Information;
             BrokenPerShift = history.BrokenPerShift;
         }
     }

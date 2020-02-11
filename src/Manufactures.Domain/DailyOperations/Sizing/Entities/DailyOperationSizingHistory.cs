@@ -14,7 +14,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         public OperatorId OperatorDocumentId { get; private set; }
         public DateTimeOffset DateTimeMachine { get; private set; }
         public string MachineStatus { get; private set; }
-        public string Information { get; private set; }
         public int BrokenPerShift { get; private set; }
         public string SizingBeamNumber { get; private set; }
         public Guid DailyOperationSizingDocumentId { get; set; }
@@ -29,9 +28,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                                            OperatorId operatorDocumentId,
                                            DateTimeOffset dateTimeMachine,
                                            string machineStatus,
-                                           string information,
-                                           int brokenBeam,
-                                           string sizingBeamNumber,
                                            Guid dailyOperationSizingDocumentId) : base(identity)
         {
             Identity = identity;
@@ -39,9 +35,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             OperatorDocumentId = operatorDocumentId;
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
-            Information = information;
-            BrokenPerShift = brokenBeam;
-            SizingBeamNumber = sizingBeamNumber;
             DailyOperationSizingDocumentId = dailyOperationSizingDocumentId;
 
             MarkTransient();
@@ -52,7 +45,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                 OperatorDocumentId = OperatorDocumentId.Value,
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
-                Information = Information,
                 BrokenPerShift = BrokenPerShift,
                 SizingBeamNumber = SizingBeamNumber,
                 DailyOperationSizingDocumentId = DailyOperationSizingDocumentId
@@ -67,7 +59,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId);
             DateTimeMachine = readModel.DateTimeMachine;
             MachineStatus = readModel.MachineStatus;
-            Information = readModel.Information;
             BrokenPerShift = readModel.BrokenPerShift;
             SizingBeamNumber = readModel.SizingBeamNumber;
             DailyOperationSizingDocumentId = readModel.DailyOperationSizingDocumentId;
@@ -115,18 +106,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             {
                 MachineStatus = machineStatus;
                 ReadModel.MachineStatus = MachineStatus;
-
-                MarkModified();
-            }
-        }
-
-        public void SetInformation(string information)
-        {
-            Validator.ThrowIfNull(() => information);
-            if (information != Information)
-            {
-                Information = information;
-                ReadModel.Information = Information;
 
                 MarkModified();
             }

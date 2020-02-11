@@ -43,6 +43,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
+        private readonly Mock<IServiceProvider> mockServiceProvider;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
         private readonly Mock<IDailyOperationWarpingHistoryRepository>
@@ -70,6 +71,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
+            this.mockServiceProvider = this.mockRepository.Create<IServiceProvider>();
 
             this.mockDailyOperationWarpingRepo = this.mockRepository.Create<IDailyOperationWarpingRepository>();
             this.mockDailyOperationWarpingHistoryRepo = this.mockRepository.Create<IDailyOperationWarpingHistoryRepository>();
@@ -104,7 +106,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
         private DailyOperationWarpingQueryHandler CreateDailyOperationWarpingQueryHandler()
         {
             return new DailyOperationWarpingQueryHandler(
-                this.mockStorage.Object);
+                this.mockStorage.Object, this.mockServiceProvider.Object);
         }
 
         [Fact]

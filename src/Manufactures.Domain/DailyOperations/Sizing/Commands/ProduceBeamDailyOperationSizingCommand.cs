@@ -43,6 +43,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "ProduceBeamTime")]
         public TimeSpan ProduceBeamTime { get; set; }
 
+        [JsonProperty(PropertyName = "BrokenPerShift")]
+        public int BrokenPerShift { get; set; }
+
         public void SetId(Guid Id)
         {
             this.Id = Id;
@@ -64,6 +67,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.ProduceBeamShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.ProduceBeamDate).NotEmpty().WithMessage("Tanggal Produksi Beam Harus Diisi");
             RuleFor(validator => validator.ProduceBeamTime).NotEmpty().WithMessage("Waktu Produksi Beam Harus Diisi");
+            RuleFor(validator => validator.BrokenPerShift).NotEmpty().WithMessage("Jumlah Putus Beam Harus Diisi");
         }
     }
 }

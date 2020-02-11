@@ -34,6 +34,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             _dailyOperationSizingRepository;
         private readonly IDailyOperationSizingBeamsWarpingRepository
             _dailyOperationBeamsWarpingRepository;
+        private readonly IDailyOperationSizingBeamProductRepository
+            _dailyOperationBeamProductRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationHistoryRepository;
         private readonly IMachineRepository
             _machineRepository;
         private readonly IMachineTypeRepository
@@ -61,6 +65,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _dailyOperationBeamsWarpingRepository =
                 _storage.GetRepository<IDailyOperationSizingBeamsWarpingRepository>();
+            _dailyOperationBeamProductRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
+            _dailyOperationHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
             _machineRepository =
                 _storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =
@@ -209,7 +217,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 
             //Not complete for detail
             var result = new DailyOperationSizingByIdDto(dailyOperationSizingDocument);
-            //double totalWarpingBeamLength = 0;
             result.SetOrderProductionNumber(orderProductionNumber);
             result.SetFabricConstructionNumber(fabricConstructionNumber);
             result.SetWeavingUnit(weavingUnitName);
@@ -219,80 +226,59 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             result.SetEmptyWeight(dailyOperationSizingDocument.EmptyWeight);
             result.SetYarnStrands(dailyOperationSizingDocument.YarnStrands);
             result.SetNeReal(dailyOperationSizingDocument.NeReal);
-                    
-            //Add Beams Warping Used in Sizing Operation to Data Transfer Object
-            //Get Beam Product of Warping That Used Same Order With Current Sizing Operation
-            await Task.Yield();
-            var warpingDocument =
-                _dailyOperationWarpingRepository
-                        .Find(x => x.OrderDocumentId == dailyOperationSizingDocument.OrderDocumentId.Value);
 
-            //Get ALL BEAM PRODUCT OF WARPING That Used Same Order With Current Sizing Operation And Add to Warping Beam Data Transfer Object
-            List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
-            foreach (var warping in warpingDocument)
-            {
-                foreach (var warpingBeamProduct in warping.WarpingBeamProducts)
-                {
-                    await Task.Yield();
-                    var warpingBeamStatus = warpingBeamProduct.BeamStatus;
-                    if (warpingBeamStatus.Equals(BeamStatus.ROLLEDUP))
-                    {
-                        await Task.Yield();
-                        var warpingBeamYarnStrands = warping.AmountOfCones;
-                        var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId.Value, warpingBeamYarnStrands);
-                        warpingListBeamProducts.Add(warpingBeam);
-                    }
-                }
-            }
-
-            var sizingBeamsWarping =
+            var beamsWarpings =
                 _dailyOperationBeamsWarpingRepository
-                    .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity)
-                    .OrderByDescending(x => x.AuditTrail.CreatedDate);
-            //Get ONLY BEAM PRODUCT OF WARPING Used in The Current Sizing Operation And Add to Warping Beam Warping Used in Sizing Data Transfer Object
-            foreach (var warpingBeamProduct in warpingListBeamProducts)
-            {
-                foreach (var beamWarpingId in sizingBeamsWarping)
-                {
-                    await Task.Yield();
-                    if (warpingBeamProduct.Id == beamWarpingId.Identity)
-                    {
-                        //Get Beam Document
-                        await Task.Yield();
-                        var beamDocument =
-                            _beamRepository
-                                .Find(o => o.Identity == beamWarpingId.Identity)
-                                .FirstOrDefault();
+                    .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity);
 
-                        await Task.Yield();
-                        var warpingBeamUsedInSizing = new DailyOperationSizingBeamsWarpingDto(warpingBeamProduct, beamDocument.Number);
-                        result.AddBeamsWarping(warpingBeamUsedInSizing);
-                    }
-                }
-            }
-
-            // Add Beam Product to Data Transfer Object
-            foreach (var beamProduct in dailyOperationSizingDocument.SizingBeamProducts)
+            await Task.Yield();
+            foreach(var beamWarping in beamsWarpings)
             {
-                await Task.Yield();
-                var beam =
+                var beamDocument =
                     _beamRepository
-                        .Find(o => o.Identity.Equals(beamProduct.SizingBeamId))
+                        .Find(o => o.Identity == beamWarping.BeamDocumentId.Value)
                         .FirstOrDefault();
 
-                var beamSizing = new DailyOperationSizingBeamProductDto(beamProduct, beam);
+                await Task.Yield();
+                result.AddBeamsWarping(new DailyOperationSizingBeamsWarpingDto(beamWarping, beamDocument.Number));
+            }
+
+            var beamProducts =
+                _dailyOperationBeamProductRepository
+                    .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity);
+
+            await Task.Yield();
+            foreach(var beamProduct in beamProducts)
+            {
+                var beamDocument =
+                    _beamRepository
+                        .Find(o => o.Identity == beamProduct.SizingBeamId.Value)
+                        .FirstOrDefault();
 
                 await Task.Yield();
-                result.AddDailyOperationSizingBeamProducts(beamSizing);
+                result.AddDailyOperationSizingBeamProducts(new DailyOperationSizingBeamProductDto(beamProduct, beamDocument.Number));
             }
-            result.DailyOperationSizingBeamProducts = result.DailyOperationSizingBeamProducts
-                                                            .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct)
-                                                            .ToList();
+            result.DailyOperationSizingBeamProducts = result.DailyOperationSizingBeamProducts.OrderByDescending(o => o.LatestDateTimeBeamProduct).ToList();
 
-            //Add History to Data Transfer Object
-            foreach (var history in dailyOperationSizingDocument.SizingHistories)
+            var histories =
+                _dailyOperationHistoryRepository
+                    .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity);
+
+            await Task.Yield();
+            foreach (var history in histories)
             {
-                //Determine Sizing Beam Number
+                await Task.Yield();
+                var operatorDocument =
+                    _operatorRepository
+                        .Find(o => o.Identity == history.OperatorDocumentId.Value)
+                        .FirstOrDefault();
+
+                await Task.Yield();
+                var shiftDocument =
+                    _shiftRepository
+                        .Find(o => o.Identity == history.ShiftDocumentId.Value)
+                        .FirstOrDefault();
+
                 var sizingBeamNumber = history.SizingBeamNumber;
                 switch (history.MachineStatus)
                 {
@@ -308,33 +294,118 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 }
 
                 await Task.Yield();
-                var shiftName =
-                    _shiftRepository
-                        .Find(entity => entity.Identity == history.ShiftDocumentId.Value)
-                        .FirstOrDefault().Name ?? "Shift Not Found";
-
-                await Task.Yield();
-                var operatorDocument =
-                    _operatorRepository
-                        .Find(entity => entity.Identity == history.OperatorDocumentId.Value)
-                        .FirstOrDefault();
-
-                var dailyHistory =
-                    new DailyOperationSizingHistoryDto(history.Identity,
-                                                       sizingBeamNumber,
-                                                       history.DateTimeMachine,
-                                                       shiftName,
-                                                       operatorDocument.CoreAccount.Name,
-                                                       operatorDocument.Group,
-                                                       history.MachineStatus,
-                                                       history.Information,
-                                                       history.BrokenPerShift,
-                                                       history.MachineTroubled);
-
-                await Task.Yield();
-                result.AddDailyOperationSizingHistories(dailyHistory);
+                result.AddDailyOperationSizingHistories(new DailyOperationSizingHistoryDto(history, operatorDocument, sizingBeamNumber, shiftDocument.Name));
             }
-            result.DailyOperationSizingHistories = result.DailyOperationSizingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
+            result.DailyOperationSizingHistories = result.DailyOperationSizingHistories.OrderByDescending(o => o.DateTimeMachine).ToList();
+                    
+            ////Add Beams Warping Used in Sizing Operation to Data Transfer Object
+            ////Get Beam Product of Warping That Used Same Order With Current Sizing Operation
+            //await Task.Yield();
+            //var warpingDocument =
+            //    _dailyOperationWarpingRepository
+            //            .Find(x => x.OrderDocumentId == dailyOperationSizingDocument.OrderDocumentId.Value);
+
+            ////Get ALL BEAM PRODUCT OF WARPING That Used Same Order With Current Sizing Operation And Add to Warping Beam Data Transfer Object
+            //List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
+            //foreach (var warping in warpingDocument)
+            //{
+            //    foreach (var warpingBeamProduct in warping.WarpingBeamProducts)
+            //    {
+            //        await Task.Yield();
+            //        var warpingBeamStatus = warpingBeamProduct.BeamStatus;
+            //        if (warpingBeamStatus.Equals(BeamStatus.ROLLEDUP))
+            //        {
+            //            await Task.Yield();
+            //            var warpingBeamYarnStrands = warping.AmountOfCones;
+            //            var warpingBeam = new DailyOperationWarpingBeamDto(warpingBeamProduct.WarpingBeamId.Value, warpingBeamYarnStrands);
+            //            warpingListBeamProducts.Add(warpingBeam);
+            //        }
+            //    }
+            //}
+
+            //var sizingBeamsWarping =
+            //    _dailyOperationBeamsWarpingRepository
+            //        .Find(o => o.DailyOperationSizingDocumentId == dailyOperationSizingDocument.Identity)
+            //        .OrderByDescending(x => x.AuditTrail.CreatedDate);
+            ////Get ONLY BEAM PRODUCT OF WARPING Used in The Current Sizing Operation And Add to Warping Beam Warping Used in Sizing Data Transfer Object
+            //foreach (var warpingBeamProduct in warpingListBeamProducts)
+            //{
+            //    foreach (var beamWarpingId in sizingBeamsWarping)
+            //    {
+            //        await Task.Yield();
+            //        if (warpingBeamProduct.Id == beamWarpingId.Identity)
+            //        {
+            //            //Get Beam Document
+            //            await Task.Yield();
+            //            var beamDocument =
+            //                _beamRepository
+            //                    .Find(o => o.Identity == beamWarpingId.Identity)
+            //                    .FirstOrDefault();
+
+            //            await Task.Yield();
+            //            var warpingBeamUsedInSizing = new DailyOperationSizingBeamsWarpingDto(warpingBeamProduct, beamDocument.Number);
+            //            result.AddBeamsWarping(warpingBeamUsedInSizing);
+            //        }
+            //    }
+            //}
+
+            //// Add Beam Product to Data Transfer Object
+            //foreach (var beamProduct in dailyOperationSizingDocument.SizingBeamProducts)
+            //{
+            //    await Task.Yield();
+            //    var beam =
+            //        _beamRepository
+            //            .Find(o => o.Identity.Equals(beamProduct.SizingBeamId))
+            //            .FirstOrDefault();
+
+            //    var beamSizing = new DailyOperationSizingBeamProductDto(beamProduct, beam);
+
+            //    await Task.Yield();
+            //    result.AddDailyOperationSizingBeamProducts(beamSizing);
+            //}
+            //result.DailyOperationSizingBeamProducts = result.DailyOperationSizingBeamProducts
+            //                                                .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct)
+            //                                                .ToList();
+
+            ////Add History to Data Transfer Object
+            //foreach (var history in dailyOperationSizingDocument.SizingHistories)
+            //{
+            //    //Determine Sizing Beam Number
+            //    var sizingBeamNumber = history.SizingBeamNumber;
+            //    switch (history.MachineStatus)
+            //    {
+            //        case "ENTRY":
+            //            sizingBeamNumber = "Belum ada Beam yang Diproses";
+            //            break;
+            //        case "FINISH":
+            //            sizingBeamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
+            //            break;
+            //        default:
+            //            sizingBeamNumber = history.SizingBeamNumber;
+            //            break;
+            //    }
+
+            //    await Task.Yield();
+            //    var shiftName =
+            //        _shiftRepository
+            //            .Find(entity => entity.Identity == history.ShiftDocumentId.Value)
+            //            .FirstOrDefault().Name ?? "Shift Not Found";
+
+            //    await Task.Yield();
+            //    var operatorDocument =
+            //        _operatorRepository
+            //            .Find(entity => entity.Identity == history.OperatorDocumentId.Value)
+            //            .FirstOrDefault();
+
+            //    var dailyHistory =
+            //        new DailyOperationSizingHistoryDto(history,
+            //                                           operatorDocument,
+            //                                           shiftName);
+
+            //    await Task.Yield();
+            //    result.AddDailyOperationSizingHistories(dailyHistory);
+            //}
+            //result.DailyOperationSizingHistories = result.DailyOperationSizingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
 
             return result;
         }

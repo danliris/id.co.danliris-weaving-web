@@ -33,8 +33,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _dailyOperationSizingHistoryRepository =
                 _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
-            //_movementRepository =
-            //  _storage.GetRepository<IMovementRepository>();
             _beamRepository =
               _storage.GetRepository<IBeamRepository>();
         }
@@ -53,13 +51,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     .Find(o=>o.Identity == existingSizingDocument.Identity)
                     .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingSizingHistories.FirstOrDefault();
-
-            //Get Daily Operation Beam Product
-            //var existingDailyOperationBeamProducts =
-            //    existingDailyOperationSizingDocument
-            //            .SizingBeamProducts
-            //            .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-            //var lastBeamProduct = existingDailyOperationBeamProducts.FirstOrDefault();
 
             //Validation for Beam Status
             var countBeamStatus =
@@ -80,18 +71,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             {
                 throw Validator.ErrorValidation(("MachineStatus", "Can't Finish. This Machine's Operation is not ONCOMPLETE"));
             }
-
-            //Validation for Started Operation Status
-            //var sizingOperationStartStatus = 
-            //    existingDailyOperation
-            //    .SizingDetails
-            //    .Where(e => e.MachineStatus == MachineStatus.ONSTART)
-            //    .Count();
-
-            //if (sizingOperationStartStatus == 0)
-            //{
-            //    throw Validator.ErrorValidation(("OperationStatus", "Can't Finish. This Operation is not Started yet"));
-            //}
 
             //Validation for Finished Operation Status
             var currentOperationStatus =
@@ -143,11 +122,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                         request.FinishDoffOperator,
                                                         dateTimeOperation,
                                                         MachineStatus.ONFINISH,
-                                                        "",
-                                                        lastHistory.BrokenPerShift,
-                                                        lastHistory.MachineTroubled,
-                                                        "",
                                                         existingSizingDocument.Identity);
+                    newHistory.SetBrokenPerShift(request.BrokenPerShift);
+                    newHistory.SetSizingBeamNumber(lastHistory.SizingBeamNumber);
 
                     await _dailyOperationSizingHistoryRepository.Update(newHistory);
 

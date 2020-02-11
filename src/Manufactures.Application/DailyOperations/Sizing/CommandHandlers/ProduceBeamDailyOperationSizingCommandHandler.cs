@@ -57,14 +57,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     .OrderByDescending(o => o.DateTimeMachine);
             var lastHistory = existingSizingHistories.FirstOrDefault();
 
-            //Validation for Beam Status
-            //var currentBeamStatus = lastBeamProduct.BeamStatus;
-
-            //if (!currentBeamStatus.Equals(BeamStatus.ONPROCESS))
-            //{
-            //    throw Validator.ErrorValidation(("BeamStatus", "Can't Produce Beam. There isn't ONPROCESS Sizing Beam on this Operation"));
-            //}
-
             //Validation for Operation Status
             var currentOperationStatus =
                 existingSizingDocument.OperationStatus;
@@ -145,11 +137,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                                 request.ProduceBeamOperator,
                                                                 dateTimeOperation,
                                                                 MachineStatus.ONCOMPLETE,
-                                                                "",
-                                                                lastHistory.BrokenPerShift,
-                                                                lastHistory.MachineTroubled,
-                                                                lastHistory.SizingBeamNumber,
                                                                 existingSizingDocument.Identity);
+                        newHistory.SetBrokenPerShift(request.BrokenPerShift);
+                        newHistory.SetSizingBeamNumber(lastHistory.SizingBeamNumber);
 
                         await _dailyOperationSizingHistoryRepository.Update(newHistory);
 

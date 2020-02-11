@@ -79,10 +79,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONENTRY,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
@@ -153,10 +149,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONCOMPLETE,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),

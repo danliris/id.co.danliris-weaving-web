@@ -22,9 +22,6 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "Visco")]
         public int Visco { get; set; }
 
-        //[JsonProperty(PropertyName = "SizingDetails")]
-        //public UpdateDoffFinishDailyOperationSizingDetailCommand Details { get; set; }
-
         [JsonProperty(PropertyName = "FinishDoffDate")]
         public DateTimeOffset FinishDoffDate { get; set; }
 
@@ -36,6 +33,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
 
         [JsonProperty(PropertyName = "FinishDoffOperator")]
         public OperatorId FinishDoffOperator { get; set; }
+
+        [JsonProperty(PropertyName = "BrokenPerShift")]
+        public int BrokenPerShift { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -54,6 +54,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.FinishDoffTime).NotEmpty().WithMessage("Waktu Selesai Harus Diisi");
             RuleFor(validator => validator.FinishDoffShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.FinishDoffOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            RuleFor(validator => validator.BrokenPerShift).NotEmpty().WithMessage("Jumlah Putus Beam Harus Diisi");
         }
     }
 }

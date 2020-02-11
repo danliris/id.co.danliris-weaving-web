@@ -93,10 +93,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                     request.PreparationOperator,
                                                     dateTimeOperation,
                                                     MachineStatus.ONENTRY,
-                                                    "-",
-                                                    0,
-                                                    0,
-                                                    "",
                                                     newSizingDocument.Identity);
 
             await _dailyOperationSizingHistoryRepository.Update(newSizingHistory);

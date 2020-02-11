@@ -235,10 +235,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONFINISH,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
@@ -416,10 +412,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONFINISH,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
@@ -597,10 +589,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONENTRY,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
@@ -778,10 +766,6 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                                                                 new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTOP,
-                                                                "-",
-                                                                1,
-                                                                1,
-                                                                "S123",
                                                                 sizingDocument.Identity);
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
