@@ -43,9 +43,9 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             this.mockRepository.VerifyAll();
         }
 
-        private HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler CreateHistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler()
+        private HistoryRemoveStartOrCompletedDailyOperationSizingCommandHandler CreateHistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler()
         {
-            return new HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler(
+            return new HistoryRemoveStartOrCompletedDailyOperationSizingCommandHandler(
                 this.mockStorage.Object);
         }
 

@@ -6,6 +6,7 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.DataTransferObjects.Operator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+//using Microsoft.Extensions.DependencyInjection;
 using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
@@ -13,6 +14,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
 
 namespace Manufactures.Controllers.Api
 {
@@ -22,14 +26,34 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class OperatorController : ControllerApiBase
     {
+        //protected readonly IHttpClientService
+        //    _http;
         private readonly IOperatorRepository _OperatorRepository;
 
         public OperatorController(IServiceProvider serviceProvider,
                                   IWorkContext workContext) : base(serviceProvider)
         {
+            //_http =
+            //       serviceProvider.GetService<IHttpClientService>();
             _OperatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
         }
+
+        //protected SingleUnitResult GetUnit(int id)
+        //{
+        //    var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+        //    var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+        //    if (unitResponse.IsSuccessStatusCode)
+        //    {
+        //        SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+        //        return unitResult;
+        //    }
+        //    else
+        //    {
+        //        return new SingleUnitResult();
+        //    }
+        //}
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
@@ -48,9 +72,12 @@ namespace Manufactures.Controllers.Api
             {
                 operatorDocuments =
                     operatorDocuments
-                        .Where(entity => entity.Username
-                                               .Contains(keyword, 
-                                                         StringComparison.OrdinalIgnoreCase))
+                        .Where(o => o.Username
+                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)||
+                                    o.Group
+                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)||
+                                    o.Type
+                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase))
                         .ToList();
             }
 

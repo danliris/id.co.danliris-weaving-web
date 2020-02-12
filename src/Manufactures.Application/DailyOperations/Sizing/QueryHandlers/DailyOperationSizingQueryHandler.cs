@@ -215,6 +215,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             SingleUnitResult unitData = GetUnit(orderProductionDocument.UnitId.Value);
             var weavingUnitName = unitData.data.Name;
 
+            //Get BeamProductResult
+            await Task.Yield();
+            var beamProductResult = dailyOperationSizingDocument.BeamProductResult;
+
             //Not complete for detail
             var result = new DailyOperationSizingByIdDto(dailyOperationSizingDocument);
             result.SetOrderProductionNumber(orderProductionNumber);
@@ -226,6 +230,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             result.SetEmptyWeight(dailyOperationSizingDocument.EmptyWeight);
             result.SetYarnStrands(dailyOperationSizingDocument.YarnStrands);
             result.SetNeReal(dailyOperationSizingDocument.NeReal);
+            result.SetBeamProductResult(beamProductResult);
 
             var beamsWarpings =
                 _dailyOperationBeamsWarpingRepository
@@ -284,9 +289,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
                 {
                     case "ENTRY":
                         sizingBeamNumber = "Belum ada Beam yang Diproses";
-                        break;
-                    case "FINISH":
-                        sizingBeamNumber = "Operasi Selesai, Tidak ada Beam yang Diproses";
                         break;
                     default:
                         sizingBeamNumber = history.SizingBeamNumber;

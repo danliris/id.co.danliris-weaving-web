@@ -20,6 +20,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "NeReal")]
         public double NeReal { get; private set; }
 
+        [JsonProperty(PropertyName = "BeamProductResult")]
+        public int BeamProductResult { get; private set; }
+
         [JsonProperty(PropertyName = "DailyOperationSizingBeamsWarping")]
         public List<DailyOperationSizingBeamsWarpingDto> DailyOperationSizingBeamsWarping { get; set; }
 
@@ -55,6 +58,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         public void SetNeReal(double neReal)
         {
             NeReal = neReal;
+        }
+
+        public void SetBeamProductResult(int beamProductResult)
+        {
+            BeamProductResult = beamProductResult;
         }
 
         public void AddBeamsWarping(DailyOperationSizingBeamsWarpingDto beamsWarping)

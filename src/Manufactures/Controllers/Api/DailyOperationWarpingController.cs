@@ -420,7 +420,7 @@ namespace Manufactures.Controllers.Api
 
         //Finish Warping Daily Operation Request
         [HttpPut("{Id}/completed-process")]
-        public async Task<IActionResult> Finish(string Id, [FromBody]CompletedDailyOperationWarpingCommand command)
+        public async Task<IActionResult> Finish(string Id, [FromBody]FinishDailyOperationWarpingCommand command)
         {
             VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))

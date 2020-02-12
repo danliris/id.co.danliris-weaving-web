@@ -15,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 {
-    public class CompletedDailyOperationWarpingCommandHandler
-        : ICommandHandler<CompletedDailyOperationWarpingCommand, DailyOperationWarpingDocument>
+    public class FinishDailyOperationWarpingCommandHandler
+        : ICommandHandler<FinishDailyOperationWarpingCommand, DailyOperationWarpingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationWarpingRepository
@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
         private readonly IDailyOperationWarpingBrokenCauseRepository
             _dailyOperationWarpingBrokenCauseRepository;
 
-        public CompletedDailyOperationWarpingCommandHandler(IStorage storage)
+        public FinishDailyOperationWarpingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationWarpingRepository =
@@ -41,27 +41,28 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 _storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
         }
 
-        public async Task<DailyOperationWarpingDocument> Handle(CompletedDailyOperationWarpingCommand request, CancellationToken cancellationToken)
+        public async Task<DailyOperationWarpingDocument> Handle(FinishDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Warping
-            var existingDailyOperationWarpingDocument =
+            var existingWarpingDocument =
                 _dailyOperationWarpingRepository
                     .Find(x => x.Identity == request.Id)
                     .FirstOrDefault();
 
             //Get Daily Operation History
-            var existingDailyOperationWarpingHistories =
+            var existingWarpingHistories =
                 _dailyOperationWarpingHistoryRepository
                     .Query
-                    .Where(h => h.DailyOperationWarpingDocumentId.Equals(existingDailyOperationWarpingDocument.Identity))
+                    .Where(h => h.DailyOperationWarpingDocumentId.Equals(existingWarpingDocument.Identity))
                     .OrderByDescending(detail => detail.DateTimeMachine);
-            var lastWarpingHistory = existingDailyOperationWarpingHistories.FirstOrDefault();
+            var lastWarpingHistory = existingWarpingHistories.FirstOrDefault();
 
             //Get Daily Operation Beam Product
             
             var lastWarpingBeamProduct = _dailyOperationWarpingBeamProductRepository
-                .Find(x => x.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
-                .OrderByDescending(x => x.LatestDateTimeBeamProduct).FirstOrDefault();
+                .Find(x => x.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                .OrderByDescending(x => x.LatestDateTimeBeamProduct)
+                .FirstOrDefault();
 
             //Reformat DateTime
             var year = request.ProduceBeamsDate.Year;
@@ -91,16 +92,16 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 {
                     if (lastWarpingHistory.MachineStatus != MachineStatus.ONENTRY)
                     {
-                        existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
+                        existingWarpingDocument.SetDateTimeOperation(warpingDateTime);
                         if (request.IsFinishFlag == true)
                         {
-                            existingDailyOperationWarpingDocument.SetOperationStatus(OperationStatus.ONFINISH);
+                            existingWarpingDocument.SetOperationStatus(OperationStatus.ONFINISH);
                         }
                         else
                         {
-                            existingDailyOperationWarpingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+                            existingWarpingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
                         }
-                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
+                        await _dailyOperationWarpingRepository.Update(existingWarpingDocument);
 
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
@@ -108,7 +109,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           new OperatorId(request.ProduceBeamsOperator.Value),
                                                                           warpingDateTime,
                                                                           MachineStatus.ONCOMPLETE,
-                                                                          existingDailyOperationWarpingDocument.Identity);
+                                                                          existingWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
@@ -136,10 +137,10 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                             await _dailyOperationWarpingBrokenCauseRepository.Update(newBrokenCause);
                         }
 
-                        await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
+                        await _dailyOperationWarpingRepository.Update(existingWarpingDocument);
                         _storage.Save();
 
-                        return existingDailyOperationWarpingDocument;
+                        return existingWarpingDocument;
                     }
                     else
                     {

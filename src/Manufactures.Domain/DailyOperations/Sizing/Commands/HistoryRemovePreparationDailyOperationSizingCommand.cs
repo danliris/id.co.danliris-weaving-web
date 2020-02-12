@@ -1,4 +1,5 @@
-﻿using Infrastructure.Domain.Commands;
+﻿using FluentValidation;
+using Infrastructure.Domain.Commands;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,15 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public void SetHistoryId(Guid historyId)
         {
             this.HistoryId = historyId;
+        }
+    }
+
+    public class HistoryRemovePreparationDailyOperationSizingCommandValidator : AbstractValidator<HistoryRemovePreparationDailyOperationSizingCommand>
+    {
+        public HistoryRemovePreparationDailyOperationSizingCommandValidator()
+        {
+            RuleFor(validator => validator.Id).NotEmpty().WithMessage("Id Operasi Sizing Tidak Boleh Kosong");
+            RuleFor(validator => validator.HistoryId).NotEmpty().WithMessage("Id History Tidak Boleh Kosong");
         }
     }
 }

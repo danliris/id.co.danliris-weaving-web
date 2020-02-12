@@ -3,6 +3,7 @@ using DanLiris.Admin.Web.Utils;
 using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
+using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.FabricConstructions.Commands;
@@ -40,8 +41,17 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateStartDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<ProduceBeamsDailyOperationWarpingCommandValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<CompletedDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<FinishDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<WarpingBrokenThreadsCausesCommandValidator>();
+
+                fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationSizingBeamsWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateStartDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<ProduceBeamDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<FinishDoffDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandValidator>();
+
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
         }

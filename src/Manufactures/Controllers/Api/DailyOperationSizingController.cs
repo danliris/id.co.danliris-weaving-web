@@ -376,34 +376,34 @@ namespace Manufactures.Controllers.Api
             return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}/pause")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdatePauseDailyOperationSizingCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/pause")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdatePauseDailyOperationSizingCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updatePauseDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updatePauseDailyOperationSizingDocument.Identity);
+        //}
 
-        [HttpPut("{Id}/resume")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateResumeDailyOperationSizingCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/resume")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdateResumeDailyOperationSizingCommand command)
+        //{
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateResumeDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updateResumeDailyOperationSizingDocument.Identity);
+        //}
 
         [HttpPut("{Id}/produce-beams")]
         public async Task<IActionResult> Put(string Id,
@@ -417,33 +417,33 @@ namespace Manufactures.Controllers.Api
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
-            //Get Daily Operation Document Sizing
-            var existingSizingDocument =
-                _dailyOperationSizingRepository
-                    .Find(o=>o.Identity == command.Id)
-                    .FirstOrDefault();
+            ////Get Daily Operation Document Sizing
+            //var existingSizingDocument =
+            //    _dailyOperationSizingRepository
+            //        .Find(o=>o.Identity == command.Id)
+            //        .FirstOrDefault();
 
-            //Get Daily Operation Beam Product
-            var lastSizingBeamProduct =
-                _dailyOperationSizingBeamProductRepository
-                    .Find(o => o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
-                    .OrderByDescending(x => x.LatestDateTimeBeamProduct)
-                    .FirstOrDefault();
+            ////Get Daily Operation Beam Product
+            //var lastSizingBeamProduct =
+            //    _dailyOperationSizingBeamProductRepository
+            //        .Find(o => o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+            //        .OrderByDescending(x => x.LatestDateTimeBeamProduct)
+            //        .FirstOrDefault();
 
-            var counterStart = lastSizingBeamProduct.CounterStart;
-            var counterFinish = lastSizingBeamProduct.CounterFinish;
-            var sizingLengthStock = counterFinish - counterStart;
+            //var counterStart = lastSizingBeamProduct.CounterStart;
+            //var counterFinish = lastSizingBeamProduct.CounterFinish;
+            //var sizingLengthStock = counterFinish - counterStart;
 
-            //Instantiate Beam Stock Command for Sizing
-            var sizingStock = new BeamStockMonitoringCommand
-            {
-                BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId.Value),
-                EntryDate = command.ProduceBeamDate,
-                EntryTime = command.ProduceBeamTime,
-                OrderDocumentId = existingSizingDocument.OrderDocumentId,
-                LengthStock = sizingLengthStock
-            };
-            var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
+            ////Instantiate Beam Stock Command for Sizing
+            //var sizingStock = new BeamStockMonitoringCommand
+            //{
+            //    BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId.Value),
+            //    EntryDate = command.ProduceBeamDate,
+            //    EntryTime = command.ProduceBeamTime,
+            //    OrderDocumentId = existingSizingDocument.OrderDocumentId,
+            //    LengthStock = sizingLengthStock
+            //};
+            //var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
@@ -487,22 +487,22 @@ namespace Manufactures.Controllers.Api
             return Ok(dailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{operationId}/{historyId}/{status}")]
-        public async Task<IActionResult> Put(string operationId,
-                                             string historyId,
-                                             string status,
-                                             [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(operationId, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{operationId}/{historyId}/{status}")]
+        //public async Task<IActionResult> Put(string operationId,
+        //                                     string historyId,
+        //                                     string status,
+        //                                     [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(operationId, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument.Identity);
+        //}
 
         [HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
         public async Task<IActionResult> Put(string operationId,

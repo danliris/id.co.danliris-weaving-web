@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.Abstractions;
 using Infrastructure.Domain.Commands;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
@@ -13,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 {
-    public class HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand, DailyOperationSizingDocument>
+    public class HistoryRemoveStartOrCompletedDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
         private readonly IDailyOperationSizingDocumentRepository
@@ -25,7 +26,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         private readonly IBeamRepository
             _beamRepository;
 
-        public HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandHandler(IStorage storage)
+        public HistoryRemoveStartOrCompletedDailyOperationSizingCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
@@ -53,14 +54,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                 //Get Daily Operation History
                 var existingSizingHistories =
                     _dailyOperationSizingHistoryRepository
-                        .Find(o=>o.Identity == existingSizingDocument.Identity)
+                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
                         .OrderByDescending(o => o.DateTimeMachine);
                 var lastHistory = existingSizingHistories.FirstOrDefault();
+                var lastSecondHistory = existingSizingHistories.ElementAt(1);
 
                 //Get Daily Operation Beam Product
                 var existingSizingBeamProducts =
                     _dailyOperationSizingBeamProductRepository
-                        .Find(o=>o.Identity == existingSizingDocument.Identity)
+                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
                         .OrderByDescending(o => o.LatestDateTimeBeamProduct);
                 var lastBeamProduct = existingSizingBeamProducts.FirstOrDefault();
 
@@ -70,6 +72,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         if (lastHistory.Identity.Equals(request.HistoryId))
                         {
                             lastHistory.Remove();
+
+                            await _dailyOperationSizingHistoryRepository.Update(lastHistory);
                         }
                         else
                         {
@@ -79,16 +83,22 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         if (lastBeamProduct.Identity.Equals(request.BeamProductId))
                         {
                             lastBeamProduct.Remove();
+
+                            await _dailyOperationSizingBeamProductRepository.Update(lastBeamProduct);
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
+                            throw Validator.ErrorValidation(("SizingBeamProduct", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
                         }
                         break;
                     case "COMPLETED":
+                        existingSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
+
                         if (lastHistory.Identity.Equals(request.HistoryId))
                         {
                             lastHistory.Remove();
+
+                            await _dailyOperationSizingHistoryRepository.Update(lastHistory);
                         }
                         else
                         {
@@ -103,13 +113,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                             lastBeamProduct.SetWeightTheoritical(0);
                             lastBeamProduct.SetPISMeter(0);
                             lastBeamProduct.SetSPU(0);
-                            lastBeamProduct.SetSizingBeamStatus(Helpers.BeamStatus.ONPROCESS);
+                            lastBeamProduct.SetTotalBroken(0);
+                            lastBeamProduct.SetSizingBeamStatus(BeamStatus.ONPROCESS);
+                            lastBeamProduct.SetLatestDateTimeBeamProduct(lastSecondHistory.DateTimeMachine);
 
                             await _dailyOperationSizingBeamProductRepository.Update(lastBeamProduct);
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
+                            throw Validator.ErrorValidation(("SizingBeamProduct", "Tidak ada Id Produk Beam yang Cocok dengan " + request.BeamProductId));
                         }
                         break;
                 }
