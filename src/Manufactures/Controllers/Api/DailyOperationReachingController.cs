@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects.DailyOperationReachingReport;
-using Manufactures.Application.Operators.DTOs;
+using Manufactures.Application.Operators.DataTransferObjects;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching.Command;

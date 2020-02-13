@@ -34,7 +34,7 @@ using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
-using Manufactures.Application.Operators.DTOs;
+using Manufactures.Application.Operators.DataTransferObjects;
 using Manufactures.Application.Operators.QueryHandlers;
 using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
 using Manufactures.Application.Orders.QueryHandlers.OrderReport;

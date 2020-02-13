@@ -2,7 +2,7 @@
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
 using Manufactures.Application.Helpers;
-using Manufactures.Application.Operators.DTOs;
+using Manufactures.Application.Operators.DataTransferObjects;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
@@ -16,7 +16,6 @@ using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using Newtonsoft.Json;
 using System;

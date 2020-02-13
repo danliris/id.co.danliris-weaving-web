@@ -112,10 +112,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow,
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
@@ -191,10 +191,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow,
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
@@ -270,10 +270,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow,
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
@@ -349,10 +349,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow.AddDays(-1),
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
@@ -428,10 +428,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow,
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
@@ -507,10 +507,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                     MachineSpeed = 1200,
                     TexSQ = 1160,
                     Visco = 40,
-                    FinishDoffDate = DateTimeOffset.UtcNow.AddDays(1),
-                    FinishDoffTime = TimeSpan.Parse("01:00"),
-                    FinishDoffShift = new ShiftId(Guid.NewGuid()),
-                    FinishDoffOperator = new OperatorId(Guid.NewGuid()),
+                    ProduceBeamDate = DateTimeOffset.UtcNow,
+                    ProduceBeamTime = TimeSpan.Parse("01:00"),
+                    ProduceBeamShift = new ShiftId(Guid.NewGuid()),
+                    ProduceBeamOperator = new OperatorId(Guid.NewGuid())
                 };
 
             //Setup Mock Object for Sizing Repo
