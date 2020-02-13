@@ -184,16 +184,16 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingBeamProduct>(etb =>
+            modelBuilder.Entity<DailyOperationSizingBeamsWarpingReadModel>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationSizingBeamProducts");
+                etb.ToTable("Weaving_DailyOperationSizingBeamsWarping");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingHistory>(etb =>
+            modelBuilder.Entity<DailyOperationSizingHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationSizingHistories");
                 etb.HasKey(e => e.Identity);
@@ -202,18 +202,19 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationSizingReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationSizingBeamProductReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_DailyOperationSizingBeamProducts");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationSizingDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationSizingDocuments");
                 etb.HasKey(e => e.Identity);
-
-                etb.HasMany(e => e.SizingBeamProducts)
-                    .WithOne(e => e.DailyOperationSizingDocument)
-                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
-
-                etb.HasMany(e => e.SizingHistories)
-                    .WithOne(e => e.DailyOperationSizingDocument)
-                    .HasForeignKey(e => e.DailyOperationSizingDocumentId);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();

@@ -17,8 +17,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class PreparationDailyOperationSizingCommandHandler : ICommandHandler<PreparationDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
+        private readonly IDailyOperationSizingBeamsWarpingRepository
+            _dailyOperationSizingBeamsWarpingRepository;
         private readonly IMovementRepository
             _movementRepository;
 
@@ -26,7 +30,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
         {
             _storage = storage;
             _dailyOperationSizingDocumentRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
+            _dailyOperationSizingBeamsWarpingRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamsWarpingRepository>();
             _movementRepository =
                _storage.GetRepository<IMovementRepository>();
         }
@@ -39,10 +47,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                                                         .Find(o => o.OrderDocumentId.Equals(request.OrderDocumentId.Value))
                                                         .Any();
 
-            if (existingDailyOperationWarpingDocument == true)
-            {
-                throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
-            }
+            //if (existingDailyOperationWarpingDocument == true)
+            //{
+            //    throw Validator.ErrorValidation(("OrderDocument", "No. Produksi Sudah Digunakan"));
+            //}
 
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
@@ -53,39 +61,45 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             var dateTimeOperation =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            var dailyOperationSizingDocument =
+            var newSizingDocument =
                 new DailyOperationSizingDocument(Guid.NewGuid(),
-                                                    request.MachineDocumentId,
-                                                    request.OrderDocumentId,
-                                                    request.BeamsWarping, 
-                                                    request.EmptyWeight,
-                                                    request.YarnStrands,
-                                                    request.RecipeCode,
-                                                    request.NeReal,
-                                                    0,
-                                                    0,
-                                                    0,
-                                                    dateTimeOperation,
-                                                    OperationStatus.ONPROCESS);
+                                                 request.MachineDocumentId,
+                                                 request.OrderDocumentId,
+                                                 request.EmptyWeight,
+                                                 request.YarnStrands,
+                                                 request.RecipeCode,
+                                                 request.NeReal,
+                                                 dateTimeOperation,
+                                                 request.BeamProductResult,
+                                                 OperationStatus.ONPROCESS);
 
-            var newOperationHistory =
+            await _dailyOperationSizingDocumentRepository.Update(newSizingDocument);
+
+            foreach (var beamWarping in request.BeamsWarping)
+            {
+                var newBeamWarping =
+                    new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
+                                                         beamWarping.BeamDocumentId,
+                                                         beamWarping.YarnStrands,
+                                                         beamWarping.EmptyWeight,
+                                                         newSizingDocument.Identity);
+
+                await _dailyOperationSizingBeamsWarpingRepository.Update(newBeamWarping);
+            }
+
+            var newSizingHistory =
                     new DailyOperationSizingHistory(Guid.NewGuid(),
-                                                   request.PreparationShift,
-                                                   request.PreparationOperator,
-                                                   dateTimeOperation,
-                                                   MachineStatus.ONENTRY,
-                                                   "-",
-                                                   0,
-                                                   0,
-                                                   " ");
+                                                    request.PreparationShift,
+                                                    request.PreparationOperator,
+                                                    dateTimeOperation,
+                                                    MachineStatus.ONENTRY,
+                                                    newSizingDocument.Identity);
 
-            dailyOperationSizingDocument.AddDailyOperationSizingHistory(newOperationHistory);
-
-            await _dailyOperationSizingDocumentRepository.Update(dailyOperationSizingDocument);
+            await _dailyOperationSizingHistoryRepository.Update(newSizingHistory);
 
             _storage.Save();
 
-            return dailyOperationSizingDocument;
+            return newSizingDocument;
         }
     }
 }

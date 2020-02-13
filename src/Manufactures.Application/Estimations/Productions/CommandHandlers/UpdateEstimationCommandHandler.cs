@@ -54,12 +54,17 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
             //var updatedDetails = request.EstimatedDetails.Where(o => estimationDetails.Any(d => d.Identity == o.Identity));
             foreach (var updatedDetail in request.EstimatedDetails)
             {
+                var gradeALimit = Math.Round(updatedDetail.GradeA, 4);
+                var gradeBLimit = Math.Round(updatedDetail.GradeB, 4);
+                var gradeCLimit = Math.Round(updatedDetail.GradeC, 4);
+                var gradeDLimit = Math.Round(updatedDetail.GradeD, 4);
+
                 var dbDetail = estimationDetails.Find(o => o.Identity == updatedDetail.Id);
                 
-                dbDetail.SetGradeA(updatedDetail.GradeA);
-                dbDetail.SetGradeB(updatedDetail.GradeB);
-                dbDetail.SetGradeC(updatedDetail.GradeC);
-                dbDetail.SetGradeD(updatedDetail.GradeD);
+                dbDetail.SetGradeA(gradeALimit);
+                dbDetail.SetGradeB(gradeBLimit);
+                dbDetail.SetGradeC(gradeCLimit);
+                dbDetail.SetGradeD(gradeDLimit);
 
                 dbDetail.SetModified();
 

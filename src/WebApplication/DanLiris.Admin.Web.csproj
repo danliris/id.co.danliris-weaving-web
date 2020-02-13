@@ -76,6 +76,8 @@
     <Compile Remove="Migrations\20191204093945_AddCutmarkAndCutmarkUomOnMachines.Designer.cs" />
     <Compile Remove="Migrations\20191217041512_AddWarpingBrokenCauseModule.cs" />
     <Compile Remove="Migrations\20191217041512_AddWarpingBrokenCauseModule.Designer.cs" />
+    <Compile Remove="Migrations\20200210075230_AddBeamProductResultsOnSizing.cs" />
+    <Compile Remove="Migrations\20200210075230_AddBeamProductResultsOnSizing.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

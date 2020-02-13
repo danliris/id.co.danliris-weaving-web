@@ -36,8 +36,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         }
     }
 
-    public class ProduceBeamsDailyOperationWarpingCommandValidator
-        : AbstractValidator<ProduceBeamsDailyOperationWarpingCommand>
+    public class ProduceBeamsDailyOperationWarpingCommandValidator : AbstractValidator<ProduceBeamsDailyOperationWarpingCommand>
     {
         public ProduceBeamsDailyOperationWarpingCommandValidator()
         {

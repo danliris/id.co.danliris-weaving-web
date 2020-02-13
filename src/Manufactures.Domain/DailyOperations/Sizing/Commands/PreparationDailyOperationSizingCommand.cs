@@ -33,6 +33,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "PreparationShift")]
         public ShiftId PreparationShift { get; set; }
 
+        [JsonProperty(PropertyName = "BeamProductResult")]
+        public int BeamProductResult { get; set; }
+
         [JsonProperty(PropertyName = "YarnStrands")]
         public double YarnStrands { get; set; }
 
@@ -40,7 +43,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         public double EmptyWeight { get; set; }
 
         [JsonProperty(PropertyName = "BeamsWarping")]
-        public List<BeamId> BeamsWarping { get; set; }
+        public List<PreparationDailyOperationSizingBeamsWarpingCommand> BeamsWarping { get; set; }
     }
 
     public class PreparationDailyOperationSizingCommandValidator : AbstractValidator<PreparationDailyOperationSizingCommand>
@@ -55,9 +58,10 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
             RuleFor(validator => validator.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
             RuleFor(validator => validator.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");
+            RuleFor(validator => validator.BeamProductResult).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.YarnStrands).NotEmpty().WithMessage("Helai Benang Beam Warping Tidak Boleh 0");
             RuleFor(validator => validator.EmptyWeight).NotEmpty().WithMessage("Berat Kosong Beam Warping Tidak Boleh 0");
-            RuleFor(validator => validator.BeamsWarping).NotEmpty();
+            RuleFor(validator => validator.BeamsWarping).NotEmpty().WithMessage("Beam Warping Tidak Boleh Kosong");
         }
     }
 }

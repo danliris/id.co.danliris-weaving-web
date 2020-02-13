@@ -1,4 +1,5 @@
 ﻿using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
+using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,16 +7,22 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
 {
-    public class DailyOperationSizingBeamsWarpingDto : DailyOperationWarpingBeamDto
+    public class DailyOperationSizingBeamsWarpingDto
     {
+        [JsonProperty(PropertyName = "Id")]
+        public Guid Id { get; set; }
+
         [JsonProperty(PropertyName = "WarpingBeamNumber")]
         public string WarpingBeamNumber { get; set; }
 
-        public DailyOperationSizingBeamsWarpingDto(DailyOperationWarpingBeamDto warpingBeamDto, string warpingBeamNumber) : base(warpingBeamDto)
+        [JsonProperty(PropertyName = "WarpingYarnStrands")]
+        public double WarpingYarnStrands { get; set; }
+
+        public DailyOperationSizingBeamsWarpingDto(DailyOperationSizingBeamsWarping beamsWarping, string warpingBeamNumber)
         {
-            Id = warpingBeamDto.Id;
-            WarpingBeamConeAmount = warpingBeamDto.WarpingBeamConeAmount;
+            Id = beamsWarping.Identity;
             WarpingBeamNumber = warpingBeamNumber;
+            WarpingYarnStrands = beamsWarping.YarnStrands;
         }
     }
 }

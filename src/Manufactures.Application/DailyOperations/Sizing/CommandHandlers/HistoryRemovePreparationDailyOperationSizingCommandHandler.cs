@@ -15,13 +15,19 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
     public class HistoryRemovePreparationDailyOperationSizingCommandHandler : ICommandHandler<HistoryRemovePreparationDailyOperationSizingCommand, DailyOperationSizingDocument>
     {
         private readonly IStorage _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingDocumentRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
 
         public HistoryRemovePreparationDailyOperationSizingCommandHandler(IStorage storage)
         {
-            _storage = storage;
-            _dailyOperationSizingDocumentRepository = _storage.GetRepository<IDailyOperationSizingRepository>();
+            _storage = 
+                storage;
+            _dailyOperationSizingDocumentRepository = 
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
         }
 
         public async Task<DailyOperationSizingDocument> Handle(HistoryRemovePreparationDailyOperationSizingCommand request, CancellationToken cancellationToken)
@@ -29,40 +35,34 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             try
             {
                 //Get Daily Operation Document Sizing
-                var sizingQuery =
-                _dailyOperationSizingDocumentRepository
-                        .Query
-                        .Include(d => d.SizingHistories)
-                        .Include(b => b.SizingBeamProducts)
-                        .Where(doc => doc.Identity.Equals(request.Id));
-                var existingDailyOperationSizingDocument =
+                var existingSizingDocument =
                     _dailyOperationSizingDocumentRepository
-                            .Find(sizingQuery)
+                            .Find(o=>o.Identity == request.Id)
                             .FirstOrDefault();
 
-                if (existingDailyOperationSizingDocument == null)
+                if (existingSizingDocument == null)
                 {
                     throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
                 }
                 
                 //Get Daily Operation History
-                var existingDailyOperationSizingHistories =
-                    existingDailyOperationSizingDocument
-                            .SizingHistories
-                            .OrderByDescending(o => o.DateTimeMachine);
+                var existingSizingHistories =
+                    _dailyOperationSizingHistoryRepository
+                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                        .OrderByDescending(o => o.DateTimeMachine);
                 var lastHistory =
-                    existingDailyOperationSizingHistories
+                    existingSizingHistories
                         .Where(o => o.Identity.Equals(request.HistoryId))
                         .FirstOrDefault();
                 lastHistory.Remove();
 
-                existingDailyOperationSizingDocument.Remove();
+                existingSizingDocument.Remove();
 
-                await _dailyOperationSizingDocumentRepository.Update(existingDailyOperationSizingDocument);
+                await _dailyOperationSizingDocumentRepository.Update(existingSizingDocument);
 
                 _storage.Save();
 
-                return existingDailyOperationSizingDocument;
+                return existingSizingDocument;
             }
             catch (FileNotFoundException e)
             {

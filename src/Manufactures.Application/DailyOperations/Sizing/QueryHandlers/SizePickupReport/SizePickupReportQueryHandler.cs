@@ -25,8 +25,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
         //    _http;
         private readonly IStorage
             _storage;
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
+        private readonly IDailyOperationSizingBeamProductRepository
+            _dailyOperationSizingBeamProductRepository;
         private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
@@ -38,14 +42,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
         private readonly IShiftRepository
             _shiftRepository;
 
-        public SizePickupReportQueryHandler(IStorage storage, IServiceProvider serviceProvider)
+        public SizePickupReportQueryHandler(IStorage storage)
         {
             //_http =
             //    serviceProvider.GetService<IHttpClientService>();
             _storage =
                 storage;
             _dailyOperationSizingRepository =
-                _storage.GetRepository<IDailyOperationSizingRepository>();
+                _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingHistoryRepository =
+                _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
+            _dailyOperationSizingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
             _weavingOrderDocumentRepository =
                 _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
@@ -73,30 +81,24 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             {
                 //Add Shell (result) for Daily Operation Sizing Report Dto
                 var result = new List<SizePickupReportListDto>();
-
-                //Query for Daily Operation Sizing
-                var dailyOperationSizingQuery =
-                    _dailyOperationSizingRepository
-                        .Query
-                        .Include(o => o.SizingBeamProducts)
-                        .Include(o => o.SizingHistories)
-                        .Where(o => o.OperationStatus.Equals(OperationStatus.ONFINISH))
-                        .AsQueryable();
-
+                
                 //Get Daily Operation Sizing Data from Daily Operation Sizing Repo
-                var dailyOperationSizingDocuments =
+                var sizingDocuments =
                     _dailyOperationSizingRepository
-                        .Find(dailyOperationSizingQuery.OrderByDescending(x => x.CreatedDate));
+                        .Find(o=>o.OperationStatus == OperationStatus.ONFINISH)
+                        .OrderByDescending(x => x.AuditTrail.CreatedDate);
 
-                foreach (var sizingDocument in dailyOperationSizingDocuments)
+                foreach (var sizingDocument in sizingDocuments)
                 {
                     //Get Beam Product
-                    var sizingBeamProducts = sizingDocument.SizingBeamProducts.Where(o => o.BeamStatus.Equals(BeamStatus.ROLLEDUP)).OrderByDescending(x => x.CreatedDate);
+                    var sizingBeamProducts = 
+                        _dailyOperationSizingBeamProductRepository
+                            .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.BeamStatus == BeamStatus.ROLLEDUP)
+                            .OrderByDescending(x => x.AuditTrail.CreatedDate);
                     foreach (var beamProduct in sizingBeamProducts)
                     {
                         //Get Order Production Number
                         await Task.Yield();
-                        var orderDocumentId = sizingDocument.OrderDocumentId.Value;
                         var orderDocumentQuery =
                             _weavingOrderDocumentRepository
                                 .Query
@@ -105,7 +107,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var orderDocuments =
                             _weavingOrderDocumentRepository
                                 .Find(orderDocumentQuery)
-                                .Where(o => o.Identity.Equals(orderDocumentId));
+                                .Where(o => o.Identity.Equals(sizingDocument.OrderDocumentId.Value));
 
                         //Instantiate New Value if Unit Id not 0
                         if (unitId != 0)
@@ -163,7 +165,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .Identity;
 
                         //Get Histories
-                        var sizingHistories = sizingDocument.SizingHistories.Where(o => o.MachineStatus.Equals(MachineStatus.ONFINISH)).OrderByDescending(x => x.CreatedDate).AsQueryable();
+                        var sizingHistories = 
+                            _dailyOperationSizingHistoryRepository
+                                .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.MachineStatus == MachineStatus.ONFINISH)
+                                .OrderByDescending(x => x.AuditTrail.CreatedDate)
+                                .AsQueryable();
 
                         if (shiftIdHistory != null)
                         {
@@ -247,7 +253,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .Number;
 
                         var sizePickupReport = new SizePickupReportListDto();
-                        var spuBeamProduct = beamProduct.SPU ?? 0;
+                        var spuBeamProduct = beamProduct.SPU;
 
                         switch (filteredConstructionNumber)
                         {
@@ -261,11 +267,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    operatorName,
                                                                                    sizingOperatorGroup,
                                                                                    latestDateTimeHistory,
-                                                                                   beamProduct.CounterStart ?? 0,
-                                                                                   beamProduct.CounterFinish ?? 0,
-                                                                                   beamProduct.WeightNetto ?? 0,
-                                                                                   beamProduct.WeightBruto ?? 0,
-                                                                                   beamProduct.PISMeter ?? 0,
+                                                                                   beamProduct.CounterStart,
+                                                                                   beamProduct.CounterFinish,
+                                                                                   beamProduct.WeightNetto,
+                                                                                   beamProduct.WeightBruto,
+                                                                                   beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber);
 
@@ -283,11 +289,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    operatorName,
                                                                                    sizingOperatorGroup,
                                                                                    latestDateTimeHistory,
-                                                                                   beamProduct.CounterStart ?? 0,
-                                                                                   beamProduct.CounterFinish ?? 0,
-                                                                                   beamProduct.WeightNetto ?? 0,
-                                                                                   beamProduct.WeightBruto ?? 0,
-                                                                                   beamProduct.PISMeter ?? 0,
+                                                                                   beamProduct.CounterStart,
+                                                                                   beamProduct.CounterFinish,
+                                                                                   beamProduct.WeightNetto,
+                                                                                   beamProduct.WeightBruto,
+                                                                                   beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber);
 
@@ -305,11 +311,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    operatorName,
                                                                                    sizingOperatorGroup,
                                                                                    latestDateTimeHistory,
-                                                                                   beamProduct.CounterStart ?? 0,
-                                                                                   beamProduct.CounterFinish ?? 0,
-                                                                                   beamProduct.WeightNetto ?? 0,
-                                                                                   beamProduct.WeightBruto ?? 0,
-                                                                                   beamProduct.PISMeter ?? 0,
+                                                                                   beamProduct.CounterStart,
+                                                                                   beamProduct.CounterFinish,
+                                                                                   beamProduct.WeightNetto,
+                                                                                   beamProduct.WeightBruto,
+                                                                                   beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber);
 
@@ -327,11 +333,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    operatorName,
                                                                                    sizingOperatorGroup,
                                                                                    latestDateTimeHistory,
-                                                                                   beamProduct.CounterStart ?? 0,
-                                                                                   beamProduct.CounterFinish ?? 0,
-                                                                                   beamProduct.WeightNetto ?? 0,
-                                                                                   beamProduct.WeightBruto ?? 0,
-                                                                                   beamProduct.PISMeter ?? 0,
+                                                                                   beamProduct.CounterStart,
+                                                                                   beamProduct.CounterFinish,
+                                                                                   beamProduct.WeightNetto,
+                                                                                   beamProduct.WeightBruto,
+                                                                                   beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber);
 
@@ -349,11 +355,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    operatorName,
                                                                                    sizingOperatorGroup,
                                                                                    latestDateTimeHistory,
-                                                                                   beamProduct.CounterStart ?? 0,
-                                                                                   beamProduct.CounterFinish ?? 0,
-                                                                                   beamProduct.WeightNetto ?? 0,
-                                                                                   beamProduct.WeightBruto ?? 0,
-                                                                                   beamProduct.PISMeter ?? 0,
+                                                                                   beamProduct.CounterStart,
+                                                                                   beamProduct.CounterFinish,
+                                                                                   beamProduct.WeightNetto,
+                                                                                   beamProduct.WeightBruto,
+                                                                                   beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber);
 
@@ -367,11 +373,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                operatorName,
                                                                                sizingOperatorGroup,
                                                                                latestDateTimeHistory,
-                                                                               beamProduct.CounterStart ?? 0,
-                                                                               beamProduct.CounterFinish ?? 0,
-                                                                               beamProduct.WeightNetto ?? 0,
-                                                                               beamProduct.WeightBruto ?? 0,
-                                                                               beamProduct.PISMeter ?? 0,
+                                                                               beamProduct.CounterStart,
+                                                                               beamProduct.CounterFinish,
+                                                                               beamProduct.WeightNetto,
+                                                                               beamProduct.WeightBruto,
+                                                                               beamProduct.PISMeter,
                                                                                spuBeamProduct,
                                                                                beamNumber);
 

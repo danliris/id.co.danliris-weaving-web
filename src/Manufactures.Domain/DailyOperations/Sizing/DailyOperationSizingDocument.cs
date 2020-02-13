@@ -2,6 +2,7 @@
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
 using Manufactures.Domain.DailyOperations.Sizing.ReadModels;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,11 +10,10 @@ using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Sizing
 {
-    public class DailyOperationSizingDocument : AggregateRoot<DailyOperationSizingDocument, DailyOperationSizingReadModel>
+    public class DailyOperationSizingDocument : AggregateRoot<DailyOperationSizingDocument, DailyOperationSizingDocumentReadModel>
     {
         public MachineId MachineDocumentId { get; private set; }
         public OrderId OrderDocumentId { get; private set; }
-        public List<BeamId> BeamsWarping { get; private set; }
         public double EmptyWeight { get; private set; }
         public double YarnStrands { get; private set; }
         public string RecipeCode { get; private set; }
@@ -22,47 +22,40 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public int TexSQ { get; private set; }
         public int Visco { get; private set; }
         public DateTimeOffset DateTimeOperation { get; private set; }
+        public int BeamProductResult { get; private set; }
         public string OperationStatus { get; private set; }
-        public IReadOnlyCollection<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
-        public IReadOnlyCollection<DailyOperationSizingHistory> SizingHistories { get; private set; }
+        public List<DailyOperationSizingBeamsWarping> BeamsWarping { get; private set; }
+        public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
+        public List<DailyOperationSizingHistory> SizingHistories { get; private set; }
 
-        public DailyOperationSizingDocument(Guid id, 
-                                            MachineId machineDocumentId, 
-                                            OrderId orderDocumentId, 
-                                            List<BeamId> beamsWarping, 
-                                            double emptyWeight, 
-                                            double yarnStrands, 
-                                            string recipeCode, 
-                                            double neReal, 
-                                            int machineSpeed, 
-                                            int texSQ, 
-                                            int visco,
+        public DailyOperationSizingDocument(Guid identity,
+                                            MachineId machineDocumentId,
+                                            OrderId orderDocumentId,
+                                            double emptyWeight,
+                                            double yarnStrands,
+                                            string recipeCode,
+                                            double neReal,
                                             DateTimeOffset datetimeOperation,
-                                            string operationStatus) :base(id)
+                                            int beamProductResult,
+                                            string operationStatus) : base(identity)
         {
-            Identity = id;
+            Identity = identity;
             MachineDocumentId = machineDocumentId;
             OrderDocumentId = orderDocumentId;
-            BeamsWarping = beamsWarping;
             EmptyWeight = emptyWeight;
             YarnStrands = yarnStrands;
             RecipeCode = recipeCode;
             NeReal = neReal;
-            MachineSpeed = machineSpeed;
-            TexSQ = texSQ;
-            Visco = visco;
             DateTimeOperation = datetimeOperation;
+            BeamProductResult = beamProductResult;
             OperationStatus = operationStatus;
-            SizingBeamProducts = new List<DailyOperationSizingBeamProduct>();
-            SizingHistories = new List<DailyOperationSizingHistory>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationSizingReadModel(Identity)
+            ReadModel = new DailyOperationSizingDocumentReadModel(Identity)
             {
                 MachineDocumentId = this.MachineDocumentId.Value,
                 OrderDocumentId = this.OrderDocumentId.Value,
-                BeamsWarping = JsonConvert.SerializeObject(this.BeamsWarping),
                 EmptyWeight = this.EmptyWeight,
                 YarnStrands = this.YarnStrands,
                 RecipeCode = this.RecipeCode,
@@ -71,189 +64,225 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 TexSQ = this.TexSQ,
                 Visco = this.Visco,
                 DateTimeOperation = this.DateTimeOperation,
+                BeamProductResult = this.BeamProductResult,
                 OperationStatus = this.OperationStatus,
-                SizingBeamProducts = this.SizingBeamProducts.ToList(),
-                SizingHistories = this.SizingHistories.ToList()
             };
         }
-        public DailyOperationSizingDocument(DailyOperationSizingReadModel readModel) : base(readModel)
+        public DailyOperationSizingDocument(DailyOperationSizingDocumentReadModel readModel) : base(readModel)
         {
-            this.MachineDocumentId = readModel.MachineDocumentId.HasValue ? new MachineId(readModel.MachineDocumentId.Value) : null;
-            this.OrderDocumentId = readModel.OrderDocumentId.HasValue ? new OrderId(readModel.OrderDocumentId.Value) : null;
-            this.BeamsWarping = JsonConvert.DeserializeObject<List<BeamId>>(readModel.BeamsWarping);
+            this.MachineDocumentId = new MachineId(readModel.MachineDocumentId);
+            this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
             this.EmptyWeight = readModel.EmptyWeight;
             this.YarnStrands = readModel.YarnStrands;
             this.RecipeCode = readModel.RecipeCode;
             this.NeReal = readModel.NeReal;
             this.MachineSpeed = readModel.MachineSpeed.HasValue ? readModel.MachineSpeed.Value : 0;
-            this.TexSQ = readModel.TexSQ;
-            this.Visco = readModel.Visco;
+            this.TexSQ = readModel.TexSQ.HasValue ? readModel.TexSQ.Value : 0;
+            this.Visco = readModel.Visco.HasValue ? readModel.Visco.Value : 0;
             this.DateTimeOperation = readModel.DateTimeOperation;
+            this.BeamProductResult = readModel.BeamProductResult;
             this.OperationStatus = readModel.OperationStatus;
-            this.SizingBeamProducts = readModel.SizingBeamProducts;
-            this.SizingHistories = readModel.SizingHistories;
         }
 
-        public void AddDailyOperationSizingHistory(DailyOperationSizingHistory sizingHistory)
-        {
-            var list = SizingHistories.ToList();
-            list.Add(sizingHistory);
-            SizingHistories = list;
-            ReadModel.SizingHistories = SizingHistories.ToList();
+        //public void AddDailyOperationSizingHistory(DailyOperationSizingHistory sizingHistory)
+        //{
+        //    var list = SizingHistories.ToList();
+        //    list.Add(sizingHistory);
+        //    SizingHistories = list;
+        //    ReadModel.SizingHistories = SizingHistories.ToList();
 
-            MarkModified();
-        }
+        //    MarkModified();
+        //}
 
-        public void UpdateDailyOperationSizingHistory(DailyOperationSizingHistory history)
-        {
-            var sizingHistories = SizingHistories.ToList();
+        //public void UpdateDailyOperationSizingHistory(DailyOperationSizingHistory history)
+        //{
+        //    var sizingHistories = SizingHistories.ToList();
 
-            //Get Sizing Detail Update
-            var index =
-                sizingHistories
-                    .FindIndex(x => x.Identity.Equals(history.Identity));
-            var sizingHistory =
-                sizingHistories
-                    .Where(x => x.Identity.Equals(history.Identity))
-                    .FirstOrDefault();
+        //    //Get Sizing Detail Update
+        //    var index =
+        //        sizingHistories
+        //            .FindIndex(x => x.Identity.Equals(history.Identity));
+        //    var sizingHistory =
+        //        sizingHistories
+        //            .Where(x => x.Identity.Equals(history.Identity))
+        //            .FirstOrDefault();
 
-            //Update Propertynya
-            sizingHistory.SetShiftId(new ShiftId(history.ShiftDocumentId));
-            sizingHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
-            sizingHistory.SetDateTimeMachine(history.DateTimeMachine);
-            sizingHistory.SetMachineStatus(history.MachineStatus);
-            sizingHistory.SetInformation(history.Information);
-            //sizingDetail.SetCauses(JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(detail.Causes));
-            sizingHistory.SetBrokenBeam(history.BrokenBeam);
-            sizingHistory.SetMachineTroubled(history.MachineTroubled);
-            sizingHistory.SetSizingBeamNumber(history.SizingBeamNumber);
+        //    //Update Propertynya
+        //    sizingHistory.SetShiftId(new ShiftId(history.ShiftDocumentId));
+        //    sizingHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
+        //    sizingHistory.SetDateTimeMachine(history.DateTimeMachine);
+        //    sizingHistory.SetMachineStatus(history.MachineStatus);
+        //    sizingHistory.SetInformation(history.Information);
+        //    //sizingDetail.SetCauses(JsonConvert.DeserializeObject<DailyOperationSizingCauseValueObject>(detail.Causes));
+        //    sizingHistory.SetBrokenBeam(history.BrokenBeam);
+        //    sizingHistory.SetMachineTroubled(history.MachineTroubled);
+        //    sizingHistory.SetSizingBeamNumber(history.SizingBeamNumber);
 
-            sizingHistories[index] = sizingHistory;
-            SizingHistories = sizingHistories;
-            ReadModel.SizingHistories = sizingHistories;
-            MarkModified();
-        }
+        //    sizingHistories[index] = sizingHistory;
+        //    SizingHistories = sizingHistories;
+        //    ReadModel.SizingHistories = sizingHistories;
+        //    MarkModified();
+        //}
 
-        public void RemoveDailyOperationSizingHistory(Guid identity)
-        {
-            var history = SizingHistories.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = SizingHistories.ToList();
+        //public void RemoveDailyOperationSizingHistory(Guid identity)
+        //{
+        //    var history = SizingHistories.Where(o => o.Identity == identity).FirstOrDefault();
+        //    var list = SizingHistories.ToList();
 
-            list.Remove(history);
-            SizingHistories = list;
-            ReadModel.SizingHistories = SizingHistories.ToList();
+        //    list.Remove(history);
+        //    SizingHistories = list;
+        //    ReadModel.SizingHistories = SizingHistories.ToList();
 
-            MarkModified();
-        }
+        //    MarkModified();
+        //}
 
-        public void AddDailyOperationSizingBeamProduct(DailyOperationSizingBeamProduct sizingBeamProduct)
-        {
-            var list = SizingBeamProducts.ToList();
-            list.Add(sizingBeamProduct);
-            SizingBeamProducts = list;
-            ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
+        //public void AddDailyOperationSizingBeamProduct(DailyOperationSizingBeamProduct sizingBeamProduct)
+        //{
+        //    var list = SizingBeamProducts.ToList();
+        //    list.Add(sizingBeamProduct);
+        //    SizingBeamProducts = list;
+        //    ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
 
-            MarkModified();
-        }
+        //    MarkModified();
+        //}
 
-        public void UpdateDailyOperationSizingBeamProduct(DailyOperationSizingBeamProduct beamProduct)
-        {
-            var sizingBeamProducts = SizingBeamProducts.ToList();
+        //public void UpdateDailyOperationSizingBeamProduct(DailyOperationSizingBeamProduct beamProduct)
+        //{
+        //    var sizingBeamProducts = SizingBeamProducts.ToList();
 
-            //Get Sizing Beam Update
-            var index =
-                sizingBeamProducts
-                    .FindIndex(x => x.Identity.Equals(beamProduct.Identity));
-            var sizingBeamProduct =
-                sizingBeamProducts
-                    .Where(x => x.Identity.Equals(beamProduct.Identity))
-                    .FirstOrDefault();
+        //    //Get Sizing Beam Update
+        //    var index =
+        //        sizingBeamProducts
+        //            .FindIndex(x => x.Identity.Equals(beamProduct.Identity));
+        //    var sizingBeamProduct =
+        //        sizingBeamProducts
+        //            .Where(x => x.Identity.Equals(beamProduct.Identity))
+        //            .FirstOrDefault();
 
-            //Update Propertynya
-            sizingBeamProduct.SetSizingBeamId(beamProduct.SizingBeamId);
-            sizingBeamProduct.SetLatestDateTimeBeamProduct(beamProduct.LatestDateTimeBeamProduct);
-            sizingBeamProduct.SetCounterStart(beamProduct.CounterStart ??0);
-            sizingBeamProduct.SetCounterFinish(beamProduct.CounterFinish ?? 0);
-            sizingBeamProduct.SetWeightNetto(beamProduct.WeightNetto ?? 0);
-            sizingBeamProduct.SetWeightBruto(beamProduct.WeightBruto ?? 0);
-            sizingBeamProduct.SetWeightTheoritical(beamProduct.WeightTheoritical ?? 0);
-            sizingBeamProduct.SetPISMeter(beamProduct.PISMeter ?? 0);
-            sizingBeamProduct.SetSPU(beamProduct.SPU ?? 0);
-            sizingBeamProduct.SetSizingBeamStatus(beamProduct.BeamStatus);
+        //    //Update Propertynya
+        //    sizingBeamProduct.SetSizingBeamId(beamProduct.SizingBeamId);
+        //    sizingBeamProduct.SetLatestDateTimeBeamProduct(beamProduct.LatestDateTimeBeamProduct);
+        //    sizingBeamProduct.SetCounterStart(beamProduct.CounterStart ??0);
+        //    sizingBeamProduct.SetCounterFinish(beamProduct.CounterFinish ?? 0);
+        //    sizingBeamProduct.SetWeightNetto(beamProduct.WeightNetto ?? 0);
+        //    sizingBeamProduct.SetWeightBruto(beamProduct.WeightBruto ?? 0);
+        //    sizingBeamProduct.SetWeightTheoritical(beamProduct.WeightTheoritical ?? 0);
+        //    sizingBeamProduct.SetPISMeter(beamProduct.PISMeter ?? 0);
+        //    sizingBeamProduct.SetSPU(beamProduct.SPU ?? 0);
+        //    sizingBeamProduct.SetSizingBeamStatus(beamProduct.BeamStatus);
 
-            sizingBeamProducts[index] = sizingBeamProduct;
-            SizingBeamProducts = sizingBeamProducts;
-            ReadModel.SizingBeamProducts = sizingBeamProducts;
-            MarkModified();
-        }
+        //    sizingBeamProducts[index] = sizingBeamProduct;
+        //    SizingBeamProducts = sizingBeamProducts;
+        //    ReadModel.SizingBeamProducts = sizingBeamProducts;
+        //    MarkModified();
+        //}
 
-        public void RemoveDailyOperationSizingBeamProduct(Guid identity)
-        {
-            var beamProduct = SizingBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = SizingBeamProducts.ToList();
+        //public void RemoveDailyOperationSizingBeamProduct(Guid identity)
+        //{
+        //    var beamProduct = SizingBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
+        //    var list = SizingBeamProducts.ToList();
 
-            list.Remove(beamProduct);
-            SizingBeamProducts = list;
-            ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
+        //    list.Remove(beamProduct);
+        //    SizingBeamProducts = list;
+        //    ReadModel.SizingBeamProducts = SizingBeamProducts.ToList();
 
-            MarkModified();
-        }
+        //    MarkModified();
+        //}
 
         public void SetEmptyWeight(double emptyWeight)
         {
-            EmptyWeight = emptyWeight;
-            ReadModel.EmptyWeight = emptyWeight;
-            MarkModified();
+            if (emptyWeight != EmptyWeight)
+            {
+                EmptyWeight = emptyWeight;
+                ReadModel.EmptyWeight = EmptyWeight;
+                MarkModified();
+            }
         }
 
         public void SetYarnStrands(double yarnStrands)
         {
-            YarnStrands = yarnStrands;
-            ReadModel.YarnStrands = yarnStrands;
-            MarkModified();
+            if (yarnStrands != YarnStrands)
+            {
+                YarnStrands = yarnStrands;
+                ReadModel.YarnStrands = YarnStrands;
+
+                MarkModified();
+            }
         }
 
         public void SetRecipeCode(string recipeCode)
         {
-            RecipeCode = recipeCode;
-            ReadModel.RecipeCode = recipeCode;
-            MarkModified();
+            Validator.ThrowIfNull(() => recipeCode);
+            if (recipeCode != RecipeCode)
+            {
+                RecipeCode = recipeCode;
+                ReadModel.RecipeCode = RecipeCode;
+
+                MarkModified();
+            }
         }
 
         public void SetNeReal(double neReal)
         {
-            NeReal = neReal;
-            ReadModel.NeReal = neReal;
-            MarkModified();
+            if (neReal != NeReal)
+            {
+                NeReal = neReal;
+                ReadModel.NeReal = NeReal;
+
+                MarkModified();
+            }
         }
 
         public void SetMachineSpeed(int machineSpeed)
         {
-            MachineSpeed = machineSpeed;
-            ReadModel.MachineSpeed = machineSpeed;
-            MarkModified();
+            if (machineSpeed != MachineSpeed)
+            {
+                MachineSpeed = machineSpeed;
+                ReadModel.MachineSpeed = MachineSpeed;
+
+                MarkModified();
+            }
         }
 
         public void SetTexSQ(int texSQ)
         {
-            TexSQ = texSQ;
-            ReadModel.TexSQ = texSQ;
-            MarkModified();
+            if (texSQ != TexSQ)
+            {
+                TexSQ = texSQ;
+                ReadModel.TexSQ = TexSQ;
+
+                MarkModified();
+            }
         }
 
         public void SetVisco(int visco)
         {
-            Visco = visco;
-            ReadModel.Visco = visco;
-            MarkModified();
+            if (visco != Visco)
+            {
+                Visco = visco;
+                ReadModel.Visco = Visco;
+
+                MarkModified();
+            }
         }
 
-        public void SetDateTimeOperation(DateTimeOffset value)
+        public void SetDateTimeOperation(DateTimeOffset dateTimeOperation)
         {
-            if (!DateTimeOperation.Equals(value))
+            if (dateTimeOperation != DateTimeOperation)
             {
-                DateTimeOperation = value;
+                DateTimeOperation = dateTimeOperation;
                 ReadModel.DateTimeOperation = DateTimeOperation;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBeamProductResult(int beamProductResult)
+        {
+            if (beamProductResult != BeamProductResult)
+            {
+                BeamProductResult = beamProductResult;
+                ReadModel.BeamProductResult = BeamProductResult;
 
                 MarkModified();
             }
@@ -261,9 +290,14 @@ namespace Manufactures.Domain.DailyOperations.Sizing
 
         public void SetOperationStatus(string operationStatus)
         {
-            OperationStatus = operationStatus;
-            ReadModel.OperationStatus = operationStatus;
-            MarkModified();
+            Validator.ThrowIfNull(() => operationStatus);
+            if (operationStatus != OperationStatus)
+            {
+                OperationStatus = operationStatus;
+                ReadModel.OperationStatus = OperationStatus;
+
+                MarkModified();
+            }
         }
 
         protected override DailyOperationSizingDocument GetEntity()

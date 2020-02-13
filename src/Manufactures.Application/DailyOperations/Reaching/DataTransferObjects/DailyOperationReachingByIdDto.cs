@@ -17,14 +17,14 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         public DailyOperationReachingByIdDto(DailyOperationReachingDocument document, 
                                              DailyOperationReachingHistory history, 
                                              string machineNumber, 
-                                             UnitId weavingUnitDocumentId, 
+                                             string weavingUnit, 
                                              string constructionNumber, 
                                              string sizingBeamNumber, 
                                              double sizingYarnStrands) 
             : base(document,
                    history,
                    machineNumber,
-                   weavingUnitDocumentId,
+                   weavingUnit,
                    constructionNumber,
                    sizingBeamNumber)
         {

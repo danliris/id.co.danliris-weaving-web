@@ -19,8 +19,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             this.WarpingBrokenCauseId = Id;
         }
 
-        public class WarpingBrokenThreadsCausesCommandValidator
-            : AbstractValidator<WarpingBrokenThreadsCausesCommand>
+        public class WarpingBrokenThreadsCausesCommandValidator : AbstractValidator<WarpingBrokenThreadsCausesCommand>
         {
             public WarpingBrokenThreadsCausesCommandValidator()
             {

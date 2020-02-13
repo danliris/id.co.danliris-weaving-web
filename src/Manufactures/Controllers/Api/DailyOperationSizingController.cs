@@ -3,7 +3,6 @@ using Manufactures.Application.DailyOperations.Sizing.Calculations;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport;
-using Manufactures.Application.Helpers;
 using Manufactures.Application.Operators.DTOs;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
@@ -25,7 +24,6 @@ using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
@@ -50,22 +48,24 @@ namespace Manufactures.Controllers.Api
         private readonly IOperatorRepository
             _operatorDocumentRepository;
 
-        private readonly IDailyOperationSizingQuery<DailyOperationSizingListDto> _sizingQuery;
+        private readonly IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto> _sizingQuery;
         private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
         private readonly IShiftQuery<ShiftDto> _shiftQuery;
         private readonly IBeamQuery<BeamListDto> _beamQuery;
         private readonly ISizePickupReportQuery<SizePickupReportListDto> _sizePickupReportQuery;
         private readonly IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> _dailyOperationSizingReportQuery;
 
-        private readonly IDailyOperationSizingRepository
+        private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
+        private readonly IDailyOperationSizingBeamProductRepository
+            _dailyOperationSizingBeamProductRepository;
         private readonly IBeamRepository
             _beamRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationSizingController(IServiceProvider serviceProvider,
                                               IWorkContext workContext,
-                                              IDailyOperationSizingQuery<DailyOperationSizingListDto> sizingQuery,
+                                              IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto> sizingQuery,
                                               IOperatorQuery<OperatorListDto> operatorQuery,
                                               IShiftQuery<ShiftDto> shiftQuery,
                                               IBeamQuery<BeamListDto> beamQuery,
@@ -81,7 +81,9 @@ namespace Manufactures.Controllers.Api
             _dailyOperationSizingReportQuery = dailyOperationSizingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationSizingReportQuery));
 
             _dailyOperationSizingRepository =
-                this.Storage.GetRepository<IDailyOperationSizingRepository>();
+                this.Storage.GetRepository<IDailyOperationSizingDocumentRepository>();
+            _dailyOperationSizingBeamProductRepository =
+                this.Storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
             _orderDocumentRepository =
                 this.Storage.GetRepository<IOrderRepository>();
             _constructionDocumentRepository =
@@ -107,8 +109,11 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 dailyOperationSizingDocuments =
                     dailyOperationSizingDocuments
-                        .Where(x => x.FabricConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                        .Where(x => x.DateTimeOperation.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.FabricConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -139,98 +144,98 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
 
-        [HttpGet("get-sizing-beams")]
-        public async Task<IActionResult> GetSizingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
-        {
-            VerifyUser();
-            page = page - 1;
-            List<DailyOperationSizingBeamDto> sizingListBeamProducts = new List<DailyOperationSizingBeamDto>();
-            List<BeamDto> sizingBeams = new List<BeamDto>();
-            if (!filter.Contains("{}"))
-            {
-                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
-                var OrderDocumentId = filterDictionary["OrderId"].ToString();
-                if (!OrderDocumentId.Equals(null))
-                {
-                    var OrderIdentity = Guid.Parse(OrderDocumentId);
+        //[HttpGet("get-sizing-beams")]
+        //public async Task<IActionResult> GetSizingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
+        //{
+        //    VerifyUser();
+        //    page = page - 1;
+        //    List<DailyOperationSizingBeamDto> sizingListBeamProducts = new List<DailyOperationSizingBeamDto>();
+        //    List<BeamDto> sizingBeams = new List<BeamDto>();
+        //    if (!filter.Contains("{}"))
+        //    {
+        //        Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+        //        var OrderDocumentId = filterDictionary["OrderId"].ToString();
+        //        if (!OrderDocumentId.Equals(null))
+        //        {
+        //            var OrderIdentity = Guid.Parse(OrderDocumentId);
 
-                    await Task.Yield();
-                    var sizingQuery =
-                         _dailyOperationSizingRepository
-                             .Query
-                             .Include(x => x.SizingHistories)
-                             .Include(x => x.SizingBeamProducts)
-                             .OrderByDescending(o => o.DateTimeOperation)
-                    .Where(doc => doc.OrderDocumentId.Equals(OrderIdentity));
+        //            await Task.Yield();
+        //            var sizingQuery =
+        //                 _dailyOperationSizingRepository
+        //                     .Query
+        //                     .Include(x => x.SizingHistories)
+        //                     .Include(x => x.SizingBeamProducts)
+        //                     .OrderByDescending(o => o.DateTimeOperation)
+        //            .Where(doc => doc.OrderDocumentId.Equals(OrderIdentity));
 
-                    await Task.Yield();
-                    var existingDailyOperationSizingDocument =
-                        _dailyOperationSizingRepository
-                            .Find(sizingQuery);
+        //            await Task.Yield();
+        //            var existingDailyOperationSizingDocument =
+        //                _dailyOperationSizingRepository
+        //                    .Find(sizingQuery);
 
-                    await Task.Yield();
-                    foreach (var sizingDocument in existingDailyOperationSizingDocument)
-                    {
-                        foreach (var sizingBeamProduct in sizingDocument.SizingBeamProducts)
-                        {
-                            await Task.Yield();
-                            var sizingBeamStatus = sizingBeamProduct.BeamStatus;
-                            if (sizingBeamStatus.Equals(BeamStatus.ROLLEDUP))
-                            {
-                                await Task.Yield();
-                                double counterStart = sizingBeamProduct.CounterStart ?? 0;
-                                double counterFinish = sizingBeamProduct.CounterFinish ?? 0;
-                                double sizingLengthCounter = counterFinish - counterStart;
-                                var warpingBeam = new DailyOperationSizingBeamDto(sizingBeamProduct.SizingBeamId, sizingLengthCounter);
-                                sizingListBeamProducts.Add(warpingBeam);
-                            }
-                        }
-                    }
+        //            await Task.Yield();
+        //            foreach (var sizingDocument in existingDailyOperationSizingDocument)
+        //            {
+        //                foreach (var sizingBeamProduct in sizingDocument.SizingBeamProducts)
+        //                {
+        //                    await Task.Yield();
+        //                    var sizingBeamStatus = sizingBeamProduct.BeamStatus;
+        //                    if (sizingBeamStatus.Equals(BeamStatus.ROLLEDUP))
+        //                    {
+        //                        await Task.Yield();
+        //                        double counterStart = sizingBeamProduct.CounterStart ?? 0;
+        //                        double counterFinish = sizingBeamProduct.CounterFinish ?? 0;
+        //                        double sizingLengthCounter = counterFinish - counterStart;
+        //                        var warpingBeam = new DailyOperationSizingBeamDto(sizingBeamProduct.SizingBeamId, sizingLengthCounter);
+        //                        sizingListBeamProducts.Add(warpingBeam);
+        //                    }
+        //                }
+        //            }
 
-                    await Task.Yield();
-                    foreach (var sizingBeam in sizingListBeamProducts)
-                    {
-                        await Task.Yield();
-                        var sizingBeamQuery =
-                            _beamRepository
-                                .Query
-                                .Where(beam => beam.Identity.Equals(sizingBeam.Id) &&
-                                               beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
-                        var sizingBeamDocument =
-                            _beamRepository
-                                .Find(sizingBeamQuery)
-                                .FirstOrDefault();
+        //            await Task.Yield();
+        //            foreach (var sizingBeam in sizingListBeamProducts)
+        //            {
+        //                await Task.Yield();
+        //                var sizingBeamQuery =
+        //                    _beamRepository
+        //                        .Query
+        //                        .Where(beam => beam.Identity.Equals(sizingBeam.Id) &&
+        //                                       beam.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+        //                var sizingBeamDocument =
+        //                    _beamRepository
+        //                        .Find(sizingBeamQuery)
+        //                        .FirstOrDefault();
 
-                        if (sizingBeamDocument == null)
-                        {
-                            continue;
-                        }
+        //                if (sizingBeamDocument == null)
+        //                {
+        //                    continue;
+        //                }
 
-                        await Task.Yield();
-                        var sizingBeamDto = new BeamDto(sizingBeam, sizingBeamDocument);
-                        sizingBeams.Add(sizingBeamDto);
-                    }
-                }
-                else
-                {
-                    throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
-                }
-            }
-            else
-            {
-                throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
-            }
+        //                await Task.Yield();
+        //                var sizingBeamDto = new BeamDto(sizingBeam, sizingBeamDocument);
+        //                sizingBeams.Add(sizingBeamDto);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw Validator.ErrorValidation(("OrderDocument", "No. Order Produksi Harus Diisi"));
+        //    }
 
-            var total = sizingBeams.Count();
-            var data = sizingBeams.Skip((page - 1) * size).Take(size);
+        //    var total = sizingBeams.Count();
+        //    var data = sizingBeams.Skip((page - 1) * size).Take(size);
 
-            return Ok(data, info: new
-            {
-                page,
-                size,
-                total
-            });
-        }
+        //    return Ok(data, info: new
+        //    {
+        //        page,
+        //        size,
+        //        total
+        //    });
+        //}
 
         //[HttpGet("get-sizing-beam-products")]
         //public async Task<IActionResult> GetSizingBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
@@ -371,34 +376,34 @@ namespace Manufactures.Controllers.Api
             return Ok(updateStartDailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{Id}/pause")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdatePauseDailyOperationSizingCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/pause")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdatePauseDailyOperationSizingCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updatePauseDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updatePauseDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updatePauseDailyOperationSizingDocument.Identity);
+        //}
 
-        [HttpPut("{Id}/resume")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateResumeDailyOperationSizingCommand command)
-        {
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/resume")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdateResumeDailyOperationSizingCommand command)
+        //{
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateResumeDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateResumeDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updateResumeDailyOperationSizingDocument.Identity);
+        //}
 
         [HttpPut("{Id}/produce-beams")]
         public async Task<IActionResult> Put(string Id,
@@ -412,41 +417,33 @@ namespace Manufactures.Controllers.Api
             command.SetId(documentId);
             var reuseBeamsDailyOperationSizingDocument = await Mediator.Send(command);
 
-            //Get Daily Operation Document Sizing
-            var sizingQuery =
-                _dailyOperationSizingRepository
-                    .Query
-                    .Include(x => x.SizingHistories)
-                    .Include(x => x.SizingBeamProducts)
-                    .Where(doc => doc.Identity.Equals(command.Id));
-            var existingDailyOperationSizingDocument =
-                _dailyOperationSizingRepository
-                    .Find(sizingQuery)
-                    .FirstOrDefault();
+            ////Get Daily Operation Document Sizing
+            //var existingSizingDocument =
+            //    _dailyOperationSizingRepository
+            //        .Find(o=>o.Identity == command.Id)
+            //        .FirstOrDefault();
 
-            //Get Daily Operation Beam Product
-            var existingDailyOperationSizingBeamProduct =
-                existingDailyOperationSizingDocument
-                    .SizingBeamProducts
-                    .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct);
-            var lastSizingBeamProduct =
-                existingDailyOperationSizingBeamProduct
-                    .FirstOrDefault();
+            ////Get Daily Operation Beam Product
+            //var lastSizingBeamProduct =
+            //    _dailyOperationSizingBeamProductRepository
+            //        .Find(o => o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+            //        .OrderByDescending(x => x.LatestDateTimeBeamProduct)
+            //        .FirstOrDefault();
 
-            var counterStart = lastSizingBeamProduct.CounterStart;
-            var counterFinish = lastSizingBeamProduct.CounterFinish;
-            var sizingLengthStock = counterFinish - counterStart;
+            //var counterStart = lastSizingBeamProduct.CounterStart;
+            //var counterFinish = lastSizingBeamProduct.CounterFinish;
+            //var sizingLengthStock = counterFinish - counterStart;
 
-            //Instantiate Beam Stock Command for Sizing
-            var sizingStock = new BeamStockMonitoringCommand
-            {
-                BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId),
-                EntryDate = command.ProduceBeamDate,
-                EntryTime = command.ProduceBeamTime,
-                OrderDocumentId = existingDailyOperationSizingDocument.OrderDocumentId,
-                LengthStock = sizingLengthStock ?? 0
-            };
-            var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
+            ////Instantiate Beam Stock Command for Sizing
+            //var sizingStock = new BeamStockMonitoringCommand
+            //{
+            //    BeamDocumentId = new BeamId(lastSizingBeamProduct.SizingBeamId.Value),
+            //    EntryDate = command.ProduceBeamDate,
+            //    EntryTime = command.ProduceBeamTime,
+            //    OrderDocumentId = existingSizingDocument.OrderDocumentId,
+            //    LengthStock = sizingLengthStock
+            //};
+            //var updateSizingOnMonitoringStockBeam = await Mediator.Send(sizingStock);
 
             return Ok(reuseBeamsDailyOperationSizingDocument.Identity);
         }
@@ -490,22 +487,22 @@ namespace Manufactures.Controllers.Api
             return Ok(dailyOperationSizingDocument.Identity);
         }
 
-        [HttpPut("{operationId}/{historyId}/{status}")]
-        public async Task<IActionResult> Put(string operationId,
-                                             string historyId,
-                                             string status,
-                                             [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(operationId, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument = await Mediator.Send(command);
+        //[HttpPut("{operationId}/{historyId}/{status}")]
+        //public async Task<IActionResult> Put(string operationId,
+        //                                     string historyId,
+        //                                     string status,
+        //                                     [FromBody]HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(operationId, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument = await Mediator.Send(command);
 
-            return Ok(updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument.Identity);
-        }
+        //    return Ok(updateRemovePauseOrResumeOrFinishDailyOperationSizingDocument.Identity);
+        //}
 
         [HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
         public async Task<IActionResult> Put(string operationId,

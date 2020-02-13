@@ -20,8 +20,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "NeReal")]
         public double NeReal { get; private set; }
 
-        [JsonProperty(PropertyName = "BeamsWarping")]
-        public List<DailyOperationWarpingBeamDto> BeamsWarping { get; set; }
+        [JsonProperty(PropertyName = "BeamProductResult")]
+        public int BeamProductResult { get; private set; }
+
+        [JsonProperty(PropertyName = "DailyOperationSizingBeamsWarping")]
+        public List<DailyOperationSizingBeamsWarpingDto> DailyOperationSizingBeamsWarping { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationSizingBeamProducts")]
         public List<DailyOperationSizingBeamProductDto> DailyOperationSizingBeamProducts { get; set; }
@@ -32,7 +35,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         public DailyOperationSizingByIdDto(DailyOperationSizingDocument document)
             : base(document)
         {
-            BeamsWarping = new List<DailyOperationWarpingBeamDto>();
+            DailyOperationSizingBeamsWarping = new List<DailyOperationSizingBeamsWarpingDto>();
             DailyOperationSizingBeamProducts = new List<DailyOperationSizingBeamProductDto>();
             DailyOperationSizingHistories = new List<DailyOperationSizingHistoryDto>();
         }
@@ -57,9 +60,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
             NeReal = neReal;
         }
 
-        public void AddBeamsWarping(DailyOperationWarpingBeamDto beamsWarping)
+        public void SetBeamProductResult(int beamProductResult)
         {
-            BeamsWarping.Add(beamsWarping);
+            BeamProductResult = beamProductResult;
+        }
+
+        public void AddBeamsWarping(DailyOperationSizingBeamsWarpingDto beamsWarping)
+        {
+            DailyOperationSizingBeamsWarping.Add(beamsWarping);
         }
 
         public void AddDailyOperationSizingBeamProducts(DailyOperationSizingBeamProductDto beamProduct)

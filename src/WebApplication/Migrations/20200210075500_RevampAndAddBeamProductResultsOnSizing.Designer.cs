@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20200210075500_RevampAndAddBeamProductResultsOnSizing")]
+    partial class RevampAndAddBeamProductResultsOnSizing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -440,8 +442,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<Guid>("SizingBeamId");
 
-                    b.Property<int>("TotalBroken");
-
                     b.Property<double>("WeightBruto");
 
                     b.Property<double>("WeightNetto");
@@ -554,7 +554,7 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BrokenPerShift");
+                    b.Property<int>("BrokenBeam");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -573,7 +573,11 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
+                    b.Property<string>("Information");
+
                     b.Property<string>("MachineStatus");
+
+                    b.Property<int>("MachineTroubled");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);

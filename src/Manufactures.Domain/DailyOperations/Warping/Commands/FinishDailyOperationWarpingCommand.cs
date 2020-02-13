@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Warping.Commands
 {
-    public class CompletedDailyOperationWarpingCommand
+    public class FinishDailyOperationWarpingCommand
          : ICommand<DailyOperationWarpingDocument>
     {
         [JsonProperty(PropertyName = "Id")]
@@ -56,10 +56,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         }
     }
 
-    public class CompletedDailyOperationWarpingCommandValidator
-         : AbstractValidator<CompletedDailyOperationWarpingCommand>
+    public class FinishDailyOperationWarpingCommandValidator : AbstractValidator<FinishDailyOperationWarpingCommand>
     {
-        public CompletedDailyOperationWarpingCommandValidator()
+        public FinishDailyOperationWarpingCommandValidator()
         {
             RuleFor(command => command.Id).NotEmpty();
             RuleFor(command => command.ProduceBeamsDate).NotEmpty().WithMessage("Tanggal Produksi Beam Harus Diisi");
@@ -72,7 +71,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.MachineSpeed).NotEmpty().WithMessage("Machine Speed Harus Diisi");
             RuleFor(command => command.PressRoll).NotEmpty().WithMessage("Press Roll Harus Diisi");
             RuleFor(command => command.PressRollUom).NotEmpty().WithMessage("Satuan Press Roll Harus Diisi");
-            RuleFor(command => command.BrokenCauses).NotEmpty();
+            //RuleFor(command => command.BrokenCauses).NotEmpty();
             RuleFor(command => command.IsFinishFlag).NotNull();
         }
     }

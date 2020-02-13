@@ -31,8 +31,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public OperatorId PreparationOperator { get; set; }
     }
 
-    public class PreparationDailyOperationWarpingCommandValidator 
-        : AbstractValidator<PreparationDailyOperationWarpingCommand>
+    public class PreparationDailyOperationWarpingCommandValidator : AbstractValidator<PreparationDailyOperationWarpingCommand>
     {
         public PreparationDailyOperationWarpingCommandValidator()
         {

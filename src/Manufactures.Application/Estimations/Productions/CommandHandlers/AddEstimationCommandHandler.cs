@@ -61,13 +61,18 @@ namespace Manufactures.Application.Estimations.Productions.CommandHandlers
                         .Find(o => o.Identity == estimationDetail.OrderId)
                         .FirstOrDefault();
 
+                var gradeALimit = Math.Round(estimationDetail.GradeA, 4);
+                var gradeBLimit = Math.Round(estimationDetail.GradeB, 4);
+                var gradeCLimit = Math.Round(estimationDetail.GradeC, 4);
+                var gradeDLimit = Math.Round(estimationDetail.GradeD, 4);
+
                 var newEstimationDetail = new EstimatedProductionDetail(Guid.NewGuid(),
                                                                         new OrderId(estimationDetail.OrderId),
                                                                         order.ConstructionDocumentId,
-                                                                        estimationDetail.GradeA,
-                                                                        estimationDetail.GradeB,
-                                                                        estimationDetail.GradeC,
-                                                                        estimationDetail.GradeD,
+                                                                        gradeALimit,
+                                                                        gradeBLimit,
+                                                                        gradeCLimit,
+                                                                        gradeDLimit,
                                                                         newEstimationDocument.Identity);
 
                 await _estimatedProductionDetailRepository.Update(newEstimationDetail);

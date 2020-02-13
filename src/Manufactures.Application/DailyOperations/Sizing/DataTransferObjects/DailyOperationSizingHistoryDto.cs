@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Manufactures.Domain.DailyOperations.Sizing.Entities;
+using Manufactures.Domain.Operators;
+using Newtonsoft.Json;
 using System;
 
 namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
@@ -23,39 +25,25 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         [JsonProperty(PropertyName = "OperatorGroup")]
         public string OperatorGroup { get; }
 
+        [JsonProperty(PropertyName = "BrokenPerShift")]
+        public int BrokenPerShift { get; }
+
         [JsonProperty(PropertyName = "MachineStatus")]
         public string MachineStatus { get; }
 
-        [JsonProperty(PropertyName = "Information")]
-        public string Information { get; }
-
-        [JsonProperty(PropertyName = "CausesBrokenBeam")]
-        public int CausesBrokenBeam { get; }
-
-        [JsonProperty(PropertyName = "CausesMachineTroubled")]
-        public int CausesMachineTroubled { get; }
-
-        public DailyOperationSizingHistoryDto(Guid id,
+        public DailyOperationSizingHistoryDto(DailyOperationSizingHistory history,
+                                              OperatorDocument operatorDocument,
                                               string sizingBeamNumber,
-                                              DateTimeOffset dateTimeMachine,
-                                              string shiftName,
-                                              string operatorName,
-                                              string operatorGroup,
-                                              string machineStatus,
-                                              string information,
-                                              int causesBrokenBeam,
-                                              int causesMachineTroubled)
+                                              string shiftName)
         {
-            Id = id;
+            Id = history.Identity;
             SizingBeamNumber = sizingBeamNumber;
-            DateTimeMachine = dateTimeMachine;
+            DateTimeMachine = history.DateTimeMachine;
             ShiftName = shiftName;
-            OperatorName = operatorName;
-            OperatorGroup = operatorGroup;
-            MachineStatus = machineStatus;
-            Information = information;
-            CausesBrokenBeam = causesBrokenBeam;
-            CausesMachineTroubled = causesMachineTroubled;
+            OperatorName = operatorDocument.CoreAccount.Name;
+            OperatorGroup = operatorDocument.Group;
+            MachineStatus = history.MachineStatus;
+            BrokenPerShift = history.BrokenPerShift;
         }
     }
 }
