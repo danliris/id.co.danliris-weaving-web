@@ -43,7 +43,10 @@ namespace Manufactures.Application.Machines.CommandHandlers
                                                       new MachineTypeId(Guid.Parse(request.MachineTypeId)),
                                                       new UnitId(int.Parse(request.WeavingUnitId)),
                                                       request.Cutmark ?? 0,
-                                                      new UomId(int.Parse(request.CutmarkUomId)) ?? null);
+                                                      new UomId(int.Parse(request.CutmarkUomId)) ?? null,
+                                                      request.Process,
+                                                      request.Area,
+                                                      request.Block);
 
             await _machineRepository.Update(machineDocument);
 

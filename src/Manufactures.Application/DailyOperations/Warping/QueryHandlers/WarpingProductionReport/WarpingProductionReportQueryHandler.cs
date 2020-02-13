@@ -65,8 +65,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
                 var warpingHistories = _dailyOperationWarpingHistoryRepository.Find(warpingHistoryQuery)
                                                                               .Where(item => item.DateTimeMachine.Month == month &&
-                                                                                     item.DateTimeMachine.Year == year &&
-                                                                                     item.WarpingBeamLengthPerOperator > 0)
+                                                                                             item.DateTimeMachine.Year == year &&
+                                                                                             item.WarpingBeamLengthPerOperator > 0)
                                                                               .ToList();
 
                 var processedList = new List<WarpingProductionReportProcessedListDto>();

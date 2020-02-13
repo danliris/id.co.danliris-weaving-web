@@ -23,6 +23,15 @@ namespace Manufactures.Domain.Machines.Commands
 
         [JsonProperty(PropertyName = "CutmarkUomId")]
         public string CutmarkUomId { get; set; }
+
+        [JsonProperty(PropertyName = "Process")]
+        public string Process { get; set; }
+
+        [JsonProperty(PropertyName = "Area")]
+        public string Area { get; set; }
+
+        [JsonProperty(PropertyName = "Block")]
+        public string Block { get; set; }
     }
 
     public class AddNewMachineCommandValidator : AbstractValidator<AddNewMachineCommand>
@@ -33,6 +42,9 @@ namespace Manufactures.Domain.Machines.Commands
             RuleFor(r => r.Location).NotEmpty();
             RuleFor(r => r.MachineTypeId).NotEmpty();
             RuleFor(r => r.WeavingUnitId).NotEmpty();
+            RuleFor(r => r.Process).NotEmpty();
+            RuleFor(r => r.Area).NotEmpty();
+            RuleFor(r => r.Block).NotEmpty();
         }
     }
 }

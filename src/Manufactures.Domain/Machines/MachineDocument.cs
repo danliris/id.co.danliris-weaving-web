@@ -14,6 +14,9 @@ namespace Manufactures.Domain.Machines
         public UnitId WeavingUnitId { get; private set; }
         public int Cutmark { get; private set; }
         public UomId CutmarkUomId { get; private set; }
+        public string Process { get; private set; }
+        public string Area { get; private set; }
+        public string Block { get; private set; }
 
         public MachineDocument(Guid identity,
                                string machineNumber,
@@ -21,7 +24,10 @@ namespace Manufactures.Domain.Machines
                                MachineTypeId machineTypeId,
                                UnitId weavingUnitId,
                                int cutmark,
-                               UomId cutmarkUomId) : base(identity)
+                               UomId cutmarkUomId,
+                               string process,
+                               string area, 
+                               string block) : base(identity)
         {
             Identity = identity;
             MachineNumber = machineNumber;
@@ -30,6 +36,9 @@ namespace Manufactures.Domain.Machines
             WeavingUnitId = weavingUnitId;
             Cutmark = cutmark;
             CutmarkUomId = cutmarkUomId;
+            Process = process;
+            Area = area;
+            Block = block;
 
             this.MarkTransient();
 
@@ -40,7 +49,10 @@ namespace Manufactures.Domain.Machines
                 MachineTypeId = this.MachineTypeId.Value,
                 WeavingUnitId = this.WeavingUnitId.Value,
                 Cutmark = this.Cutmark,
-                CutmarkUomId = this.CutmarkUomId.Value
+                CutmarkUomId = this.CutmarkUomId.Value,
+                Process = this.Process,
+                Area = this.Area,
+                Block = this.Block
             };
         }
 
@@ -53,6 +65,9 @@ namespace Manufactures.Domain.Machines
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
             this.Cutmark = readModel.Cutmark.HasValue ? readModel.Cutmark.Value : 0;
             this.CutmarkUomId = readModel.CutmarkUomId.HasValue ? new UomId(readModel.CutmarkUomId.Value) : null;
+            this.Process = readModel.Process;
+            this.Area = readModel.Area;
+            this.Block = readModel.Block;
         }
 
         public void SetLocation(string value)
@@ -116,6 +131,39 @@ namespace Manufactures.Domain.Machines
             {
                 CutmarkUomId = cutmarkUomId;
                 ReadModel.CutmarkUomId = CutmarkUomId.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetProcess(string value)
+        {
+            if (!Process.Equals(value))
+            {
+                Process = value;
+                ReadModel.Process = MachineNumber;
+
+                MarkModified();
+            }
+        }
+
+        public void SetArea(string value)
+        {
+            if (!Area.Equals(value))
+            {
+                Area = value;
+                ReadModel.Area = Area;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBlock(string value)
+        {
+            if (!Block.Equals(value))
+            {
+                Block = value;
+                ReadModel.Block = Block;
 
                 MarkModified();
             }

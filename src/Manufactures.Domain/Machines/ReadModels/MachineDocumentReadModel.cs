@@ -15,5 +15,8 @@ namespace Manufactures.Domain.Machines.ReadModels
         public string Location { get; internal set; }
         public int? Cutmark{ get; internal set; }
         public int? CutmarkUomId { get; internal set; }
+        public string Process { get; internal set; }
+        public string Area { get; internal set; }
+        public string Block { get; internal set; }
     }
 }
