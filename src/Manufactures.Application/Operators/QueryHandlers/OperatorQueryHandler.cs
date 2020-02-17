@@ -87,6 +87,7 @@ namespace Manufactures.Application.Operators.QueryHandlers
             var operatorDocument =
                 _operatorRepository
                     .Find(operatorQuery)
+                    .Where(o => o.Identity == id)
                     .FirstOrDefault();
 
             //Get Weaving Unit

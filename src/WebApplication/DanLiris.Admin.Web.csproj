@@ -78,6 +78,8 @@
     <Compile Remove="Migrations\20191217041512_AddWarpingBrokenCauseModule.Designer.cs" />
     <Compile Remove="Migrations\20200210075230_AddBeamProductResultsOnSizing.cs" />
     <Compile Remove="Migrations\20200210075230_AddBeamProductResultsOnSizing.Designer.cs" />
+    <Compile Remove="Migrations\20200214032334_ChangeOnMachineTable.cs" />
+    <Compile Remove="Migrations\20200214032334_ChangeOnMachineTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

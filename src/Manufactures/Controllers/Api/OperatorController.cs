@@ -30,6 +30,7 @@ namespace Manufactures.Controllers.Api
                                   IOperatorQuery<OperatorListDto> operatorQuery) : base(serviceProvider)
         {
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
+
             _operatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
         }

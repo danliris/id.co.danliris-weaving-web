@@ -1,14 +1,11 @@
 ﻿using Barebone.Controllers;
-using Infrastructure.External.DanLirisClient.CoreMicroservice;
-using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
-using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
+using Manufactures.Application.Machines.DataTransferObjects;
 using Manufactures.Domain.Machines.Commands;
+using Manufactures.Domain.Machines.Queries;
 using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
-using Manufactures.DataTransferObjects.Machine;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,36 +20,19 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class MachineDocumentController : ControllerApiBase
     {
-        //protected readonly IHttpClientService _http;
-        private readonly IMachineRepository _machineRepository;
-        private readonly IMachineTypeRepository 
-            _machineTypeRepository;
+        private readonly IMachineRepository 
+            _machineRepository;
+        private readonly IMachineQuery<MachineListDto> 
+            _machineQuery;
 
-        public MachineDocumentController(IServiceProvider serviceProvider) : base(serviceProvider)
+        public MachineDocumentController(IServiceProvider serviceProvider,
+                                         IMachineQuery<MachineListDto> machineQuery) : base(serviceProvider)
         {
-            //_http =
-            //    serviceProvider.GetService<IHttpClientService>();
+            _machineQuery = machineQuery ?? throw new ArgumentNullException(nameof(machineQuery));
+
             _machineRepository = 
                 this.Storage.GetRepository<IMachineRepository>();
-            _machineTypeRepository =
-                this.Storage.GetRepository<IMachineTypeRepository>();
         }
-
-        //protected SingleUomResult GetUom(int id)
-        //{
-        //    var masterUnitUri = MasterDataSettings.Endpoint + $"master/uoms/{id}";
-        //    var unitResponse = _http.GetAsync(masterUnitUri).Result;
-
-        //    if (unitResponse.IsSuccessStatusCode)
-        //    {
-        //        SingleUomResult uomResult = JsonConvert.DeserializeObject<SingleUomResult>(unitResponse.Content.ReadAsStringAsync().Result);
-        //        return uomResult;
-        //    }
-        //    else
-        //    {
-        //        return new SingleUomResult();
-        //    }
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
@@ -61,32 +41,17 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query =
-                _machineRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var allMachine =
-                _machineRepository.Find(query);
-
-            var machines = new List<MachineListDto>();
-
-            foreach (var machine in allMachine)
-            {
-                var machineType =
-                    _machineTypeRepository.Find(o => o.Identity.Equals(machine.MachineTypeId.Value)).FirstOrDefault().TypeName;
-                var machineDto  = new MachineListDto(machine);
-                machineDto.SetMachineType(machineType);
-
-                machines.Add(machineDto);
-            }
-
+            VerifyUser();
+            var machineDocuments = await _machineQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                machines =
-                    machines.Where(entity => entity.MachineNumber.Contains(keyword,
-                                                                          StringComparison.OrdinalIgnoreCase) ||
-                                            entity.Location.Contains(keyword, 
-                                                                     StringComparison.OrdinalIgnoreCase)).ToList();
+                machineDocuments =
+                    machineDocuments.Where(o => o.MachineNumber.Contains(keyword,
+                                                                            StringComparison.OrdinalIgnoreCase) ||
+                                                o.Location.Contains(keyword, 
+                                                                            StringComparison.OrdinalIgnoreCase))
+                                    .ToList();
             }
 
             if (!order.Contains("{}"))
@@ -99,48 +64,34 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    machines = machines.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    machineDocuments = machineDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    machines = machines.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    machineDocuments = machineDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            var ResultMachine = machines.Skip(page * size).Take(size);
-            int totalRows = machines.Count();
-            int resultCount = ResultMachine.Count();
-            page = page + 1;
+            //int totalRows = dailyOperationWarpingDocuments.Count();
+            var result = machineDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
 
-            await Task.Yield();
-
-            return Ok(ResultMachine, info: new
-            {
-                page,
-                size,
-                total = totalRows,
-                count = resultCount
-            });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
+            VerifyUser();
             var Identity = Guid.Parse(Id);
-            var machine =
-                _machineRepository.Find(item => item.Identity == Identity)
-                                  .FirstOrDefault();
+            var machineDocument = await _machineQuery.GetById(Identity);
 
-            await Task.Yield();
-            if (machine == null)
+            if (machineDocument == null)
             {
-                return NotFound();
+                return NotFound(Identity);
             }
-            else
-            {
-                var result = new MachineDocumentDto(machine);
-                return Ok(result);
-            }
+
+            return Ok(machineDocument);
         }
 
         [HttpPost]

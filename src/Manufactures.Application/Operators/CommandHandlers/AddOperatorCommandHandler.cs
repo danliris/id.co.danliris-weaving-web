@@ -28,8 +28,7 @@ namespace Manufactures.Application.Operators.CommandHandlers
         {
             var coreAccount =
                 new CoreAccount(request.CoreAccount.MongoId,
-                                request.CoreAccount.Id.HasValue ?
-                                request.CoreAccount.Id.Value : 0,
+                                request.CoreAccount.Id.HasValue ? request.CoreAccount.Id.Value : 0,
                                 request.CoreAccount.Name);
             var newOperator =
                 new OperatorDocument(Guid.NewGuid(),

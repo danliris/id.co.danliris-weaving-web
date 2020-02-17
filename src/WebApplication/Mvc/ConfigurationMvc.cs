@@ -7,6 +7,7 @@ using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.FabricConstructions.Commands;
+using Manufactures.Domain.Machines.Commands;
 using Manufactures.Domain.Orders.Commands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -51,6 +52,8 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<FinishDoffDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateExistingMachineCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<AddNewMachineCommandValidator>();
 
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });

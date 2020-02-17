@@ -173,9 +173,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(machineTypeDocument.Identity),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { machineDocument });
 
@@ -322,9 +320,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(machineTypeDocument.Identity),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { machineDocument });
 
@@ -499,9 +495,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(machineTypeDocument.Identity),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { machineDocument });
 
@@ -676,9 +670,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 "123",
                 "Utara",
                 new MachineTypeId(machineTypeDocument.Identity),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { machineDocument });
 

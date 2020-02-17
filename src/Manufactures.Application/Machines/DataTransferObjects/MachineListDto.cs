@@ -1,8 +1,10 @@
 ﻿using Manufactures.Domain.Machines;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
-namespace Manufactures.DataTransferObjects.Machine
+namespace Manufactures.Application.Machines.DataTransferObjects
 {
     public class MachineListDto
     {

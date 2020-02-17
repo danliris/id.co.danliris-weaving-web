@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -17,16 +18,16 @@ namespace Manufactures.Domain.Machines.Commands
         public string Location { get; set; }
 
         [JsonProperty(PropertyName = "MachineTypeId")]
-        public string MachineTypeId { get; set; }
+        public MachineTypeId MachineTypeId { get; set; }
 
         [JsonProperty(PropertyName = "WeavingUnitId")]
-        public string WeavingUnitId { get; set; }
+        public UnitId WeavingUnitId { get; set; }
 
         [JsonProperty(PropertyName = "Cutmark")]
         public int? Cutmark { get; set; }
 
-        [JsonProperty(PropertyName = "CutmarkUomId")]
-        public string CutmarkUomId { get; set; }
+        [JsonProperty(PropertyName = "CutmarkUom")]
+        public string CutmarkUom { get; set; }
 
         [JsonProperty(PropertyName = "Process")]
         public string Process { get; set; }
@@ -35,7 +36,7 @@ namespace Manufactures.Domain.Machines.Commands
         public string Area { get; set; }
 
         [JsonProperty(PropertyName = "Block")]
-        public string Block { get; set; }
+        public int Block { get; set; }
 
         public void SetId(Guid Id)
         {

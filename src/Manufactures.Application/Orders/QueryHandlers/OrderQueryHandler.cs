@@ -83,8 +83,7 @@ namespace Manufactures.Application.Orders.QueryHandlers
                     _fabricConstructionRepository
                         .Query
                         .Where(o => o.Identity == order.ConstructionDocumentId.Value)
-                        .FirstOrDefault()
-                        .ConstructionNumber;
+                        .FirstOrDefault()?.ConstructionNumber;
 
                 var resultDto = new OrderListDto(order);
 
