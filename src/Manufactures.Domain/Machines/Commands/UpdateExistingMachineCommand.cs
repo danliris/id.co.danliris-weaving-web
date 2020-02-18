@@ -48,14 +48,14 @@ namespace Manufactures.Domain.Machines.Commands
     {
         public UpdateExistingMachineCommandValidator()
         {
-            RuleFor(r => r.Id).NotEmpty();
-            RuleFor(r => r.MachineNumber).NotEmpty();
-            RuleFor(r => r.Location).NotEmpty();
-            RuleFor(r => r.MachineTypeId).NotEmpty();
-            RuleFor(r => r.WeavingUnitId).NotEmpty();
-            RuleFor(r => r.Process).NotEmpty();
-            RuleFor(r => r.Area).NotEmpty();
-            RuleFor(r => r.Block).NotEmpty();
+            RuleFor(r => r.Id).NotEmpty().WithMessage("Id Tidak Boleh Kosong");
+            RuleFor(r => r.MachineNumber).NotEmpty().WithMessage("No. Mesin Harus Diisi");
+            RuleFor(r => r.Location).NotEmpty().WithMessage("Lokasi Harus Diisi");
+            RuleFor(r => r.MachineTypeId).NotEmpty().WithMessage("Tipe Mesin Harus Diisi");
+            RuleFor(r => r.WeavingUnitId).NotEmpty().WithMessage("Unit Weaving Harus Diisi");
+            RuleFor(r => r.Process).NotEmpty().WithMessage("Proses Harus Diisi");
+            RuleFor(r => r.Area).NotEmpty().WithMessage("Area Harus Diisi");
+            RuleFor(r => r.Block).NotNull().WithMessage("Blok Harus Diisi");
         }
     }
 }
