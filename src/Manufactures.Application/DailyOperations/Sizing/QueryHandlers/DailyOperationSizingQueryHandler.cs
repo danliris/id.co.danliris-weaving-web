@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
 {
-    public class DailyOperationSizingQueryHandler : IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>
+    public class DailyOperationSizingQueryHandler : IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, IDailyOperationSizingBeamProductQuery<DailyOperationSizingBeamProductDto>
     {
         protected readonly IHttpClientService
             _http;
@@ -409,6 +409,51 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             //}
             //result.DailyOperationSizingHistories = result.DailyOperationSizingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
 
+            return result;
+        }
+
+        public async Task<List<DailyOperationSizingBeamProductDto>> GetSizingBeamProductsByOrder(Guid orderId)
+        {
+            var result = new List<DailyOperationSizingBeamProductDto>();
+
+            //Get Sizing Document that used same OrderId
+            var sizingDocumentQuery =
+                   _dailyOperationSizingRepository
+                       .Query
+                       .OrderByDescending(x => x.CreatedDate);
+
+            await Task.Yield();
+            var sizingDocuments =
+                    _dailyOperationSizingRepository
+                        .Find(sizingDocumentQuery)
+                        .Where(o => o.OrderDocumentId.Value == orderId);
+
+            //Get Ids of Sizing Documents
+            var sizingDocumentIds = sizingDocuments.Select(o => o.Identity);
+
+            //Get Sizing Beam Products That Contains Sizing Document Ids
+            await Task.Yield();
+            var sizingBeamProducts =
+                _dailyOperationBeamProductRepository
+                    .Find(o => sizingDocumentIds.Contains(o.DailyOperationSizingDocumentId))
+                    .ToList();
+
+            await Task.Yield();
+            foreach (var sizingBeamProduct in sizingBeamProducts)
+            {
+                //Get Beam Number
+                var beamNumber =
+                    _beamRepository
+                        .Find(o => o.Identity == sizingBeamProduct.SizingBeamId.Value)
+                        .FirstOrDefault()?
+                        .Number;
+
+                //Convert Sizing Beam Products to Sizing Beam Product Dto
+                var sizingBeamProductDto = new DailyOperationSizingBeamProductDto(sizingBeamProduct, beamNumber);
+
+                //Add to Result Dto(List of DailyOperationSizingBeamProductDto)
+                result.Add(sizingBeamProductDto);
+            }
             return result;
         }
     }

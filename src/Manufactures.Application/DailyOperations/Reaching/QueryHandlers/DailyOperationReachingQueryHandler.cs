@@ -83,41 +83,43 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
         public async Task<IEnumerable<DailyOperationReachingListDto>> GetAll()
         {
-            var query =
+            var reachingQuery =
                 _dailyOperationReachingRepository
                     .Query
                     .OrderByDescending(x => x.CreatedDate);
 
             await Task.Yield();
-            var dailyOperationReachingDocuments =
+            var reachingDocuments =
                     _dailyOperationReachingRepository
-                        .Find(query);
+                        .Find(reachingQuery);
+
             var result = new List<DailyOperationReachingListDto>();
 
-            foreach (var operation in dailyOperationReachingDocuments)
+            foreach (var reachingDocument in reachingDocuments)
             {
-                var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == operation.Identity);
-                var reachingDetail = histories.OrderByDescending(d => d.DateTimeMachine).FirstOrDefault();
+                var reachingHistories = 
+                    _dailyOperationReachingHistoryRepository
+                        .Find(o => o.DailyOperationReachingDocumentId == reachingDocument.Identity);
+                var latestReachingHistory = 
+                    reachingHistories
+                        .OrderByDescending(d => d.DateTimeMachine)
+                        .FirstOrDefault();
 
                 //Get Machine Number
                 await Task.Yield();
                 var machineNumber =
                     _machineRepository
                         .Find(entity => entity.Identity
-                        .Equals(operation.MachineDocumentId.Value))
-                        .FirstOrDefault()
+                        .Equals(reachingDocument.MachineDocumentId.Value))
+                        .FirstOrDefault()?
                         .MachineNumber ?? "Not Found Machine Number";
 
                 //Get Order Document
                 await Task.Yield();
                 var orderDocument =
                     _orderDocumentRepository
-                        .Find(entity => entity.Identity
-                        .Equals(operation.OrderDocumentId.Value))
+                        .Find(o => o.Identity == reachingDocument.OrderDocumentId.Value)
                         .FirstOrDefault();
-
-                //Get Construction Id
-                var constructionId = orderDocument.ConstructionDocumentId.Value;
 
                 //Get Weaving Unit Id
                 SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
@@ -127,23 +129,26 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                 await Task.Yield();
                 var constructionNumber =
                     _fabricConstructionRepository
-                        .Find(entity => entity.Identity
-                        .Equals(constructionId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == orderDocument.ConstructionDocumentId.Value)
+                        .FirstOrDefault()?
                         .ConstructionNumber ?? "Not Found Construction Number";
 
                 //Get Sizing Beam Number
                 await Task.Yield();
                 var sizingBeamNumber =
                     _beamRepository
-                        .Find(entity => entity.Identity.Equals(operation.SizingBeamId.Value))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == reachingDocument.SizingBeamId.Value)
+                        .FirstOrDefault()?
                         .Number ?? "Not Found Sizing Beam Number";
 
-                var operationResult = new DailyOperationReachingListDto(operation, reachingDetail, machineNumber, weavingUnitName,
-                    constructionNumber, sizingBeamNumber);
+                var resultDto = new DailyOperationReachingListDto(reachingDocument, 
+                                                                  latestReachingHistory, 
+                                                                  machineNumber, 
+                                                                  weavingUnitName,
+                                                                  constructionNumber, 
+                                                                  sizingBeamNumber);
 
-                result.Add(operationResult);
+                result.Add(resultDto);
             }
 
             return result;
@@ -151,39 +156,31 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
         public async Task<DailyOperationReachingListDto> GetById(Guid id)
         {
-            //var query =
-            //    _dailyOperationReachingRepository.Query
-            //        .OrderByDescending(x => x.CreatedDate);
-
             //Get Daily Operation Reaching Document
             await Task.Yield();
-            var dailyOperationReachingTyingDocument =
-                   _dailyOperationReachingRepository
-                       .Find(x => x.Identity == id)
-                       .FirstOrDefault();
+            var reachingDocument =
+                _dailyOperationReachingRepository
+                    .Find(o => o.Identity == id)
+                    .FirstOrDefault();
 
-            var histories = _dailyOperationReachingHistoryRepository.Find(s => s.DailyOperationReachingDocumentId == dailyOperationReachingTyingDocument.Identity);
-
+            var reachingHistories = 
+                _dailyOperationReachingHistoryRepository
+                    .Find(o => o.DailyOperationReachingDocumentId == reachingDocument.Identity);
 
             //Get Machine Number
             await Task.Yield();
             var machineNumber =
                 _machineRepository
-                    .Find(entity => entity.Identity
-                    .Equals(dailyOperationReachingTyingDocument.MachineDocumentId.Value))
-                    .FirstOrDefault()
+                    .Find(o => o.Identity == reachingDocument.MachineDocumentId.Value)
+                    .FirstOrDefault()?
                     .MachineNumber ?? "Not Found Machine Number";
 
             //Get Order Document
             await Task.Yield();
             var orderDocument =
                 _orderDocumentRepository
-                    .Find(entity => entity.Identity
-                    .Equals(dailyOperationReachingTyingDocument.OrderDocumentId.Value))
+                    .Find(o => o.Identity == reachingDocument.OrderDocumentId.Value)
                     .FirstOrDefault();
-
-            //Get Construction Id
-            var constructionId = orderDocument.ConstructionDocumentId.Value;
 
             //Get Weaving Unit Id
             SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
@@ -193,51 +190,61 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             await Task.Yield();
             var constructionNumber =
                 _fabricConstructionRepository
-                    .Find(entity => entity.Identity
-                    .Equals(constructionId))
-                    .FirstOrDefault()
+                    .Find(o => o.Identity == orderDocument.ConstructionDocumentId.Value)
+                    .FirstOrDefault()?
                     .ConstructionNumber ?? "Not Found Construction Number";
 
             //Get Sizing Beam Number
             await Task.Yield();
             var sizingBeamDocument =
                 _beamRepository
-                    .Find(entity => entity.Identity.Equals(dailyOperationReachingTyingDocument.SizingBeamId.Value))
+                    .Find(o => o.Identity == reachingDocument.SizingBeamId.Value)
                     .FirstOrDefault();
             var sizingBeamNumber = sizingBeamDocument.Number ?? "Not Found Sizing Beam Number";
             var sizingYarnStrands = sizingBeamDocument.YarnStrands;
 
             //Get Daily Operation Reaching Detail
             await Task.Yield();
-            var dailyOperationReachingTyingDetail =
-                histories
+            var lastReachingHistory =
+                reachingHistories
                     .OrderByDescending(e => e.DateTimeMachine)
                     .FirstOrDefault();
 
             //Assign Parameter to Object Result
-            var result = new DailyOperationReachingByIdDto(dailyOperationReachingTyingDocument, dailyOperationReachingTyingDetail, machineNumber, weavingUnitName, constructionNumber, sizingBeamNumber, sizingYarnStrands);
+            var result = new DailyOperationReachingByIdDto(reachingDocument, 
+                                                           lastReachingHistory, 
+                                                           machineNumber, 
+                                                           weavingUnitName, 
+                                                           constructionNumber, 
+                                                           sizingBeamNumber, 
+                                                           sizingYarnStrands);
 
-            foreach (var detail in histories)
+            foreach (var reachingHistory in reachingHistories)
             {
                 //Get Operator Name
                 await Task.Yield();
                 var operatorName = 
                     _operatorRepository
-                        .Find(entity => entity.Identity.Equals(detail.OperatorDocumentId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == reachingHistory.OperatorDocumentId.Value)
+                        .FirstOrDefault()?
                         .CoreAccount.Name ?? "Not Found Operator Name";
 
                 //Get Shift Name
                 await Task.Yield();
                 var shiftName =
                     _shiftRepository
-                        .Find(entity => entity.Identity.Equals(detail.ShiftDocumentId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == reachingHistory.ShiftDocumentId.Value)
+                        .FirstOrDefault()?
                         .Name ?? "Not Found Shift Name";
 
-                var reachingDetail = new DailyOperationReachingHistoryDto(detail.Identity, operatorName, detail.YarnStrandsProcessed, detail.DateTimeMachine, shiftName, detail.MachineStatus);
+                var reachingHistoryDto = new DailyOperationReachingHistoryDto(reachingHistory.Identity, 
+                                                                              operatorName, 
+                                                                              reachingHistory.YarnStrandsProcessed, 
+                                                                              reachingHistory.DateTimeMachine, 
+                                                                              shiftName, 
+                                                                              reachingHistory.MachineStatus);
 
-                result.ReachingHistories.Add(reachingDetail);
+                result.ReachingHistories.Add(reachingHistoryDto);
             }
             result.ReachingHistories = result.ReachingHistories.OrderByDescending(history => history.DateTimeMachine).ToList();
 

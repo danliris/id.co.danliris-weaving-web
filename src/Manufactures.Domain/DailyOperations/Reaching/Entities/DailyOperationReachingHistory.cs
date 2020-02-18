@@ -1,92 +1,122 @@
 ﻿using Infrastructure.Domain;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
+using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Reaching.Entities
 {
-    public class DailyOperationReachingHistory : EntityBase<DailyOperationReachingHistory>
+    public class DailyOperationReachingHistory : AggregateRoot<DailyOperationReachingHistory, DailyOperationReachingHistoryReadModel>
     {
-        public Guid OperatorDocumentId { get; private set; }
+        public OperatorId OperatorDocumentId { get; private set; }
 
         public int YarnStrandsProcessed { get; private set; }
 
         public DateTimeOffset DateTimeMachine { get; private set; }
 
-        public Guid ShiftDocumentId { get; private set; }
+        public ShiftId ShiftDocumentId { get; private set; }
 
         public string MachineStatus { get; private set; }
 
         public Guid DailyOperationReachingDocumentId { get; set; }
 
-        public DailyOperationReachingReadModel DailyOperationReachingDocument { get; set; }
-
-        public DailyOperationReachingHistory(Guid identity) : base(identity)
+        public DailyOperationReachingHistory(Guid identity, OperatorId operatorDocumentId, int yarnStrandsProcessed, DateTimeOffset dateTimeMachine, ShiftId shiftDocumentId, string machineStatus, Guid dailyOperationReachingDocumentId) : base(identity)
         {
-        }
-
-        public DailyOperationReachingHistory(Guid identity,
-                                                 OperatorId operatorDocumentId,
-                                                 int yarnStrandsProcessed,
-                                                 DateTimeOffset dateTimeMachine,
-                                                 ShiftId shiftDocumentId,
-                                                 string machineStatus) : base(identity)
-        {
-            OperatorDocumentId = operatorDocumentId.Value;
+            MarkTransient();
+            
+            Identity = identity;
+            OperatorDocumentId = operatorDocumentId;
             YarnStrandsProcessed = yarnStrandsProcessed;
             DateTimeMachine = dateTimeMachine;
-            ShiftDocumentId = shiftDocumentId.Value;
+            ShiftDocumentId = shiftDocumentId;
             MachineStatus = machineStatus;
-        }
+            DailyOperationReachingDocumentId = dailyOperationReachingDocumentId;
 
-        public DailyOperationReachingHistory(Guid identity,
-                                                 OperatorId operatorDocumentId,
-                                                 DateTimeOffset dateTimeMachine,
-                                                 ShiftId shiftDocumentId,
-                                                 string machineStatus) : base(identity)
-        {
-            OperatorDocumentId = operatorDocumentId.Value;
-            DateTimeMachine = dateTimeMachine;
-            ShiftDocumentId = shiftDocumentId.Value;
-            MachineStatus = machineStatus;
-        }
-
-        public void SetOperatorDocumentId(OperatorId operatorDocumentId)
-        {
-            if (!OperatorDocumentId.Equals(operatorDocumentId.Value))
+            ReadModel = new DailyOperationReachingHistoryReadModel(Identity)
             {
-                OperatorDocumentId = operatorDocumentId.Value;
-                MarkModified();
-            }
+                OperatorDocumentId = OperatorDocumentId.Value,
+                YarnStrandsProcessed = YarnStrandsProcessed,
+                DateTimeMachine = DateTimeMachine,
+                ShiftDocumentId = ShiftDocumentId.Value,
+                MachineStatus = MachineStatus,
+                DailyOperationReachingDocumentId = DailyOperationReachingDocumentId
+            };
+
+            ReadModel.AddDomainEvent(new OnAddDailyOperationReachingHistory(Identity));
         }
 
-        public void SetYarnStrandsProcessed(int yarnStrandsProcessed)
+        public DailyOperationReachingHistory(DailyOperationReachingHistoryReadModel readModel) : base(readModel)
         {
-            YarnStrandsProcessed = yarnStrandsProcessed;
-            MarkModified();
-        }
-
-        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
-        {
-            DateTimeMachine = dateTimeMachine;
-            MarkModified();
-        }
-
-        public void SetShiftId(ShiftId shiftDocumentId)
-        {
-            ShiftDocumentId = shiftDocumentId.Value;
-            MarkModified();
-        }
-
-        public void SetMachineStatus(string machineStatus)
-        {
-            MachineStatus = machineStatus;
-            MarkModified();
+            OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId);
+            YarnStrandsProcessed = readModel.YarnStrandsProcessed;
+            DateTimeMachine = readModel.DateTimeMachine;
+            ShiftDocumentId = new ShiftId(readModel.ShiftDocumentId);
+            MachineStatus = readModel.MachineStatus;
+            DailyOperationReachingDocumentId = readModel.DailyOperationReachingDocumentId;
         }
 
         protected override DailyOperationReachingHistory GetEntity()
         {
             return this;
+        }
+
+        public void SetOperatorDocumentId(OperatorId newOperatorDocumentId)
+        {
+            if (OperatorDocumentId != newOperatorDocumentId)
+            {
+                OperatorDocumentId = newOperatorDocumentId;
+                ReadModel.OperatorDocumentId = OperatorDocumentId.Value;
+                MarkModified();
+            }
+        }
+
+        public void SetYarnStrandsProcessed(int newYarnStrandsProcessed)
+        {
+            if(YarnStrandsProcessed != newYarnStrandsProcessed)
+            {
+                YarnStrandsProcessed = newYarnStrandsProcessed;
+                ReadModel.YarnStrandsProcessed = YarnStrandsProcessed;
+                MarkModified();
+            }
+        }
+
+        public void SetDateTimeMachine(DateTimeOffset newDateTimeMachine)
+        {
+            if(DateTimeMachine != newDateTimeMachine)
+            {
+                DateTimeMachine = newDateTimeMachine;
+                ReadModel.DateTimeMachine = DateTimeMachine;
+                MarkModified();
+            }
+        }
+
+        public void SetShiftId(ShiftId newShiftDocumentId)
+        {
+            if(ShiftDocumentId != newShiftDocumentId)
+            {
+                ShiftDocumentId = newShiftDocumentId;
+                ReadModel.ShiftDocumentId = ShiftDocumentId.Value;
+                MarkModified();
+            }
+            
+        }
+
+        public void SetMachineStatus(string newMachineStatus)
+        {
+            if(MachineStatus != newMachineStatus)
+            {
+                MachineStatus = newMachineStatus;
+                ReadModel.MachineStatus = MachineStatus;
+                MarkModified();
+            }
+            
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
     }
 }

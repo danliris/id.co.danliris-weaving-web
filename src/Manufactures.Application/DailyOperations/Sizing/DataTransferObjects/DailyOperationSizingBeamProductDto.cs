@@ -1,5 +1,6 @@
 ﻿using Manufactures.Domain.Beams;
 using Manufactures.Domain.DailyOperations.Sizing.Entities;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 
@@ -9,6 +10,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
     {
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; }
+
+        [JsonProperty(PropertyName = "SizingBeamId")]
+        public BeamId SizingBeamId { get; }
 
         [JsonProperty(PropertyName = "SizingBeamNumber")]
         public string SizingBeamNumber { get; }
@@ -43,6 +47,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
         public DailyOperationSizingBeamProductDto(DailyOperationSizingBeamProduct beamProduct, string sizingBeamNumber)
         {
             Id = beamProduct.Identity;
+            SizingBeamId = beamProduct.SizingBeamId;
             SizingBeamNumber = sizingBeamNumber;
             LatestDateTimeBeamProduct = beamProduct.LatestDateTimeBeamProduct;
             CounterStart = beamProduct.CounterStart;

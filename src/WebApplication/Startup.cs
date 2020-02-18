@@ -167,6 +167,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<ISizePickupReportQuery<SizePickupReportListDto>, SizePickupReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
+            services.AddTransient<IDailyOperationSizingBeamProductQuery<DailyOperationSizingBeamProductDto>, DailyOperationSizingQueryHandler>();
 
             //Warping and Warping's Report
             services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();

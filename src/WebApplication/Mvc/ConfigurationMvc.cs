@@ -3,6 +3,7 @@ using DanLiris.Admin.Web.Utils;
 using ExtCore.Mvc.Infrastructure.Actions;
 using FluentValidation.AspNetCore;
 using Infrastructure.Mvc.Filters;
+using Manufactures.Domain.DailyOperations.Reaching.Command;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Warping.Commands;
 using Manufactures.Domain.Estimations.Productions.Commands;
@@ -45,6 +46,13 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<FinishDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<WarpingBrokenThreadsCausesCommandValidator>();
 
+                fv.RegisterValidatorsFromAssemblyContaining<ChangeOperatorCombDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateCombFinishDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateCombStartDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<ChangeOperatorReachingInDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateReachingInFinishDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateReachingInStartDailyOperationReachingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationReachingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationSizingBeamsWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<PreparationDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateStartDailyOperationSizingCommandValidator>();

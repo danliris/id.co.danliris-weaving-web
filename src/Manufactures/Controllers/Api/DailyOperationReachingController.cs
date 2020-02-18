@@ -142,33 +142,33 @@ namespace Manufactures.Controllers.Api
             var dailyOperationReaching = await Mediator.Send(command);
 
             //Reformat DateTime
-            var year = command.PreparationDate.Year;
-            var month = command.PreparationDate.Month;
-            var day = command.PreparationDate.Day;
-            var hour = command.PreparationTime.Hours;
-            var minutes = command.PreparationTime.Minutes;
-            var seconds = command.PreparationTime.Seconds;
-            var dateTime =
-                new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+            //var year = command.PreparationDate.Year;
+            //var month = command.PreparationDate.Month;
+            //var day = command.PreparationDate.Day;
+            //var hour = command.PreparationTime.Hours;
+            //var minutes = command.PreparationTime.Minutes;
+            //var seconds = command.PreparationTime.Seconds;
+            //var dateTime =
+            //    new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-            //Get Last Beam Stock Monitoring Which Used Same Beam Id
-            var beamStockMonitoring =
-                _beamStockMonitoringRepository
-                    .Query
-                    .Where(o=>o.BeamDocumentId.Equals(command.SizingBeamId.Value) &&
-                           o.OrderDocumentId.Equals(command.OrderDocumentId.Value))
-                    .OrderByDescending(o => o.CreatedDate);
+            ////Get Last Beam Stock Monitoring Which Used Same Beam Id
+            //var beamStockMonitoring =
+            //    _beamStockMonitoringRepository
+            //        .Query
+            //        .Where(o=>o.BeamDocumentId.Equals(command.SizingBeamId.Value) &&
+            //               o.OrderDocumentId.Equals(command.OrderDocumentId.Value))
+            //        .OrderByDescending(o => o.CreatedDate);
 
-            var sameBeamIdBeamStockMonitoring =
-                _beamStockMonitoringRepository
-                    .Find(beamStockMonitoring)
-                    .FirstOrDefault();
+            //var sameBeamIdBeamStockMonitoring =
+            //    _beamStockMonitoringRepository
+            //        .Find(beamStockMonitoring)
+            //        .FirstOrDefault();
 
-            sameBeamIdBeamStockMonitoring.SetReachingEntryDate(dateTime);
-            sameBeamIdBeamStockMonitoring.SetReachingLengthStock(sameBeamIdBeamStockMonitoring.SizingLengthStock);
-            sameBeamIdBeamStockMonitoring.SetPosition(2);
+            //sameBeamIdBeamStockMonitoring.SetReachingEntryDate(dateTime);
+            //sameBeamIdBeamStockMonitoring.SetReachingLengthStock(sameBeamIdBeamStockMonitoring.SizingLengthStock);
+            //sameBeamIdBeamStockMonitoring.SetPosition(2);
 
-            await _beamStockMonitoringRepository.Update(sameBeamIdBeamStockMonitoring);
+            //await _beamStockMonitoringRepository.Update(sameBeamIdBeamStockMonitoring);
             Storage.Save();
 
             //Return Result from Command Handler as Identity(Id)

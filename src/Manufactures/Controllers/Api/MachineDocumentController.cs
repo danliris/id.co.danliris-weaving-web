@@ -48,9 +48,9 @@ namespace Manufactures.Controllers.Api
             {
                 machineDocuments =
                     machineDocuments.Where(o => o.MachineNumber.Contains(keyword,
-                                                                            StringComparison.OrdinalIgnoreCase) ||
+                                                                            StringComparison.CurrentCultureIgnoreCase) ||
                                                 o.Location.Contains(keyword, 
-                                                                            StringComparison.OrdinalIgnoreCase))
+                                                                            StringComparison.CurrentCultureIgnoreCase))
                                     .ToList();
             }
 

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
 
 namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 {

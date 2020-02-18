@@ -87,7 +87,14 @@ namespace Manufactures.Application.Machines.QueryHandlers
 
             foreach (var machineDocument in machineDocuments)
             {
+                var machineType =
+                    _machineTypeRepository
+                        .Find(o => o.Identity == machineDocument.MachineTypeId.Value)
+                        .FirstOrDefault()?
+                        .TypeName;
+
                 var operatorDto = new MachineListDto(machineDocument);
+                operatorDto.SetMachineType(machineType);
 
                 result.Add(operatorDto);
             }
