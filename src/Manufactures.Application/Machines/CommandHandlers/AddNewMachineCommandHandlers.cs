@@ -26,12 +26,12 @@ namespace Manufactures.Application.Machines.CommandHandlers
         public async Task<MachineDocument> Handle(AddNewMachineCommand request, 
                                                                    CancellationToken cancellationToken)
         {
-            var exsistingMachine = _machineRepository.Find(o => o.MachineNumber.Equals(request.MachineNumber) && 
+            var existingMachine = _machineRepository.Find(o => o.MachineNumber.Equals(request.MachineNumber) && 
                                                                 o.Deleted.Value.Equals(false))
                                                      .FirstOrDefault();
 
 
-            if(exsistingMachine != null)
+            if(existingMachine != null)
             {
                 throw Validator.ErrorValidation(("MachineNumber", "Has available machine number"));
             }
@@ -40,10 +40,14 @@ namespace Manufactures.Application.Machines.CommandHandlers
             var machineDocument = new MachineDocument(Guid.NewGuid(),
                                                       request.MachineNumber,
                                                       request.Location,
-                                                      new MachineTypeId(Guid.Parse(request.MachineTypeId)),
-                                                      new UnitId(int.Parse(request.WeavingUnitId)),
-                                                      request.Cutmark ?? 0,
-                                                      new UomId(int.Parse(request.CutmarkUomId)) ?? null);
+                                                      new MachineTypeId(request.MachineTypeId),
+                                                      new UnitId(request.WeavingUnitId),
+                                                      request.Process,
+                                                      request.Area,
+                                                      request.Block);
+
+            machineDocument.SetCutmark(request.Cutmark);
+            machineDocument.SetCutmarkUom(request.CutmarkUom ?? "");
 
             await _machineRepository.Update(machineDocument);
 

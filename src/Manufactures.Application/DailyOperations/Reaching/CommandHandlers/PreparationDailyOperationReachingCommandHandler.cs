@@ -4,6 +4,7 @@ using Manufactures.Application.Helpers;
 using Manufactures.Domain.BeamStockMonitoring.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching;
 using Manufactures.Domain.DailyOperations.Reaching.Command;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
@@ -37,13 +38,13 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
         {
             var dailyOperationReachingDocument =
                 new DailyOperationReachingDocument(Guid.NewGuid(),
-                                                   new MachineId(request.MachineDocumentId.Value),
-                                                   new OrderId(request.OrderDocumentId.Value),
-                                                   new BeamId(request.SizingBeamId.Value),
+                                                   request.MachineDocumentId,
+                                                   request.OrderDocumentId,
+                                                   request.SizingBeamId,
                                                    OperationStatus.ONPROCESS);
 
-
             await _dailyOperationReachingDocumentRepository.Update(dailyOperationReachingDocument);
+
             var year = request.PreparationDate.Year;
             var month = request.PreparationDate.Month;
             var day = request.PreparationDate.Day;
@@ -55,16 +56,14 @@ namespace Manufactures.Application.DailyOperations.Reaching.CommandHandlers
 
             var newHistory =
                     new DailyOperationReachingHistory(Guid.NewGuid(),
-                                                          new OperatorId(request.OperatorDocumentId.Value),
-                                                          0,
-                                                          dateTimeOperation,
-                                                          new ShiftId(request.ShiftDocumentId.Value),
-                                                          MachineStatus.ONENTRY,
-                                                          dailyOperationReachingDocument.Identity);
-
-            //dailyOperationReachingDocument.AddDailyOperationReachingHistory(newHistory);
+                                                      request.OperatorDocumentId,
+                                                      0,
+                                                      dateTimeOperation,
+                                                      request.ShiftDocumentId,
+                                                      MachineStatus.ONENTRY,
+                                                      dailyOperationReachingDocument.Identity);
+            
             await _dailyOperationReachingHistoryRepository.Update(newHistory);
-
 
             _storage.Save();
 

@@ -33,8 +33,12 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationLoomController : ControllerApiBase
     {
-        private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto> _loomQuery;
-        private readonly IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> _dailyOperationLoomReportQuery;
+        private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto> 
+            _loomQuery;
+        private readonly IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> 
+            _dailyOperationLoomReportQuery;
+        private readonly IDailyOperationLoomBeamProductQuery<DailyOperationLoomBeamProductDto>
+            _loomBeamProductQuery;
 
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
@@ -42,8 +46,10 @@ namespace Manufactures.Controllers.Api
             _beamRepository;
         private readonly IMachineRepository
             _machineRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository 
+            _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository 
+            _dailyOperationLoomProductRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
@@ -59,8 +65,10 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IBeamRepository>();
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
-            _dailyOperationLoomHistoryRepository = Storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository = Storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+            _dailyOperationLoomHistoryRepository = 
+                this.Storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository =
+                this.Storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         [HttpGet]
@@ -111,33 +119,53 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
 
-        [HttpGet("get-loom-beam-products")]
-        public async Task<IActionResult> GetLoomBeamProducts(string keyword, string filter = "{}", int page = 1, int size = 25)
+        [HttpGet("get-loom-beam-products-by-order")]
+        public async Task<IActionResult> GetLoomBeamProducts(int page = 1,
+                                                             int size = 25,
+                                                             string order = "{}",
+                                                             string keyword = null,
+                                                             string filter = "{}")
         {
             VerifyUser();
-            page = page - 1;
-            List<DailyOperationLoomBeamProductDto> loomListBeamProducts = new List<DailyOperationLoomBeamProductDto>();
+            var dailyOperationLoomBeamProducts = new List<DailyOperationLoomBeamProductDto>();
+
+            //if (!string.IsNullOrEmpty(filter))
+            //{
+            //    var orderFilter = new { OrderId = "" };
+            //    var serializedFilter = JsonConvert.DeserializeAnonymousType(filter, orderFilter);
+
+            //    if (!Guid.TryParse(serializedFilter.OrderId, out Guid OrderGuid))
+            //    {
+            //        return NotFound();
+            //    }
+
+            //    dailyOperationLoomBeamProducts = await _loomBeamProductQuery.GetLoomBeamProductsByOrder(OrderGuid);
+            //}
+
             if (!filter.Contains("{}"))
             {
                 Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
                 var LoomOperationId = filterDictionary["LoomOperationId"].ToString();
+
                 if (!LoomOperationId.Equals(null))
                 {
                     var LoomOperationGuid = Guid.Parse(LoomOperationId);
-
-                    await Task.Yield();
                     
                     await Task.Yield();
                     var existingDailyOperationLoomDocument =
                         _dailyOperationLoomRepository
-                            .Find(s => s.Identity == LoomOperationGuid)
+                            .Find(o => o.Identity == LoomOperationGuid)
                             .FirstOrDefault();
 
-                    var loomHistories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
-                    var loomProducts = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+                    var loomHistories = 
+                        _dailyOperationLoomHistoryRepository
+                            .Find(o => o.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+                    var loomBeamProducts = 
+                        _dailyOperationLoomProductRepository
+                            .Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
 
                     await Task.Yield();
-                    foreach (var loomBeamProduct in loomProducts)
+                    foreach (var loomBeamProduct in loomBeamProducts)
                     {
                         await Task.Yield();
                         var sizingBeamStatus = loomBeamProduct.BeamProductStatus;
@@ -184,7 +212,7 @@ namespace Manufactures.Controllers.Api
                                                                                       beamProductStatus);
                             loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
 
-                            loomListBeamProducts.Add(loomSizingBeam);
+                            dailyOperationLoomBeamProducts.Add(loomSizingBeam);
                         }
                     }
                 }
@@ -198,8 +226,8 @@ namespace Manufactures.Controllers.Api
                 throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
             }
 
-            var total = loomListBeamProducts.Count();
-            var data = loomListBeamProducts.Skip((page - 1) * size).Take(size);
+            var total = dailyOperationLoomBeamProducts.Count();
+            var data = dailyOperationLoomBeamProducts.Skip((page - 1) * size).Take(size);
 
             return Ok(data, info: new
             {

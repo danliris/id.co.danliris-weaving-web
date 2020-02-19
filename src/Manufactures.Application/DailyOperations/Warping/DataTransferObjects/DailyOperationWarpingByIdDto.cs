@@ -18,15 +18,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "MaterialType")]
         public string MaterialType { get; private set; }
 
-        //[JsonProperty(PropertyName = "TotalWarpingBeamLength")]
-        //public double TotalWarpingBeamLength { get; private set; }
-
-        //[JsonProperty(PropertyName = "CountWarpingBeamProducts")]
-        //public int CountWarpingBeamProducts { get; private set; }
-
-        //[JsonProperty(PropertyName = "IsFinishFlag")]
-        //public bool IsFinishFlag { get; private set; }
-
         [JsonProperty(PropertyName = "DailyOperationWarpingBeamProducts")]
         public List<DailyOperationWarpingBeamProductDto> DailyOperationWarpingBeamProducts { get; set; }
 

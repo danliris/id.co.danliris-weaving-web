@@ -108,13 +108,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (startDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
             }
             else
             {
                 if (dateTimeOperation <= lastHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("StartTime", "Start time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                 }
                 else
                 {

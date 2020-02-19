@@ -1,12 +1,9 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.Commands;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
-using Manufactures.DataTransferObjects.Operator;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-//using Microsoft.Extensions.DependencyInjection;
 using Moonlay;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
@@ -14,9 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
-using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
-using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Manufactures.Domain.Operators.Queries;
+using Manufactures.Application.Operators.DataTransferObjects;
 
 namespace Manufactures.Controllers.Api
 {
@@ -26,34 +22,18 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class OperatorController : ControllerApiBase
     {
-        //protected readonly IHttpClientService
-        //    _http;
-        private readonly IOperatorRepository _OperatorRepository;
+        private readonly IOperatorRepository _operatorRepository;
+        private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
 
         public OperatorController(IServiceProvider serviceProvider,
-                                  IWorkContext workContext) : base(serviceProvider)
+                                  IWorkContext workContext,
+                                  IOperatorQuery<OperatorListDto> operatorQuery) : base(serviceProvider)
         {
-            //_http =
-            //       serviceProvider.GetService<IHttpClientService>();
-            _OperatorRepository =
+            _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
+
+            _operatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
         }
-
-        //protected SingleUnitResult GetUnit(int id)
-        //{
-        //    var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
-        //    var unitResponse = _http.GetAsync(masterUnitUri).Result;
-
-        //    if (unitResponse.IsSuccessStatusCode)
-        //    {
-        //        SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
-        //        return unitResult;
-        //    }
-        //    else
-        //    {
-        //        return new SingleUnitResult();
-        //    }
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
@@ -62,22 +42,22 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query =
-                _OperatorRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var operatorDocuments =
-                _OperatorRepository.Find(query).Select(x => new OperatorListDto(x));
+            VerifyUser();
+            var operatorDocuments = await _operatorQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
+                await Task.Yield();
                 operatorDocuments =
                     operatorDocuments
                         .Where(o => o.Username
-                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)||
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    o.UnitName
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     o.Group
-                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase)||
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     o.Type
-                                        .Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
             }
 
@@ -101,40 +81,26 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            var ResultOperatorDocuments = operatorDocuments.Skip(page * size).Take(size).ToList();
-            int totalRows = operatorDocuments.Count();
-            int resultCount = ResultOperatorDocuments.Count();
-            page = page + 1;
+            //int totalRows = dailyOperationWarpingDocuments.Count();
+            var result = operatorDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
 
-            await Task.Yield();
-
-            return Ok(ResultOperatorDocuments, info: new
-            {
-                page,
-                size,
-                total = totalRows,
-                count = resultCount
-            });
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
+            VerifyUser();
             var Identity = Guid.Parse(Id);
-            var operatorDocument =
-                _OperatorRepository.Find(item => item.Identity == Identity).FirstOrDefault();
-            await Task.Yield();
+            var operatorDocument = await _operatorQuery.GetById(Identity);
 
             if (operatorDocument == null)
             {
-                return NotFound();
+                return NotFound(Identity);
             }
-            else
-            {
-                var resultData = new OperatorByIdDto(operatorDocument);
 
-                return Ok(resultData);
-            }
+            return Ok(operatorDocument);
         }
 
         [HttpPost]
@@ -143,7 +109,7 @@ namespace Manufactures.Controllers.Api
             var mongodbId = command.CoreAccount.MongoId;
 
             var existingOperator = 
-                _OperatorRepository
+                _operatorRepository
                     .Query
                     .Where(o => o.CoreAccount
                                  .Deserialize<CoreAccount>()

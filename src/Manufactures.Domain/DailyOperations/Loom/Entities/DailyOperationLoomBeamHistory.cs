@@ -1,23 +1,24 @@
 ﻿using Infrastructure.Domain;
-using Infrastructure.Domain.Events;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
-using System.Linq;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
-    public class DailyOperationLoomBeamHistory : EntityBase<DailyOperationLoomBeamHistory>
+    public class DailyOperationLoomBeamHistory : AggregateRoot<DailyOperationLoomBeamHistory, DailyOperationLoomBeamHistoryReadModel>
     {
         public string BeamNumber { get; private set; }
 
         public string MachineNumber { get; private set; }
 
-        public Guid OperatorDocumentId { get; private set; }
+        public OperatorId OperatorDocumentId { get; private set; }
 
         public DateTimeOffset DateTimeMachine { get; private set; }
 
-        public Guid ShiftDocumentId { get; private set; }
+        public ShiftId ShiftDocumentId { get; private set; }
 
         public int? WarpBrokenThreads { get; private set; }
 
@@ -33,92 +34,47 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public Guid DailyOperationLoomDocumentId { get; set; }
 
-        public DailyOperationLoomReadModel DailyOperationLoomDocument { get; set; }
-
-        public DailyOperationLoomBeamHistory(Guid identity) : base(identity)
+        public DailyOperationLoomBeamHistory(Guid identity, string beamNumber, string machineNumber, OperatorId operatorDocumentId, DateTimeOffset dateTimeMachine, ShiftId shiftDocumentId, string machineStatus, Guid dailyOperationLoomDocumentId) : base(identity)
         {
-        }
+            MarkTransient();
 
-        public DailyOperationLoomBeamHistory(Guid identity,
-                                             string beamNumber,
-                                             string machineNumber,
-                                             OperatorId operatorDocumentId, 
-                                             DateTimeOffset dateTimeMachine, 
-                                             ShiftId shiftDocumentId,
-                                             string machineStatus) : base(identity)
-        {
+            Identity = identity;
             BeamNumber = beamNumber;
             MachineNumber = machineNumber;
-            OperatorDocumentId = operatorDocumentId.Value;
+            OperatorDocumentId = operatorDocumentId;
             DateTimeMachine = dateTimeMachine;
-            ShiftDocumentId = shiftDocumentId.Value;
+            ShiftDocumentId = shiftDocumentId;
             MachineStatus = machineStatus;
+            DailyOperationLoomDocumentId = dailyOperationLoomDocumentId;
+
+            ReadModel = new DailyOperationLoomBeamHistoryReadModel(Identity)
+            {
+                BeamNumber = BeamNumber,
+                MachineNumber = MachineNumber,
+                OperatorDocumentId = OperatorDocumentId.Value,
+                DateTimeMachine = DateTimeMachine,
+                ShiftDocumentId = ShiftDocumentId.Value,
+                MachineStatus = MachineStatus,
+                DailyOperationLoomDocumentId = DailyOperationLoomDocumentId
+            };
+
+            ReadModel.AddDomainEvent(new OnAddDailyOperationLoomBeamHistory(Identity));
         }
 
-        public void SetBeamNumber(string beamNumber)
+        public DailyOperationLoomBeamHistory(DailyOperationLoomBeamHistoryReadModel readModel) : base(readModel)
         {
-            BeamNumber = beamNumber;
-            MarkModified();
-        }
-
-        public void SetMachineNumber(string machineNumber)
-        {
-            MachineNumber = machineNumber;
-            MarkModified();
-        }
-
-        public void SetOperatorDocumentId(OperatorId operatorDocumentId)
-        {
-            OperatorDocumentId = operatorDocumentId.Value;
-            MarkModified();
-        }
-
-        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
-        {
-            DateTimeMachine = dateTimeMachine;
-            MarkModified();
-        }
-
-        public void SetShiftDocumentId(ShiftId shiftDocumentId)
-        {
-            ShiftDocumentId = shiftDocumentId.Value;
-            MarkModified();
-        }
-
-        public void SetWarpBrokenThreads(int warpBrokenThreads)
-        {
-            WarpBrokenThreads = warpBrokenThreads;
-            MarkModified();
-        }
-
-        public void SetWeftBrokenThreads(int weftBrokenThreads)
-        {
-            WeftBrokenThreads = weftBrokenThreads;
-            MarkModified();
-        }
-
-        public void SetLenoBrokenThreads(int lenoBrokenThreads)
-        {
-            LenoBrokenThreads= lenoBrokenThreads;
-            MarkModified();
-        }
-
-        public void SetReprocessTo(string reprocessTo)
-        {
-            ReprocessTo = reprocessTo;
-            MarkModified();
-        }
-
-        public void SetInformation(string information)
-        {
-            Information = information;
-            MarkModified();
-        }
-
-        public void SetMachineStatus(string machineStatus)
-        {
-            MachineStatus = machineStatus;
-            MarkModified();
+            BeamNumber = readModel.BeamNumber;
+            MachineNumber = readModel.MachineNumber;
+            OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId);
+            DateTimeMachine = readModel.DateTimeMachine;
+            ShiftDocumentId = new ShiftId(readModel.ShiftDocumentId);
+            WarpBrokenThreads = readModel.WarpBrokenThreads;
+            WeftBrokenThreads = readModel.WeftBrokenThreads;
+            LenoBrokenThreads = readModel.LenoBrokenThreads;
+            ReprocessTo = readModel.ReprocessTo;
+            Information = readModel.Information;
+            MachineStatus = readModel.MachineStatus;
+            DailyOperationLoomDocumentId = readModel.DailyOperationLoomDocumentId;
         }
 
         protected override DailyOperationLoomBeamHistory GetEntity()
@@ -126,22 +82,123 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             return this;
         }
 
-        protected override void MarkRemoved()
+
+        public void SetBeamNumber(string newBeamNumber)
         {
-            DeletedBy = "System";
-            Deleted = true;
-            DeletedDate = DateTimeOffset.UtcNow;
-
-            if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityDeleted<DailyOperationLoomBeamHistory>))
-                this.AddDomainEvent(new OnEntityDeleted<DailyOperationLoomBeamHistory>(GetEntity()));
-
-            // clear updated events
-            if (this.DomainEvents.Any(o => o is OnEntityUpdated<DailyOperationLoomBeamHistory>))
+            if (BeamNumber != newBeamNumber)
             {
-                this.DomainEvents.Where(o => o is OnEntityUpdated<DailyOperationLoomBeamHistory>)
-                    .ToList()
-                    .ForEach(o => this.RemoveDomainEvent(o));
+                BeamNumber = newBeamNumber;
+                ReadModel.BeamNumber = BeamNumber;
+                MarkModified();
             }
+
+        }
+
+        public void SetMachineNumber(string newMachineNumber)
+        {
+            if (MachineNumber != newMachineNumber)
+            {
+                MachineNumber = newMachineNumber;
+                ReadModel.MachineNumber = MachineNumber;
+                MarkModified();
+            }
+
+        }
+
+        public void SetOperatorDocumentId(OperatorId newOperatorDocumentId)
+        {
+            if(OperatorDocumentId != newOperatorDocumentId)
+            {
+                OperatorDocumentId = newOperatorDocumentId;
+                ReadModel.OperatorDocumentId = OperatorDocumentId.Value;
+                MarkModified();
+            }
+        }
+
+        public void SetDateTimeMachine(DateTimeOffset newDateTimeMachine)
+        {
+            if(DateTimeMachine != newDateTimeMachine)
+            {
+                DateTimeMachine = newDateTimeMachine;
+                ReadModel.DateTimeMachine = DateTimeMachine;
+                MarkModified();
+            }
+        }
+
+        public void SetShiftDocumentId(ShiftId newShiftDocumentId)
+        {
+            if(ShiftDocumentId != newShiftDocumentId)
+            {
+                ShiftDocumentId = newShiftDocumentId;
+                ReadModel.ShiftDocumentId = newShiftDocumentId.Value;
+                MarkModified();
+            }
+        }
+
+        public void SetWarpBrokenThreads(int newWarpBrokenThreads)
+        {
+            if(WarpBrokenThreads.HasValue && WarpBrokenThreads.Value != newWarpBrokenThreads)
+            {
+                WarpBrokenThreads = newWarpBrokenThreads;
+                ReadModel.WarpBrokenThreads = WarpBrokenThreads;
+                MarkModified();
+            }
+        }
+
+        public void SetWeftBrokenThreads(int newWeftBrokenThreads)
+        {
+            if (WeftBrokenThreads.HasValue && WeftBrokenThreads.Value != newWeftBrokenThreads)
+            {
+                WeftBrokenThreads = newWeftBrokenThreads;
+                ReadModel.WeftBrokenThreads = WeftBrokenThreads;
+                MarkModified();
+            }
+        }
+
+        public void SetLenoBrokenThreads(int newLenoBrokenThreads)
+        {
+            if (LenoBrokenThreads.HasValue && LenoBrokenThreads.Value != newLenoBrokenThreads)
+            {
+                LenoBrokenThreads = newLenoBrokenThreads;
+                ReadModel.LenoBrokenThreads = LenoBrokenThreads;
+                MarkModified();
+            }
+        }
+
+        public void SetReprocessTo(string newReprocessTo)
+        {
+            if(ReprocessTo != newReprocessTo)
+            {
+                ReprocessTo = newReprocessTo;
+                ReadModel.ReprocessTo = ReprocessTo;
+                MarkModified();
+
+            }
+        }
+
+        public void SetInformation(string newInformation)
+        {
+            if(Information != newInformation)
+            {
+                Information = newInformation;
+                ReadModel.Information = Information;
+                MarkModified();
+            }
+        }
+
+        public void SetMachineStatus(string newMachineStatus)
+        {
+            if(MachineStatus != newMachineStatus)
+            {
+                MachineStatus = newMachineStatus;
+                ReadModel.MachineStatus = MachineStatus;
+                MarkModified();
+            }
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
     }
 }

@@ -13,23 +13,28 @@ namespace Manufactures.Domain.Machines
         public MachineTypeId MachineTypeId { get; private set; }
         public UnitId WeavingUnitId { get; private set; }
         public int Cutmark { get; private set; }
-        public UomId CutmarkUomId { get; private set; }
+        public string CutmarkUom { get; private set; }
+        public string Process { get; private set; }
+        public string Area { get; private set; }
+        public int Block { get; private set; }
 
         public MachineDocument(Guid identity,
                                string machineNumber,
                                string location,
                                MachineTypeId machineTypeId,
                                UnitId weavingUnitId,
-                               int cutmark,
-                               UomId cutmarkUomId) : base(identity)
+                               string process,
+                               string area, 
+                               int block) : base(identity)
         {
             Identity = identity;
             MachineNumber = machineNumber;
             Location = location;
             MachineTypeId = machineTypeId;
             WeavingUnitId = weavingUnitId;
-            Cutmark = cutmark;
-            CutmarkUomId = cutmarkUomId;
+            Process = process;
+            Area = area;
+            Block = block;
 
             this.MarkTransient();
 
@@ -40,7 +45,10 @@ namespace Manufactures.Domain.Machines
                 MachineTypeId = this.MachineTypeId.Value,
                 WeavingUnitId = this.WeavingUnitId.Value,
                 Cutmark = this.Cutmark,
-                CutmarkUomId = this.CutmarkUomId.Value
+                CutmarkUom = this.CutmarkUom,
+                Process = this.Process,
+                Area = this.Area,
+                Block = this.Block
             };
         }
 
@@ -51,48 +59,51 @@ namespace Manufactures.Domain.Machines
             this.Location = readModel.Location;
             this.MachineTypeId = readModel.MachineTypeId.HasValue ? new MachineTypeId(readModel.MachineTypeId.Value) : null;
             this.WeavingUnitId = readModel.WeavingUnitId.HasValue ? new UnitId(readModel.WeavingUnitId.Value) : null;
-            this.Cutmark = readModel.Cutmark.HasValue ? readModel.Cutmark.Value : 0;
-            this.CutmarkUomId = readModel.CutmarkUomId.HasValue ? new UomId(readModel.CutmarkUomId.Value) : null;
+            this.Cutmark = readModel.Cutmark ?? 0;
+            this.CutmarkUom = readModel.CutmarkUom ?? "";
+            this.Process = readModel.Process;
+            this.Area = readModel.Area;
+            this.Block = readModel.Block;
         }
 
-        public void SetLocation(string value)
+        public void SetLocation(string location)
         {
-            if (!Location.Equals(value))
+            if (Location != location)
             {
-                Location = value;
+                Location = location;
                 ReadModel.Location = Location;
 
                 MarkModified();
             }
         }
 
-        public void SetMachineTypeId(MachineTypeId value)
+        public void SetMachineTypeId(MachineTypeId machineTypeId)
         {
-            if (MachineTypeId != value)
+            if (MachineTypeId != machineTypeId)
             {
-                MachineTypeId = value;
+                MachineTypeId = machineTypeId;
                 ReadModel.MachineTypeId = MachineTypeId.Value;
 
                 MarkModified();
             }
         }
 
-        public void SetWeavingUnitId(UnitId value)
+        public void SetWeavingUnitId(UnitId unitId)
         {
-            if (WeavingUnitId != value)
+            if (WeavingUnitId != unitId)
             {
-                WeavingUnitId = value;
+                WeavingUnitId = unitId;
                 ReadModel.WeavingUnitId = WeavingUnitId.Value;
 
                 MarkModified();
             }
         }
 
-        public void SetMachineNumber(string value)
+        public void SetMachineNumber(string machineNumber)
         {
-            if (!MachineNumber.Equals(value))
+            if (MachineNumber != machineNumber)
             {
-                MachineNumber = value;
+                MachineNumber = machineNumber;
                 ReadModel.MachineNumber = MachineNumber;
 
                 MarkModified();
@@ -101,7 +112,7 @@ namespace Manufactures.Domain.Machines
 
         public void SetCutmark(int cutmark)
         {
-            if (!Cutmark.Equals(cutmark))
+            if (Cutmark != cutmark)
             {
                 Cutmark = cutmark;
                 ReadModel.Cutmark = Cutmark;
@@ -110,12 +121,45 @@ namespace Manufactures.Domain.Machines
             }
         }
 
-        public void SetCutmarkUomId(UomId cutmarkUomId)
+        public void SetCutmarkUom(string cutmarkUom)
         {
-            if (!CutmarkUomId.Equals(cutmarkUomId))
+            if (CutmarkUom != cutmarkUom)
             {
-                CutmarkUomId = cutmarkUomId;
-                ReadModel.CutmarkUomId = CutmarkUomId.Value;
+                CutmarkUom = cutmarkUom;
+                ReadModel.CutmarkUom = CutmarkUom;
+
+                MarkModified();
+            }
+        }
+
+        public void SetProcess(string process)
+        {
+            if (Process != process)
+            {
+                Process = process;
+                ReadModel.Process = Process;
+
+                MarkModified();
+            }
+        }
+
+        public void SetArea(string area)
+        {
+            if (Area != area)
+            {
+                Area = area;
+                ReadModel.Area = Area;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBlock(int block)
+        {
+            if (Block != block)
+            {
+                Block = block;
+                ReadModel.Block = Block;
 
                 MarkModified();
             }

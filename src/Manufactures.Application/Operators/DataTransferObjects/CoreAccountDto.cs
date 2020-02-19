@@ -1,11 +1,10 @@
-﻿using Manufactures.Domain.Operators;
-using Manufactures.Domain.Shared.ValueObjects;
+﻿using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Manufactures.DataTransferObjects.Operator
+namespace Manufactures.Application.Operators.DataTransferObjects
 {
     public class CoreAccountDto
     {

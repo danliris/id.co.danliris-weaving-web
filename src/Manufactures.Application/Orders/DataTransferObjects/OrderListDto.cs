@@ -23,6 +23,12 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
 
+        [JsonProperty(PropertyName = "WarpOriginId")]
+        public Guid WarpOriginId { get; }
+
+        [JsonProperty(PropertyName = "WarpOrigin")]
+        public string WarpOrigin { get; }
+
         [JsonProperty(PropertyName = "WarpCompositionPoly")]
         public double WarpCompositionPoly { get; }
 
@@ -31,6 +37,12 @@ namespace Manufactures.Application.Orders.DataTransferObjects
 
         [JsonProperty(PropertyName = "WarpCompositionOthers")]
         public double WarpCompositionOthers { get; }
+
+        [JsonProperty(PropertyName = "WeftOriginId")]
+        public Guid WeftOriginId { get; }
+
+        [JsonProperty(PropertyName = "WeftOrigin")]
+        public string WeftOrigin { get; }
 
         [JsonProperty(PropertyName = "WeftCompositionPoly")]
         public double WeftCompositionPoly { get; }
@@ -41,14 +53,18 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "WeftCompositionOthers")]
         public double WeftCompositionOthers { get; }
 
-        public OrderListDto(OrderDocument orderDocument)
+        public OrderListDto(OrderDocument orderDocument, string warpOrigin, string weftOrigin)
         {
             Id = orderDocument.Identity;
             OrderNumber = orderDocument.OrderNumber;
             Period = orderDocument.Period;
+            WarpOriginId = orderDocument.WarpOriginId.Value;
+            WarpOrigin = warpOrigin;
             WarpCompositionPoly = orderDocument.WarpCompositionPoly;
             WarpCompositionCotton = orderDocument.WarpCompositionCotton;
             WarpCompositionOthers = orderDocument.WarpCompositionOthers;
+            WeftOriginId = orderDocument.WeftOriginId.Value;
+            WeftOrigin = weftOrigin;
             WeftCompositionPoly = orderDocument.WeftCompositionPoly;
             WeftCompositionCotton = orderDocument.WeftCompositionCotton;
             WeftCompositionOthers = orderDocument.WeftCompositionOthers;

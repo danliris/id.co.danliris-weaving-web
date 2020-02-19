@@ -34,7 +34,7 @@ using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
-using Manufactures.Application.Operators.DTOs;
+using Manufactures.Application.Operators.DataTransferObjects;
 using Manufactures.Application.Operators.QueryHandlers;
 using Manufactures.Application.Orders.DataTransferObjects.OrderReport;
 using Manufactures.Application.Orders.QueryHandlers.OrderReport;
@@ -84,6 +84,9 @@ using Manufactures.Application.Orders.DataTransferObjects;
 using Manufactures.Application.Estimations.Productions.QueryHandlers;
 using Manufactures.Domain.Estimations.Productions.Queries;
 using Manufactures.Application.Estimations.Productions.DataTransferObjects;
+using Manufactures.Application.Machines.QueryHandlers;
+using Manufactures.Domain.Machines.Queries;
+using Manufactures.Application.Machines.DataTransferObjects;
 
 namespace DanLiris.Admin.Web
 {
@@ -164,6 +167,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<ISizePickupReportQuery<SizePickupReportListDto>, SizePickupReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto>, DailyOperationSizingReportQueryHandler>();
             services.AddTransient<IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>, DailyOperationSizingQueryHandler>();
+            services.AddTransient<IDailyOperationSizingBeamProductQuery<DailyOperationSizingBeamProductDto>, DailyOperationSizingQueryHandler>();
 
             //Warping and Warping's Report
             services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();
@@ -172,6 +176,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
 
             //Master Weaving
+            services.AddTransient<IMachineQuery<MachineListDto>, MachinesQueryHandler>();
             services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
             services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();

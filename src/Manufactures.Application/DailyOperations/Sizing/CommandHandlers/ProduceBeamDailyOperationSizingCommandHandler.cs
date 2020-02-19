@@ -90,13 +90,13 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 if (produceBeamDateMachineLogUtc < lastDateMachineLogUtc)
                 {
-                    throw Validator.ErrorValidation(("ProduceBeamDate", "Produce Beam date cannot less than latest date log"));
+                    throw Validator.ErrorValidation(("ProduceBeamDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
                 }
                 else
                 {
                     if (dateTimeOperation <= lastHistory.DateTimeMachine)
                     {
-                        throw Validator.ErrorValidation(("ProduceBeamTime", "Produce Beam time cannot less than or equal latest time log"));
+                        throw Validator.ErrorValidation(("ProduceBeamTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                     }
                     else
                     {

@@ -3,11 +3,10 @@ using Manufactures.Application.DailyOperations.Sizing.Calculations;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.DailyOperationSizingReport;
 using Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.SizePickupReport;
-using Manufactures.Application.Operators.DTOs;
+using Manufactures.Application.Operators.DataTransferObjects;
 using Manufactures.Application.Shifts.DTOs;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Domain.BeamStockMonitoring.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Calculation;
 using Manufactures.Domain.DailyOperations.Sizing.Commands;
 using Manufactures.Domain.DailyOperations.Sizing.Queries;
@@ -18,7 +17,6 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
-using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Shifts.Queries;
 using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Helpers.XlsTemplates;
@@ -41,19 +39,20 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationSizingController : ControllerApiBase
     {
-        private readonly IOrderRepository
-            _orderDocumentRepository;
-        private readonly IFabricConstructionRepository
-            _constructionDocumentRepository;
-        private readonly IOperatorRepository
-            _operatorDocumentRepository;
-
-        private readonly IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto> _sizingQuery;
-        private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
-        private readonly IShiftQuery<ShiftDto> _shiftQuery;
-        private readonly IBeamQuery<BeamListDto> _beamQuery;
-        private readonly ISizePickupReportQuery<SizePickupReportListDto> _sizePickupReportQuery;
-        private readonly IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> _dailyOperationSizingReportQuery;
+        private readonly IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto>
+            _sizingDocumentQuery;
+        private readonly IDailyOperationSizingBeamProductQuery<DailyOperationSizingBeamProductDto>
+            _sizingBeamProductQuery;
+        private readonly IOperatorQuery<OperatorListDto> 
+            _operatorQuery;
+        private readonly IShiftQuery<ShiftDto> 
+            _shiftQuery;
+        private readonly IBeamQuery<BeamListDto> 
+            _beamQuery;
+        private readonly ISizePickupReportQuery<SizePickupReportListDto> 
+            _sizePickupReportQuery;
+        private readonly IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> 
+            _dailyOperationSizingReportQuery;
 
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
@@ -65,7 +64,8 @@ namespace Manufactures.Controllers.Api
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationSizingController(IServiceProvider serviceProvider,
                                               IWorkContext workContext,
-                                              IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto> sizingQuery,
+                                              IDailyOperationSizingDocumentQuery<DailyOperationSizingListDto> sizingDocumentQuery,
+                                              IDailyOperationSizingBeamProductQuery<DailyOperationSizingBeamProductDto> sizingBeamProductQuery,
                                               IOperatorQuery<OperatorListDto> operatorQuery,
                                               IShiftQuery<ShiftDto> shiftQuery,
                                               IBeamQuery<BeamListDto> beamQuery,
@@ -73,7 +73,8 @@ namespace Manufactures.Controllers.Api
                                               IDailyOperationSizingReportQuery<DailyOperationSizingReportListDto> dailyOperationSizingReportQuery)
             : base(serviceProvider)
         {
-            _sizingQuery = sizingQuery ?? throw new ArgumentNullException(nameof(sizingQuery));
+            _sizingDocumentQuery = sizingDocumentQuery ?? throw new ArgumentNullException(nameof(sizingDocumentQuery));
+            _sizingBeamProductQuery = sizingBeamProductQuery ?? throw new ArgumentNullException(nameof(sizingBeamProductQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
@@ -84,14 +85,8 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _dailyOperationSizingBeamProductRepository =
                 this.Storage.GetRepository<IDailyOperationSizingBeamProductRepository>();
-            _orderDocumentRepository =
-                this.Storage.GetRepository<IOrderRepository>();
-            _constructionDocumentRepository =
-                this.Storage.GetRepository<IFabricConstructionRepository>();
             _beamRepository =
                 this.Storage.GetRepository<IBeamRepository>();
-            _operatorDocumentRepository =
-                this.Storage.GetRepository<IOperatorRepository>();
         }
 
         [HttpGet]
@@ -102,7 +97,7 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             VerifyUser();
-            var dailyOperationSizingDocuments = await _sizingQuery.GetAll();
+            var dailyOperationSizingDocuments = await _sizingDocumentQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -137,8 +132,68 @@ namespace Manufactures.Controllers.Api
                         dailyOperationSizingDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
-            
+
             var result = dailyOperationSizingDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+
+        [HttpGet("get-sizing-beam-products-by-order")]
+        public async Task<IActionResult> GetSizingBeamProducts(int page = 1,
+                                                               int size = 25,
+                                                               string order = "{}",
+                                                               string keyword = null,
+                                                               string filter = "{}")
+        {
+            VerifyUser();
+            var dailyOperationSizingBeamProducts = new List<DailyOperationSizingBeamProductDto>();
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                var orderFilter = new { OrderId = "" };
+                var serializedFilter = JsonConvert.DeserializeAnonymousType(filter, orderFilter);
+
+                if(!Guid.TryParse(serializedFilter.OrderId, out Guid OrderGuid))
+                {
+                    return NotFound();
+                }
+
+                dailyOperationSizingBeamProducts = await _sizingBeamProductQuery.GetSizingBeamProductsByOrder(OrderGuid);
+            }
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                dailyOperationSizingBeamProducts =
+                        dailyOperationSizingBeamProducts
+                            .Where(x => x.SizingBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
+                            .ToList();
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo orderProp = typeof(DailyOperationSizingBeamProductDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    await Task.Yield();
+                    dailyOperationSizingBeamProducts =
+                        dailyOperationSizingBeamProducts.OrderBy(x => orderProp.GetValue(x, null)).ToList();
+                }
+                else
+                {
+                    await Task.Yield();
+                    dailyOperationSizingBeamProducts =
+                        dailyOperationSizingBeamProducts.OrderByDescending(x => orderProp.GetValue(x, null)).ToList();
+                }
+            }
+
+            var result = dailyOperationSizingBeamProducts.Skip((page - 1) * size).Take(size);
             var total = result.Count();
 
             return Ok(result, info: new { page, size, total });
@@ -342,7 +397,7 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var identity = Guid.Parse(Id);
-            var dailyOperationSizingDocument = await _sizingQuery.GetById(identity);
+            var dailyOperationSizingDocument = await _sizingDocumentQuery.GetById(identity);
 
             if (dailyOperationSizingDocument == null)
             {

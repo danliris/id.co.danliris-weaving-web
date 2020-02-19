@@ -28,14 +28,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             _storage;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
-        //private readonly IDailyOperationWarpingBeamProductRepository
-        //    _dailyOperationWarpingBeamProductRepository;
-        //private readonly IDailyOperationWarpingBrokenCauseRepository
-        //    _dailyOperationWarpingBrokenCauseRepository;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
+        private readonly IDailyOperationWarpingBrokenCauseRepository
+            _dailyOperationWarpingBrokenCauseRepository;
         private readonly IOrderRepository
             _orderRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
+        private readonly IConstructionYarnDetailRepository
+            _constructionYarnDetailRepository;
         private readonly IWarpingBrokenCauseRepository
             _warpingBrokenCauseRepository;
         private readonly IYarnDocumentRepository
@@ -51,10 +53,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 storage;
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
+            _dailyOperationWarpingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
+            _dailyOperationWarpingBrokenCauseRepository =
+                _storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
             _orderRepository =
                 _storage.GetRepository<IOrderRepository>();
             _fabricConstructionRepository =
                 _storage.GetRepository<IFabricConstructionRepository>();
+            _constructionYarnDetailRepository =
+                _storage.GetRepository<IConstructionYarnDetailRepository>();
             _warpingBrokenCauseRepository =
                 _storage.GetRepository<IWarpingBrokenCauseRepository>();
             _yarnRepository =
@@ -83,6 +91,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             try
             {
+                //var result = new WarpingBrokenThreadsReportListDto();
+
+                //var 
+
+                //-----------------------------------------------------------------
+
                 //Add Shell (result) for Daily Operation Warping Broken Report Dto
                 var result = new WarpingBrokenThreadsReportListDto();
 
@@ -121,9 +135,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 var dailyOperationWarpingQuery =
                     _dailyOperationWarpingRepository
                         .Query
-                        //.Include(h => h.WarpingHistories)
-                        //.Include(p => p.WarpingBeamProducts)
-                        //.ThenInclude(b => b.WarpingBrokenThreadsCauses)
                         .Where(o => filteredOrderDocumentIds.Contains(o.OrderDocumentId))
                         .AsQueryable();
                 var warpingDocuments = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery);
@@ -136,9 +147,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 {
                     //Get Warping Beam Products w/ Filter date and year param from UI
                     var groupedBeamProducts =
-                        document.WarpingBeamProducts.Where(item => item.LatestDateTimeBeamProduct.Month == month &&
-                                                                   item.LatestDateTimeBeamProduct.Year == year)
-                                                    .ToList();
+                        _dailyOperationWarpingBeamProductRepository
+                            .Find(item => item.DailyOperationWarpingDocumentId == document.Identity &&
+                                          item.LatestDateTimeBeamProduct.Month == month &&
+                                          item.LatestDateTimeBeamProduct.Year == year)
+                            .ToList();
 
                     var unitId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().UnitId.Value;
 
@@ -152,13 +165,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                             .FirstOrDefault().ConstructionDocumentId.Value;
 
                     //Get ConstructionDocument using ConstructionId from above, to get List of Warp Id (warpIds)
-                    var constructionDocument =
-                        _fabricConstructionRepository
-                            .Find(c => c.Identity.Equals(constructionId))
-                            .FirstOrDefault();
+                    var constructionYarnDetail =
+                        _constructionYarnDetailRepository
+                            .Find(d=>d.FabricConstructionDocumentId == constructionId);
 
                     //Get WarpName using List of Warp Id (warpIds)
-                    var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
+                    var warpIds = constructionYarnDetail.Select(o => o.YarnId.Value);
                     var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
 
                     var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOriginId;

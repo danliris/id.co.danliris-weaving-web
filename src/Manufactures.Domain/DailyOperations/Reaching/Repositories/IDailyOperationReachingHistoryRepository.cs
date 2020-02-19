@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Domain.Repositories;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using System;
 using System.Collections.Generic;

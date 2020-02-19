@@ -107,9 +107,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "32",
                 "Timur",
                 new MachineTypeId(new Guid("E6655428-E60B-4923-AF39-875B5BA61CFB")),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             //mockMachineRepo.Setup(x => x.Query)
             //    .Returns(new List<MachineDocumentReadModel>()
             //    .AsQueryable());
@@ -238,9 +236,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
                 "32",
                 "Timur",
                 new MachineTypeId(new Guid("E6655428-E60B-4923-AF39-875B5BA61CFB")),
-                new UnitId(11),
-                33,
-                new UomId(195));
+                new UnitId(11), "Loom", "Utara", 0);
             mockMachineRepo.Setup(x => x.Find(It.IsAny<Expression<Func<MachineDocumentReadModel, bool>>>()))
                 .Returns(new List<MachineDocument>() { machine });
 
