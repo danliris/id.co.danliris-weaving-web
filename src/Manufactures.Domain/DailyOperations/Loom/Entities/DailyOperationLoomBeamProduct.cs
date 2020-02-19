@@ -1,23 +1,22 @@
 ﻿using Infrastructure.Domain;
-using Infrastructure.Domain.Events;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
+using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
-    public class DailyOperationLoomBeamProduct : EntityBase<DailyOperationLoomBeamProduct>
+    public class DailyOperationLoomBeamProduct : AggregateRoot<DailyOperationLoomBeamProduct, DailyOperationLoomBeamProductReadModel>
     {
         public string BeamOrigin { get; private set; }
 
-        public Guid BeamDocumentId { get; private set; }
+        public BeamId BeamDocumentId { get; private set; }
 
         public double CombNumber { get; private set; }
 
-        public Guid MachineDocumentId { get; private set; }
+        public MachineId MachineDocumentId { get; private set; }
 
         public DateTimeOffset LatestDateTimeBeamProduct { get; private set; }
 
@@ -27,70 +26,43 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public Guid DailyOperationLoomDocumentId { get; set; }
 
-        public DailyOperationLoomReadModel DailyOperationLoomDocument { get; set; }
-
-        public DailyOperationLoomBeamProduct(Guid identity) : base(identity)
+        public DailyOperationLoomBeamProduct(Guid identity, string beamOrigin, BeamId beamDocumentId, double combNumber, MachineId machineDocumentId, DateTimeOffset latestDateTimeBeamProduct, string loomProcess, string beamProductStatus, Guid dailyOperationLoomDocumentId) : base(identity)
         {
-        }
-
-        public DailyOperationLoomBeamProduct(Guid identity,
-                                             string beamOrigin,
-                                             BeamId beamDocumentId,
-                                             double combNumber,
-                                             MachineId machineDocumentId,
-                                             DateTimeOffset latestDateTimeBeamProduct,
-                                             string loomProcess,
-                                             string beamProductStatus) : base(identity)
-        {
+            MarkTransient();
             BeamOrigin = beamOrigin;
-            BeamDocumentId = beamDocumentId.Value;
+            BeamDocumentId = beamDocumentId;
             CombNumber = combNumber;
-            MachineDocumentId = machineDocumentId.Value;
+            MachineDocumentId = machineDocumentId;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             LoomProcess = loomProcess;
             BeamProductStatus = beamProductStatus;
+            DailyOperationLoomDocumentId = dailyOperationLoomDocumentId;
+
+            ReadModel = new DailyOperationLoomBeamProductReadModel(Identity)
+            {
+                BeamOrigin = BeamOrigin,
+                BeamDocumentId = BeamDocumentId.Value,
+                CombNumber = CombNumber,
+                MachineDocumentId = MachineDocumentId.Value,
+                LatestDateTimeBeamProduct = LatestDateTimeBeamProduct,
+                LoomProcess = LoomProcess,
+                BeamProductStatus = BeamProductStatus,
+                DailyOperationLoomDocumentId = DailyOperationLoomDocumentId
+            };
+
+            ReadModel.AddDomainEvent(new OnAddDailyOperationLoomBeamProduct(Identity));
         }
 
-        public void SetBeamOrigin(string beamOrigin)
+        public DailyOperationLoomBeamProduct(DailyOperationLoomBeamProductReadModel readModel) : base(readModel)
         {
-            BeamOrigin = beamOrigin;
-            MarkModified();
-        }
-
-        public void SetBeamDocumentId(BeamId beamDocumentId)
-        {
-            BeamDocumentId = beamDocumentId.Value;
-            MarkModified();
-        }
-
-        public void SetCombNumber(double combNumber)
-        {
-            CombNumber = combNumber;
-            MarkModified();
-        }
-
-        public void SetMachineDocumentId(MachineId machineDocumentId)
-        {
-            MachineDocumentId = machineDocumentId.Value;
-            MarkModified();
-        }
-
-        public void SetLatestDateTimeBeamProduct(DateTimeOffset latestDateTimeBeamProduct)
-        {
-            LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
-            MarkModified();
-        }
-
-        public void SetLoomProcess(string loomProcess)
-        {
-            LoomProcess = loomProcess;
-            MarkModified();
-        }
-
-        public void SetBeamProductStatus(string beamProductStatus)
-        {
-            BeamProductStatus = beamProductStatus;
-            MarkModified();
+            BeamOrigin = readModel.BeamOrigin;
+            BeamDocumentId = new BeamId(readModel.BeamDocumentId);
+            CombNumber = readModel.CombNumber;
+            MachineDocumentId = new MachineId(readModel.MachineDocumentId);
+            LatestDateTimeBeamProduct = readModel.LatestDateTimeBeamProduct;
+            LoomProcess = readModel.LoomProcess;
+            BeamProductStatus = readModel.BeamProductStatus;
+            DailyOperationLoomDocumentId = readModel.DailyOperationLoomDocumentId;
         }
 
         protected override DailyOperationLoomBeamProduct GetEntity()
@@ -98,22 +70,82 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             return this;
         }
 
-        protected override void MarkRemoved()
+        public void SetBeamOrigin(string newBeamOrigin)
         {
-            DeletedBy = "System";
-            Deleted = true;
-            DeletedDate = DateTimeOffset.UtcNow;
-
-            if (this.DomainEvents == null || !this.DomainEvents.Any(o => o is OnEntityDeleted<DailyOperationLoomBeamProduct>))
-                this.AddDomainEvent(new OnEntityDeleted<DailyOperationLoomBeamProduct>(GetEntity()));
-
-            // clear updated events
-            if (this.DomainEvents.Any(o => o is OnEntityUpdated<DailyOperationLoomBeamProduct>))
+            if(BeamOrigin != newBeamOrigin)
             {
-                this.DomainEvents.Where(o => o is OnEntityUpdated<DailyOperationLoomBeamProduct>)
-                    .ToList()
-                    .ForEach(o => this.RemoveDomainEvent(o));
+                BeamOrigin = newBeamOrigin;
+                ReadModel.BeamOrigin = BeamOrigin;
+                MarkModified();
             }
+            
+        }
+
+        public void SetBeamDocumentId(BeamId newBeamDocumentId)
+        {
+            if (BeamDocumentId != newBeamDocumentId)
+            {
+                BeamDocumentId = newBeamDocumentId;
+                ReadModel.BeamDocumentId = BeamDocumentId.Value;
+                MarkModified();
+            }
+
+        }
+
+        public void SetCombNumber(double newCombNumber)
+        {
+            if (CombNumber != newCombNumber)
+            {
+                CombNumber = newCombNumber;
+                ReadModel.CombNumber = CombNumber;
+                MarkModified();
+            }
+
+        }
+
+        public void SetMachineDocumentId(MachineId newMachineDocumentId)
+        {
+            if (MachineDocumentId != newMachineDocumentId)
+            {
+                MachineDocumentId = newMachineDocumentId;
+                ReadModel.MachineDocumentId = MachineDocumentId.Value;
+                MarkModified();
+            }
+        }
+
+        public void SetLatestDateTimeBeamProduct(DateTimeOffset newLatestDateTimeBeamProduct)
+        {
+            if (LatestDateTimeBeamProduct != newLatestDateTimeBeamProduct)
+            {
+                LatestDateTimeBeamProduct = newLatestDateTimeBeamProduct;
+                ReadModel.LatestDateTimeBeamProduct = LatestDateTimeBeamProduct;
+                MarkModified();
+            }
+        }
+
+        public void SetLoomProcess(string newLoomProcess)
+        {
+            if (LoomProcess != newLoomProcess)
+            {
+                LoomProcess = newLoomProcess;
+                ReadModel.LoomProcess = LoomProcess;
+                MarkModified();
+            }
+        }
+
+        public void SetBeamProductStatus(string newBeamProductStatus)
+        {
+            if (BeamProductStatus != newBeamProductStatus)
+            {
+                BeamProductStatus = newBeamProductStatus;
+                ReadModel.BeamProductStatus = BeamProductStatus;
+                MarkModified();
+            }
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
     }
 }

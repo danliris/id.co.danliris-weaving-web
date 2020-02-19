@@ -1,4 +1,7 @@
 ﻿using ExtCore.Data.Abstractions;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.Queries;
@@ -10,6 +13,8 @@ using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
 using Manufactures.Domain.Suppliers.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +25,16 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 {
     public class DailyOperationLoomQueryHandler : IDailyOperationLoomQuery<DailyOperationLoomListDto>
     {
+        protected readonly IHttpClientService
+            _http;
         private readonly IStorage
             _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;
+        private readonly IDailyOperationLoomBeamHistoryRepository
+            _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomBeamProductRepository
+            _dailyOperationLoomProductRepository;
         private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
@@ -38,12 +49,13 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             _operatorRepository;
         private readonly IShiftRepository
             _shiftRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
-        public DailyOperationLoomQueryHandler(IStorage storage)
+        public DailyOperationLoomQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
-            _storage = storage;
+            _http =
+                serviceProvider.GetService<IHttpClientService>();
+            _storage = 
+                storage;
             _dailyOperationLoomRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _weavingOrderDocumentRepository =
@@ -60,8 +72,26 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
                 _storage.GetRepository<IShiftRepository>();
-            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+            _dailyOperationLoomHistoryRepository = 
+                _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomProductRepository =
+                _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+        }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
         }
 
         public async Task<IEnumerable<DailyOperationLoomListDto>> GetAll()
@@ -79,50 +109,55 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             foreach (var loomDocument in dailyOperationLoomDocuments)
             {
-                var histories = _dailyOperationLoomHistoryRepository.Find(x => x.DailyOperationLoomDocumentId == loomDocument.Identity);
-                var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
+                var loomHistories = 
+                    _dailyOperationLoomHistoryRepository
+                        .Find(x => x.DailyOperationLoomDocumentId == loomDocument.Identity);
+                var loomBeamProducts = 
+                    _dailyOperationLoomProductRepository
+                        .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
+
                 //Get Order Number
                 await Task.Yield();
                 var orderDocument =
                     _weavingOrderDocumentRepository
-                        .Find(o => o.Identity.Equals(loomDocument.OrderDocumentId.Value))
+                        .Find(o => o.Identity == loomDocument.OrderDocumentId.Value)
                         .FirstOrDefault();
                 var orderNumber = orderDocument.OrderNumber;
 
-                //Get Weaving Unit
-                var unitWeavingId = orderDocument.UnitId.Value;
+                //Get Weaving Unit Id
+                SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
+                var weavingUnitName = unitData.data.Name;
 
                 //Get Construction Number
                 await Task.Yield();
                 var constructionId = orderDocument.ConstructionDocumentId.Value;
                 var constructionNumber =
                     _fabricConstructionRepository
-                        .Find(o => o.Identity.Equals(constructionId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity== orderDocument.ConstructionDocumentId.Value)
+                        .FirstOrDefault()?
                         .ConstructionNumber;
 
                 //Get Warp Origin Code and Weft Origin Code
                 await Task.Yield();
-                var warpId = orderDocument.WarpOriginId;
-                var weftId = orderDocument.WeftOriginId;
+                var warpId = orderDocument.WarpOriginId.Value;
+                var weftId = orderDocument.WeftOriginId.Value;
                 
                 await Task.Yield();
                 var warpCode =
                     _weavingSupplierRepository
-                        .Find(o => o.Identity.ToString().Equals(warpId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == warpId)
+                        .FirstOrDefault()?
                         .Code;
 
                 await Task.Yield();
                 var weftCode =
                     _weavingSupplierRepository
-                        .Find(o => o.Identity.ToString().Equals(weftId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity==weftId)
+                        .FirstOrDefault()?
                         .Code;
 
                 await Task.Yield();
-                var loomHistories = histories.OrderByDescending(o => o.AuditTrail.CreatedDate);
-                var latestLoomHistory = loomHistories.FirstOrDefault();
+                var latestLoomHistory = loomHistories.OrderByDescending(o => o.AuditTrail.CreatedDate).FirstOrDefault();
 
                 //Get Latest Date Time Machine
                 var latestLoomHistoryDateTime = latestLoomHistory.DateTimeMachine;
@@ -131,7 +166,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 var loomDto = new DailyOperationLoomListDto(loomDocument);
 
                 loomDto.SetDateTimeMachine(latestLoomHistoryDateTime);
-                loomDto.SetWeavingUnitId(unitWeavingId);
+                loomDto.SetWeavingUnit(weavingUnitName);
                 loomDto.SetOrderProductionNumber(orderNumber);
                 loomDto.SetFabricConstructionNumber(constructionNumber);
                 loomDto.SetWarpOrigin(warpCode);
@@ -161,8 +196,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     .FirstOrDefault();
             var orderNumber = orderDocument.OrderNumber;
 
-            //Get Weaving Unit
-            var unitWeavingId = orderDocument.UnitId.Value;
+            //Get Weaving Unit Id
+            SingleUnitResult unitData = GetUnit(orderDocument.UnitId.Value);
+            var weavingUnitName = unitData.data.Name;
 
             //Get Construction Number
             await Task.Yield();
@@ -194,7 +230,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             //Add Shell (DailyOperationLoomByIdDto Data Type) for Loom By Id Dto
             var result = new DailyOperationLoomByIdDto(dailyOperationLoomDocument);
-            result.SetWeavingUnitId(unitWeavingId);
+            result.SetWeavingUnit(weavingUnitName);
             result.SetOrderProductionNumber(orderNumber);
             result.SetFabricConstructionNumber(constructionNumber);
             result.SetWarpOrigin(warpCode);

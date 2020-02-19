@@ -25,7 +25,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
     {
         protected readonly IHttpClientService
             _http;
-        private readonly IStorage _storage;
+        private readonly IStorage 
+            _storage;
         private readonly IDailyOperationReachingRepository
             _dailyOperationReachingRepository;
         private readonly IMachineRepository
@@ -47,7 +48,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
         {
             _http =
                 serviceProvider.GetService<IHttpClientService>();
-            _storage = storage;
+            _storage = 
+                storage;
             _dailyOperationReachingRepository =
                 _storage.GetRepository<IDailyOperationReachingRepository>();
             _machineRepository =

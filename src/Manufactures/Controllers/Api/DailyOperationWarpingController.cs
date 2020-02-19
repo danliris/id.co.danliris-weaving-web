@@ -42,13 +42,20 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationWarpingController : ControllerApiBase
     {
-        private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> _warpingQuery;
-        private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
-        private readonly IShiftQuery<ShiftDto> _shiftQuery;
-        private readonly IBeamQuery<BeamListDto> _beamQuery;
-        private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> _dailyOperationWarpingReportQuery;
-        private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto> _warpingProductionReportQuery;
-        private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> _warpingBrokenReportQuery;
+        private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> 
+            _warpingQuery;
+        private readonly IOperatorQuery<OperatorListDto> 
+            _operatorQuery;
+        private readonly IShiftQuery<ShiftDto> 
+            _shiftQuery;
+        private readonly IBeamQuery<BeamListDto> 
+            _beamQuery;
+        private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> 
+            _dailyOperationWarpingReportQuery;
+        private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto> 
+            _warpingProductionReportQuery;
+        private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> 
+            _warpingBrokenReportQuery;
 
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -80,14 +87,16 @@ namespace Manufactures.Controllers.Api
             _warpingProductionReportQuery = warpingProductionReportQuery ?? throw new ArgumentNullException(nameof(warpingProductionReportQuery));
             _warpingBrokenReportQuery = warpingBrokenReportQuery ?? throw new ArgumentNullException(nameof(warpingBrokenReportQuery));
 
-            _dailyOperationWarpingRepository = this.Storage.GetRepository<IDailyOperationWarpingRepository>();
-            _beamRepository = this.Storage.GetRepository<IBeamRepository>();
+            _dailyOperationWarpingRepository = 
+                this.Storage.GetRepository<IDailyOperationWarpingRepository>();
+            _beamRepository = 
+                this.Storage.GetRepository<IBeamRepository>();
             _dailyOperationWarpingHistoryRepository =
-                Storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
+                this.Storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
             _dailyOperationWarpingBeamProductRepository =
-                Storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
+                this.Storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _dailyOperationWarpingBrokenCauseRepository =
-                Storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
+                this.Storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
         }
 
         [HttpGet]
@@ -138,11 +147,14 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
 
-        [HttpGet("get-warping-beams")]
-        public async Task<IActionResult> GetWarpingBeamIds(string keyword, string filter = "{}", int page = 1, int size = 25)
+        [HttpGet("get-warping-beam-products-by-order")]
+        public async Task<IActionResult> GetWarpingBeamIds(int page = 1,
+                                                           int size = 25,
+                                                           string order = "{}",
+                                                           string keyword = null,
+                                                           string filter = "{}")
         {
             VerifyUser();
-            page = page - 1;
             List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
             List<BeamDto> warpingBeams = new List<BeamDto>();
             if (!filter.Contains("{}"))

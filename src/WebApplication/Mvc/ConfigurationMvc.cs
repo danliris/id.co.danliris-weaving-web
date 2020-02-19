@@ -45,6 +45,8 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<ProduceBeamsDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<FinishDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<WarpingBrokenThreadsCausesCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<UpdateExistingMachineCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<AddNewMachineCommandValidator>();
 
                 fv.RegisterValidatorsFromAssemblyContaining<ChangeOperatorCombDailyOperationReachingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<UpdateCombFinishDailyOperationReachingCommandValidator>();
@@ -60,8 +62,6 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<FinishDoffDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<UpdateExistingMachineCommandValidator>();
-                fv.RegisterValidatorsFromAssemblyContaining<AddNewMachineCommandValidator>();
 
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });

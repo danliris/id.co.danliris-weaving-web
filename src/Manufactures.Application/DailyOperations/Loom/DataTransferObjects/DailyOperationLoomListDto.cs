@@ -14,8 +14,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "DateTimeMachine")]
         public DateTimeOffset DateTimeMachine { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnitId")]
-        public int WeavingUnitId { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnit")]
+        public string WeavingUnit { get; private set; }
 
         [JsonProperty(PropertyName = "OrderProductionNumber")]
         public string OrderProductionNumber { get; private set; }
@@ -43,9 +43,9 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             DateTimeMachine = dateTimeMachine;
         }
 
-        public void SetWeavingUnitId(int weavingUnitId)
+        public void SetWeavingUnit(string weavingUnit)
         {
-            WeavingUnitId = weavingUnitId;
+            WeavingUnit = weavingUnit;
         }
 
         public void SetOrderProductionNumber(string orderProductionNumber)

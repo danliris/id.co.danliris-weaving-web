@@ -197,7 +197,6 @@ namespace Manufactures.Controllers.Api
             var total = result.Count();
 
             return Ok(result, info: new { page, size, total });
-            //}
         }
 
         //[HttpGet("get-sizing-beams")]
