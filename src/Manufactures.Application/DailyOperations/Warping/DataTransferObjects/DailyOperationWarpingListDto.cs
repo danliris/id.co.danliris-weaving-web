@@ -10,8 +10,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DateTimeMachine")]
-        public DateTimeOffset DateTimeMachine { get; private set; }
+        [JsonProperty(PropertyName = "DateTimeOperation")]
+        public DateTimeOffset DateTimeOperation { get; private set; }
 
         [JsonProperty(PropertyName = "OrderProductionNumber")]
         public string OrderProductionNumber { get; private set; }
@@ -28,7 +28,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public DailyOperationWarpingListDto(DailyOperationWarpingDocument document)
         {
             Id = document.Identity;
-            DateTimeMachine = document.DateTimeOperation;
+            DateTimeOperation = document.DateTimeOperation;
             OperationStatus = document.OperationStatus;
         }
 

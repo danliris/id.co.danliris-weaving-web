@@ -54,7 +54,7 @@ namespace Manufactures.Domain.Machines.Commands
             RuleFor(r => r.MachineTypeId).NotEmpty().WithMessage("Tipe Mesin Harus Diisi");
             RuleFor(r => r.WeavingUnitId).NotEmpty().WithMessage("Unit Weaving Harus Diisi");
             RuleFor(r => r.Process).NotEmpty().WithMessage("Proses Harus Diisi");
-            RuleFor(r => r.Area).NotEmpty().WithMessage("Area Harus Diisi");
+            RuleFor(r => r.Area).NotEmpty().WithMessage("Area Harus Diisi, Pilih Unit Weaving 1 atau Unit Weaving 2");
             RuleFor(r => r.Block).NotNull().WithMessage("Blok Harus Diisi");
         }
     }

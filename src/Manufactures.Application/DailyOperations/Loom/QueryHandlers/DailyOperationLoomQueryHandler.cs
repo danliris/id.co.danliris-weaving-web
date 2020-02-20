@@ -185,14 +185,18 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                         .Find(s => s.Identity == id)
                         .FirstOrDefault();
 
-            var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
-            var histories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
+            var loomBeamProducts = 
+                _dailyOperationLoomProductRepository
+                    .Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
+            var loomHistories =
+                _dailyOperationLoomHistoryRepository
+                    .Find(s => s.DailyOperationLoomDocumentId == dailyOperationLoomDocument.Identity);
 
             //Get Order Number
             await Task.Yield();
             var orderDocument =
                 _weavingOrderDocumentRepository
-                    .Find(o => o.Identity.Equals(dailyOperationLoomDocument.OrderDocumentId.Value))
+                    .Find(o => o.Identity == dailyOperationLoomDocument.OrderDocumentId.Value)
                     .FirstOrDefault();
             var orderNumber = orderDocument.OrderNumber;
 
@@ -205,27 +209,27 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             var constructionId = orderDocument.ConstructionDocumentId.Value;
             var constructionNumber =
                 _fabricConstructionRepository
-                    .Find(o => o.Identity.Equals(constructionId))
-                    .FirstOrDefault()
+                    .Find(o => o.Identity == constructionId)
+                    .FirstOrDefault()?
                     .ConstructionNumber;
 
             //Get Warp Origin Code and Weft Origin Code
             await Task.Yield();
-            var warpId = orderDocument.WarpOriginId;
-            var weftId = orderDocument.WeftOriginId;
+            var warpId = orderDocument.WarpOriginId.Value;
+            var weftId = orderDocument.WeftOriginId.Value;
 
             await Task.Yield();
             var warpCode =
                 _weavingSupplierRepository
-                    .Find(o => o.Identity.ToString().Equals(warpId))
-                    .FirstOrDefault()
+                    .Find(o => o.Identity == warpId)
+                    .FirstOrDefault()?
                     .Code;
 
             await Task.Yield();
             var weftCode =
                 _weavingSupplierRepository
-                    .Find(o => o.Identity.ToString().Equals(weftId))
-                    .FirstOrDefault()
+                    .Find(o => o.Identity == weftId)
+                    .FirstOrDefault()?
                     .Code;
 
             //Add Shell (DailyOperationLoomByIdDto Data Type) for Loom By Id Dto
@@ -236,31 +240,22 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             result.SetWarpOrigin(warpCode);
             result.SetWeftOrigin(weftCode);
 
-            foreach (var loomBeamProduct in products)
+            foreach (var loomBeamProduct in loomBeamProducts)
             {
                 //Get Beam Number
                 await Task.Yield();
-                //var beamQuery =
-                //    _beamRepository
-                //        .Query
-                //        .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
-                //        .OrderByDescending(o => o.CreatedDate);
                 var beamNumber =
                     _beamRepository
-                        .Find(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == loomBeamProduct.BeamDocumentId.Value)
+                        .FirstOrDefault()?
                         .Number;
 
                 //Get Machine Number
                 await Task.Yield();
-                //var machineQuery =
-                //    _machineRepository
-                //        .Query
-                //        .OrderByDescending(o => o.CreatedDate);
                 var machineNumber =
                     _machineRepository
-                        .Find(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
-                        .FirstOrDefault()
+                        .Find(o => o.Identity == loomBeamProduct.MachineDocumentId.Value)
+                        .FirstOrDefault()?
                         .MachineNumber;
 
                 //Get Date Time Beam Product
@@ -290,7 +285,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             }
             result.DailyOperationLoomBeamProducts = result.DailyOperationLoomBeamProducts.OrderByDescending(o => o.LatestDateTimeBeamProduct).ToList();
 
-            foreach (var loomBeamHistory in histories)
+            foreach (var loomBeamHistory in loomHistories)
             {
                 //Get Beam Number
                 var beamNumber = loomBeamHistory.BeamNumber;
@@ -300,15 +295,10 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Operator Name and Group
                 await Task.Yield();
-                var operatorId = loomBeamHistory.OperatorDocumentId;
-                //var operatorQuery =
-                //    _operatorRepository
-                //        .Query
-                //        .Where(o => o.Identity.Equals(operatorId))
-                //        .OrderByDescending(o => o.CreatedDate);
+                var operatorId = loomBeamHistory.OperatorDocumentId.Value;
                 var operatorDocument =
                     _operatorRepository
-                        .Find(o => o.Identity.Equals(operatorId))
+                        .Find(o => o.Identity == operatorId)
                         .FirstOrDefault();
                 var operatorName = operatorDocument.CoreAccount.Name;
                 var operatorGroup = operatorDocument.Group;
@@ -319,15 +309,10 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Shift Name
                 await Task.Yield();
-                var shiftId = loomBeamHistory.ShiftDocumentId;
-                //var shiftQuery =
-                //    _shiftRepository
-                //        .Query
-                //        .Where(o => o.Identity.Equals(shiftId))
-                //        .OrderByDescending(o => o.CreatedDate);
+                var shiftId = loomBeamHistory.ShiftDocumentId.Value;
                 var shiftName =
                     _shiftRepository
-                        .Find(o => o.Identity.Equals(shiftId))
+                        .Find(o => o.Identity == shiftId)
                         .FirstOrDefault()
                         .Name;
 

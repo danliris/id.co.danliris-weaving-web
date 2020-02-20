@@ -6,6 +6,7 @@ using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Reaching;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
 using Manufactures.Domain.DailyOperations.Reaching.ReadModels;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
 using Manufactures.Domain.FabricConstructions;
