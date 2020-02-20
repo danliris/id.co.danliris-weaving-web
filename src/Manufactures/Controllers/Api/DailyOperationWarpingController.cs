@@ -43,7 +43,7 @@ namespace Manufactures.Controllers.Api
     public class DailyOperationWarpingController : ControllerApiBase
     {
         private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> 
-            _warpingQuery;
+            _warpingDocumentQuery;
         private readonly IOperatorQuery<OperatorListDto> 
             _operatorQuery;
         private readonly IShiftQuery<ShiftDto> 
@@ -79,7 +79,7 @@ namespace Manufactures.Controllers.Api
                                                IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> warpingBrokenReportQuery)
             : base(serviceProvider)
         {
-            _warpingQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
+            _warpingDocumentQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
             _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
             _shiftQuery = shiftQuery ?? throw new ArgumentNullException(nameof(shiftQuery));
             _beamQuery = beamQuery ?? throw new ArgumentNullException(nameof(beamQuery));
@@ -107,15 +107,18 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             VerifyUser();
-            var dailyOperationWarpingDocuments = await _warpingQuery.GetAll();
+            var dailyOperationWarpingDocuments = await _warpingDocumentQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 await Task.Yield();
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
-                        .Where(x => x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                        .Where(x => x.DateTimeOperation.ToString("DD/MM/YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) || 
+                                    x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -234,7 +237,7 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var identity = Guid.Parse(Id);
-            var dailyOperationWarpingDocument = await _warpingQuery.GetById(identity);
+            var dailyOperationWarpingDocument = await _warpingDocumentQuery.GetById(identity);
 
             if (dailyOperationWarpingDocument == null)
             {

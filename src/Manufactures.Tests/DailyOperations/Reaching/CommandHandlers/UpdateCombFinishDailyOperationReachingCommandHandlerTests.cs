@@ -15,6 +15,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using System.Linq.Expressions;
+using Manufactures.Domain.DailyOperations.Reaching.Entities;
 
 namespace Manufactures.Tests.DailyOperations.Reaching.CommandHandlers
 {

@@ -30,6 +30,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Globalization;
 
 namespace Manufactures.Controllers.Api
 {
@@ -104,11 +105,12 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 dailyOperationSizingDocuments =
                     dailyOperationSizingDocuments
-                        .Where(x => x.DateTimeOperation.ToString("DD MMMM YYYY").Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                        .Where(x => x.DateTimeOperation.ToString("DD/MM/YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.FabricConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                                    x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)||
+                                    x.MachineNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))

@@ -6,6 +6,7 @@ using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Loom;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
 using Manufactures.Domain.FabricConstructions;
@@ -43,6 +44,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
     {
         private readonly MockRepository mockRepository;
         private readonly Mock<IStorage> mockStorage;
+        private readonly Mock<IServiceProvider> mockServiceProvider;
         private readonly Mock<IDailyOperationLoomRepository>
             mockDailyOperationLoomRepo;
         private readonly Mock<IMachineRepository>
@@ -68,6 +70,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
             this.mockStorage = this.mockRepository.Create<IStorage>();
+            this.mockServiceProvider = this.mockRepository.Create<IServiceProvider>();
 
             this.mockDailyOperationLoomRepo = this.mockRepository.Create<IDailyOperationLoomRepository>();
             this.mockMachineRepo = this.mockRepository.Create<IMachineRepository>();
@@ -105,7 +108,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
         private DailyOperationLoomQueryHandler CreateDailyOperationLoomQueryHandler()
         {
             return new DailyOperationLoomQueryHandler(
-                this.mockStorage.Object);
+                this.mockStorage.Object, this.mockServiceProvider.Object);
         }
 
         [Fact]

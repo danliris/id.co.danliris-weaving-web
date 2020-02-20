@@ -83,11 +83,11 @@ namespace Manufactures.Controllers.Api
                 await Task.Yield();
                 dailyOperationReachingDocuments =
                     dailyOperationReachingDocuments
-                        .Where(x => x.DateTimeOperation.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.MachineNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                        .Where(x => x.DateTimeOperation.ToString("DD/MM/YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.SizingBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                                    x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.SizingBeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.MachineNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
@@ -111,8 +111,7 @@ namespace Manufactures.Controllers.Api
                         dailyOperationReachingDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
-
-            //int totalRows = dailyOperationReachingDocuments.Count();
+            
             var result = dailyOperationReachingDocuments.Skip((page - 1) * size).Take(size);
             var total = result.Count();
 

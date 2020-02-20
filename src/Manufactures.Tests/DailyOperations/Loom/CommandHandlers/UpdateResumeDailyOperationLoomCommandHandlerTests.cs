@@ -15,6 +15,7 @@ using System.Threading;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
 
 namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 {
