@@ -29,6 +29,7 @@ using Manufactures.Domain.Defects.FabricDefect.ReadModels;
 using Manufactures.Domain.BeamStockMonitoring.ReadModels;
 using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom;
+using Manufactures.Domain.TroubleMachineMonitoring.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -237,6 +238,15 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ToTable("Weaving_ShiftDocuments");
                 etb.HasKey(e => e.Identity);
                 etb.Property(e => e.Name).HasMaxLength(255);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<TroubleMachineMonitoringReadModel>(etb =>
+            {
+                etb.ToTable("Weaving_WarpingMachineTroubleDocuments");
+                etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
