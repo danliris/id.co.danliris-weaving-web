@@ -35,6 +35,7 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
+            VerifyUser();
             var troubleMachineMonitoringDocuments = await _troubleMachineMonitoring.GetAll();
 
 
@@ -42,7 +43,10 @@ namespace Manufactures.Controllers.Api
             {
                 troubleMachineMonitoringDocuments =
                     troubleMachineMonitoringDocuments
-                        .Where(o => o.Trouble.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        .Where(t => t.OrderNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    t.ConstructionNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    t.Operator.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                    t.Trouble.Contains(keyword, StringComparison.OrdinalIgnoreCase))
                         .ToList();
             }
 
