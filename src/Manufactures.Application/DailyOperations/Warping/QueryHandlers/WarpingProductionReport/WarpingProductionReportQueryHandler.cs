@@ -101,7 +101,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             var result = new List<DailyProcessedPerOperatorDto>();
 
-            var groupedHistories = histories.GroupBy(item => new { item.OperatorDocumentId, item.WarpingBeamLengthPerOperatorUomId }).Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator), Uom = s.Key.WarpingBeamLengthPerOperatorUomId });
+            var groupedHistories = 
+                histories
+                    .GroupBy(item => new { item.OperatorDocumentId, item.WarpingBeamLengthPerOperatorUomId })
+                    .Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator), Uom = s.Key.WarpingBeamLengthPerOperatorUomId });
 
             var operatorIds = groupedHistories.Select(s => s.OperatorDocumentId.Value).ToList();
             var operatorQuery = _operatorRepository.Query.Where(w => operatorIds.Contains(w.Identity));
