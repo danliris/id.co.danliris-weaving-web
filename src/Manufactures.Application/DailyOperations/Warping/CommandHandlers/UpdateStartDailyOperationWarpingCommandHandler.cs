@@ -106,6 +106,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           MachineStatus.ONSTART,
                                                                           existingDailyOperationWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(request.WarpingBeamId);
+                        newHistory.SetWarpingBeamLengthPerOperatorUomId(new UomId(request.WarpingBeamLengthUomId));
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
@@ -114,6 +115,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                                   warpingDateTime,
                                                                                   BeamStatus.ONPROCESS,
                                                                                   existingDailyOperationWarpingDocument.Identity);
+                        newBeamProduct.SetWarpingTotalBeamLengthUomId(new UomId(request.WarpingBeamLengthUomId));
                         await _dailyOperationWarpingBeamProductRepository.Update(newBeamProduct);
 
                         _storage.Save();
@@ -135,6 +137,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                               MachineStatus.ONSTART, 
                                                                               existingDailyOperationWarpingDocument.Identity);
                             newHistory.SetWarpingBeamId(request.WarpingBeamId);
+                            newHistory.SetWarpingBeamLengthPerOperatorUomId(new UomId(request.WarpingBeamLengthUomId));
                             await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                             //Assign Value to Warping Beam Product and Add to Warping Document
@@ -144,6 +147,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                                       BeamStatus.ONPROCESS,
                                                                                       existingDailyOperationWarpingDocument.Identity);
                             newBeamProduct.SetWarpingTotalBeamLength(0);
+                            newBeamProduct.SetWarpingTotalBeamLengthUomId(new UomId(request.WarpingBeamLengthUomId));
                             await _dailyOperationWarpingBeamProductRepository.Update(newBeamProduct);
 
                             _storage.Save();

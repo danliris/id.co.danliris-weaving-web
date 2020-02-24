@@ -27,6 +27,9 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "WarpingBeamId")]
         public BeamId WarpingBeamId { get; set; }
 
+        [JsonProperty(PropertyName = "WarpingBeamLengthUomId")]
+        public int WarpingBeamLengthUomId { get; set; }
+
         public void SetId(Guid Id)
         {
             this.Id = Id;
@@ -43,6 +46,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.StartShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(command => command.StartOperator).NotEmpty().WithMessage("Operator Harus Diisi");
             RuleFor(command => command.WarpingBeamId).NotEmpty().WithMessage("No. Beam Warping Harus Diisi");
+            RuleFor(command => command.WarpingBeamLengthUomId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
         }
     }
 }

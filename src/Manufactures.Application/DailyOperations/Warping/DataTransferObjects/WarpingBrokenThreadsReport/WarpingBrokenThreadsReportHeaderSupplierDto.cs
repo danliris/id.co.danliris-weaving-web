@@ -7,16 +7,16 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportHeaderSupplierDto
     {
-        [JsonProperty(PropertyName = "Unit")]
-        public string Unit { get; set; }
+        [JsonProperty(PropertyName = "SupplierName")]
+        public string SupplierName { get; set; }
 
         [JsonProperty(PropertyName = "Span")]
         public int Span { get; set; }
 
-        public WarpingBrokenThreadsReportHeaderSupplierDto(string unit,
+        public WarpingBrokenThreadsReportHeaderSupplierDto(string supplierName,
                                                            int span)
         {
-            Unit = unit;
+            SupplierName = supplierName;
             Span = span;
         }
     }

@@ -49,8 +49,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
             //Get Daily Operation History
             var existingDailyOperationWarpingHistories =
                 _dailyOperationWarpingHistoryRepository
-                    .Query
-                    .Where(h => h.DailyOperationWarpingDocumentId.Equals(existingDailyOperationWarpingDocument.Identity))
+                    .Find(o=>o.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
                     .OrderByDescending(detail => detail.DateTimeMachine);
             var lastWarpingHistory = existingDailyOperationWarpingHistories.FirstOrDefault();
 
@@ -100,16 +99,16 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           warpingDateTime,
                                                                           MachineStatus.ONPROCESSBEAM,
                                                                           existingDailyOperationWarpingDocument.Identity);
-                        newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
+                        newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
-                        newHistory.SetWarpingBeamLengthPerOperatorUomId(new UomId(request.WarpingBeamLengthUomId));
+                        newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);                        
                         var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
                         lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
-                        lastWarpingBeamProduct.SetWarpingTotalBeamLengthUomId(new UomId(request.WarpingBeamLengthUomId));
+                        //lastWarpingBeamProduct.SetWarpingTotalBeamLengthUomId(lastWarpingBeamProduct.WarpingTotalBeamLengthUomId);
                         lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ONPROCESS);
                         await _dailyOperationWarpingBeamProductRepository.Update(lastWarpingBeamProduct);                        
 

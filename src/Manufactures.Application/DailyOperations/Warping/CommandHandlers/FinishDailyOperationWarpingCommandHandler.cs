@@ -50,19 +50,19 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .FirstOrDefault();
 
             //Get Daily Operation History
-            var existingWarpingHistories =
+            var lastWarpingHistory =
                 _dailyOperationWarpingHistoryRepository
-                    .Query
-                    .Where(h => h.DailyOperationWarpingDocumentId.Equals(existingWarpingDocument.Identity))
-                    .OrderByDescending(detail => detail.DateTimeMachine);
-            var lastWarpingHistory = existingWarpingHistories.FirstOrDefault();
+                    .Find(o=>o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                    .OrderByDescending(detail => detail.DateTimeMachine)
+                    .FirstOrDefault();
 
             //Get Daily Operation Beam Product
             
-            var lastWarpingBeamProduct = _dailyOperationWarpingBeamProductRepository
-                .Find(x => x.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
-                .OrderByDescending(x => x.LatestDateTimeBeamProduct)
-                .FirstOrDefault();
+            var lastWarpingBeamProduct = 
+                _dailyOperationWarpingBeamProductRepository
+                    .Find(x => x.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                    .OrderByDescending(x => x.LatestDateTimeBeamProduct)
+                    .FirstOrDefault();
 
             //Reformat DateTime
             var year = request.ProduceBeamsDate.Year;
@@ -110,14 +110,14 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                                                                           warpingDateTime,
                                                                           MachineStatus.ONCOMPLETE,
                                                                           existingWarpingDocument.Identity);
-                        newHistory.SetWarpingBeamId(new BeamId(lastWarpingHistory.WarpingBeamId));
+                        newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
+                        newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);
                         lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ROLLEDUP);
-                        
-                        
+
                         var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
                         lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
 
@@ -125,7 +125,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         lastWarpingBeamProduct.SetMachineSpeed(request.MachineSpeed);
                         lastWarpingBeamProduct.SetPressRoll(request.PressRoll);
                         lastWarpingBeamProduct.SetPressRollUom(request.PressRollUom);
-
                         await _dailyOperationWarpingBeamProductRepository.Update(lastWarpingBeamProduct);
 
                         foreach (var brokenCause in request.BrokenCauses)

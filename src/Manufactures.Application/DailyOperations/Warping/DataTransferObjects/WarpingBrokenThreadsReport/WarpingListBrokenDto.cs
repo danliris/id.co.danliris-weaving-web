@@ -13,14 +13,14 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "YarnName")]
         public string YarnName { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenEach")]
-        public double BrokenEach { get; set; }
+        [JsonProperty(PropertyName = "BrokenEachYarn")]
+        public double BrokenEachYarn { get; set; }
 
-        public WarpingListBrokenDto(string supplierName, string yarnName, double brokenEach)
+        public WarpingListBrokenDto(string supplierName, string yarnName, double brokenEachYarn)
         {
             SupplierName = supplierName;
             YarnName = yarnName;
-            BrokenEach = brokenEach;
+            BrokenEachYarn = brokenEachYarn;
         }
     }
 }
