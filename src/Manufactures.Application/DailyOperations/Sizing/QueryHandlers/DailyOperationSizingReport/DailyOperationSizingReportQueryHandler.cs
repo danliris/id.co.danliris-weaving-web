@@ -30,12 +30,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
             _http;
         private readonly IStorage
             _storage;
+        private readonly IDailyOperationWarpingBeamProductRepository
+            _dailyOperationWarpingBeamProductRepository;
         private readonly IDailyOperationSizingDocumentRepository
             _dailyOperationSizingRepository;
         private readonly IDailyOperationSizingBeamsWarpingRepository
             _dailyOperationBeamsWarpingRepository;
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
+        private readonly IDailyOperationSizingHistoryRepository
+            _dailyOperationSizingHistoryRepository;
         private readonly IOrderRepository
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
@@ -59,6 +63,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                 _storage.GetRepository<IDailyOperationSizingDocumentRepository>();
             _dailyOperationBeamsWarpingRepository =
                 _storage.GetRepository<IDailyOperationSizingBeamsWarpingRepository>();
+            _dailyOperationWarpingBeamProductRepository =
+                _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
+            _dailyOperationSizingHistoryRepository =
+               _storage.GetRepository<IDailyOperationSizingHistoryRepository>();
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _weavingOrderDocumentRepository =
@@ -108,7 +116,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
 
                 //Query for Daily Operation Sizing
                 var dailyOperationSizingQuery =
-                    _dailyOperationSizingRepository.Query;
+                    _dailyOperationSizingRepository
+                    .Query
+                    .AsQueryable();
 
                 //Check if Machine Id Null
                 await Task.Yield();
@@ -228,8 +238,19 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     //Get Ne Real
                     var neReal = document.NeReal;
 
+                    //get Machine Speed
+                    var machineSpeed = document.MachineSpeed;
+
+                    //get TexSeq
+                    var texSeq = document.TexSQ;
+
+                    //get Visco
+                    var visco = document.Visco;
+
                     //Get Histories
-                    var sizingHistories = document.SizingHistories.OrderByDescending(x => x.AuditTrail.CreatedDate);
+                    var sizingHistories = _dailyOperationSizingHistoryRepository
+                            .Find(o => o.DailyOperationSizingDocumentId == document.Identity)
+                            .OrderByDescending(i => i.AuditTrail.CreatedDate);
 
                     //Get First History, if Histories = null, skip This Document
                     var firstHistory = sizingHistories.LastOrDefault();     //Use This History to Get History at Preparation State
@@ -278,7 +299,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     var operatorDocument =
                         _operatorRepository
                             .Find(operatorQuery)
-                            .Where(o => o.Identity.Equals(operatorId))
+                            .Where(o => o.Identity == operatorId.Value)
                             .FirstOrDefault();
                     var operatorName = operatorDocument.CoreAccount.Name;
 
@@ -294,7 +315,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                     var shiftDocument =
                         _shiftRepository
                             .Find(shiftQuery)
-                            .Where(o => o.Identity.Equals(shiftId))
+                            .Where(o => o.Identity == shiftId.Value)
                             .FirstOrDefault();
                     var shiftName = shiftDocument.Name;
 
@@ -311,11 +332,15 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                             .Find(x => x.OrderDocumentId == document.OrderDocumentId.Value)
                             .OrderByDescending(x => x.AuditTrail.CreatedDate);
 
+
                     //Get ALL BEAM PRODUCT OF WARPING That Used Same Order With Current Sizing Operation And Add to Warping Beam Data Transfer Object
                     List<DailyOperationWarpingBeamDto> warpingListBeamProducts = new List<DailyOperationWarpingBeamDto>();
                     foreach (var warping in dailyOperationWarpingDocument)
                     {
-                        foreach (var warpingBeamProduct in warping.WarpingBeamProducts)
+                    var beamProducts =
+                        _dailyOperationWarpingBeamProductRepository
+                        .Find(x => x.DailyOperationWarpingDocumentId == warping.Identity);
+                        foreach (var warpingBeamProduct in beamProducts)
                         {
                             await Task.Yield();
                             var warpingBeamStatus = warpingBeamProduct.BeamStatus;
@@ -337,6 +362,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                         _dailyOperationBeamsWarpingRepository
                             .Find(o => o.DailyOperationSizingDocumentId == document.Identity)
                             .OrderByDescending(x => x.AuditTrail.CreatedDate);
+
 
                     //Get ONLY BEAM PRODUCT OF WARPING Used in The Current Sizing Operation And Incremented YarnStrands and EmptyWeight Value using Short Hand Operators
                     foreach (var warpingBeamProduct in warpingListBeamProducts)
