@@ -81,12 +81,18 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             {
                 //Add Shell (result) for Daily Operation Sizing Report Dto
                 var result = new List<SizePickupReportListDto>();
-                
+
                 //Get Daily Operation Sizing Data from Daily Operation Sizing Repo
+                var sizePickupQuery =
+                    _dailyOperationSizingRepository
+                        .Query
+                        .AsQueryable();
+
                 var sizingDocuments =
                     _dailyOperationSizingRepository
-                        .Find(o=>o.OperationStatus == OperationStatus.ONFINISH)
+                        .Find(sizePickupQuery)
                         .OrderByDescending(x => x.AuditTrail.CreatedDate);
+
 
                 foreach (var sizingDocument in sizingDocuments)
                 {
@@ -164,16 +170,22 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .FirstOrDefault()
                                 .Identity;
 
+                        ////Get Histories
+                        //var sizingHistories = 
+                        //    _dailyOperationSizingHistoryRepository
+                        //        .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.MachineStatus == MachineStatus.ONFINISH)
+                        //        .OrderByDescending(x => x.AuditTrail.CreatedDate)
+                        //        .AsQueryable();
+
                         //Get Histories
-                        var sizingHistories = 
-                            _dailyOperationSizingHistoryRepository
-                                .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.MachineStatus == MachineStatus.ONFINISH)
-                                .OrderByDescending(x => x.AuditTrail.CreatedDate)
+                        var sizingHistories = _dailyOperationSizingHistoryRepository
+                                .Find(o => o.DailyOperationSizingDocumentId == sizingDocument.Identity)
+                                .OrderByDescending(i => i.AuditTrail.CreatedDate)
                                 .AsQueryable();
 
                         if (shiftIdHistory != null)
                         {
-                            sizingHistories = sizingHistories.Where(o => o.ShiftDocumentId.Equals(shiftIdHistory));
+                            sizingHistories = sizingHistories.Where(o => o.ShiftDocumentId.Value == shiftIdHistory);
                         }
 
                         //Get Latest History, if Histories = null, skip This Document
@@ -233,7 +245,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var operatorDocument =
                             _operatorRepository
                                 .Find(operatorQuery)
-                                .Where(o => o.Identity.Equals(operatorId))
+                                .Where(o => o.Identity == operatorId.Value)
                                 .FirstOrDefault();
                         var operatorName = operatorDocument.CoreAccount.Name;
 
@@ -244,8 +256,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var beamQuery =
                             _beamRepository
                                 .Query
-                                .Where(o => o.Identity.Equals(beamProduct.SizingBeamId))
+                                .Where(o => o.Identity == beamProduct.SizingBeamId.Value)
                                 .OrderByDescending(o => o.CreatedDate);
+
                         var beamNumber =
                             _beamRepository
                                 .Find(beamQuery)
