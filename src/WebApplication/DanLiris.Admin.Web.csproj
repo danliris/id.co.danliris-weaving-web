@@ -80,6 +80,8 @@
     <Compile Remove="Migrations\20200210075230_AddBeamProductResultsOnSizing.Designer.cs" />
     <Compile Remove="Migrations\20200214032334_ChangeOnMachineTable.cs" />
     <Compile Remove="Migrations\20200214032334_ChangeOnMachineTable.Designer.cs" />
+    <Compile Remove="Migrations\20200225045448_ChangeDataTypeOnDailyOperationWarping.cs" />
+    <Compile Remove="Migrations\20200225045448_ChangeDataTypeOnDailyOperationWarping.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

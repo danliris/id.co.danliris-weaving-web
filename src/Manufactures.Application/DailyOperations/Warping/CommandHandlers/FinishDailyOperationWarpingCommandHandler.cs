@@ -105,14 +105,14 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                          new ShiftId(request.ProduceBeamsShift.Value),
-                                                                          new OperatorId(request.ProduceBeamsOperator.Value),
+                                                                          request.ProduceBeamsShift,
+                                                                          request.ProduceBeamsOperator,
                                                                           warpingDateTime,
                                                                           MachineStatus.ONCOMPLETE,
                                                                           existingWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
-                        newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
+                        //newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);

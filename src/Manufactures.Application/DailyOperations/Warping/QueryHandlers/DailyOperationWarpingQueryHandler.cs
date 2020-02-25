@@ -160,11 +160,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             var histories = 
                 _dailyOperationWarpingHistoryRepository
-                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
+                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity).ToList();
 
             var beamProducts = 
                 _dailyOperationWarpingBeamProductRepository
-                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity);
+                    .Find(x => x.DailyOperationWarpingDocumentId == dailyOperationWarpingDocument.Identity).ToList();
 
             foreach(var product in beamProducts)
             {

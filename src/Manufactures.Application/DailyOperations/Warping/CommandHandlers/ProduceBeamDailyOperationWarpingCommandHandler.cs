@@ -94,8 +94,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                          new ShiftId(request.ProduceBeamsShift.Value),
-                                                                          new OperatorId(request.ProduceBeamsOperator.Value),
+                                                                          request.ProduceBeamsShift,
+                                                                          request.ProduceBeamsOperator,
                                                                           warpingDateTime,
                                                                           MachineStatus.ONPROCESSBEAM,
                                                                           existingDailyOperationWarpingDocument.Identity);

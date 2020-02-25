@@ -24,12 +24,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         //Constructor (Write)
         public DailyOperationWarpingBeamProduct(Guid identity,
                                                 BeamId warpingBeamId,
+                                                UomId warpingTotalBeamLengthUomId,
                                                 DateTimeOffset latestDateTimeBeamProduct,
                                                 string beamStatus,
                                                 Guid dailyOperationWarpingDocumentId) : base(identity)
         {
             Identity = identity;
             WarpingBeamId = warpingBeamId;
+            WarpingTotalBeamLengthUomId = warpingTotalBeamLengthUomId;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             BeamStatus = beamStatus;
             DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId;

@@ -28,7 +28,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         public BeamId WarpingBeamId { get; set; }
 
         [JsonProperty(PropertyName = "WarpingBeamLengthUomId")]
-        public int WarpingBeamLengthUomId { get; set; }
+        public UomId WarpingBeamLengthUomId { get; set; }
 
         public void SetId(Guid Id)
         {

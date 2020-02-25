@@ -52,7 +52,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             //Instantiate new Daily Operation warping
             var newWarpingDocument = new DailyOperationWarpingDocument(Guid.NewGuid(),
-                                                                       new OrderId(request.PreparationOrder.Value),
+                                                                       request.PreparationOrder,
                                                                        request.AmountOfCones,
                                                                        request.BeamProductResult,
                                                                        warpingDateTime,
@@ -63,8 +63,8 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
             //Add Daily Operation History
             var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                              new ShiftId(request.PreparationShift.Value),
-                                                              new OperatorId(request.PreparationOperator.Value), 
+                                                              request.PreparationShift,
+                                                              request.PreparationOperator, 
                                                               warpingDateTime,
                                                               MachineStatus.ONENTRY,
                                                               newWarpingDocument.Identity);
