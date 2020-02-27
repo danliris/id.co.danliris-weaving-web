@@ -29,5 +29,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
             MinBrokenValue = minBrokenValue;
             LastMonthAverageBrokenValue = lastMonthAverageBrokenValue;
         }
+
+        public WarpingBrokenThreadsReportFooterDto()
+        {
+            TotalBrokenValue = new List<WarpingBrokenThreadsReportFooterTotalDto>();
+            MaxBrokenValue = new List<double>();
+            MinBrokenValue = new List<double>();
+            LastMonthAverageBrokenValue = new List<double>();
+        }
     }
 }
