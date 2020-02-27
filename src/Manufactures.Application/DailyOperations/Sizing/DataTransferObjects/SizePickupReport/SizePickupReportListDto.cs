@@ -53,6 +53,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
         [JsonProperty(PropertyName = "SPU")]
         public double SPU { get; set; }
 
+        [JsonProperty(PropertyName = "Category")]
+        public string Category { get; set; }
+
+
         public SizePickupReportListDto(DailyOperationSizingDocument document, 
                                        string operatorName, 
                                        string operatorGroup, 
@@ -63,7 +67,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
                                        double weightBruto, 
                                        double pisMeter, 
                                        double spu, 
-                                       string beamNumber)
+                                       string beamNumber,
+                                       string category)
         {
             Id = document.Identity;
             RecipeCode = document.RecipeCode;
@@ -80,6 +85,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
             PISMeter = pisMeter;
             SPU = spu;
             BeamNumber = beamNumber;
+            Category = category;
         }
 
         public SizePickupReportListDto()
