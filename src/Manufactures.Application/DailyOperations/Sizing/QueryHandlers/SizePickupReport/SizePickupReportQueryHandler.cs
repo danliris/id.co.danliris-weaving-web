@@ -6,6 +6,7 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Queries.SizePickupReport;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
@@ -35,6 +36,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
+        private readonly IMaterialTypeRepository
+            _materialTypeRepository;
         private readonly IBeamRepository
             _beamRepository;
         private readonly IOperatorRepository
@@ -64,6 +67,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
                 _storage.GetRepository<IShiftRepository>();
+            _materialTypeRepository =
+                _storage.GetRepository<IMaterialTypeRepository>();
         }
 
         public async Task<(IEnumerable<SizePickupReportListDto>, int)> GetReports(string shiftId,
@@ -147,6 +152,65 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var charToTrim = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '/' };
                         var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(charToTrim);
 
+                        //Filter Standart Material Type
+                        await Task.Yield();
+
+                        var materialTypeQuery =
+                            _materialTypeRepository
+                                .Query
+                                .OrderBy(o => o.CreatedDate);
+
+                        var materialType = fabricConstructionDocument.MaterialType;
+
+                        var materialTypeDocument =
+                            _materialTypeRepository
+                                .Find(materialTypeQuery)
+                                .Where(m => m.Name.Equals(materialType))
+                                .FirstOrDefault();
+
+                        var materialCode = materialTypeDocument.Code;
+
+                        var pc = new List<string>() { "A", "B", "C", "PV", "AA" };
+                        var cotton = new List<string>() { "G", "M", "O", "R", "RN", "RR", "RS", "J", "Z", "Q", "F" };
+                        var pe = new List<string>() { "L", "N", "S", "X", "H", "T" };
+                        var rayon = new List<string>() { "Y", "YV" };
+
+                        var materialPC = pc
+                            .Where(m => m.Contains(materialCode))
+                            .FirstOrDefault();
+
+                        var materialCotton = cotton
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        var materialPE = pe
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        var materialRayon = rayon
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        if (materialCotton != null)
+                        {
+                            filteredConstructionNumber = "COTTON";
+                        }
+
+                        if (materialPC != null)
+                        {
+                            filteredConstructionNumber = "PC";
+                        }
+
+                        if (materialPE != null)
+                        {
+                            filteredConstructionNumber = "PE";
+                        }
+
+                        if (materialRayon != null)
+                        {
+                            filteredConstructionNumber = "RAYON";
+                        }
+
                         //Get Shift (Latest History)
                         var shiftQuery =
                         _shiftRepository
@@ -182,6 +246,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .Find(o => o.DailyOperationSizingDocumentId == sizingDocument.Identity)
                                 .OrderByDescending(i => i.AuditTrail.CreatedDate)
                                 .AsQueryable();
+
 
                         if (shiftIdHistory != null)
                         {
@@ -268,6 +333,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var sizePickupReport = new SizePickupReportListDto();
                         var spuBeamProduct = beamProduct.SPU;
 
+                        if (shiftId != null)
+                        {
+                            if (!(shiftId == shiftIdHistory.ToString()))
+                            {
+                                continue;
+                            }
+                        }
+
+                        var category = "";
+
                         switch (filteredConstructionNumber)
                         {
                             case SizePickupSPUConstants.PCCONSTRUCTION:
@@ -286,7 +361,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultPC);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -308,7 +384,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultCVC);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -330,7 +407,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultCotton);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -352,7 +430,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultPE);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -374,7 +453,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultRayon);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -392,7 +472,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                beamProduct.WeightBruto,
                                                                                beamProduct.PISMeter,
                                                                                spuBeamProduct,
-                                                                               beamNumber);
+                                                                               beamNumber,
+                                                                               category);
 
                                 //Add SizePickupReportListDto to List of SizePickupReportListDto
                                 result.Add(sizePickupReport);
