@@ -19,37 +19,32 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "HeaderSuppliers")]
         public List<WarpingBrokenThreadsReportHeaderSupplierDto> HeaderSuppliers { get; set; }
 
-        [JsonProperty(PropertyName = "HeaderWarps")]
-        public List<WarpingBrokenThreadsReportHeaderYarnDto> HeaderWarps { get; set; }
+        [JsonProperty(PropertyName = "HeaderBrokens")]
+        public List<WarpingBrokenThreadsReportHeaderBrokenDto> HeaderBrokens { get; set; }
 
         [JsonProperty(PropertyName = "BodyBrokens")]
-        public List<WarpingBrokenThreadsReportBodyBrokenDto> BodyBrokens { get; set; }
-
-        [JsonProperty(PropertyName = "Footers")]
-        public WarpingBrokenThreadsReportFooterDto Footers { get; set; }
-
+        public List<WarpingBrokenThreadsReportBodyBrokenDto> BodyBrokensValue { get; set; }
+        
         public WarpingBrokenThreadsReportListDto(string month, 
                                                  string year, 
                                                  string weavingUnitName,
                                                  List<WarpingBrokenThreadsReportHeaderSupplierDto> headerSuppliers,
-                                                 List<WarpingBrokenThreadsReportHeaderYarnDto> headerWarps,
-                                                 List<WarpingBrokenThreadsReportBodyBrokenDto> bodyBrokens,
-                                                 WarpingBrokenThreadsReportFooterDto footers)
+                                                 List<WarpingBrokenThreadsReportHeaderBrokenDto> headerBrokens,
+                                                 List<WarpingBrokenThreadsReportBodyBrokenDto> bodyBrokens)
         {
             Month = month;
             Year = year;
             WeavingUnitName = weavingUnitName;
             HeaderSuppliers = headerSuppliers;
-            HeaderWarps = headerWarps;
-            BodyBrokens = bodyBrokens;
-            Footers = footers;
+            HeaderBrokens = headerBrokens;
+            BodyBrokensValue = bodyBrokens;
         }
 
         public WarpingBrokenThreadsReportListDto()
         {
             HeaderSuppliers = new List<WarpingBrokenThreadsReportHeaderSupplierDto>();
-            HeaderWarps = new List<WarpingBrokenThreadsReportHeaderYarnDto>();
-            BodyBrokens = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
+            HeaderBrokens = new List<WarpingBrokenThreadsReportHeaderBrokenDto>();
+            BodyBrokensValue = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
         }
     }
 }

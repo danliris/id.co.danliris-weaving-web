@@ -7,6 +7,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportFooterDto
     {
+        [JsonProperty(PropertyName = "LastMonth")]
+        public string LastMonth { get; set; }
+
         [JsonProperty(PropertyName = "TotalBrokenValue")]
         public List<WarpingBrokenThreadsReportFooterTotalDto> TotalBrokenValue { get; set; }
 
@@ -17,13 +20,15 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public List<double> MinBrokenValue { get; set; }
 
         [JsonProperty(PropertyName = "LastMonthAverageBrokenValue")]
-        public List<double> LastMonthAverageBrokenValue { get; set; }
+        public List<WarpingBrokenThreadsReportFooterTotalDto> LastMonthAverageBrokenValue { get; set; }
 
-        public WarpingBrokenThreadsReportFooterDto(List<WarpingBrokenThreadsReportFooterTotalDto> totalBrokenValue, 
+        public WarpingBrokenThreadsReportFooterDto(string lastMonth,
+                                                   List<WarpingBrokenThreadsReportFooterTotalDto> totalBrokenValue, 
                                                    List<double> maxBrokenValue, 
                                                    List<double> minBrokenValue,
-                                                   List<double> lastMonthAverageBrokenValue)
+                                                   List<WarpingBrokenThreadsReportFooterTotalDto> lastMonthAverageBrokenValue)
         {
+            LastMonth = lastMonth;
             TotalBrokenValue = totalBrokenValue;
             MaxBrokenValue = maxBrokenValue;
             MinBrokenValue = minBrokenValue;
@@ -35,7 +40,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
             TotalBrokenValue = new List<WarpingBrokenThreadsReportFooterTotalDto>();
             MaxBrokenValue = new List<double>();
             MinBrokenValue = new List<double>();
-            LastMonthAverageBrokenValue = new List<double>();
+            LastMonthAverageBrokenValue = new List<WarpingBrokenThreadsReportFooterTotalDto>();
         }
     }
 }

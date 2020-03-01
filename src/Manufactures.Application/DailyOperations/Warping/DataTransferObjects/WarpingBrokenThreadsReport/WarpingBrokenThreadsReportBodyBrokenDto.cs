@@ -8,21 +8,47 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportBodyBrokenDto
     {
+        [JsonProperty(PropertyName = "YarnName")]
+        public string YarnName { get; set; }
+
         [JsonProperty(PropertyName = "BrokenName")]
         public string BrokenName { get; set; }
 
-        [JsonProperty(PropertyName = "ListBroken")]
-        public List<WarpingListBrokenDto> ListBroken { get; set; }
+        [JsonProperty(PropertyName = "TotalEachBroken")]
+        public double TotalEachBroken { get; set; }
 
-        public WarpingBrokenThreadsReportBodyBrokenDto(string brokenName, List<WarpingListBrokenDto> listBroken)
+        [JsonProperty(PropertyName = "LastMonthName")]
+        public string LastMonthName { get; set; }
+
+        [JsonProperty(PropertyName = "TotalAllBroken")]
+        public double TotalAllBroken { get; set; }
+
+        [JsonProperty(PropertyName = "MaxBroken")]
+        public double MaxBroken { get; set; }
+
+        [JsonProperty(PropertyName = "MinBroken")]
+        public double MinBroken { get; set; }
+
+        [JsonProperty(PropertyName = "LastMonthAverageBroken")]
+        public double LastMonthAverageBroken { get; set; }
+
+        public WarpingBrokenThreadsReportBodyBrokenDto(string yarnName,
+                                                       string brokenName,
+                                                       double totalEachBroken,
+                                                       string lastMonthName,
+                                                       double totalAllBroken,
+                                                       double maxBroken,
+                                                       double minBroken,
+                                                       double lastMonthAverageBroken)
         {
+            YarnName = yarnName;
             BrokenName = brokenName;
-            ListBroken = listBroken;
-        }
-
-        public WarpingBrokenThreadsReportBodyBrokenDto()
-        {
-            ListBroken = new List<WarpingListBrokenDto>();
+            TotalEachBroken = totalEachBroken;
+            LastMonthName = lastMonthName;
+            TotalAllBroken = totalAllBroken;
+            MaxBroken = maxBroken;
+            MinBroken = minBroken;
+            LastMonthAverageBroken = lastMonthAverageBroken;
         }
     }
 }

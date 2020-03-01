@@ -7,7 +7,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportFooterTotalDto
     {
-
         [JsonProperty(PropertyName = "WarpName")]
         public string WarpName { get; set; }
 
