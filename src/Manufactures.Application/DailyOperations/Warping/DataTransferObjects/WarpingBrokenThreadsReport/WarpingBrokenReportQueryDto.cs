@@ -13,46 +13,51 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "WeavingUnitId")]
         public int WeavingUnitId { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenCauseName")]
-        public string BrokenCauseName { get; set; }
-
         [JsonProperty(PropertyName = "SupplierName")]
         public string SupplierName { get; set; }
+
+        [JsonProperty(PropertyName = "BrokenCauseName")]
+        public string BrokenCauseName { get; set; }
 
         [JsonProperty(PropertyName = "YarnName")]
         public string YarnName { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenEachCause")]
-        public int BrokenEachCause { get; set; }
+        [JsonProperty(PropertyName = "YarnId")]
+        public Guid YarnId { get; set; }
 
-        [JsonProperty(PropertyName = "BeamPerOperatorUom")]
-        public int BeamPerOperatorUom { get; set; }
-
-        [JsonProperty(PropertyName = "TotalBeamLength")]
-        public double TotalBeamLength { get; set; }
+        [JsonProperty(PropertyName = "BeamLength")]
+        public double BeamLength { get; set; }
 
         [JsonProperty(PropertyName = "AmountOfCones")]
         public int AmountOfCones { get; set; }
+
+        [JsonProperty(PropertyName = "BrokenEachYarn")]
+        public int BrokenEachYarn { get; set; }
+
+        [JsonProperty(PropertyName = "BeamPerOperatorUom")]
+        public int BeamPerOperatorUom { get; set; }
 
         public WarpingBrokenReportQueryDto(DateTimeOffset? dateTimeProductBeam, 
                                            int weavingUnitId, 
                                            string brokenCauseName, 
                                            string supplierName, 
-                                           string yarnName, 
-                                           int brokenEachCause, 
-                                           int beamPerOperatorUom, 
-                                           double totalBeamLength, 
-                                           int amountOfCones)
+                                           string yarnName,
+                                           Guid yarnId,
+                                           double beamLength,
+                                           int amountOfCones, 
+                                           int brokenEachYarn, 
+                                           int beamPerOperatorUom)
         {
             DateTimeProductBeam = dateTimeProductBeam;
             WeavingUnitId = weavingUnitId;
             BrokenCauseName = brokenCauseName;
             SupplierName = supplierName;
             YarnName = yarnName;
-            BrokenEachCause = brokenEachCause;
-            BeamPerOperatorUom = beamPerOperatorUom;
-            TotalBeamLength = totalBeamLength;
+            YarnId = yarnId;
+            BeamLength = beamLength;
             AmountOfCones = amountOfCones;
+            BrokenEachYarn = brokenEachYarn;
+            BeamPerOperatorUom = beamPerOperatorUom;
         }
     }
 }

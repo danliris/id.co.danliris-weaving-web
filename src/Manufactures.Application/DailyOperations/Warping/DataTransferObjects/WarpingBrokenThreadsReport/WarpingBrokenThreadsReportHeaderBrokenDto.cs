@@ -10,9 +10,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "BrokenName")]
         public string BrokenName { get; set; }
 
-        public WarpingBrokenThreadsReportHeaderBrokenDto(string brokenName)
+        [JsonProperty(PropertyName = "LastMonth")]
+        public string LastMonth { get; set; }
+
+        public WarpingBrokenThreadsReportHeaderBrokenDto(string brokenName, string lastMonth)
         {
             BrokenName = brokenName;
+            LastMonth = lastMonth;
         }
     }
 }

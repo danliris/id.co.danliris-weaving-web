@@ -8,17 +8,17 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportBodyBrokenDto
     {
+        [JsonProperty(PropertyName = "SupplierName")]
+        public string SupplierName { get; set; }
+
+        //[JsonProperty(PropertyName = "YarnNameRowSpan")]
+        //public int YarnNameRowSpan { get; set; }
+
         [JsonProperty(PropertyName = "YarnName")]
         public string YarnName { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenName")]
-        public string BrokenName { get; set; }
-
-        [JsonProperty(PropertyName = "TotalEachBroken")]
-        public double TotalEachBroken { get; set; }
-
-        [JsonProperty(PropertyName = "LastMonthName")]
-        public string LastMonthName { get; set; }
+        [JsonProperty(PropertyName = "BrokenEachYarn")]
+        public List<TotalBrokenEachYarnValueDto> BrokenEachYarn { get; set; }
 
         [JsonProperty(PropertyName = "TotalAllBroken")]
         public double TotalAllBroken { get; set; }
@@ -32,23 +32,28 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "LastMonthAverageBroken")]
         public double LastMonthAverageBroken { get; set; }
 
-        public WarpingBrokenThreadsReportBodyBrokenDto(string yarnName,
-                                                       string brokenName,
-                                                       double totalEachBroken,
-                                                       string lastMonthName,
+        public WarpingBrokenThreadsReportBodyBrokenDto(string supplierName,
+                                                       //int yarnNameRowSpan,
+                                                       string yarnName,
+                                                       List<TotalBrokenEachYarnValueDto> brokenEachYarn,
                                                        double totalAllBroken,
                                                        double maxBroken,
                                                        double minBroken,
                                                        double lastMonthAverageBroken)
         {
+            SupplierName = supplierName;
+            //YarnNameRowSpan = yarnNameRowSpan;
             YarnName = yarnName;
-            BrokenName = brokenName;
-            TotalEachBroken = totalEachBroken;
-            LastMonthName = lastMonthName;
+            BrokenEachYarn = brokenEachYarn;
             TotalAllBroken = totalAllBroken;
             MaxBroken = maxBroken;
             MinBroken = minBroken;
             LastMonthAverageBroken = lastMonthAverageBroken;
+        }
+
+        public WarpingBrokenThreadsReportBodyBrokenDto()
+        {
+            BrokenEachYarn = new List<TotalBrokenEachYarnValueDto>();
         }
     }
 }

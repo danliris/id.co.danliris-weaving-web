@@ -7,6 +7,7 @@
   <ItemGroup>
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterTotalDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderSupplierDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderYarnDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingListBrokenDto.cs" />
   </ItemGroup>
