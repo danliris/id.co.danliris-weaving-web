@@ -104,7 +104,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.DailyOpe
                                                                                             string operationStatus,
                                                                                             int unitId, 
                                                                                             DateTimeOffset? dateFrom, 
-                                                                                            DateTimeOffset? dateTo, 
+                                                                                            DateTimeOffset? dateTo,
+                                                                                            int? month,
+                                                                                            int? year,
                                                                                             int page, 
                                                                                             int size,
                                                                                             string order = "{}")

@@ -71,16 +71,14 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                 _storage.GetRepository<IMaterialTypeRepository>();
         }
 
-        public async Task<(IEnumerable<SizePickupReportListDto>, int)> GetReports(string shiftId,
-                                                                                  string spuStatus,
-                                                                                  int unitId,
-                                                                                  DateTimeOffset? date,
-                                                                                  DateTimeOffset? dateFrom,
-                                                                                  DateTimeOffset? dateTo,
-                                                                                  int? month,
-                                                                                  int page,
-                                                                                  int size,
-                                                                                  string order = "{}")
+        public async Task<(IEnumerable<SizePickupReportListDto>, int)> GetReportsAsync(string shiftId,
+                                                                            string spuStatus,
+                                                                            int unitId,
+                                                                            DateTimeOffset? date,
+                                                                            DateTimeOffset? dateFrom,
+                                                                            DateTimeOffset? dateTo, 
+                                                                            int? month, int? year,
+                                                                            int page, int size, string order = "{}")
         {
             try
             {
@@ -115,9 +113,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .Query
                                 .OrderByDescending(o => o.CreatedDate);
 
-                        var orderDocuments =
+                        var orderDocumentFind =
                             _weavingOrderDocumentRepository
-                                .Find(orderDocumentQuery)
+                                .Find(orderDocumentQuery);
+
+                        var orderDocuments =
+                            orderDocumentFind
                                 .Where(o => o.Identity.Equals(sizingDocument.OrderDocumentId.Value));
 
                         //Instantiate New Value if Unit Id not 0
@@ -132,6 +133,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         {
                             continue;
                         }
+
+                        //Get Order Number
+                        var orderNumber = orderDocument.OrderNumber;
 
                         //Get Construction Number
                         await Task.Yield();
@@ -290,9 +294,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                             }
                         }
 
-                        else if (month != 0)
+                        else if (month != 0 && year != 0)
                         {
-                            if (!(latestHistory.DateTimeMachine.Month == month))
+                            if ((latestHistory.DateTimeMachine.Month != month) || (latestHistory.DateTimeMachine.Year != year))
                             {
                                 continue;
                             }
@@ -362,7 +366,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber,
-                                                                                   resultPC);
+                                                                                   resultPC,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -385,7 +390,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber,
-                                                                                   resultCVC);
+                                                                                   resultCVC,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -408,7 +414,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber,
-                                                                                   resultCotton);
+                                                                                   resultCotton,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -431,7 +438,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber,
-                                                                                   resultPE);
+                                                                                   resultPE,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -454,7 +462,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
                                                                                    beamNumber,
-                                                                                   resultRayon);
+                                                                                   resultRayon,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -473,7 +482,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                beamProduct.PISMeter,
                                                                                spuBeamProduct,
                                                                                beamNumber,
-                                                                               category);
+                                                                               category,
+                                                                               orderNumber);
 
                                 //Add SizePickupReportListDto to List of SizePickupReportListDto
                                 result.Add(sizePickupReport);
@@ -509,6 +519,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                 throw;
             }
+        }
+
+        public Task GetReports(string v1, string v2, int v3, object p1, object p2, object p3, object p4, int v4, int v5, int v6, int v7, string v8)
+        {
+            throw new NotImplementedException();
         }
     }
 }

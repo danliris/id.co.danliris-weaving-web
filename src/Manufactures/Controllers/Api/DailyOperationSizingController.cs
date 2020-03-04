@@ -719,6 +719,7 @@ namespace Manufactures.Controllers.Api
                                                              DateTimeOffset? dateFrom = null,
                                                              DateTimeOffset? dateTo = null,
                                                              int? month = 0,
+                                                             int? year = 0,
                                                              int page = 1,
                                                              int size = 25,
                                                              string order = "{}")
@@ -727,13 +728,14 @@ namespace Manufactures.Controllers.Api
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var sizePickupReport = await _sizePickupReportQuery.GetReports(shiftId,
+            var sizePickupReport = await _sizePickupReportQuery.GetReportsAsync(shiftId,
                                                                            spuStatus,
                                                                            unitId,
                                                                            date,
                                                                            dateFrom,
                                                                            dateTo,
                                                                            month,
+                                                                           year,
                                                                            page,
                                                                            size,
                                                                            order);
@@ -766,6 +768,8 @@ namespace Manufactures.Controllers.Api
                                                    int unitId = 0,
                                                    DateTimeOffset? dateFrom = null,
                                                    DateTimeOffset? dateTo = null,
+                                                   int? month = 0,
+                                                   int? year = 0 ,
                                                    int page = 1,
                                                    int size = 25,
                                                    string order = "{}")
@@ -780,6 +784,8 @@ namespace Manufactures.Controllers.Api
                                                                                                unitId,
                                                                                                dateFrom,
                                                                                                dateTo,
+                                                                                               month,
+                                                                                               year,
                                                                                                page,
                                                                                                size,
                                                                                                order);
