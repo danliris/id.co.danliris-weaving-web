@@ -13,6 +13,7 @@ namespace Manufactures.Helpers.XlsTemplates
             DataTable dt = new DataTable();
 
             dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No SPP", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Selesai", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Grup Sizing", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
@@ -39,6 +40,7 @@ namespace Manufactures.Helpers.XlsTemplates
                 int index = 1;
                 foreach (var item in sizePickupModel)
                 {
+                    var orderNumber = item.OrderNumber.ToString();
                     var date = item.DateTimeMachineHistory.ToString("dd MMMM yyyy");
                     var operatorGroup = item.OperatorGroup;
                     var operatorName = item.OperatorName;
@@ -68,7 +70,8 @@ namespace Manufactures.Helpers.XlsTemplates
                     }
 
                     //var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
-                    dt.Rows.Add(index++, 
+                    dt.Rows.Add(index++,
+                                orderNumber,
                                 date, 
                                 operatorGroup, 
                                 operatorName, 

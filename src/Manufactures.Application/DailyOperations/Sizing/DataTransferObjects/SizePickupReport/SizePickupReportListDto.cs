@@ -11,6 +11,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
+        [JsonProperty(PropertyName = "OrderNumber")]
+        public string OrderNumber { get; set; }
+
         [JsonProperty(PropertyName = "RecipeCode")]
         public string RecipeCode { get; set; }
 
@@ -68,7 +71,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
                                        double pisMeter, 
                                        double spu, 
                                        string beamNumber,
-                                       string category)
+                                       string category,
+                                       string orderNumber)
         {
             Id = document.Identity;
             RecipeCode = document.RecipeCode;
@@ -86,6 +90,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects.Si
             SPU = spu;
             BeamNumber = beamNumber;
             Category = category;
+            OrderNumber = orderNumber;
         }
 
         public SizePickupReportListDto()
