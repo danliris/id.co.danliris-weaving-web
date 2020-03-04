@@ -10,6 +10,7 @@
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderSupplierDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderYarnDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingListBrokenDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\YarnNameRowSpanDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
