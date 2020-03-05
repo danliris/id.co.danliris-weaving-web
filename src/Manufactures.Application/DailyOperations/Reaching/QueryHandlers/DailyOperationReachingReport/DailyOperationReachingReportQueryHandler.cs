@@ -312,7 +312,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     var operatorDocument =
                         _operatorRepository
                             .Find(operatorQuery)
-                            .Where(o => o.Identity.Equals(operatorId))
+                            .Where(o => o.Identity == operatorId.Value)
                             .FirstOrDefault();
                     var operatorName = operatorDocument.CoreAccount.Name;
 
@@ -328,7 +328,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                     var shiftDocument =
                         _shiftRepository
                             .Find(shiftQuery)
-                            .Where(o => o.Identity.Equals(shiftId))
+                            .Where(o => o.Identity == shiftId.Value)
                             .FirstOrDefault();
                     var shiftName = shiftDocument.Name;
 
