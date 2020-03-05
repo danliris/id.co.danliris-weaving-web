@@ -79,13 +79,13 @@ namespace Manufactures.Application.Orders.QueryHandlers
                 await Task.Yield();
                 var warpOrigin =
                     _supplierRepository
-                        .Find(o => o.Identity == orderDocument.WarpOriginId.Value)
+                        .Find(o => o.Identity == orderDocument.WarpOriginIdOne.Value)
                         .FirstOrDefault()
                         .Name;
 
                 var weftOrigin =
                     _supplierRepository
-                        .Find(o => o.Identity == orderDocument.WeftOriginId.Value)
+                        .Find(o => o.Identity == orderDocument.WeftOriginIdOne.Value)
                         .FirstOrDefault()
                         .Name;
 
@@ -118,13 +118,13 @@ namespace Manufactures.Application.Orders.QueryHandlers
 
             var warpOrigin =
                 _supplierRepository
-                    .Find(o => o.Identity == orderDocument.WarpOriginId.Value)
+                    .Find(o => o.Identity == orderDocument.WarpOriginIdOne.Value)
                     .FirstOrDefault()
                     .Name;
 
             var weftOrigin =
                 _supplierRepository
-                    .Find(o => o.Identity == orderDocument.WeftOriginId.Value)
+                    .Find(o => o.Identity == orderDocument.WeftOriginIdOne.Value)
                     .FirstOrDefault()
                     .Name;
 

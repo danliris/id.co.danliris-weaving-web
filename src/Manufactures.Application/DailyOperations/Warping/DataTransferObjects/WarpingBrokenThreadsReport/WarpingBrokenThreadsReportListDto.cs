@@ -20,13 +20,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public List<WarpingBrokenThreadsReportHeaderBrokenDto> HeaderBrokens { get; set; }
 
         [JsonProperty(PropertyName = "BodyBrokensValue")]
-        public List<WarpingBrokenThreadsReportBodyBrokenDto> BodyBrokensValue { get; set; }
+        public List<WarpingBrokenThreadsReportMappedBodyBrokenDto> BodyBrokensValue { get; set; }
         
         public WarpingBrokenThreadsReportListDto(string month, 
                                                  string year, 
                                                  string weavingUnitName,
                                                  List<WarpingBrokenThreadsReportHeaderBrokenDto> headerBrokens,
-                                                 List<WarpingBrokenThreadsReportBodyBrokenDto> bodyBrokensValue)
+                                                 List<WarpingBrokenThreadsReportMappedBodyBrokenDto> bodyBrokensValue)
         {
             Month = month;
             Year = year;
@@ -38,7 +38,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public WarpingBrokenThreadsReportListDto()
         {
             HeaderBrokens = new List<WarpingBrokenThreadsReportHeaderBrokenDto>();
-            BodyBrokensValue = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
+            BodyBrokensValue = new List<WarpingBrokenThreadsReportMappedBodyBrokenDto>();
         }
     }
 }

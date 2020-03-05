@@ -22,7 +22,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
     public class ProduceBeamDailyOperationWarpingCommandHandlerTests : IDisposable
     {
         private MockRepository mockRepository;
-        private Mock<IStorage> mockStorage;
+        private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
         private readonly Mock<IDailyOperationWarpingHistoryRepository>
@@ -77,15 +77,18 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                                                                            OperationStatus.ONPROCESS);
 
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
-                                                                          new ShiftId(Guid.NewGuid()),
-                                                                          new OperatorId(Guid.NewGuid()),
-                                                                          DateTimeOffset.UtcNow,
-                                                                          MachineStatus.ONENTRY, 
-                                                                          currentWarpingDocument.Identity);
+                                                                         new ShiftId(Guid.NewGuid()),
+                                                                         DateTimeOffset.UtcNow,
+                                                                         MachineStatus.ONENTRY,
+                                                                         currentWarpingDocument.Identity);
+            currentWarpingHistory.SetWarpingBeamId(new BeamId(Guid.NewGuid()));
+            currentWarpingHistory.SetOperatorDocumentId(new OperatorId(Guid.NewGuid()));
             currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
+                                                                          new UomId(195),
+                                                                          "Meter",
                                                                           DateTimeOffset.UtcNow,
                                                                           BeamStatus.ROLLEDUP, 
                                                                           currentWarpingDocument.Identity);
@@ -120,9 +123,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
                  .Returns(new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct });
 
-            mockDailyOperationWarpingHistoryRepo.
-                Setup(s => s.Query)
-                .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { currentWarpingHistory });
+
+            //mockDailyOperationWarpingHistoryRepo.
+            //    Setup(s => s.Query)
+            //    .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
 
             //mockDailyOperationWarpingBeamProductRepo.
             //    Setup(s => s.Query)
@@ -143,7 +150,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- ProduceBeamsDate: Tanggal Tidak Boleh Melebihi Tanggal Sebelumnya", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- ProduceBeamsDate: Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya", messageException.Message);
             }
         }
 
@@ -165,14 +172,17 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                          new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY, 
+                                                                         MachineStatus.ONENTRY,
                                                                          currentWarpingDocument.Identity);
+            currentWarpingHistory.SetWarpingBeamId(new BeamId(Guid.NewGuid()));
+            currentWarpingHistory.SetOperatorDocumentId(new OperatorId(Guid.NewGuid()));
             currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
+                                                                          new UomId(195),
+                                                                          "Meter",
                                                                           DateTimeOffset.UtcNow,
                                                                           BeamStatus.ROLLEDUP, 
                                                                           currentWarpingDocument.Identity);
@@ -207,9 +217,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
                  .Returns(new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct });
 
-            mockDailyOperationWarpingHistoryRepo.
-                Setup(s => s.Query)
-                .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { currentWarpingHistory });
+
+            //mockDailyOperationWarpingHistoryRepo.
+            //    Setup(s => s.Query)
+            //    .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
 
             //mockDailyOperationWarpingBeamProductRepo.
             //    Setup(s => s.Query)
@@ -230,7 +244,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- ProduceBeamsTime: Waktu Tidak Boleh Melebihi Waktu Sebelumnya", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- ProduceBeamsTime: Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya", messageException.Message);
             }
         }
 
@@ -252,14 +266,17 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                          new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONSTART, 
+                                                                         MachineStatus.ONENTRY,
                                                                          currentWarpingDocument.Identity);
+            currentWarpingHistory.SetWarpingBeamId(new BeamId(Guid.NewGuid()));
+            currentWarpingHistory.SetOperatorDocumentId(new OperatorId(Guid.NewGuid()));
             currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
+                                                                          new UomId(195),
+                                                                          "Meter",
                                                                           DateTimeOffset.UtcNow,
                                                                           BeamStatus.ROLLEDUP, 
                                                                           currentWarpingDocument.Identity);
@@ -294,9 +311,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
                  .Returns(new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct });
 
-            mockDailyOperationWarpingHistoryRepo.
-                Setup(s => s.Query)
-                .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { currentWarpingHistory });
+
+            //mockDailyOperationWarpingHistoryRepo.
+            //    Setup(s => s.Query)
+            //    .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
 
             mockDailyOperationWarpingRepo.Setup(o => o.Update(It.IsAny<DailyOperationWarpingDocument>())).Returns(Task.CompletedTask);
             mockDailyOperationWarpingHistoryRepo.Setup(o => o.Update(It.IsAny<DailyOperationWarpingHistory>())).Returns(Task.CompletedTask);
@@ -340,14 +361,17 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
 
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                          new ShiftId(Guid.NewGuid()),
-                                                                         new OperatorId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
                                                                          MachineStatus.ONENTRY, 
                                                                          currentWarpingDocument.Identity);
+            currentWarpingHistory.SetWarpingBeamId(new BeamId(Guid.NewGuid()));
+            currentWarpingHistory.SetOperatorDocumentId(new OperatorId(Guid.NewGuid()));
             currentWarpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { currentWarpingHistory };
 
             var currentBeamProduct = new DailyOperationWarpingBeamProduct(Guid.NewGuid(),
                                                                           new BeamId(Guid.NewGuid()),
+                                                                          new UomId(195),
+                                                                          "Meter",
                                                                           DateTimeOffset.UtcNow,
                                                                           BeamStatus.ROLLEDUP, 
                                                                           currentWarpingDocument.Identity);
@@ -382,9 +406,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                  .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingBeamProductReadModel, bool>>>()))
                  .Returns(new List<DailyOperationWarpingBeamProduct>() { currentBeamProduct });
 
-            mockDailyOperationWarpingHistoryRepo.
-                Setup(s => s.Query)
-                .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
+            mockDailyOperationWarpingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationWarpingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationWarpingHistory>() { currentWarpingHistory });
+
+            //mockDailyOperationWarpingHistoryRepo.
+            //    Setup(s => s.Query)
+            //    .Returns(new List<DailyOperationWarpingHistoryReadModel>() { currentWarpingHistory.GetReadModel() }.AsQueryable());
 
             //mockDailyOperationWarpingBeamProductRepo.
             //    Setup(s => s.Query)
@@ -405,7 +433,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't Produce Beam, latest status is not ONSTART or ONRESUME", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- MachineStatus: Tidak Dapat Produksi Beam, Status Mesin Harus ONSTART", messageException.Message);
             }
         }
     }

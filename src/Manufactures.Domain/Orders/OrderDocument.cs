@@ -12,11 +12,13 @@ namespace Manufactures.Domain.Orders
         public DateTime Period { get; private set; }
         public ConstructionId ConstructionDocumentId { get; private set; }
         public string YarnType { get; private set; }
-        public SupplierId WarpOriginId { get; private set; }
+        public SupplierId WarpOriginIdOne { get; private set; }
+        //public SupplierId WarpOriginIdTwo { get; private set; }
         public double WarpCompositionPoly { get; private set; }
         public double WarpCompositionCotton { get; private set; }
         public double WarpCompositionOthers { get; private set; }
-        public SupplierId WeftOriginId { get; private set; }
+        public SupplierId WeftOriginIdOne { get; private set; }
+        public SupplierId WeftOriginIdTwo { get; private set; }
         public double WeftCompositionPoly { get; private set; }
         public double WeftCompositionCotton { get; private set; }
         public double WeftCompositionOthers { get; private set; }
@@ -28,15 +30,9 @@ namespace Manufactures.Domain.Orders
                              string orderNumber, 
                              DateTime period, 
                              ConstructionId constructionDocumentId, 
-                             string yarnType, 
-                             SupplierId warpOriginId, 
-                             double warpCompositionPoly, 
-                             double warpCompositionCotton, 
-                             double warpCompositionOthers, 
-                             SupplierId weftOriginId, 
-                             double weftCompositionPoly, 
-                             double weftCompositionCotton, 
-                             double weftCompositionOthers, 
+                             string yarnType,
+                             SupplierId warpOriginIdOne,
+                             SupplierId weftOriginIdOne,
                              double allGrade, 
                              UnitId unitId, 
                              string orderStatus) : base(identity)
@@ -46,14 +42,14 @@ namespace Manufactures.Domain.Orders
             Period = period;
             ConstructionDocumentId = constructionDocumentId;
             YarnType = yarnType;
-            WarpOriginId = warpOriginId;
-            WarpCompositionPoly = warpCompositionPoly;
-            WarpCompositionCotton = warpCompositionCotton;
-            WarpCompositionOthers = warpCompositionOthers;
-            WeftOriginId = weftOriginId;
-            WeftCompositionPoly = weftCompositionPoly;
-            WeftCompositionCotton = weftCompositionCotton;
-            WeftCompositionOthers = weftCompositionOthers;
+            WarpOriginIdOne = warpOriginIdOne;
+            //WarpCompositionPoly = warpCompositionPoly;
+            //WarpCompositionCotton = warpCompositionCotton;
+            //WarpCompositionOthers = warpCompositionOthers;
+            WeftOriginIdOne = weftOriginIdOne;
+            //WeftCompositionPoly = weftCompositionPoly;
+            //WeftCompositionCotton = weftCompositionCotton;
+            //WeftCompositionOthers = weftCompositionOthers;
             AllGrade = allGrade;
             UnitId = unitId;
             OrderStatus = orderStatus;
@@ -66,11 +62,13 @@ namespace Manufactures.Domain.Orders
                 Period = Period,
                 ConstructionDocumentId = ConstructionDocumentId.Value,
                 YarnType = YarnType,
-                WarpOriginId = WarpOriginId.Value,
+                WarpOriginIdOne = WarpOriginIdOne.Value,
+                //WarpOriginIdTwo = WarpOriginId.Value,
                 WarpCompositionPoly = WarpCompositionPoly,
                 WarpCompositionCotton = WarpCompositionCotton,
                 WarpCompositionOthers = WarpCompositionOthers,
-                WeftOriginId = WeftOriginId.Value,
+                WeftOriginIdOne = WeftOriginIdOne.Value,
+                WeftOriginIdTwo = WeftOriginIdTwo == null ? Guid.Empty : WeftOriginIdTwo.Value,
                 WeftCompositionPoly = WeftCompositionPoly,
                 WeftCompositionCotton = WeftCompositionCotton,
                 WeftCompositionOthers = WeftCompositionOthers,
@@ -86,11 +84,13 @@ namespace Manufactures.Domain.Orders
             Period = readModel.Period;
             ConstructionDocumentId = new ConstructionId(readModel.ConstructionDocumentId);
             YarnType = readModel.YarnType;
-            WarpOriginId = new SupplierId(readModel.WarpOriginId);
+            WarpOriginIdOne = new SupplierId(readModel.WarpOriginIdOne);
+            //WarpOriginIdTwo = new SupplierId(readModel.WarpOriginIdTwo.HasValue ? readModel.WarpOriginIdTwo.Value : Guid.Empty);
             WarpCompositionPoly = readModel.WarpCompositionPoly;
             WarpCompositionCotton = readModel.WarpCompositionCotton;
             WarpCompositionOthers = readModel.WarpCompositionOthers;
-            WeftOriginId = new SupplierId(readModel.WeftOriginId);
+            WeftOriginIdOne = new SupplierId(readModel.WeftOriginIdOne);
+            WeftOriginIdTwo = new SupplierId(readModel.WeftOriginIdTwo ?? Guid.Empty);
             WeftCompositionPoly = readModel.WeftCompositionPoly;
             WeftCompositionCotton = readModel.WeftCompositionCotton;
             WeftCompositionOthers = readModel.WeftCompositionOthers;
@@ -154,19 +154,33 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetWarpOrigin(SupplierId warpOrigin)
+        public void SetWarpOriginOne(SupplierId warpOriginOne)
         {
-            Validator.ThrowIfNull(() => warpOrigin);
+            Validator.ThrowIfNull(() => warpOriginOne);
 
-            if (warpOrigin != WarpOriginId)
+            if (warpOriginOne != WarpOriginIdOne)
             {
 
-                WarpOriginId = warpOrigin;
-                ReadModel.WarpOriginId = WarpOriginId.Value;
+                WarpOriginIdOne = warpOriginOne;
+                ReadModel.WarpOriginIdOne = WarpOriginIdOne.Value;
 
                 MarkModified();
             }
         }
+
+        //public void SetWarpOriginTwo(SupplierId warpOriginTwo)
+        //{
+        //    Validator.ThrowIfNull(() => warpOriginTwo);
+
+        //    if (warpOriginTwo != WarpOriginIdTwo)
+        //    {
+
+        //        WarpOriginIdTwo = warpOriginTwo;
+        //        ReadModel.WarpOriginIdOne = WarpOriginIdTwo.Value;
+
+        //        MarkModified();
+        //    }
+        //}
 
         public void SetWarpCompositionPoly(double warpCompositionPoly)
         {
@@ -207,15 +221,29 @@ namespace Manufactures.Domain.Orders
             }
         }
 
-        public void SetWeftOrigin(SupplierId weftOrigin)
+        public void SetWeftOriginOne(SupplierId weftOriginOne)
         {
-            Validator.ThrowIfNull(() => weftOrigin);
+            Validator.ThrowIfNull(() => weftOriginOne);
 
-            if (weftOrigin != WeftOriginId)
+            if (weftOriginOne != WeftOriginIdOne)
             {
 
-                WeftOriginId = weftOrigin;
-                ReadModel.WeftOriginId = WeftOriginId.Value;
+                WeftOriginIdOne = weftOriginOne;
+                ReadModel.WeftOriginIdOne = WeftOriginIdOne.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetWeftOriginTwo(SupplierId weftOriginTwo)
+        {
+            Validator.ThrowIfNull(() => weftOriginTwo);
+
+            if (weftOriginTwo != WeftOriginIdTwo)
+            {
+
+                WeftOriginIdTwo = weftOriginTwo;
+                ReadModel.WeftOriginIdOne = WeftOriginIdTwo.Value;
 
                 MarkModified();
             }

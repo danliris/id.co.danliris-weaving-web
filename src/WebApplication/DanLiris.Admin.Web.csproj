@@ -82,6 +82,12 @@
     <Compile Remove="Migrations\20200214032334_ChangeOnMachineTable.Designer.cs" />
     <Compile Remove="Migrations\20200225045448_ChangeDataTypeOnDailyOperationWarping.cs" />
     <Compile Remove="Migrations\20200225045448_ChangeDataTypeOnDailyOperationWarping.Designer.cs" />
+    <Compile Remove="Migrations\20200305053919_AddWeftOriginTwoAndWarpOriginTwoOnOrder.cs" />
+    <Compile Remove="Migrations\20200305053919_AddWeftOriginTwoAndWarpOriginTwoOnOrder.Designer.cs" />
+    <Compile Remove="Migrations\20200305060237_AddWeftOriginTwoOnOrder.cs" />
+    <Compile Remove="Migrations\20200305060237_AddWeftOriginTwoOnOrder.Designer.cs" />
+    <Compile Remove="Migrations\20200305090340_RenameWarpOriginIdOnOrder.cs" />
+    <Compile Remove="Migrations\20200305090340_RenameWarpOriginIdOnOrder.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

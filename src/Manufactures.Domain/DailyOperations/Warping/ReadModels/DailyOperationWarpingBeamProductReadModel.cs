@@ -11,6 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         public Guid WarpingBeamId { get; internal set; }
         public double WarpingTotalBeamLength { get; internal set; }
         public int WarpingTotalBeamLengthUomId { get; internal set; }
+        public string WarpingTotalBeamLengthUomUnit { get; internal set; }
         public double Tention { get; internal set; }
         public int MachineSpeed { get; internal set; }
         public double PressRoll { get; internal set; }

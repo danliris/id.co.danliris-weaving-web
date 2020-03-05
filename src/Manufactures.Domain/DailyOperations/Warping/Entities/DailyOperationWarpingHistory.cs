@@ -25,7 +25,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         //Constructor (Write)
         public DailyOperationWarpingHistory(Guid identity,
                                             ShiftId shiftDocumentId,
-                                            OperatorId operatorDocumentId,
                                             DateTimeOffset dateTimeMachine,
                                             string machineStatus,
                                             Guid dailyOperationWarpingDocumentId) : base(identity)
@@ -33,7 +32,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             //Instantiate Properties from Parameter Variable
             Identity = identity;
             ShiftDocumentId = shiftDocumentId;
-            OperatorDocumentId = operatorDocumentId;
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId;
@@ -43,7 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             ReadModel = new DailyOperationWarpingHistoryReadModel(Identity)
             {
                 ShiftDocumentId = ShiftDocumentId.Value,
-                OperatorDocumentId = OperatorDocumentId.Value,
+                OperatorDocumentId = OperatorDocumentId == null?Guid.Empty : OperatorDocumentId.Value,
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
                 DailyOperationWarpingDocumentId = DailyOperationWarpingDocumentId
@@ -55,7 +53,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         {
             //Instantiate object from database
             ShiftDocumentId = new ShiftId(readModel.ShiftDocumentId);
-            OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId);
+            OperatorDocumentId = new OperatorId(readModel.OperatorDocumentId ?? Guid.Empty);
             DateTimeMachine = readModel.DateTimeMachine;
             MachineStatus = readModel.MachineStatus;
             Information = readModel.Information;

@@ -23,8 +23,11 @@ namespace Manufactures.Domain.Orders.Commands
         [JsonProperty(PropertyName = "YarnType")]
         public string YarnType { get; private set; }
 
-        [JsonProperty(PropertyName = "WarpOriginId")]
-        public SupplierId WarpOriginId { get; private set; }
+        [JsonProperty(PropertyName = "WarpOriginIdOne")]
+        public SupplierId WarpOriginIdOne { get; private set; }
+
+        //[JsonProperty(PropertyName = "WarpOriginIdTwo")]
+        //public SupplierId WarpOriginIdTwo { get; private set; }
 
         [JsonProperty(PropertyName = "WarpCompositionPoly")]
         public double WarpCompositionPoly { get; private set; }
@@ -35,8 +38,11 @@ namespace Manufactures.Domain.Orders.Commands
         [JsonProperty(PropertyName = "WarpCompositionOthers")]
         public double WarpCompositionOthers { get; private set; }
 
-        [JsonProperty(PropertyName = "WeftOriginId")]
-        public SupplierId WeftOriginId { get; private set; }
+        [JsonProperty(PropertyName = "WeftOriginIdOne")]
+        public SupplierId WeftOriginIdOne { get; private set; }
+
+        [JsonProperty(PropertyName = "WeftOriginIdTwo")]
+        public SupplierId WeftOriginIdTwo{ get; private set; }
 
         [JsonProperty(PropertyName = "WeftCompositionPoly")]
         public double WeftCompositionPoly { get; private set; }
@@ -68,10 +74,10 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.Month).NotEmpty().WithMessage("Bulan Harus Diisi");
             RuleFor(command => command.ConstructionDocumentId).NotEmpty().WithMessage("Konstruksi Harus Diisi");
             RuleFor(command => command.YarnType).NotEmpty().WithMessage("Jenis Benang Tidak Boleh Kosong");
-            RuleFor(command => command.WarpOriginId).NotEmpty().WithMessage("Asal Lusi Harus Diisi");
+            RuleFor(command => command.WarpOriginIdOne).NotEmpty().WithMessage("Asal Lusi Harus Diisi");
             RuleFor(command => command.WarpCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
             RuleFor(command => command.WarpCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
-            RuleFor(command => command.WeftOriginId).NotEmpty().WithMessage("Asal Pakan Harus Diisi");
+            RuleFor(command => command.WeftOriginIdOne).NotEmpty().WithMessage("Asal Pakan Harus Diisi");
             RuleFor(command => command.WeftCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
             RuleFor(command => command.WeftCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
             RuleFor(command => command.AllGrade).NotEmpty().WithMessage("All Grade Harus Diisi");

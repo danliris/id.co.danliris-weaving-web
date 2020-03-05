@@ -150,16 +150,16 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -331,16 +331,16 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
