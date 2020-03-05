@@ -13,6 +13,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizin
                                                     int unitId,
                                                     DateTimeOffset? dateFrom,
                                                     DateTimeOffset? dateTo,
+                                                    int? month,
+                                                    int? year,
                                                     int page,
                                                     int size,
                                                     string order);

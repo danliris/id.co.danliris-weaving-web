@@ -13,6 +13,7 @@ namespace Manufactures.Helpers.XlsTemplates
             DataTable dt = new DataTable();
 
             dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No SPP", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Selesai", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Grup Sizing", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Operator", DataType = typeof(string) });
@@ -27,7 +28,8 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Netto", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Bruto", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "Jam Doffing", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Kategori", DataType = typeof(string) });
+            //dt.Columns.Add(new DataColumn() { ColumnName = "Jam Doffing", DataType = typeof(string) });
 
             if (sizePickupModel.Count == 0)
             {
@@ -38,6 +40,7 @@ namespace Manufactures.Helpers.XlsTemplates
                 int index = 1;
                 foreach (var item in sizePickupModel)
                 {
+                    var orderNumber = item.OrderNumber.ToString();
                     var date = item.DateTimeMachineHistory.ToString("dd MMMM yyyy");
                     var operatorGroup = item.OperatorGroup;
                     var operatorName = item.OperatorName;
@@ -52,8 +55,23 @@ namespace Manufactures.Helpers.XlsTemplates
                     var netto = item.WeightNetto;
                     var bruto = item.WeightBruto;
                     var spu = item.SPU.ToString();
-                    var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
-                    dt.Rows.Add(index++, 
+                    var category = item.Category.ToString();
+
+                    if (category == "Lower Limit")
+                    {
+                        category = "Di Bawah Standar";
+                    }
+                    else if (category == "Upper Limit")
+                    {
+                        category = "Di Atas Standar";
+                    }
+                    else {
+                        category = "Sesuai Standar";
+                    }
+
+                    //var doffingTime = item.DateTimeMachineHistory.ToString("HH:mm:ss");
+                    dt.Rows.Add(index++,
+                                orderNumber,
                                 date, 
                                 operatorGroup, 
                                 operatorName, 
@@ -67,8 +85,9 @@ namespace Manufactures.Helpers.XlsTemplates
                                 counterFinish, 
                                 netto, 
                                 bruto, 
-                                spu, 
-                                doffingTime);
+                                spu,
+                                category); 
+                                //doffingTime);
                 }
             }
 

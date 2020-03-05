@@ -6,6 +6,7 @@ using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Sizing.Queries.SizePickupReport;
 using Manufactures.Domain.DailyOperations.Sizing.Repositories;
 using Manufactures.Domain.FabricConstructions.Repositories;
+using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
 using Manufactures.Domain.Shifts.Repositories;
@@ -35,6 +36,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
             _weavingOrderDocumentRepository;
         private readonly IFabricConstructionRepository
             _fabricConstructionRepository;
+        private readonly IMaterialTypeRepository
+            _materialTypeRepository;
         private readonly IBeamRepository
             _beamRepository;
         private readonly IOperatorRepository
@@ -64,29 +67,35 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                 _storage.GetRepository<IOperatorRepository>();
             _shiftRepository =
                 _storage.GetRepository<IShiftRepository>();
+            _materialTypeRepository =
+                _storage.GetRepository<IMaterialTypeRepository>();
         }
 
-        public async Task<(IEnumerable<SizePickupReportListDto>, int)> GetReports(string shiftId,
-                                                                                  string spuStatus,
-                                                                                  int unitId,
-                                                                                  DateTimeOffset? date,
-                                                                                  DateTimeOffset? dateFrom,
-                                                                                  DateTimeOffset? dateTo,
-                                                                                  int? month,
-                                                                                  int page,
-                                                                                  int size,
-                                                                                  string order = "{}")
+        public async Task<(IEnumerable<SizePickupReportListDto>, int)> GetReportsAsync(string shiftId,
+                                                                            string spuStatus,
+                                                                            int unitId,
+                                                                            DateTimeOffset? date,
+                                                                            DateTimeOffset? dateFrom,
+                                                                            DateTimeOffset? dateTo, 
+                                                                            int? month, int? year,
+                                                                            int page, int size, string order = "{}")
         {
             try
             {
                 //Add Shell (result) for Daily Operation Sizing Report Dto
                 var result = new List<SizePickupReportListDto>();
-                
+
                 //Get Daily Operation Sizing Data from Daily Operation Sizing Repo
+                var sizePickupQuery =
+                    _dailyOperationSizingRepository
+                        .Query
+                        .AsQueryable();
+
                 var sizingDocuments =
                     _dailyOperationSizingRepository
-                        .Find(o=>o.OperationStatus == OperationStatus.ONFINISH)
+                        .Find(sizePickupQuery)
                         .OrderByDescending(x => x.AuditTrail.CreatedDate);
+
 
                 foreach (var sizingDocument in sizingDocuments)
                 {
@@ -104,9 +113,12 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .Query
                                 .OrderByDescending(o => o.CreatedDate);
 
-                        var orderDocuments =
+                        var orderDocumentFind =
                             _weavingOrderDocumentRepository
-                                .Find(orderDocumentQuery)
+                                .Find(orderDocumentQuery);
+
+                        var orderDocuments =
+                            orderDocumentFind
                                 .Where(o => o.Identity.Equals(sizingDocument.OrderDocumentId.Value));
 
                         //Instantiate New Value if Unit Id not 0
@@ -121,6 +133,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         {
                             continue;
                         }
+
+                        //Get Order Number
+                        var orderNumber = orderDocument.OrderNumber;
 
                         //Get Construction Number
                         await Task.Yield();
@@ -140,6 +155,65 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         string[] splittedConstructionNumber = constructionNumber.Split(" ");
                         var charToTrim = new[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '.', '/' };
                         var filteredConstructionNumber = splittedConstructionNumber[0].TrimEnd(charToTrim);
+
+                        //Filter Standart Material Type
+                        await Task.Yield();
+
+                        var materialTypeQuery =
+                            _materialTypeRepository
+                                .Query
+                                .OrderBy(o => o.CreatedDate);
+
+                        var materialType = fabricConstructionDocument.MaterialType;
+
+                        var materialTypeDocument =
+                            _materialTypeRepository
+                                .Find(materialTypeQuery)
+                                .Where(m => m.Name.Equals(materialType))
+                                .FirstOrDefault();
+
+                        var materialCode = materialTypeDocument.Code;
+
+                        var pc = new List<string>() { "A", "B", "C", "PV", "AA" };
+                        var cotton = new List<string>() { "G", "M", "O", "R", "RN", "RR", "RS", "J", "Z", "Q", "F" };
+                        var pe = new List<string>() { "L", "N", "S", "X", "H", "T" };
+                        var rayon = new List<string>() { "Y", "YV" };
+
+                        var materialPC = pc
+                            .Where(m => m.Contains(materialCode))
+                            .FirstOrDefault();
+
+                        var materialCotton = cotton
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        var materialPE = pe
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        var materialRayon = rayon
+                           .Where(m => m.Contains(materialCode))
+                           .FirstOrDefault();
+
+                        if (materialCotton != null)
+                        {
+                            filteredConstructionNumber = "COTTON";
+                        }
+
+                        if (materialPC != null)
+                        {
+                            filteredConstructionNumber = "PC";
+                        }
+
+                        if (materialPE != null)
+                        {
+                            filteredConstructionNumber = "PE";
+                        }
+
+                        if (materialRayon != null)
+                        {
+                            filteredConstructionNumber = "RAYON";
+                        }
 
                         //Get Shift (Latest History)
                         var shiftQuery =
@@ -164,16 +238,23 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                 .FirstOrDefault()
                                 .Identity;
 
+                        ////Get Histories
+                        //var sizingHistories = 
+                        //    _dailyOperationSizingHistoryRepository
+                        //        .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.MachineStatus == MachineStatus.ONFINISH)
+                        //        .OrderByDescending(x => x.AuditTrail.CreatedDate)
+                        //        .AsQueryable();
+
                         //Get Histories
-                        var sizingHistories = 
-                            _dailyOperationSizingHistoryRepository
-                                .Find(o=>o.DailyOperationSizingDocumentId == sizingDocument.Identity && o.MachineStatus == MachineStatus.ONFINISH)
-                                .OrderByDescending(x => x.AuditTrail.CreatedDate)
+                        var sizingHistories = _dailyOperationSizingHistoryRepository
+                                .Find(o => o.DailyOperationSizingDocumentId == sizingDocument.Identity)
+                                .OrderByDescending(i => i.AuditTrail.CreatedDate)
                                 .AsQueryable();
+
 
                         if (shiftIdHistory != null)
                         {
-                            sizingHistories = sizingHistories.Where(o => o.ShiftDocumentId.Equals(shiftIdHistory));
+                            sizingHistories = sizingHistories.Where(o => o.ShiftDocumentId.Value == shiftIdHistory);
                         }
 
                         //Get Latest History, if Histories = null, skip This Document
@@ -213,9 +294,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                             }
                         }
 
-                        else if (month != 0)
+                        else if (month != 0 && year != 0)
                         {
-                            if (!(latestHistory.DateTimeMachine.Month == month))
+                            if ((latestHistory.DateTimeMachine.Month != month) || (latestHistory.DateTimeMachine.Year != year))
                             {
                                 continue;
                             }
@@ -233,7 +314,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var operatorDocument =
                             _operatorRepository
                                 .Find(operatorQuery)
-                                .Where(o => o.Identity.Equals(operatorId))
+                                .Where(o => o.Identity == operatorId.Value)
                                 .FirstOrDefault();
                         var operatorName = operatorDocument.CoreAccount.Name;
 
@@ -244,8 +325,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         var beamQuery =
                             _beamRepository
                                 .Query
-                                .Where(o => o.Identity.Equals(beamProduct.SizingBeamId))
+                                .Where(o => o.Identity == beamProduct.SizingBeamId.Value)
                                 .OrderByDescending(o => o.CreatedDate);
+
                         var beamNumber =
                             _beamRepository
                                 .Find(beamQuery)
@@ -254,6 +336,16 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                         var sizePickupReport = new SizePickupReportListDto();
                         var spuBeamProduct = beamProduct.SPU;
+
+                        if (shiftId != null)
+                        {
+                            if (!(shiftId == shiftIdHistory.ToString()))
+                            {
+                                continue;
+                            }
+                        }
+
+                        var category = "";
 
                         switch (filteredConstructionNumber)
                         {
@@ -273,7 +365,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultPC,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -295,7 +389,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultCVC,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -317,7 +413,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultCotton,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -339,7 +437,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultPE,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -361,7 +461,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                    beamProduct.WeightBruto,
                                                                                    beamProduct.PISMeter,
                                                                                    spuBeamProduct,
-                                                                                   beamNumber);
+                                                                                   beamNumber,
+                                                                                   resultRayon,
+                                                                                   orderNumber);
 
                                     //Add SizePickupReportListDto to List of SizePickupReportListDto
                                     result.Add(sizePickupReport);
@@ -379,7 +481,9 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                                                                                beamProduct.WeightBruto,
                                                                                beamProduct.PISMeter,
                                                                                spuBeamProduct,
-                                                                               beamNumber);
+                                                                               beamNumber,
+                                                                               category,
+                                                                               orderNumber);
 
                                 //Add SizePickupReportListDto to List of SizePickupReportListDto
                                 result.Add(sizePickupReport);
@@ -415,6 +519,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                 throw;
             }
+        }
+
+        public Task GetReports(string v1, string v2, int v3, object p1, object p2, object p3, object p4, int v4, int v5, int v6, int v7, string v8)
+        {
+            throw new NotImplementedException();
         }
     }
 }
