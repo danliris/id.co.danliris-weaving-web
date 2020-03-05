@@ -29,8 +29,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "WarpingBeamLengthPerOperator")]
         public double WarpingBeamLengthPerOperator { get; set; }
 
-        [JsonProperty(PropertyName = "WarpingBeamLengthUomId")]
-        public int WarpingBeamLengthUomId { get; set; }
+        //[JsonProperty(PropertyName = "WarpingBeamLengthUomId")]
+        //public int WarpingBeamLengthUomId { get; set; }
 
         [JsonProperty(PropertyName = "Tention")]
         public int Tention { get; set; }
@@ -66,7 +66,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.ProduceBeamsShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(command => command.ProduceBeamsOperator).NotEmpty().WithMessage("Operator Harus Diisi");
             RuleFor(command => command.WarpingBeamLengthPerOperator).NotEmpty().WithMessage("Panjang Beam Warping Harus Diisi");
-            RuleFor(command => command.WarpingBeamLengthUomId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
+            //RuleFor(command => command.WarpingBeamLengthUomId).NotEmpty().WithMessage("Satuan Panjang Beam Warping Harus Diisi");
             RuleFor(command => command.Tention).NotEmpty().WithMessage("Tention Harus Diisi");
             RuleFor(command => command.MachineSpeed).NotEmpty().WithMessage("Machine Speed Harus Diisi");
             RuleFor(command => command.PressRoll).NotEmpty().WithMessage("Press Roll Harus Diisi");

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,31 +8,26 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsReportBodyBrokenDto
     {
-        [JsonProperty(PropertyName = "BrokenName")]
-        public string BrokenName { get; set; }
+        [JsonProperty(PropertyName = "SupplierName")]
+        public string SupplierName { get; set; }
 
-        //[JsonProperty(PropertyName = "SpinningUnit")]
-        //public string SpinningUnit { get; set; }
+        [JsonProperty(PropertyName = "ListOfYarn")]
+        public List<WarpingBrokenThreadsReportListOfYarnDto> ListOfYarn { get; set; }
 
-        [JsonProperty(PropertyName = "WarpName")]
-        public string WarpName { get; set; }
+        [JsonProperty(PropertyName = "YarnNameRowSpan")]
+        public int YarnNameRowSpan { get; set; }
 
-        [JsonProperty(PropertyName = "BrokenValue")]
-        public double BrokenValue { get; set; }
-
-        public WarpingBrokenThreadsReportBodyBrokenDto(string brokenName, 
-                                                       //string spinningUnit, 
-                                                       string warpName, 
-                                                       double brokenValue)
+        public WarpingBrokenThreadsReportBodyBrokenDto(string supplierName,
+                                                       int yarnNameRowSpan
+                                                       )
         {
-            BrokenName = brokenName;
-            //SpinningUnit = spinningUnit;
-            WarpName = warpName;
-            BrokenValue = brokenValue;
+            SupplierName = supplierName;
+            YarnNameRowSpan = yarnNameRowSpan;
         }
 
         public WarpingBrokenThreadsReportBodyBrokenDto()
         {
+            ListOfYarn = new List<WarpingBrokenThreadsReportListOfYarnDto>();
         }
     }
 }

@@ -3,6 +3,7 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
+using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 using Manufactures.Application.Helpers;
 using Manufactures.Domain.BrokenCauses.Warping.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
@@ -51,24 +52,25 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 serviceProvider.GetService<IHttpClientService>();
             _storage =
                 storage;
+            _yarnRepository =
+                _storage.GetRepository<IYarnDocumentRepository>();
+            _constructionYarnDetailRepository =
+                _storage.GetRepository<IConstructionYarnDetailRepository>();
+            _supplierRepository =
+                _storage.GetRepository<IWeavingSupplierRepository>();
+            _orderRepository =
+                _storage.GetRepository<IOrderRepository>();
             _dailyOperationWarpingRepository =
                 _storage.GetRepository<IDailyOperationWarpingRepository>();
             _dailyOperationWarpingBeamProductRepository =
                 _storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _dailyOperationWarpingBrokenCauseRepository =
                 _storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
-            _orderRepository =
-                _storage.GetRepository<IOrderRepository>();
-            _fabricConstructionRepository =
-                _storage.GetRepository<IFabricConstructionRepository>();
-            _constructionYarnDetailRepository =
-                _storage.GetRepository<IConstructionYarnDetailRepository>();
             _warpingBrokenCauseRepository =
                 _storage.GetRepository<IWarpingBrokenCauseRepository>();
-            _yarnRepository =
-                _storage.GetRepository<IYarnDocumentRepository>();
-            _supplierRepository =
-                _storage.GetRepository<IWeavingSupplierRepository>();
+
+            _fabricConstructionRepository =
+                _storage.GetRepository<IFabricConstructionRepository>();
         }
 
         protected SingleUnitResult GetUnit(int id)
@@ -91,12 +93,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             try
             {
-                //var result = new WarpingBrokenThreadsReportListDto();
-
-                //var 
-
-                //-----------------------------------------------------------------
-
                 //Add Shell (result) for Daily Operation Warping Broken Report Dto
                 var result = new WarpingBrokenThreadsReportListDto();
 
@@ -107,9 +103,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
                 //Preparing Order Query
                 var orderQuery =
-                _orderRepository
-                    .Query
-                    .AsQueryable();
+                    _orderRepository
+                        .Query
+                        .AsQueryable();
 
                 //Validation for weavingId from UI, if exist parse to weavingGuid, else return empty result
                 if (weavingUnitId != 0)
@@ -121,244 +117,365 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                     return result;
                 }
 
-                //Transform month and year from UI to DateTimeOffset
-                DateTimeOffset dateTimeFilter =
-                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
-                var monthName = dateTimeFilter.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
-                var daysOfMonth = DateTime.DaysInMonth(year, month);
+                //Create DateTime from Params (month and year)
+                var dateTime = new DateTime(year, month, 1);
 
-                //Get order which used (weavingId) same as parameter from UI
-                var filteredOrderDocuments = _orderRepository.Find(orderQuery);
-                var filteredOrderDocumentIds = filteredOrderDocuments.Select(o => o.Identity);
-
-                //Preparing Daily Operation Warping Query w/ Filter Identity param equals (filteredOrderDocumentIds)
-                var dailyOperationWarpingQuery =
-                    _dailyOperationWarpingRepository
-                        .Query
-                        .Where(o => filteredOrderDocumentIds.Contains(o.OrderDocumentId))
-                        .AsQueryable();
-                var warpingDocuments = _dailyOperationWarpingRepository.Find(dailyOperationWarpingQuery);
-                
-                //var documentLength = warpingDocuments.Count();
-
-                //Add Shell for (BodyBrokenDto)
-                var bodyBrokenList = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
-                foreach (var document in warpingDocuments)
+                //Get MonthName and LastMonthName
+                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+                var lastMonthName = "";
+                if (dateTime.AddMonths(-1).Year != dateTime.Year)
                 {
-                    //Get Warping Beam Products w/ Filter date and year param from UI
-                    var groupedBeamProducts =
-                        _dailyOperationWarpingBeamProductRepository
-                            .Find(item => item.DailyOperationWarpingDocumentId == document.Identity &&
-                                          item.LatestDateTimeBeamProduct.Month == month &&
-                                          item.LatestDateTimeBeamProduct.Year == year)
-                            .ToList();
-
-                    var unitId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().UnitId.Value;
-
-                    SingleUnitResult unitData = GetUnit(unitId);
-                    var weavingUnitName = unitData.data.Name;
-
-                    //Get ConstructionId from OrderId from Warping Document (document)
-                    var constructionId =
-                        _orderRepository
-                            .Find(o => o.Identity.Equals(document.OrderDocumentId.Value))
-                            .FirstOrDefault().ConstructionDocumentId.Value;
-
-                    //Get ConstructionDocument using ConstructionId from above, to get List of Warp Id (warpIds)
-                    var constructionYarnDetail =
-                        _constructionYarnDetailRepository
-                            .Find(d=>d.FabricConstructionDocumentId == constructionId);
-
-                    //Get WarpName using List of Warp Id (warpIds)
-                    var warpIds = constructionYarnDetail.Select(o => o.YarnId.Value);
-                    var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
-
-                    var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOriginId;
-                    var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
-
-                    var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();
-                    foreach (var warpName in warpNames)
-                    {
-                        foreach (var beamProduct in groupedBeamProducts)
-                        {
-                            foreach (var broken in beamProduct.BrokenCauses)
-                            {
-                                var brokenName = _warpingBrokenCauseRepository.Find(o => o.Identity == broken.BrokenCauseId).FirstOrDefault().WarpingBrokenCauseName;
-
-                                //Calculate BrokenTotal based on UomId(136 = YARD or 195 = MTR)
-                                double brokenValue = CalculateWarpingBroken(beamProduct.WarpingTotalBeamLengthUomId, beamProduct.WarpingTotalBeamLength, document.AmountOfCones, broken.TotalBroken);
-
-                                resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto(brokenName,
-                                                                                               //supplierName, 
-                                                                                               warpName,
-                                                                                               brokenValue);
-                                bodyBrokenList.Add(resultBodyBroken);
-                            }
-                        }
-                    }
-
-                    var headerWarps =
-                        bodyBrokenList
-                            .GroupBy(g => new { supplierName, g.BrokenName, g.WarpName })
-                            .Select(s => new WarpingBrokenThreadsReportHeaderWarpDto(s.Key.supplierName, s.Key.BrokenName, s.Key.WarpName))
-                            .ToList();
-
-                    var headerSuppliers =
-                        headerWarps
-                            .GroupBy(o => new { o.SpinningUnit, o.WarpName })
-                            .Select(s => new WarpingBrokenThreadsReportHeaderSupplierDto(s.Key.SpinningUnit, s.Count()))
-                            .ToList();
-
-                    var totalValue =
-                        bodyBrokenList.GroupBy(o => new { o.WarpName }).Select(s => new WarpingBrokenThreadsReportFooterTotalDto(s.Key.WarpName, s.Sum(sum => sum.BrokenValue))).ToList();
-
-                    var maxValue =
-                        bodyBrokenList.GroupBy(o => new { o.WarpName }).Select(s => s.Max(max => max.BrokenValue)).ToList();
-
-                    var minValue =
-                        bodyBrokenList.GroupBy(o => new { o.WarpName }).Select(s => s.Min(min => min.BrokenValue)).ToList();
-
-                    var previousDateTime = dateTimeFilter.AddMonths(-1);
-                    var lastMonthTotalValue = GetLastMonthTotal(previousDateTime.Month, previousDateTime.Year, weavingUnitId);
-                    var lastMonthAverageValue = new List<double>();
-
-                    foreach (var value in totalValue)
-                    {
-                        var selectedLastMonthTotal = lastMonthTotalValue.FirstOrDefault(o => o.WarpName == value.WarpName);
-                        if (selectedLastMonthTotal != null)
-                        {
-                            lastMonthAverageValue.Add(selectedLastMonthTotal.TotalValue);
-                        }
-                        else
-                        {
-                            lastMonthAverageValue.Add(0);
-                        }
-                    }
-
-                    var footer = new WarpingBrokenThreadsReportFooterDto(totalValue, maxValue, minValue, lastMonthAverageValue);
-
-                    result.Month = monthName;
-                    result.Year = year.ToString();
-                    result.WeavingUnitName = weavingUnitName;
-                    result.HeaderSuppliers = headerSuppliers;
-                    result.HeaderWarps = headerWarps;
-                    result.BodyBrokens = bodyBrokenList;
-                    result.Footers = footer;
+                    lastMonthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
                 }
+                else
+                {
+                    lastMonthName = dateTime.AddMonths(-1).ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+                }
+
+                //Get Unit Name from Master
+                SingleUnitResult unitData = GetUnit(weavingUnitId);
+                var weavingUnitName = unitData.data.Name;
+
+                //Get ReportQueryDto from Join Result using LINQ
+                var reportQueries = GetWarpingBrokenReportQueries();
+
+                //Filter ReportQueryDto based on Params (month and year)
+                var filteredReportQueries =
+                    reportQueries
+                        .Where(o => o.DateTimeProductBeam.GetValueOrDefault().Month == month && o.DateTimeProductBeam.GetValueOrDefault().Year == year && o.WeavingUnitId == weavingUnitId)
+                        .ToList();
+
+                //Grouped FilteredReportQueries by SupplierName, BrokenCauseName & YarnName
+                var anonymousHeaderBrokens =
+                    filteredReportQueries
+                        .GroupBy(item => new { item.SupplierName, item.BrokenCauseName, item.YarnName })
+                        .Select(entity => new
+                        {
+                            entity.Key.SupplierName,
+                            entity.Key.YarnName,
+                            entity.Key.BrokenCauseName,
+                            TotalBrokenYarn = entity.Sum(sum => sum.BrokenEachYarn)
+                        })
+                        .ToList();
+
+                //Mapping to HeaderBrokenDto
+                var headerBrokensDto =
+                    anonymousHeaderBrokens
+                        .GroupBy(item => new { item.BrokenCauseName })
+                        .Select(o => new WarpingBrokenThreadsReportHeaderBrokenDto(o.Key.BrokenCauseName, lastMonthName))
+                        .ToList();
+
+                ////Grouped FilteredReportQueries by SupplierName, & YarnName
+                //var anonymousBodyBrokens = filteredReportQueries
+                //    .GroupBy(o => new { o.SupplierName, o.YarnName }).ToList();
+
+                //var bodyBrokensDto = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
+                //foreach (var bodyBroken in anonymousBodyBrokens)
+                //{
+                //    var bodyBrokenDto = new WarpingBrokenThreadsReportBodyBrokenDto();
+
+                //    bodyBrokenDto.SupplierName = 
+                //        bodyBroken.Key.SupplierName;
+                //    bodyBrokenDto.YarnName = 
+                //        bodyBroken.Key.YarnName;
+                //    bodyBrokenDto.BrokenEachYarn = 
+                //        bodyBroken
+                //            .Select(o => new TotalBrokenEachYarnValueDto(CalculateWarpingBroken(o.BeamPerOperatorUom, 
+                //                                                                                o.BeamLength, 
+                //                                                                                o.AmountOfCones, 
+                //                                                                                o.BrokenEachYarn))).ToList();
+                //    bodyBrokenDto.TotalAllBroken = 
+                //        bodyBroken
+                //            .Sum(s => GetBrokenTotalAndAverage(s.BeamPerOperatorUom, 
+                //                                               s.BeamLength, 
+                //                                               s.AmountOfCones, 
+                //                                               s.DateTimeProductBeam.GetValueOrDefault().Month, 
+                //                                               s.DateTimeProductBeam.GetValueOrDefault().Year, 
+                //                                               s.WeavingUnitId));
+                //    bodyBrokenDto.MaxBroken = 
+                //        bodyBroken
+                //            .Max(s => GetBrokenMax(s.BeamPerOperatorUom, 
+                //                                   s.BeamLength, 
+                //                                   s.AmountOfCones, 
+                //                                   s.DateTimeProductBeam.GetValueOrDefault().Year, 
+                //                                   s.WeavingUnitId));
+                //    bodyBrokenDto.MinBroken = 
+                //        bodyBroken
+                //            .Min(s => GetBrokenMin(s.BeamPerOperatorUom, 
+                //                                   s.BeamLength, 
+                //                                   s.AmountOfCones, 
+                //                                   s.DateTimeProductBeam.GetValueOrDefault().Year, 
+                //                                   s.WeavingUnitId));
+                //    bodyBrokenDto.LastMonthAverageBroken =
+                //        bodyBroken
+                //        .Average(s => GetBrokenTotalAndAverage(s.BeamPerOperatorUom, s.BeamLength, s.AmountOfCones, s.DateTimeProductBeam.GetValueOrDefault().Year != s.DateTimeProductBeam.GetValueOrDefault().AddMonths(-1).Year ? s.DateTimeProductBeam.GetValueOrDefault().Month : s.DateTimeProductBeam.GetValueOrDefault().AddMonths(-1).Month,
+                //            s.DateTimeProductBeam.GetValueOrDefault().Year != s.DateTimeProductBeam.GetValueOrDefault().AddMonths(-1).Year ? s.DateTimeProductBeam.GetValueOrDefault().Year : s.DateTimeProductBeam.GetValueOrDefault().AddMonths(-1).Year, s.WeavingUnitId));
+
+                //    bodyBrokensDto.Add(bodyBrokenDto);
+                //}
+
+                //Grouped FilteredReportQueries by SupplierName, & YarnName
+                var anonymousBodyBrokens = filteredReportQueries
+                    .GroupBy(o => new { o.SupplierName })
+                    .Select(r=>new WarpingBrokenThreadsReportBodyBrokenDto()
+                    {
+                        SupplierName = r.Key.SupplierName,
+                        ListOfYarn = r.Select(entity => new WarpingBrokenThreadsReportListOfYarnDto()
+                        {
+                            YarnName = entity.YarnName,
+                            BrokenEachYarn = r.Select(b=>new TotalBrokenEachYarnValueDto(CalculateWarpingBroken(b.BeamPerOperatorUom,
+                                                                                                                b.BeamLength,
+                                                                                                                b.AmountOfCones,
+                                                                                                                b.BrokenEachYarn))).ToList(),
+                            TotalAllBroken = r.Sum(s=>GetBrokenTotalAndAverage(s.BeamPerOperatorUom,
+                                                                               s.BeamLength,
+                                                                               s.AmountOfCones,
+                                                                               s.DateTimeProductBeam.GetValueOrDefault().Month,
+                                                                               s.DateTimeProductBeam.GetValueOrDefault().Year,
+                                                                               s.WeavingUnitId)),
+                            MaxBroken = r.Max(s => GetBrokenMax(s.BeamPerOperatorUom,
+                                                   s.BeamLength,
+                                                   s.AmountOfCones,
+                                                   s.DateTimeProductBeam.GetValueOrDefault().Year,
+                                                   s.WeavingUnitId)),
+                            MinBroken = r.Min(s => GetBrokenMin(s.BeamPerOperatorUom,
+                                                   s.BeamLength,
+                                                   s.AmountOfCones,
+                                                   s.DateTimeProductBeam.GetValueOrDefault().Year,
+                                                   s.WeavingUnitId))
+                        }).ToList(),
+                        YarnNameRowSpan = r.Count()
+                    })
+                    .ToList();
+
+                //var bodyBrokensDto = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
+                //foreach (var bodyBroken in anonymousBodyBrokens)
+                //{
+                //    var bodyBrokenDto = new WarpingBrokenThreadsReportBodyBrokenDto();
+                //}
+
+                //foreach (var anonymousBodyBroken in anonymousBodyBrokens)
+                //{
+                //    double lastMonthAverageBroken = 0;
+                //    if (anonymousBodyBroken.DateTimeProductBeam.Value.AddMonths(-1).Year != anonymousBodyBroken.DateTimeProductBeam.Value.Year)
+                //    {
+                //        lastMonthAverageBroken = GetBrokenTotalAndAverage(anonymousBodyBroken.BeamPerOperatorUom,
+                //                                                          anonymousBodyBroken.BeamLength,
+                //                                                          anonymousBodyBroken.AmountOfCones,
+                //                                                          anonymousBodyBroken.DateTimeProductBeam.Value.Month,
+                //                                                          anonymousBodyBroken.DateTimeProductBeam.Value.Year,
+                //                                                          anonymousBodyBroken.WeavingUnitId);
+                //    }
+                //    else
+                //    {
+                //        lastMonthAverageBroken = GetBrokenTotalAndAverage(anonymousBodyBroken.BeamPerOperatorUom,
+                //                                                          anonymousBodyBroken.BeamLength,
+                //                                                          anonymousBodyBroken.AmountOfCones,
+                //                                                          anonymousBodyBroken.DateTimeProductBeam.Value.AddMonths(-1).Month,
+                //                                                          anonymousBodyBroken.DateTimeProductBeam.Value.AddMonths(-1).Year,
+                //                                                          anonymousBodyBroken.WeavingUnitId);
+                //    }
+
+                //    var bodyBrokenResult = new WarpingBrokenThreadsReportBodyBrokenDto(anonymousBodyBroken.SupplierName,
+                //                                                                       //anonymousBodyBroken.YarnNameRowSpan,
+                //                                                                       anonymousBodyBroken.YarnName,
+                //                                                                       anonymousBodyBroken.BrokenEachYarn,
+                //                                                                       anonymousBodyBroken.TotalAllBroken,
+                //                                                                       anonymousBodyBroken.MaxBroken,
+                //                                                                       anonymousBodyBroken.MinBroken,
+                //                                                                       lastMonthAverageBroken);
+                //    bodyBrokens.Add(bodyBrokenResult);
+                //}
+
+                result.Month = monthName;
+                result.Year = year.ToString();
+                result.WeavingUnitName = weavingUnitName;
+                result.HeaderBrokens = headerBrokensDto;
+                result.BodyBrokensValue = anonymousBodyBrokens;
+
                 return result;
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
-                throw;
+                throw e;
             }
         }
 
         private double CalculateWarpingBroken(int uomId, double totalWarpingBeamLength, int amountOfCones, int totalBroken)
         {
             double result = 0;
+            double convertedResult = 0;
+
             if (uomId == 136)
             {
-                result = BrokenWarpingConstants.BROKEN_WARPING_DEFAULT_CONST / totalWarpingBeamLength * amountOfCones * totalBroken;
+                result = CalculateWarpingBrokenYard(totalWarpingBeamLength, amountOfCones, totalBroken);
             }
             else if (uomId == 195)
             {
-                result = BrokenWarpingConstants.MTR_CONST * BrokenWarpingConstants.BROKEN_WARPING_DEFAULT_CONST / totalWarpingBeamLength * amountOfCones * totalBroken;
+                result = CalculateWarpingBrokenMeter(totalWarpingBeamLength, amountOfCones, totalBroken);
             }
+            else
+            {
+                result = 0;
+            }
+
+            convertedResult = Math.Round(result, 4);
+            return convertedResult;
+        }
+
+        private double CalculateWarpingBrokenYard(double totalWarpingBeamLength, int amountOfCones, int totalBroken)
+        {
+            double result = 0;
+
+            double lengthCones = totalWarpingBeamLength * amountOfCones;
+            double constantPerLengthCones = BrokenWarpingConstants.BROKEN_WARPING_DEFAULT_CONST / lengthCones;
+            result = constantPerLengthCones * totalBroken;
 
             return result;
         }
 
-        private List<WarpingBrokenThreadsReportFooterTotalDto> GetLastMonthTotal(int month, int year, int weavingId)
+        private double CalculateWarpingBrokenMeter(double totalWarpingBeamLength, int amountOfCones, int totalBroken)
         {
-            //Transform month and year from UI to DateTimeOffset
-            DateTimeOffset dateTimeFilter =
-                new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
-            var monthName = dateTimeFilter.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
-            var daysOfMonth = DateTime.DaysInMonth(year, month);
+            double result = 0;
 
-            //Get order which used (weavingId) same as parameter from UI
-            var orderQuery =
-                _orderRepository
-                    .Query
-                    .AsQueryable();
-            var filteredOrderDocuments = _orderRepository.Find(orderQuery);
-            var filteredOrderDocumentIds = filteredOrderDocuments.Select(o => o.Identity);
+            double lengthCones = totalWarpingBeamLength * amountOfCones;
+            double constantMeter = 0.9144 * BrokenWarpingConstants.BROKEN_WARPING_DEFAULT_CONST;
+            double constantMeterPerLengthCones = constantMeter / lengthCones;
+            result = constantMeterPerLengthCones * totalBroken;
 
-            //Preparing Daily Operation Warping Query w/ Filter Identity param equals (filteredOrderDocumentIds)
-            
-            var warpingDocuments = _dailyOperationWarpingRepository.Find(x => filteredOrderDocumentIds.Contains(x.OrderDocumentId));
+            return result;
+        }
 
-            //var documentLength = warpingDocuments.Count();
+        private List<WarpingBrokenReportQueryDto> GetWarpingBrokenReportQueries()
+        {
+            var reportQueries = (from brokenCause in _warpingBrokenCauseRepository.Query
 
-            //Add Shell for (BodyBrokenDto)
-            var bodyBrokenList = new List<WarpingBrokenThreadsReportBodyBrokenDto>();
-            var totalValue = new List<WarpingBrokenThreadsReportFooterTotalDto>();
-            foreach (var document in warpingDocuments)
+                                 join warpingBrokenCause in _dailyOperationWarpingBrokenCauseRepository.Query
+                                                         on brokenCause.Identity equals warpingBrokenCause.BrokenCauseId
+                                                         into joinWarpingBrokenCause
+                                 from brokenCauseJoinWarpingBrokenCause in joinWarpingBrokenCause.DefaultIfEmpty()
+
+                                 join warpingBeamProduct in _dailyOperationWarpingBeamProductRepository.Query
+                                                         on brokenCauseJoinWarpingBrokenCause.DailyOperationWarpingBeamProductId equals warpingBeamProduct.Identity
+                                                         into joinWarpingBeamProduct
+                                 from brokenCauseJoinBeamProduct in joinWarpingBeamProduct.DefaultIfEmpty()
+
+                                 join warpingDocument in _dailyOperationWarpingRepository.Query
+                                                      on brokenCauseJoinBeamProduct.DailyOperationWarpingDocumentId equals warpingDocument.Identity
+                                                      into joinWarpingDocument
+                                 from beamProductJoinWarpingDocument in joinWarpingDocument.DefaultIfEmpty()
+
+                                 join orderDocument in _orderRepository.Query
+                                                    on beamProductJoinWarpingDocument.OrderDocumentId equals orderDocument.Identity
+                                                    into joinOrderDocument
+                                 from warpingDocumentJoinOrder in joinOrderDocument.DefaultIfEmpty()
+
+                                 join supplierDocument in _supplierRepository.Query
+                                                       on warpingDocumentJoinOrder.WarpOriginId equals supplierDocument.Identity
+                                                       into joinSupplierDocument
+                                 from orderDocumentJoinSupplier in joinSupplierDocument.DefaultIfEmpty()
+
+                                 join constructionYarnDetail in _constructionYarnDetailRepository.Query.Where(o => o.Type == "Warp")
+                                                             on warpingDocumentJoinOrder.ConstructionDocumentId equals constructionYarnDetail.FabricConstructionDocumentId
+                                                             into joinConstructionYarnDetail
+                                 from orderJoinConstructionYarnDetail in joinConstructionYarnDetail.DefaultIfEmpty()
+
+                                 join yarnDocument in _yarnRepository.Query
+                                                   on orderJoinConstructionYarnDetail.YarnId equals yarnDocument.Identity
+                                                   into joinYarnDocument
+                                 from constructionYarnDetailJoinYarn in joinYarnDocument.DefaultIfEmpty()
+
+                                 select new
+                                 {
+                                     DateTimeProduceBeam = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct : DateTimeOffset.Now,
+                                     WeavingUnitId = warpingDocumentJoinOrder != null ? warpingDocumentJoinOrder.UnitId : 0,
+                                     SupplierName = orderDocumentJoinSupplier != null ? orderDocumentJoinSupplier.Name : "",
+                                     BrokenCauseName = brokenCause != null ? brokenCause.WarpingBrokenCauseName : "",
+                                     YarnName = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.Name : "",
+
+                                     YarnId = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.YarnNumberId.Value : Guid.Empty,
+                                     BeamLength = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLength : 0,
+                                     AmountOfCones = beamProductJoinWarpingDocument != null ? beamProductJoinWarpingDocument.AmountOfCones : 0,
+                                     BrokenEachYarn = brokenCauseJoinWarpingBrokenCause != null ? brokenCauseJoinWarpingBrokenCause.TotalBroken : 0,
+                                     BeamPerOperatorUom = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId : 0
+                                 })
+                                 .ToList();
+
+            var warpingBrokenReport = new List<WarpingBrokenReportQueryDto>();
+            foreach (var report in reportQueries)
             {
-                //Get Warping Beam Products w/ Filter date and year param from UI
-                var groupedBeamProducts =
-                    document.WarpingBeamProducts.Where(item => item.LatestDateTimeBeamProduct.Month == month &&
-                                                               item.LatestDateTimeBeamProduct.Year == year)
-                                                .ToList();
-
-                var weavingUnitId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().UnitId.Value;
-
-                SingleUnitResult unitData = GetUnit(weavingUnitId);
-                var weavingUnitName = unitData.data.Name;
-
-                //Get ConstructionId from OrderId from Warping Document (document)
-                var constructionId =
-                    _orderRepository
-                        .Find(o => o.Identity.Equals(document.OrderDocumentId.Value))
-                        .FirstOrDefault().ConstructionDocumentId.Value;
-
-                //Get ConstructionDocument using ConstructionId from above, to get List of Warp Id (warpIds)
-                var constructionDocument =
-                    _fabricConstructionRepository
-                        .Find(c => c.Identity.Equals(constructionId))
-                        .FirstOrDefault();
-
-                //Get WarpName using List of Warp Id (warpIds)
-                var warpIds = constructionDocument.ConstructionWarpsDetail.Select(o => o.YarnId.Value);
-                var warpNames = _yarnRepository.Find(o => warpIds.Contains(o.Identity)).Select(y => y.Name);
-
-                var warpOriginId = _orderRepository.Find(o => o.Identity == document.OrderDocumentId.Value).FirstOrDefault().WarpOriginId;
-                var supplierName = _supplierRepository.Find(o => o.Identity == warpOriginId.Value).FirstOrDefault().Name;
-
-                var resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto();
-                foreach (var warpName in warpNames)
-                {
-                    foreach (var beamProduct in groupedBeamProducts)
-                    {
-                        foreach (var broken in beamProduct.BrokenCauses)
-                        {
-                            var brokenName = _warpingBrokenCauseRepository.Find(o => o.Identity == broken.BrokenCauseId).FirstOrDefault().WarpingBrokenCauseName;
-
-                            //Calculate BrokenTotal based on UomId(136 = YARD or 195 = MTR)
-                            double brokenValue = CalculateWarpingBroken(beamProduct.WarpingTotalBeamLengthUomId, beamProduct.WarpingTotalBeamLength, document.AmountOfCones, broken.TotalBroken);
-
-                            resultBodyBroken = new WarpingBrokenThreadsReportBodyBrokenDto(brokenName,
-                                                                                           //supplierName, 
-                                                                                           warpName,
-                                                                                           brokenValue);
-                            bodyBrokenList.Add(resultBodyBroken);
-                        }
-                    }
-                }
-
-                var headerWarps =
-                    bodyBrokenList
-                        .GroupBy(g => new { supplierName, g.BrokenName, g.WarpName })
-                        .Select(s => new WarpingBrokenThreadsReportHeaderWarpDto(s.Key.supplierName,
-                                                                                 s.Key.BrokenName,
-                                                                                 s.Key.WarpName))
-                        .ToList();
-
-                totalValue =
-                    bodyBrokenList.GroupBy(o => new { o.WarpName }).Select(s => new WarpingBrokenThreadsReportFooterTotalDto(s.Key.WarpName, s.Sum(sum => sum.BrokenValue))).ToList();
+                var brokenReportDto = new WarpingBrokenReportQueryDto(report.DateTimeProduceBeam,
+                                                                      report.WeavingUnitId,
+                                                                      report.BrokenCauseName,
+                                                                      report.SupplierName,
+                                                                      report.YarnName,
+                                                                      report.YarnId,
+                                                                      report.BeamLength,
+                                                                      report.AmountOfCones,
+                                                                      report.BrokenEachYarn,
+                                                                      report.BeamPerOperatorUom);
+                warpingBrokenReport.Add(brokenReportDto);
             }
-            return totalValue;
+
+            return warpingBrokenReport;
+        }
+
+        private double GetBrokenTotalAndAverage(int uomId, double totalWarpingBeamLength, int amountOfCones, int month, int year, int weavingId)
+        {
+            var reportQueries = GetWarpingBrokenReportQueries();
+
+            var filteredQueries =
+                reportQueries
+                    .Where(o => o.DateTimeProductBeam.GetValueOrDefault().Month == month && o.DateTimeProductBeam.GetValueOrDefault().Year == year && o.WeavingUnitId == weavingId)
+                    .ToList();
+
+            var totalBroken =
+                filteredQueries
+                    .GroupBy(o => new { o.YarnId })
+                    .Sum(s => s.Sum(sum => sum.BrokenEachYarn));
+
+            var calculateTotal = CalculateWarpingBroken(uomId, totalWarpingBeamLength, amountOfCones, totalBroken);
+
+            return calculateTotal;
+        }
+
+        private double GetBrokenMax(int uomId, double totalWarpingBeamLength, int amountOfCones, int year, int weavingId)
+        {
+            var reportQueries = GetWarpingBrokenReportQueries();
+
+            var filteredQueries =
+                reportQueries
+                    .Where(o => o.DateTimeProductBeam.GetValueOrDefault().Year == year && o.WeavingUnitId == weavingId)
+                    .ToList();
+
+            var maxBroken =
+                filteredQueries
+                    .GroupBy(o => new { o.YarnId })
+                    .Sum(s => s.Max(max => max.BrokenEachYarn));
+
+            var calculateMax = CalculateWarpingBroken(uomId, totalWarpingBeamLength, amountOfCones, maxBroken);
+
+            return calculateMax;
+        }
+
+        private double GetBrokenMin(int uomId, double totalWarpingBeamLength, int amountOfCones, int year, int weavingId)
+        {
+            var reportQueries = GetWarpingBrokenReportQueries();
+
+            var filteredQueries =
+                reportQueries
+                    .Where(o => o.DateTimeProductBeam.GetValueOrDefault().Year == year && o.WeavingUnitId == weavingId)
+                    .ToList();
+
+            var minBroken =
+                filteredQueries
+                    .GroupBy(o => new { o.YarnId })
+                    .Sum(s => s.Min(min => min.BrokenEachYarn));
+
+            var calculateMin = CalculateWarpingBroken(uomId, totalWarpingBeamLength, amountOfCones, minBroken);
+
+            return calculateMin;
         }
     }
 }

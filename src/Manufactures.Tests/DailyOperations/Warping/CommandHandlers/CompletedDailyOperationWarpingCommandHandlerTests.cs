@@ -22,7 +22,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
     public class CompletedDailyOperationWarpingCommandHandlerTests : IDisposable
     {
         private MockRepository mockRepository;
-        private Mock<IStorage> mockStorage;
+        private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationWarpingRepository>
             mockDailyOperationWarpingRepo;
         private readonly Mock<IDailyOperationWarpingHistoryRepository>
@@ -122,7 +122,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsShift = finishShift,
                     ProduceBeamsOperator = finishOperator,
                     WarpingBeamLengthPerOperator = 100,
-                    WarpingBeamLengthUomId = 195,
+                    //WarpingBeamLengthUomId = 195,
                     Tention = 33,
                     MachineSpeed = 3500,
                     PressRoll = 44,
@@ -219,7 +219,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsShift = finishShift,
                     ProduceBeamsOperator = finishOperator,
                     WarpingBeamLengthPerOperator = 100,
-                    WarpingBeamLengthUomId = 195,
+                    //WarpingBeamLengthUomId = 195,
                     Tention = 33,
                     MachineSpeed = 3500,
                     PressRoll = 44,
@@ -316,7 +316,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsShift = finishShift,
                     ProduceBeamsOperator = finishOperator,
                     WarpingBeamLengthPerOperator = 100,
-                    WarpingBeamLengthUomId = 195,
+                    //WarpingBeamLengthUomId = 195,
                     Tention = 33,
                     MachineSpeed = 3500,
                     PressRoll = 44,
@@ -411,7 +411,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsShift = finishShift,
                     ProduceBeamsOperator = finishOperator,
                     WarpingBeamLengthPerOperator = 100,
-                    WarpingBeamLengthUomId = 195,
+                    //WarpingBeamLengthUomId = 195,
                     Tention = 33,
                     MachineSpeed = 3500,
                     PressRoll = 44,
@@ -506,7 +506,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     ProduceBeamsShift = finishShift,
                     ProduceBeamsOperator = finishOperator,
                     WarpingBeamLengthPerOperator = 100,
-                    WarpingBeamLengthUomId = 195,
+                    //WarpingBeamLengthUomId = 195,
                     Tention = 33,
                     MachineSpeed = 3500,
                     PressRoll = 44,

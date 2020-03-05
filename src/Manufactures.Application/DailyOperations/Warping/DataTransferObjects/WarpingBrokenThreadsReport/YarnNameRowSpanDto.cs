@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport
 {
-    public class WarpingBrokenThreadsReportHeaderSupplierDto
+    public class YarnNameRowSpanDto
     {
         [JsonProperty(PropertyName = "SupplierName")]
         public string SupplierName { get; set; }
@@ -13,8 +13,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "Span")]
         public int Span { get; set; }
 
-        public WarpingBrokenThreadsReportHeaderSupplierDto(string supplierName,
-                                                           int span)
+        public YarnNameRowSpanDto(string supplierName, int span)
         {
             SupplierName = supplierName;
             Span = span;

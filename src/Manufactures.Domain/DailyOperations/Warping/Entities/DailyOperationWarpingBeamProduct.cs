@@ -12,7 +12,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
     {
         public BeamId WarpingBeamId { get; private set; }
         public double WarpingTotalBeamLength { get; private set; }
-        public int WarpingTotalBeamLengthUomId { get; private set; }
+        public UomId WarpingTotalBeamLengthUomId { get; private set; }
         public double? Tention { get; private set; }
         public int? MachineSpeed { get; private set; }
         public double? PressRoll { get; private set; }
@@ -24,12 +24,14 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         //Constructor (Write)
         public DailyOperationWarpingBeamProduct(Guid identity,
                                                 BeamId warpingBeamId,
+                                                UomId warpingTotalBeamLengthUomId,
                                                 DateTimeOffset latestDateTimeBeamProduct,
                                                 string beamStatus,
                                                 Guid dailyOperationWarpingDocumentId) : base(identity)
         {
             Identity = identity;
             WarpingBeamId = warpingBeamId;
+            WarpingTotalBeamLengthUomId = warpingTotalBeamLengthUomId;
             LatestDateTimeBeamProduct = latestDateTimeBeamProduct;
             BeamStatus = beamStatus;
             DailyOperationWarpingDocumentId = dailyOperationWarpingDocumentId;
@@ -41,7 +43,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
                 WarpingBeamId = WarpingBeamId.Value,
                 WarpingTotalBeamLength = WarpingTotalBeamLength,
-                WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId,
+                WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId.Value,
                 Tention = Tention ?? 0,
                 MachineSpeed = MachineSpeed ?? 0,
                 PressRoll = PressRoll ?? 0,
@@ -61,7 +63,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             BeamStatus = readModel.BeamStatus;
             DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
             WarpingTotalBeamLength = readModel.WarpingTotalBeamLength;
-            WarpingTotalBeamLengthUomId = readModel.WarpingTotalBeamLengthUomId;
+            WarpingTotalBeamLengthUomId = new UomId(readModel.WarpingTotalBeamLengthUomId);
             Tention = readModel.Tention;
             MachineSpeed = readModel.MachineSpeed;
             PressRoll = readModel.PressRoll;
@@ -94,10 +96,10 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
         public void SetWarpingTotalBeamLengthUomId(UomId warpingTotalBeamLengthUomId)
         {
-            if (WarpingTotalBeamLengthUomId != warpingTotalBeamLengthUomId.Value)
+            if (WarpingTotalBeamLengthUomId != warpingTotalBeamLengthUomId)
             {
-                WarpingTotalBeamLengthUomId = warpingTotalBeamLengthUomId.Value;
-                ReadModel.WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId;
+                WarpingTotalBeamLengthUomId = warpingTotalBeamLengthUomId;
+                ReadModel.WarpingTotalBeamLengthUomId = WarpingTotalBeamLengthUomId.Value;
 
                 MarkModified();
             }

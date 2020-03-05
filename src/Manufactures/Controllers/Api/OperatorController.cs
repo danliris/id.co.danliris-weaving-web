@@ -51,13 +51,14 @@ namespace Manufactures.Controllers.Api
                 operatorDocuments =
                     operatorDocuments
                         .Where(o => o.Username
-                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    o.UnitName
-                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    o.Group
-                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    o.Type
-                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase)) 
+                                    //    ||
+                                    //o.UnitName
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    //o.Group
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    //o.Type
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
             }
 
