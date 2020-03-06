@@ -109,79 +109,79 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             result.SizingHistories.Should().NotBeEmpty();
         }
 
-        [Fact]
-        public async Task Handle_SameOrderUsed_ThrowError()
-        {
-            // Arrange
-            // Set Preparation Command Handler Object
-            var unitUnderTest = this.CreatePreparationDailyOperationSizingCommandHandler();
+        //[Fact]
+        //public async Task Handle_SameOrderUsed_ThrowError()
+        //{
+        //    // Arrange
+        //    // Set Preparation Command Handler Object
+        //    var unitUnderTest = this.CreatePreparationDailyOperationSizingCommandHandler();
 
-            //Instantiate Object for New Preparation Object (Commands)
-            var machineDocumentId = new MachineId(Guid.NewGuid());
-            var orderDocumentId = new OrderId(Guid.NewGuid());
-            var recipeCode = "PCA 133R";
-            var neReal = 40;
-            var preparationOperator = new OperatorId(Guid.NewGuid());
-            var preparationDate = DateTimeOffset.UtcNow;
-            var preparationTime = TimeSpan.Parse("01:00");
-            var preparationShift = new ShiftId(Guid.NewGuid());
-            var yarnStrands = 400;
-            var emptyWeight = 13;
-            List<BeamId> beamsWarping = new List<BeamId>();
-            var warpingBeamId = new BeamId(Guid.NewGuid());
-            beamsWarping.Add(warpingBeamId);
+        //    //Instantiate Object for New Preparation Object (Commands)
+        //    var machineDocumentId = new MachineId(Guid.NewGuid());
+        //    var orderDocumentId = new OrderId(Guid.NewGuid());
+        //    var recipeCode = "PCA 133R";
+        //    var neReal = 40;
+        //    var preparationOperator = new OperatorId(Guid.NewGuid());
+        //    var preparationDate = DateTimeOffset.UtcNow;
+        //    var preparationTime = TimeSpan.Parse("01:00");
+        //    var preparationShift = new ShiftId(Guid.NewGuid());
+        //    var yarnStrands = 400;
+        //    var emptyWeight = 13;
+        //    List<BeamId> beamsWarping = new List<BeamId>();
+        //    var warpingBeamId = new BeamId(Guid.NewGuid());
+        //    beamsWarping.Add(warpingBeamId);
 
-            //Add Existing Sizing Document
-            var sizingId = Guid.NewGuid();
-            var sizingDocument = 
-                new DailyOperationSizingDocument 
-                (
-                    Guid.NewGuid(),
-                    new MachineId(Guid.NewGuid()),
-                    new OrderId(Guid.NewGuid()),
-                    46,
-                    400,
-                    "PCA 133R",
-                    2,
-                    DateTimeOffset.UtcNow,
-                    2,
-                    OperationStatus.ONPROCESS
-                 );
+        //    //Add Existing Sizing Document
+        //    var sizingId = Guid.NewGuid();
+        //    var sizingDocument = 
+        //        new DailyOperationSizingDocument 
+        //        (
+        //            Guid.NewGuid(),
+        //            new MachineId(Guid.NewGuid()),
+        //            new OrderId(Guid.NewGuid()),
+        //            46,
+        //            400,
+        //            "PCA 133R",
+        //            2,
+        //            DateTimeOffset.UtcNow,
+        //            2,
+        //            OperationStatus.ONPROCESS
+        //         );
 
-            //Create New Preparation Object (Commands)
-            PreparationDailyOperationSizingCommand request =
-                new PreparationDailyOperationSizingCommand
-                {
-                    MachineDocumentId = machineDocumentId,
-                    OrderDocumentId = orderDocumentId,
-                    RecipeCode = recipeCode,
-                    NeReal = neReal,
-                    PreparationOperator = preparationOperator,
-                    PreparationDate = preparationDate,
-                    PreparationTime = preparationTime,
-                    PreparationShift = preparationShift,
-                    YarnStrands = yarnStrands,
-                    EmptyWeight = emptyWeight
-                };
+        //    //Create New Preparation Object (Commands)
+        //    PreparationDailyOperationSizingCommand request =
+        //        new PreparationDailyOperationSizingCommand
+        //        {
+        //            MachineDocumentId = machineDocumentId,
+        //            OrderDocumentId = orderDocumentId,
+        //            RecipeCode = recipeCode,
+        //            NeReal = neReal,
+        //            PreparationOperator = preparationOperator,
+        //            PreparationDate = preparationDate,
+        //            PreparationTime = preparationTime,
+        //            PreparationShift = preparationShift,
+        //            YarnStrands = yarnStrands,
+        //            EmptyWeight = emptyWeight
+        //        };
 
-            //Setup Mock Object for Sizing Repository
-            mockSizingOperationRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
-                .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+        //    //Setup Mock Object for Sizing Repository
+        //    mockSizingOperationRepo
+        //        .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
+        //        .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
-            //Set Cancellation Token
-            CancellationToken cancellationToken = CancellationToken.None;
+        //    //Set Cancellation Token
+        //    CancellationToken cancellationToken = CancellationToken.None;
 
-            try
-            {
-                // Act
-                var result = await unitUnderTest.Handle(request, cancellationToken);
-            }
-            catch (Exception messageException)
-            {
-                // Assert
-                Assert.Equal("Validation failed: \r\n -- OrderDocument: No. Produksi Sudah Digunakan", messageException.Message);
-            }
-        }
+        //    try
+        //    {
+        //        // Act
+        //        var result = await unitUnderTest.Handle(request, cancellationToken);
+        //    }
+        //    catch (Exception messageException)
+        //    {
+        //        // Assert
+        //        Assert.Equal("Validation failed: \r\n -- OrderDocument: No. Produksi Sudah Digunakan", messageException.Message);
+        //    }
+        //}
     }
 }

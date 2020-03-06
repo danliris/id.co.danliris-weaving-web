@@ -47,11 +47,10 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .FirstOrDefault();
 
             //Get Daily Operation History
-            var existingDailyOperationWarpingHistories =
+            var lastWarpingHistory =
                 _dailyOperationWarpingHistoryRepository
                     .Find(o=>o.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
-                    .OrderByDescending(detail => detail.DateTimeMachine);
-            var lastWarpingHistory = existingDailyOperationWarpingHistories.FirstOrDefault();
+                    .OrderByDescending(detail => detail.DateTimeMachine).FirstOrDefault();
 
             //Get Daily Operation Beam Product
             
@@ -95,13 +94,13 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                           request.ProduceBeamsShift,
-                                                                          request.ProduceBeamsOperator,
                                                                           warpingDateTime,
                                                                           MachineStatus.ONPROCESSBEAM,
                                                                           existingDailyOperationWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
+                        newHistory.SetOperatorDocumentId(request.ProduceBeamsOperator);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         //Assign Value to Warping Beam Product and Add to Warping Document
@@ -126,7 +125,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Produksi Beam, Status Mesin Harus Mulai"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Produksi Beam, Status Mesin Harus ONSTART"));
                     }
                 }
             }

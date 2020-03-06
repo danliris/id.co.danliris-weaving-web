@@ -58,17 +58,20 @@ namespace Manufactures.Application.Orders.CommandHandlers
                                           period,
                                           request.ConstructionDocumentId,
                                           request.YarnType,
-                                          request.WarpOriginId,
-                                          warpCompositionPolyLimit,
-                                          warpCompositionCottonLimit, 
-                                          warpCompositionOthersLimit,
-                                          request.WeftOriginId, 
-                                          weftCompositionPolyLimit,
-                                          weftCompositionCottonLimit,
-                                          weftCompositionOthersLimit,
+                                          request.WarpOriginIdOne,
+                                          request.WeftOriginIdOne, 
                                           allGradeLimit,
                                           request.UnitId,
                                           orderStatus);
+
+            order.SetWarpCompositionPoly(warpCompositionPolyLimit);
+            order.SetWarpCompositionCotton(warpCompositionCottonLimit);
+            order.SetWarpCompositionOthers(warpCompositionOthersLimit);
+            order.SetWeftCompositionPoly(weftCompositionPolyLimit);
+            order.SetWeftCompositionCotton(weftCompositionCottonLimit);
+            order.SetWeftCompositionOthers(weftCompositionOthersLimit);
+            //order.SetWarpOriginTwo(request.WarpOriginIdTwo ?? new SupplierId(Guid.Empty));
+            order.SetWeftOriginTwo(request.WeftOriginIdTwo ?? new SupplierId(Guid.Empty));
 
             //Update
             await _orderDocumentRepository.Update(order);

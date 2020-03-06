@@ -291,7 +291,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 await Task.Yield();
                 var operatorBeam =
                     _operatorRepository
-                        .Find(entity => entity.Identity.Equals(history.OperatorDocumentId.Value))
+                        .Find(entity => entity.Identity == history.OperatorDocumentId.Value)
                         .FirstOrDefault();
 
                 await Task.Yield();
@@ -302,8 +302,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                                         warpingBeamNumber,
                                                         history.DateTimeMachine,
                                                         shiftName,
-                                                        operatorBeam.CoreAccount.Name,
-                                                        operatorBeam.Group,
+                                                        operatorBeam == null ? "-" : operatorBeam.CoreAccount.Name,
+                                                        operatorBeam == null ? "-" : operatorBeam.Group,
                                                         warpingBeamLengthPerOperator,
                                                         history.MachineStatus);
 

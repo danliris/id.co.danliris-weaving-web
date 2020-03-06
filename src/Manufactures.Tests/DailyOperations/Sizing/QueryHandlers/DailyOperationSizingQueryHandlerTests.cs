@@ -145,16 +145,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -292,16 +292,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -369,17 +369,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
                                                                 new ShiftId(shift.Identity),
-                                                                new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 warpingDocument.Identity);
+            history.SetOperatorDocumentId(new OperatorId(operatorDocument.Identity));
             warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
             var beamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(beam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS,
-                                                                        warpingDocument.Identity);
+                                                                   new BeamId(beam.Identity),
+                                                                   new UomId(195),
+                                                                   "Meter",
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
             //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
@@ -467,16 +469,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -544,17 +546,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
                                                                 new ShiftId(shift.Identity),
-                                                                new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 warpingDocument.Identity);
+            history.SetOperatorDocumentId(new OperatorId(operatorDocument.Identity));
             warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
             var beamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(beam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS,
-                                                                        warpingDocument.Identity);
+                                                                   new BeamId(beam.Identity),
+                                                                   new UomId(195),
+                                                                   "Meter",
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
             //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
@@ -642,16 +646,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
                 new ConstructionId(fabricConstruction.Identity),
                 "MMCXRAYON30",
                 new SupplierId(supplierDocument.Identity),
-                40,
-                40,
-                20,
                 new SupplierId(supplierDocument.Identity),
-                30,
-                30,
-                40,
                 3500,
                 new UnitId(14),
                 Constants.ONORDER);
+            orderDocument.SetWarpCompositionPoly(40);
+            orderDocument.SetWarpCompositionCotton(40);
+            orderDocument.SetWarpCompositionOthers(20);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(30);
+            orderDocument.SetWeftCompositionPoly(40);
             mockOrderDocumentRepo.Setup(x => x.Find(It.IsAny<Expression<Func<OrderReadModel, bool>>>()))
                 .Returns(new List<OrderDocument>() { orderDocument });
 
@@ -719,17 +723,19 @@ namespace Manufactures.Tests.DailyOperations.Sizing.QueryHandlers
 
             var history = new DailyOperationWarpingHistory(new Guid("BB160B68-7724-49A2-9470-0E9F44169812"),
                                                                 new ShiftId(shift.Identity),
-                                                                new OperatorId(operatorDocument.Identity),
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 warpingDocument.Identity);
+            history.SetOperatorDocumentId(new OperatorId(operatorDocument.Identity));
             warpingDocument.WarpingHistories = new List<DailyOperationWarpingHistory>() { history };
 
             var beamProduct = new DailyOperationWarpingBeamProduct(new Guid("3C5E09E8-0E86-4BB3-890E-057063719F13"),
-                                                                        new BeamId(beam.Identity),
-                                                                        DateTimeOffset.UtcNow,
-                                                                        BeamStatus.ONPROCESS,
-                                                                        warpingDocument.Identity);
+                                                                   new BeamId(beam.Identity),
+                                                                   new UomId(195),
+                                                                   "Meter",
+                                                                   DateTimeOffset.UtcNow,
+                                                                   BeamStatus.ONPROCESS,
+                                                                   warpingDocument.Identity);
             warpingDocument.WarpingBeamProducts = new List<DailyOperationWarpingBeamProduct>() { beamProduct };
 
             //mockDailyOperationWarpingRepo.Setup(x => x.Query).Returns(new List<DailyOperationWarpingDocumentReadModel>().AsQueryable());
