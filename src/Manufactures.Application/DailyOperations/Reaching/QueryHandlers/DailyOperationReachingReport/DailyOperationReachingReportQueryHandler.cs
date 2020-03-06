@@ -314,6 +314,11 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers.DailyO
                             .Find(operatorQuery)
                             .Where(o => o.Identity == operatorId.Value)
                             .FirstOrDefault();
+
+                    if (operatorDocument == null) {
+                        continue;
+                    }
+
                     var operatorName = operatorDocument.CoreAccount.Name;
 
                     //Get Reaching Operator Group (Latest History)
