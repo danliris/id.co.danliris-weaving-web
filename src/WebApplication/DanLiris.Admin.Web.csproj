@@ -88,6 +88,8 @@
     <Compile Remove="Migrations\20200305060237_AddWeftOriginTwoOnOrder.Designer.cs" />
     <Compile Remove="Migrations\20200305090340_RenameWarpOriginIdOnOrder.cs" />
     <Compile Remove="Migrations\20200305090340_RenameWarpOriginIdOnOrder.Designer.cs" />
+    <Compile Remove="Migrations\20200306032856_AddUomUnitOnDOMWarping.cs" />
+    <Compile Remove="Migrations\20200306032856_AddUomUnitOnDOMWarping.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
