@@ -42,7 +42,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 if (existingSizingDocument == null)
                 {
-                    throw Validator.ErrorValidation(("SizingHistory", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
+                    throw Validator.ErrorValidation(("SizingDocument", "Tidak ada Id History yang Cocok dengan " + request.HistoryId));
                 }
                 
                 //Get Daily Operation History
@@ -50,6 +50,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     _dailyOperationSizingHistoryRepository
                         .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
                         .OrderByDescending(o => o.DateTimeMachine);
+
                 var lastHistory =
                     existingSizingHistories
                         .Where(o => o.Identity.Equals(request.HistoryId))

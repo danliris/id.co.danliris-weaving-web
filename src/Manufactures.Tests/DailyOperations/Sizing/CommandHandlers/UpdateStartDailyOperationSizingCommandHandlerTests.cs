@@ -28,6 +28,10 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
         private readonly Mock<IStorage> mockStorage;
         private readonly Mock<IDailyOperationSizingDocumentRepository>
             mockSizingOperationRepo;
+        private readonly Mock<IDailyOperationSizingBeamProductRepository>
+            mockSizingBeamProductRepo;
+        private readonly Mock<IDailyOperationSizingHistoryRepository>
+            mockSizingHistoryRepo;
         private readonly Mock<IBeamRepository>
             mockBeamRepo;
 
@@ -41,6 +45,18 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationSizingDocumentRepository>())
                 .Returns(mockSizingOperationRepo.Object);
+
+            this.mockSizingBeamProductRepo =
+                this.mockRepository.Create<IDailyOperationSizingBeamProductRepository>();
+            this.mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationSizingBeamProductRepository>())
+                .Returns(mockSizingBeamProductRepo.Object);
+
+            this.mockSizingHistoryRepo =
+                this.mockRepository.Create<IDailyOperationSizingHistoryRepository>();
+            this.mockStorage
+                .Setup(x => x.GetRepository<IDailyOperationSizingHistoryRepository>())
+                .Returns(mockSizingHistoryRepo.Object);
 
             this.mockBeamRepo =
                 this.mockRepository.Create<IBeamRepository>();
@@ -86,27 +102,31 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
                                                                         0,
-                                                                        BeamStatus.ONPROCESS,
+                                                                        BeamStatus.ROLLEDUP,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = sizingBeamProduct.SizingBeamId,
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
-                StartDate = DateTimeOffset.UtcNow,
+                StartDate = DateTimeOffset.UtcNow.AddDays(1),
                 StartTime = TimeSpan.Parse("01:00"),
                 StartShift = new ShiftId(Guid.NewGuid()),
                 StartOperator = new OperatorId(Guid.NewGuid())
@@ -114,8 +134,20 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -157,6 +189,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
@@ -164,12 +197,14 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                         BeamStatus.ONPROCESS,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             var startOperator = new OperatorId(Guid.NewGuid());
@@ -181,6 +216,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
                 StartDate = DateTimeOffset.UtcNow,
                 StartTime = TimeSpan.Parse("01:00"),
@@ -190,8 +226,20 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -203,7 +251,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- BeamStatus: Can't Start. There's ONPROCESS Sizing Beam on this Operation", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- BeamStatus: Tidak Dapat Memulai. Ada Beam yang Sedang Diproses", messageException.Message);
             }
         }
 
@@ -231,8 +279,9 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new ShiftId(Guid.NewGuid()),
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART,
+                                                                MachineStatus.ONCOMPLETE,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
@@ -240,20 +289,23 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                         BeamStatus.ROLLEDUP,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
-                StartDate = DateTimeOffset.UtcNow,
+                StartDate = DateTimeOffset.UtcNow.AddDays(1),
                 StartTime = TimeSpan.Parse("01:00"),
                 StartShift = new ShiftId(Guid.NewGuid()),
                 StartOperator = new OperatorId(Guid.NewGuid())
@@ -261,8 +313,20 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -274,7 +338,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- OperationStatus: Can't Start. This operation's status already FINISHED", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- OperationStatus: Tidak Dapat Memulai. Status Operasi Sudah Selesai", messageException.Message);
             }
         }
 
@@ -294,42 +358,41 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                   400,
                                                                   "PCA 133R",
                                                                   2,
-                                                                  DateTimeOffset.UtcNow,
+                                                                  DateTimeOffset.UtcNow.AddDays(1),
                                                                   2,
                                                                   OperationStatus.ONPROCESS);
 
             var sizingHistory = new DailyOperationSizingHistory(Guid.NewGuid(),
                                                                 new ShiftId(Guid.NewGuid()),
                                                                 new OperatorId(Guid.NewGuid()),
-                                                                DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART,
+                                                                DateTimeOffset.UtcNow.AddDays(1),
+                                                                MachineStatus.ONCOMPLETE,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
                                                                         0,
                                                                         BeamStatus.ROLLEDUP,
-                                                                        DateTimeOffset.UtcNow,
+                                                                        DateTimeOffset.UtcNow.AddDays(1),
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
-            var startOperator = new OperatorId(Guid.NewGuid());
-            var startDate = DateTimeOffset.UtcNow.AddDays(-1);
-            var startTime = TimeSpan.Parse("01:00");
-            var startShift = new ShiftId(Guid.NewGuid());
-            var newSizingBeamId = new BeamId(Guid.NewGuid());
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
-                StartDate = DateTimeOffset.UtcNow.AddDays(-1),
+                StartDate = DateTimeOffset.UtcNow,
                 StartTime = TimeSpan.Parse("01:00"),
                 StartShift = new ShiftId(Guid.NewGuid()),
                 StartOperator = new OperatorId(Guid.NewGuid())
@@ -337,8 +400,20 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -350,7 +425,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- StartDate: Start date cannot less than latest date log", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- StartDate: Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya", messageException.Message);
             }
         }
 
@@ -378,8 +453,9 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new ShiftId(Guid.NewGuid()),
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART,
+                                                                MachineStatus.ONCOMPLETE,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
@@ -387,20 +463,23 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                         BeamStatus.ROLLEDUP,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
-                StartDate = DateTimeOffset.UtcNow,
+                StartDate = DateTimeOffset.UtcNow.AddMinutes(-1),
                 StartTime = TimeSpan.Parse("01:00"),
                 StartShift = new ShiftId(Guid.NewGuid()),
                 StartOperator = new OperatorId(Guid.NewGuid())
@@ -408,8 +487,20 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -421,7 +512,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- StartTime: Start time cannot less than or equal latest time log", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- StartTime: Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya", messageException.Message);
             }
         }
 
@@ -455,14 +546,16 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new ShiftId(Guid.NewGuid()),
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART,
+                                                                MachineStatus.ONENTRY,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
                 StartDate = DateTimeOffset.UtcNow.AddDays(1),
                 StartTime = TimeSpan.Parse("01:00"),
@@ -472,11 +565,24 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
-            mockBeamRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { existingBeamDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            //mockBeamRepo
+            //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
+            //    .Returns(new List<BeamDocument>() { existingBeamDocument });
             this.mockStorage.Setup(x => x.Save());
 
             CancellationToken cancellationToken = CancellationToken.None;
@@ -519,8 +625,9 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 new ShiftId(Guid.NewGuid()),
                                                                 new OperatorId(Guid.NewGuid()),
                                                                 DateTimeOffset.UtcNow,
-                                                                MachineStatus.ONSTART,
+                                                                MachineStatus.ONCOMPLETE,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
@@ -528,18 +635,21 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                         BeamStatus.ROLLEDUP,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
             {
                 Id = sizingDocument.Identity,
                 SizingBeamId = new BeamId(Guid.NewGuid()),
+                SizingBeamNumber = "T12",
                 CounterStart = 0,
                 StartDate = DateTimeOffset.UtcNow.AddDays(1),
                 StartTime = TimeSpan.Parse("01:00"),
@@ -549,12 +659,25 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
-            mockBeamRepo
-                .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
-                .Returns(new List<BeamDocument>() { existingBeamDocument });
-            this.mockStorage.Setup(x => x.Save());
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            //mockBeamRepo
+            //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
+            //    .Returns(new List<BeamDocument>() { existingBeamDocument });
+            //this.mockStorage.Setup(x => x.Save());
 
             CancellationToken cancellationToken = CancellationToken.None;
 
@@ -598,19 +721,22 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
                                                                 DateTimeOffset.UtcNow,
                                                                 MachineStatus.ONSTART,
                                                                 sizingDocument.Identity);
+            sizingDocument.SizingHistories = new List<DailyOperationSizingHistory>() { sizingHistory };
 
             var sizingBeamProduct = new DailyOperationSizingBeamProduct(Guid.NewGuid(),
                                                                         new BeamId(Guid.NewGuid()),
                                                                         0,
-                                                                        BeamStatus.ROLLEDUP,
+                                                                        BeamStatus.ONPROCESS,
                                                                         DateTimeOffset.UtcNow,
                                                                         sizingDocument.Identity);
+            sizingDocument.SizingBeamProducts = new List<DailyOperationSizingBeamProduct>() { sizingBeamProduct };
 
             var sizingBeamsWarping = new DailyOperationSizingBeamsWarping(Guid.NewGuid(),
                                                                           sizingBeamProduct.SizingBeamId,
                                                                           120,
                                                                           32,
                                                                           sizingDocument.Identity);
+            sizingDocument.BeamsWarping = new List<DailyOperationSizingBeamsWarping>() { sizingBeamsWarping };
 
             //Instantiate Object for New Update Start Object (Commands)
             UpdateStartDailyOperationSizingCommand request = new UpdateStartDailyOperationSizingCommand
@@ -626,8 +752,21 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
 
             //Setup Mock Object for Sizing Repo
             mockSizingOperationRepo
-                 .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingDocumentReadModel, bool>>>()))
                  .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
+            mockSizingHistoryRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingHistoryReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingHistory>() { sizingHistory });
+
+            mockSizingBeamProductRepo
+                 .Setup(x => x.Find(It.IsAny<Expression<Func<DailyOperationSizingBeamProductReadModel, bool>>>()))
+                 .Returns(new List<DailyOperationSizingBeamProduct>() { });
+
+            //mockSizingOperationRepo
+            //     .Setup(x => x.Find(It.IsAny<IQueryable<DailyOperationSizingDocumentReadModel>>()))
+            //     .Returns(new List<DailyOperationSizingDocument>() { sizingDocument });
+
             //mockBeamRepo
             //    .Setup(x => x.Find(It.IsAny<Expression<Func<BeamReadModel, bool>>>()))
             //    .Returns(new List<BeamDocument>() { existingBeamDocument });
@@ -643,7 +782,7 @@ namespace Manufactures.Tests.DailyOperations.Sizing.CommandHandlers
             catch (Exception messageException)
             {
                 // Assert
-                Assert.Equal("Validation failed: \r\n -- MachineStatus: Can't start, latest machine status must ONENTRY or ONCOMPLETE", messageException.Message);
+                Assert.Equal("Validation failed: \r\n -- MachineStatus: Tidak Dapat Memulai, Status Mesin Terakhir Harus ONENTRY or ONCOMPLETE", messageException.Message);
             }
         }
     }

@@ -100,6 +100,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
+                        newHistory.SetWarpingBeamLengthPerOperatorUomUnit(lastWarpingHistory.WarpingBeamLengthPerOperatorUomUnit);
                         newHistory.SetOperatorDocumentId(request.ProduceBeamsOperator);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
@@ -107,7 +108,6 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);                        
                         var totalBeamLength = request.WarpingBeamLengthPerOperator + lastWarpingBeamProduct.WarpingTotalBeamLength;
                         lastWarpingBeamProduct.SetWarpingTotalBeamLength(totalBeamLength);
-                        //lastWarpingBeamProduct.SetWarpingTotalBeamLengthUomId(lastWarpingBeamProduct.WarpingTotalBeamLengthUomId);
                         lastWarpingBeamProduct.SetBeamStatus(BeamStatus.ONPROCESS);
                         await _dailyOperationWarpingBeamProductRepository.Update(lastWarpingBeamProduct);                        
 

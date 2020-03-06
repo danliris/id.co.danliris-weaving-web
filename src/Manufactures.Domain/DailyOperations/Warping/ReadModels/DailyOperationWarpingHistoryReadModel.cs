@@ -15,6 +15,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         public Guid WarpingBeamId { get; internal set; }
         public double WarpingBeamLengthPerOperator { get; internal set; }
         public int WarpingBeamLengthPerOperatorUomId { get; internal set; }
+        public string WarpingBeamLengthPerOperatorUomUnit { get; internal set; }
         public Guid DailyOperationWarpingDocumentId { get; internal set; }
 
         public DailyOperationWarpingHistoryReadModel(Guid identity) : base(identity)
