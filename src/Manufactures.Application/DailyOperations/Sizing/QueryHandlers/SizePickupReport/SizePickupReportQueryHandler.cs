@@ -305,22 +305,6 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
                         //Get Preparation Date (First History (PreparationState))
                         var latestDateTimeHistory = latestHistory.DateTimeMachine;
 
-                        //Get Operator Name (Latest History)
-                        var operatorId = latestHistory.OperatorDocumentId;
-                        var operatorQuery =
-                            _operatorRepository
-                                .Query
-                                .OrderByDescending(o => o.CreatedDate);
-                        var operatorDocument =
-                            _operatorRepository
-                                .Find(operatorQuery)
-                                .Where(o => o.Identity == operatorId.Value)
-                                .FirstOrDefault();
-                        var operatorName = operatorDocument.CoreAccount.Name;
-
-                        //Get Sizing Operator Group (Latest History)
-                        var sizingOperatorGroup = operatorDocument.Group;
-
                         //Get Beam Number
                         var beamQuery =
                             _beamRepository
@@ -336,6 +320,28 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                         var sizePickupReport = new SizePickupReportListDto();
                         var spuBeamProduct = beamProduct.SPU;
+
+                        //Get Operator Name (Latest History)
+                        var operatorId = latestHistory.OperatorDocumentId;
+                        var operatorQuery =
+                            _operatorRepository
+                                .Query
+                                .OrderByDescending(o => o.CreatedDate);
+                        var operatorDocument =
+                            _operatorRepository
+                                .Find(operatorQuery)
+                                .Where(o => o.Identity == operatorId.Value)
+                                .FirstOrDefault();
+                        if (operatorDocument == null) {
+                            continue;
+                        }
+
+                        var operatorName = operatorDocument.CoreAccount.Name;
+
+                        //Get Sizing Operator Group (Latest History)
+                        var sizingOperatorGroup = operatorDocument.Group;
+
+                       
 
                         if (shiftId != null)
                         {
@@ -519,6 +525,11 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers.SizePick
 
                 throw;
             }
+        }
+
+        public Task GetReports(string v1, string v2, int v3, object p1, object p2, object p3, object p4, int v4, int v5, int v6, string v7)
+        {
+            throw new NotImplementedException();
         }
 
         public Task GetReports(string v1, string v2, int v3, object p1, object p2, object p3, object p4, int v4, int v5, int v6, int v7, string v8)
