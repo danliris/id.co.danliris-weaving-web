@@ -267,7 +267,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var currentWarpingHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                          new ShiftId(Guid.NewGuid()),
                                                                          DateTimeOffset.UtcNow,
-                                                                         MachineStatus.ONENTRY,
+                                                                         MachineStatus.ONSTART,
                                                                          currentWarpingDocument.Identity);
             currentWarpingHistory.SetWarpingBeamId(new BeamId(Guid.NewGuid()));
             currentWarpingHistory.SetOperatorDocumentId(new OperatorId(Guid.NewGuid()));
