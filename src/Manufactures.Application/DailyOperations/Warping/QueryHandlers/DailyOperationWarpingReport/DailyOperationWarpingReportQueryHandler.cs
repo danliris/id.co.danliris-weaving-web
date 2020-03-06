@@ -268,6 +268,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOp
                             .Find(operatorQuery)
                             .Where(o => o.Identity.Equals(operatorId))
                             .FirstOrDefault();
+                    if (operatorDocument == null) {
+                        continue;
+                    }
+
                     var operatorName = operatorDocument.CoreAccount.Name;
 
                     //Get Warping Operator Group (Latest History)
