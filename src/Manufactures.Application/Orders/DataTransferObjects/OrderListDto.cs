@@ -58,12 +58,12 @@ namespace Manufactures.Application.Orders.DataTransferObjects
             Id = orderDocument.Identity;
             OrderNumber = orderDocument.OrderNumber;
             Period = orderDocument.Period;
-            WarpOriginId = orderDocument.WarpOriginId.Value;
+            WarpOriginId = orderDocument.WarpOriginIdOne.Value;
             WarpOrigin = warpOrigin;
             WarpCompositionPoly = orderDocument.WarpCompositionPoly;
             WarpCompositionCotton = orderDocument.WarpCompositionCotton;
             WarpCompositionOthers = orderDocument.WarpCompositionOthers;
-            WeftOriginId = orderDocument.WeftOriginId.Value;
+            WeftOriginId = orderDocument.WeftOriginIdOne.Value;
             WeftOrigin = weftOrigin;
             WeftCompositionPoly = orderDocument.WeftCompositionPoly;
             WeftCompositionCotton = orderDocument.WeftCompositionCotton;

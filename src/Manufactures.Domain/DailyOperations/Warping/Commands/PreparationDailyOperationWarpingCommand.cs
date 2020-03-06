@@ -27,8 +27,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "PreparationShift")]
         public ShiftId PreparationShift { get; set; }
 
-        [JsonProperty(PropertyName = "PreparationOperator")]
-        public OperatorId PreparationOperator { get; set; }
+        //[JsonProperty(PropertyName = "PreparationOperator")]
+        //public OperatorId PreparationOperator { get; set; }
     }
 
     public class PreparationDailyOperationWarpingCommandValidator : AbstractValidator<PreparationDailyOperationWarpingCommand>
@@ -41,7 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
             RuleFor(command => command.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
             RuleFor(command => command.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");
-            RuleFor(command => command.PreparationOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            //RuleFor(command => command.PreparationOperator).NotEmpty().WithMessage("Operator Harus Diisi");
         }
     }
 }

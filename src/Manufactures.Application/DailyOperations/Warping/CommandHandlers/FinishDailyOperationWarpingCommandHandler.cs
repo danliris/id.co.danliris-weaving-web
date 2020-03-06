@@ -106,12 +106,12 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         //Assign Value to Warping History and Add to Warping Document
                         var newHistory = new DailyOperationWarpingHistory(Guid.NewGuid(),
                                                                           request.ProduceBeamsShift,
-                                                                          request.ProduceBeamsOperator,
                                                                           warpingDateTime,
                                                                           MachineStatus.ONCOMPLETE,
                                                                           existingWarpingDocument.Identity);
                         newHistory.SetWarpingBeamId(lastWarpingHistory.WarpingBeamId);
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
+                        newHistory.SetOperatorDocumentId(request.ProduceBeamsOperator);
                         //newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Menyelesaikan Proses, Status Mesin Harus Mulai atau Sedang Proses"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Menyelesaikan Proses, Status Mesin Harus ONSTART atau ON-PROCESS"));
                     }
                 }
             }

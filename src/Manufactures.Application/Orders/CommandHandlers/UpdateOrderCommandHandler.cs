@@ -56,11 +56,13 @@ namespace Manufactures.Application.Orders.CommandHandlers
             order.SetPeriod(period);
             order.SetConstructionDocumentId(request.ConstructionDocumentId);
             order.SetYarnType(request.YarnType);
-            order.SetWarpOrigin(request.WarpOriginId);
+            order.SetWarpOriginOne(request.WarpOriginIdOne);
+            //order.SetWarpOriginTwo(request.WarpOriginIdTwo ?? order.WarpOriginIdTwo);
             order.SetWarpCompositionPoly(warpCompositionPolyLimit);
             order.SetWarpCompositionCotton(warpCompositionCottonLimit);
             order.SetWarpCompositionOthers(warpCompositionOthersLimit);
-            order.SetWeftOrigin(request.WeftOriginId);
+            order.SetWeftOriginOne(request.WeftOriginIdOne);
+            order.SetWeftOriginTwo(request.WeftOriginIdTwo ?? order.WeftOriginIdTwo);
             order.SetWeftCompositionPoly(weftCompositionPolyLimit);
             order.SetWeftCompositionCotton(weftCompositionCottonLimit);
             order.SetWeftCompositionOthers(weftCompositionOthersLimit);

@@ -37,8 +37,8 @@ namespace Manufactures.Controllers.Api
             _loomQuery;
         private readonly IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> 
             _dailyOperationLoomReportQuery;
-        private readonly IDailyOperationLoomBeamProductQuery<DailyOperationLoomBeamProductDto>
-            _loomBeamProductQuery;
+        //private readonly IDailyOperationLoomBeamProductQuery<DailyOperationLoomBeamProductDto>
+        //    _loomBeamProductQuery;
 
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomRepository;

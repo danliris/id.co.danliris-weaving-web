@@ -184,8 +184,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                     //Get Warp Origin Code and Weft Origin Code
                     await Task.Yield();
-                    var warpId = orderDocument.WarpOriginId;
-                    var weftId = orderDocument.WeftOriginId;
+                    var warpId = orderDocument.WarpOriginIdOne;
+                    var weftId = orderDocument.WeftOriginIdOne;
 
                     await Task.Yield();
                     var warpCode =

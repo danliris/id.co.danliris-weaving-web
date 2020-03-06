@@ -11,7 +11,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public string YarnName { get; set; }
 
         [JsonProperty(PropertyName = "BrokenEachYarn")]
-        public List<TotalBrokenEachYarnValueDto> BrokenEachYarn { get; set; }
+        public List<double> BrokenEachYarn { get; set; }
 
         [JsonProperty(PropertyName = "TotalAllBroken")]
         public double TotalAllBroken { get; set; }
@@ -26,7 +26,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public double LastMonthAverageBroken { get; set; }
 
         public WarpingBrokenThreadsReportListOfYarnDto(string yarnName, 
-                                                       List<TotalBrokenEachYarnValueDto> brokenEachYarn, 
+                                                       List<double> brokenEachYarn, 
                                                        double totalAllBroken, 
                                                        double maxBroken, 
                                                        double minBroken, 
@@ -42,7 +42,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 
         public WarpingBrokenThreadsReportListOfYarnDto()
         {
-            BrokenEachYarn = new List<TotalBrokenEachYarnValueDto>();
+            BrokenEachYarn = new List<double>();
         }
     }
 }

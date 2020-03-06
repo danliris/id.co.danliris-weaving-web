@@ -66,7 +66,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
             var unitUnderTest = this.CreateAddNewWarpingOperationCommandHandler();
 
             //Instantiate new Object
-            var operatorId = new OperatorId(Guid.NewGuid());
+            //var operatorId = new OperatorId(Guid.NewGuid());
             var shiftId = new ShiftId(Guid.NewGuid());
 
             //Create new preparation object
@@ -76,7 +76,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.CommandHandlers
                     AmountOfCones = 10,
                     PreparationDate = DateTimeOffset.UtcNow,
                     PreparationTime = TimeSpan.Parse("01:00"),
-                    PreparationOperator = operatorId,
                     PreparationShift = shiftId,
                     PreparationOrder = new OrderId(Guid.NewGuid())
                 };

@@ -8,7 +8,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
     public class DailyOperationWarpingHistoryReadModel : ReadModelBase
     {
         public Guid ShiftDocumentId { get; internal set; }
-        public Guid OperatorDocumentId { get; internal set; }
+        public Guid? OperatorDocumentId { get; internal set; }
         public DateTimeOffset DateTimeMachine { get; internal set; }
         public string MachineStatus { get; internal set; }
         public string Information { get; internal set; }
