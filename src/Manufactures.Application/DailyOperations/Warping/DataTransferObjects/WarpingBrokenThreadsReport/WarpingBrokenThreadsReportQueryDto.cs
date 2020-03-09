@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport
 {
-    public class WarpingBrokenReportQueryDto
+    public class WarpingBrokenThreadsReportQueryDto
     {
         [JsonProperty(PropertyName = "DateTimeProductBeam")]
         public DateTimeOffset? DateTimeProductBeam { get; set; }
@@ -34,10 +34,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "BrokenEachYarn")]
         public int BrokenEachYarn { get; set; }
 
-        [JsonProperty(PropertyName = "BeamPerOperatorUom")]
-        public int BeamPerOperatorUom { get; set; }
+        [JsonProperty(PropertyName = "BeamProductUomId")]
+        public int BeamProductUomId { get; set; }
 
-        public WarpingBrokenReportQueryDto(DateTimeOffset? dateTimeProductBeam, 
+        [JsonProperty(PropertyName = "BeamProductUomUnit")]
+        public string BeamProductUomUnit { get; set; }
+
+        public WarpingBrokenThreadsReportQueryDto(DateTimeOffset? dateTimeProductBeam, 
                                            int weavingUnitId, 
                                            string brokenCauseName, 
                                            string supplierName, 
@@ -45,8 +48,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
                                            Guid yarnId,
                                            double beamLength,
                                            int amountOfCones, 
-                                           int brokenEachYarn, 
-                                           int beamPerOperatorUom)
+                                           int brokenEachYarn,
+                                           int beamProductUomId,
+                                           string beamProductUomUnit)
         {
             DateTimeProductBeam = dateTimeProductBeam;
             WeavingUnitId = weavingUnitId;
@@ -57,7 +61,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
             BeamLength = beamLength;
             AmountOfCones = amountOfCones;
             BrokenEachYarn = brokenEachYarn;
-            BeamPerOperatorUom = beamPerOperatorUom;
+            BeamProductUomId = beamProductUomId;
+            BeamProductUomUnit = beamProductUomUnit;
         }
     }
 }
