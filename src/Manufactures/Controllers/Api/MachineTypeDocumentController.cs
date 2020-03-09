@@ -35,11 +35,23 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             page = page - 1;
-            var query =
-                _machineTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
+            var query = _machineTypeRepository.Query;
+            query = query.OrderByDescending(item => item.CreatedDate);
+
+  
+
+         if (!filter.Contains("{}"))
+            {
+                Dictionary<string, string> filterDictionary =
+                   JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+
+                var filterUnit = filterDictionary["MachineUnit"];
+                query = query.Where(x => x.MachineUnit == filterUnit);
+            }
+
             var machineTypeDtos =
-                _machineTypeRepository.Find(query)
-                                       .Select(item => new MachineTypeDocumentDto(item));
+                        _machineTypeRepository.Find(query)
+                                .Select(item => new MachineTypeDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
