@@ -42,9 +42,13 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             ReadModel = new DailyOperationWarpingHistoryReadModel(Identity)
             {
                 ShiftDocumentId = ShiftDocumentId.Value,
-                OperatorDocumentId = OperatorDocumentId == null?Guid.Empty : OperatorDocumentId.Value,
+                OperatorDocumentId = OperatorDocumentId != null ? OperatorDocumentId.Value : Guid.Empty,
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
+                Information = Information,
+                WarpingBeamLengthPerOperator = WarpingBeamLengthPerOperator,
+                WarpingBeamLengthPerOperatorUomId = WarpingBeamLengthPerOperatorUomId != null ? WarpingBeamLengthPerOperatorUomId.Value : 0,
+                WarpingBeamLengthPerOperatorUomUnit = WarpingBeamLengthPerOperatorUomUnit,
                 DailyOperationWarpingDocumentId = DailyOperationWarpingDocumentId
             };
         }
@@ -61,6 +65,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             WarpingBeamId = new BeamId(readModel.WarpingBeamId);
             WarpingBeamLengthPerOperator = readModel.WarpingBeamLengthPerOperator;
             WarpingBeamLengthPerOperatorUomId = new UomId(readModel.WarpingBeamLengthPerOperatorUomId);
+            WarpingBeamLengthPerOperatorUomUnit = readModel.WarpingBeamLengthPerOperatorUomUnit;
             DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
         }
 
@@ -169,7 +174,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             if (warpingBeamLengthPerOperatorUomUnit != WarpingBeamLengthPerOperatorUomUnit)
             {
                 WarpingBeamLengthPerOperatorUomUnit = warpingBeamLengthPerOperatorUomUnit;
-                ReadModel.WarpingBeamLengthPerOperatorUomUnit = MachineStatus;
+                ReadModel.WarpingBeamLengthPerOperatorUomUnit = WarpingBeamLengthPerOperatorUomUnit;
 
                 MarkModified();
             }

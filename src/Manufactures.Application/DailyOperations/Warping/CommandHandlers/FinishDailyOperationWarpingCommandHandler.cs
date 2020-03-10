@@ -113,6 +113,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                         newHistory.SetWarpingBeamLengthPerOperator(request.WarpingBeamLengthPerOperator);
                         newHistory.SetOperatorDocumentId(request.ProduceBeamsOperator);
                         newHistory.SetWarpingBeamLengthPerOperatorUomId(lastWarpingHistory.WarpingBeamLengthPerOperatorUomId);
+                        newHistory.SetWarpingBeamLengthPerOperatorUomUnit(lastWarpingHistory.WarpingBeamLengthPerOperatorUomUnit);
                         await _dailyOperationWarpingHistoryRepository.Update(newHistory);
 
                         lastWarpingBeamProduct.SetLatestDateTimeBeamProduct(warpingDateTime);

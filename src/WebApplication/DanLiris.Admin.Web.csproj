@@ -90,6 +90,8 @@
     <Compile Remove="Migrations\20200305090340_RenameWarpOriginIdOnOrder.Designer.cs" />
     <Compile Remove="Migrations\20200306032856_AddUomUnitOnDOMWarping.cs" />
     <Compile Remove="Migrations\20200306032856_AddUomUnitOnDOMWarping.Designer.cs" />
+    <Compile Remove="Migrations\20200310041447_AddUomUnitOnWarpingHistory.cs" />
+    <Compile Remove="Migrations\20200310041447_AddUomUnitOnWarpingHistory.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
