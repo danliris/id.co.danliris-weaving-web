@@ -3,8 +3,6 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
-using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
-using Manufactures.Application.Helpers;
 using Manufactures.Domain.BrokenCauses.Warping.Repositories;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
@@ -183,31 +181,31 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         {
                             dictionary[brokenCause.WarpingBrokenCauseName] = "0";
 
-                            //dictionary[FooterBroken.TOTAL_BROKEN.ToString()] = "0";
-                            //dictionary[FooterBroken.MAX_BROKEN.ToString()] = "0";
-                            //dictionary[FooterBroken.MIN_BROKEN.ToString()] = "0";
-                            //dictionary[FooterBroken.AVERAGE_BROKEN.ToString()] = "0";
+                            dictionary[FooterBroken.Total.ToString()] = "0";
+                            dictionary[FooterBroken.Max.ToString()] = "0";
+                            dictionary[FooterBroken.Min.ToString()] = "0";
+                            dictionary[FooterBroken.Average.ToString()] = "0";
                         }
 
                         dictionary[element.BrokenCauseName] = element.BrokenEachYarn.ToString();
 
-                        dictionary[FooterBroken.TOTAL_BROKEN.ToString()] = GetBrokenTotalAndAverage(element.BeamProductUomUnit, 
+                        dictionary[FooterBroken.Total.ToString()] = GetBrokenTotalAndAverage(element.BeamProductUomUnit, 
                                                                                                     element.BeamLength, 
                                                                                                     element.AmountOfCones, 
                                                                                                     month, 
                                                                                                     year,
                                                                                                     weavingUnitId).ToString();
-                        dictionary[FooterBroken.MAX_BROKEN.ToString()] = GetBrokenMax(element.BeamProductUomUnit, 
+                        dictionary[FooterBroken.Max.ToString()] = GetBrokenMax(element.BeamProductUomUnit, 
                                                                                       element.BeamLength,
                                                                                       element.AmountOfCones,
                                                                                       year,
                                                                                       weavingUnitId).ToString();
-                        dictionary[FooterBroken.MIN_BROKEN.ToString()] = GetBrokenMin(element.BeamProductUomUnit,
+                        dictionary[FooterBroken.Min.ToString()] = GetBrokenMin(element.BeamProductUomUnit,
                                                                                       element.BeamLength,
                                                                                       element.AmountOfCones,
                                                                                       year,
                                                                                       weavingUnitId).ToString();
-                        dictionary[FooterBroken.AVERAGE_BROKEN.ToString()] = GetBrokenTotalAndAverage(element.BeamProductUomUnit, 
+                        dictionary[FooterBroken.Average.ToString()] = GetBrokenTotalAndAverage(element.BeamProductUomUnit, 
                                                                                                       element.BeamLength, 
                                                                                                       element.AmountOfCones,
 
@@ -230,9 +228,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         existingDictionary[element.BrokenCauseName] = (totalBroken + element.BrokenEachYarn).ToString();
                     }
                 }
-                var groupedResult = from o in tempResult
-                                    group o by o["SupplierName"] into groupedTemp
-                                    select groupedTemp;
                 
                 //tempResult.GroupBy(o => o["SupplierName"]).ToList();
 
@@ -240,6 +235,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                 result.Year = year.ToString();
                 result.WeavingUnitName = weavingUnitName;
                 result.LastMonth = lastMonthName;
+                result.Items = tempResult;
                 //result.Items = 
                 //result.HeaderBrokens = headerBrokensDto;
                 //result.BodyBrokensValue = mappedBodyBrokensDto;

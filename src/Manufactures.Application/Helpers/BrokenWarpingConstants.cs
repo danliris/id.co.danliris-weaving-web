@@ -11,10 +11,10 @@ namespace Manufactures.Application.Helpers
 
         public enum FooterBroken
         {
-            TOTAL_BROKEN,
-            MAX_BROKEN,
-            MIN_BROKEN,
-            AVERAGE_BROKEN
+            Total,
+            Max,
+            Min,
+            Average
         }
     }
 }

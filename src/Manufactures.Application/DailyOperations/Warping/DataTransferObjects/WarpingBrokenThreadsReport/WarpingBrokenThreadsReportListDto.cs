@@ -20,7 +20,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         public string WeavingUnitName { get; set; }
 
         [JsonProperty(PropertyName = "Items")]
-        public List<WarpingBrokenThreadsItemsDto> Items { get; set; }
+        public List<Dictionary<string, string>> Items { get; set; }
 
         //[JsonProperty(PropertyName = "HeaderBrokens")]
         //public List<WarpingBrokenThreadsReportHeaderBrokenDto> HeaderBrokens { get; set; }
@@ -32,7 +32,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
                                                  string lastMonth,
                                                  string year, 
                                                  string weavingUnitName,
-                                                 List<WarpingBrokenThreadsItemsDto> items)
+                                                 List<Dictionary<string, string>> items)
                                                  //List<WarpingBrokenThreadsReportHeaderBrokenDto> headerBrokens,
                                                  //List<WarpingBrokenThreadsReportMappedBodyBrokenDto> bodyBrokensValue)
         {
@@ -47,7 +47,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 
         public WarpingBrokenThreadsReportListDto()
         {
-            Items = new List<WarpingBrokenThreadsItemsDto>();
+            Items = new List<Dictionary<string, string>>();
             //HeaderBrokens = new List<WarpingBrokenThreadsReportHeaderBrokenDto>();
             //BodyBrokensValue = new List<WarpingBrokenThreadsReportMappedBodyBrokenDto>();
         }
