@@ -47,12 +47,8 @@ namespace Manufactures.Domain.Yarns
             this.Code = readModel.Code;
             this.Name = readModel.Name;
             this.Tags = readModel.Tags;
-            this.MaterialTypeId = 
-                readModel.MaterialTypeId.HasValue ? 
-                    new MaterialTypeId(readModel.MaterialTypeId.Value) : null;
-            this.YarnNumberId = 
-                readModel.YarnNumberId.HasValue ? 
-                    new YarnNumberId(readModel.YarnNumberId.Value) : null;
+            this.MaterialTypeId = new MaterialTypeId(readModel.MaterialTypeId);
+            this.YarnNumberId = new YarnNumberId(readModel.YarnNumberId);
         }
 
         public void SetCode(string code)

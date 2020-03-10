@@ -24,9 +24,9 @@ namespace Manufactures.Domain.DailyOperations.Sizing
         public DateTimeOffset DateTimeOperation { get; private set; }
         public int BeamProductResult { get; private set; }
         public string OperationStatus { get; private set; }
-        public List<DailyOperationSizingBeamsWarping> BeamsWarping { get; private set; }
-        public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; private set; }
-        public List<DailyOperationSizingHistory> SizingHistories { get; private set; }
+        public List<DailyOperationSizingBeamsWarping> BeamsWarping { get; set; }
+        public List<DailyOperationSizingBeamProduct> SizingBeamProducts { get; set; }
+        public List<DailyOperationSizingHistory> SizingHistories { get; set; }
 
         public DailyOperationSizingDocument(Guid identity,
                                             MachineId machineDocumentId,

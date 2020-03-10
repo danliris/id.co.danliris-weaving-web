@@ -37,7 +37,7 @@ namespace Manufactures.Application.Orders.CommandHandlers
             var period = new DateTime(year, month, 1);
 
             //Generate Order Number
-            var countOrderNumber = (orders.Where(o => o.Period.Year == year).Count() + 1).ToString();
+            var countOrderNumber = (orders.Where(o => o.Period.Year == year && o.Period.Month == month).Count() + 1).ToString();
             var orderNumber = countOrderNumber.PadLeft(4, '0') + "/" + month.ToString().PadLeft(2, '0') + "-" + year.ToString();
 
             //Set Status

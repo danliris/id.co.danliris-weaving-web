@@ -48,11 +48,10 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         .FirstOrDefault();
 
             //Get Daily Operation History
-            var existingSizingHistories =
+            var lastHistory =
                 _dailyOperationSizingHistoryRepository
                     .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
-                    .OrderByDescending(o => o.DateTimeMachine);
-            var lastHistory = existingSizingHistories.FirstOrDefault();
+                    .OrderByDescending(o => o.DateTimeMachine).FirstOrDefault();
 
             //Get Daily Operation Beam Product
             var existingSizingBeamProduct =
@@ -64,7 +63,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Validation for Beam Id
             var countBeamId =
                 existingSizingBeamProduct
-                    .Where(o => o.SizingBeamId.Equals(request.SizingBeamId.Value))
+                    .Where(o => o.SizingBeamId == request.SizingBeamId)
                     .Count();
 
             if (!countBeamId.Equals(0))
@@ -80,7 +79,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (!countBeamStatus.Equals(0))
             {
-                throw Validator.ErrorValidation(("BeamStatus", "Can't Start. There's ONPROCESS Sizing Beam on this Operation"));
+                throw Validator.ErrorValidation(("BeamStatus", "Tidak Dapat Memulai. Ada Beam yang Sedang Diproses"));
             }
 
             //Validation for Operation Status
@@ -89,7 +88,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
             if (operationCompleteStatus.Equals(OperationStatus.ONFINISH))
             {
-                throw Validator.ErrorValidation(("OperationStatus", "Can't Start. This operation's status already FINISHED"));
+                throw Validator.ErrorValidation(("OperationStatus", "Tidak Dapat Memulai. Status Operasi Sudah Selesai"));
             }
 
             //Reformat DateTime
@@ -147,7 +146,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Memulai, Status Mesin Terakhir Harus ONENTRY or ONCOMPLETE"));
                     }
                 }
             }

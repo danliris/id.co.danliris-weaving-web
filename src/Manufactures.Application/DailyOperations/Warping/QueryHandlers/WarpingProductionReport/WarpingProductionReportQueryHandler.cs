@@ -103,8 +103,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
             var groupedHistories = 
                 histories
-                    .GroupBy(item => new { item.OperatorDocumentId, item.WarpingBeamLengthPerOperatorUomId })
-                    .Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator), Uom = s.Key.WarpingBeamLengthPerOperatorUomId });
+                    .GroupBy(item => new { item.OperatorDocumentId, item.WarpingBeamLengthPerOperatorUomUnit })
+                    .Select(s => new { s.Key.OperatorDocumentId, Total = s.Sum(sum => sum.WarpingBeamLengthPerOperator), UomUnit = s.Key.WarpingBeamLengthPerOperatorUomUnit });
 
             var operatorIds = groupedHistories.Select(s => s.OperatorDocumentId.Value).ToList();
             var operatorQuery = _operatorRepository.Query.Where(w => operatorIds.Contains(w.Identity));
@@ -113,10 +113,10 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
             foreach (var history in groupedHistories)
             {
                 var selectedOperator = operators.FirstOrDefault(f => f.Identity == history.OperatorDocumentId.Value);
-                if (history.Uom.Value == 136){
+                if (history.UomUnit == "YARD"){
                     var totalLimit = Math.Round(history.Total, 4);
                     result.Add(new DailyProcessedPerOperatorDto(selectedOperator.Group, selectedOperator.CoreAccount.Name, totalLimit));
-                } else if(history.Uom.Value == 195)
+                } else if(history.UomUnit == "MTR")
                 {
                     var meterToYardConvertion = history.Total * 1.09361;
                     var conversionValueLimit = Math.Round(meterToYardConvertion, 4);

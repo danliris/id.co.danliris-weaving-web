@@ -5,10 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\TotalBrokenEachYarnValueDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenGroupedReportQueryDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportBodyBrokenDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterTotalDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderBrokenDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderSupplierDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderYarnDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportListOfYarnDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportMappedBodyBrokenDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingListBrokenDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\YarnNameRowSpanDto.cs" />
   </ItemGroup>

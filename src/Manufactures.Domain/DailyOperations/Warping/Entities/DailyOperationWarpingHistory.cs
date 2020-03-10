@@ -16,6 +16,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public BeamId WarpingBeamId { get; private set; }
         public double WarpingBeamLengthPerOperator { get; private set; }
         public UomId WarpingBeamLengthPerOperatorUomId { get; private set; }
+        public string WarpingBeamLengthPerOperatorUomUnit { get; private set; }
         public Guid DailyOperationWarpingDocumentId { get; set; }
 
         public DailyOperationWarpingHistory(Guid identity) : base(identity)
@@ -41,9 +42,13 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             ReadModel = new DailyOperationWarpingHistoryReadModel(Identity)
             {
                 ShiftDocumentId = ShiftDocumentId.Value,
-                OperatorDocumentId = OperatorDocumentId == null?Guid.Empty : OperatorDocumentId.Value,
+                OperatorDocumentId = OperatorDocumentId != null ? OperatorDocumentId.Value : Guid.Empty,
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
+                Information = Information,
+                WarpingBeamLengthPerOperator = WarpingBeamLengthPerOperator,
+                WarpingBeamLengthPerOperatorUomId = WarpingBeamLengthPerOperatorUomId != null ? WarpingBeamLengthPerOperatorUomId.Value : 0,
+                WarpingBeamLengthPerOperatorUomUnit = WarpingBeamLengthPerOperatorUomUnit,
                 DailyOperationWarpingDocumentId = DailyOperationWarpingDocumentId
             };
         }
@@ -60,6 +65,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             WarpingBeamId = new BeamId(readModel.WarpingBeamId);
             WarpingBeamLengthPerOperator = readModel.WarpingBeamLengthPerOperator;
             WarpingBeamLengthPerOperatorUomId = new UomId(readModel.WarpingBeamLengthPerOperatorUomId);
+            WarpingBeamLengthPerOperatorUomUnit = readModel.WarpingBeamLengthPerOperatorUomUnit;
             DailyOperationWarpingDocumentId = readModel.DailyOperationWarpingDocumentId;
         }
 
@@ -156,6 +162,19 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             {
                 WarpingBeamLengthPerOperatorUomId = warpingBeamLengthPerOperatorUomId;
                 ReadModel.WarpingBeamLengthPerOperatorUomId = WarpingBeamLengthPerOperatorUomId.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetWarpingBeamLengthPerOperatorUomUnit(string warpingBeamLengthPerOperatorUomUnit)
+        {
+            Validator.ThrowIfNull(() => warpingBeamLengthPerOperatorUomUnit);
+
+            if (warpingBeamLengthPerOperatorUomUnit != WarpingBeamLengthPerOperatorUomUnit)
+            {
+                WarpingBeamLengthPerOperatorUomUnit = warpingBeamLengthPerOperatorUomUnit;
+                ReadModel.WarpingBeamLengthPerOperatorUomUnit = WarpingBeamLengthPerOperatorUomUnit;
 
                 MarkModified();
             }

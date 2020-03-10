@@ -63,7 +63,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 if (currentOperationStatus.Equals(OperationStatus.ONFINISH))
                 {
-                    throw Validator.ErrorValidation(("OperationStatus", "Can't Produce Beam. This operation's status already FINISHED"));
+                    throw Validator.ErrorValidation(("OperationStatus", "Tidak Dapat Produksi Beam. Operasi Sudah Selesai"));
                 }
 
                 //Validation for Machine Status
@@ -71,7 +71,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
 
                 if (currentMachineStatus.Equals(MachineStatus.ONCOMPLETE))
                 {
-                    throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam. This current Operation status already ONCOMPLETE"));
+                    throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Produksi Beam. Status Mesin Complete"));
                 }
 
                 //Reformat DateTime
@@ -163,7 +163,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         }
                         else
                         {
-                            throw Validator.ErrorValidation(("MachineStatus", "Can't Produce Beam, latest status is not ONSTART or ONRESUME"));
+                            throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Produksi Beam. Status Mesin Bukan ONSTART atau ONRESUME"));
                         }
                     }
                 }
