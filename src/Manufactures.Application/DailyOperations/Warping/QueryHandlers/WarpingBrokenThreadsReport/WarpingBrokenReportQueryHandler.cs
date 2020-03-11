@@ -153,9 +153,13 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
                 //Get ReportQueryDto from Join Result using LINQ
                 var reportQueries = GetWarpingBrokenReportQueries(year, weavingUnitId);
+                if (reportQueries == null)
+                {
+                    return result;
+                }
                 var filteredResult = reportQueries.Where(reportQuery => reportQuery.DateTimeProductBeam.HasValue && reportQuery.DateTimeProductBeam.Value.Month == month);
 
-                // get broken causes
+                // Get Broken Causes
                 var brokenCauses = _warpingBrokenCauseRepository
                     .Query
                     .Select(brokenCause => new
@@ -228,17 +232,24 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                         existingDictionary[element.BrokenCauseName] = (totalBroken + element.BrokenEachYarn).ToString();
                     }
                 }
-                
-                //tempResult.GroupBy(o => o["SupplierName"]).ToList();
+
+                var groupedResult = (from o in tempResult
+                                     group o by o["SupplierName"] into groupedTemp
+                                     //select groupedTemp
+                                     select new WarpingBrokenThreadsGroupedItemsDto
+                                     {
+                                         SupplierName = groupedTemp.Key,
+                                         ItemsValue = groupedTemp.ToList(),
+                                         ItemsValueLength = groupedTemp.ToList().Count()
+                                     }
+                                    ).ToList();
 
                 result.Month = monthName;
                 result.Year = year.ToString();
                 result.WeavingUnitName = weavingUnitName;
                 result.LastMonth = lastMonthName;
-                result.Items = tempResult;
-                //result.Items = 
-                //result.HeaderBrokens = headerBrokensDto;
-                //result.BodyBrokensValue = mappedBodyBrokensDto;
+                result.GroupedItems = groupedResult;
+                result.TotalItems = tempResult.Count();
 
                 return result;
             }
@@ -296,90 +307,97 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
 
         private List<WarpingBrokenThreadsReportQueryDto> GetWarpingBrokenReportQueries(int year, int weavingUnitId)
         {
-            var reportQueries = (from brokenCause in _warpingBrokenCauseRepository.Query
-
-                                 join warpingBrokenCause in _dailyOperationWarpingBrokenCauseRepository.Query
-                                                         on brokenCause.Identity equals warpingBrokenCause.BrokenCauseId
-                                                         into joinWarpingBrokenCause
-                                 from brokenCauseJoinWarpingBrokenCause in joinWarpingBrokenCause.DefaultIfEmpty()
-
-                                 join warpingBeamProduct in _dailyOperationWarpingBeamProductRepository.Query.Where(o=>o.LatestDateTimeBeamProduct.Year == year)
-                                                         on brokenCauseJoinWarpingBrokenCause.DailyOperationWarpingBeamProductId equals warpingBeamProduct.Identity
-                                                         into joinWarpingBeamProduct
-                                 from brokenCauseJoinBeamProduct in joinWarpingBeamProduct.DefaultIfEmpty()
-
-                                 join warpingDocument in _dailyOperationWarpingRepository.Query
-                                                      on brokenCauseJoinBeamProduct.DailyOperationWarpingDocumentId equals warpingDocument.Identity
-                                                      into joinWarpingDocument
-                                 from beamProductJoinWarpingDocument in joinWarpingDocument.DefaultIfEmpty()
-
-                                 join orderDocument in _orderRepository.Query.Where(o=>o.UnitId == weavingUnitId)
-                                                    on beamProductJoinWarpingDocument.OrderDocumentId equals orderDocument.Identity
-                                                    into joinOrderDocument
-                                 from warpingDocumentJoinOrder in joinOrderDocument.DefaultIfEmpty()
-
-                                 join supplierDocument in _supplierRepository.Query
-                                                       on warpingDocumentJoinOrder.WarpOriginIdOne equals supplierDocument.Identity
-                                                       into joinSupplierDocument
-                                 from orderDocumentJoinSupplier in joinSupplierDocument.DefaultIfEmpty()
-
-                                 join constructionYarnDetail in _constructionYarnDetailRepository.Query.Where(o => o.Type == "Warp")
-                                                             on warpingDocumentJoinOrder.ConstructionDocumentId equals constructionYarnDetail.FabricConstructionDocumentId
-                                                             into joinConstructionYarnDetail
-                                 from orderJoinConstructionYarnDetail in joinConstructionYarnDetail.DefaultIfEmpty()
-
-                                 join yarnDocument in _yarnRepository.Query
-                                                   on orderJoinConstructionYarnDetail.YarnId equals yarnDocument.Identity
-                                                   into joinYarnDocument
-                                 from constructionYarnDetailJoinYarn in joinYarnDocument.DefaultIfEmpty()
-
-                                 select new
-                                 {
-                                     DateTimeProduceBeam = brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct,
-                                     WeavingUnitId = warpingDocumentJoinOrder.UnitId,
-                                     SupplierName = orderDocumentJoinSupplier.Name,
-                                     BrokenCauseName = brokenCause.WarpingBrokenCauseName,
-                                     YarnName = constructionYarnDetailJoinYarn.Name,
-
-                                     YarnId = constructionYarnDetailJoinYarn.YarnNumberId,
-                                     BeamLength = brokenCauseJoinBeamProduct.WarpingTotalBeamLength,
-                                     beamProductJoinWarpingDocument.AmountOfCones,
-                                     BrokenEachYarn = brokenCauseJoinWarpingBrokenCause.TotalBroken,
-                                     BeamProductUomId = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId,
-                                     BeamProductUomUnit = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomUnit
-
-                                     //DateTimeProduceBeam = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct : DateTimeOffset.UtcNow,
-                                     //WeavingUnitId = warpingDocumentJoinOrder != null ? warpingDocumentJoinOrder.UnitId : 0,
-                                     //SupplierName = orderDocumentJoinSupplier != null ? orderDocumentJoinSupplier.Name : "",
-                                     //BrokenCauseName = brokenCause != null ? brokenCause.WarpingBrokenCauseName : "",
-                                     //YarnName = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.Name : "",
-
-                                     //YarnId = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.YarnNumberId.Value : Guid.Empty,
-                                     //BeamLength = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLength : 0,
-                                     //AmountOfCones = beamProductJoinWarpingDocument != null ? beamProductJoinWarpingDocument.AmountOfCones : 0,
-                                     //BrokenEachYarn = brokenCauseJoinWarpingBrokenCause != null ? brokenCauseJoinWarpingBrokenCause.TotalBroken : 0,
-                                     //BeamPerOperatorUom = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId : 0
-                                 })
-                                 .ToList(); // ubah //Nullable object must have a value
-
-            var warpingBrokenReport = new List<WarpingBrokenThreadsReportQueryDto>();
-            foreach (var report in reportQueries)
+            try
             {
-                var brokenReportDto = new WarpingBrokenThreadsReportQueryDto(report.DateTimeProduceBeam,
-                                                                      report.WeavingUnitId,
-                                                                      report.BrokenCauseName,
-                                                                      report.SupplierName,
-                                                                      report.YarnName,
-                                                                      report.YarnId,
-                                                                      report.BeamLength,
-                                                                      report.AmountOfCones,
-                                                                      report.BrokenEachYarn,
-                                                                      report.BeamProductUomId,
-                                                                      report.BeamProductUomUnit);
-                warpingBrokenReport.Add(brokenReportDto);
-            }
+                var reportQueries = (from brokenCause in _warpingBrokenCauseRepository.Query
 
-            return warpingBrokenReport;
+                                     join warpingBrokenCause in _dailyOperationWarpingBrokenCauseRepository.Query
+                                                             on brokenCause.Identity equals warpingBrokenCause.BrokenCauseId
+                                                             into joinWarpingBrokenCause
+                                     from brokenCauseJoinWarpingBrokenCause in joinWarpingBrokenCause.DefaultIfEmpty()
+
+                                     join warpingBeamProduct in _dailyOperationWarpingBeamProductRepository.Query.Where(o => o.LatestDateTimeBeamProduct.Year == year)
+                                                             on brokenCauseJoinWarpingBrokenCause.DailyOperationWarpingBeamProductId equals warpingBeamProduct.Identity
+                                                             into joinWarpingBeamProduct
+                                     from brokenCauseJoinBeamProduct in joinWarpingBeamProduct.DefaultIfEmpty()
+
+                                     join warpingDocument in _dailyOperationWarpingRepository.Query
+                                                          on brokenCauseJoinBeamProduct.DailyOperationWarpingDocumentId equals warpingDocument.Identity
+                                                          into joinWarpingDocument
+                                     from beamProductJoinWarpingDocument in joinWarpingDocument.DefaultIfEmpty()
+
+                                     join orderDocument in _orderRepository.Query.Where(o => o.UnitId == weavingUnitId)
+                                                        on beamProductJoinWarpingDocument.OrderDocumentId equals orderDocument.Identity
+                                                        into joinOrderDocument
+                                     from warpingDocumentJoinOrder in joinOrderDocument.DefaultIfEmpty()
+
+                                     join supplierDocument in _supplierRepository.Query
+                                                           on warpingDocumentJoinOrder.WarpOriginIdOne equals supplierDocument.Identity
+                                                           into joinSupplierDocument
+                                     from orderDocumentJoinSupplier in joinSupplierDocument.DefaultIfEmpty()
+
+                                     join constructionYarnDetail in _constructionYarnDetailRepository.Query.Where(o => o.Type == "Warp")
+                                                                 on warpingDocumentJoinOrder.ConstructionDocumentId equals constructionYarnDetail.FabricConstructionDocumentId
+                                                                 into joinConstructionYarnDetail
+                                     from orderJoinConstructionYarnDetail in joinConstructionYarnDetail.DefaultIfEmpty()
+
+                                     join yarnDocument in _yarnRepository.Query
+                                                       on orderJoinConstructionYarnDetail.YarnId equals yarnDocument.Identity
+                                                       into joinYarnDocument
+                                     from constructionYarnDetailJoinYarn in joinYarnDocument.DefaultIfEmpty()
+
+                                     select new
+                                     {
+                                         DateTimeProduceBeam = brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct,
+                                         WeavingUnitId = warpingDocumentJoinOrder.UnitId,
+                                         SupplierName = orderDocumentJoinSupplier.Name,
+                                         BrokenCauseName = brokenCause.WarpingBrokenCauseName,
+                                         YarnName = constructionYarnDetailJoinYarn.Name,
+
+                                         YarnId = constructionYarnDetailJoinYarn.YarnNumberId,
+                                         BeamLength = brokenCauseJoinBeamProduct.WarpingTotalBeamLength,
+                                         beamProductJoinWarpingDocument.AmountOfCones,
+                                         BrokenEachYarn = brokenCauseJoinWarpingBrokenCause.TotalBroken,
+                                         BeamProductUomId = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId,
+                                         BeamProductUomUnit = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomUnit
+
+                                         //DateTimeProduceBeam = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct : DateTimeOffset.UtcNow,
+                                         //WeavingUnitId = warpingDocumentJoinOrder != null ? warpingDocumentJoinOrder.UnitId : 0,
+                                         //SupplierName = orderDocumentJoinSupplier != null ? orderDocumentJoinSupplier.Name : "",
+                                         //BrokenCauseName = brokenCause != null ? brokenCause.WarpingBrokenCauseName : "",
+                                         //YarnName = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.Name : "",
+
+                                         //YarnId = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.YarnNumberId.Value : Guid.Empty,
+                                         //BeamLength = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLength : 0,
+                                         //AmountOfCones = beamProductJoinWarpingDocument != null ? beamProductJoinWarpingDocument.AmountOfCones : 0,
+                                         //BrokenEachYarn = brokenCauseJoinWarpingBrokenCause != null ? brokenCauseJoinWarpingBrokenCause.TotalBroken : 0,
+                                         //BeamPerOperatorUom = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId : 0
+                                     })
+                                     .ToList();
+
+                var warpingBrokenReport = new List<WarpingBrokenThreadsReportQueryDto>();
+                foreach (var report in reportQueries)
+                {
+                    var brokenReportDto = new WarpingBrokenThreadsReportQueryDto(report.DateTimeProduceBeam,
+                                                                                 report.WeavingUnitId,
+                                                                                 report.BrokenCauseName,
+                                                                                 report.SupplierName,
+                                                                                 report.YarnName,
+                                                                                 report.YarnId,
+                                                                                 report.BeamLength,
+                                                                                 report.AmountOfCones,
+                                                                                 report.BrokenEachYarn,
+                                                                                 report.BeamProductUomId,
+                                                                                 report.BeamProductUomUnit);
+                    warpingBrokenReport.Add(brokenReportDto);
+                }
+
+                return warpingBrokenReport;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         private double GetBrokenTotalAndAverage(string uomUnit, double totalWarpingBeamLength, int amountOfCones, int month, int year, int weavingId)

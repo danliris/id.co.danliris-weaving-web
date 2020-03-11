@@ -7,10 +7,13 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
 {
     public class WarpingBrokenThreadsGroupedItemsDto
     {
-        [JsonProperty(PropertyName = "YarnName")]
-        public string YarnName { get; set; }
+        [JsonProperty(PropertyName = "SupplierName")]
+        public string SupplierName { get; set; }
 
-        //[JsonProperty(PropertyName = "YarnName")]
-        //public string YarnName { get; set; }
+        [JsonProperty(PropertyName = "ItemsValue")]
+        public List<Dictionary<string, string>> ItemsValue { get; set; }
+
+        [JsonProperty(PropertyName = "ItemsValueLength")]
+        public int ItemsValueLength { get; set; }
     }
 }
