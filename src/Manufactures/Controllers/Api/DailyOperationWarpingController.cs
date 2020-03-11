@@ -502,8 +502,7 @@ namespace Manufactures.Controllers.Api
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
 
-            var productionWarpingReport = _warpingProductionReportQuery.GetReports(month,
-                                                                                         year);
+            var productionWarpingReport = _warpingProductionReportQuery.GetReports(month, year);
 
             await Task.Yield();
             if (index.Equals(true))
@@ -536,31 +535,31 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
-            var index = acceptRequest.IndexOf("application/pdf") > 0;
+            var index = acceptRequest.IndexOf("application/xls") > 0;
 
-            var productionWarpingReport = _warpingBrokenReportQuery.GetReports(month, year, weavingUnitId);
+            var brokenWarpingReport = _warpingBrokenReportQuery.GetReports(month, year, weavingUnitId);
 
             await Task.Yield();
-            //if (index.Equals(true))
-            //{
-            //    var dateTime =
-            //        new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+            if (index.Equals(true))
+            {
+                var dateTime =
+                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
 
-            //    var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
 
-            //    var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
+                var fileName = "Laporan Putus Warping_" + monthName + "_" + year;
 
-            //    WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
-            //    MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
-            //    return new FileStreamResult(productionResultPdf, "application/pdf")
-            //    {
-            //        FileDownloadName = string.Format(fileName)
-            //    };
-            //}
-            //else
-            //{
-                return Ok(productionWarpingReport);
-            //}
+                WarpingBrokenReportXlsTemplate pdfTemplate = new WarpingBrokenReportXlsTemplate();
+                MemoryStream brokenResultPdf = pdfTemplate.GenerateWarpingBrokenReportXls(brokenWarpingReport);
+                return new FileStreamResult(brokenResultPdf, "application/xls")
+                {
+                    FileDownloadName = string.Format(fileName)
+                };
+            }
+            else
+            {
+                return Ok(brokenWarpingReport);
+            }
         }
     }
 }

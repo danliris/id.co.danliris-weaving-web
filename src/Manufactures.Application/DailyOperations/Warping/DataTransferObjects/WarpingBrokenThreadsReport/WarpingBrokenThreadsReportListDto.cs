@@ -19,37 +19,30 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects.W
         [JsonProperty(PropertyName = "WeavingUnitName")]
         public string WeavingUnitName { get; set; }
 
-        [JsonProperty(PropertyName = "Items")]
-        public List<Dictionary<string, string>> Items { get; set; }
+        [JsonProperty(PropertyName = "TotalItems")]
+        public int TotalItems { get; set; }
 
-        //[JsonProperty(PropertyName = "HeaderBrokens")]
-        //public List<WarpingBrokenThreadsReportHeaderBrokenDto> HeaderBrokens { get; set; }
-
-        //[JsonProperty(PropertyName = "BodyBrokensValue")]
-        //public List<WarpingBrokenThreadsReportMappedBodyBrokenDto> BodyBrokensValue { get; set; }
+        [JsonProperty(PropertyName = "GroupedItems")]
+        public List<WarpingBrokenThreadsGroupedItemsDto> GroupedItems { get; set; }
 
         public WarpingBrokenThreadsReportListDto(string month, 
                                                  string lastMonth,
                                                  string year, 
                                                  string weavingUnitName,
-                                                 List<Dictionary<string, string>> items)
-                                                 //List<WarpingBrokenThreadsReportHeaderBrokenDto> headerBrokens,
-                                                 //List<WarpingBrokenThreadsReportMappedBodyBrokenDto> bodyBrokensValue)
+                                                 int totalItems,
+                                                 List<WarpingBrokenThreadsGroupedItemsDto> groupedItems)
         {
             Month = month;
             LastMonth = lastMonth;
             Year = year;
             WeavingUnitName = weavingUnitName;
-            Items = items;
-            //HeaderBrokens = headerBrokens;
-            //BodyBrokensValue = bodyBrokensValue;
+            TotalItems = totalItems;
+            GroupedItems = groupedItems;
         }
 
         public WarpingBrokenThreadsReportListDto()
         {
-            Items = new List<Dictionary<string, string>>();
-            //HeaderBrokens = new List<WarpingBrokenThreadsReportHeaderBrokenDto>();
-            //BodyBrokensValue = new List<WarpingBrokenThreadsReportMappedBodyBrokenDto>();
+            GroupedItems = new List<WarpingBrokenThreadsGroupedItemsDto>();
         }
     }
 }

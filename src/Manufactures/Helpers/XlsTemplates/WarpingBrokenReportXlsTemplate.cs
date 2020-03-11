@@ -1,16 +1,28 @@
-﻿using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
+﻿using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Text;
 
 namespace Manufactures.Helpers.XlsTemplates
 {
-    public class WarpingProductionReportXlsTemplate
+    public class WarpingBrokenReportXlsTemplate
     {
-        //public MemoryStream GenerateWarpingProductionReportXls(WarpingProductionReportListDto warpingProductionReportListDto)
-        //{
+        public MemoryStream GenerateWarpingBrokenReportXls(WarpingBrokenThreadsReportListDto warpingBrokenReportListDto)
+        {
+            int manyColumn = warpingBrokenReportListDto.GroupedItems[0].ItemsValue[0].Count; //get all column for merging title document
+            List<string> titleRow = new List<string>
+            {
+                "Laporan Putus Warping",
+                "Periode TGL {tglAwal} S/D {tglAkhir}",
+                "Bulan : {Bulan} {Tahun}",
+                warpingBrokenReportListDto.WeavingUnitName
+            };
+            string datePlace = $"Sukoharjo, {DateTime.Now.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id-ID"))}";
+            
+
             //    DataTable dt = new DataTable();
 
             //    dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Produksi", DataType = typeof(string) });
@@ -158,6 +170,17 @@ namespace Manufactures.Helpers.XlsTemplates
             //    MemoryStream stream = new MemoryStream();
             //    package.SaveAs(stream);
             //    return stream;
-        //}
+            return null;
+        }
+        public MemoryStream CreateExcel(string nameSheet,List<string> titleList, WarpingBrokenThreadsReportListDto warpingBrokenThreadsReportListDto)
+        {
+            ExcelPackage package = new ExcelPackage();
+            var sheet = package.Workbook.Worksheets.Add(nameSheet);
+            foreach(var warpGroup in warpingBrokenReportListDto.Gr)
+            {
+
+            }
+            return null;
+        }
     }
 }
