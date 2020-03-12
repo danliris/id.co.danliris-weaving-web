@@ -207,9 +207,12 @@ namespace Manufactures.Helpers.XlsTemplates
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
             sheet.Cells[rowIndex, ++colIndex].Value = "Average";
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
-
+            
             #region binding Data
-
+            foreach(var data in warpingBrokenThreadsReportListDto.GroupedItems)
+            {
+                sheet.Cells[++rowIndex, ++colIndex].Value = "test";
+            }
             #endregion
             MemoryStream stream = new MemoryStream();
             package.SaveAs(stream);
