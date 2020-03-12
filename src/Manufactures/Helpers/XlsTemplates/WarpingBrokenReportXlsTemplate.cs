@@ -10,19 +10,19 @@ namespace Manufactures.Helpers.XlsTemplates
 {
     public class WarpingBrokenReportXlsTemplate
     {
-        public MemoryStream GenerateWarpingBrokenReportXls(WarpingBrokenThreadsReportListDto warpingBrokenReportListDto)
+        public MemoryStream GenerateWarpingBrokenReportXls(WarpingBrokenThreadsReportListDto warpingBrokenThreadsReportListDto)
         {
-            int manyColumn = warpingBrokenReportListDto.GroupedItems[0].ItemsValue[0].Count; //get all column for merging title document
+            int manyColumn = warpingBrokenThreadsReportListDto.GroupedItems[0].ItemsValue[0].Count; //get all column for merging title document
             List<string> titleRow = new List<string>
             {
                 "Laporan Putus Warping",
                 "Periode TGL {tglAwal} S/D {tglAkhir}",
                 "Bulan : {Bulan} {Tahun}",
-                warpingBrokenReportListDto.WeavingUnitName
+                warpingBrokenThreadsReportListDto.WeavingUnitName
             };
             string datePlace = $"Sukoharjo, {DateTime.Now.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id-ID"))}";
-            
 
+            return CreateExcel("Sheet 1", titleRow, warpingBrokenThreadsReportListDto);
             //    DataTable dt = new DataTable();
 
             //    dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal Produksi", DataType = typeof(string) });
@@ -170,17 +170,51 @@ namespace Manufactures.Helpers.XlsTemplates
             //    MemoryStream stream = new MemoryStream();
             //    package.SaveAs(stream);
             //    return stream;
-            return null;
+            //return null;
         }
-        public MemoryStream CreateExcel(string nameSheet,List<string> titleList, WarpingBrokenThreadsReportListDto warpingBrokenThreadsReportListDto)
+        public MemoryStream CreateExcel(string nameSheet, List<string> titleList, WarpingBrokenThreadsReportListDto warpingBrokenThreadsReportListDto)
         {
+            List<string> ignoredKeys = new List<string>
+            {
+                "SupplierName", "YarnName", "Total", "Max", "Min", "Average"
+            };
+
             ExcelPackage package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add(nameSheet);
-            foreach(var warpGroup in warpingBrokenReportListDto.Gr)
-            {
+            int rowIndex = 1;
+            int colIndex = 1;
 
+            sheet.Cells[rowIndex, colIndex].Value = "Penyebab";
+            sheet.Cells[rowIndex, colIndex, rowIndex, ++colIndex].Merge = true;
+            sheet.Cells[++rowIndex, --colIndex].Value = "Asal Benang";
+            sheet.Cells[rowIndex, ++colIndex].Value = "Jenis & No. Benang";
+            --rowIndex;
+            foreach (var key in warpingBrokenThreadsReportListDto.GroupedItems[0].ItemsValue[0])
+            {
+                if (!ignoredKeys.Contains(key.Key))
+                {
+                    var localTemp = rowIndex + 1;
+                    sheet.Cells[rowIndex, ++colIndex].Value = key.Key;
+                    sheet.Cells[rowIndex, colIndex, localTemp, colIndex].Merge = true;
+                }
             }
-            return null;
+            sheet.Cells[rowIndex, ++colIndex].Value = "Total";
+            var temp = rowIndex + 1;
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, ++colIndex].Value = "Max";
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, ++colIndex].Value = "Min";
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, ++colIndex].Value = "Average";
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+
+            #region binding Data
+
+            #endregion
+            MemoryStream stream = new MemoryStream();
+            package.SaveAs(stream);
+
+            return stream;
         }
     }
 }

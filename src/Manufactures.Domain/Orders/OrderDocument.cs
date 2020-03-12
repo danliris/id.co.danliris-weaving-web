@@ -243,7 +243,7 @@ namespace Manufactures.Domain.Orders
             {
 
                 WeftOriginIdTwo = weftOriginTwo;
-                ReadModel.WeftOriginIdOne = WeftOriginIdTwo.Value;
+                ReadModel.WeftOriginIdTwo = WeftOriginIdTwo.Value;
 
                 MarkModified();
             }
