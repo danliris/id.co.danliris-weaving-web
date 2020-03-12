@@ -542,6 +542,8 @@ namespace Manufactures.Controllers.Api
             await Task.Yield();
             if (index.Equals(true))
             {
+                byte[] xlsInBytes;
+
                 var dateTime =
                     new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
 
@@ -549,12 +551,17 @@ namespace Manufactures.Controllers.Api
 
                 var fileName = "Laporan Putus Warping_" + monthName + "_" + year;
 
-                WarpingBrokenReportXlsTemplate pdfTemplate = new WarpingBrokenReportXlsTemplate();
-                MemoryStream brokenResultPdf = pdfTemplate.GenerateWarpingBrokenReportXls(brokenWarpingReport);
-                return new FileStreamResult(brokenResultPdf, "application/xls")
-                {
-                    FileDownloadName = string.Format(fileName)
-                };
+                WarpingBrokenReportXlsTemplate xlsTemplate = new WarpingBrokenReportXlsTemplate();
+                MemoryStream brokenResultXls = xlsTemplate.GenerateWarpingBrokenReportXls(brokenWarpingReport);
+
+                xlsInBytes = brokenResultXls.ToArray();
+                var xlsFile = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return xlsFile;
+
+                //return new FileStreamResult(brokenResultXls, "application/xls")
+                //{
+                //    FileDownloadName = string.Format(fileName)
+                //};
             }
             else
             {
