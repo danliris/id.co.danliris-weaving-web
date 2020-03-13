@@ -6,6 +6,7 @@ using Manufactures.Application.Orders.DataTransferObjects;
 using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Orders.Queries;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.Shared.ValueObjects;
 using Manufactures.Domain.Suppliers.Repositories;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,17 +78,27 @@ namespace Manufactures.Application.Orders.QueryHandlers
             {
                 //Get Weaving Unit
                 await Task.Yield();
-                var warpOrigin =
+                var warpOriginOne =
                     _supplierRepository
                         .Find(o => o.Identity == orderDocument.WarpOriginIdOne.Value)
                         .FirstOrDefault()
                         .Name;
 
-                var weftOrigin =
+                var weftOriginOne =
                     _supplierRepository
                         .Find(o => o.Identity == orderDocument.WeftOriginIdOne.Value)
                         .FirstOrDefault()
                         .Name;
+
+                var weftOriginTwo = "";
+                if (orderDocument.WeftOriginIdTwo.Value != Guid.Empty)
+                {
+                    weftOriginTwo =
+                        _supplierRepository
+                            .Find(o => o.Identity == orderDocument.WeftOriginIdTwo.Value)
+                            .FirstOrDefault()
+                            .Name;
+                }
 
                 await Task.Yield();
                 var unitName = GetUnit(orderDocument.UnitId.Value).data.Name;
@@ -98,7 +109,7 @@ namespace Manufactures.Application.Orders.QueryHandlers
                         .Where(o => o.Identity == orderDocument.ConstructionDocumentId.Value)
                         .FirstOrDefault()?.ConstructionNumber;
 
-                var resultDto = new OrderListDto(orderDocument, warpOrigin, weftOrigin);
+                var resultDto = new OrderListDto(orderDocument, warpOriginOne, weftOriginOne, weftOriginTwo);
 
                 resultDto.SetUnit(unitName);
                 resultDto.SetConstructionNumber(constructionNumber);
@@ -116,28 +127,38 @@ namespace Manufactures.Application.Orders.QueryHandlers
                     .Find(o=>o.Identity == id)
                     .FirstOrDefault();
 
-            var warpOrigin =
+            var warpOriginOne =
                 _supplierRepository
                     .Find(o => o.Identity == orderDocument.WarpOriginIdOne.Value)
                     .FirstOrDefault()
-                    .Name;
+                    .Name ?? "Lusi Tidak Ditemukan";
 
-            var weftOrigin =
+            var weftOriginOne =
                 _supplierRepository
                     .Find(o => o.Identity == orderDocument.WeftOriginIdOne.Value)
                     .FirstOrDefault()
-                    .Name;
+                    .Name ?? "Pakan Tidak Ditemukan";
+
+            var weftOriginTwo = "";
+            if (orderDocument.WeftOriginIdTwo.Value != Guid.Empty)
+            {
+                weftOriginTwo =
+                    _supplierRepository
+                        .Find(o => o.Identity == orderDocument.WeftOriginIdTwo.Value)
+                        .FirstOrDefault()
+                        .Name ?? "Pakan Tidak Ditemukan";
+            }
 
             var constructionNumber =
                 _fabricConstructionRepository
                     .Find(o => o.Identity == orderDocument.ConstructionDocumentId.Value)
                     .FirstOrDefault()
-                    .ConstructionNumber;
+                    .ConstructionNumber ?? "No. Konstruksi Tidak Ditemukan";
 
             var unitName = GetUnit(orderDocument.UnitId.Value).data.Name;
 
             await Task.Yield();
-            var resultByIdDto = new OrderByIdDto(orderDocument, warpOrigin, weftOrigin);
+            var resultByIdDto = new OrderByIdDto(orderDocument, warpOriginOne, weftOriginOne, weftOriginTwo);
             resultByIdDto.SetConstructionNumber(constructionNumber);
             resultByIdDto.SetUnit(unitName);
 

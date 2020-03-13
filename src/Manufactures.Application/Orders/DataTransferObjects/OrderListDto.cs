@@ -23,11 +23,11 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "ConstructionNumber")]
         public string ConstructionNumber { get; private set; }
 
-        [JsonProperty(PropertyName = "WarpOriginId")]
-        public Guid WarpOriginId { get; }
+        [JsonProperty(PropertyName = "WarpOriginIdOne")]
+        public Guid WarpOriginIdOne { get; }
 
-        [JsonProperty(PropertyName = "WarpOrigin")]
-        public string WarpOrigin { get; }
+        [JsonProperty(PropertyName = "WarpOriginOne")]
+        public string WarpOriginOne { get; }
 
         [JsonProperty(PropertyName = "WarpCompositionPoly")]
         public double WarpCompositionPoly { get; }
@@ -38,11 +38,17 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "WarpCompositionOthers")]
         public double WarpCompositionOthers { get; }
 
-        [JsonProperty(PropertyName = "WeftOriginId")]
-        public Guid WeftOriginId { get; }
+        [JsonProperty(PropertyName = "WeftOriginIdOne")]
+        public Guid WeftOriginIdOne { get; }
 
-        [JsonProperty(PropertyName = "WeftOrigin")]
-        public string WeftOrigin { get; }
+        [JsonProperty(PropertyName = "WeftOriginOne")]
+        public string WeftOriginOne { get; }
+
+        [JsonProperty(PropertyName = "WeftOriginIdTwo")]
+        public Guid WeftOriginIdTwo { get; }
+
+        [JsonProperty(PropertyName = "WeftOriginTwo")]
+        public string WeftOriginTwo { get; }
 
         [JsonProperty(PropertyName = "WeftCompositionPoly")]
         public double WeftCompositionPoly { get; }
@@ -53,18 +59,20 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "WeftCompositionOthers")]
         public double WeftCompositionOthers { get; }
 
-        public OrderListDto(OrderDocument orderDocument, string warpOrigin, string weftOrigin)
+        public OrderListDto(OrderDocument orderDocument, string warpOriginOne, string weftOriginOne, string weftOriginTwo)
         {
             Id = orderDocument.Identity;
             OrderNumber = orderDocument.OrderNumber;
             Period = orderDocument.Period;
-            WarpOriginId = orderDocument.WarpOriginIdOne.Value;
-            WarpOrigin = warpOrigin;
+            WarpOriginIdOne = orderDocument.WarpOriginIdOne.Value;
+            WarpOriginOne = warpOriginOne;
             WarpCompositionPoly = orderDocument.WarpCompositionPoly;
             WarpCompositionCotton = orderDocument.WarpCompositionCotton;
             WarpCompositionOthers = orderDocument.WarpCompositionOthers;
-            WeftOriginId = orderDocument.WeftOriginIdOne.Value;
-            WeftOrigin = weftOrigin;
+            WeftOriginIdOne = orderDocument.WeftOriginIdOne.Value;
+            WeftOriginOne = weftOriginOne;
+            WeftOriginIdTwo = orderDocument.WeftOriginIdTwo.Value;
+            WeftOriginTwo = weftOriginTwo;
             WeftCompositionPoly = orderDocument.WeftCompositionPoly;
             WeftCompositionCotton = orderDocument.WeftCompositionCotton;
             WeftCompositionOthers = orderDocument.WeftCompositionOthers;
