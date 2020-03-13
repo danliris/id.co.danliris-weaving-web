@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace Manufactures.Helpers.XlsTemplates
@@ -16,8 +17,8 @@ namespace Manufactures.Helpers.XlsTemplates
             List<string> titleRow = new List<string>
             {
                 "Laporan Putus Warping",
-                "Periode TGL {tglAwal} S/D {tglAkhir}",
-                "Bulan : {Bulan} {Tahun}",
+                $"Periode TGL 01 S/D 31",
+                $"Bulan : {warpingBrokenThreadsReportListDto.Month} {warpingBrokenThreadsReportListDto.Year}",
                 warpingBrokenThreadsReportListDto.WeavingUnitName
             };
             string datePlace = $"Sukoharjo, {DateTime.Now.ToString("DD MMMM YYYY", CultureInfo.CreateSpecificCulture("id-ID"))}";
@@ -181,13 +182,45 @@ namespace Manufactures.Helpers.XlsTemplates
 
             ExcelPackage package = new ExcelPackage();
             var sheet = package.Workbook.Worksheets.Add(nameSheet);
-            int rowIndex = 1;
-            int colIndex = 1;
+            int defaultRowIndex = 1;
+            int defaultColIndex = 1;
+            int totalCol = warpingBrokenThreadsReportListDto.GroupedItems[0].ItemsValue[0].Count;
+            int rowIndex = titleList.Count+1;// start row index table
+            int colIndex = defaultColIndex;// start col index table 1 means from A
+
+            #region title sheet
+            var i = 0;
+            foreach(var title in titleList)
+            {
+                sheet.Cells[defaultRowIndex + i, defaultColIndex].Value = title;
+                sheet.Cells[defaultRowIndex + i, defaultColIndex].Style.Font.Bold = true;
+                sheet.Cells[defaultRowIndex + i, defaultColIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                sheet.Cells[defaultRowIndex + i, defaultColIndex,defaultRowIndex+i,totalCol].Merge = true;
+                i++;
+            }
+            #endregion
 
             sheet.Cells[rowIndex, colIndex].Value = "Penyebab";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment= OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
             sheet.Cells[rowIndex, colIndex, rowIndex, ++colIndex].Merge = true;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+
             sheet.Cells[++rowIndex, --colIndex].Value = "Asal Benang";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, ++colIndex].Value = "Jenis & No. Benang";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             --rowIndex;
             foreach (var key in warpingBrokenThreadsReportListDto.GroupedItems[0].ItemsValue[0])
             {
@@ -195,25 +228,101 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var localTemp = rowIndex + 1;
                     sheet.Cells[rowIndex, ++colIndex].Value = key.Key;
+                    sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+                    sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                    sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                     sheet.Cells[rowIndex, colIndex, localTemp, colIndex].Merge = true;
+                    sheet.Cells[rowIndex, colIndex, localTemp, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
                 }
             }
             sheet.Cells[rowIndex, ++colIndex].Value = "Total";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             var temp = rowIndex + 1;
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, ++colIndex].Value = "Max";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, ++colIndex].Value = "Min";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, ++colIndex].Value = "Average";
+            sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
             sheet.Cells[rowIndex, colIndex, temp, colIndex].Merge = true;
-            
+            sheet.Cells[rowIndex, colIndex, temp, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+
+            rowIndex += 2;
+            colIndex = defaultColIndex;
             #region binding Data
-            foreach(var data in warpingBrokenThreadsReportListDto.GroupedItems)
+            foreach (var groupedItem in warpingBrokenThreadsReportListDto.GroupedItems)
             {
-                sheet.Cells[++rowIndex, ++colIndex].Value = "test";
+                int startRowData = rowIndex;
+                foreach (var item in groupedItem.ItemsValue.Select((data,index)=>new { Index = index, Data = data }))
+                {
+                    if (item.Index == 0)
+                    {
+                        foreach (var data in item.Data)
+                        {
+                            sheet.Cells[rowIndex, colIndex].Value = data.Value;
+                            sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                            if (data.Key == "SupplierName")
+                            {
+                                sheet.Cells[rowIndex, colIndex, rowIndex + groupedItem.ItemsValueLength - 1, colIndex].Merge = true;
+                            }
+                            colIndex++;
+                        }
+                    }
+                    else
+                    {
+                        foreach (var data in item.Data)
+                        {
+                            if (data.Key != "SupplierName")
+                            {
+                                sheet.Cells[rowIndex, colIndex].Value = data.Value;
+                                sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
+
+                                colIndex++;
+                            }
+                            else
+                            {
+                                colIndex++;
+                            }
+                        }
+                    }
+                    rowIndex++;
+                    colIndex = defaultColIndex;
+                }
+                colIndex = defaultColIndex;
+                int endRowData = rowIndex + groupedItem.ItemsValueLength - 1;
             }
             #endregion
+            sheet.Cells[sheet.Dimension.Address].AutoFitColumns();
             MemoryStream stream = new MemoryStream();
             package.SaveAs(stream);
 

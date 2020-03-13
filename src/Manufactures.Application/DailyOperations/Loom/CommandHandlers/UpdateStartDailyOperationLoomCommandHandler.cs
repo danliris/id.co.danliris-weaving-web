@@ -35,12 +35,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         public async Task<DailyOperationLoomDocument> Handle(UpdateStartDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
             //Get Daily Operation Document Loom
-            //var loomQuery =
-            //    _dailyOperationLoomDocumentRepository
-            //            .Query
-            //            .Include(o => o.LoomBeamHistories)
-            //            .Include(o => o.LoomBeamProducts)
-            //            .Where(doc => doc.Identity.Equals(request.Id));
+
             var existingDailyOperationLoomDocument =
                 _dailyOperationLoomDocumentRepository
                         .Find(s => s.Identity == request.Id)
@@ -49,8 +44,12 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             if (existingDailyOperationLoomDocument == null)
                 throw Validator.ErrorValidation(("Id", "Invalid Daily Operation Loom: " + request.Id));
 
-            var loomHistories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
-            var loomProducts = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+            var loomHistories = 
+                _dailyOperationLoomHistoryRepository
+                    .Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+            var loomProducts = 
+                _dailyOperationLoomProductRepository
+                    .Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
 
             //Get Daily Operation Loom History
             var existingDailyOperationSizingHistories =

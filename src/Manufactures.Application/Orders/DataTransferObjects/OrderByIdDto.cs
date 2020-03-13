@@ -26,7 +26,13 @@ namespace Manufactures.Application.Orders.DataTransferObjects
         [JsonProperty(PropertyName = "AllGrade")]
         public double AllGrade { get; }
 
-        public OrderByIdDto(OrderDocument orderDocument, string warpOrigin, string weftOrigin) : base(orderDocument, warpOrigin, weftOrigin)
+        public OrderByIdDto(OrderDocument orderDocument, 
+                            string warpOriginOne, 
+                            string weftOriginOne, 
+                            string weftOriginTwo) : base(orderDocument, 
+                                                         warpOriginOne, 
+                                                         weftOriginOne, 
+                                                         weftOriginTwo)
         {
             ConstructionDocumentId = orderDocument.ConstructionDocumentId.Value;
             UnitId = orderDocument.UnitId.Value;
