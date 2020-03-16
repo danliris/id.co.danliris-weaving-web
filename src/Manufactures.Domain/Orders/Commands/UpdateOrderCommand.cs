@@ -75,11 +75,11 @@ namespace Manufactures.Domain.Orders.Commands
             RuleFor(command => command.ConstructionDocumentId).NotEmpty().WithMessage("Konstruksi Harus Diisi");
             RuleFor(command => command.YarnType).NotEmpty().WithMessage("Jenis Benang Tidak Boleh Kosong");
             RuleFor(command => command.WarpOriginIdOne).NotEmpty().WithMessage("Asal Lusi Harus Diisi");
-            RuleFor(command => command.WarpCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
-            RuleFor(command => command.WarpCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
+            //RuleFor(command => command.WarpCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
+            //RuleFor(command => command.WarpCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
             RuleFor(command => command.WeftOriginIdOne).NotEmpty().WithMessage("Asal Pakan Harus Diisi");
-            RuleFor(command => command.WeftCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
-            RuleFor(command => command.WeftCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
+            //RuleFor(command => command.WeftCompositionPoly).NotEmpty().WithMessage("Poly Harus Diisi");
+            //RuleFor(command => command.WeftCompositionCotton).NotEmpty().WithMessage("Cotton Harus Diisi");
             RuleFor(command => command.AllGrade).NotEmpty().WithMessage("All Grade Harus Diisi");
             RuleFor(command => command.UnitId).NotEmpty().WithMessage("Unit Harus Diisi");
         }
