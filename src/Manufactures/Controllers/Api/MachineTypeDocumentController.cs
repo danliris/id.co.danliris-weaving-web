@@ -34,64 +34,91 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query = _machineTypeRepository.Query;
-            query = query.OrderByDescending(item => item.CreatedDate);
+            var machineTypeQuery = 
+                _machineTypeRepository.Query;
+            machineTypeQuery = 
+                machineTypeQuery
+                    .OrderByDescending(o => o.CreatedDate);
 
-  
+            //if (!filter.Contains("{}"))
+            //{
+            //    Dictionary<string, string> filterDictionary =
+            //       JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
 
-         if (!filter.Contains("{}"))
-            {
-                Dictionary<string, string> filterDictionary =
-                   JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
-
-                var filterUnit = filterDictionary["MachineUnit"];
-                query = query.Where(x => x.MachineUnit == filterUnit);
-            }
+            //    var filterUnit = filterDictionary["MachineUnit"];
+            //    machineTypeQuery = machineTypeQuery.Where(x => x.MachineUnit == filterUnit);
+            //}
 
             var machineTypeDtos =
-                        _machineTypeRepository.Find(query)
+                        _machineTypeRepository.Find(machineTypeQuery)
                                 .Select(item => new MachineTypeDocumentDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
                 machineTypeDtos =
-                    machineTypeDtos.Where(entity => entity.TypeName.Contains(keyword,
-                                                                     StringComparison.OrdinalIgnoreCase));
+                    machineTypeDtos
+                        .Where(o => o.TypeName.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary =
+                Dictionary<string, string> machineTypeDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                          orderDictionary.Keys.First().Substring(1);
+                var key = machineTypeDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          machineTypeDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(MachineTypeDocumentDto).GetProperty(key);
 
-                if (orderDictionary.Values.Contains("asc"))
+                if (machineTypeDictionary.Values.Contains("asc"))
                 {
-                    machineTypeDtos = machineTypeDtos.OrderBy(x => prop.GetValue(x, null));
+                    await Task.Yield();
+                    machineTypeDtos =
+                        machineTypeDtos.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    machineTypeDtos = machineTypeDtos.OrderByDescending(x => prop.GetValue(x, null));
+                    await Task.Yield();
+                    machineTypeDtos =
+                        machineTypeDtos.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            var ResultMachineTypeDtos = machineTypeDtos.Skip(page * size).Take(size);
-            int totalRows = machineTypeDtos.Count();
-            int resultCount = ResultMachineTypeDtos.Count();
-            page = page + 1;
+            //if (!order.Contains("{}"))
+            //{
+            //    Dictionary<string, string> orderDictionary =
+            //        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            //    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+            //              orderDictionary.Keys.First().Substring(1);
+            //    System.Reflection.PropertyInfo prop = typeof(MachineTypeDocumentDto).GetProperty(key);
 
-            await Task.Yield();
+            //    if (orderDictionary.Values.Contains("asc"))
+            //    {
+            //        machineTypeDtos = machineTypeDtos.OrderBy(x => prop.GetValue(x, null));
+            //    }
+            //    else
+            //    {
+            //        machineTypeDtos = machineTypeDtos.OrderByDescending(x => prop.GetValue(x, null));
+            //    }
+            //}
 
-            return Ok(ResultMachineTypeDtos, info: new
-            {
-                page,
-                size,
-                total = totalRows,
-                count = resultCount
-            });
+            var result = machineTypeDtos.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+
+            //var ResultMachineTypeDtos = machineTypeDtos.Skip(page * size).Take(size);
+            //int totalRows = machineTypeDtos.Count();
+            //int resultCount = ResultMachineTypeDtos.Count();
+            //page = page + 1;
+
+            //await Task.Yield();
+
+            //return Ok(ResultMachineTypeDtos, info: new
+            //{
+            //    page,
+            //    size,
+            //    total = totalRows,
+            //    count = resultCount
+            //});
         }
 
         [HttpGet("{Id}")]
