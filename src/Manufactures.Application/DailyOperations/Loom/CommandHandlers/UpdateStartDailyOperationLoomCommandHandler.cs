@@ -62,11 +62,11 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomBeamProducts =
                 loomProducts
                         .Where(o => o.Identity.Equals(request.StartBeamProductId))
-                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+                        .OrderByDescending(o => o.DateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Validation for Prevent Beam Product with End Status Processed Again
-            if (lastBeamProduct.BeamProductStatus.Equals(BeamStatus.END))
+            if (lastBeamProduct.BeamUsedStatus.Equals(BeamStatus.END))
             {
                 throw Validator.ErrorValidation(("StartBeamNumber", "Status Beam ini Reproses, Tidak Dapat Diproses Kembali"));
             }
@@ -100,7 +100,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     if (lastHistory.MachineStatus == MachineStatus.ONENTRY || lastHistory.MachineStatus == MachineStatus.ONCOMPLETE)
                     {
                         var newLoomHistory =
-                                new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                                new DailyOperationLoomHistory(Guid.NewGuid(),
                                                                   request.StartBeamNumber,
                                                                   request.StartMachineNumber,
                                                                   new OperatorId(request.StartOperatorDocumentId.Value),

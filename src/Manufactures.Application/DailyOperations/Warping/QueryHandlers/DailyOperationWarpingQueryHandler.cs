@@ -119,7 +119,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 await Task.Yield();
                 var OrderDocument =
                     _weavingOrderDocumentRepository
-                        .Find(o => o.Identity.Equals(document.OrderDocumentId.Value))
+                        .Find(o => o.Identity == document.OrderDocumentId.Value)
                         .FirstOrDefault();
 
                 //Get Order Number

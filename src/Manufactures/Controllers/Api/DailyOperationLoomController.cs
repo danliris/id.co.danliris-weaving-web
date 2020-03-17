@@ -162,7 +162,7 @@ namespace Manufactures.Controllers.Api
                     foreach (var loomBeamProduct in loomBeamProducts)
                     {
                         await Task.Yield();
-                        var sizingBeamStatus = loomBeamProduct.BeamProductStatus;
+                        var sizingBeamStatus = loomBeamProduct.BeamUsedStatus;
                         if (sizingBeamStatus.Equals(BeamStatus.ONPROCESS))
                         {
                             //Get Beam Number
@@ -192,9 +192,9 @@ namespace Manufactures.Controllers.Api
                                     .MachineNumber;
 
                             await Task.Yield();
-                            var latestDateTimeBeamProduct = loomBeamProduct.LatestDateTimeBeamProduct;
-                            var loomProcess = loomBeamProduct.LoomProcess;
-                            var beamProductStatus = loomBeamProduct.BeamProductStatus;
+                            var latestDateTimeBeamProduct = loomBeamProduct.DateTimeProcessed;
+                            var loomProcess = loomBeamProduct.Process;
+                            var beamProductStatus = loomBeamProduct.BeamUsedStatus;
 
                             var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
                                                                                       loomBeamProduct.BeamOrigin,

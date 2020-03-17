@@ -1,49 +1,52 @@
 ﻿using Infrastructure.Domain;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
+    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomDocumentReadModel>
     {
 
         public OrderId OrderDocumentId { get; private set; }
         public string OperationStatus { get; private set; }
-        //public IReadOnlyCollection<DailyOperationLoomBeamProduct> LoomBeamProducts { get; private set; }
+        public List<DailyOperationLoomBeamUsed> LoomBeamsUsed { get; set; }
+        public List<DailyOperationLoomProduct> LoomProducts { get; set; }
+        public List<DailyOperationLoomHistory> LoomHistories { get; set; }
 
-        public DailyOperationLoomDocument(Guid id, OrderId orderDocumentId, string operationStatus) : base(id)
+        public DailyOperationLoomDocument(Guid identity, 
+                                          OrderId orderDocumentId, 
+                                          string operationStatus) : base(identity)
         {
-            Identity = id;
+            Identity = identity;
             OrderDocumentId = orderDocumentId;
             OperationStatus = operationStatus;
-            //LoomBeamProducts = new List<DailyOperationLoomBeamProduct>();
-            //LoomBeamHistories = new List<DailyOperationLoomBeamHistory>();
+            //LoomBeamsUsed= new List<DailyOperationLoomBeamUsed>();
+            //LoomProducts = new List<DailyOperationLoomProduct>();
+            //LoomHistories = new List<DailyOperationLoomHistory>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationLoomReadModel(Identity)
+            ReadModel = new DailyOperationLoomDocumentReadModel(Identity)
             {
                 OrderDocumentId = OrderDocumentId.Value,
-                OperationStatus = OperationStatus,
-                //LoomBeamProducts = LoomBeamProducts.ToList(),
-                //LoomBeamHistories = LoomBeamHistories.ToList()
+                OperationStatus = OperationStatus
             };
 
             ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
         }
 
         //Constructor for Mapping Object from Database to Domain
-        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
+        public DailyOperationLoomDocument(DailyOperationLoomDocumentReadModel readModel) : base(readModel)
         {
-            //Instantiate object from database
+            //Instantiate Object from Database
             this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
             this.OperationStatus = readModel.OperationStatus;
-            //this.LoomBeamHistories = readModel.LoomBeamHistories;
-            //this.LoomBeamProducts = readModel.LoomBeamProducts;
         }
 
         //public void AddDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
@@ -146,22 +149,25 @@ namespace Manufactures.Domain.DailyOperations.Loom
         //    MarkModified();
         //}
 
-        public void SetOperationStatus(string newOperationStatus)
+        public void SetOrderDocumentId(OrderId orderDocumentId)
         {
-            if(OperationStatus != newOperationStatus)
+            Validator.ThrowIfNull(() => orderDocumentId);
+            if (OrderDocumentId != orderDocumentId)
             {
-                OperationStatus = newOperationStatus;
-                ReadModel.OperationStatus = OperationStatus;
+                OrderDocumentId = orderDocumentId;
+                ReadModel.OrderDocumentId = OrderDocumentId.Value;
                 MarkModified();
             }
         }
 
-        public void SetOrderDocumentId(OrderId newOrderDocumentId)
+        public void SetOperationStatus(string operationStatus)
         {
-            if(OrderDocumentId != newOrderDocumentId)
+            Validator.ThrowIfNull(() => operationStatus);
+            if (operationStatus != OperationStatus)
             {
-                OrderDocumentId = newOrderDocumentId;
-                ReadModel.OrderDocumentId = OrderDocumentId.Value;
+                OperationStatus = operationStatus;
+                ReadModel.OperationStatus = OperationStatus;
+
                 MarkModified();
             }
         }
@@ -169,6 +175,11 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public void SetModified()
         {
             MarkModified();
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override DailyOperationLoomDocument GetEntity()

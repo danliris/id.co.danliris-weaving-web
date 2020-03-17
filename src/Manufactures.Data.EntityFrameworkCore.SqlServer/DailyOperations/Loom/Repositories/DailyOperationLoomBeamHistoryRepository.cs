@@ -5,11 +5,11 @@ using Manufactures.Domain.DailyOperations.Loom.Repositories;
 
 namespace Manufactures.Data.EntityFrameworkCore.DailyOperations.Loom.Repositories
 {
-    public class DailyOperationLoomBeamHistoryRepository : AggregateRepostory<DailyOperationLoomBeamHistory, DailyOperationLoomBeamHistoryReadModel>, IDailyOperationLoomBeamHistoryRepository
+    public class DailyOperationLoomBeamHistoryRepository : AggregateRepostory<DailyOperationLoomHistory, DailyOperationLoomHistoryReadModel>, IDailyOperationLoomBeamHistoryRepository
     {
-        protected override DailyOperationLoomBeamHistory Map(DailyOperationLoomBeamHistoryReadModel readModel)
+        protected override DailyOperationLoomHistory Map(DailyOperationLoomHistoryReadModel readModel)
         {
-            return new DailyOperationLoomBeamHistory(readModel);
+            return new DailyOperationLoomHistory(readModel);
         }
     }
 }

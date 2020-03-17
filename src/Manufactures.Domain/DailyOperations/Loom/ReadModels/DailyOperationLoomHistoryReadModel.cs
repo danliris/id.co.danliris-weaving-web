@@ -5,9 +5,9 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
 {
-    public class DailyOperationLoomBeamHistoryReadModel : ReadModelBase
+    public class DailyOperationLoomHistoryReadModel : ReadModelBase
     {
-        public DailyOperationLoomBeamHistoryReadModel(Guid identity) : base(identity)
+        public DailyOperationLoomHistoryReadModel(Guid identity) : base(identity)
         {
 
         }

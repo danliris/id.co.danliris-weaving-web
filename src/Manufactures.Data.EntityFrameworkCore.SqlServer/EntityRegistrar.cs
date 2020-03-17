@@ -50,7 +50,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationLoomBeamProductReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationLoomBeamUsedReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomBeamProducts");
                 etb.HasKey(e => e.Identity);
@@ -59,7 +59,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationLoomBeamHistoryReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationLoomHistoryReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomHistories");
                 etb.HasKey(e => e.Identity);
@@ -68,7 +68,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
-            modelBuilder.Entity<DailyOperationLoomReadModel>(etb =>
+            modelBuilder.Entity<DailyOperationLoomDocumentReadModel>(etb =>
             {
                 etb.ToTable("Weaving_DailyOperationLoomDocuments");
                 etb.HasKey(e => e.Identity);

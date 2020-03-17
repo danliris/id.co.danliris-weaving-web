@@ -55,7 +55,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
                 var newBeamProduct =
-                    new DailyOperationLoomBeamProduct(Guid.NewGuid(),
+                    new DailyOperationLoomBeamUsed(Guid.NewGuid(),
                                                       beamProduct.BeamOrigin,
                                                       new BeamId(beamProduct.BeamDocumentId.Value),
                                                       beamProduct.CombNumber,
@@ -85,7 +85,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
                 var newLoomHistory =
-                        new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                        new DailyOperationLoomHistory(Guid.NewGuid(),
                                                           beamNumber,
                                                           machineNumber,
                                                           new OperatorId(beamHistory.OperatorDocumentId.Value),

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Entities
 {
-    public class DailyOperationLoomBeamHistory : AggregateRoot<DailyOperationLoomBeamHistory, DailyOperationLoomBeamHistoryReadModel>
+    public class DailyOperationLoomHistory : AggregateRoot<DailyOperationLoomHistory, DailyOperationLoomHistoryReadModel>
     {
         public string BeamNumber { get; private set; }
 
@@ -34,7 +34,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public Guid DailyOperationLoomDocumentId { get; set; }
 
-        public DailyOperationLoomBeamHistory(Guid identity, string beamNumber, string machineNumber, OperatorId operatorDocumentId, DateTimeOffset dateTimeMachine, ShiftId shiftDocumentId, string machineStatus, Guid dailyOperationLoomDocumentId) : base(identity)
+        public DailyOperationLoomHistory(Guid identity, string beamNumber, string machineNumber, OperatorId operatorDocumentId, DateTimeOffset dateTimeMachine, ShiftId shiftDocumentId, string machineStatus, Guid dailyOperationLoomDocumentId) : base(identity)
         {
             MarkTransient();
 
@@ -47,7 +47,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             MachineStatus = machineStatus;
             DailyOperationLoomDocumentId = dailyOperationLoomDocumentId;
 
-            ReadModel = new DailyOperationLoomBeamHistoryReadModel(Identity)
+            ReadModel = new DailyOperationLoomHistoryReadModel(Identity)
             {
                 BeamNumber = BeamNumber,
                 MachineNumber = MachineNumber,
@@ -61,7 +61,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             ReadModel.AddDomainEvent(new OnAddDailyOperationLoomBeamHistory(Identity));
         }
 
-        public DailyOperationLoomBeamHistory(DailyOperationLoomBeamHistoryReadModel readModel) : base(readModel)
+        public DailyOperationLoomHistory(DailyOperationLoomHistoryReadModel readModel) : base(readModel)
         {
             BeamNumber = readModel.BeamNumber;
             MachineNumber = readModel.MachineNumber;
@@ -77,7 +77,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             DailyOperationLoomDocumentId = readModel.DailyOperationLoomDocumentId;
         }
 
-        protected override DailyOperationLoomBeamHistory GetEntity()
+        protected override DailyOperationLoomHistory GetEntity()
         {
             return this;
         }

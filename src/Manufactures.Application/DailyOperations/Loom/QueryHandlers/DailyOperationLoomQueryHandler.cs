@@ -260,13 +260,13 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
                 //Get Date Time Beam Product
                 await Task.Yield();
-                var dateTimeBeamProduct = loomBeamProduct.LatestDateTimeBeamProduct;
+                var dateTimeBeamProduct = loomBeamProduct.DateTimeProcessed;
 
                 //Get Beam Process Status
-                var beamProductProcess = loomBeamProduct.LoomProcess;
+                var beamProductProcess = loomBeamProduct.Process;
 
                 //Get Beam Product Status
-                var beamStatus = loomBeamProduct.BeamProductStatus;
+                var beamStatus = loomBeamProduct.BeamUsedStatus;
 
                 await Task.Yield();
                 var loomBeamProductDto = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,

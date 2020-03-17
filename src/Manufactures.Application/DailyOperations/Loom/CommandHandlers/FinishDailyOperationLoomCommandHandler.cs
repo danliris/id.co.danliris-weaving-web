@@ -61,7 +61,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             //            .LoomBeamProducts
             //            .Where(o => o.BeamDocumentId.Equals(request.FinishBeamProductBeamId))
             //            .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-            var existingDailyOperationLoomBeamProducts = loomProducts.Where(o => o.BeamDocumentId.Value == request.FinishBeamProductBeamId).OrderByDescending(x => x.LatestDateTimeBeamProduct);
+            var existingDailyOperationLoomBeamProducts = loomProducts.Where(o => o.BeamDocumentId.Value == request.FinishBeamProductBeamId).OrderByDescending(x => x.DateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime
@@ -93,7 +93,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     if (lastHistory.MachineStatus == MachineStatus.ONSTART || lastHistory.MachineStatus == MachineStatus.ONRESUME)
                     {
                         var newLoomHistory =
-                            new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                            new DailyOperationLoomHistory(Guid.NewGuid(),
                                                               request.FinishBeamNumber,
                                                               request.FinishMachineNumber,
                                                               new OperatorId(request.FinishOperatorDocumentId.Value),
@@ -116,7 +116,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                         var isAllBeamProductProcessed = 0;
                         foreach (var beamProduct in loomProducts)
                         {
-                            if (beamProduct.BeamProductStatus == BeamStatus.ONPROCESS)
+                            if (beamProduct.BeamUsedStatus == BeamStatus.ONPROCESS)
                             {
                                 isAllBeamProductProcessed++;
                             }

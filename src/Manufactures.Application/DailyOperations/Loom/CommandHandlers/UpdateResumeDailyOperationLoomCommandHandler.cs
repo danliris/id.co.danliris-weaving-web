@@ -65,7 +65,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomBeamProducts =
                 loomProducts
                         .Where(o => o.BeamDocumentId.Value == request.ResumeBeamProductBeamId)
-                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+                        .OrderByDescending(o => o.DateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime
@@ -97,7 +97,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     if (lastHistory.MachineStatus == MachineStatus.ONSTOP)
                     {
                         var newLoomHistory =
-                            new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                            new DailyOperationLoomHistory(Guid.NewGuid(),
                                                               request.ResumeBeamNumber,
                                                               request.ResumeMachineNumber,
                                                               new OperatorId(request.ResumeOperatorDocumentId.Value),

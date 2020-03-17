@@ -64,7 +64,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomBeamProducts =
                loomProducts
                         .Where(o => o.BeamDocumentId.Value == request.PauseBeamProductBeamId)
-                        .OrderByDescending(o => o.LatestDateTimeBeamProduct);
+                        .OrderByDescending(o => o.DateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime
@@ -98,7 +98,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                         if (string.IsNullOrEmpty(request.ReprocessTo))
                         {
                             var newLoomHistory =
-                                new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                                new DailyOperationLoomHistory(Guid.NewGuid(),
                                                                   request.PauseBeamNumber,
                                                                   request.PauseMachineNumber,
                                                                   new OperatorId(request.PauseOperatorDocumentId.Value),
@@ -123,7 +123,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                         else
                         {
                             var newLoomHistory =
-                                new DailyOperationLoomBeamHistory(Guid.NewGuid(),
+                                new DailyOperationLoomHistory(Guid.NewGuid(),
                                                                   request.PauseBeamNumber,
                                                                   request.PauseMachineNumber,
                                                                   new OperatorId(request.PauseOperatorDocumentId.Value),
@@ -148,7 +148,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                             var isAllBeamProductProcessed = 0;
                             foreach (var beamProduct in loomProducts)
                             {
-                                if (beamProduct.BeamProductStatus == BeamStatus.ONPROCESS)
+                                if (beamProduct.BeamUsedStatus == BeamStatus.ONPROCESS)
                                 {
                                     isAllBeamProductProcessed++;
                                 }
