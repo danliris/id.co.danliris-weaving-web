@@ -134,10 +134,29 @@ namespace Manufactures.Application.Orders.QueryHandlers.OrderReport
                 {
                     foreach (var orderDocument in orderDocuments)
                     {
+
                         var constructionDocument =
                             _constructionDocumentRepository
                                 .Find(e => e.Identity == orderDocument.ConstructionDocumentId.Value)
                                 .FirstOrDefault();
+
+                        var listConstructionYarnDetails =
+                            _constructionYarnDetailRepository
+                            .Find(e => e.FabricConstructionDocumentId == orderDocument.ConstructionDocumentId.Value);
+
+                        //assign total yarn detail to constructionDoc
+                        int totalAmountOfWarp = Convert.ToInt32(listConstructionYarnDetails.Where(x => x.Type.ToLower() == "warp").Sum(x => x.Quantity) * orderDocument.AllGrade / 1000);
+                        //double totalAmountOfWarp =listConstructionYarnDetails.Where(x => x.Type.ToLower() == "warp").Sum(x => x.Quantity) * orderDocument.AllGrade / 1000;
+
+                        int totalAmountOfWeft = Convert.ToInt32(listConstructionYarnDetails.Where(x => x.Type.ToLower() == "weft").Sum(x => x.Quantity) * orderDocument.AllGrade / 1000);
+                        //double totalAmountOfWeft = listConstructionYarnDetails.Where(x => x.Type.ToLower() == "weft").Sum(x => x.Quantity) * orderDocument.AllGrade / 1000;
+
+                        int totalYarn = totalAmountOfWarp + totalAmountOfWeft;
+                        //double totalYarn = totalAmountOfWarp + totalAmountOfWeft;
+
+                        constructionDocument.SetAmountOfWarp(totalAmountOfWarp);
+                        constructionDocument.SetAmountOfWeft(totalAmountOfWeft);
+                        constructionDocument.SetTotalYarn(totalYarn);
 
                         //Get Weaving Unit
                         await Task.Yield();
