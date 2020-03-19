@@ -17,95 +17,141 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
     public class PreparationDailyOperationLoomCommandHandler : ICommandHandler<PreparationDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
-        private readonly IStorage _storage;
+        private readonly IStorage 
+            _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomDocumentRepository;
         private readonly IBeamStockMonitoringRepository
              _beamStockMonitoringRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
+        private readonly IDailyOperationLoomBeamUsedRepository
+            _dailyOperationLoomBeamUsedRepository;
+        private readonly IDailyOperationLoomHistoryRepository
+            _dailyOperationLoomHistoryRepository;
+        //private readonly IDailyOperationLoomBeamProductRepository 
+        //    _dailyOperationLoomProductRepository;
 
         public PreparationDailyOperationLoomCommandHandler(IStorage storage)
         {
-            _storage = storage;
+            _storage = 
+                storage;
             _dailyOperationLoomDocumentRepository =
                 _storage.GetRepository<IDailyOperationLoomRepository>();
             _beamStockMonitoringRepository =
                 _storage.GetRepository<IBeamStockMonitoringRepository>();
-            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+            _dailyOperationLoomBeamUsedRepository =
+                _storage.GetRepository<IDailyOperationLoomBeamUsedRepository>();
+            _dailyOperationLoomHistoryRepository =
+                 _storage.GetRepository<IDailyOperationLoomHistoryRepository>();
+            //_dailyOperationLoomProductRepository = 
+            //    _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(PreparationDailyOperationLoomCommand request, CancellationToken cancellationToken)
         {
-            var dailyOperationLoomDocument =
+            var newLoomDocument =
                 new DailyOperationLoomDocument(Guid.NewGuid(),
                                                request.OrderDocumentId,
+                                               request.BeamProcessed,
                                                OperationStatus.ONPROCESS);
-            await _dailyOperationLoomDocumentRepository.Update(dailyOperationLoomDocument);
-            foreach (var beamProduct in request.LoomBeamProducts)
+            newLoomDocument.SetTotalCounter(0);
+            await _dailyOperationLoomDocumentRepository.Update(newLoomDocument);
+
+            foreach (var item in request.LoomItems)
             {
-                var year = beamProduct.DateBeamProduct.Year;
-                var month = beamProduct.DateBeamProduct.Month;
-                var day = beamProduct.DateBeamProduct.Day;
-                var hour = beamProduct.TimeBeamProduct.Hours;
-                var minutes = beamProduct.TimeBeamProduct.Minutes;
-                var seconds = beamProduct.TimeBeamProduct.Seconds;
-                var dateTimeBeamProduct =
+                var year = item.PreparationDate.Year;
+                var month = item.PreparationDate.Month;
+                var day = item.PreparationDate.Day;
+                var hour = item.PreparationTime.Hours;
+                var minutes = item.PreparationTime.Minutes;
+                var seconds = item.PreparationTime.Seconds;
+                var dateTimeLoom =
                     new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-                var newBeamProduct =
-                    new DailyOperationLoomBeamUsed(Guid.NewGuid(),
-                                                      beamProduct.BeamOrigin,
-                                                      new BeamId(beamProduct.BeamDocumentId.Value),
-                                                      beamProduct.CombNumber,
-                                                      new MachineId(beamProduct.MachineDocumentId.Value),
-                                                      dateTimeBeamProduct,
-                                                      beamProduct.LoomProcess,
-                                                      BeamStatus.ONPROCESS,
-                                                      dailyOperationLoomDocument.Identity);
+                var newBeamUsed = new DailyOperationLoomBeamUsed(Guid.NewGuid(),
+                                                                 item.BeamOrigin,
+                                                                 item.BeamDocumentId,
+                                                                 item.BeamNumber,
+                                                                 dateTimeLoom,
+                                                                 BeamStatus.ONPROCESS,
+                                                                 newLoomDocument.Identity);
+                await _dailyOperationLoomBeamUsedRepository.Update(newBeamUsed);
 
-                //dailyOperationLoomDocument.AddDailyOperationLoomBeamProduct(newBeamProduct);
-                await _dailyOperationLoomProductRepository.Update(newBeamProduct);
+                var newHistory = new DailyOperationLoomHistory(Guid.NewGuid(),
+                                                               item.BeamDocumentId,
+                                                               item.BeamNumber,
+                                                               item.LoomMachineId,
+                                                               item.LoomOperatorId,
+                                                               0,
+                                                               dateTimeLoom,
+                                                               item.PreparationShift,
+                                                               MachineStatus.ONENTRY,
+                                                               newLoomDocument.Identity);
+                await _dailyOperationLoomHistoryRepository.Update(newHistory);
             }
 
-            foreach (var beamHistory in request.LoomBeamHistories)
-            {
-                var beamNumber = beamHistory.BeamNumber;
+            //foreach (var beamProduct in request.LoomBeamProducts)
+            //{
+            //    var year = beamProduct.DateBeamProduct.Year;
+            //    var month = beamProduct.DateBeamProduct.Month;
+            //    var day = beamProduct.DateBeamProduct.Day;
+            //    var hour = beamProduct.TimeBeamProduct.Hours;
+            //    var minutes = beamProduct.TimeBeamProduct.Minutes;
+            //    var seconds = beamProduct.TimeBeamProduct.Seconds;
+            //    var dateTimeBeamProduct =
+            //        new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
-                var machineNumber = beamHistory.MachineNumber;
+            //    var newBeamProduct =
+            //        new DailyOperationLoomBeamUsed(Guid.NewGuid(),
+            //                                       beamProduct.BeamOrigin,
+            //                                       new BeamId(beamProduct.BeamDocumentId.Value),
+            //                                       beamProduct.CombNumber,
+            //                                       new MachineId(beamProduct.MachineDocumentId.Value),
+            //                                       dateTimeBeamProduct,
+            //                                       beamProduct.LoomProcess,
+            //                                       BeamStatus.ONPROCESS,
+            //                                       dailyOperationLoomDocument.Identity);
 
-                var year = beamHistory.DateMachine.Year;
-                var month = beamHistory.DateMachine.Month;
-                var day = beamHistory.DateMachine.Day;
-                var hour = beamHistory.TimeMachine.Hours;
-                var minutes = beamHistory.TimeMachine.Minutes;
-                var seconds = beamHistory.TimeMachine.Seconds;
-                var dateTimeBeamHistory =
-                    new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+            //    //dailyOperationLoomDocument.AddDailyOperationLoomBeamProduct(newBeamProduct);
+            //    await _dailyOperationLoomProductRepository.Update(newBeamProduct);
+            //}
 
-                var newLoomHistory =
-                        new DailyOperationLoomHistory(Guid.NewGuid(),
-                                                          beamNumber,
-                                                          machineNumber,
-                                                          new OperatorId(beamHistory.OperatorDocumentId.Value),
-                                                          dateTimeBeamHistory,
-                                                          new ShiftId(beamHistory.ShiftDocumentId.Value),
-                                                          MachineStatus.ONENTRY,
-                                                          dailyOperationLoomDocument.Identity);
+            //foreach (var beamHistory in request.LoomBeamHistories)
+            //{
+            //    var beamNumber = beamHistory.BeamNumber;
 
-                newLoomHistory.SetWarpBrokenThreads(0);
-                newLoomHistory.SetWeftBrokenThreads(0);
-                newLoomHistory.SetLenoBrokenThreads(0);
-                newLoomHistory.SetInformation(beamHistory.Information ?? "");
+            //    var machineNumber = beamHistory.MachineNumber;
 
-                //dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
-                await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
-            }
+            //    var year = beamHistory.DateMachine.Year;
+            //    var month = beamHistory.DateMachine.Month;
+            //    var day = beamHistory.DateMachine.Day;
+            //    var hour = beamHistory.TimeMachine.Hours;
+            //    var minutes = beamHistory.TimeMachine.Minutes;
+            //    var seconds = beamHistory.TimeMachine.Seconds;
+            //    var dateTimeBeamHistory =
+            //        new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
+
+            //    var newLoomHistory =
+            //            new DailyOperationLoomHistory(Guid.NewGuid(),
+            //                                              beamNumber,
+            //                                              machineNumber,
+            //                                              new OperatorId(beamHistory.OperatorDocumentId.Value),
+            //                                              dateTimeBeamHistory,
+            //                                              new ShiftId(beamHistory.ShiftDocumentId.Value),
+            //                                              MachineStatus.ONENTRY,
+            //                                              dailyOperationLoomDocument.Identity);
+
+            //    newLoomHistory.SetWarpBrokenThreads(0);
+            //    newLoomHistory.SetWeftBrokenThreads(0);
+            //    newLoomHistory.SetLenoBrokenThreads(0);
+            //    newLoomHistory.SetInformation(beamHistory.Information ?? "");
+
+            //    //dailyOperationLoomDocument.AddDailyOperationLoomHistory(newLoomHistory);
+            //    await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
+            //}
 
             _storage.Save();
 
-            return dailyOperationLoomDocument;
+            return newLoomDocument;
         }
     }
 }

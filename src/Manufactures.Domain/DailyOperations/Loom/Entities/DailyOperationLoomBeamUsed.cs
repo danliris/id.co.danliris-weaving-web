@@ -12,47 +12,53 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
     public class DailyOperationLoomBeamUsed : AggregateRoot<DailyOperationLoomBeamUsed, DailyOperationLoomBeamUsedReadModel>
     {
         public string BeamOrigin { get; private set; }
+
         public BeamId BeamDocumentId { get; private set; }
+
         public string BeamNumber { get; private set; }
-        public MachineId TyingMachineId { get; private set; }
-        public OperatorId TyingOperatorId { get; private set; }
-        public MachineId LoomMachineId { get; private set; }
-        public OperatorId LoomOperatorId { get; private set; }
-        public DateTimeOffset DateTimeProcessed { get; private set; }
-        public ShiftId ShiftDocumentId { get; private set; }
-        public string Process { get; private set; }
+
+        public double StartCounter { get; private set; }
+
+        public double FinishCounter { get; private set; }
+
+        public double MachineSpeed { get; private set; }
+
+        public double SCMPX { get; private set; }
+
+        public double Efficiency { get; private set; }
+
+        public double F { get; private set; }
+
+        public double W { get; private set; }
+
+        public double L { get; private set; }
+
+        public double T { get; private set; }
+
+        public UomId UomDocumentId { get; private set; }
+
+        public string UomUnit { get; private set; }
+
+        public DateTimeOffset LastDateTimeProcessed { get; private set; }
+
         public string BeamUsedStatus { get; private set; }
+
         public Guid DailyOperationLoomDocumentId { get; set; }
-        public Guid DailyOperationLoomProductId { get; set; }
 
         public DailyOperationLoomBeamUsed(Guid identity, 
                                           string beamOrigin, 
                                           BeamId beamDocumentId, 
                                           string beamNumber, 
-                                          //MachineId tyingMachineId,
-                                          //OperatorId tyingOperatorId,
-                                          MachineId loomMachineId,
-                                          OperatorId loomOperatorId,
-                                          DateTimeOffset dateTimeProcessed,
-                                          ShiftId shiftDocumentId,
-                                          string process, 
+                                          DateTimeOffset lastDateTimeProcessed,
                                           string beamUsedStatus,
-                                          //Guid dailyOperationLoomProductId, 
                                           Guid dailyOperationLoomDocumentId) : base(identity)
         {
             Identity = identity;
             BeamOrigin = beamOrigin;
             BeamDocumentId = beamDocumentId;
             BeamNumber = beamNumber;
-            //TyingMachineId = tyingMachineId;
-            //TyingOperatorId = tyingOperatorId;
-            LoomMachineId = loomMachineId;
-            LoomOperatorId = loomOperatorId;
-            DateTimeProcessed = dateTimeProcessed;
-            ShiftDocumentId = shiftDocumentId;
-            Process = process;
+            LastDateTimeProcessed = lastDateTimeProcessed;
             BeamUsedStatus = beamUsedStatus;
-            //DailyOperationLoomProductId = dailyOperationLoomProductId;
             DailyOperationLoomDocumentId = dailyOperationLoomDocumentId;
 
             MarkTransient();
@@ -62,15 +68,19 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
                 BeamOrigin = BeamOrigin,
                 BeamDocumentId = BeamDocumentId.Value,
                 BeamNumber = BeamNumber,
-                TyingMachineId = TyingMachineId.Value,
-                TyingOperatorId = TyingOperatorId.Value,
-                LoomMachineId = LoomMachineId.Value,
-                LoomOperatorId = LoomOperatorId.Value,
-                DateTimeProcessed = DateTimeProcessed,
-                ShiftDocumentId = ShiftDocumentId.Value,
-                Process = Process,
+                StartCounter = StartCounter,
+                FinishCounter = FinishCounter,
+                MachineSpeed = MachineSpeed,
+                SCMPX = SCMPX,
+                Efficiency = Efficiency,
+                F=F,
+                W=W,
+                L=L,
+                T=T,
+                UomDocumentId = UomDocumentId.Value,
+                UomUnit = UomUnit,
+                LastDateTimeProcessed = LastDateTimeProcessed,
                 BeamUsedStatus = BeamUsedStatus,
-                DailyOperationLoomProductId = DailyOperationLoomProductId,
                 DailyOperationLoomDocumentId = DailyOperationLoomDocumentId
             };
 
@@ -82,21 +92,20 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             BeamOrigin = readModel.BeamOrigin;
             BeamDocumentId = new BeamId(readModel.BeamDocumentId);
             BeamNumber = readModel.BeamNumber;
-            TyingMachineId = new MachineId(readModel.TyingMachineId);
-            TyingOperatorId = new OperatorId(readModel.TyingOperatorId);
-            LoomMachineId = new MachineId(readModel.LoomMachineId);
-            LoomOperatorId = new OperatorId(readModel.LoomOperatorId);
-            DateTimeProcessed = readModel.DateTimeProcessed;
-            ShiftDocumentId = new ShiftId(readModel.ShiftDocumentId);
-            Process = readModel.Process;
+            StartCounter = readModel.StartCounter;
+            FinishCounter = readModel.FinishCounter;
+            MachineSpeed = readModel.MachineSpeed;
+            SCMPX = readModel.SCMPX;
+            Efficiency = readModel.Efficiency;
+            F = readModel.F;
+            W = readModel.W;
+            L = readModel.L;
+            T = readModel.T;
+            UomDocumentId = new UomId(readModel.UomDocumentId);
+            UomUnit = readModel.UomUnit;
+            LastDateTimeProcessed = readModel.LastDateTimeProcessed;
             BeamUsedStatus = readModel.BeamUsedStatus;
-            DailyOperationLoomProductId = readModel.DailyOperationLoomProductId;
             DailyOperationLoomDocumentId = readModel.DailyOperationLoomDocumentId;
-        }
-
-        protected override DailyOperationLoomBeamUsed GetEntity()
-        {
-            return this;
         }
 
         public void SetBeamOrigin(string beamOrigin)
@@ -133,84 +142,135 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             }
         }
 
-        public void SetTyingMachineId(MachineId tyingMachineId)
+        public void SetStartCounter(double startCounter)
         {
-            Validator.ThrowIfNull(() => tyingMachineId);
-            if (tyingMachineId != TyingMachineId)
+            if (startCounter != StartCounter)
             {
-                TyingMachineId = tyingMachineId;
-                ReadModel.TyingMachineId = TyingMachineId.Value;
+                StartCounter = startCounter;
+                ReadModel.StartCounter = StartCounter;
 
                 MarkModified();
             }
         }
 
-        public void SetTyingOperatorId(OperatorId tyingOperatorId)
+        public void SetFinishCounter(double finishCounter)
         {
-            Validator.ThrowIfNull(() => tyingOperatorId);
-            if (tyingOperatorId != TyingOperatorId)
+            if (finishCounter != FinishCounter)
             {
-                TyingOperatorId = tyingOperatorId;
-                ReadModel.TyingOperatorId = TyingOperatorId.Value;
+                FinishCounter = finishCounter;
+                ReadModel.FinishCounter = FinishCounter;
 
                 MarkModified();
             }
         }
 
-        public void SetLoomMachineId(MachineId loomMachineId)
+        public void SetMachineSpeed(double machineSpeed)
         {
-            Validator.ThrowIfNull(() => loomMachineId);
-            if (loomMachineId != LoomMachineId)
+            if (machineSpeed != MachineSpeed)
             {
-                LoomMachineId = loomMachineId;
-                ReadModel.LoomMachineId = LoomMachineId.Value;
+                MachineSpeed = machineSpeed;
+                ReadModel.MachineSpeed = MachineSpeed;
 
                 MarkModified();
             }
         }
 
-        public void SetLoomOperatorId(OperatorId loomOperatorId)
+        public void SetSCMPX(double scmpx)
         {
-            Validator.ThrowIfNull(() => loomOperatorId);
-            if (loomOperatorId != LoomOperatorId)
+            if (scmpx != SCMPX)
             {
-                LoomOperatorId = loomOperatorId;
-                ReadModel.TyingMachineId = LoomOperatorId.Value;
+                SCMPX = scmpx;
+                ReadModel.SCMPX = SCMPX;
 
                 MarkModified();
             }
         }
 
-        public void SetDateTimeProcessed(DateTimeOffset dateTimeProcessed)
+        public void SetEfficiency(double efficiency)
         {
-            if (dateTimeProcessed != DateTimeProcessed)
+            if (efficiency != Efficiency)
             {
-                DateTimeProcessed = dateTimeProcessed;
-                ReadModel.DateTimeProcessed = DateTimeProcessed;
+                Efficiency = efficiency;
+                ReadModel.Efficiency = Efficiency;
 
                 MarkModified();
             }
         }
 
-        public void SetShiftDocumentId(ShiftId shiftDocumentId)
+        public void SetF(double f)
         {
-            Validator.ThrowIfNull(() => shiftDocumentId);
-            if (shiftDocumentId != ShiftDocumentId)
+            if (f != F)
             {
-                ShiftDocumentId = shiftDocumentId;
-                ReadModel.ShiftDocumentId = ShiftDocumentId.Value;
+                F = f;
+                ReadModel.F = F;
 
                 MarkModified();
             }
         }
 
-        public void SetProcess(string process)
+        public void SetW(double w)
         {
-            Validator.ThrowIfNull(() => process);
-            if (process != Process)
+            if (w != W)
             {
-                Process = process;
-                ReadModel.Process = Process;
+                W = w;
+                ReadModel.W = W;
+
+                MarkModified();
+            }
+        }
+
+        public void SetL(double l)
+        {
+            if (l != L)
+            {
+                L = l;
+                ReadModel.L = L;
+
+                MarkModified();
+            }
+        }
+
+        public void SetT(double t)
+        {
+            if (t != T)
+            {
+                T = t;
+                ReadModel.T = T;
+
+                MarkModified();
+            }
+        }
+
+        public void SetUomDocumentId(UomId uomDocumentId)
+        {
+            Validator.ThrowIfNull(() => uomDocumentId);
+            if (uomDocumentId != UomDocumentId)
+            {
+                UomDocumentId = uomDocumentId;
+                ReadModel.UomDocumentId = UomDocumentId.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetUomUnit(string uomUnit)
+        {
+            Validator.ThrowIfNull(() => uomUnit);
+            if (uomUnit != UomUnit)
+            {
+                UomUnit = uomUnit;
+                ReadModel.UomUnit = UomUnit;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLastDateTimeProcessed(DateTimeOffset lastDateTimeProcessed)
+        {
+            if (lastDateTimeProcessed != LastDateTimeProcessed)
+            {
+                LastDateTimeProcessed = lastDateTimeProcessed;
+                ReadModel.LastDateTimeProcessed = LastDateTimeProcessed;
 
                 MarkModified();
             }
@@ -223,18 +283,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             {
                 BeamUsedStatus = beamUsedStatus;
                 ReadModel.BeamUsedStatus = BeamUsedStatus;
-
-                MarkModified();
-            }
-        }
-
-        public void SetLoomProductId(Guid loomProductId)
-        {
-            Validator.ThrowIfNull(() => loomProductId);
-            if (loomProductId != DailyOperationLoomProductId)
-            {
-                DailyOperationLoomProductId = loomProductId;
-                ReadModel.DailyOperationLoomProductId = DailyOperationLoomProductId;
 
                 MarkModified();
             }
@@ -260,6 +308,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
         public void SetDeleted()
         {
             MarkRemoved();
+        }
+
+        protected override DailyOperationLoomBeamUsed GetEntity()
+        {
+            return this;
         }
     }
 }

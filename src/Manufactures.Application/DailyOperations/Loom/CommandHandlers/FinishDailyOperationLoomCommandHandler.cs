@@ -17,17 +17,25 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 {
     public class FinishDailyOperationLoomCommandHandler : ICommandHandler<FinishDailyOperationLoomCommand, DailyOperationLoomDocument>
     {
-        private readonly IStorage _storage;
-        private readonly IDailyOperationLoomRepository _dailyOperationLoomDocumentRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
+        private readonly IStorage 
+            _storage;
+        private readonly IDailyOperationLoomRepository 
+            _dailyOperationLoomDocumentRepository;
+        private readonly IDailyOperationLoomHistoryRepository 
+            _dailyOperationLoomHistoryRepository;
+        //private readonly IDailyOperationLoomBeamProductRepository 
+        //    _dailyOperationLoomProductRepository;
 
         public FinishDailyOperationLoomCommandHandler(IStorage storage)
         {
-            _storage = storage;
-            _dailyOperationLoomDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
-            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+            _storage = 
+                storage;
+            _dailyOperationLoomDocumentRepository = 
+                _storage.GetRepository<IDailyOperationLoomRepository>();
+            _dailyOperationLoomHistoryRepository = 
+                _storage.GetRepository<IDailyOperationLoomHistoryRepository>();
+            //_dailyOperationLoomProductRepository = 
+            //    _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         public async Task<DailyOperationLoomDocument> Handle(FinishDailyOperationLoomCommand request, CancellationToken cancellationToken)
@@ -61,7 +69,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             //            .LoomBeamProducts
             //            .Where(o => o.BeamDocumentId.Equals(request.FinishBeamProductBeamId))
             //            .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-            var existingDailyOperationLoomBeamProducts = loomProducts.Where(o => o.BeamDocumentId.Value == request.FinishBeamProductBeamId).OrderByDescending(x => x.DateTimeProcessed);
+            var existingDailyOperationLoomBeamProducts = loomProducts.Where(o => o.BeamDocumentId.Value == request.FinishBeamProductBeamId).OrderByDescending(x => x.LastDateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime

@@ -27,7 +27,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             mockLoomOperationRepo;
         private readonly Mock<IDailyOperationLoomBeamProductRepository>
            mockLoomOperationProductRepo;
-        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+        private readonly Mock<IDailyOperationLoomHistoryRepository>
             mockLoomOperationHistoryRepo;
 
         public UpdatePauseDailyOperationLoomCommandHandlerTests()
@@ -37,13 +37,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             this.mockLoomOperationRepo =
                 this.mockRepository.Create<IDailyOperationLoomRepository>();
-            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomHistoryRepository>();
             mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationLoomRepository>())
                 .Returns(mockLoomOperationRepo.Object);
             mockStorage
-                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Setup(x => x.GetRepository<IDailyOperationLoomHistoryRepository>())
                 .Returns(mockLoomOperationHistoryRepo.Object);
 
             mockStorage

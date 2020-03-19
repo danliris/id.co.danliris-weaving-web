@@ -63,7 +63,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             mockBeamRepo;
         private readonly Mock<IDailyOperationLoomBeamProductRepository>
             mockLoomOperationProductRepo;
-        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+        private readonly Mock<IDailyOperationLoomHistoryRepository>
             mockLoomOperationHistoryRepo;
 
         public DailyOperationLoomQueryHandlerTests()
@@ -80,7 +80,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             this.mockOperatorRepo = this.mockRepository.Create<IOperatorRepository>();
             this.mockShiftRepo = this.mockRepository.Create<IShiftRepository>();
             this.mockBeamRepo = this.mockRepository.Create<IBeamRepository>();
-            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomHistoryRepository>();
             mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
 
             this.mockStorage.Setup(x => x.GetRepository<IDailyOperationLoomRepository>()).Returns(mockDailyOperationLoomRepo.Object);
@@ -92,7 +92,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.QueryHandlers
             this.mockStorage.Setup(x => x.GetRepository<IShiftRepository>()).Returns(mockShiftRepo.Object);
             this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockBeamRepo.Object);
             mockStorage
-                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Setup(x => x.GetRepository<IDailyOperationLoomHistoryRepository>())
                 .Returns(mockLoomOperationHistoryRepo.Object);
 
             mockStorage

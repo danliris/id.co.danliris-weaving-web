@@ -52,7 +52,7 @@ namespace Manufactures.Data.EntityFrameworkCore
 
             modelBuilder.Entity<DailyOperationLoomBeamUsedReadModel>(etb =>
             {
-                etb.ToTable("Weaving_DailyOperationLoomBeamProducts");
+                etb.ToTable("Weaving_DailyOperationLoomBeamsUsed");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();

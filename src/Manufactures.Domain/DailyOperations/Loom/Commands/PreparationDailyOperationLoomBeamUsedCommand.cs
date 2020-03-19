@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class PreparationDailyOperationLoomBeamProductCommand
+    public class PreparationDailyOperationLoomBeamUsedCommand
     {
 
         [JsonProperty(PropertyName = "BeamOrigin")]
@@ -32,7 +32,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public string LoomProcess { get; set; }
     }
 
-    public class PreparationDailyOperationLoomBeamProductCommandValidator : AbstractValidator<PreparationDailyOperationLoomBeamProductCommand>
+    public class PreparationDailyOperationLoomBeamProductCommandValidator : AbstractValidator<PreparationDailyOperationLoomBeamUsedCommand>
     {
         public PreparationDailyOperationLoomBeamProductCommandValidator()
         {

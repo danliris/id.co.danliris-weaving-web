@@ -22,14 +22,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
         private readonly IStorage _storage;
         private readonly IDailyOperationLoomRepository
             _dailyOperationLoomDocumentRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
+        private readonly IDailyOperationLoomHistoryRepository _dailyOperationLoomHistoryRepository;
         private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public UpdateResumeDailyOperationLoomCommandHandler(IStorage storage)
         {
             _storage = storage;
             _dailyOperationLoomDocumentRepository = _storage.GetRepository<IDailyOperationLoomRepository>();
-            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomHistoryRepository>();
             _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
@@ -65,7 +65,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var existingDailyOperationLoomBeamProducts =
                 loomProducts
                         .Where(o => o.BeamDocumentId.Value == request.ResumeBeamProductBeamId)
-                        .OrderByDescending(o => o.DateTimeProcessed);
+                        .OrderByDescending(o => o.LastDateTimeProcessed);
             var lastBeamProduct = existingDailyOperationLoomBeamProducts.FirstOrDefault();
 
             //Reformat DateTime

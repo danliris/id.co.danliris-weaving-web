@@ -25,7 +25,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             mockLoomOperationRepo;
         private readonly Mock<IDailyOperationLoomBeamProductRepository>
            mockLoomOperationProductRepo;
-        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+        private readonly Mock<IDailyOperationLoomHistoryRepository>
             mockLoomOperationHistoryRepo;
 
         public PreparationDailyOperationLoomCommandHandlerTests()
@@ -35,13 +35,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             this.mockLoomOperationRepo =
                 this.mockRepository.Create<IDailyOperationLoomRepository>();
-            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomHistoryRepository>();
             mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationLoomRepository>())
                 .Returns(mockLoomOperationRepo.Object);
             mockStorage
-                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Setup(x => x.GetRepository<IDailyOperationLoomHistoryRepository>())
                 .Returns(mockLoomOperationHistoryRepo.Object);
 
             mockStorage
@@ -68,8 +68,8 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             var preparationDailyOperationLoomCommandHandler = this.CreatePreparationDailyOperationLoomCommandHandler();
 
             //Mocking Preparation Beam Product Object
-            List<PreparationDailyOperationLoomBeamProductCommand> loomBeamProducts = new List<PreparationDailyOperationLoomBeamProductCommand>();
-            PreparationDailyOperationLoomBeamProductCommand loomBeamProduct = new PreparationDailyOperationLoomBeamProductCommand
+            List<PreparationDailyOperationLoomBeamUsedCommand> loomBeamProducts = new List<PreparationDailyOperationLoomBeamUsedCommand>();
+            PreparationDailyOperationLoomBeamUsedCommand loomBeamProduct = new PreparationDailyOperationLoomBeamUsedCommand
             {
                 BeamOrigin = "Reaching",
                 BeamDocumentId = new BeamId(Guid.NewGuid()),
@@ -82,8 +82,8 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             loomBeamProducts.Add(loomBeamProduct);
 
             //Mocking Preparation History Object
-            List<PreparationDailyOperationLoomBeamHistoryCommand> loomBeamHistories = new List<PreparationDailyOperationLoomBeamHistoryCommand>();
-            PreparationDailyOperationLoomBeamHistoryCommand loomBeamHistory = new PreparationDailyOperationLoomBeamHistoryCommand
+            List<PreparationDailyOperationLoomHistoryCommand> loomBeamHistories = new List<PreparationDailyOperationLoomHistoryCommand>();
+            PreparationDailyOperationLoomHistoryCommand loomBeamHistory = new PreparationDailyOperationLoomHistoryCommand
             {
                 BeamNumber = "S11",
                 MachineNumber = "111",

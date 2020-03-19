@@ -14,17 +14,25 @@ namespace Manufactures.Domain.DailyOperations.Loom
     {
 
         public OrderId OrderDocumentId { get; private set; }
+
+        public double TotalCounter { get; private set; }
+
+        public int BeamProcessed { get; private set; }
+
         public string OperationStatus { get; private set; }
+
         public List<DailyOperationLoomBeamUsed> LoomBeamsUsed { get; set; }
-        public List<DailyOperationLoomProduct> LoomProducts { get; set; }
+
         public List<DailyOperationLoomHistory> LoomHistories { get; set; }
 
-        public DailyOperationLoomDocument(Guid identity, 
-                                          OrderId orderDocumentId, 
+        public DailyOperationLoomDocument(Guid identity,
+                                          OrderId orderDocumentId,
+                                          int beamProcessed,
                                           string operationStatus) : base(identity)
         {
             Identity = identity;
             OrderDocumentId = orderDocumentId;
+            BeamProcessed = beamProcessed;
             OperationStatus = operationStatus;
             //LoomBeamsUsed= new List<DailyOperationLoomBeamUsed>();
             //LoomProducts = new List<DailyOperationLoomProduct>();
@@ -35,10 +43,12 @@ namespace Manufactures.Domain.DailyOperations.Loom
             ReadModel = new DailyOperationLoomDocumentReadModel(Identity)
             {
                 OrderDocumentId = OrderDocumentId.Value,
+                TotalCounter = TotalCounter,
+                BeamProcessed = BeamProcessed,
                 OperationStatus = OperationStatus
             };
 
-            ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
+            //ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
         }
 
         //Constructor for Mapping Object from Database to Domain
@@ -46,6 +56,8 @@ namespace Manufactures.Domain.DailyOperations.Loom
         {
             //Instantiate Object from Database
             this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
+            this.TotalCounter = readModel.TotalCounter;
+            this.BeamProcessed = readModel.BeamProcessed;
             this.OperationStatus = readModel.OperationStatus;
         }
 
@@ -152,10 +164,33 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public void SetOrderDocumentId(OrderId orderDocumentId)
         {
             Validator.ThrowIfNull(() => orderDocumentId);
-            if (OrderDocumentId != orderDocumentId)
+            if (orderDocumentId != OrderDocumentId)
             {
                 OrderDocumentId = orderDocumentId;
                 ReadModel.OrderDocumentId = OrderDocumentId.Value;
+
+                MarkModified();
+            }
+        }
+
+        public void SetTotalCounter(double totalCounter)
+        {
+            if (totalCounter != TotalCounter)
+            {
+                TotalCounter = totalCounter;
+                ReadModel.TotalCounter = TotalCounter;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBeamProcessed(int beamProcessed)
+        {
+            if (beamProcessed != BeamProcessed)
+            {
+                BeamProcessed = beamProcessed;
+                ReadModel.BeamProcessed = BeamProcessed;
+
                 MarkModified();
             }
         }

@@ -27,7 +27,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             mockLoomOperationRepo;
         private readonly Mock<IDailyOperationLoomBeamProductRepository>
             mockLoomOperationProductRepo;
-        private readonly Mock<IDailyOperationLoomBeamHistoryRepository>
+        private readonly Mock<IDailyOperationLoomHistoryRepository>
             mockLoomOperationHistoryRepo;
 
         public UpdateStartDailyOperationLoomCommandHandlerTests()
@@ -37,14 +37,14 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
 
             this.mockLoomOperationRepo =
                 this.mockRepository.Create<IDailyOperationLoomRepository>();
-            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomBeamHistoryRepository>();
+            mockLoomOperationHistoryRepo = mockRepository.Create<IDailyOperationLoomHistoryRepository>();
             mockLoomOperationProductRepo = mockRepository.Create<IDailyOperationLoomBeamProductRepository>();
 
             this.mockStorage
                 .Setup(x => x.GetRepository<IDailyOperationLoomRepository>())
                 .Returns(mockLoomOperationRepo.Object);
             mockStorage
-                .Setup(x => x.GetRepository<IDailyOperationLoomBeamHistoryRepository>())
+                .Setup(x => x.GetRepository<IDailyOperationLoomHistoryRepository>())
                 .Returns(mockLoomOperationHistoryRepo.Object);
 
             mockStorage
@@ -118,13 +118,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo
@@ -220,13 +220,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo
@@ -322,13 +322,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo
@@ -427,13 +427,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo
@@ -531,13 +531,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo
@@ -636,13 +636,13 @@ namespace Manufactures.Tests.DailyOperations.Loom.CommandHandlers
             UpdateStartDailyOperationLoomCommand request = new UpdateStartDailyOperationLoomCommand
             {
                 Id = loomDocument.Identity,
-                StartBeamProductId = loomBeamProduct.Identity,
+                StartBeamDocumentId = loomBeamProduct.Identity,
                 StartBeamNumber = loomBeamHistory.BeamNumber,
                 StartMachineNumber = loomBeamHistory.MachineNumber,
                 StartDateMachine = DateTimeOffset.UtcNow,
                 StartTimeMachine = TimeSpan.Parse("07:00"),
                 StartShiftDocumentId = new ShiftId(Guid.NewGuid()),
-                StartOperatorDocumentId = new OperatorId(Guid.NewGuid()),
+                StartLoomOperatorDocumentId = new OperatorId(Guid.NewGuid()),
             };
 
             //Setup Mock Object for Loom Repo

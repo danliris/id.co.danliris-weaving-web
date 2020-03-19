@@ -5,6 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\FinishDailyOperationLoomCommandHandler.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdatePauseDailyOperationLoomCommandHandler.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdateResumeDailyOperationLoomCommandHandler.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\TotalBrokenEachYarnValueDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenGroupedReportQueryDto.cs" />
     <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportBodyBrokenDto.cs" />

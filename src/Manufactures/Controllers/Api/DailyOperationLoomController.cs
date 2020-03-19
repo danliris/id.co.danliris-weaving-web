@@ -40,18 +40,20 @@ namespace Manufactures.Controllers.Api
             _beamRepository;
         private readonly IMachineRepository
             _machineRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository 
+        private readonly IDailyOperationLoomHistoryRepository 
             _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository 
-            _dailyOperationLoomProductRepository;
+        private readonly IDailyOperationLoomBeamUsedRepository 
+            _dailyOperationLoomUsedRepository;
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
                                             IDailyOperationLoomQuery<DailyOperationLoomListDto> loomQuery,
                                             IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> dailyOperationLoomReportQuery) : base(serviceProvider)
         {
-            _loomQuery = loomQuery ?? throw new ArgumentNullException(nameof(loomQuery));
-            _dailyOperationLoomReportQuery = dailyOperationLoomReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationLoomReportQuery));
+            _loomQuery = 
+                loomQuery ?? throw new ArgumentNullException(nameof(loomQuery));
+            _dailyOperationLoomReportQuery = 
+                dailyOperationLoomReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationLoomReportQuery));
 
             _dailyOperationLoomRepository =
                 this.Storage.GetRepository<IDailyOperationLoomRepository>();
@@ -60,9 +62,9 @@ namespace Manufactures.Controllers.Api
             _machineRepository =
                 this.Storage.GetRepository<IMachineRepository>();
             _dailyOperationLoomHistoryRepository = 
-                this.Storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository =
-                this.Storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+                this.Storage.GetRepository<IDailyOperationLoomHistoryRepository>();
+            _dailyOperationLoomUsedRepository =
+                this.Storage.GetRepository<IDailyOperationLoomBeamUsedRepository>();
         }
 
         [HttpGet]
@@ -113,123 +115,123 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
 
-        [HttpGet("get-loom-beam-products-by-order")]
-        public async Task<IActionResult> GetLoomBeamProducts(int page = 1,
-                                                             int size = 25,
-                                                             string order = "{}",
-                                                             string keyword = null,
-                                                             string filter = "{}")
-        {
-            VerifyUser();
-            var dailyOperationLoomBeamProducts = new List<DailyOperationLoomBeamProductDto>();
+        //[HttpGet("get-loom-beam-products-by-order")]
+        //public async Task<IActionResult> GetLoomBeamProducts(int page = 1,
+        //                                                     int size = 25,
+        //                                                     string order = "{}",
+        //                                                     string keyword = null,
+        //                                                     string filter = "{}")
+        //{
+        //    VerifyUser();
+        //    var dailyOperationLoomBeamProducts = new List<DailyOperationLoomBeamProductDto>();
 
-            //if (!string.IsNullOrEmpty(filter))
-            //{
-            //    var orderFilter = new { OrderId = "" };
-            //    var serializedFilter = JsonConvert.DeserializeAnonymousType(filter, orderFilter);
+        //    //if (!string.IsNullOrEmpty(filter))
+        //    //{
+        //    //    var orderFilter = new { OrderId = "" };
+        //    //    var serializedFilter = JsonConvert.DeserializeAnonymousType(filter, orderFilter);
 
-            //    if (!Guid.TryParse(serializedFilter.OrderId, out Guid OrderGuid))
-            //    {
-            //        return NotFound();
-            //    }
+        //    //    if (!Guid.TryParse(serializedFilter.OrderId, out Guid OrderGuid))
+        //    //    {
+        //    //        return NotFound();
+        //    //    }
 
-            //    dailyOperationLoomBeamProducts = await _loomBeamProductQuery.GetLoomBeamProductsByOrder(OrderGuid);
-            //}
+        //    //    dailyOperationLoomBeamProducts = await _loomBeamProductQuery.GetLoomBeamProductsByOrder(OrderGuid);
+        //    //}
 
-            if (!filter.Contains("{}"))
-            {
-                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
-                var LoomOperationId = filterDictionary["LoomOperationId"].ToString();
+        //    if (!filter.Contains("{}"))
+        //    {
+        //        Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+        //        var LoomOperationId = filterDictionary["LoomOperationId"].ToString();
 
-                if (!LoomOperationId.Equals(null))
-                {
-                    var LoomOperationGuid = Guid.Parse(LoomOperationId);
+        //        if (!LoomOperationId.Equals(null))
+        //        {
+        //            var LoomOperationGuid = Guid.Parse(LoomOperationId);
                     
-                    await Task.Yield();
-                    var existingDailyOperationLoomDocument =
-                        _dailyOperationLoomRepository
-                            .Find(o => o.Identity == LoomOperationGuid)
-                            .FirstOrDefault();
+        //            await Task.Yield();
+        //            var existingDailyOperationLoomDocument =
+        //                _dailyOperationLoomRepository
+        //                    .Find(o => o.Identity == LoomOperationGuid)
+        //                    .FirstOrDefault();
 
-                    var loomHistories = 
-                        _dailyOperationLoomHistoryRepository
-                            .Find(o => o.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
-                    var loomBeamProducts = 
-                        _dailyOperationLoomProductRepository
-                            .Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+        //            var loomHistories = 
+        //                _dailyOperationLoomHistoryRepository
+        //                    .Find(o => o.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
+        //            var loomBeamProducts = 
+        //                _dailyOperationLoomUsedRepository
+        //                    .Find(s => s.DailyOperationLoomDocumentId == existingDailyOperationLoomDocument.Identity);
 
-                    await Task.Yield();
-                    foreach (var loomBeamProduct in loomBeamProducts)
-                    {
-                        await Task.Yield();
-                        var sizingBeamStatus = loomBeamProduct.BeamUsedStatus;
-                        if (sizingBeamStatus.Equals(BeamStatus.ONPROCESS))
-                        {
-                            //Get Beam Number
-                            await Task.Yield();
-                            var beamQuery =
-                                _beamRepository
-                                    .Query
-                                    .OrderByDescending(o => o.CreatedDate);
-                            var beamNumber =
-                                _beamRepository
-                                    .Find(beamQuery)
-                                    .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
-                                    .FirstOrDefault()
-                                    .Number;
+        //            await Task.Yield();
+        //            foreach (var loomBeamProduct in loomBeamProducts)
+        //            {
+        //                await Task.Yield();
+        //                var sizingBeamStatus = loomBeamProduct.BeamUsedStatus;
+        //                if (sizingBeamStatus.Equals(BeamStatus.ONPROCESS))
+        //                {
+        //                    //Get Beam Number
+        //                    await Task.Yield();
+        //                    var beamQuery =
+        //                        _beamRepository
+        //                            .Query
+        //                            .OrderByDescending(o => o.CreatedDate);
+        //                    var beamNumber =
+        //                        _beamRepository
+        //                            .Find(beamQuery)
+        //                            .Where(o => o.Identity.Equals(loomBeamProduct.BeamDocumentId))
+        //                            .FirstOrDefault()
+        //                            .Number;
 
-                            //Get Machine Number
-                            await Task.Yield();
-                            var machineQuery =
-                                _machineRepository
-                                    .Query
-                                    .OrderByDescending(o => o.CreatedDate);
-                            var machineNumber =
-                                _machineRepository
-                                    .Find(machineQuery)
-                                    .Where(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
-                                    .FirstOrDefault()
-                                    .MachineNumber;
+        //                    //Get Machine Number
+        //                    await Task.Yield();
+        //                    var machineQuery =
+        //                        _machineRepository
+        //                            .Query
+        //                            .OrderByDescending(o => o.CreatedDate);
+        //                    var machineNumber =
+        //                        _machineRepository
+        //                            .Find(machineQuery)
+        //                            .Where(o => o.Identity.Equals(loomBeamProduct.MachineDocumentId))
+        //                            .FirstOrDefault()
+        //                            .MachineNumber;
 
-                            await Task.Yield();
-                            var latestDateTimeBeamProduct = loomBeamProduct.DateTimeProcessed;
-                            var loomProcess = loomBeamProduct.Process;
-                            var beamProductStatus = loomBeamProduct.BeamUsedStatus;
+        //                    await Task.Yield();
+        //                    var latestDateTimeBeamProduct = loomBeamProduct.LastDateTimeProcessed;
+        //                    var loomProcess = loomBeamProduct.Process;
+        //                    var beamProductStatus = loomBeamProduct.BeamUsedStatus;
 
-                            var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
-                                                                                      loomBeamProduct.BeamOrigin,
-                                                                                      beamNumber,
-                                                                                      loomBeamProduct.CombNumber,
-                                                                                      machineNumber, 
-                                                                                      latestDateTimeBeamProduct, 
-                                                                                      loomProcess, 
-                                                                                      beamProductStatus);
-                            loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
+        //                    var loomSizingBeam = new DailyOperationLoomBeamProductDto(loomBeamProduct.Identity,
+        //                                                                              loomBeamProduct.BeamOrigin,
+        //                                                                              beamNumber,
+        //                                                                              loomBeamProduct.CombNumber,
+        //                                                                              machineNumber, 
+        //                                                                              latestDateTimeBeamProduct, 
+        //                                                                              loomProcess, 
+        //                                                                              beamProductStatus);
+        //                    loomSizingBeam.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
 
-                            dailyOperationLoomBeamProducts.Add(loomSizingBeam);
-                        }
-                    }
-                }
-                else
-                {
-                    throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
-                }
-            }
-            else
-            {
-                throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
-            }
+        //                    dailyOperationLoomBeamProducts.Add(loomSizingBeam);
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
+        //        }
+        //    }
+        //    else
+        //    {
+        //        throw Validator.ErrorValidation(("Id", "Id Operasi Tidak Ditemukan"));
+        //    }
 
-            var total = dailyOperationLoomBeamProducts.Count();
-            var data = dailyOperationLoomBeamProducts.Skip((page - 1) * size).Take(size);
+        //    var total = dailyOperationLoomBeamProducts.Count();
+        //    var data = dailyOperationLoomBeamProducts.Skip((page - 1) * size).Take(size);
 
-            return Ok(data, info: new
-            {
-                page,
-                size,
-                total
-            });
-        }
+        //    return Ok(data, info: new
+        //    {
+        //        page,
+        //        size,
+        //        total
+        //    });
+        //}
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
@@ -270,50 +272,50 @@ namespace Manufactures.Controllers.Api
             return Ok(updateStartDailyOperationLoomDocument.Identity);
         }
 
-        [HttpPut("{Id}/pause")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdatePauseDailyOperationLoomCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updatePauseDailyOperationLoomDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/pause")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdatePauseDailyOperationLoomCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updatePauseDailyOperationLoomDocument = await Mediator.Send(command);
 
-            return Ok(updatePauseDailyOperationLoomDocument.Identity);
-        }
+        //    return Ok(updatePauseDailyOperationLoomDocument.Identity);
+        //}
 
-        [HttpPut("{Id}/resume")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]UpdateResumeDailyOperationLoomCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var updateResumeDailyOperationLoomDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/resume")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]UpdateResumeDailyOperationLoomCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateResumeDailyOperationLoomDocument = await Mediator.Send(command);
 
-            return Ok(updateResumeDailyOperationLoomDocument.Identity);
-        }
+        //    return Ok(updateResumeDailyOperationLoomDocument.Identity);
+        //}
 
-        [HttpPut("{Id}/finish")]
-        public async Task<IActionResult> Put(string Id,
-                                             [FromBody]FinishDailyOperationLoomCommand command)
-        {
-            VerifyUser();
-            if (!Guid.TryParse(Id, out Guid documentId))
-            {
-                return NotFound();
-            }
-            command.SetId(documentId);
-            var finishDailyOperationLoomDocument = await Mediator.Send(command);
+        //[HttpPut("{Id}/finish")]
+        //public async Task<IActionResult> Put(string Id,
+        //                                     [FromBody]FinishDailyOperationLoomCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(Id, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var finishDailyOperationLoomDocument = await Mediator.Send(command);
 
-            return Ok(finishDailyOperationLoomDocument.Identity);
-        }
+        //    return Ok(finishDailyOperationLoomDocument.Identity);
+        //}
 
         //Controller for Daily Operation Reaching Report
         [HttpGet("get-report")]

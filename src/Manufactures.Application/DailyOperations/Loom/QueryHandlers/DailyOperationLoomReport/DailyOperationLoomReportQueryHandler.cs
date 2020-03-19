@@ -33,8 +33,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
             _fabricConstructionRepository;
         private readonly IWeavingSupplierRepository
             _weavingSupplierRepository;
-        private readonly IDailyOperationLoomBeamHistoryRepository _dailyOperationLoomHistoryRepository;
-        private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
+        private readonly IDailyOperationLoomHistoryRepository _dailyOperationLoomHistoryRepository;
+        //private readonly IDailyOperationLoomBeamProductRepository _dailyOperationLoomProductRepository;
 
         public DailyOperationLoomReportQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
@@ -50,8 +50,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
                 _storage.GetRepository<IFabricConstructionRepository>();
             _weavingSupplierRepository =
                 _storage.GetRepository<IWeavingSupplierRepository>();
-            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomBeamHistoryRepository>();
-            _dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
+            _dailyOperationLoomHistoryRepository = _storage.GetRepository<IDailyOperationLoomHistoryRepository>();
+            //_dailyOperationLoomProductRepository = _storage.GetRepository<IDailyOperationLoomBeamProductRepository>();
         }
 
         protected SingleUnitResult GetUnit(int id)
@@ -120,7 +120,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                 foreach(var loomDocument in dailyOperationLoomDocuments)
                 {
-                    var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
+                    //var products = _dailyOperationLoomProductRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
                     var histories = _dailyOperationLoomHistoryRepository.Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity);
 
 
