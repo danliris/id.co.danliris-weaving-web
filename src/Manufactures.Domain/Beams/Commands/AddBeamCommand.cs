@@ -22,7 +22,11 @@ namespace Manufactures.Domain.Beams.Commands
         {
             RuleFor(command => command.Number).NotEmpty();
             RuleFor(command => command.Type).NotEmpty();
-            RuleFor(command => command.EmptyWeight).NotEmpty();
+            RuleFor(command => command.EmptyWeight).NotEmpty().When(command => command.Type.ToLower() != "warping");
+            //When(command => command.Type.ToLower() != "warping", () =>
+            //{
+            //    RuleFor(command => command.EmptyWeight).NotEmpty();
+            //});
         }
     }
 
