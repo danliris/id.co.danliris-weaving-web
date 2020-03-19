@@ -568,5 +568,64 @@ namespace Manufactures.Controllers.Api
                 return Ok(brokenWarpingReport);
             }
         }
+
+        //[HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
+        //public async Task<IActionResult> Put(string operationId,
+        //                                     string historyId,
+        //                                     string beamProductId,
+        //                                     string status,
+        //                                     [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand command)
+        //{
+        //    VerifyUser();
+        //    if (!Guid.TryParse(operationId, out Guid documentId))
+        //    {
+        //        return NotFound();
+        //    }
+        //    command.SetId(documentId);
+        //    var updateRemoveStartOrProduceBeamDailyOperationSizingDocument = await Mediator.Send(command);
+
+        //    return Ok(updateRemoveStartOrProduceBeamDailyOperationSizingDocument.Identity);
+        //}
+
+        [HttpDelete("{operationId}/{historyId}")]
+        public async Task<IActionResult> Delete(string operationId,
+                                                string historyId)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(operationId, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            if (!Guid.TryParse(historyId, out Guid HistoryId))
+            {
+                return NotFound();
+            }
+
+            var command = new HistoryRemovePreparationDailyOperationWarpingCommand();
+            command.SetId(Identity);
+            command.SetHistoryId(HistoryId);
+
+            var dailyOperationWarpingDocument = await Mediator.Send(command);
+
+            return Ok(dailyOperationWarpingDocument.Identity);
+        }
+        [HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
+        public async Task<IActionResult> Put(string operationId,
+                                             string historyId,
+                                             string beamProductId,
+                                             string status,
+                                             [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationWarpingCommand command)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(operationId, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateRemoveStartOrProduceBeamDailyOperationWarpingDocument = await Mediator.Send(command);
+
+            return Ok(updateRemoveStartOrProduceBeamDailyOperationWarpingDocument.Identity);
+        }
     }
 }

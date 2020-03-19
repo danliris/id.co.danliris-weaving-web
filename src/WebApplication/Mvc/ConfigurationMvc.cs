@@ -61,7 +61,11 @@ namespace Infrastructure.Mvc
                 fv.RegisterValidatorsFromAssemblyContaining<ProduceBeamDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<FinishDoffDailyOperationSizingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationSizingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationWarpingCommandValidator>();
+                fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationWarpingCommandValidator>();
                 fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandValidator>();
+                //fv.RegisterValidatorsFromAssemblyContaining<HistoryRemovePreparationDailyOperationReachingCommandValidator>();
+                //fv.RegisterValidatorsFromAssemblyContaining<HistoryRemoveStartOrProduceBeamDailyOperationReachingCommandValidator>();
 
                 fv.RegisterValidatorsFromAssemblyContaining<Startup>();
             });
