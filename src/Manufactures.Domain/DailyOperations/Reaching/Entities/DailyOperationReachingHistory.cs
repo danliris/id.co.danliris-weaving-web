@@ -27,7 +27,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Entities
             MarkTransient();
             
             Identity = identity;
-            OperatorDocumentId = operatorDocumentId;
+            OperatorDocumentId = operatorDocumentId != null ? operatorDocumentId : null;
             YarnStrandsProcessed = yarnStrandsProcessed;
             DateTimeMachine = dateTimeMachine;
             ShiftDocumentId = shiftDocumentId;
@@ -36,7 +36,7 @@ namespace Manufactures.Domain.DailyOperations.Reaching.Entities
 
             ReadModel = new DailyOperationReachingHistoryReadModel(Identity)
             {
-                OperatorDocumentId = OperatorDocumentId.Value,
+                OperatorDocumentId = operatorDocumentId!= null ? OperatorDocumentId.Value:Guid.Empty,
                 YarnStrandsProcessed = YarnStrandsProcessed,
                 DateTimeMachine = DateTimeMachine,
                 ShiftDocumentId = ShiftDocumentId.Value,
