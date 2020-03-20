@@ -58,14 +58,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var lastLoomHistory =
                 _dailyOperationLoomHistoryRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId.Value == request.StartBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.StartBeamDocumentId)
                     .OrderByDescending(d => d.DateTimeMachine)
                     .FirstOrDefault();
 
             var lastLoomBeamUsed =
                 _dailyOperationLoomBeamUsedRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId.Value == request.StartBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.StartBeamDocumentId)
                     .OrderByDescending(d => d.LastDateTimeProcessed)
                     .FirstOrDefault();
 
@@ -119,13 +119,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     {
                         var newLoomHistory =
                                 new DailyOperationLoomHistory(Guid.NewGuid(),
-                                                              new BeamId(request.StartBeamDocumentId),
+                                                              request.StartBeamDocumentId,
                                                               request.StartBeamNumber,
                                                               lastLoomHistory.LoomMachineId,
-                                                              new OperatorId(request.StartLoomOperatorDocumentId),
+                                                              request.StartLoomOperatorDocumentId,
                                                               request.StartCounterPerOperator,
                                                               dateTimeLoom,
-                                                              new ShiftId(request.StartShiftDocumentId),
+                                                              request.StartShiftDocumentId,
                                                               MachineStatus.ONSTART,
                                                               loomDocument.Identity);
 

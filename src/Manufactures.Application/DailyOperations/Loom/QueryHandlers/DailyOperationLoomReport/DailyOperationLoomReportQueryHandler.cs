@@ -126,7 +126,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers.DailyOpera
 
                     //Get Order Production Number
                     await Task.Yield();
-                    var orderDocumentId = loomDocument.OrderDocumentId.Value;
+                    var orderDocumentId = loomDocument.OrderDocumentId;
                     var orderDocumentQuery =
                         _weavingOrderDocumentRepository
                             .Query

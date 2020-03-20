@@ -53,14 +53,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var lastLoomHistory =
                 _dailyOperationLoomHistoryRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId.Value == request.ReprocessBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.ReprocessBeamDocumentId)
                     .OrderByDescending(d => d.DateTimeMachine)
                     .FirstOrDefault();
 
             var lastLoomBeamUsed =
                 _dailyOperationLoomBeamUsedRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId.Value == request.ReprocessBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.ReprocessBeamDocumentId)
                     .OrderByDescending(d => d.LastDateTimeProcessed)
                     .FirstOrDefault();
 

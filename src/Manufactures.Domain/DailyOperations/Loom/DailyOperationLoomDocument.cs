@@ -13,7 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
     public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomDocumentReadModel>
     {
 
-        public OrderId OrderDocumentId { get; private set; }
+        public Guid OrderDocumentId { get; private set; }
 
         public double TotalCounter { get; private set; }
 
@@ -26,7 +26,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public List<DailyOperationLoomHistory> LoomHistories { get; set; }
 
         public DailyOperationLoomDocument(Guid identity,
-                                          OrderId orderDocumentId,
+                                          Guid orderDocumentId,
                                           int beamProcessed,
                                           string operationStatus) : base(identity)
         {
@@ -42,7 +42,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
 
             ReadModel = new DailyOperationLoomDocumentReadModel(Identity)
             {
-                OrderDocumentId = OrderDocumentId.Value,
+                OrderDocumentId = OrderDocumentId,
                 TotalCounter = TotalCounter,
                 BeamProcessed = BeamProcessed,
                 OperationStatus = OperationStatus
@@ -55,7 +55,7 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public DailyOperationLoomDocument(DailyOperationLoomDocumentReadModel readModel) : base(readModel)
         {
             //Instantiate Object from Database
-            this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
+            this.OrderDocumentId = readModel.OrderDocumentId;
             this.TotalCounter = readModel.TotalCounter;
             this.BeamProcessed = readModel.BeamProcessed;
             this.OperationStatus = readModel.OperationStatus;
@@ -161,13 +161,13 @@ namespace Manufactures.Domain.DailyOperations.Loom
         //    MarkModified();
         //}
 
-        public void SetOrderDocumentId(OrderId orderDocumentId)
+        public void SetOrderDocumentId(Guid orderDocumentId)
         {
             Validator.ThrowIfNull(() => orderDocumentId);
             if (orderDocumentId != OrderDocumentId)
             {
                 OrderDocumentId = orderDocumentId;
-                ReadModel.OrderDocumentId = OrderDocumentId.Value;
+                ReadModel.OrderDocumentId = OrderDocumentId;
 
                 MarkModified();
             }

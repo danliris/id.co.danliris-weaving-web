@@ -13,22 +13,22 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public string BeamOrigin { get; set; }
 
         [JsonProperty(PropertyName = "BeamDocumentId")]
-        public BeamId BeamDocumentId { get; set; }
+        public Guid BeamDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; set; }
 
         [JsonProperty(PropertyName = "TyingMachineId")]
-        public MachineId TyingMachineId { get; set; }
+        public Guid TyingMachineId { get; set; }
 
         [JsonProperty(PropertyName = "TyingOperatorId")]
-        public OperatorId TyingOperatorId { get; set; }
+        public Guid TyingOperatorId { get; set; }
 
         [JsonProperty(PropertyName = "LoomMachineId")]
-        public MachineId LoomMachineId { get; set; }
+        public Guid LoomMachineId { get; set; }
 
         [JsonProperty(PropertyName = "LoomOperatorId")]
-        public OperatorId LoomOperatorId { get; set; }
+        public Guid LoomOperatorId { get; set; }
 
         [JsonProperty(PropertyName = "PreparationDate")]
         public DateTimeOffset PreparationDate { get; set; }
@@ -37,7 +37,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public TimeSpan PreparationTime { get; set; }
 
         [JsonProperty(PropertyName = "PreparationShift")]
-        public ShiftId PreparationShift { get; set; }
+        public Guid PreparationShift { get; set; }
     }
 
     public class PreparationDailyOperationLoomItemsCommandValidator : AbstractValidator<PreparationDailyOperationLoomItemsCommand>

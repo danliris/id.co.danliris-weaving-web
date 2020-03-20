@@ -2,6 +2,7 @@
 using Infrastructure.Domain.Commands;
 using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
@@ -9,7 +10,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
     public class PreparationDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "OrderDocumentId")]
-        public OrderId OrderDocumentId { get; set; }
+        public Guid OrderDocumentId { get; set; }
 
         [JsonProperty(PropertyName = "BeamProcessed")]
         public int BeamProcessed { get; set; }
