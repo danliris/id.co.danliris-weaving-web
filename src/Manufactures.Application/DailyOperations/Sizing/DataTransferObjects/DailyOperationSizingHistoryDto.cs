@@ -40,8 +40,8 @@ namespace Manufactures.Application.DailyOperations.Sizing.DataTransferObjects
             SizingBeamNumber = sizingBeamNumber;
             DateTimeMachine = history.DateTimeMachine;
             ShiftName = shiftName;
-            OperatorName = operatorDocument.CoreAccount.Name;
-            OperatorGroup = operatorDocument.Group;
+            OperatorName = operatorDocument != null ? operatorDocument.CoreAccount.Name: "-";
+            OperatorGroup = operatorDocument!= null? operatorDocument.Group:"-";
             MachineStatus = history.MachineStatus;
             BrokenPerShift = history.BrokenPerShift;
         }

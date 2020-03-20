@@ -229,7 +229,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                     _operatorRepository
                         .Find(o => o.Identity == reachingHistory.OperatorDocumentId.Value)
                         .FirstOrDefault()?
-                        .CoreAccount.Name ?? "Not Found Operator Name";
+                        .CoreAccount.Name ?? "-";
 
                 //Get Shift Name
                 await Task.Yield();

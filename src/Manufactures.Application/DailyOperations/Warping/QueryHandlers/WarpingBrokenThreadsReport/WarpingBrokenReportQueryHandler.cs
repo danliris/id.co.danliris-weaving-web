@@ -309,6 +309,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
         {
             try
             {
+
                 var reportQueries = (from brokenCause in _warpingBrokenCauseRepository.Query
 
                                      join warpingBrokenCause in _dailyOperationWarpingBrokenCauseRepository.Query
@@ -345,56 +346,72 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                                                        on orderJoinConstructionYarnDetail.YarnId equals yarnDocument.Identity
                                                        into joinYarnDocument
                                      from constructionYarnDetailJoinYarn in joinYarnDocument.DefaultIfEmpty()
+                                     //select new
+                                     //{
+                                     //    BrokenCouse = brokenCause,
+                                     //    JoinWarpingBrokenCause = joinWarpingBrokenCause,
+                                     //    JoinWarpingBeamProduct = joinWarpingBeamProduct,
+                                     //    JoinWarpingDocument = joinWarpingDocument,
+                                     //    JoinOrderDocument = joinOrderDocument,
+                                     //    JoinSupplierDocument = joinSupplierDocument,
+                                     //    JoinConstructionYarnDetail = joinConstructionYarnDetail,
+                                     //    JoinYarnDocument = joinYarnDocument
 
+                                    //})
                                      select new
                                      {
-                                         DateTimeProduceBeam = brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct,
-                                         WeavingUnitId = warpingDocumentJoinOrder.UnitId,
-                                         SupplierName = orderDocumentJoinSupplier.Name,
-                                         BrokenCauseName = brokenCause.WarpingBrokenCauseName,
-                                         YarnName = constructionYarnDetailJoinYarn.Name,
+                                         //DateTimeProduceBeam = brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct,
+                                         //WeavingUnitId = warpingDocumentJoinOrder.UnitId,
+                                         //SupplierName = orderDocumentJoinSupplier.Name,
+                                         //BrokenCauseName = brokenCause.WarpingBrokenCauseName,
+                                         //YarnName = constructionYarnDetailJoinYarn.Name,
 
-                                         YarnId = constructionYarnDetailJoinYarn.YarnNumberId,
-                                         BeamLength = brokenCauseJoinBeamProduct.WarpingTotalBeamLength,
-                                         beamProductJoinWarpingDocument.AmountOfCones,
-                                         BrokenEachYarn = brokenCauseJoinWarpingBrokenCause.TotalBroken,
-                                         BeamProductUomId = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId,
-                                         BeamProductUomUnit = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomUnit
+                                         //YarnId = constructionYarnDetailJoinYarn.YarnNumberId,
+                                         //BeamLength = brokenCauseJoinBeamProduct.WarpingTotalBeamLength,
+                                         //beamProductJoinWarpingDocument.AmountOfCones,
+                                         //BrokenEachYarn = brokenCauseJoinWarpingBrokenCause.TotalBroken,
+                                         //BeamProductUomId = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId,
+                                         //BeamProductUomUnit = brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomUnit
 
-                                         //DateTimeProduceBeam = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct : DateTimeOffset.UtcNow,
-                                         //WeavingUnitId = warpingDocumentJoinOrder != null ? warpingDocumentJoinOrder.UnitId : 0,
-                                         //SupplierName = orderDocumentJoinSupplier != null ? orderDocumentJoinSupplier.Name : "",
-                                         //BrokenCauseName = brokenCause != null ? brokenCause.WarpingBrokenCauseName : "",
-                                         //YarnName = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.Name : "",
+                                         DateTimeProduceBeam = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.LatestDateTimeBeamProduct : DateTimeOffset.UtcNow,
+                                         WeavingUnitId = warpingDocumentJoinOrder != null ? warpingDocumentJoinOrder.UnitId : 0,
+                                         SupplierName = orderDocumentJoinSupplier != null ? orderDocumentJoinSupplier.Name : null,
+                                         BrokenCauseName = brokenCause != null ? brokenCause.WarpingBrokenCauseName : null,
+                                         YarnName = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.Name : null,
 
-                                         //YarnId = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.YarnNumberId.Value : Guid.Empty,
-                                         //BeamLength = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLength : 0,
-                                         //AmountOfCones = beamProductJoinWarpingDocument != null ? beamProductJoinWarpingDocument.AmountOfCones : 0,
-                                         //BrokenEachYarn = brokenCauseJoinWarpingBrokenCause != null ? brokenCauseJoinWarpingBrokenCause.TotalBroken : 0,
-                                         //BeamPerOperatorUom = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId : 0
+                                         YarnId = constructionYarnDetailJoinYarn != null ? constructionYarnDetailJoinYarn.YarnNumberId : Guid.Empty,
+                                         BeamLength = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLength : 0,
+                                         AmountOfCones = beamProductJoinWarpingDocument != null ? beamProductJoinWarpingDocument.AmountOfCones : 0,
+                                         BrokenEachYarn = brokenCauseJoinWarpingBrokenCause != null ? brokenCauseJoinWarpingBrokenCause.TotalBroken : 0,
+                                         BeamPerOperatorUom = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId : 0,
+                                         BeamProductUomId = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomId:0,
+                                         BeamProductUomUnit = brokenCauseJoinBeamProduct != null ? brokenCauseJoinBeamProduct.WarpingTotalBeamLengthUomUnit:null
                                      })
                                      .ToList();
 
                 var warpingBrokenReport = new List<WarpingBrokenThreadsReportQueryDto>();
                 foreach (var report in reportQueries)
                 {
-                    var brokenReportDto = new WarpingBrokenThreadsReportQueryDto(report.DateTimeProduceBeam,
-                                                                                 report.WeavingUnitId,
-                                                                                 report.BrokenCauseName,
-                                                                                 report.SupplierName,
-                                                                                 report.YarnName,
-                                                                                 report.YarnId,
-                                                                                 report.BeamLength,
-                                                                                 report.AmountOfCones,
-                                                                                 report.BrokenEachYarn,
-                                                                                 report.BeamProductUomId,
-                                                                                 report.BeamProductUomUnit);
-                    warpingBrokenReport.Add(brokenReportDto);
+                    if (!string.IsNullOrEmpty(report.SupplierName))
+                    {
+                        var brokenReportDto = new WarpingBrokenThreadsReportQueryDto(report.DateTimeProduceBeam,
+                                                                                     report.WeavingUnitId,
+                                                                                     report.BrokenCauseName,
+                                                                                     report.SupplierName,
+                                                                                     report.YarnName,
+                                                                                     report.YarnId,
+                                                                                     report.BeamLength,
+                                                                                     report.AmountOfCones,
+                                                                                     report.BrokenEachYarn,
+                                                                                     report.BeamProductUomId,
+                                                                                     report.BeamProductUomUnit);
+                        warpingBrokenReport.Add(brokenReportDto);
+                    }
                 }
 
                 return warpingBrokenReport;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }
