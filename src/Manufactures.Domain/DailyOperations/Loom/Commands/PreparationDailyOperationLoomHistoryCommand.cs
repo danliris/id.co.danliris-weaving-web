@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
-    public class PreparationDailyOperationLoomBeamHistoryCommand
+    public class PreparationDailyOperationLoomHistoryCommand
     {
         [JsonProperty(PropertyName = "BeamNumber")]
         public string BeamNumber { get; set; }
@@ -31,7 +31,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public string Information { get; set; }
     }
 
-    public class PreparationDailyOperationLoomBeamHistoryCommandValidator : AbstractValidator<PreparationDailyOperationLoomBeamHistoryCommand>
+    public class PreparationDailyOperationLoomBeamHistoryCommandValidator : AbstractValidator<PreparationDailyOperationLoomHistoryCommand>
     {
         public PreparationDailyOperationLoomBeamHistoryCommandValidator()
         {

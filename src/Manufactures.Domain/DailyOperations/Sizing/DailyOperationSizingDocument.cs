@@ -68,6 +68,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing
                 OperationStatus = this.OperationStatus,
             };
         }
+
         public DailyOperationSizingDocument(DailyOperationSizingDocumentReadModel readModel) : base(readModel)
         {
             this.MachineDocumentId = new MachineId(readModel.MachineDocumentId);

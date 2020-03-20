@@ -4,20 +4,19 @@ using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Commands
 {
     public class PreparationDailyOperationLoomCommand : ICommand<DailyOperationLoomDocument>
     {
         [JsonProperty(PropertyName = "OrderDocumentId")]
-        public OrderId OrderDocumentId { get; set; }
+        public Guid OrderDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "LoomBeamProducts")]
-        public List<PreparationDailyOperationLoomBeamProductCommand> LoomBeamProducts { get; set; }
+        [JsonProperty(PropertyName = "BeamProcessed")]
+        public int BeamProcessed { get; set; }
 
-        [JsonProperty(PropertyName = "LoomBeamHistories")]
-        public List<PreparationDailyOperationLoomBeamHistoryCommand> LoomBeamHistories { get; set; }
+        [JsonProperty(PropertyName = "LoomItems")]
+        public List<PreparationDailyOperationLoomItemsCommand> LoomItems { get; set; }
     }
 
     public class PreparationDailyOperationLoomCommandValidator : AbstractValidator<PreparationDailyOperationLoomCommand>
@@ -25,10 +24,9 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public PreparationDailyOperationLoomCommandValidator()
         {
             RuleFor(validator => validator.OrderDocumentId).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
-            RuleFor(validator => validator.LoomBeamHistories).Must(list => list.Count > 0).WithMessage("Beam Sizing Yang Diproses Tidak Boleh Kosong");
-            RuleForEach(validator => validator.LoomBeamHistories).SetValidator(new PreparationDailyOperationLoomBeamHistoryCommandValidator());
-            RuleFor(validator => validator.LoomBeamProducts).Must(list => list.Count > 0).WithMessage("Beam Sizing Yang Diproses Tidak Boleh Kosong");
-            RuleForEach(validator => validator.LoomBeamProducts).SetValidator(new PreparationDailyOperationLoomBeamProductCommandValidator());
+            RuleFor(validator => validator.BeamProcessed).NotEmpty().WithMessage("Jumlah Beam Diproses Harus Diisi");
+            RuleFor(validator => validator.LoomItems).Must(list => list.Count > 0).WithMessage("Beam Diproses Tidak Boleh Kosong");
+            RuleForEach(validator => validator.LoomItems).SetValidator(new PreparationDailyOperationLoomItemsCommandValidator());
         }
     }
 }

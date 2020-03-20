@@ -92,6 +92,8 @@
     <Compile Remove="Migrations\20200306032856_AddUomUnitOnDOMWarping.Designer.cs" />
     <Compile Remove="Migrations\20200310041447_AddUomUnitOnWarpingHistory.cs" />
     <Compile Remove="Migrations\20200310041447_AddUomUnitOnWarpingHistory.Designer.cs" />
+    <Compile Remove="Migrations\20200320020742_ChangePropertiesOnDailyOperationLoom.cs" />
+    <Compile Remove="Migrations\20200320020742_ChangePropertiesOnDailyOperationLoom.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
