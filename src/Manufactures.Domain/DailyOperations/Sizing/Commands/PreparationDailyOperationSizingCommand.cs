@@ -54,7 +54,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.OrderDocumentId).NotEmpty().WithMessage("No. Order Produksi Harus Diisi");
             RuleFor(validator => validator.RecipeCode).NotEmpty().WithMessage("Kode Resep Harus Diisi");
             RuleFor(validator => validator.NeReal).NotEmpty().WithMessage("Ne Real Harus Diisi");
-            RuleFor(validator => validator.PreparationOperator).NotEmpty().WithMessage("Operator Harus Diisi");
+            //RuleFor(validator => validator.PreparationOperator).NotEmpty().WithMessage("Operator Harus Diisi");
             RuleFor(validator => validator.PreparationDate).NotEmpty().WithMessage("Tanggal Pasang Harus Diisi");
             RuleFor(validator => validator.PreparationTime).NotEmpty().WithMessage("Waktu Pasang Harus Diisi");
             RuleFor(validator => validator.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");

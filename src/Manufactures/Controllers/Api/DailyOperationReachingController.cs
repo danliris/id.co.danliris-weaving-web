@@ -340,5 +340,46 @@ namespace Manufactures.Controllers.Api
                 count = dailyOperationReachingBeamDocuments.Item2
             });
         }
+
+        [HttpDelete("{operationId}/{historyId}")]
+        public async Task<IActionResult> Delete(string operationId,
+                                                string historyId)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(operationId, out Guid Identity))
+            {
+                return NotFound();
+            }
+
+            if (!Guid.TryParse(historyId, out Guid HistoryId))
+            {
+                return NotFound();
+            }
+
+            var command = new HistoryRemovePreparationDailyOperationReachingCommand();
+            command.SetId(Identity);
+            command.SetHistoryId(HistoryId);
+
+            var dailyOperationReachingDocument = await Mediator.Send(command);
+
+            return Ok(dailyOperationReachingDocument.Identity);
+        }
+        [HttpPut("{operationId}/{historyId}/{beamProductId}/{status}")]
+        public async Task<IActionResult> Put(string operationId,
+                                             string historyId,
+                                             string beamProductId,
+                                             string status,
+                                             [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationReachingCommand command)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(operationId, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var updateRemoveStartOrProduceBeamDailyOperationReachingDocument = await Mediator.Send(command);
+
+            return Ok(updateRemoveStartOrProduceBeamDailyOperationReachingDocument.Identity);
+        }
     }
 }

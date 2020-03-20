@@ -32,7 +32,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
         {
             Identity = identity;
             ShiftDocumentId = shiftDocumentId;
-            OperatorDocumentId = operatorDocumentId;
+            OperatorDocumentId = operatorDocumentId != null ? OperatorDocumentId : null;
             DateTimeMachine = dateTimeMachine;
             MachineStatus = machineStatus;
             DailyOperationSizingDocumentId = dailyOperationSizingDocumentId;
@@ -42,7 +42,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
             ReadModel = new DailyOperationSizingHistoryReadModel(Identity)
             {
                 ShiftDocumentId = ShiftDocumentId.Value,
-                OperatorDocumentId = OperatorDocumentId.Value,
+                OperatorDocumentId = OperatorDocumentId != null ? OperatorDocumentId.Value : Guid.Empty,
                 DateTimeMachine = DateTimeMachine,
                 MachineStatus = MachineStatus,
                 BrokenPerShift = BrokenPerShift,
@@ -50,6 +50,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Entities
                 DailyOperationSizingDocumentId = DailyOperationSizingDocumentId
             };
         }
+
 
         //Constructor for Mapping Object from Database to Domain (Read)
         public DailyOperationSizingHistory(DailyOperationSizingHistoryReadModel readModel) : base(readModel)
