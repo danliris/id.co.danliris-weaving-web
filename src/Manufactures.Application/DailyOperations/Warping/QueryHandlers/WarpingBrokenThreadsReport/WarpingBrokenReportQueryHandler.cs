@@ -191,7 +191,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers.Warping
                             dictionary[FooterBroken.Average.ToString()] = "0";
                         }
 
-                        dictionary[element.BrokenCauseName] = element.BrokenEachYarn.ToString();
+                        //dictionary[element.BrokenCauseName] = element.BrokenEachYarn.ToString();
+                        
+                        dictionary[element.BrokenCauseName] = CalculateWarpingBroken(element.BeamProductUomUnit,
+                                                                                        element.BeamLength,
+                                                                                        element.AmountOfCones,
+                                                                                        element.BrokenEachYarn).ToString();
 
                         dictionary[FooterBroken.Total.ToString()] = GetBrokenTotalAndAverage(element.BeamProductUomUnit, 
                                                                                                     element.BeamLength, 
