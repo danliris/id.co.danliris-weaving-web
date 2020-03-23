@@ -436,6 +436,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.QueryHandlers
             var sizingBeamProducts =
                 _dailyOperationBeamProductRepository
                     .Find(o => sizingDocumentIds.Contains(o.DailyOperationSizingDocumentId))
+                    .OrderByDescending(o => o.LatestDateTimeBeamProduct)
                     .ToList();
 
             await Task.Yield();
