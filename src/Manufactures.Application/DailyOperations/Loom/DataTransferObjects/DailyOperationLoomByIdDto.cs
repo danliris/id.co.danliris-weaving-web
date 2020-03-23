@@ -9,13 +9,17 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
     public class DailyOperationLoomByIdDto : DailyOperationLoomListDto
     {
         [JsonProperty(PropertyName = "DailyOperationLoomBeamsUsed")]
+        public int BeamProcessed { get; set; }
+
+        [JsonProperty(PropertyName = "DailyOperationLoomBeamsUsed")]
         public List<DailyOperationLoomBeamUsedDto> DailyOperationLoomBeamsUsed { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationLoomBeamHistories")]
         public List<DailyOperationLoomHistoryDto> DailyOperationLoomBeamHistories { get; set; }
 
-        public DailyOperationLoomByIdDto(DailyOperationLoomDocument document) : base(document)
+        public DailyOperationLoomByIdDto(DailyOperationLoomDocument document, int beamProcessed) : base(document)
         {
+            BeamProcessed = beamProcessed;
             DailyOperationLoomBeamsUsed = new List<DailyOperationLoomBeamUsedDto>();
             DailyOperationLoomBeamHistories = new List<DailyOperationLoomHistoryDto>();
         }

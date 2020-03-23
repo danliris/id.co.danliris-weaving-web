@@ -105,13 +105,13 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
 
             if (startDateMachineLogUtc < lastDateMachineLogUtc)
             {
-                throw Validator.ErrorValidation(("StartDate", "Start date cannot less than latest date log"));
+                throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
             }
             else
             {
                 if (dateTimeLoom <= lastLoomHistory.DateTimeMachine)
                 {
-                    throw Validator.ErrorValidation(("StartTime", "Start time cannot less than or equal latest time log"));
+                    throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                 }
                 else
                 {
@@ -143,7 +143,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Can't start, latest machine status must ONENTRY or ONCOMPLETE"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Memulai, Status Terakhir Mesin Harus ON-ENTRY atau COMPLETED"));
                     }
                 }
             }

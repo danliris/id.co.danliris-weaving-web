@@ -220,7 +220,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     .Code ?? "Kode Pakan Tidak Ditemukan";
 
             //Add Shell (DailyOperationLoomByIdDto Data Type) for Loom By Id Dto
-            var result = new DailyOperationLoomByIdDto(loomDocument);
+            var result = new DailyOperationLoomByIdDto(loomDocument, loomDocument.BeamProcessed);
             result.SetWeavingUnit(weavingUnitName);
             result.SetOrderProductionNumber(orderNumber);
             result.SetFabricConstructionNumber(constructionNumber);
@@ -269,7 +269,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     _machineRepository
                         .Find(o => o.Identity == loomHistory.TyingMachineId.Value)
                         .FirstOrDefault()?
-                        .MachineNumber ?? "Bukan Proses Tying/ Nomor Mesin Tying Tidak Ditemukan";
+                        .MachineNumber ?? "-";
 
                 //Get Tying Operator Name and Group
                 var tyingOperatorDocument =
@@ -285,8 +285,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 }
                 else
                 {
-                    tyingOperatorName = "Operator Tying Tidak Ditemukan";
-                    tyingOperatorGroup = "Grup Tying Tidak Ditemukan";
+                    tyingOperatorName = "-";
+                    tyingOperatorGroup = "-";
                 }
 
                 //Get Loom Machine Number
@@ -295,7 +295,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     _machineRepository
                         .Find(o => o.Identity == loomHistory.LoomMachineId)
                         .FirstOrDefault()?
-                        .MachineNumber ?? "Nomor Mesin Loom Tidak Ditemukan";
+                        .MachineNumber ?? "-";
 
                 //Get Loom Operator Name and Group
                 var loomOperatorDocument =
@@ -311,8 +311,8 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                 }
                 else
                 {
-                    loomOperatorName = "Operator Loom Tidak Ditemukan";
-                    loomOperatorGroup = "Grup Loom Tidak Ditemukan";
+                    loomOperatorName = "-";
+                    loomOperatorGroup = "-";
                 }
 
                 //Get Shift Name
@@ -322,7 +322,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                     _shiftRepository
                         .Find(o => o.Identity == shiftId)
                         .FirstOrDefault()
-                        .Name ?? "Shift Tidak Ditemukan";
+                        .Name ?? "-";
 
                 await Task.Yield();
                 var loomBeamHistoryDto = new DailyOperationLoomHistoryDto(loomHistory.Identity,
