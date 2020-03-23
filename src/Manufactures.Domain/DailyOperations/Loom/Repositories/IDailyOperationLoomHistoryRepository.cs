@@ -4,7 +4,7 @@ using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 
 namespace Manufactures.Domain.DailyOperations.Loom.Repositories
 {
-    public interface IDailyOperationLoomBeamProductRepository : IAggregateRepository<DailyOperationLoomBeamUsed, DailyOperationLoomBeamUsedReadModel>
+    public interface IDailyOperationLoomHistoryRepository : IAggregateRepository<DailyOperationLoomHistory, DailyOperationLoomHistoryReadModel>
     {
     }
 }

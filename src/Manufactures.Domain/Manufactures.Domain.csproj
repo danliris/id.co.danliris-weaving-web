@@ -11,6 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="DailyOperations\Loom\Commands\FinishDailyOperationLoomCommand.cs" />
+    <Compile Remove="DailyOperations\Loom\Commands\PreparationDailyOperationLoomBeamUsedCommand.cs" />
+    <Compile Remove="DailyOperations\Loom\Commands\PreparationDailyOperationLoomHistoryCommand.cs" />
+    <Compile Remove="DailyOperations\Loom\Commands\UpdatePauseDailyOperationLoomCommand.cs" />
+    <Compile Remove="DailyOperations\Loom\Commands\UpdateResumeDailyOperationLoomCommand.cs" />
+    <Compile Remove="DailyOperations\Loom\Entities\DailyOperationLoomProduct.cs" />
+    <Compile Remove="DailyOperations\Loom\ReadModels\DailyOperationLoomProductReadModel.cs" />
+    <Compile Remove="DailyOperations\Loom\Repositories\IDailyOperationLoomBeamProductRepository.cs" />
     <Compile Remove="Orders\Repositories\IGoodsCompositionRepository.cs" />
   </ItemGroup>
 

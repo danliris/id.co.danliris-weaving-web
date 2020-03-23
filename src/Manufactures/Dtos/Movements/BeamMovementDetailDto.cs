@@ -28,7 +28,7 @@ namespace Manufactures.DataTransferObjects.Movements
             Information = detail.MachineStatus;
         }
 
-        public BeamMovementDetailDto(DailyOperationLoomBeamHistory detail)
+        public BeamMovementDetailDto(DailyOperationLoomHistory detail)
         {
             Id = detail.Identity;
             DateTimeOperation = detail.DateTimeMachine;

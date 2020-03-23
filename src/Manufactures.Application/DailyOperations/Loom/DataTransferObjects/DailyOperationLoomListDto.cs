@@ -11,11 +11,11 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "DateTimeMachine")]
-        public DateTimeOffset DateTimeMachine { get; private set; }
+        [JsonProperty(PropertyName = "DateTimeOperation")]
+        public DateTimeOffset DateTimeOperation { get; private set; }
 
-        [JsonProperty(PropertyName = "WeavingUnit")]
-        public string WeavingUnit { get; private set; }
+        [JsonProperty(PropertyName = "WeavingUnitName")]
+        public string WeavingUnitName { get; private set; }
 
         [JsonProperty(PropertyName = "OrderProductionNumber")]
         public string OrderProductionNumber { get; private set; }
@@ -38,14 +38,14 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             OperationStatus = document.OperationStatus;
         }
 
-        public void SetDateTimeMachine(DateTimeOffset dateTimeMachine)
+        public void SetDateTimeOperation(DateTimeOffset dateTimeMachine)
         {
-            DateTimeMachine = dateTimeMachine;
+            DateTimeOperation = dateTimeMachine;
         }
 
         public void SetWeavingUnit(string weavingUnit)
         {
-            WeavingUnit = weavingUnit;
+            WeavingUnitName = weavingUnit;
         }
 
         public void SetOrderProductionNumber(string orderProductionNumber)

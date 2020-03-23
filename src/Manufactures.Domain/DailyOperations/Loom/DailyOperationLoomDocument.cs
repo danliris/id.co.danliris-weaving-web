@@ -1,49 +1,64 @@
 ﻿using Infrastructure.Domain;
+using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
+    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomDocumentReadModel>
     {
 
-        public OrderId OrderDocumentId { get; private set; }
-        public string OperationStatus { get; private set; }
-        //public IReadOnlyCollection<DailyOperationLoomBeamProduct> LoomBeamProducts { get; private set; }
+        public Guid OrderDocumentId { get; private set; }
 
-        public DailyOperationLoomDocument(Guid id, OrderId orderDocumentId, string operationStatus) : base(id)
+        public double TotalCounter { get; private set; }
+
+        public int BeamProcessed { get; private set; }
+
+        public string OperationStatus { get; private set; }
+
+        public List<DailyOperationLoomBeamUsed> LoomBeamsUsed { get; set; }
+
+        public List<DailyOperationLoomHistory> LoomHistories { get; set; }
+
+        public DailyOperationLoomDocument(Guid identity,
+                                          Guid orderDocumentId,
+                                          int beamProcessed,
+                                          string operationStatus) : base(identity)
         {
-            Identity = id;
+            Identity = identity;
             OrderDocumentId = orderDocumentId;
+            BeamProcessed = beamProcessed;
             OperationStatus = operationStatus;
-            //LoomBeamProducts = new List<DailyOperationLoomBeamProduct>();
-            //LoomBeamHistories = new List<DailyOperationLoomBeamHistory>();
+            //LoomBeamsUsed= new List<DailyOperationLoomBeamUsed>();
+            //LoomProducts = new List<DailyOperationLoomProduct>();
+            //LoomHistories = new List<DailyOperationLoomHistory>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationLoomReadModel(Identity)
+            ReadModel = new DailyOperationLoomDocumentReadModel(Identity)
             {
-                OrderDocumentId = OrderDocumentId.Value,
-                OperationStatus = OperationStatus,
-                //LoomBeamProducts = LoomBeamProducts.ToList(),
-                //LoomBeamHistories = LoomBeamHistories.ToList()
+                OrderDocumentId = OrderDocumentId,
+                TotalCounter = TotalCounter,
+                BeamProcessed = BeamProcessed,
+                OperationStatus = OperationStatus
             };
 
-            ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
+            //ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
         }
 
         //Constructor for Mapping Object from Database to Domain
-        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
+        public DailyOperationLoomDocument(DailyOperationLoomDocumentReadModel readModel) : base(readModel)
         {
-            //Instantiate object from database
-            this.OrderDocumentId = new OrderId(readModel.OrderDocumentId);
+            //Instantiate Object from Database
+            this.OrderDocumentId = readModel.OrderDocumentId;
+            this.TotalCounter = readModel.TotalCounter;
+            this.BeamProcessed = readModel.BeamProcessed;
             this.OperationStatus = readModel.OperationStatus;
-            //this.LoomBeamHistories = readModel.LoomBeamHistories;
-            //this.LoomBeamProducts = readModel.LoomBeamProducts;
         }
 
         //public void AddDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
@@ -146,22 +161,48 @@ namespace Manufactures.Domain.DailyOperations.Loom
         //    MarkModified();
         //}
 
-        public void SetOperationStatus(string newOperationStatus)
+        public void SetOrderDocumentId(Guid orderDocumentId)
         {
-            if(OperationStatus != newOperationStatus)
+            Validator.ThrowIfNull(() => orderDocumentId);
+            if (orderDocumentId != OrderDocumentId)
             {
-                OperationStatus = newOperationStatus;
-                ReadModel.OperationStatus = OperationStatus;
+                OrderDocumentId = orderDocumentId;
+                ReadModel.OrderDocumentId = OrderDocumentId;
+
                 MarkModified();
             }
         }
 
-        public void SetOrderDocumentId(OrderId newOrderDocumentId)
+        public void SetTotalCounter(double totalCounter)
         {
-            if(OrderDocumentId != newOrderDocumentId)
+            if (totalCounter != TotalCounter)
             {
-                OrderDocumentId = newOrderDocumentId;
-                ReadModel.OrderDocumentId = OrderDocumentId.Value;
+                TotalCounter = totalCounter;
+                ReadModel.TotalCounter = TotalCounter;
+
+                MarkModified();
+            }
+        }
+
+        public void SetBeamProcessed(int beamProcessed)
+        {
+            if (beamProcessed != BeamProcessed)
+            {
+                BeamProcessed = beamProcessed;
+                ReadModel.BeamProcessed = BeamProcessed;
+
+                MarkModified();
+            }
+        }
+
+        public void SetOperationStatus(string operationStatus)
+        {
+            Validator.ThrowIfNull(() => operationStatus);
+            if (operationStatus != OperationStatus)
+            {
+                OperationStatus = operationStatus;
+                ReadModel.OperationStatus = OperationStatus;
+
                 MarkModified();
             }
         }
@@ -169,6 +210,11 @@ namespace Manufactures.Domain.DailyOperations.Loom
         public void SetModified()
         {
             MarkModified();
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override DailyOperationLoomDocument GetEntity()
