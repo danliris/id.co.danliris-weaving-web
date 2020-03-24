@@ -78,7 +78,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.ProduceBeamShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.ProduceBeamDate).NotEmpty().WithMessage("Tanggal Produksi Beam Harus Diisi");
             RuleFor(validator => validator.ProduceBeamTime).NotEmpty().WithMessage("Waktu Produksi Beam Harus Diisi");
-            RuleFor(validator => validator.BrokenPerShift).NotEmpty().WithMessage("Jumlah Putus Beam Harus Diisi");
+            //RuleFor(validator => validator.BrokenPerShift).NotEmpty().WithMessage("Jumlah Putus Beam Harus Diisi");
             RuleFor(validator => validator.MachineSpeed).NotEmpty().WithMessage("Kecepatan Mesin Harus Diisi");
             RuleFor(validator => validator.TexSQ).NotEmpty().WithMessage("TexSQ Harus Diisi");
             RuleFor(validator => validator.Visco).NotEmpty().WithMessage("Visco Harus Diisi");

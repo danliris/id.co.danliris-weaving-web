@@ -60,7 +60,7 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.PreparationShift).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.BeamProductResult).NotEmpty().WithMessage("Shift Harus Diisi");
             RuleFor(validator => validator.YarnStrands).NotEmpty().WithMessage("Helai Benang Beam Warping Tidak Boleh 0");
-            RuleFor(validator => validator.EmptyWeight).NotEmpty().WithMessage("Berat Kosong Beam Warping Tidak Boleh 0");
+            //RuleFor(validator => validator.EmptyWeight).NotEmpty().WithMessage("Berat Kosong Beam Warping Tidak Boleh 0");
             RuleFor(validator => validator.BeamsWarping).NotEmpty().WithMessage("Beam Warping Tidak Boleh Kosong");
         }
     }
