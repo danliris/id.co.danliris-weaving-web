@@ -8,11 +8,11 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
 {
     public class DailyOperationLoomByIdDto : DailyOperationLoomListDto
     {
-        [JsonProperty(PropertyName = "DailyOperationLoomBeamsUsed")]
+        [JsonProperty(PropertyName = "BeamProcessed")]
         public int BeamProcessed { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationLoomBeamsUsed")]
-        public List<DailyOperationLoomBeamUsedDto> DailyOperationLoomBeamsUsed { get; set; }
+        public List<DailyOperationLoomBeamsUsedDto> DailyOperationLoomBeamsUsed { get; set; }
 
         [JsonProperty(PropertyName = "DailyOperationLoomBeamHistories")]
         public List<DailyOperationLoomHistoryDto> DailyOperationLoomBeamHistories { get; set; }
@@ -20,11 +20,11 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         public DailyOperationLoomByIdDto(DailyOperationLoomDocument document, int beamProcessed) : base(document)
         {
             BeamProcessed = beamProcessed;
-            DailyOperationLoomBeamsUsed = new List<DailyOperationLoomBeamUsedDto>();
+            DailyOperationLoomBeamsUsed = new List<DailyOperationLoomBeamsUsedDto>();
             DailyOperationLoomBeamHistories = new List<DailyOperationLoomHistoryDto>();
         }
 
-        public void AddDailyOperationLoomBeamProducts(DailyOperationLoomBeamUsedDto beamProduct)
+        public void AddDailyOperationLoomBeamProducts(DailyOperationLoomBeamsUsedDto beamProduct)
         {
             DailyOperationLoomBeamsUsed.Add(beamProduct);
         }

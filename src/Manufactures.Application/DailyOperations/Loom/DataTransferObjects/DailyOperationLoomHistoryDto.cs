@@ -19,8 +19,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "TyingOperatorName")]
         public string TyingOperatorName { get; }
 
-        [JsonProperty(PropertyName = "TyingOperatorGroup")]
-        public string TyingOperatorGroup { get; }
+        [JsonProperty(PropertyName = "TyingGroup")]
+        public string TyingGroup { get; }
 
         [JsonProperty(PropertyName = "LoomMachineNumber")]
         public string LoomMachineNumber { get; }
@@ -28,8 +28,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "LoomOperatorName")]
         public string LoomOperatorName { get; }
 
-        [JsonProperty(PropertyName = "LoomOperatorGroup")]
-        public string LoomOperatorGroup { get; }
+        [JsonProperty(PropertyName = "LoomGroup")]
+        public string LoomGroup { get; }
 
         [JsonProperty(PropertyName = "CounterPerOperator")]
         public double CounterPerOperator { get; }
@@ -50,10 +50,10 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
                                             string beamNumber,
                                             string tyingMachineNumber,
                                             string tyingOperatorName,
-                                            string tyingOperatorGroup,
+                                            string tyingGroup,
                                             string loomMachineNumber,
                                             string loomOperatorName,
-                                            string loomOperatorGroup,
+                                            string loomGroup,
                                             DateTimeOffset dateTimeMachine, 
                                             string shiftName, 
                                             string information, 
@@ -63,10 +63,10 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
             BeamNumber = beamNumber;
             TyingMachineNumber = tyingMachineNumber;
             TyingOperatorName = tyingOperatorName;
-            TyingOperatorGroup = tyingOperatorGroup;
+            TyingGroup = tyingGroup;
             LoomMachineNumber = loomMachineNumber;
             LoomOperatorName = loomOperatorName;
-            LoomOperatorGroup = loomOperatorGroup;
+            LoomGroup = loomGroup;
             DateTimeMachine = dateTimeMachine;
             ShiftName = shiftName;
             Information = information;

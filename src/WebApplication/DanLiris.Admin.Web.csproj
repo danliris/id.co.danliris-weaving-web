@@ -94,6 +94,12 @@
     <Compile Remove="Migrations\20200310041447_AddUomUnitOnWarpingHistory.Designer.cs" />
     <Compile Remove="Migrations\20200320020742_ChangePropertiesOnDailyOperationLoom.cs" />
     <Compile Remove="Migrations\20200320020742_ChangePropertiesOnDailyOperationLoom.Designer.cs" />
+    <Compile Remove="Migrations\20200324122116_AddPropertiesOnLoomBeamsUsed.cs" />
+    <Compile Remove="Migrations\20200324122116_AddPropertiesOnLoomBeamsUsed.Designer.cs" />
+    <Compile Remove="Migrations\20200324123835_AddPropertiesOnLoomBeamsUsed.cs" />
+    <Compile Remove="Migrations\20200324123835_AddPropertiesOnLoomBeamsUsed.Designer.cs" />
+    <Compile Remove="Migrations\20200324131352_AddPropertiesOnLoomBeamsUsed.cs" />
+    <Compile Remove="Migrations\20200324131352_AddPropertiesOnLoomBeamsUsed.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

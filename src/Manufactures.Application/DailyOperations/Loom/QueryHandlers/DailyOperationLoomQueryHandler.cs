@@ -3,6 +3,7 @@ using Infrastructure.External.DanLirisClient.CoreMicroservice;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
 using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
+using Manufactures.Application.Helpers;
 using Manufactures.Domain.Beams.Repositories;
 using Manufactures.Domain.DailyOperations.Loom.Queries;
 using Manufactures.Domain.DailyOperations.Loom.Repositories;
@@ -23,7 +24,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 {
-    public class DailyOperationLoomQueryHandler : IDailyOperationLoomQuery<DailyOperationLoomListDto>
+    public class DailyOperationLoomQueryHandler : IDailyOperationLoomQuery<DailyOperationLoomListDto>, IDailyOperationLoomBeamsUsedQuery<DailyOperationLoomBeamsUsedDto>
     {
         protected readonly IHttpClientService
             _http;
@@ -234,21 +235,26 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
             foreach (var loomBeamUsed in loomBeamsUsed)
             {
                 await Task.Yield();
-                var loomBeamProductDto = new DailyOperationLoomBeamUsedDto(loomBeamUsed.Identity,
-                                                                           loomBeamUsed.BeamOrigin,
-                                                                           loomBeamUsed.BeamNumber,
-                                                                           loomBeamUsed.StartCounter ?? 0,
-                                                                           loomBeamUsed.FinishCounter ?? 0,
-                                                                           loomBeamUsed.MachineSpeed ?? 0,
-                                                                           loomBeamUsed.SCMPX ?? 0,
-                                                                           loomBeamUsed.Efficiency ?? 0,
-                                                                           loomBeamUsed.F ?? 0,
-                                                                           loomBeamUsed.W ?? 0,
-                                                                           loomBeamUsed.L ?? 0,
-                                                                           loomBeamUsed.T ?? 0,
-                                                                           loomBeamUsed.UomUnit ?? "-",
-                                                                           loomBeamUsed.LastDateTimeProcessed,
-                                                                           loomBeamUsed.BeamUsedStatus);
+                var loomBeamProductDto = new DailyOperationLoomBeamsUsedDto(loomBeamUsed.Identity,
+                                                                            loomBeamUsed.BeamOrigin,
+                                                                            loomBeamUsed.BeamNumber,
+                                                                            loomBeamUsed.BeamDocumentId,
+                                                                            loomBeamUsed.TyingMachineNumber,
+                                                                            loomBeamUsed.LoomMachineNumber,
+                                                                            loomBeamUsed.LastTyingOperatorDocumentId ?? Guid.Empty,
+                                                                            loomBeamUsed.StartCounter ?? 0,
+                                                                            loomBeamUsed.FinishCounter ?? 0,
+                                                                            loomBeamUsed.MachineSpeed ?? 0,
+                                                                            loomBeamUsed.SCMPX ?? 0,
+                                                                            loomBeamUsed.Efficiency ?? 0,
+                                                                            loomBeamUsed.F ?? 0,
+                                                                            loomBeamUsed.W ?? 0,
+                                                                            loomBeamUsed.L ?? 0,
+                                                                            loomBeamUsed.T ?? 0,
+                                                                            loomBeamUsed.UomUnit ?? "-",
+                                                                            loomBeamUsed.LastDateTimeProcessed,
+                                                                            loomBeamUsed.BeamUsedStatus,
+                                                                            loomBeamUsed.DailyOperationLoomDocumentId);
 
                 //loomBeamProductDto.SetBeamDocumentId(loomBeamProduct.BeamDocumentId.Value);
 
@@ -345,5 +351,92 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             return result;
         }
+
+        public async Task<IEnumerable<DailyOperationLoomBeamsUsedDto>> GetAllBeamsUsed()
+        {
+            await Task.Yield();
+            var loomBeamsUsedQuery =
+                _dailyOperationLoomBeamUsedRepository
+                    .Query
+                    .OrderByDescending(o => o.CreatedDate);
+
+            var loomBeamsUsedDto =
+                    _dailyOperationLoomBeamUsedRepository
+                        .Find(loomBeamsUsedQuery)
+                        .Select(x => new DailyOperationLoomBeamsUsedDto(x.Identity,
+                                                                        x.BeamOrigin,
+                                                                        x.BeamNumber,
+                                                                        x.BeamDocumentId,
+                                                                        x.TyingMachineNumber,
+                                                                        x.LoomMachineNumber,
+                                                                        x.LastTyingOperatorDocumentId ?? Guid.Empty,
+                                                                        x.StartCounter ?? 0,
+                                                                        x.FinishCounter ?? 0,
+                                                                        x.MachineSpeed ?? 0,
+                                                                        x.SCMPX ?? 0,
+                                                                        x.Efficiency ?? 0,
+                                                                        x.F ?? 0,
+                                                                        x.W ?? 0,
+                                                                        x.L ?? 0,
+                                                                        x.T ?? 0,
+                                                                        x.UomUnit ?? "-",
+                                                                        x.LastDateTimeProcessed,
+                                                                        x.BeamUsedStatus,
+                                                                        x.DailyOperationLoomDocumentId));
+
+            return loomBeamsUsedDto;
+        }
+
+        //public async Task<IEnumerable<DailyOperationLoomBeamsUsedDto>> GetBeamsUsedById(Guid id)
+        //{
+        //    await Task.Yield();
+        //    var loomBeamsUsedByIdDto =
+        //            _dailyOperationLoomBeamUsedRepository
+        //                .Find(o => o.DailyOperationLoomDocumentId == id)
+        //                .Select(x=>new DailyOperationLoomBeamsUsedDto(x.Identity,
+        //                                                              x.BeamOrigin,
+        //                                                              x.BeamNumber,
+        //                                                              x.StartCounter ?? 0,
+        //                                                              x.FinishCounter ?? 0,
+        //                                                              x.MachineSpeed ?? 0,
+        //                                                              x.SCMPX ?? 0,
+        //                                                              x.Efficiency ?? 0,
+        //                                                              x.F ?? 0,
+        //                                                              x.W ?? 0,
+        //                                                              x.L ?? 0,
+        //                                                              x.T ?? 0,
+        //                                                              x.UomUnit ?? "-",
+        //                                                              x.LastDateTimeProcessed,
+        //                                                              x.BeamUsedStatus,
+        //                                                              x.DailyOperationLoomDocumentId));
+
+        //    return loomBeamsUsedByIdDto;
+        //}
+
+        //public async Task<IEnumerable<DailyOperationLoomBeamsUsedDto>> GetBeamsUsedByIdProcessed(Guid id)
+        //{
+        //    await Task.Yield();
+        //    var loomBeamsUsedByIdProcessedDto =
+        //            _dailyOperationLoomBeamUsedRepository
+        //                .Find(o => o.DailyOperationLoomDocumentId == id && o.BeamUsedStatus == BeamStatus.ONPROCESS)
+        //                .Select(x => new DailyOperationLoomBeamsUsedDto(x.Identity,
+        //                                                              x.BeamOrigin,
+        //                                                              x.BeamNumber,
+        //                                                              x.StartCounter ?? 0,
+        //                                                              x.FinishCounter ?? 0,
+        //                                                              x.MachineSpeed ?? 0,
+        //                                                              x.SCMPX ?? 0,
+        //                                                              x.Efficiency ?? 0,
+        //                                                              x.F ?? 0,
+        //                                                              x.W ?? 0,
+        //                                                              x.L ?? 0,
+        //                                                              x.T ?? 0,
+        //                                                              x.UomUnit ?? "-",
+        //                                                              x.LastDateTimeProcessed,
+        //                                                              x.BeamUsedStatus,
+        //                                                              x.DailyOperationLoomDocumentId));
+
+        //    return loomBeamsUsedByIdProcessedDto;
+        //}
     }
 }

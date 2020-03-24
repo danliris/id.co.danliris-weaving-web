@@ -95,7 +95,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetBeamDocumentId(Guid beamDocumentId)
         {
-            Validator.ThrowIfNull(() => beamDocumentId);
             if (BeamDocumentId != beamDocumentId)
             {
                 BeamDocumentId = beamDocumentId;
@@ -117,7 +116,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetTyingMachineId(Guid tyingMachineId)
         {
-            Validator.ThrowIfNull(() => tyingMachineId);
             if (tyingMachineId != TyingMachineId)
             {
                 TyingMachineId = tyingMachineId;
@@ -129,7 +127,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetTyingOperatorId(Guid tyingOperatorId)
         {
-            Validator.ThrowIfNull(() => tyingOperatorId);
             if (tyingOperatorId != TyingOperatorId)
             {
                 TyingOperatorId = tyingOperatorId;
@@ -141,7 +138,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetLoomMachineId(Guid loomMachineId)
         {
-            Validator.ThrowIfNull(() => loomMachineId);
             if (loomMachineId != LoomMachineId)
             {
                 LoomMachineId = loomMachineId;
@@ -153,7 +149,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetLoomOperatorId(Guid loomOperatorId)
         {
-            Validator.ThrowIfNull(() => loomOperatorId);
             if (loomOperatorId != LoomOperatorId)
             {
                 LoomOperatorId = loomOperatorId;
