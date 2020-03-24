@@ -74,6 +74,11 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                  dateTimeLoom,
                                                                  BeamStatus.ONPROCESS,
                                                                  newLoomDocument.Identity);
+                newBeamUsed.SetTyingMachineDocumentId(item.TyingMachineId);
+                newBeamUsed.SetTyingMachineNumber(item.TyingMachineNumber);
+                newBeamUsed.SetLoomMachineNumber(item.LoomMachineNumber);
+                newBeamUsed.SetLastTyingOperatorDocumentId(item.TyingOperatorId);
+                newBeamUsed.SetLastTyingOperatorName(item.TyingOperatorName);
                 await _dailyOperationLoomBeamUsedRepository.Update(newBeamUsed);
 
                 var newHistory = new DailyOperationLoomHistory(Guid.NewGuid(),
@@ -86,6 +91,8 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                item.PreparationShift,
                                                                MachineStatus.ONENTRY,
                                                                newLoomDocument.Identity);
+                newHistory.SetTyingMachineId(item.TyingMachineId);
+                newHistory.SetTyingOperatorId(item.TyingOperatorId);
                 await _dailyOperationLoomHistoryRepository.Update(newHistory);
             }
 

@@ -21,8 +21,17 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "TyingMachineId")]
         public Guid TyingMachineId { get; set; }
 
+        [JsonProperty(PropertyName = "TyingMachineNumber")]
+        public string TyingMachineNumber { get; set; }
+
+        [JsonProperty(PropertyName = "LoomMachineNumber")]
+        public string LoomMachineNumber { get; set; }
+
         [JsonProperty(PropertyName = "TyingOperatorId")]
         public Guid TyingOperatorId { get; set; }
+
+        [JsonProperty(PropertyName = "TyingOperatorName")]
+        public string TyingOperatorName { get; set; }
 
         [JsonProperty(PropertyName = "LoomMachineId")]
         public Guid LoomMachineId { get; set; }

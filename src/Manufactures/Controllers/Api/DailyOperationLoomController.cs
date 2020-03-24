@@ -27,8 +27,10 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationLoomController : ControllerApiBase
     {
-        private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto> 
-            _loomQuery;
+        private readonly IDailyOperationLoomQuery<DailyOperationLoomListDto>
+            _loomDocumentQuery;
+        private readonly IDailyOperationLoomBeamsUsedQuery<DailyOperationLoomBeamsUsedDto>
+            _loomBeamsUsedQuery;
         private readonly IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> 
             _dailyOperationLoomReportQuery;
         //private readonly IDailyOperationLoomBeamProductQuery<DailyOperationLoomBeamProductDto>
@@ -47,11 +49,14 @@ namespace Manufactures.Controllers.Api
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationLoomController(IServiceProvider serviceProvider,
-                                            IDailyOperationLoomQuery<DailyOperationLoomListDto> loomQuery,
+                                            IDailyOperationLoomQuery<DailyOperationLoomListDto> loomDocumentQuery,
+                                            IDailyOperationLoomBeamsUsedQuery<DailyOperationLoomBeamsUsedDto> loomBeamsUsedQuery,
                                             IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto> dailyOperationLoomReportQuery) : base(serviceProvider)
         {
-            _loomQuery = 
-                loomQuery ?? throw new ArgumentNullException(nameof(loomQuery));
+            _loomDocumentQuery =
+                loomDocumentQuery ?? throw new ArgumentNullException(nameof(loomDocumentQuery));
+            _loomBeamsUsedQuery =
+                loomBeamsUsedQuery ?? throw new ArgumentNullException(nameof(loomBeamsUsedQuery));
             _dailyOperationLoomReportQuery = 
                 dailyOperationLoomReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationLoomReportQuery));
 
@@ -75,7 +80,7 @@ namespace Manufactures.Controllers.Api
                                              string filter = "{}")
         {
             VerifyUser();
-            var dailyOperationLoomDocuments = await _loomQuery.GetAll();
+            var dailyOperationLoomDocuments = await _loomDocumentQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -146,7 +151,7 @@ namespace Manufactures.Controllers.Api
         //        if (!LoomOperationId.Equals(null))
         //        {
         //            var LoomOperationGuid = Guid.Parse(LoomOperationId);
-                    
+
         //            await Task.Yield();
         //            var existingDailyOperationLoomDocument =
         //                _dailyOperationLoomRepository
@@ -236,16 +241,172 @@ namespace Manufactures.Controllers.Api
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetById(string Id)
         {
-            VerifyUser();
-            var identity = Guid.Parse(Id);
-            var dailyOperationLoomDocument = await _loomQuery.GetById(identity);
-
-            if (dailyOperationLoomDocument == null)
+            try
             {
-                return NotFound(identity);
-            }
+                VerifyUser();
+                var identity = Guid.Parse(Id);
+                var dailyOperationLoomDocument = await _loomDocumentQuery.GetById(identity);
 
-            return Ok(dailyOperationLoomDocument);
+                if (dailyOperationLoomDocument == null)
+                {
+                    return NotFound(identity);
+                }
+
+                return Ok(dailyOperationLoomDocument);
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        [HttpGet("get-loom-beams-used")]
+        public async Task<IActionResult> GetLoomBeamsUsed(int page = 1,
+                                                          int size = 25,
+                                                          string order = "{}",
+                                                          string keyword = null,
+                                                          string filter = "{}")
+        {
+            try
+            {
+                VerifyUser();
+                var dailyOperationLoomBeamsUsed = await _loomBeamsUsedQuery.GetAllBeamsUsed();
+
+                if (!filter.Contains("{}"))
+                {
+                    Dictionary<string, string> filterDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+                    var key = filterDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              filterDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(DailyOperationLoomBeamsUsedDto).GetProperty(key);
+
+                    if (filterDictionary.Keys.Contains("LoomOperationId"))
+                    {
+                        if (!Guid.TryParse(filterDictionary["LoomOperationId"], out Guid operationId))
+                        {
+                            return NotFound();
+                        }
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed
+                                .Where(x => x.DailyOperationLoomDocumentId == operationId);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    await Task.Yield();
+                    dailyOperationLoomBeamsUsed =
+                        dailyOperationLoomBeamsUsed
+                            .Where(x => x.BeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                }
+
+                if (!order.Contains("{}"))
+                {
+                    Dictionary<string, string> orderDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              orderDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(DailyOperationLoomBeamsUsedDto).GetProperty(key);
+
+                    if (orderDictionary.Values.Contains("asc"))
+                    {
+                        await Task.Yield();
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed.OrderBy(x => prop.GetValue(x, null));
+                    }
+                    else
+                    {
+                        await Task.Yield();
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed.OrderByDescending(x => prop.GetValue(x, null));
+                    }
+                }
+
+                var result = dailyOperationLoomBeamsUsed.Skip((page - 1) * size).Take(size);
+                var total = result.Count();
+
+                return Ok(result, info: new { page, size, total });
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+        [HttpGet("get-loom-beams-used-processed")]
+        public async Task<IActionResult> GetLoomBeamsUsedProcessed(int page = 1,
+                                                                   int size = 25,
+                                                                   string order = "{}",
+                                                                   string keyword = null,
+                                                                   string filter = "{}")
+        {
+            try
+            {
+                VerifyUser();
+                var dailyOperationLoomBeamsUsed = await _loomBeamsUsedQuery.GetAllBeamsUsed();
+
+                if (!filter.Contains("{}"))
+                {
+                    Dictionary<string, string> filterDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+                    var key = filterDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              filterDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(DailyOperationLoomBeamsUsedDto).GetProperty(key);
+
+                    if (filterDictionary.Keys.Contains("LoomOperationId"))
+                    {
+                        if (!Guid.TryParse(filterDictionary["LoomOperationId"], out Guid operationId))
+                        {
+                            return NotFound();
+                        }
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed
+                                .Where(x => x.DailyOperationLoomDocumentId == operationId && x.BeamUsedStatus == BeamStatus.ONPROCESS);
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    await Task.Yield();
+                    dailyOperationLoomBeamsUsed =
+                        dailyOperationLoomBeamsUsed
+                            .Where(x => x.BeamNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                }
+
+                if (!order.Contains("{}"))
+                {
+                    Dictionary<string, string> orderDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              orderDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(DailyOperationLoomBeamsUsedDto).GetProperty(key);
+
+                    if (orderDictionary.Values.Contains("asc"))
+                    {
+                        await Task.Yield();
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed.OrderBy(x => prop.GetValue(x, null));
+                    }
+                    else
+                    {
+                        await Task.Yield();
+                        dailyOperationLoomBeamsUsed =
+                            dailyOperationLoomBeamsUsed.OrderByDescending(x => prop.GetValue(x, null));
+                    }
+                }
+
+                var result = dailyOperationLoomBeamsUsed.Skip((page - 1) * size).Take(size);
+                var total = result.Count();
+
+                return Ok(result, info: new { page, size, total });
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
         }
 
         [HttpPost]

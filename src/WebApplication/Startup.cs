@@ -159,6 +159,7 @@ namespace DanLiris.Admin.Web
             //Loom and Loom's Report
             services.AddTransient<IDailyOperationLoomReportQuery<DailyOperationLoomReportListDto>, DailyOperationLoomReportQueryHandler>();
             services.AddTransient<IDailyOperationLoomQuery<DailyOperationLoomListDto>, DailyOperationLoomQueryHandler>();
+            services.AddTransient<IDailyOperationLoomBeamsUsedQuery<DailyOperationLoomBeamsUsedDto>, DailyOperationLoomQueryHandler>();
 
             //Reaching and Reaching's Report
             services.AddTransient<IDailyOperationReachingBeamQuery<DailyOperationReachingBeamDto>, DailyOperationReachingBeamQueryHandler>();

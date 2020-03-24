@@ -17,6 +17,16 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public string BeamNumber { get; private set; }
 
+        public Guid? TyingMachineDocumentId { get; private set; }
+
+        public string TyingMachineNumber { get; private set; }
+
+        public string LoomMachineNumber { get; private set; }
+
+        public Guid? LastTyingOperatorDocumentId { get; private set; }
+
+        public string LastTyingOperatorName { get; private set; }
+
         public double? StartCounter { get; private set; }
 
         public double? FinishCounter { get; private set; }
@@ -45,10 +55,10 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public Guid DailyOperationLoomDocumentId { get; set; }
 
-        public DailyOperationLoomBeamUsed(Guid identity, 
-                                          string beamOrigin, 
-                                          Guid beamDocumentId, 
-                                          string beamNumber, 
+        public DailyOperationLoomBeamUsed(Guid identity,
+                                          string beamOrigin,
+                                          Guid beamDocumentId,
+                                          string beamNumber,
                                           DateTimeOffset lastDateTimeProcessed,
                                           string beamUsedStatus,
                                           Guid dailyOperationLoomDocumentId) : base(identity)
@@ -68,15 +78,20 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
                 BeamOrigin = BeamOrigin,
                 BeamDocumentId = BeamDocumentId,
                 BeamNumber = BeamNumber,
+                TyingMachineDocumentId = TyingMachineDocumentId ?? Guid.Empty,
+                TyingMachineNumber = TyingMachineNumber,
+                LoomMachineNumber = LoomMachineNumber,
+                LastTyingOperatorDocumentId = LastTyingOperatorDocumentId ?? Guid.Empty,
+                LastTyingOperatorName = LastTyingOperatorName,
                 StartCounter = StartCounter ?? 0,
                 FinishCounter = FinishCounter ?? 0,
                 MachineSpeed = MachineSpeed ?? 0,
                 SCMPX = SCMPX ?? 0,
                 Efficiency = Efficiency ?? 0,
-                F=F ?? 0,
-                W=W ?? 0,
-                L=L ?? 0,
-                T=T ?? 0,
+                F = F ?? 0,
+                W = W ?? 0,
+                L = L ?? 0,
+                T = T ?? 0,
                 UomDocumentId = UomDocumentId,
                 UomUnit = UomUnit,
                 LastDateTimeProcessed = LastDateTimeProcessed,
@@ -92,6 +107,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             BeamOrigin = readModel.BeamOrigin;
             BeamDocumentId = readModel.BeamDocumentId;
             BeamNumber = readModel.BeamNumber;
+            TyingMachineDocumentId = readModel.TyingMachineDocumentId;
+            TyingMachineNumber = readModel.TyingMachineNumber;
+            LoomMachineNumber = readModel.LoomMachineNumber;
+            LastTyingOperatorDocumentId = readModel.LastTyingOperatorDocumentId;
+            LastTyingOperatorName = readModel.LastTyingOperatorName;
             StartCounter = readModel.StartCounter;
             FinishCounter = readModel.FinishCounter;
             MachineSpeed = readModel.MachineSpeed;
@@ -110,18 +130,17 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetBeamOrigin(string beamOrigin)
         {
-            Validator.ThrowIfNull(() => beamOrigin);
+            //Validator.ThrowIfNull(() => beamOrigin);
             if (BeamOrigin != beamOrigin)
             {
                 BeamOrigin = beamOrigin;
                 ReadModel.BeamOrigin = BeamOrigin;
                 MarkModified();
-            }            
+            }
         }
 
         public void SetBeamDocumentId(Guid beamDocumentId)
         {
-            Validator.ThrowIfNull(() => beamDocumentId);
             if (BeamDocumentId != beamDocumentId)
             {
                 BeamDocumentId = beamDocumentId;
@@ -132,11 +151,67 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetBeamNumber(string beamNumber)
         {
-            Validator.ThrowIfNull(() => beamNumber);
+            //Validator.ThrowIfNull(() => beamNumber);
             if (beamNumber != BeamNumber)
             {
                 BeamNumber = beamNumber;
                 ReadModel.BeamNumber = BeamNumber;
+
+                MarkModified();
+            }
+        }
+
+        public void SetTyingMachineDocumentId(Guid tyingMachineDocumentId)
+        {
+            if (TyingMachineDocumentId != tyingMachineDocumentId)
+            {
+                TyingMachineDocumentId = tyingMachineDocumentId;
+                ReadModel.TyingMachineDocumentId = TyingMachineDocumentId ?? Guid.Empty;
+                MarkModified();
+            }
+        }
+
+        public void SetTyingMachineNumber(string tyingMachineNumber)
+        {
+            //Validator.ThrowIfNull(() => tyingMachineNumber);
+            if (tyingMachineNumber != TyingMachineNumber)
+            {
+                TyingMachineNumber = tyingMachineNumber;
+                ReadModel.TyingMachineNumber = TyingMachineNumber;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLoomMachineNumber(string loomMachineNumber)
+        {
+            //Validator.ThrowIfNull(() => tyingMachineNumber);
+            if (loomMachineNumber != LoomMachineNumber)
+            {
+                LoomMachineNumber = loomMachineNumber;
+                ReadModel.LoomMachineNumber = LoomMachineNumber;
+
+                MarkModified();
+            }
+        }
+
+        public void SetLastTyingOperatorDocumentId(Guid lastTyingOperatorDocumentId)
+        {
+            if (LastTyingOperatorDocumentId != lastTyingOperatorDocumentId)
+            {
+                LastTyingOperatorDocumentId = lastTyingOperatorDocumentId;
+                ReadModel.LastTyingOperatorDocumentId = LastTyingOperatorDocumentId ?? Guid.Empty;
+                MarkModified();
+            }
+        }
+
+        public void SetLastTyingOperatorName(string lastTyingOperatorName)
+        {
+            //Validator.ThrowIfNull(() => lastTyingOperatorName);
+            if (lastTyingOperatorName != LastTyingOperatorName)
+            {
+                LastTyingOperatorName = lastTyingOperatorName;
+                ReadModel.LastTyingOperatorName = LastTyingOperatorName;
 
                 MarkModified();
             }
@@ -255,7 +330,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetUomUnit(string uomUnit)
         {
-            Validator.ThrowIfNull(() => uomUnit);
+            //Validator.ThrowIfNull(() => uomUnit);
             if (uomUnit != UomUnit)
             {
                 UomUnit = uomUnit;
@@ -290,7 +365,6 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetLoomDocumentId(Guid loomDocumentId)
         {
-            Validator.ThrowIfNull(() => loomDocumentId);
             if (loomDocumentId != DailyOperationLoomDocumentId)
             {
                 DailyOperationLoomDocumentId = loomDocumentId;
