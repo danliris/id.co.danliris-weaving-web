@@ -93,7 +93,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         break;
                     case "COMPLETED":
                         existingSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
-
+                        await _dailyOperationSizingDocumentRepository.Update(existingSizingDocument);
                         if (lastHistory.Identity.Equals(request.HistoryId))
                         {
                             lastHistory.Remove();
