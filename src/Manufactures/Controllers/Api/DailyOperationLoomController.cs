@@ -289,7 +289,7 @@ namespace Manufactures.Controllers.Api
                         }
                         dailyOperationLoomBeamsUsed =
                             dailyOperationLoomBeamsUsed
-                                .Where(x => x.DailyOperationLoomDocumentId == operationId);
+                                .Where(x => x.DailyOperationLoomDocumentId == operationId && x.BeamUsedStatus == BeamStatus.QUEUE);
                     }
                 }
 
@@ -363,7 +363,7 @@ namespace Manufactures.Controllers.Api
                         }
                         dailyOperationLoomBeamsUsed =
                             dailyOperationLoomBeamsUsed
-                                .Where(x => x.DailyOperationLoomDocumentId == operationId && x.BeamUsedStatus == BeamStatus.ONPROCESS);
+                                .Where(x => x.DailyOperationLoomDocumentId == operationId && (x.BeamUsedStatus == BeamStatus.ONPROCESS || x.BeamUsedStatus == BeamStatus.REPROCESS));
                     }
                 }
 
@@ -428,9 +428,39 @@ namespace Manufactures.Controllers.Api
                 return NotFound();
             }
             command.SetId(documentId);
-            var updateStartDailyOperationLoomDocument = await Mediator.Send(command);
+            var startDailyOperationLoomDocument = await Mediator.Send(command);
 
-            return Ok(updateStartDailyOperationLoomDocument.Identity);
+            return Ok(startDailyOperationLoomDocument.Identity);
+        }
+
+        [HttpPut("{Id}/reprocess")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]ReprocessDailyOperationLoomCommand command)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var reprocessDailyOperationLoomDocument = await Mediator.Send(command);
+
+            return Ok(reprocessDailyOperationLoomDocument.Identity);
+        }
+
+        [HttpPut("{Id}/produce-greige")]
+        public async Task<IActionResult> Put(string Id,
+                                            [FromBody]ProduceGreigeDailyOperationLoomCommand command)
+        {
+            VerifyUser();
+            if (!Guid.TryParse(Id, out Guid documentId))
+            {
+                return NotFound();
+            }
+            command.SetId(documentId);
+            var produceGreigeDailyOperationLoomDocument = await Mediator.Send(command);
+
+            return Ok(produceGreigeDailyOperationLoomDocument.Identity);
         }
 
         //[HttpPut("{Id}/pause")]

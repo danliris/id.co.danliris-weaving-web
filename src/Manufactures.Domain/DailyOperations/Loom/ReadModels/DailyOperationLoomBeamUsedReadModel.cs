@@ -26,6 +26,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.ReadModels
         public string UomUnit { get; internal set; }
         public DateTimeOffset LastDateTimeProcessed { get; internal set; }
         public string BeamUsedStatus { get; internal set; }
+        public bool IsCompletedProduction { get; internal set; }
         public Guid DailyOperationLoomDocumentId { get; set; }
 
         public DailyOperationLoomBeamUsedReadModel(Guid identity) : base(identity)
