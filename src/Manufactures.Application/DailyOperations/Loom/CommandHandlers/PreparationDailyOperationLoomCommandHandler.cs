@@ -72,13 +72,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                                                                  item.BeamDocumentId,
                                                                  item.BeamNumber,
                                                                  dateTimeLoom,
-                                                                 BeamStatus.ONPROCESS,
+                                                                 BeamStatus.QUEUE,
                                                                  newLoomDocument.Identity);
                 newBeamUsed.SetTyingMachineDocumentId(item.TyingMachineId);
                 newBeamUsed.SetTyingMachineNumber(item.TyingMachineNumber);
                 newBeamUsed.SetLoomMachineNumber(item.LoomMachineNumber);
                 newBeamUsed.SetLastTyingOperatorDocumentId(item.TyingOperatorId);
                 newBeamUsed.SetLastTyingOperatorName(item.TyingOperatorName);
+                newBeamUsed.SetIsCompletedProduction(false);
                 await _dailyOperationLoomBeamUsedRepository.Update(newBeamUsed);
 
                 var newHistory = new DailyOperationLoomHistory(Guid.NewGuid(),

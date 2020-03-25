@@ -13,26 +13,29 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; set; }
 
-        [JsonProperty(PropertyName = "StartBeamDocumentId")]
-        public Guid StartBeamDocumentId { get; set; }
+        [JsonProperty(PropertyName = "StartBeamUsedId")]
+        public Guid StartBeamUsedId { get; set; }
 
-        [JsonProperty(PropertyName = "StartBeamNumber")]
-        public string StartBeamNumber { get; set; }
+        [JsonProperty(PropertyName = "StartBeamUsedNumber")]
+        public string StartBeamUsedNumber { get; set; }
 
         [JsonProperty(PropertyName = "StartTyingOperatorDocumentId")]
         public Guid StartTyingOperatorDocumentId { get; set; }
 
+        [JsonProperty(PropertyName = "StartTyingOperatorName")]
+        public string StartTyingOperatorName { get; set; }
+
         [JsonProperty(PropertyName = "StartLoomOperatorDocumentId")]
         public Guid StartLoomOperatorDocumentId { get; set; }
 
-        [JsonProperty(PropertyName = "StartCounterPerOperator")]
-        public double StartCounterPerOperator { get; set; }
+        //[JsonProperty(PropertyName = "StartCounterPerOperator")]
+        //public double StartCounterPerOperator { get; set; }
 
-        [JsonProperty(PropertyName = "StartDateMachine")]
-        public DateTimeOffset StartDateMachine { get; set; }
+        [JsonProperty(PropertyName = "StartDate")]
+        public DateTimeOffset StartDate { get; set; }
 
-        [JsonProperty(PropertyName = "StartTimeMachine")]
-        public TimeSpan StartTimeMachine { get; set; }
+        [JsonProperty(PropertyName = "StartTime")]
+        public TimeSpan StartTime { get; set; }
 
         [JsonProperty(PropertyName = "StartShiftDocumentId")]
         public Guid StartShiftDocumentId { get; set; }
@@ -48,11 +51,11 @@ namespace Manufactures.Domain.DailyOperations.Loom.Commands
         public UpdateStartDailyOperationLoomCommandValidator()
         {
             RuleFor(validator => validator.Id).NotEmpty();
-            RuleFor(validator => validator.StartBeamDocumentId).NotEmpty();
-            RuleFor(validator => validator.StartBeamNumber).NotEmpty().WithMessage("No. Beam Harus Diisi");
+            RuleFor(validator => validator.StartBeamUsedId).NotEmpty().WithMessage("No. Beam Harus Diisi");
+            RuleFor(validator => validator.StartBeamUsedNumber).NotEmpty().WithMessage("No. Beam Harus Diisi");
             RuleFor(validator => validator.StartLoomOperatorDocumentId).NotEmpty().WithMessage("Operator Harus Diisi");
-            RuleFor(validator => validator.StartDateMachine).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
-            RuleFor(validator => validator.StartTimeMachine).NotEmpty().WithMessage("Waktu Mulai Harus Diisi");
+            RuleFor(validator => validator.StartDate).NotEmpty().WithMessage("Tanggal Mulai Harus Diisi");
+            RuleFor(validator => validator.StartTime).NotEmpty().WithMessage("Waktu Mulai Harus Diisi");
             RuleFor(validator => validator.StartShiftDocumentId).NotEmpty().WithMessage("Shift Tidak Boleh Kosong");
         }
     }

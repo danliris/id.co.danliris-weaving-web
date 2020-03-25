@@ -58,14 +58,14 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             var lastLoomHistory =
                 _dailyOperationLoomHistoryRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId == request.StartBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.StartBeamUsedId)
                     .OrderByDescending(d => d.DateTimeMachine)
                     .FirstOrDefault();
 
             var lastLoomBeamUsed =
                 _dailyOperationLoomBeamUsedRepository
                     .Find(s => s.DailyOperationLoomDocumentId == loomDocument.Identity)
-                    .Where(o => o.BeamDocumentId == request.StartBeamDocumentId)
+                    .Where(o => o.BeamDocumentId == request.StartBeamUsedId)
                     .OrderByDescending(d => d.LastDateTimeProcessed)
                     .FirstOrDefault();
 
@@ -84,24 +84,24 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
             //var lastBeamProduct = loomBeamsUsed.FirstOrDefault();
 
             //Validation for Prevent Beam Product with End Status Processed Again
-            if (lastLoomBeamUsed.BeamUsedStatus.Equals(BeamStatus.END))
+            if (lastLoomBeamUsed.BeamUsedStatus.Equals(BeamStatus.COMPLETED))
             {
-                throw Validator.ErrorValidation(("StartBeamNumber", "Status Beam ini Reproses, Tidak Dapat Diproses Kembali"));
+                throw Validator.ErrorValidation(("StartBeamUsedId", "Status Beam Ini Sudah Completed, Tidak Dapat Diproses Kembali"));
             }
 
             //Reformat DateTime
-            var year = request.StartDateMachine.Year;
-            var month = request.StartDateMachine.Month;
-            var day = request.StartDateMachine.Day;
-            var hour = request.StartTimeMachine.Hours;
-            var minutes = request.StartTimeMachine.Minutes;
-            var seconds = request.StartTimeMachine.Seconds;
+            var year = request.StartDate.Year;
+            var month = request.StartDate.Month;
+            var day = request.StartDate.Day;
+            var hour = request.StartTime.Hours;
+            var minutes = request.StartTime.Minutes;
+            var seconds = request.StartTime.Seconds;
             var dateTimeLoom =
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
             var lastDateMachineLogUtc = new DateTimeOffset(lastLoomHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
-            var startDateMachineLogUtc = new DateTimeOffset(request.StartDateMachine.Date, new TimeSpan(+7, 0, 0));
+            var startDateMachineLogUtc = new DateTimeOffset(request.StartDate.Date, new TimeSpan(+7, 0, 0));
 
             if (startDateMachineLogUtc < lastDateMachineLogUtc)
             {
@@ -115,24 +115,29 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                 }
                 else
                 {
-                    if (lastLoomHistory.MachineStatus == MachineStatus.ONENTRY || lastLoomHistory.MachineStatus == MachineStatus.ONCOMPLETE)
+                    if (lastLoomHistory.MachineStatus == MachineStatus.ONENTRY)
                     {
                         var newLoomHistory =
                                 new DailyOperationLoomHistory(Guid.NewGuid(),
-                                                              request.StartBeamDocumentId,
-                                                              request.StartBeamNumber,
+                                                              request.StartBeamUsedId,
+                                                              request.StartBeamUsedNumber,
                                                               lastLoomHistory.LoomMachineId,
                                                               request.StartLoomOperatorDocumentId,
-                                                              request.StartCounterPerOperator,
+                                                              0,
+                                                              //request.StartCounterPerOperator,
                                                               dateTimeLoom,
                                                               request.StartShiftDocumentId,
                                                               MachineStatus.ONSTART,
                                                               loomDocument.Identity);
+                        newLoomHistory.SetTyingOperatorId(request.StartTyingOperatorDocumentId);
 
                         await _dailyOperationLoomHistoryRepository.Update(newLoomHistory);
 
-                        lastLoomBeamUsed.SetStartCounter(request.StartCounterPerOperator);
+                        //lastLoomBeamUsed.SetStartCounter(request.StartCounterPerOperator);
+                        lastLoomBeamUsed.SetLastTyingOperatorDocumentId(request.StartTyingOperatorDocumentId);
+                        lastLoomBeamUsed.SetLastTyingOperatorName(request.StartTyingOperatorName);
                         lastLoomBeamUsed.SetLastDateTimeProcessed(dateTimeLoom);
+                        lastLoomBeamUsed.SetBeamUsedStatus(BeamStatus.ONPROCESS);
 
                         await _dailyOperationLoomBeamUsedRepository.Update(lastLoomBeamUsed);
 
@@ -143,7 +148,7 @@ namespace Manufactures.Application.DailyOperations.Loom.CommandHandlers
                     }
                     else
                     {
-                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Memulai, Status Terakhir Mesin Harus ON-ENTRY atau COMPLETED"));
+                        throw Validator.ErrorValidation(("MachineStatus", "Tidak Dapat Memulai, Status Terakhir Mesin Beam " + request.StartBeamUsedNumber + " Harus ON-ENTRY"));
                     }
                 }
             }

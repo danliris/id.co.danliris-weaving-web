@@ -10,6 +10,7 @@
 
         //Daily Operation - Machine Status (Loom, Sizing)
         public static string ONSTOP = "STOP";
+        public static string REPROCESS = "REPROCESSING";
         public static string ONRESUME = "CONTINUE";
         public static string ONFINISH = "FINISH";
 

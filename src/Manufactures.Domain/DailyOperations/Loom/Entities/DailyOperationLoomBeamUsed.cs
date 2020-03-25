@@ -53,6 +53,8 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public string BeamUsedStatus { get; private set; }
 
+        public bool IsCompletedProduction{ get; private set; }
+
         public Guid DailyOperationLoomDocumentId { get; set; }
 
         public DailyOperationLoomBeamUsed(Guid identity,
@@ -96,6 +98,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
                 UomUnit = UomUnit,
                 LastDateTimeProcessed = LastDateTimeProcessed,
                 BeamUsedStatus = BeamUsedStatus,
+                IsCompletedProduction = IsCompletedProduction,
                 DailyOperationLoomDocumentId = DailyOperationLoomDocumentId
             };
 
@@ -125,6 +128,7 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
             UomUnit = readModel.UomUnit;
             LastDateTimeProcessed = readModel.LastDateTimeProcessed;
             BeamUsedStatus = readModel.BeamUsedStatus;
+            IsCompletedProduction = readModel.IsCompletedProduction;
             DailyOperationLoomDocumentId = readModel.DailyOperationLoomDocumentId;
         }
 
@@ -353,11 +357,22 @@ namespace Manufactures.Domain.DailyOperations.Loom.Entities
 
         public void SetBeamUsedStatus(string beamUsedStatus)
         {
-            Validator.ThrowIfNull(() => beamUsedStatus);
+            //Validator.ThrowIfNull(() => beamUsedStatus);
             if (beamUsedStatus != BeamUsedStatus)
             {
                 BeamUsedStatus = beamUsedStatus;
                 ReadModel.BeamUsedStatus = BeamUsedStatus;
+
+                MarkModified();
+            }
+        }
+
+        public void SetIsCompletedProduction(bool isCompletedProduction)
+        {
+            if (isCompletedProduction != IsCompletedProduction)
+            {
+                IsCompletedProduction = isCompletedProduction;
+                ReadModel.IsCompletedProduction = IsCompletedProduction;
 
                 MarkModified();
             }

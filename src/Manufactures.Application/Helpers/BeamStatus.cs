@@ -11,6 +11,8 @@
         public static string ONPROCESS = "ON-PROCESS";
 
         //Daily Operation - Beam Status (Loom)
+        public static string QUEUE = "IN-QUEUE";
+        public static string REPROCESS = "REPROCESS";
         public static string END = "END";
         public static string COMPLETED = "COMPLETED";
     }
