@@ -16,6 +16,9 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         [JsonProperty(PropertyName = "WarpingBeamNumber")]
         public string WarpingBeamNumber { get; }
 
+        [JsonProperty(PropertyName = "WarpingBeamId")]
+        public Guid WarpingBeamId { get; }
+
         [JsonProperty(PropertyName = "LatestDateTimeBeamProduct")]
         public DateTimeOffset LatestDateTimeBeamProduct { get; }
 
@@ -41,6 +44,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         {
             Id = beamProduct.Identity;
             WarpingBeamNumber = beamDocument.Number;
+            WarpingBeamId = beamDocument.Identity;
             LatestDateTimeBeamProduct = beamProduct.LatestDateTimeBeamProduct;
             WarpingTotalBeamLength = beamProduct.WarpingTotalBeamLength;
             Tention = beamProduct.Tention ?? 0;

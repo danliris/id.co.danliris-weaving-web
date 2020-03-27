@@ -253,7 +253,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         .FirstOrDefault();
 
                 var warpingBeamNumber = "";
-
+                var warpingBeamId = "";
                 if (warpingBeamDocument != null)
                 {
                     switch (history.MachineStatus)
@@ -266,6 +266,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                             break;
                         default:
                             warpingBeamNumber = warpingBeamDocument.Number;
+                            warpingBeamId = warpingBeamDocument.Identity.ToString();
                             break;
                     }
                 }
@@ -300,6 +301,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var dailyHistory =
                     new DailyOperationWarpingHistoryDto(history.Identity,
                                                         warpingBeamNumber,
+                                                        warpingBeamId,
                                                         history.DateTimeMachine,
                                                         shiftName,
                                                         operatorBeam == null ? "-" : operatorBeam.CoreAccount.Name,

@@ -43,24 +43,38 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
         public async Task<DailyOperationWarpingDocument> Handle(FinishDailyOperationWarpingCommand request, CancellationToken cancellationToken)
         {
+            Guid warpingBeams = Guid.Parse(request.ProduceBeamsId);
+
             //Get Daily Operation Document Warping
             var existingWarpingDocument =
                 _dailyOperationWarpingRepository
                     .Find(x => x.Identity == request.Id)
                     .FirstOrDefault();
 
+            //Get list History Daily Opertaion with beamsId
+            //var lastWarpingHistoryWithBeamsId =
+            //    _dailyOperationWarpingHistoryRepository
+            //        .Find(o => o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity && o.WarpingBeamId == warpingBeams)
+            //        .OrderByDescending(detail => detail.DateTimeMachine)
+            //        .FirstOrDefault();
+
+            // Get Beams Warping that uses
+            var usesWarping =
+                _dailyOperationWarpingBeamProductRepository.Find(o => o.Identity == warpingBeams && o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                .OrderByDescending(detail => detail.LatestDateTimeBeamProduct)
+                .FirstOrDefault();
+
             //Get Daily Operation History
             var lastWarpingHistory =
                 _dailyOperationWarpingHistoryRepository
-                    .Find(o=>o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                    .Find(o=>o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity && o.WarpingBeamId == usesWarping.WarpingBeamId.Value)
                     .OrderByDescending(detail => detail.DateTimeMachine)
                     .FirstOrDefault();
 
             //Get Daily Operation Beam Product
-            
             var lastWarpingBeamProduct = 
                 _dailyOperationWarpingBeamProductRepository
-                    .Find(x => x.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
+                    .Find(x => x.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity && x.WarpingBeamId == usesWarping.WarpingBeamId.Value)
                     .OrderByDescending(x => x.LatestDateTimeBeamProduct)
                     .FirstOrDefault();
 
