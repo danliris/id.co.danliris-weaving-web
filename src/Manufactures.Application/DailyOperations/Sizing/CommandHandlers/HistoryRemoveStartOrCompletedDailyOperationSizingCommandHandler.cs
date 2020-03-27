@@ -51,18 +51,27 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                             .Find(o=>o.Identity == request.Id)
                             .FirstOrDefault();
 
+                var beamSizingIdGuid = _dailyOperationSizingBeamProductRepository.Find(y => y.Identity == request.BeamProductId).FirstOrDefault();
+
+                //Get Beam Number by Identity
+                var beamSizing =
+                    _beamRepository
+                        .Find(o =>
+                            o.Identity == beamSizingIdGuid.SizingBeamId.Value
+                        ).FirstOrDefault();
+
                 //Get Daily Operation History
                 var existingSizingHistories =
                     _dailyOperationSizingHistoryRepository
-                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity && o.SizingBeamNumber == beamSizing.Number)
                         .OrderByDescending(o => o.DateTimeMachine);
                 var lastHistory = existingSizingHistories.FirstOrDefault();
-                var lastSecondHistory = existingSizingHistories.ElementAt(1);
+                
 
                 //Get Daily Operation Beam Product
                 var existingSizingBeamProducts =
                     _dailyOperationSizingBeamProductRepository
-                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                        .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity && o.Identity == request.BeamProductId)
                         .OrderByDescending(o => o.LatestDateTimeBeamProduct);
                 var lastBeamProduct = existingSizingBeamProducts.FirstOrDefault();
 
@@ -92,6 +101,7 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
                         }
                         break;
                     case "COMPLETED":
+                        var lastSecondHistory = existingSizingHistories.ElementAt(1);
                         existingSizingDocument.SetOperationStatus(OperationStatus.ONPROCESS);
                         await _dailyOperationSizingDocumentRepository.Update(existingSizingDocument);
                         if (lastHistory.Identity.Equals(request.HistoryId))

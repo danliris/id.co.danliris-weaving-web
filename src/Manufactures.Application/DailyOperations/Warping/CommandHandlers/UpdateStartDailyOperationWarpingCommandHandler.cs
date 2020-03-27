@@ -44,12 +44,19 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .Find(x => x.Identity == request.Id)
                     .FirstOrDefault();
 
-            //Get Daily Operation History
-            var lastWarpingHistory = 
+            //Get List Daily Operation History
+            var listWarpingHistory =
                 _dailyOperationWarpingHistoryRepository
-                    .Find(o=>o.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
+                    .Find(o => o.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
                     .OrderByDescending(detail => detail.DateTimeMachine)
-                    .FirstOrDefault();
+                    .ToList();
+
+            //Get Daily Operation History
+            var lastWarpingHistory = listWarpingHistory.FirstOrDefault();
+                //_dailyOperationWarpingHistoryRepository
+                //    .Find(o=>o.DailyOperationWarpingDocumentId == existingDailyOperationWarpingDocument.Identity)
+                //    .OrderByDescending(detail => detail.DateTimeMachine)
+                //    .FirstOrDefault();
             //var lastWarpingHistory = existingDailyOperationWarpingHistories.FirstOrDefault();
 
             //Get Daily Operation Beam Product
@@ -59,6 +66,20 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     .OrderByDescending(beamProduct => beamProduct.LatestDateTimeBeamProduct)
                     .FirstOrDefault();
             //var lastWarpingBeamProduct = existingDailyOperationWarpingBeamProduct.FirstOrDefault();
+
+            //Filter Daily Operation History by entry status
+            var entryWarpingHistory =
+                listWarpingHistory.Where(x => x.MachineStatus == MachineStatus.ONENTRY).FirstOrDefault();
+
+            //Filter Daily Operation History by Beam Product
+            var listWarpingHistoryWithBeamsId =
+                listWarpingHistory
+                .Where(x => x.WarpingBeamId == request.WarpingBeamId)
+                .ToList();
+
+            var lastWarpingHistoryWithBeamsId =
+                listWarpingHistoryWithBeamsId
+                .FirstOrDefault();
 
             //Validation for Operation Status
             var operationStatus = existingDailyOperationWarpingDocument.OperationStatus;
@@ -78,22 +99,26 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                 new DateTimeOffset(year, month, day, hour, minutes, seconds, new TimeSpan(+7, 0, 0));
 
             //Validation for Start Date
-            var lastWarpingDateLogUtc = new DateTimeOffset(lastWarpingHistory.DateTimeMachine.Date, new TimeSpan(+7, 0, 0));
+            var lastWarpingDateLogUtc = listWarpingHistoryWithBeamsId.Count == 0 ? new DateTimeOffset(entryWarpingHistory.DateTimeMachine.DateTime, new TimeSpan(+7, 0, 0)) : new DateTimeOffset(lastWarpingHistoryWithBeamsId.DateTimeMachine.DateTime, new TimeSpan(+7, 0, 0));
+            //var lastWarpingDateLogUtc = listWarpingHistoryWithBeamsId.Count == 0 ? new DateTimeOffset(entryWarpingHistory.DateTimeMachine.Date, new TimeSpan(+7, entryWarpingHistory.DateTimeMachine.Minute, entryWarpingHistory.DateTimeMachine.Second)) : new DateTimeOffset(lastWarpingHistoryWithBeamsId.DateTimeMachine.Date, new TimeSpan(+7, lastWarpingHistoryWithBeamsId.DateTimeMachine.Minute, lastWarpingHistoryWithBeamsId.DateTimeMachine.Second));
+
             var warpingStartDateLogUtc = new DateTimeOffset(request.StartDate.Date, new TimeSpan(+7, 0, 0));
 
-            if (warpingStartDateLogUtc < lastWarpingDateLogUtc)
+            if (warpingStartDateLogUtc.Date < lastWarpingDateLogUtc.Date)
             {
                 throw Validator.ErrorValidation(("StartDate", "Tanggal Tidak Boleh Lebih Awal Dari Tanggal Sebelumnya"));
             }
             else
             {
-                if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
+                //if (warpingDateTime <= lastWarpingHistory.DateTimeMachine)
+                if (warpingDateTime <= lastWarpingDateLogUtc)
                 {
                     throw Validator.ErrorValidation(("StartTime", "Waktu Tidak Boleh Lebih Awal Dari Waktu Sebelumnya"));
                 }
                 else
                 {
-                    if (lastWarpingHistory.MachineStatus == MachineStatus.ONENTRY)
+                    string lastWarpingHistoryStatus = listWarpingHistoryWithBeamsId.Count == 0 ? entryWarpingHistory.MachineStatus : lastWarpingHistoryWithBeamsId.MachineStatus;
+                    if (lastWarpingHistoryStatus == MachineStatus.ONENTRY)
                     {
                         existingDailyOperationWarpingDocument.SetDateTimeOperation(warpingDateTime);
                         await _dailyOperationWarpingRepository.Update(existingDailyOperationWarpingDocument);
@@ -126,7 +151,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
 
                         return existingDailyOperationWarpingDocument;
                     }
-                    else if (lastWarpingHistory.MachineStatus == MachineStatus.ONCOMPLETE)
+                    else if (lastWarpingHistoryStatus == MachineStatus.ONCOMPLETE)
                     {
                         if (request.WarpingBeamId.Value != lastWarpingBeamProduct.WarpingBeamId.Value)
                         {

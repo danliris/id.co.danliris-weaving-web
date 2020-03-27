@@ -55,7 +55,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     _dailyOperationWarpingHistoryRepository
                         .Find(o => o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
                         .OrderByDescending(o => o.DateTimeMachine);
-                var lastHistory = existingWarpingHistories.FirstOrDefault();
+                var lastHistory = existingWarpingHistories.Where(o => o.Identity == request.HistoryId).FirstOrDefault();
                 var lastSecondHistory = existingWarpingHistories.ElementAt(1);
 
                 //Get Daily Operation Beam Product
@@ -63,7 +63,7 @@ namespace Manufactures.Application.DailyOperations.Warping.CommandHandlers
                     _dailyOperationWarpingBeamProductRepository
                         .Find(o => o.DailyOperationWarpingDocumentId == existingWarpingDocument.Identity)
                         .OrderByDescending(o => o.LatestDateTimeBeamProduct);
-                var lastBeamProduct = existingWarpingBeamProducts.FirstOrDefault();
+                var lastBeamProduct = existingWarpingBeamProducts.Where(o=>o.Identity == request.BeamProductId).FirstOrDefault();
 
                 switch (request.HistoryStatus)
                 {

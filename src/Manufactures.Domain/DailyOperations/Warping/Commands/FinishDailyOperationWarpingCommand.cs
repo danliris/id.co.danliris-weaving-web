@@ -50,6 +50,10 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
         [JsonProperty(PropertyName = "IsFinishFlag")]
         public bool IsFinishFlag { get; set; }
 
+        [JsonProperty(PropertyName = "ProduceBeamsId")]
+        public string ProduceBeamsId { get; set; }
+
+
         public void SetId(Guid Id)
         {
             this.Id = Id;
@@ -73,6 +77,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Commands
             RuleFor(command => command.PressRollUom).NotEmpty().WithMessage("Satuan Press Roll Harus Diisi");
             //RuleFor(command => command.BrokenCauses).NotEmpty();
             RuleFor(command => command.IsFinishFlag).NotNull();
+            RuleFor(command => command.ProduceBeamsId).NotEmpty().WithMessage("Warping Beams harus Diiisi");
         }
     }
 }

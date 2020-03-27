@@ -58,6 +58,12 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
         [JsonProperty(PropertyName = "IsFinishFlag")]
         public bool IsFinishFlag { get; set; }
 
+        [JsonProperty(PropertyName = "SizingBeamId")]
+        public string SizingBeamId { get; set; }
+
+        [JsonProperty(PropertyName = "SizingBeamNumber")]
+        public string SizingBeamNumber { get; set; }
+
         public void SetId(Guid Id)
         {
             this.Id = Id;
@@ -82,6 +88,8 @@ namespace Manufactures.Domain.DailyOperations.Sizing.Commands
             RuleFor(validator => validator.MachineSpeed).NotEmpty().WithMessage("Kecepatan Mesin Harus Diisi");
             RuleFor(validator => validator.TexSQ).NotEmpty().WithMessage("TexSQ Harus Diisi");
             RuleFor(validator => validator.Visco).NotEmpty().WithMessage("Visco Harus Diisi");
+            RuleFor(validator => validator.SizingBeamId).NotEmpty().WithMessage("No. Beam Sizing Harus Diisi");
+            RuleFor(validator => validator.SizingBeamNumber).NotEmpty().WithMessage("Number Beam Sizing Harus Diisi");
         }
     }
 }

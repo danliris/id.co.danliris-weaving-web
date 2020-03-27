@@ -50,13 +50,20 @@ namespace Manufactures.Application.DailyOperations.Sizing.CommandHandlers
             //Get Daily Operation History
             var lastHistory =
                 _dailyOperationSizingHistoryRepository
-                    .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                    .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity && o.SizingBeamNumber == request.SizingBeamNumber)
                     .OrderByDescending(o => o.DateTimeMachine).FirstOrDefault();
+            if (lastHistory == null)
+            {
+                lastHistory =
+                    _dailyOperationSizingHistoryRepository
+                    .Find(o => o.DailyOperationSizingDocumentId == existingSizingDocument.Identity && o.MachineStatus == MachineStatus.ONENTRY)
+                    .OrderByDescending(o => o.DateTimeMachine).FirstOrDefault();
+            }
 
             //Get Daily Operation Beam Product
             var existingSizingBeamProduct =
                 _dailyOperationSizingBeamProductRepository
-                    .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity)
+                    .Find(o=>o.DailyOperationSizingDocumentId == existingSizingDocument.Identity && o.SizingBeamId == request.SizingBeamId.Value)
                     .OrderByDescending(o => o.LatestDateTimeBeamProduct);
             var lastBeamProduct = existingSizingBeamProduct.FirstOrDefault();
 
