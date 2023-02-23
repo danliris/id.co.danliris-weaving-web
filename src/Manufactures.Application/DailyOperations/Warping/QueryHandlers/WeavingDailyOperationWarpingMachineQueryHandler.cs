@@ -67,13 +67,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             var startCol = 1;
             WeavingDailyOperationWarpingMachine data;
             int rowIndex = 0;
-            var totalRows = 0;
-            var sheetName = new List<string>();
-            sheetName.Add("Produksi WP");
+            var totalRows = 0; 
+           
             foreach (var sheet in sheets)
             {
 
-                
                 totalRows = sheet.Dimension.Rows;
                 var totalColumns = sheet.Dimension.Columns;
 
@@ -132,9 +130,18 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 }
                
             }
-            await Delete(month, year.ToString());
-            _storage.Save();
-            return ((rowIndex - 1) == totalRows && totalRows > 0);
+            try
+            {
+                await Delete(month, year.ToString());
+                _storage.Save();
+                return ((rowIndex - 1) == totalRows && totalRows > 0);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Gagal menyhimpan data, cek File yang diupload");
+            }
+
         }
 
         public async Task<IEnumerable<WeavingDailyOperationWarpingMachineDto>> GetAll()
