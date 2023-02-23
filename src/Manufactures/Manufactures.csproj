@@ -17,5 +17,9 @@
   <ItemGroup>
     <Folder Include="Dtos\Shared\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+  </ItemGroup>
   
 </Project>

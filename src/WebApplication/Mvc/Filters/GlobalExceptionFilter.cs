@@ -75,7 +75,7 @@ namespace Infrastructure.Mvc.Filters
                     data,
                     info,
                     error = errors,
-                    message,
+                    message = message,
                     trace = context.Exception.StackTrace
                 }));
             }
