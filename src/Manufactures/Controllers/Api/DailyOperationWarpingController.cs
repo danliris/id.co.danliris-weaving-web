@@ -29,6 +29,11 @@ using Manufactures.Helpers.PdfTemplates;
 using System.Globalization;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines;
+using OfficeOpenXml;
+using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using CsvHelper;
 
 namespace Manufactures.Controllers.Api
 {
@@ -56,6 +61,10 @@ namespace Manufactures.Controllers.Api
             _warpingProductionReportQuery;
         private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> 
             _warpingBrokenReportQuery;
+        private readonly IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>//<WeavingDailyOperationWarpingMachineDto>
+          _weavingDailyOperationWarpingMachineQuery;
+
+        
 
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -67,6 +76,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationWarpingBeamProductRepository;
         private readonly IDailyOperationWarpingBrokenCauseRepository
             _dailyOperationWarpingBrokenCauseRepository;
+        
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
@@ -76,7 +86,8 @@ namespace Manufactures.Controllers.Api
                                                IBeamQuery<BeamListDto> beamQuery,
                                                IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> dailyOperationWarpingReportQuery,
                                                IWarpingProductionReportQuery<WarpingProductionReportListDto> warpingProductionReportQuery,
-                                               IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> warpingBrokenReportQuery)
+                                               IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> warpingBrokenReportQuery,
+                                               IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto> weavingDailyOperationWarpingMachineQuery)
             : base(serviceProvider)
         {
             _warpingDocumentQuery = warpingQuery ?? throw new ArgumentNullException(nameof(warpingQuery));
@@ -86,6 +97,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationWarpingReportQuery = dailyOperationWarpingReportQuery ?? throw new ArgumentNullException(nameof(dailyOperationWarpingReportQuery));
             _warpingProductionReportQuery = warpingProductionReportQuery ?? throw new ArgumentNullException(nameof(warpingProductionReportQuery));
             _warpingBrokenReportQuery = warpingBrokenReportQuery ?? throw new ArgumentNullException(nameof(warpingBrokenReportQuery));
+            _weavingDailyOperationWarpingMachineQuery = weavingDailyOperationWarpingMachineQuery ?? throw new ArgumentNullException(nameof(weavingDailyOperationWarpingMachineQuery));
 
             _dailyOperationWarpingRepository = 
                 this.Storage.GetRepository<IDailyOperationWarpingRepository>();
@@ -97,6 +109,9 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _dailyOperationWarpingBrokenCauseRepository =
                 this.Storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
+            
+
+
         }
 
         [HttpGet]
@@ -627,5 +642,109 @@ namespace Manufactures.Controllers.Api
 
             return Ok(updateRemoveStartOrProduceBeamDailyOperationWarpingDocument.Identity);
         }
+        [HttpGet("warpingMachine")]
+        public async Task<IActionResult> GetWarpingMachine(int page = 1,
+                                           int size = 25,
+                                           string order = "{}",
+                                           string keyword = null,
+                                           string filter = "{}")
+        {
+            VerifyUser();
+            var weavingDailyOperations = await _weavingDailyOperationWarpingMachineQuery.GetAll();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                weavingDailyOperations =
+                   weavingDailyOperations
+                       .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.MCNo.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
+                                  // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(DailyOperationWarpingListDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    await Task.Yield();
+                    weavingDailyOperations =
+                        weavingDailyOperations.OrderBy(x => prop.GetValue(x, null));
+                }
+                else
+                {
+                    await Task.Yield();
+                    weavingDailyOperations =
+                        weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
+                }
+            }
+
+            //int totalRows = dailyOperationWarpingDocuments.Count();
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+        [HttpGet("warpingMachine/{Id}")]
+        public async Task<IActionResult> GetWarpingMachineById(string Id)
+        {
+            VerifyUser();
+            var identity = Guid.Parse(Id);
+            var dailyOperationWarpingDocument = await _weavingDailyOperationWarpingMachineQuery.GetById(identity);
+
+            if (dailyOperationWarpingDocument == null)
+            {
+                return NotFound(identity);
+            }
+
+            return Ok(dailyOperationWarpingDocument);
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFile(string month, int year)
+        {
+            VerifyUser();
+           
+            if (Request.Form.Files.Count > 0)
+                {
+                    IFormFile UploadedFile = Request.Form.Files[0];
+                    if (System.IO.Path.GetExtension(UploadedFile.FileName) == ".xlsx")
+                    {
+
+                        using (var excelPack = new ExcelPackage())
+                        {
+                            using (var stream = UploadedFile.OpenReadStream())
+                            {
+                                excelPack.Load(stream);
+                            }
+                            var sheet = excelPack.Workbook.Worksheets;
+
+
+                            var weavingMachine = await _weavingDailyOperationWarpingMachineQuery.Upload(sheet, month, year);
+                            return Ok(weavingMachine);
+                        }
+                    }
+                    else
+                    {
+                        throw new Exception($"Ekstensi file harus bertipe .xlsx");
+                      
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Gagal menyimpan data");
+                }
+           
+            
+        }
+
     }
 }

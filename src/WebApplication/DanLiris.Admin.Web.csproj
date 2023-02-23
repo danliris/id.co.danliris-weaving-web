@@ -100,6 +100,8 @@
     <Compile Remove="Migrations\20200324123835_AddPropertiesOnLoomBeamsUsed.Designer.cs" />
     <Compile Remove="Migrations\20200324131352_AddPropertiesOnLoomBeamsUsed.cs" />
     <Compile Remove="Migrations\20200324131352_AddPropertiesOnLoomBeamsUsed.Designer.cs" />
+    <Compile Remove="Migrations\20200325112114_AddCompletedFlagOnLoomBeamsUsed.cs" />
+    <Compile Remove="Migrations\20200325112114_AddCompletedFlagOnLoomBeamsUsed.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

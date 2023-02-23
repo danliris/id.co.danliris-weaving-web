@@ -1,0 +1,16 @@
+﻿using OfficeOpenXml;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
+using Manufactures.Domain.DailyOperations.Warping.Entities;
+using Infrastructure.Domain.Queries;
+
+namespace Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines
+{
+    public interface IWeavingDailyOperationWarpingMachineQuery<TModel> : IQueries<TModel>
+    {
+       Task<bool> Upload(ExcelWorksheets sheet,string month,int year);
+    }
+}

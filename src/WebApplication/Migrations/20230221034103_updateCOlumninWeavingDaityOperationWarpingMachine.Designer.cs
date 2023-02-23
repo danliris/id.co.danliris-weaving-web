@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230221034103_updateCOlumninWeavingDaityOperationWarpingMachine")]
+    partial class updateCOlumninWeavingDaityOperationWarpingMachine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -820,8 +822,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("AL");
-
                     b.Property<string>("BeamNo")
                         .HasMaxLength(100);
 
@@ -829,8 +829,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("Code")
                         .HasMaxLength(100);
-
-                    b.Property<string>("Construction");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -849,9 +847,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTime>("Doff");
 
-                    b.Property<string>("Eff");
-
-                    b.Property<string>("Group");
+                    b.Property<double>("Eff");
 
                     b.Property<double>("HNLeft");
 
@@ -870,7 +866,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<string>("Month");
+                    b.Property<int>("Month");
 
                     b.Property<string>("Name")
                         .HasMaxLength(100);
@@ -897,9 +893,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("WarpType");
 
-                    b.Property<string>("Year");
-
-                    b.Property<string>("YearPeriode");
+                    b.Property<int>("Year");
 
                     b.Property<string>("YearSP");
 

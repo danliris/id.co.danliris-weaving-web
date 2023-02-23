@@ -89,6 +89,7 @@ using Manufactures.Domain.Machines.Queries;
 using Manufactures.Application.Machines.DataTransferObjects;
 using Manufactures.Application.TroubleMachineMonitoring.QueryHandlers;
 using Manufactures.Application.TroubleMachineMonitoring.Queries;
+using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines;
 
 namespace DanLiris.Admin.Web
 {
@@ -191,6 +192,9 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IBeamQuery<BeamListDto>, BeamQueryHandler>();
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();
             services.AddTransient<ITroubleMachineMonitoringQuery, TroubleMachineMonitoringQueryHandler>();
+            services.AddTransient<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>, WeavingDailyOperationWarpingMachineQueryHandler>();
+
+           
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);
 
