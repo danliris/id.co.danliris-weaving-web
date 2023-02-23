@@ -1,7 +1,7 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Domain.Materials.Commands;
 using Manufactures.Domain.Materials.Repositories;
-using Manufactures.Dtos.MaterialType;
+using Manufactures.DataTransferObjects.MaterialType;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
@@ -21,67 +21,69 @@ namespace Manufactures.Controllers.Api
     {
         private readonly IMaterialTypeRepository _materialTypeRepository;
 
-        public MaterialTypeController(IServiceProvider serviceProvider, 
+        public MaterialTypeController(IServiceProvider serviceProvider,
                                       IWorkContext workContext) : base(serviceProvider)
         {
-            _materialTypeRepository = 
+            _materialTypeRepository =
                 this.Storage.GetRepository<IMaterialTypeRepository>();
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(int page = 1, 
-                                             int size = 25, 
-                                             string order = "{}", 
-                                             string keyword = null, 
+        public async Task<IActionResult> Get(int page = 1,
+                                             int size = 25,
+                                             string order = "{}",
+                                             string keyword = null,
                                              string filter = "{}")
         {
             page = page - 1;
-            var query = 
+            var query =
                 _materialTypeRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var materialTypeDocuments = 
+            var materialTypeDocuments =
                 _materialTypeRepository.Find(query).Select(item => new MaterialTypeListDto(item));
 
             if (!string.IsNullOrEmpty(keyword))
             {
-               materialTypeDocuments = 
-                    materialTypeDocuments
-                        .Where(entity => entity.Code.Contains(keyword, 
-                                                              StringComparison.CurrentCultureIgnoreCase) ||
-                                         entity.Name.Contains(keyword, 
-                                                              StringComparison.CurrentCultureIgnoreCase));
+                materialTypeDocuments =
+                     materialTypeDocuments
+                         .Where(entity => entity.Code.Contains(keyword,
+                                                               StringComparison.CurrentCultureIgnoreCase) ||
+                                          entity.Name.Contains(keyword,
+                                                               StringComparison.CurrentCultureIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary = 
+                Dictionary<string, string> orderDictionary =
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() + 
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
                 System.Reflection.PropertyInfo prop = typeof(MaterialTypeListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    materialTypeDocuments = 
+                    materialTypeDocuments =
                         materialTypeDocuments.OrderBy(x => prop.GetValue(x, null));
                 }
                 else
                 {
-                    materialTypeDocuments = 
+                    materialTypeDocuments =
                         materialTypeDocuments.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
 
-            materialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
+            var ResultMaterialTypeDocuments = materialTypeDocuments.Skip(page * size).Take(size);
             int totalRows = materialTypeDocuments.Count();
+            int resultCount = ResultMaterialTypeDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(materialTypeDocuments, info: new
+            return Ok(ResultMaterialTypeDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
@@ -89,7 +91,7 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> Get(string Id)
         {
             var Identity = Guid.Parse(Id);
-            var materialTypeDto = 
+            var materialTypeDto =
                 _materialTypeRepository.Find(item => item.Identity == Identity)
                                        .Select(item => new MaterialTypeDocumentDto(item))
                                        .FirstOrDefault();
@@ -114,7 +116,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPut("{Id}")]
-        public async Task<IActionResult> Put(string Id, 
+        public async Task<IActionResult> Put(string Id,
                                              [FromBody]UpdateMaterialTypeCommand command)
         {
             if (!Guid.TryParse(Id, out Guid Identity))

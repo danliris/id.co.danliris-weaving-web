@@ -1,4 +1,5 @@
-﻿using Infrastructure.Data.EntityFrameworkCore;
+﻿using System;
+using Infrastructure.Data.EntityFrameworkCore;
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.ReadModels;
 using Manufactures.Domain.Shifts.Repositories;

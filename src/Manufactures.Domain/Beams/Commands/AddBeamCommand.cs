@@ -6,19 +6,27 @@ namespace Manufactures.Domain.Beams.Commands
 {
     public class AddBeamCommand : ICommand<BeamDocument>
     {
-        [JsonProperty(propertyName: "BeamNumber")]
-        public string BeamNumber { get; set; }
+        [JsonProperty(propertyName: "Number")]
+        public string Number { get; set; }
 
-        [JsonProperty(propertyName: "BeamType")]
-        public string BeamType { get; set; }
+        [JsonProperty(propertyName: "Type")]
+        public string Type { get; set; }
+
+        [JsonProperty(propertyName: "EmptyWeight")]
+        public double EmptyWeight { get; set; }
     }
 
     public class AddBeamCommandValidator : AbstractValidator<AddBeamCommand>
     {
         public AddBeamCommandValidator()
         {
-            RuleFor(command => command.BeamNumber).NotEmpty();
-            RuleFor(command => command.BeamType).NotEmpty();
+            RuleFor(command => command.Number).NotEmpty();
+            RuleFor(command => command.Type).NotEmpty();
+            RuleFor(command => command.EmptyWeight).NotEmpty().When(command => command.Type.ToLower() != "warping");
+            //When(command => command.Type.ToLower() != "warping", () =>
+            //{
+            //    RuleFor(command => command.EmptyWeight).NotEmpty();
+            //});
         }
     }
 

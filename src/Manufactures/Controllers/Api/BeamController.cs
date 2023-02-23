@@ -1,9 +1,13 @@
 ﻿using Barebone.Controllers;
+using Manufactures.Data.EntityFrameworkCore.Utilities;
+using Manufactures.Domain.Beams;
 using Manufactures.Domain.Beams.Commands;
+using Manufactures.Domain.Beams.ReadModels;
 using Manufactures.Domain.Beams.Repositories;
-using Manufactures.Dtos.Beams;
+using Manufactures.DataTransferObjects.Beams;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -28,53 +32,101 @@ namespace Manufactures.Controllers.Api
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1,
-                                            int size = 25,
-                                            string order = "{}",
-                                            string keyword = null,
-                                            string filter = "{}")
+                                             int size = 25,
+                                             string order = "{}",
+                                             string keyword = null,
+                                             string filter = "{}")
         {
             page = page - 1;
-            var query =
-                _beamRepository.Query.OrderByDescending(o => o.CreatedDate);
-            var beams = _beamRepository.Find(query).Select(o => new BeamDto(o));
+            //var query =
+            //    _beamRepository.Query.OrderByDescending(o => o.CreatedDate);
 
-            if (!string.IsNullOrEmpty(keyword))
+            page = page < 1 ? 1 : page;
+            var query = _beamRepository.Query;
+
+            if (!filter.Contains("{}"))
             {
-                beams =
-                    beams.Where(entity => 
-                        entity.BeamNumber.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
-                        entity.BeamType.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+                Dictionary<string, object> filterDictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(filter);
+                query = QueryHelper<BeamReadModel>.Filter(query, filterDictionary);
+            }
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                query = query.Where(w => w.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase) || w.Type.Contains(keyword, StringComparison.OrdinalIgnoreCase));
             }
 
             if (!order.Contains("{}"))
             {
-                Dictionary<string, string> orderDictionary =
-                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                          orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(BeamDto).GetProperty(key);
-
-                if (orderDictionary.Values.Contains("asc"))
-                {
-                    beams = beams.OrderBy(x => prop.GetValue(x, null));
-                }
-                else
-                {
-                    beams = beams.OrderByDescending(x => prop.GetValue(x, null));
-                }
+                Dictionary<string, string> orderDictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                query = QueryHelper<BeamReadModel>.Order(query, orderDictionary);
             }
 
-            beams = beams.Skip(page * size).Take(size);
-            int totalRows = beams.Count();
-            page = page + 1;
+            var total = query.Count();
+            var data = await query.Skip((page - 1) * size).Take(size).Select(s => new BeamDocument(s)).Select(s => new BeamDto(s)).ToListAsync();
 
-            await Task.Yield();
+            //var beams = _beamRepository.Find(query).Select(o => new BeamDto(o));
 
-            return Ok(beams, info: new
+            //if (!string.IsNullOrEmpty(keyword))
+            //{
+            //    beams =
+            //        beams.Where(entity =>
+            //            entity.Number.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+            //            entity.Type.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            //}
+
+            //if (!order.Contains("{}"))
+            //{
+            //    Dictionary<string, string> orderDictionary =
+            //        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            //    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+            //              orderDictionary.Keys.First().Substring(1);
+            //    System.Reflection.PropertyInfo prop = typeof(BeamDto).GetProperty(key);
+
+            //    if (orderDictionary.Values.Contains("asc"))
+            //    {
+            //        beams = beams.OrderBy(x => prop.GetValue(x, null));
+            //    }
+            //    else
+            //    {
+            //        beams = beams.OrderByDescending(x => prop.GetValue(x, null));
+            //    }
+            //}
+
+            //if (!filter.Contains("{}"))
+            //{
+            //    Dictionary<string, string> filterDictionary =
+            //        JsonConvert.DeserializeObject<Dictionary<string, string>>(filter);
+            //    var key = filterDictionary.Keys.First().Substring(0, 1).ToUpper() +
+            //              filterDictionary.Keys.First().Substring(1);
+            //    System.Reflection.PropertyInfo prop = typeof(BeamDto).GetProperty(key);
+
+            //    if (filterDictionary != null && filterDictionary.Count > 0)
+            //    {
+            //        foreach (var dct in filterDictionary)
+            //        {
+            //            var filterKey = dct.Key;
+            //            var valueKey = dct.Value;
+
+            //            var filterQuery = string.Concat(string.Empty, filterKey, " ==@0 ");
+
+            //            var beamQuery = beams.AsQueryable().Where(filterQuery, valueKey);
+            //        }
+            //    }
+            //}
+
+            //var resultBeams = beams.Skip(page * size).Take(size);
+            //int totalRows = beams.Count();
+            //int resultCount = resultBeams.Count();
+            //page = page + 1;
+
+            //await Task.Yield();
+
+            return Ok(data, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total,
+                count = data.Count
             });
         }
 
@@ -83,8 +135,11 @@ namespace Manufactures.Controllers.Api
         {
             var Identity = Guid.Parse(Id);
             var beam =
-                _beamRepository.Find(item => item.Identity == Identity)
-                               .Select(item => new BeamDto(item)).FirstOrDefault();
+                _beamRepository
+                    .Find(item => item.Identity == Identity)
+                    .Select(item => new BeamDto(item))
+                    .FirstOrDefault();
+
             await Task.Yield();
 
             if (beam == null)

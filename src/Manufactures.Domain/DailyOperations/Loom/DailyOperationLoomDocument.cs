@@ -3,100 +3,218 @@ using Manufactures.Domain.DailyOperations.Loom.Entities;
 using Manufactures.Domain.DailyOperations.Loom.ReadModels;
 using Manufactures.Domain.Events;
 using Manufactures.Domain.Shared.ValueObjects;
+using Moonlay;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Manufactures.Domain.DailyOperations.Loom
 {
-    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomReadModel>
+    public class DailyOperationLoomDocument : AggregateRoot<DailyOperationLoomDocument, DailyOperationLoomDocumentReadModel>
     {
-        public DateTimeOffset DateOperated { get; private set; }
-        public MachineId MachineId { get; private set; }
-        public UnitId UnitId { get; private set; }
-        public string Status { get; private set; }
-        public IReadOnlyCollection<DailyOperationLoomDetail> DailyOperationMachineDetails { get; private set; }
 
-        public DailyOperationLoomDocument(Guid id, MachineId machineId, UnitId unitId, string status) :base(id)
+        public Guid OrderDocumentId { get; private set; }
+
+        public double TotalCounter { get; private set; }
+
+        public int BeamProcessed { get; private set; }
+
+        public string OperationStatus { get; private set; }
+
+        public List<DailyOperationLoomBeamUsed> LoomBeamsUsed { get; set; }
+
+        public List<DailyOperationLoomHistory> LoomHistories { get; set; }
+
+        public DailyOperationLoomDocument(Guid identity,
+                                          Guid orderDocumentId,
+                                          int beamProcessed,
+                                          string operationStatus) : base(identity)
         {
-            Identity = id;
-            MachineId = machineId;
-            UnitId = unitId;
-            Status = status;
-            DailyOperationMachineDetails = new List<DailyOperationLoomDetail>();
+            Identity = identity;
+            OrderDocumentId = orderDocumentId;
+            BeamProcessed = beamProcessed;
+            OperationStatus = operationStatus;
+            //LoomBeamsUsed= new List<DailyOperationLoomBeamUsed>();
+            //LoomProducts = new List<DailyOperationLoomProduct>();
+            //LoomHistories = new List<DailyOperationLoomHistory>();
 
             this.MarkTransient();
 
-            ReadModel = new DailyOperationLoomReadModel(Identity)
+            ReadModel = new DailyOperationLoomDocumentReadModel(Identity)
             {
-                MachineId = this.MachineId.Value,
-                UnitId = this.UnitId.Value,
-                Status = this.Status,
-                DailyOperationLoomDetails = this.DailyOperationMachineDetails.ToList()
+                OrderDocumentId = OrderDocumentId,
+                TotalCounter = TotalCounter,
+                BeamProcessed = BeamProcessed,
+                OperationStatus = OperationStatus
             };
 
-            ReadModel.AddDomainEvent(new OnAddDailyOperationLoom(Identity));
+            //ReadModel.AddDomainEvent(new OnAddDailyOperationLoomDocument(Identity));
         }
 
-        public DailyOperationLoomDocument(DailyOperationLoomReadModel readModel) : base(readModel)
+        //Constructor for Mapping Object from Database to Domain
+        public DailyOperationLoomDocument(DailyOperationLoomDocumentReadModel readModel) : base(readModel)
         {
-            this.DateOperated = readModel.CreatedDate;
-            this.MachineId = readModel.MachineId.HasValue ? new MachineId(readModel.MachineId.Value) : null;
-            this.UnitId = readModel.UnitId.HasValue ? new UnitId(readModel.UnitId.Value) : null;
-            this.Status = readModel.Status; 
-            this.DailyOperationMachineDetails = readModel.DailyOperationLoomDetails;
+            //Instantiate Object from Database
+            this.OrderDocumentId = readModel.OrderDocumentId;
+            this.TotalCounter = readModel.TotalCounter;
+            this.BeamProcessed = readModel.BeamProcessed;
+            this.OperationStatus = readModel.OperationStatus;
         }
 
-        public void AddDailyOperationMachineDetail(DailyOperationLoomDetail dailyOperationMachineDetail)
+        //public void AddDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
+        //{
+        //    var list = LoomBeamProducts.ToList();
+        //    list.Add(beamProduct);
+        //    LoomBeamProducts = list;
+        //    ReadModel.LoomBeamProducts = LoomBeamProducts.ToList();
+
+        //    MarkModified();
+        //}
+
+        //public void UpdateDailyOperationLoomBeamProduct(DailyOperationLoomBeamProduct beamProduct)
+        //{
+        //    var loomBeamProducts = LoomBeamProducts.ToList();
+
+        //    //Get Loom Beam Product Update
+        //    var index =
+        //        loomBeamProducts
+        //            .FindIndex(x => x.Identity.Equals(beamProduct.Identity));
+        //    var loomBeamProduct =
+        //        loomBeamProducts
+        //            .Where(x => x.Identity.Equals(beamProduct.Identity))
+        //            .FirstOrDefault();
+
+        //    //Update Beam Product Properties
+        //    loomBeamProduct.SetBeamDocumentId(new BeamId(beamProduct.BeamDocumentId));
+        //    loomBeamProduct.SetMachineDocumentId(new MachineId(beamProduct.MachineDocumentId));
+        //    loomBeamProduct.SetLatestDateTimeBeamProduct(beamProduct.LatestDateTimeBeamProduct);
+        //    loomBeamProduct.SetLoomProcess(beamProduct.LoomProcess);
+        //    loomBeamProduct.SetBeamProductStatus(beamProduct.BeamProductStatus);
+
+        //    loomBeamProducts[index] = loomBeamProduct;
+        //    LoomBeamProducts = loomBeamProducts;
+        //    ReadModel.LoomBeamProducts= loomBeamProducts;
+        //    MarkModified();
+        //}
+
+        //public void RemoveDailyOperationLoomBeamProduct(Guid identity)
+        //{
+        //    var beamProduct = LoomBeamProducts.Where(o => o.Identity == identity).FirstOrDefault();
+        //    var list = LoomBeamProducts.ToList();
+
+        //    list.Remove(beamProduct);
+        //    LoomBeamProducts = list;
+        //    ReadModel.LoomBeamProducts= LoomBeamProducts.ToList();
+
+        //    MarkModified();
+        //}
+
+        //public void AddDailyOperationLoomHistory(DailyOperationLoomBeamHistory history)
+        //{
+        //    var list = LoomBeamHistories.ToList();
+        //    list.Add(history);
+        //    LoomBeamHistories = list;
+        //    ReadModel.LoomBeamHistories = LoomBeamHistories.ToList();
+
+        //    MarkModified();
+        //}
+
+        //public void UpdateDailyOperationLoomHistory(DailyOperationLoomBeamHistory history)
+        //{
+        //    var loomHistories = LoomBeamHistories.ToList();
+
+        //    //Get Loom History Update
+        //    var index =
+        //        loomHistories
+        //            .FindIndex(x => x.Identity.Equals(history.Identity));
+        //    var loomHistory =
+        //        loomHistories
+        //            .Where(x => x.Identity.Equals(history.Identity))
+        //            .FirstOrDefault();
+
+        //    //Update History Properties
+        //    loomHistory.SetOperatorDocumentId(new OperatorId(history.OperatorDocumentId));
+        //    loomHistory.SetDateTimeMachine(history.DateTimeMachine);
+        //    loomHistory.SetShiftDocumentId(new ShiftId(history.ShiftDocumentId));
+        //    loomHistory.SetWarpBrokenThreads(history.WarpBrokenThreads ?? 0);
+        //    loomHistory.SetWeftBrokenThreads(history.WeftBrokenThreads ?? 0);
+        //    loomHistory.SetLenoBrokenThreads(history.LenoBrokenThreads ?? 0);
+        //    loomHistory.SetReprocessTo(history.ReprocessTo);
+        //    loomHistory.SetInformation(history.Information);
+        //    loomHistory.SetMachineStatus(history.MachineStatus);
+
+        //    loomHistories[index] = loomHistory;
+        //    LoomBeamHistories = loomHistories;
+        //    ReadModel.LoomBeamHistories = loomHistories;
+        //    MarkModified();
+        //}
+
+        //public void RemoveDailyOperationLoomHistory(Guid identity)
+        //{
+        //    var history = LoomBeamHistories.Where(o => o.Identity == identity).FirstOrDefault();
+        //    var list = LoomBeamHistories.ToList();
+
+        //    list.Remove(history);
+        //    LoomBeamHistories = list;
+        //    ReadModel.LoomBeamHistories = LoomBeamHistories.ToList();
+
+        //    MarkModified();
+        //}
+
+        public void SetOrderDocumentId(Guid orderDocumentId)
         {
-            var list = DailyOperationMachineDetails.ToList();
-            list.Add(dailyOperationMachineDetail);
-            DailyOperationMachineDetails = list;
-            ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
-
-            MarkModified();
-        }
-
-        public void RemoveDailyOperationMachineDetail(Guid identity)
-        {
-            var detail = DailyOperationMachineDetails.Where(o => o.Identity == identity).FirstOrDefault();
-            var list = DailyOperationMachineDetails.ToList();
-
-            list.Remove(detail);
-            DailyOperationMachineDetails = list;
-            ReadModel.DailyOperationLoomDetails = DailyOperationMachineDetails.ToList();
-
-            MarkModified();
-        }
-
-        public void SetUnit(UnitId value)
-        {
-            if (value.Value != UnitId.Value)
+            Validator.ThrowIfNull(() => orderDocumentId);
+            if (orderDocumentId != OrderDocumentId)
             {
-                UnitId = value;
-                ReadModel.UnitId = UnitId.Value;
+                OrderDocumentId = orderDocumentId;
+                ReadModel.OrderDocumentId = OrderDocumentId;
 
                 MarkModified();
             }
         }
 
-        public void SetMachine(MachineId value)
+        public void SetTotalCounter(double totalCounter)
         {
-            if(value.Value != MachineId.Value)
+            if (totalCounter != TotalCounter)
             {
-                MachineId = value;
-                ReadModel.MachineId = MachineId.Value;
+                TotalCounter = totalCounter;
+                ReadModel.TotalCounter = TotalCounter;
 
                 MarkModified();
             }
         }
 
-        public void SetStatus(string value)
+        public void SetBeamProcessed(int beamProcessed)
         {
-            Status = value;
-            ReadModel.Status = Status;
+            if (beamProcessed != BeamProcessed)
+            {
+                BeamProcessed = beamProcessed;
+                ReadModel.BeamProcessed = BeamProcessed;
 
+                MarkModified();
+            }
+        }
+
+        public void SetOperationStatus(string operationStatus)
+        {
+            Validator.ThrowIfNull(() => operationStatus);
+            if (operationStatus != OperationStatus)
+            {
+                OperationStatus = operationStatus;
+                ReadModel.OperationStatus = OperationStatus;
+
+                MarkModified();
+            }
+        }
+
+        public void SetModified()
+        {
             MarkModified();
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override DailyOperationLoomDocument GetEntity()

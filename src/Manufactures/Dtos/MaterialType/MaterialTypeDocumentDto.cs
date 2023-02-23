@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Manufactures.Dtos.MaterialType
+namespace Manufactures.DataTransferObjects.MaterialType
 {
     public class MaterialTypeDocumentDto
     {

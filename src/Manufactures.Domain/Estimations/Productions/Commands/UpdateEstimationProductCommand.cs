@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Infrastructure.Domain.Commands;
-using Manufactures.Domain.Estimations.Productions.ValueObjects;
-using Manufactures.Domain.GlobalValueObjects;
+using Manufactures.Domain.Estimations.Productions.Entities;
+using Manufactures.Domain.Shared.ValueObjects;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -13,14 +13,8 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(PropertyName = "Period")]
-        public Period Period { get; set; }
-
-        [JsonProperty(PropertyName = "Unit")]
-        public WeavingUnit Unit { get; set; }
-
-        [JsonProperty(PropertyName = "EstimationProducts")]
-        public List<EstimationProductValueObject> EstimationProducts { get; set; }
+        [JsonProperty(PropertyName = "EstimatedDetails")]
+        public List<UpdateEstimatedProductionDetailCommand> EstimatedDetails { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -32,8 +26,8 @@ namespace Manufactures.Domain.Estimations.Productions.Commands
     {
         public UpdateEstimationProductCommandValidator()
         {
-            RuleFor(command => command.Period).NotEmpty();
-            RuleFor(command => command.Unit).NotEmpty();
+            RuleFor(command => command.Id).NotEmpty();
+            RuleFor(command => command.EstimatedDetails).NotEmpty();
         }
     }
 }

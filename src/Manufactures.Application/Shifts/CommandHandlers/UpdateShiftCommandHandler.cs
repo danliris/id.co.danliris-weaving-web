@@ -26,19 +26,17 @@ namespace Manufactures.Application.Shifts.CommandHandlers
         public async Task<ShiftDocument> Handle(UpdateShiftCommand request, CancellationToken cancellationToken)
         {
             var existingShift = _shiftRepository.Find(o => o.Identity.Equals(request.Id)).FirstOrDefault();
-            var startTime = request.StartTime.TimeOfDay;
-            var endTime = request.EndTime.TimeOfDay;
+            var startTime = TimeSpan.Parse(request.StartTime);
+            var endTime = TimeSpan.Parse(request.EndTime);
 
             if (existingShift == null)
             {
-                throw Validator.ErrorValidation(("Id", "Invalid Shift Id: " + request.Id));
+                throw Validator.ErrorValidation(("Id", "Invalid ShiftId Id: " + request.Id));
             }
-
-
-
+            
             existingShift.SetName(request.Name);
-            existingShift.SetStartTime(startTime.ToString());
-            existingShift.SetEndTime(endTime.ToString());
+            existingShift.SetStartTime(startTime);
+            existingShift.SetEndTime(endTime);
 
             await _shiftRepository.Update(existingShift);
             _storage.Save();

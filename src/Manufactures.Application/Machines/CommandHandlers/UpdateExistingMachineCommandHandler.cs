@@ -38,7 +38,7 @@ namespace Manufactures.Application.Machines.CommandHandlers
                 // Check if any have same number
                 var sameNumber = _machineRepository.Find(o => o.MachineNumber.Equals(request.MachineNumber) && o.Deleted.Value == false).FirstOrDefault();
 
-                if(sameNumber == null)
+                if (sameNumber == null)
                 {
                     existingMachine.SetMachineNumber(request.MachineNumber);
                 }
@@ -50,8 +50,13 @@ namespace Manufactures.Application.Machines.CommandHandlers
 
 
             existingMachine.SetLocation(request.Location);
-            existingMachine.SetMachineTypeId(new MachineTypeId(Guid.Parse(request.MachineTypeId)));
-            existingMachine.SetWeavingUnitId(new UnitId(int.Parse(request.WeavingUnitId)));
+            existingMachine.SetMachineTypeId(request.MachineTypeId);
+            existingMachine.SetWeavingUnitId(request.WeavingUnitId);
+            existingMachine.SetCutmark(request.Cutmark ?? 0);
+            existingMachine.SetCutmarkUom(request.CutmarkUom ?? "");
+            existingMachine.SetProcess(request.Process);
+            existingMachine.SetArea(request.Area);
+            existingMachine.SetBlock(request.Block);
 
             await _machineRepository.Update(existingMachine);
 

@@ -55,7 +55,7 @@ namespace Manufactures.Tests.YarnNumbers.CommandHandlers
 
             this.mockRingRepo
                  .Setup(x => x.Find(It.IsAny<Expression<Func<YarnNumberDocumentReadModel, bool>>>()))
-                 .Returns(new List<YarnNumberDocument>() { new YarnNumberDocument(testId, "0000", 90, "test-type", "this is test") });
+                 .Returns(new List<YarnNumberDocument>() { new YarnNumberDocument(testId, "0000", "90", "test-type", "this is test") });
 
             this.mockRingRepo
                 .Setup(x => x.Update(It.IsAny<YarnNumberDocument>()))
@@ -64,7 +64,7 @@ namespace Manufactures.Tests.YarnNumbers.CommandHandlers
             UpdateYarnNumberCommand request = new UpdateYarnNumberCommand()
             {
                 Code = "0001",
-                Number = 100,
+                Number = "100",
                 Description = "Change value of code and Number"
             };
             request.SetId(testId);

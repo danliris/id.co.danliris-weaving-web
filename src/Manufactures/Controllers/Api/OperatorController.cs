@@ -1,5 +1,4 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Domain.Operators;
 using Manufactures.Domain.Operators.Commands;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Shared.ValueObjects;
@@ -12,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Manufactures.Domain.Operators.Queries;
+using Manufactures.Application.Operators.DataTransferObjects;
 
 namespace Manufactures.Controllers.Api
 {
@@ -21,12 +22,16 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class OperatorController : ControllerApiBase
     {
-        private readonly IOperatorRepository _OperatorRepository;
+        private readonly IOperatorRepository _operatorRepository;
+        private readonly IOperatorQuery<OperatorListDto> _operatorQuery;
 
         public OperatorController(IServiceProvider serviceProvider,
-                                  IWorkContext workContext) : base(serviceProvider)
+                                  IWorkContext workContext,
+                                  IOperatorQuery<OperatorListDto> operatorQuery) : base(serviceProvider)
         {
-            _OperatorRepository =
+            _operatorQuery = operatorQuery ?? throw new ArgumentNullException(nameof(operatorQuery));
+
+            _operatorRepository =
                 this.Storage.GetRepository<IOperatorRepository>();
         }
 
@@ -37,20 +42,23 @@ namespace Manufactures.Controllers.Api
                                              string keyword = null,
                                              string filter = "{}")
         {
-            page = page - 1;
-            var query =
-                _OperatorRepository.Query.OrderByDescending(item => item.CreatedDate);
-            var operatorDocuments =
-                _OperatorRepository.Find(query);
+            VerifyUser();
+            var operatorDocuments = await _operatorQuery.GetAll();
 
             if (!string.IsNullOrEmpty(keyword))
             {
+                await Task.Yield();
                 operatorDocuments =
                     operatorDocuments
-                        .Where(entity => entity.CoreAccount
-                                               .Name
-                                               .Contains(keyword, 
-                                                         StringComparison.OrdinalIgnoreCase))
+                        .Where(o => o.Username
+                                        .Contains(keyword, StringComparison.CurrentCultureIgnoreCase)) 
+                                    //    ||
+                                    //o.UnitName
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    //o.Group
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    //o.Type
+                                    //    .Contains(keyword, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
             }
 
@@ -60,7 +68,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(OperatorDocument).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(OperatorListDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -74,40 +82,70 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            operatorDocuments = operatorDocuments.Skip(page * size).Take(size).ToList();
-            int totalRows = operatorDocuments.Count();
-            page = page + 1;
+            //int totalRows = dailyOperationWarpingDocuments.Count();
+            var result = operatorDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
 
-            var resultDocuments = operatorDocuments;
+            return Ok(result, info: new { page, size, total });
+        }
 
-            await Task.Yield();
+        [HttpGet("operator-by-name")]
+        public async Task<IActionResult> GetOrderByNumber(int page = 1,
+                                                          int size = 25,
+                                                          string order = "{}",
+                                                          string keyword = null,
+                                                          string filter = "{}")
+        {
+            var operatorDocuments = await _operatorQuery.GetAll();
 
-            return Ok(resultDocuments, info: new
+
+            if (!string.IsNullOrEmpty(keyword))
             {
-                page,
-                size,
-                total = totalRows
-            });
+                operatorDocuments =
+                    operatorDocuments
+                        .Where(o => o.Username.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(OperatorListDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    operatorDocuments =
+                        operatorDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
+                }
+                else
+                {
+                    operatorDocuments =
+                        operatorDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                }
+            }
+
+            var result = operatorDocuments.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("{Id}")]
         public async Task<IActionResult> Get(string Id)
         {
+            VerifyUser();
             var Identity = Guid.Parse(Id);
-            var operatorDocument =
-                _OperatorRepository.Find(item => item.Identity == Identity).FirstOrDefault();
-            await Task.Yield();
+            var operatorDocument = await _operatorQuery.GetById(Identity);
 
             if (operatorDocument == null)
             {
-                return NotFound();
+                return NotFound(Identity);
             }
-            else
-            {
-                var resultData = operatorDocument;
 
-                return Ok(resultData);
-            }
+            return Ok(operatorDocument);
         }
 
         [HttpPost]
@@ -116,7 +154,7 @@ namespace Manufactures.Controllers.Api
             var mongodbId = command.CoreAccount.MongoId;
 
             var existingOperator = 
-                _OperatorRepository
+                _operatorRepository
                     .Query
                     .Where(o => o.CoreAccount
                                  .Deserialize<CoreAccount>()

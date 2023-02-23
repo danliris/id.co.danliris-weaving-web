@@ -9,12 +9,6 @@ namespace Manufactures.Domain.Shared.ValueObjects
         public int Id { get; private set; }
         public string Name { get; private set; }
 
-        public CoreAccount(string mongoId, string name)
-        {
-            MongoId = mongoId;
-            Name = name;
-        }
-
         public CoreAccount(string mongoId, int id, string name)
         {
             MongoId = mongoId;
@@ -26,6 +20,7 @@ namespace Manufactures.Domain.Shared.ValueObjects
         {
             yield return MongoId;
             yield return Id;
+            yield return Name;
         }
     }
 }

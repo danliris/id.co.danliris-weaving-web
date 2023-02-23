@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.WeavingSupplier
+namespace Manufactures.DataTransferObjects.WeavingSupplier
 {
     public class SupplierDocumentDto
     {

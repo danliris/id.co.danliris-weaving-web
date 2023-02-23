@@ -2,6 +2,7 @@
 using Manufactures.Domain.Shifts;
 using Manufactures.Domain.Shifts.Commands;
 using Manufactures.Domain.Shifts.Repositories;
+using Manufactures.DataTransferObjects.Shift;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;
@@ -40,7 +41,7 @@ namespace Manufactures.Controllers.Api
             var query =
                 _shiftRepository.Query.OrderByDescending(item => item.CreatedDate);
             var shiftDocuments =
-                _shiftRepository.Find(query);
+                _shiftRepository.Find(query).Select(x => new ShiftDto(x));
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -58,7 +59,7 @@ namespace Manufactures.Controllers.Api
                     JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
                 var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
                           orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(ShiftDocument).GetProperty(key);
+                System.Reflection.PropertyInfo prop = typeof(ShiftDto).GetProperty(key);
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
@@ -72,19 +73,19 @@ namespace Manufactures.Controllers.Api
                 }
             }
 
-            shiftDocuments = shiftDocuments.Skip(page * size).Take(size).ToList();
+            var ResultShiftDocuments = shiftDocuments.Skip(page * size).Take(size).ToList();
             int totalRows = shiftDocuments.Count();
+            int resultCount = ResultShiftDocuments.Count();
             page = page + 1;
-
-            var resultDocuments = shiftDocuments;
 
             await Task.Yield();
 
-            return Ok(resultDocuments, info: new
+            return Ok(ResultShiftDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
             });
         }
 
@@ -93,7 +94,9 @@ namespace Manufactures.Controllers.Api
         {
             var Identity = Guid.Parse(Id);
             var shiftDocument =
-                _shiftRepository.Find(item => item.Identity == Identity).FirstOrDefault();
+                _shiftRepository
+                    .Find(item => item.Identity == Identity)
+                    .FirstOrDefault();
             await Task.Yield();
 
             if (shiftDocument == null)
@@ -102,10 +105,65 @@ namespace Manufactures.Controllers.Api
             }
             else
             {
-                var resultData = shiftDocument;
+                var resultData = new ShiftDto(shiftDocument);
 
                 return Ok(resultData);
             }
+        }
+
+        [HttpGet("check-shift/{time}")]
+        public async Task<IActionResult> CheckShift(string time)
+        {
+            var checkTime = TimeSpan.Parse(time);
+            var defaultTime = checkTime;
+            var query = _shiftRepository.Query;
+            var existingShift =
+                _shiftRepository
+                    .Find(query)
+                    .Select(shift => new ShiftDto(shift));
+
+            foreach (var shift in existingShift)
+            {
+                checkTime = defaultTime;
+                var shiftEnd = new TimeSpan();
+                var isMoreDays = false;
+
+                if (shift.StartTime > shift.EndTime)
+                {
+                    if (checkTime < shift.StartTime)
+                    {
+                        // Add more days
+                        checkTime = checkTime + TimeSpan.FromHours(24);
+                    }
+
+                    // Add more days
+                    shiftEnd = shift.EndTime + TimeSpan.FromHours(24);
+                    isMoreDays = true;
+                }
+
+                if (checkTime >= shift.StartTime)
+                {
+                    if (isMoreDays == false)
+                    {
+                        if (checkTime <= shift.EndTime)
+                        {
+                            await Task.Yield();
+                            return Ok(shift);
+                        }
+                    }
+                    else
+                    {
+                        if (checkTime <= shiftEnd)
+                        {
+                            await Task.Yield();
+                            return Ok(shift);
+                        }
+                    }
+                }
+            }
+
+            await Task.Yield();
+            return NotFound();
         }
 
         [HttpPost]
@@ -119,7 +177,7 @@ namespace Manufactures.Controllers.Api
 
             if (existingOperator != null)
             {
-                throw Validator.ErrorValidation(("Name", "Has existing Shift Name"));
+                throw Validator.ErrorValidation(("Name", "Has existing ShiftName Name"));
             }
 
             var shiftDocument = await Mediator.Send(command);
