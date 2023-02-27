@@ -60,7 +60,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             
         }
-        public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year)
+        public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year, int monthId)
         {
 
             var startRow = 5;
@@ -89,7 +89,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                 data = new WeavingDailyOperationWarpingMachine(
                                   Guid.NewGuid(), //
                                   Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
-                                  month,//month
+                                  month,
+                                  monthId,//month
                                   converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
                                   year.ToString(),//year
                                   converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
@@ -166,6 +167,53 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         public Task<WeavingDailyOperationWarpingMachineDto> GetById(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
+        {
+
+             
+
+            var allData = from a in _repository.Query
+                          select new
+                          {
+                              code = a.Code,
+                              threadNo = a.ThreadNo,
+                              shift = a.Shift,
+                              sp = a.SP,
+                              threadCut = a.ThreadCut,
+                              length = a.Length,
+                              mcNo = a.MCNo,
+                              month = a.Month,
+                              yearPeriode = a.YearPeriode,
+                              day = a.Date,
+                              name = a.Name,
+                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date)
+                          };
+            var query = from a in allData
+                        where ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
+                         (shift == null || (shift != null && shift != "" && a.shift == mcNo)) &&
+                          (sp == null || (sp != null && sp != "" && a.sp.Contains(sp)) &&
+                           (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo == threadNo)) &&
+                            (code == null || (code != null && code != "" && a.code == mcNo)) &&
+                            (a.Periode >= fromDate && a.Periode <= toDate)))
+                            select a;
+            List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
+            foreach(var item in query)
+            {
+                WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto
+                {
+                    MCNo = item.mcNo,
+                    ThreadCut = item.threadCut,
+                    Length = item.length,
+                    Name = item.name
+                };
+                list.Add(dto);
+            }
+
+            return list;
+             
+
         }
     }
 }

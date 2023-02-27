@@ -13,6 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         }
         public int Date { get; internal set; }
         public string Month { get; internal set; }
+        public int MonthId { get; internal set; }
         public string YearPeriode { get; internal set; }
         public string Year { get; internal set; }
         public string Shift { get; internal set; }

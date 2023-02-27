@@ -11,6 +11,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperat
 {
     public interface IWeavingDailyOperationWarpingMachineQuery<TModel> : IQueries<TModel>
     {
-       Task<bool> Upload(ExcelWorksheets sheet,string month,int year);
+       Task<bool> Upload(ExcelWorksheets sheet,string month,int year,int monthId);
+       List<TModel> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code);
     }
 }

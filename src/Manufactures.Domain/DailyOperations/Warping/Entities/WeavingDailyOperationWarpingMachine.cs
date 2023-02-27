@@ -13,6 +13,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         }
         public int Date { get; internal set; }
         public string Month { get; internal set; }
+        public int MonthId { get; internal set; }
         public string YearPeriode { get; internal set; }
         public string Year { get; internal set; }
         public string Shift { get; internal set; }
@@ -43,6 +44,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
 
         public WeavingDailyOperationWarpingMachine(Guid identity, int Date,
           string Month,
+          int MonthId,
           string Year,
           string YearPeriode,
           string Shift,
@@ -73,6 +75,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         {
             this.Date = Date;
             this.Month = Month;
+            this.MonthId = MonthId;
             this.Year = Year;
             this.YearPeriode = YearPeriode;
             this.Shift = Shift;
@@ -106,6 +109,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             {
                 Date = this.Date,
                 Month = this.Month,
+                MonthId = this.MonthId,
                 Year = this.Year,
                 YearPeriode = this.YearPeriode,
                 Shift = this.Shift,

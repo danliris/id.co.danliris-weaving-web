@@ -509,32 +509,60 @@ namespace Manufactures.Controllers.Api
         }
 
         //Controller for Daily Operation Warping Production Report
+        //[HttpGet("get-warping-production-report")]
+        //public async Task<IActionResult> GetWarpingProductionReport(int month = 0,
+        //                                                            int year = 0)
+        //{
+        //    VerifyUser();
+        //    var acceptRequest = Request.Headers.Values.ToList();
+        //    var index = acceptRequest.IndexOf("application/pdf") > 0;
+
+        //    var productionWarpingReport = _warpingProductionReportQuery.GetReports(month, year);
+
+        //    await Task.Yield();
+        //    if (index.Equals(true))
+        //    {
+        //        var dateTime =
+        //            new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+
+        //        var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
+
+        //        var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
+
+        //        WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
+        //        MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
+        //        return new FileStreamResult(productionResultPdf, "application/pdf")
+        //        {
+        //            FileDownloadName = string.Format(fileName)
+        //        };
+        //    }
+        //    else
+        //    {
+        //        return Ok(productionWarpingReport);
+        //    }
+        //}
         [HttpGet("get-warping-production-report")]
-        public async Task<IActionResult> GetWarpingProductionReport(int month = 0,
-                                                                    int year = 0)
+        public async Task<IActionResult> GetWarpingProductionReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var index = acceptRequest.IndexOf("application/pdf") > 0;
 
-            var productionWarpingReport = _warpingProductionReportQuery.GetReports(month, year);
+            var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
 
             await Task.Yield();
             if (index.Equals(true))
             {
-                var dateTime =
-                    new DateTimeOffset(year, month, 1, 0, 0, 0, new TimeSpan(+7, 0, 0));
+                byte[] xlsInBytes;
+ 
 
-                var monthName = dateTime.ToString("MMMM", CultureInfo.CreateSpecificCulture("id-ID"));
-
-                var fileName = "Laporan Produksi Warping Per Operator_" + monthName + "_" + year;
-
-                WarpingProductionReportPdfTemplate pdfTemplate = new WarpingProductionReportPdfTemplate(productionWarpingReport);
-                MemoryStream productionResultPdf = pdfTemplate.GeneratePdfTemplate();
-                return new FileStreamResult(productionResultPdf, "application/pdf")
-                {
-                    FileDownloadName = string.Format(fileName)
-                };
+                var fileName = "Laporan Putus Warping_" + fromDate + "_" + toDate;
+                WarpingBrokenReportXlsTemplate xlsTemplate = new WarpingBrokenReportXlsTemplate();
+               // MemoryStream brokenResultXls = xlsTemplate.GenerateWarpingBrokenReportXls(productionWarpingReport);
+               
+               // xlsInBytes = brokenResultXls.ToArray();
+                var xlsFile = File("", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return xlsFile;
             }
             else
             {
@@ -709,7 +737,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFile(string month, int year)
+        public async Task<IActionResult> UploadFile(string month, int year, int monthId)
         {
             VerifyUser();
            
@@ -728,7 +756,7 @@ namespace Manufactures.Controllers.Api
                             var sheet = excelPack.Workbook.Worksheets;
 
 
-                            var weavingMachine = await _weavingDailyOperationWarpingMachineQuery.Upload(sheet, month, year);
+                            var weavingMachine = await _weavingDailyOperationWarpingMachineQuery.Upload(sheet, month, year,monthId);
                             return Ok(weavingMachine);
                         }
                     }
