@@ -395,6 +395,20 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
+
+            modelBuilder.Entity<WeavingDailyOperationWarpingMachineReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationWarpingMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Name).HasMaxLength(100);
+                etb.Property(p => p.Code).HasMaxLength(100);
+                etb.Property(p => p.BeamNo).HasMaxLength(100);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
         }
     }
 }
