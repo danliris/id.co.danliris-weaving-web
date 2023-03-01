@@ -166,9 +166,24 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             return query;
         }
 
-        public Task<WeavingDailyOperationWarpingMachineDto> GetById(Guid id)
+        public async Task<WeavingDailyOperationWarpingMachineDto> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            var query = _repository
+                            .Query.OrderByDescending(o => o.CreatedDate)
+                            .Where(s=>s.Identity == id)
+                            .Select(y =>
+                             new WeavingDailyOperationWarpingMachineDto
+                             {
+                                 MCNo = y.MCNo,
+                                 YearPeriode = y.YearPeriode,
+                                 Group = y.Group,
+                                 Name = y.Name,
+                                 CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy")
+                             }).FirstOrDefault();
+
+          
+
+            return query;
         }
 
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
@@ -190,16 +205,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                               yearPeriode = a.YearPeriode,
                               day = a.Date,
                               name = a.Name,
-                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date)
+                              Periode = new DateTime(Convert.ToInt32(a.Year), a.MonthId, a.Date)
                           };
             var query = from a in allData
                         where ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
                          (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
                           (sp == null || (sp != null && sp != "" && a.sp.Contains(sp)) &&
                            (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo == threadNo)) &&
-                            (code == null || (code != null && code != "" && a.code == code)) &&
-                            (a.Periode >= fromDate && a.Periode <= toDate)))
-                        select a;
+                            (code == null || (code != null && code != "" && a.code == code)))&&
+                            (a.Periode.Date  >= fromDate.Date && a.Periode.Date<= toDate.Date)
+)                       select a;
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
             foreach (var item in query)
             {
