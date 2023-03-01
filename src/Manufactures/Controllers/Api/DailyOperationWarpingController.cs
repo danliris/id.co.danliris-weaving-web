@@ -34,6 +34,7 @@ using OfficeOpenXml;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using CsvHelper;
+using System.Net;
 
 namespace Manufactures.Controllers.Api
 {
@@ -47,24 +48,24 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class DailyOperationWarpingController : ControllerApiBase
     {
-        private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto> 
+        private readonly IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>
             _warpingDocumentQuery;
-        private readonly IOperatorQuery<OperatorListDto> 
+        private readonly IOperatorQuery<OperatorListDto>
             _operatorQuery;
-        private readonly IShiftQuery<ShiftDto> 
+        private readonly IShiftQuery<ShiftDto>
             _shiftQuery;
-        private readonly IBeamQuery<BeamListDto> 
+        private readonly IBeamQuery<BeamListDto>
             _beamQuery;
-        private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto> 
+        private readonly IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>
             _dailyOperationWarpingReportQuery;
-        private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto> 
+        private readonly IWarpingProductionReportQuery<WarpingProductionReportListDto>
             _warpingProductionReportQuery;
-        private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto> 
+        private readonly IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>
             _warpingBrokenReportQuery;
         private readonly IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>//<WeavingDailyOperationWarpingMachineDto>
           _weavingDailyOperationWarpingMachineQuery;
 
-        
+
 
         private readonly IDailyOperationWarpingRepository
             _dailyOperationWarpingRepository;
@@ -76,7 +77,7 @@ namespace Manufactures.Controllers.Api
             _dailyOperationWarpingBeamProductRepository;
         private readonly IDailyOperationWarpingBrokenCauseRepository
             _dailyOperationWarpingBrokenCauseRepository;
-        
+
 
         //Dependency Injection activated from constructor need IServiceProvider
         public DailyOperationWarpingController(IServiceProvider serviceProvider,
@@ -99,9 +100,9 @@ namespace Manufactures.Controllers.Api
             _warpingBrokenReportQuery = warpingBrokenReportQuery ?? throw new ArgumentNullException(nameof(warpingBrokenReportQuery));
             _weavingDailyOperationWarpingMachineQuery = weavingDailyOperationWarpingMachineQuery ?? throw new ArgumentNullException(nameof(weavingDailyOperationWarpingMachineQuery));
 
-            _dailyOperationWarpingRepository = 
+            _dailyOperationWarpingRepository =
                 this.Storage.GetRepository<IDailyOperationWarpingRepository>();
-            _beamRepository = 
+            _beamRepository =
                 this.Storage.GetRepository<IBeamRepository>();
             _dailyOperationWarpingHistoryRepository =
                 this.Storage.GetRepository<IDailyOperationWarpingHistoryRepository>();
@@ -109,7 +110,7 @@ namespace Manufactures.Controllers.Api
                 this.Storage.GetRepository<IDailyOperationWarpingBeamProductRepository>();
             _dailyOperationWarpingBrokenCauseRepository =
                 this.Storage.GetRepository<IDailyOperationWarpingBrokenCauseRepository>();
-            
+
 
 
         }
@@ -130,7 +131,7 @@ namespace Manufactures.Controllers.Api
                 dailyOperationWarpingDocuments =
                     dailyOperationWarpingDocuments
                         .Where(x => x.DateTimeOperation.ToString("DD/MM/YYYY", CultureInfo.CreateSpecificCulture("id")).Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) || 
+                                    x.OrderProductionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.ConstructionNumber.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.WeavingUnit.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
@@ -205,11 +206,11 @@ namespace Manufactures.Controllers.Api
                         }
                         document.WarpingBeamProducts = beamProducts;
 
-                        
+
                     }
                     await Task.Yield();
-                    
-                    
+
+
                     foreach (var warpingBeam in warpingListBeamProducts)
                     {
                         await Task.Yield();
@@ -264,7 +265,7 @@ namespace Manufactures.Controllers.Api
 
         //Preparation Warping Daily Operation Request
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]PreparationDailyOperationWarpingCommand command)
+        public async Task<IActionResult> Post([FromBody] PreparationDailyOperationWarpingCommand command)
         {
             VerifyUser();
             // Sending command to command handler
@@ -276,7 +277,7 @@ namespace Manufactures.Controllers.Api
 
         //Start Warping Daily Operation Request
         [HttpPut("{Id}/start-process")]
-        public async Task<IActionResult> Start(string Id, [FromBody]UpdateStartDailyOperationWarpingCommand command)
+        public async Task<IActionResult> Start(string Id, [FromBody] UpdateStartDailyOperationWarpingCommand command)
         {
             VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
@@ -360,7 +361,7 @@ namespace Manufactures.Controllers.Api
 
         //Produce Beams Warping Daily Operation Request
         [HttpPut("{Id}/produce-beams-process")]
-        public async Task<IActionResult> ProduceBeams(string Id, [FromBody]ProduceBeamsDailyOperationWarpingCommand command)
+        public async Task<IActionResult> ProduceBeams(string Id, [FromBody] ProduceBeamsDailyOperationWarpingCommand command)
         {
             VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
@@ -449,7 +450,7 @@ namespace Manufactures.Controllers.Api
 
         //Finish Warping Daily Operation Request
         [HttpPut("{Id}/completed-process")]
-        public async Task<IActionResult> Finish(string Id, [FromBody]FinishDailyOperationWarpingCommand command)
+        public async Task<IActionResult> Finish(string Id, [FromBody] FinishDailyOperationWarpingCommand command)
         {
             VerifyUser();
             if (!Guid.TryParse(Id, out Guid documentId))
@@ -546,7 +547,7 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
-            var index = acceptRequest.IndexOf("application/pdf") > 0;
+            var index = acceptRequest.IndexOf("application/xls") > 0;
 
             var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
 
@@ -554,22 +555,54 @@ namespace Manufactures.Controllers.Api
             if (index.Equals(true))
             {
                 byte[] xlsInBytes;
- 
 
-                var fileName = "Laporan Putus Warping_" + fromDate + "_" + toDate;
-                WarpingBrokenReportXlsTemplate xlsTemplate = new WarpingBrokenReportXlsTemplate();
-               // MemoryStream brokenResultXls = xlsTemplate.GenerateWarpingBrokenReportXls(productionWarpingReport);
-               
-               // xlsInBytes = brokenResultXls.ToArray();
-                var xlsFile = File("", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                return xlsFile;
+
+                var fileName = "Laporan Produksi Warping per Operator" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                WeavingDailyOperationWarpingMachineReportXlsTemplate xlsTemplate = new WeavingDailyOperationWarpingMachineReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateXls(productionWarpingReport, fromDate, toDate, shift, mcNo, sp, threadNo, code);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
             }
             else
             {
                 return Ok(productionWarpingReport);
             }
         }
+        [HttpGet("get-warping-production-report/download")]
+        public async Task<IActionResult> GetWarpingProductionExcel(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
+        {
 
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
+
+
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan Produksi Warping per Operator" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                WeavingDailyOperationWarpingMachineReportXlsTemplate xlsTemplate = new WeavingDailyOperationWarpingMachineReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateXls(productionWarpingReport, fromDate, toDate, shift, mcNo, sp, threadNo, code);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
         //Controller for Daily Operation Warping Broken Report
         [HttpGet("get-warping-broken-report")]
         public async Task<IActionResult> GetWarpingBrokenReport(int month = 0,
@@ -658,7 +691,7 @@ namespace Manufactures.Controllers.Api
                                              string historyId,
                                              string beamProductId,
                                              string status,
-                                             [FromBody]HistoryRemoveStartOrProduceBeamDailyOperationWarpingCommand command)
+                                             [FromBody] HistoryRemoveStartOrProduceBeamDailyOperationWarpingCommand command)
         {
             VerifyUser();
             if (!Guid.TryParse(operationId, out Guid documentId))
@@ -689,7 +722,7 @@ namespace Manufactures.Controllers.Api
                                    x.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.MCNo.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
-                                  // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+                                                                                                                // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
 
             }
 
@@ -740,38 +773,38 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> UploadFile(string month, int year, int monthId)
         {
             VerifyUser();
-           
+
             if (Request.Form.Files.Count > 0)
+            {
+                IFormFile UploadedFile = Request.Form.Files[0];
+                if (System.IO.Path.GetExtension(UploadedFile.FileName) == ".xlsx")
                 {
-                    IFormFile UploadedFile = Request.Form.Files[0];
-                    if (System.IO.Path.GetExtension(UploadedFile.FileName) == ".xlsx")
-                    {
 
-                        using (var excelPack = new ExcelPackage())
+                    using (var excelPack = new ExcelPackage())
+                    {
+                        using (var stream = UploadedFile.OpenReadStream())
                         {
-                            using (var stream = UploadedFile.OpenReadStream())
-                            {
-                                excelPack.Load(stream);
-                            }
-                            var sheet = excelPack.Workbook.Worksheets;
-
-
-                            var weavingMachine = await _weavingDailyOperationWarpingMachineQuery.Upload(sheet, month, year,monthId);
-                            return Ok(weavingMachine);
+                            excelPack.Load(stream);
                         }
-                    }
-                    else
-                    {
-                        throw new Exception($"Ekstensi file harus bertipe .xlsx");
-                      
+                        var sheet = excelPack.Workbook.Worksheets;
+
+
+                        var weavingMachine = await _weavingDailyOperationWarpingMachineQuery.Upload(sheet, month, year, monthId);
+                        return Ok(weavingMachine);
                     }
                 }
                 else
                 {
-                    throw new Exception($"Gagal menyimpan data");
+                    throw new Exception($"Ekstensi file harus bertipe .xlsx");
+
                 }
-           
-            
+            }
+            else
+            {
+                throw new Exception($"Gagal menyimpan data");
+            }
+
+
         }
 
     }
