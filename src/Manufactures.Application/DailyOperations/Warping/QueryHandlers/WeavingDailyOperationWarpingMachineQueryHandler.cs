@@ -44,21 +44,22 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
-                 
+
                 String sql = "";
-               // set the connection to instance of SqlCommand  
-                sql= @"delete WeavingDailyOperationWarpingMachines where [month]= '" + month + "' and yearperiode='" + year +"'";
+                // set the connection to instance of SqlCommand  
+                sql = @"delete WeavingDailyOperationWarpingMachines where [month]= '" + month + "' and yearperiode='" + year + "'";
                 cmd.CommandText = sql;
                 cmd.Connection = conn;
                 cmd.ExecuteNonQuery();
 
                 conn.Close();
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
 
             }
-            
+
         }
         public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year, int monthId)
         {
@@ -67,8 +68,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             var startCol = 1;
             WeavingDailyOperationWarpingMachine data;
             int rowIndex = 0;
-            var totalRows = 0; 
-           
+            var totalRows = 0;
+
             foreach (var sheet in sheets)
             {
 
@@ -76,17 +77,17 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 var totalColumns = sheet.Dimension.Columns;
 
                 if (sheet.Name.Trim() == "Produksi WP")
-                { 
+                {
                     try
                     {
                         for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                         {
 
-                            if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value.ToString() != "")
+                            if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                             {
-
-                                // general.ValidatePeriode(sheet.Cells[rowIndex, 2], new DateTime(year, month, 1));
-                                data = new WeavingDailyOperationWarpingMachine(
+                                if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 7]) == year)
+                                {
+                                    data = new WeavingDailyOperationWarpingMachine(
                                   Guid.NewGuid(), //
                                   Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
                                   month,
@@ -119,7 +120,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                   Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Capacity
                                   converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//Eff
                                   );
-                                await _repository.Update(data);
+                                    await _repository.Update(data);
+                                }
 
                             }
                         }
@@ -129,7 +131,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
                     }
                 }
-               
+
             }
             try
             {
@@ -172,7 +174,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
         {
 
-             
+
 
             var allData = from a in _repository.Query
                           select new
@@ -192,14 +194,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                           };
             var query = from a in allData
                         where ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
-                         (shift == null || (shift != null && shift != "" && a.shift == mcNo)) &&
+                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
                           (sp == null || (sp != null && sp != "" && a.sp.Contains(sp)) &&
                            (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo == threadNo)) &&
-                            (code == null || (code != null && code != "" && a.code == mcNo)) &&
+                            (code == null || (code != null && code != "" && a.code == code)) &&
                             (a.Periode >= fromDate && a.Periode <= toDate)))
-                            select a;
+                        select a;
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
-            foreach(var item in query)
+            foreach (var item in query)
             {
                 WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto
                 {
@@ -212,7 +214,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
 
             return list;
-             
+
 
         }
     }
