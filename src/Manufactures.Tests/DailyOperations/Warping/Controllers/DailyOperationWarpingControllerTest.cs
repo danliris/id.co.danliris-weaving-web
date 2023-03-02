@@ -1,4 +1,5 @@
-﻿using ExtCore.Data.Abstractions;
+﻿using Barebone.Tests;
+using ExtCore.Data.Abstractions;
 using FluentAssertions;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
@@ -10,11 +11,13 @@ using Manufactures.Controllers.Api;
 using Manufactures.DataTransferObjects.Beams;
 using Manufactures.Domain.Beams.Queries;
 using Manufactures.Domain.Beams.Repositories;
+using Manufactures.Domain.DailyOperations.Warping.Entities;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines;
+using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
@@ -24,21 +27,21 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Net;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Manufactures.Tests.DailyOperations.Warping.Controllers
 {
-    public class WeavingDailyOperationWarpingMachineControllerTest  
+    public class DailyOperationWarpingControllerTest : BaseControllerUnitTest
     {
         private readonly MockRepository mockRepository;
 
-        private readonly Mock<IStorage> mockStorage;
-        private readonly Mock<IServiceProvider> mockServiceProvider;
-        protected readonly Mock<IMediator> mockMediator;
+       
         private readonly Mock<IWeavingDailyOperationWarpingMachineRepository> mockWeavingDailyOperationWarpingMachineRepository;
         private readonly Mock<IDailyOperationWarpingRepository>mockdailyOperationWarpingRepository;
         private readonly Mock<IBeamRepository>mockbeamRepository;
@@ -55,12 +58,10 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
         private readonly Mock<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>> mocWeavingQuery;
         private readonly Mock<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>> mockDailyWarpDocumentQuery;
        
-        public WeavingDailyOperationWarpingMachineControllerTest() : base()
+        public DailyOperationWarpingControllerTest() :base()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
-            mockMediator = mockRepository.Create<IMediator>();
-            this.mockStorage = this.mockRepository.Create<IStorage>(); ;
-            this.mockServiceProvider = this.mockRepository.Create<IServiceProvider>();
+             
             this.mockWeavingDailyOperationWarpingMachineRepository = this.mockRepository.Create<IWeavingDailyOperationWarpingMachineRepository>();
             this.mockdailyOperationWarpingRepository = this.mockRepository.Create<IDailyOperationWarpingRepository>();
             this.mockbeamRepository = this.mockRepository.Create<IBeamRepository>();
@@ -78,12 +79,12 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             this.mocWeavingQuery = this.mockRepository.Create<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>>();
             this.mockDailyWarpDocumentQuery = this.mockRepository.Create<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>>();
 
-            this.mockStorage.Setup(x => x.GetRepository<IWeavingDailyOperationWarpingMachineRepository>()).Returns(mockWeavingDailyOperationWarpingMachineRepository.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBrokenCauseRepository>()).Returns(mockdailyOperationWarpingBrokenCauseRepository.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockdailyOperationWarpingRepository.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockbeamRepository.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingHistoryRepository>()).Returns(mockdailyOperationWarpingHistoryRepository.Object);
-            this.mockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBeamProductRepository>()).Returns(mockdailyOperationWarpingBeamProductRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IWeavingDailyOperationWarpingMachineRepository>()).Returns(mockWeavingDailyOperationWarpingMachineRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBrokenCauseRepository>()).Returns(mockdailyOperationWarpingBrokenCauseRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockdailyOperationWarpingRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockbeamRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingHistoryRepository>()).Returns(mockdailyOperationWarpingHistoryRepository.Object);
+            this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBeamProductRepository>()).Returns(mockdailyOperationWarpingBeamProductRepository.Object);
 
         }
         public DailyOperationWarpingController CreateDailyOperationWarpingController()
@@ -94,7 +95,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
                 new Claim("username", "unittestusername")
             };
             user.Setup(u => u.Claims).Returns(claims);
-            DailyOperationWarpingController controller = new DailyOperationWarpingController(mockServiceProvider.Object,mockDailyWarpDocumentQuery.Object,mockOperatorQuery.Object,mockShiftQuery.Object,mockBeamQuery.Object,mockDailyOperation.Object,mockWarpingProdQuery.Object,mockWarpBrokenQuery.Object,mocWeavingQuery.Object);//(DailyOperationWarpingController)Activator.CreateInstance(typeof(DailyOperationWarpingController), mockServiceProvider.Object);
+            DailyOperationWarpingController controller = new DailyOperationWarpingController(_MockServiceProvider.Object,mockDailyWarpDocumentQuery.Object,mockOperatorQuery.Object,mockShiftQuery.Object,mockBeamQuery.Object,mockDailyOperation.Object,mockWarpingProdQuery.Object,mockWarpBrokenQuery.Object,mocWeavingQuery.Object);//(DailyOperationWarpingController)Activator.CreateInstance(typeof(DailyOperationWarpingController), mockServiceProvider.Object);
             controller.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext()
@@ -107,25 +108,24 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             controller.ControllerContext.HttpContext.Request.Path = new PathString("/v1/unit-test");
             return controller;
         }
-        protected int GetStatusCode(IActionResult response)
-        {
-            return (int)response.GetType().GetProperty("StatusCode").GetValue(response, null);
-        }
+       
 
         [Fact]
         public async Task GetReport()
         {
+      
+
+            //_MockMediator
+            //     .Setup(s => s.Send(It.IsAny<IWeavingDailyOperationWarpingMachineQuery>(), It.IsAny<CancellationToken>()))
+            //     .ReturnsAsync(new WeavingDailyOperationWarpingMachineDto());
+
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.Now, DateTime.Now, "", "", "", "", "")).Returns(new List<WeavingDailyOperationWarpingMachineDto>());
             var unitUnderTest = CreateDailyOperationWarpingController();
-
-            //mockMediator
-            //    .Setup(s => s.Send(It.IsAny<Get>(), It.IsAny<CancellationToken>()))
-            //    .ReturnsAsync(new GarmentMonitoringPrepareListViewModel());
-
             // Act
-            var result = await unitUnderTest.GetWarpingProductionReport( DateTime.Now, DateTime.Now,"","","","","");
+            var result = await unitUnderTest.GetWarpingProductionReport(DateTime.Now, DateTime.Now,"","","","","");
 
             // Assert
-            GetStatusCode(result).Should().Equals((int)HttpStatusCode.OK);
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
     }
 }
