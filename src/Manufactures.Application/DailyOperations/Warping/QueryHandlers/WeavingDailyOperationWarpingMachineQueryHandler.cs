@@ -207,7 +207,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                               name = a.Name,
                               Periode = new DateTime(Convert.ToInt32(a.Year), a.MonthId, a.Date)
                           };
-            var query = from a in allData
+            var query = (from a in allData
                         where 
                         ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
@@ -215,22 +215,26 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
                         (code == null || (code != null && code != "" && a.code.Contains( code))) &&
                         (a.Periode.Date  >= fromDate.Date && a.Periode.Date<= toDate.Date))
-                        select a;
+                        select new { Name = a.name , ThreadCut  = a.threadCut, Length  =a.length}).GroupBy(l => l.Name)
+                            .Select(cl => new
+                            {
+                                Name = cl.First().Name,
+                                ThreadCut = cl.Sum(c => c.ThreadCut),
+                                Length = cl.Sum(c => c.Length),
+                            }).ToList(); ;
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
             foreach (var item in query)
             {
                 WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto
                 {
-                    MCNo = item.mcNo,
-                    ThreadCut = item.threadCut,
-                    Length = item.length,
-                    Name = item.name
+                    ThreadCut = item.ThreadCut,
+                    Length = item.Length,
+                    Name = item.Name
                 };
                 list.Add(dto);
             }
 
             return list;
-
 
         }
     }

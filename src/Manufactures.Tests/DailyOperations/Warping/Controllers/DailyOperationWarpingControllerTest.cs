@@ -21,15 +21,21 @@ using Manufactures.Domain.DailyOperations.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Warping.Repositories;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Shifts.Queries;
+using Manufactures.Helpers;
+using Manufactures.Helpers.XlsTemplates;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading;
@@ -80,7 +86,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             this.mocWeavingQuery = this.mockRepository.Create<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>>();
             this.mockDailyWarpDocumentQuery = this.mockRepository.Create<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>>();
 
-            this._MockStorage.Setup(x => x.GetRepository<IWeavingDailyOperationWarpingMachineRepository>()).Returns(mockWeavingDailyOperationWarpingMachineRepository.Object);
+           // this._MockStorage.Setup(x => x.GetRepository<IWeavingDailyOperationWarpingMachineRepository>()).Returns(mockWeavingDailyOperationWarpingMachineRepository.Object);
             this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingBrokenCauseRepository>()).Returns(mockdailyOperationWarpingBrokenCauseRepository.Object);
             this._MockStorage.Setup(x => x.GetRepository<IDailyOperationWarpingRepository>()).Returns(mockdailyOperationWarpingRepository.Object);
             this._MockStorage.Setup(x => x.GetRepository<IBeamRepository>()).Returns(mockbeamRepository.Object);
@@ -117,13 +123,13 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
 
             Guid newGuid = new Guid();
             DateTime _date = new DateTime();
-            this.mockWeavingDailyOperationWarpingMachineRepository
-              .Setup(s => s.Query)
-               .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
-               {
-                    new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
-                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
-               }.AsQueryable());
+            //this.mockWeavingDailyOperationWarpingMachineRepository
+            //  .Setup(s => s.Query)
+            //   .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
+            //   {
+            //        new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
+            //        "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+            //   }.AsQueryable());
             this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.Now, DateTime.Now, "", "", "", "", "")).Returns(new List<WeavingDailyOperationWarpingMachineDto>());
             var unitUnderTest = CreateDailyOperationWarpingController();
             // Act
@@ -131,6 +137,52 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
 
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
+        }
+          [Fact]
+        public async Task GetExcel()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            this.mockWeavingDailyOperationWarpingMachineRepository
+              .Setup(s => s.Query)
+               .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
+               {
+                    new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
+                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+               }.AsQueryable());
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto { 
+                Name ="name",
+                 Year = DateTime.Now.Year.ToString(),
+                 YearPeriode= DateTime.Now.Year.ToString(),
+                Group= "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingProductionExcel(DateTime.MinValue, DateTime.Now,"","","","","");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+        }
+        [Fact]
+        public async Task Upload()
+        {
+            var httpContext = new DefaultHttpContext();
+
+            httpContext.Request.Headers.Add("Content-Type", "multipart/form-data");
+            httpContext.Request.Headers.Add("ContentDisposition", "form-data");
+
+            var file = new FormFile(new MemoryStream(Encoding.UTF8.GetBytes("This is a dummy file")), 0, 0, "Data", "dummy.xls");
+            var content = new StringContent(file.ToString(), Encoding.UTF8, General.JsonMediaType);
+
+            httpContext.Request.Form = new FormCollection(new Dictionary<string, StringValues>(), new FormFileCollection { file });
+
+            httpContext.Request.Form.Files[0].OpenReadStream();
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            var result = await unitUnderTest.UploadFile(DateTime.Now.Month.ToString(), DateTime.Now.Year, DateTime.Now.Month);
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
         }
     }
 }

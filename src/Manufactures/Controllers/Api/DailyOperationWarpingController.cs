@@ -547,30 +547,9 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
-            var index = acceptRequest.IndexOf("application/xls") > 0;
-
             var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
 
-            await Task.Yield();
-            if (index.Equals(true))
-            {
-                byte[] xlsInBytes;
-
-
-                var fileName = "Laporan Produksi Warping per Operator" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
-                WeavingDailyOperationWarpingMachineReportXlsTemplate xlsTemplate = new WeavingDailyOperationWarpingMachineReportXlsTemplate();
-                MemoryStream xls = xlsTemplate.GenerateXls(productionWarpingReport, fromDate, toDate, shift, mcNo, sp, threadNo, code);
-
-                fileName += ".xlsx";
-
-                xlsInBytes = xls.ToArray();
-                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
-                return file;
-            }
-            else
-            {
-                return Ok(productionWarpingReport);
-            }
+            return Ok(productionWarpingReport);
         }
         [HttpGet("get-warping-production-report/download")]
         public async Task<IActionResult> GetWarpingProductionExcel(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
