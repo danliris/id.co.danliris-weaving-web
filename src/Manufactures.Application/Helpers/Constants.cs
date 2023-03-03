@@ -2,11 +2,19 @@
 {
     public class Constants
     {
+        //Others
+        public static string EMPTYVALUE = " ";
+
         // Daily Operation Status
-        public static string PROCESS = "Memproses";
-        public static string STOP = "Berhenti";
-        public static string RESUME = "Melanjutkan";
-        public static string FINISH = "Selesai";
+        public static string PROCESS = "PROCESSING";
+        public static string STOP = "STOP";
+        public static string RESUME = "CONTINUE";
+        public static string FINISH = "FINISH";
+
+        // Beam Status
+        public static string AVAILABLE = "AVAILABLE";
+        public static string USED = "USED";
+        public static string UNUSED = "UNUSED";
 
         // Type Of Yarn
         public static string WARP = "LUSI";

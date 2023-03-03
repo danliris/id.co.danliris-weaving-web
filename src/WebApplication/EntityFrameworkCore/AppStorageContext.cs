@@ -1,5 +1,6 @@
 ﻿using ExtCore.Data.EntityFramework;
 using ExtCore.Data.EntityFramework.SqlServer;
+using Infrastructure;
 using Infrastructure.Domain.ReadModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,10 +16,10 @@ namespace DanLiris.Admin.Web
 {
     public class AppStorageContext : StorageContext
     {
-        private readonly IWorkContext _workContext;
+        private readonly IWebApiContext _workContext;
         private readonly IMediator _mediator;
 
-        public AppStorageContext(IOptions<StorageContextOptions> options, IWorkContext workContext, IMediator mediator) : base(options)
+        public AppStorageContext(IOptions<StorageContextOptions> options, IWebApiContext workContext, IMediator mediator) : base(options)
         {
             _workContext = workContext;
             _mediator = mediator;
@@ -45,7 +46,7 @@ namespace DanLiris.Admin.Web
 
     internal static class EventDispatcherExtension
     {
-        public static void AuditTrack(this AppStorageContext ctx, IWorkContext workContext)
+        public static void AuditTrack(this AppStorageContext ctx, IWebApiContext workContext)
         {
             if (workContext == null) return;
 
@@ -62,7 +63,7 @@ namespace DanLiris.Admin.Web
             if (!modifiedAuditedEntities.Any() && !addedAuditedEntities.Any())
                 return;
 
-            var currentUser = workContext.CurrentUser ?? "System";
+            var currentUser = workContext.UserName ?? "System";
 
             foreach (var added in addedAuditedEntities)
             {

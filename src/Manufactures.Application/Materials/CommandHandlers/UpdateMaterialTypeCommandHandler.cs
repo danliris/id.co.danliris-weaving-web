@@ -25,10 +25,14 @@ namespace Manufactures.Application.Materials.CommandHandlers
         public async Task<MaterialTypeDocument> Handle(UpdateMaterialTypeCommand request,
                                                CancellationToken cancellationToken)
         {
-            var materialType = _materialTypeRepository.Find(entity => entity.Identity.Equals(request.Id))
-                                                      .FirstOrDefault();
-            var exsistingMaterialCode = _materialTypeRepository.Find(material => material.Code.Equals(request.Code) &&
-                                                                                 material.Deleted.Equals(false)).Count() > 1;
+            var materialType = 
+                _materialTypeRepository
+                    .Find(entity => entity.Identity.Equals(request.Id))
+                    .FirstOrDefault();
+            var existingMaterialCode = 
+                _materialTypeRepository
+                    .Find(material => material.Code.Equals(request.Code) && material.Deleted.Equals(false))
+                    .Count() > 1;
 
             // Check if material does't exsist
             if (materialType == null)
@@ -37,7 +41,7 @@ namespace Manufactures.Application.Materials.CommandHandlers
             }
 
             // Check if has same material code
-            if (exsistingMaterialCode && !materialType.Code.Equals(request.Code))
+            if (existingMaterialCode && !materialType.Code.Equals(request.Code))
             {
                 throw Validator.ErrorValidation(("Code", "Code with " + request.Code + " has available"));
             }
@@ -48,30 +52,30 @@ namespace Manufactures.Application.Materials.CommandHandlers
 
             if (request.RingDocuments.Count > 0)
             {
-                foreach(var exsistingRing in materialType.RingDocuments)
+                foreach(var existingRing in materialType.RingDocuments)
                 {
-                    var requestRing = request.RingDocuments.Where(e => e.Code.Equals(exsistingRing.Code) && e.Number.Equals(exsistingRing.Number)).FirstOrDefault();
+                    var requestRing = request.RingDocuments.Where(e => e.Code.Equals(existingRing.Code) && e.Number.Equals(existingRing.Number)).FirstOrDefault();
 
                     if(requestRing == null)
                     {
-                        materialType.RemoveRingNumber(exsistingRing);
+                        materialType.RemoveRingNumber(existingRing);
                     }
                 }
 
                 foreach (var requestRing in request.RingDocuments)
                 {
-                    var exsistingRing = materialType.RingDocuments.Where(e => e.Code.Equals(requestRing.Code) && e.Number.Equals(requestRing.Number)).FirstOrDefault();
+                    var existingRing = materialType.RingDocuments.Where(e => e.Code.Equals(requestRing.Code) && e.Number.Equals(requestRing.Number)).FirstOrDefault();
 
-                    if (exsistingRing == null)
+                    if (existingRing == null)
                     {
                         materialType.SetRingNumber(requestRing);
                     }
                 }
             } else
             {
-                foreach (var exsistingRing in materialType.RingDocuments)
+                foreach (var existingRing in materialType.RingDocuments)
                 {
-                    materialType.RemoveRingNumber(exsistingRing);
+                    materialType.RemoveRingNumber(existingRing);
                 }
             }
 

@@ -36,7 +36,7 @@ namespace Manufactures.Application.Operators.CommandHandlers
                 _operatorRepository.Find(o => o.Identity.Equals(request.Id))
                                    .FirstOrDefault();
 
-            existingOperator.SetUnitId(new UnitId(request.UnitId.Id));
+            existingOperator.SetUnitId(request.UnitId);
             existingOperator.SetCoreAccount(coreAccount);
             existingOperator.SetAssignment(request.Assignment);
             existingOperator.SetGroup(request.Group);

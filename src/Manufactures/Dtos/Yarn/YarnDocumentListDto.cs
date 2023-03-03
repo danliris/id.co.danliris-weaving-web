@@ -3,7 +3,7 @@ using Manufactures.Domain.Yarns;
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.Yarn
+namespace Manufactures.DataTransferObjects.Yarn
 {
     public class YarnDocumentListDto
     {

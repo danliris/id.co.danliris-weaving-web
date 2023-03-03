@@ -3,10 +3,15 @@
 
 using ExtCore.Data.Abstractions;
 using Infrastructure;
+using Infrastructure.External.DanLirisClient.CoreMicroservice;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.HttpClientService;
+using Infrastructure.External.DanLirisClient.CoreMicroservice.MasterResult;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
+using System.Linq;
 using System.Net;
 
 namespace Barebone.Controllers
@@ -27,12 +32,37 @@ namespace Barebone.Controllers
         protected IStorage Storage { get; }
         protected IWebApiContext WorkContext { get; }
         protected IMediator Mediator { get; }
+        protected readonly IHttpClientService _http;
 
         public ControllerApiBase(IServiceProvider serviceProvider)
         {
+            _http = serviceProvider.GetService<IHttpClientService>();
             this.Storage = serviceProvider.GetService<IStorage>();
             this.WorkContext = serviceProvider.GetService<IWebApiContext>();
             this.Mediator = serviceProvider.GetService<IMediator>();
+        }
+
+        protected SingleUnitResult GetUnit(int id)
+        {
+            var masterUnitUri = MasterDataSettings.Endpoint + $"master/units/{id}";
+            var unitResponse = _http.GetAsync(masterUnitUri).Result;
+
+            if (unitResponse.IsSuccessStatusCode)
+            {
+                SingleUnitResult unitResult = JsonConvert.DeserializeObject<SingleUnitResult>(unitResponse.Content.ReadAsStringAsync().Result);
+                return unitResult;
+            }
+            else
+            {
+                return new SingleUnitResult();
+            }
+        }
+
+        protected void VerifyUser()
+        {
+            WorkContext.Token = Request.Headers["Authorization"].FirstOrDefault().Replace("Bearer ", "");
+            WorkContext.UserName = User.Claims.ToArray().SingleOrDefault(p => p.Type.Equals("username")).Value;
+            WorkContext.TimezoneOffset = Convert.ToInt32(Request.Headers["x-timezone-offset"]);
         }
 
         protected IActionResult Ok<T>(T data, object info = null, string message = null)

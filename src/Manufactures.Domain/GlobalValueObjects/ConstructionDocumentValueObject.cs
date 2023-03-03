@@ -12,18 +12,18 @@ namespace Manufactures.Domain.GlobalValueObjects
         public string ConstructionNumber { get; }
 
         [JsonProperty(PropertyName = "AmountOfWarp")]
-        public int AmountOfWarp { get; }
+        public double AmountOfWarp { get; }
 
         [JsonProperty(PropertyName = "AmountOfWeft")]
-        public int AmountOfWeft { get; }
+        public double AmountOfWeft { get; }
 
         [JsonProperty(PropertyName = "TotalYarn")]
         public double TotalYarn { get; }
 
         public ConstructionDocumentValueObject(Guid identity,
                                                string constructionNumber,
-                                               int amountOfWarp,
-                                               int amountOfWeft,
+                                               double amountOfWarp,
+                                               double amountOfWeft,
                                                double totalYarn)
         {
             Identity = identity;

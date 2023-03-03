@@ -1,0 +1,2226 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Manufactures.Domain.Beams.Commands.AddBeamCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAIAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Beams\Commands\AddBeamCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.Commands.AddBeamCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Beams\Commands\AddBeamCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.Commands.RemoveBeamCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Beams\Commands\RemoveBeamCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.Commands.UpdateBeamCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAEAAAAAIAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Beams\Commands\UpdateBeamCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.Commands.UpdateBeamCommandValidator" Collapsed="true">
+    <Position X="9.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Beams\Commands\UpdateBeamCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.ReadModels.BeamReadModel" Collapsed="true">
+    <Position X="29" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAEAAAAAIAIAAAAAAAQAAIAAAABA=</HashCode>
+      <FileName>Beams\ReadModels\BeamReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Beams.BeamDocument" Collapsed="true">
+    <Position X="23.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAQAAQEABAABICIACAgAAASAAIAAAAAA=</HashCode>
+      <FileName>Beams\BeamDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BeamStockMonitoring.Commands.BeamStockMonitoringCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAAAAAAAAAACIAAAABAAAABAAAAAAAAA=</HashCode>
+      <FileName>BeamStockMonitoring\Commands\BeamStockMonitoringCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.BeamStockMonitoring.Commands.SizingBeamStockMonitoringCommandValidator" Collapsed="true">
+    <Position X="20.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BeamStockMonitoring\Commands\BeamStockMonitoringCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BeamStockMonitoring.ReadModels.BeamStockMonitoringReadModel" Collapsed="true">
+    <Position X="34.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAoAAQgAQAAAAAAAAAAAAAAABAgQABgAAA=</HashCode>
+      <FileName>BeamStockMonitoring\ReadModels\BeamStockMonitoringReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BeamStockMonitoring.BeamStockMonitoringDocument" Collapsed="true">
+    <Position X="32.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgEAAAAAAoAAQgAYAFgAAAAAAABgBAIBogQABwAAA=</HashCode>
+      <FileName>BeamStockMonitoring\BeamStockMonitoringDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.Commands.AddWarpingBrokenCauseCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Commands\AddWarpingBrokenCauseCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.Commands.AddWarpingBrokenCauseCommandValidator" Collapsed="true">
+    <Position X="20.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Commands\AddWarpingBrokenCauseCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.Commands.RemoveWarpingBrokenCauseCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Commands\RemoveWarpingBrokenCauseCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.Commands.UpdateWarpingBrokenCauseCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="32.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAACEAAAAAAAIAAAAAAAAAAAAAAAAAAQAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Commands\UpdateWarpingBrokenCauseCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.Commands.UpdateWarpingBrokenCauseCommandValidator" Collapsed="true">
+    <Position X="34.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Commands\UpdateWarpingBrokenCauseCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.ReadModels.WarpingBrokenCauseReadModel" Collapsed="true">
+    <Position X="18.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAEAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\ReadModels\WarpingBrokenCauseReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.BrokenCauses.Warping.WarpingBrokenCauseDocument" Collapsed="true">
+    <Position X="16.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAAEAAAAIAACAAAAAABEgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\WarpingBrokenCauseDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.FinishDailyOperationLoomCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAEAAAABgAAQgAAAAAAAEAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\FinishDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.FinishDailyOperationLoomCommandValidator" Collapsed="true">
+    <Position X="23.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\FinishDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomBeamHistoryCommand" Collapsed="true">
+    <Position X="9.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAIAAAAAAAAAAAGAAIQACAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomBeamHistoryCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomBeamHistoryCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomBeamHistoryCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomBeamProductCommand" Collapsed="true">
+    <Position X="13.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAACACAAAAAQAACAAAAAAAAAgABAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomBeamProductCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomBeamProductCommandValidator" Collapsed="true">
+    <Position X="15" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomBeamProductCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAgAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.PreparationDailyOperationLoomCommandValidator" Collapsed="true">
+    <Position X="18.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\PreparationDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdatePauseDailyOperationLoomCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACACEAIAAAABIAAAAAAAIABABAEAAAABAgAAAQAQAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdatePauseDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdatePauseDailyOperationLoomCommandValidator" Collapsed="true">
+    <Position X="27.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdatePauseDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdateResumeDailyOperationLoomCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAABAIAAAAABEAAAAAAAACIAAAEAAAAAAQAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdateResumeDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdateResumeDailyOperationLoomCommandValidator" Collapsed="true">
+    <Position X="13.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdateResumeDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdateStartDailyOperationLoomCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAkAAAEIAAAAAAIAAAAAgAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdateStartDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Commands.UpdateStartDailyOperationLoomCommandValidator" Collapsed="true">
+    <Position X="23.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Commands\UpdateStartDailyOperationLoomCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamHistory" Collapsed="true">
+    <Position X="20.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAEAAAIAABAAQCCEAHEAIQAAAAAgIRACAAAQAFACE=</HashCode>
+      <FileName>DailyOperations\Loom\Entities\DailyOperationLoomBeamHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.Entities.DailyOperationLoomBeamProduct" Collapsed="true">
+    <Position X="22" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAQAEAACADAQAAAQBAAAAAAAAAACQABJAAgAUAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Entities\DailyOperationLoomBeamProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.ReadModels.DailyOperationLoomReadModel" Collapsed="true">
+    <Position X="25.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAgAIAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\ReadModels\DailyOperationLoomReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Loom.DailyOperationLoomDocument" Collapsed="true">
+    <Position X="23.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAgIIEAABAAAIABAAABAgAAAAAAAQAEAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\DailyOperationLoomDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.ChangeOperatorCombDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAIAAAAAAEAAAQAAAAAAAIAAAIAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\ChangeOperatorCombDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.ChangeOperatorCombDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\ChangeOperatorCombDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.ChangeOperatorReachingInDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAAAACAIAAAAAAEAAAQAAAAAAAABAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\ChangeOperatorReachingInDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.ChangeOperatorReachingInDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="15" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\ChangeOperatorReachingInDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.PreparationDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAQAAAAAAAAAAAAAEAgAQQAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\PreparationDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.PreparationDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="22" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\PreparationDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateCombFinishDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAIAgAAAAEAAAQAAAAAAAAAAAIAAAAQAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateCombFinishDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateCombFinishDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="13.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateCombFinishDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateCombStartDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAIAAAAAAEAAAUAEAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateCombStartDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateCombStartDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="16.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateCombStartDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateReachingInFinishDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="32.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAMAAAAAAEAAAQEAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateReachingInFinishDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateReachingInFinishDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="34.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateReachingInFinishDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateReachingInStartDailyOperationReachingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAACAIAAEAAAEgAAQABAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateReachingInStartDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Command.UpdateReachingInStartDailyOperationReachingCommandValidator" Collapsed="true">
+    <Position X="9.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Command\UpdateReachingInStartDailyOperationReachingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.Entities.DailyOperationReachingHistory" Collapsed="true">
+    <Position X="30.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAACAACACAEAFAAAQAAAAAwIAAAAAAAAACCA=</HashCode>
+      <FileName>DailyOperations\Reaching\Entities\DailyOperationReachingHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingReadModel" Collapsed="true">
+    <Position X="32.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAQAAAACAEAAFAAAAAAAEQBAAAAAAAAQIAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\ReadModels\DailyOperationReachingReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Reaching.DailyOperationReachingDocument" Collapsed="true">
+    <Position X="29" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAhAQEAAACAkAAFBAQBAACEQBAAAAAACAYIABAAAQA=</HashCode>
+      <FileName>DailyOperations\Reaching\DailyOperationReachingDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.FinishDoffDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQCAIAAAAQAIAAgAACAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\FinishDoffDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.FinishDoffDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="27.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\FinishDoffDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAGAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="30.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\HistoryRemovePauseOrResumeOrFinishDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.HistoryRemovePreparationDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="32.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAGAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\HistoryRemovePreparationDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAGAAAAAAAAIAAAAAAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.HistoryRemoveStartOrProduceBeamDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="36" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\HistoryRemoveStartOrProduceBeamDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.PreparationDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAQAACQAAIAAAAAAAAgAIAAAEAAACAAAAIAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\PreparationDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.PreparationDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="25.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\PreparationDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.ProduceBeamDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAABCIAIAIAAAAAEAAAAIAQAABAAIAAAAAAEAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\ProduceBeamDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.ProduceBeamDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="32.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\ProduceBeamDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdatePauseDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAIAAAAKAEAAAAAAAAgAAAAAAAABAQAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdatePauseDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdatePauseDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="30.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdatePauseDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdateResumeDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAQAAAIACAAAAQAAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdateResumeDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdateResumeDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="16.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdateResumeDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdateStartDailyOperationSizingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAJAAAAAAgAAAAYAAAAAAAAAAQAEAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdateStartDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Commands.UpdateStartDailyOperationSizingCommandValidator" Collapsed="true">
+    <Position X="27.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Commands\UpdateStartDailyOperationSizingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingBeamProduct" Collapsed="true">
+    <Position X="34.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEBAIADAQQAgABAAIAQIAUAAAUAYBACAAgUAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Entities\DailyOperationSizingBeamProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.Entities.DailyOperationSizingHistory" Collapsed="true">
+    <Position X="9.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAEAAQCAMAFEAIwAAAAAkIQQAQAAAAACCA=</HashCode>
+      <FileName>DailyOperations\Sizing\Entities\DailyOperationSizingHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.ReadModels.DailyOperationSizingReadModel" Collapsed="true">
+    <Position X="13.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAgAYAACAAAIgABAACAgAAIAAAAAAAAAAACIAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\ReadModels\DailyOperationSizingReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Sizing.DailyOperationSizingDocument" Collapsed="true">
+    <Position X="36" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQgAYGgCIAAIqABBACBgAAIAQAACgAAAIACIAAAAAE=</HashCode>
+      <FileName>DailyOperations\Sizing\DailyOperationSizingDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.CompletedDailyOperationWarpingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQqAIAAAAACIAAAAIAAAAAAIAEAAAAAAAABAAAFAgA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\CompletedDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.CompletedDailyOperationWarpingCommandValidator" Collapsed="true">
+    <Position X="18.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\CompletedDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.PreparationDailyOperationWarpingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAAAAAAAAAgAADAEEAAACAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\PreparationDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.PreparationDailyOperationWarpingCommandValidator" Collapsed="true">
+    <Position X="29" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\PreparationDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.ProduceBeamsDailyOperationWarpingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAqAAAAAAAAIAAAAAAAAAAAIAEAAAAAAAABAAAEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\ProduceBeamsDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.ProduceBeamsDailyOperationWarpingCommandValidator" Collapsed="true">
+    <Position X="36" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\ProduceBeamsDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.UpdateStartDailyOperationWarpingCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAgAAAAIAAAAAAAAAQQAEAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\UpdateStartDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.UpdateStartDailyOperationWarpingCommandValidator" Collapsed="true">
+    <Position X="30.75" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\UpdateStartDailyOperationWarpingCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Commands.WarpingBrokenThreadsCausesCommand" Collapsed="true">
+    <Position X="20.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Commands\WarpingBrokenThreadsCausesCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBeamProduct" Collapsed="true">
+    <Position X="15" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAIAEAAACAgABAIABBQAAAAAAAAACAARQCAAJAAg=</HashCode>
+      <FileName>DailyOperations\Warping\Entities\DailyOperationWarpingBeamProduct.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingBrokenCause" Collapsed="true">
+    <Position X="18.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAEAAABAAAAAAAAAAAAAAAAAAwEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Entities\DailyOperationWarpingBrokenCause.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.Entities.DailyOperationWarpingHistory" Collapsed="true">
+    <Position X="25.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAEAAAAAAADAEAFEQAQAAAAAgIAAAQAAAAEQCA=</HashCode>
+      <FileName>DailyOperations\Warping\Entities\DailyOperationWarpingHistory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingBeamProductReadModel" Collapsed="true">
+    <Position X="16.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAEAAACAAAAAIAABQAAAAAAAAACAAQACAABAAA=</HashCode>
+      <FileName>DailyOperations\Warping\ReadModels\DailyOperationWarpingBeamProductReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingBrokenCauseReadModel" Collapsed="true">
+    <Position X="20.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAgEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\ReadModels\DailyOperationWarpingBrokenCauseReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingDocumentReadModel" Collapsed="true">
+    <Position X="23.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAAAgABAAAAAAAABAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\ReadModels\DailyOperationWarpingDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.ReadModels.DailyOperationWarpingHistoryReadModel" Collapsed="true">
+    <Position X="27.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAAAAACAAAEAQAQAAAAAgAAAAQAAAAEAAA=</HashCode>
+      <FileName>DailyOperations\Warping\ReadModels\DailyOperationWarpingHistoryReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.DailyOperations.Warping.DailyOperationWarpingDocument" Collapsed="true">
+    <Position X="22" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABgAAEAAAAAAgIBAAABAAAABAEAAAAAAIAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\DailyOperationWarpingDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.Commands.AddFabricDefectCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Commands\AddFabricDefectCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.Commands.AddYarnDefectCommandValidator" Collapsed="true">
+    <Position X="22" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Commands\AddFabricDefectCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.Commands.RemoveFabricDefectCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Commands\RemoveFabricDefectCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.Commands.UpdateFabricDefectCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAICAAAAAAAAIAAAAAAAQAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Commands\UpdateFabricDefectCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.Commands.UpdateYarnDefectCommandValidator" Collapsed="true">
+    <Position X="9.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Commands\UpdateFabricDefectCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.ReadModels.FabricDefectReadModel" Collapsed="true">
+    <Position X="20.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAQAAAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\ReadModels\FabricDefectReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Defects.FabricDefect.FabricDefectDocument" Collapsed="true">
+    <Position X="16.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAgABQAEAAEAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\FabricDefectDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.AddNewEstimationCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAEAAAAAAI=</HashCode>
+      <FileName>Estimations\Productions\Commands\AddNewEstimationCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.AddNewEstimationCommandValidator" Collapsed="true">
+    <Position X="25.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Commands\AddNewEstimationCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.EstimatedProductionDetailCommand" Collapsed="true">
+    <Position X="30.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAACAAAAAAAAAAAAAAAAAABAAAAAIAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Estimations\Productions\Commands\EstimatedProductionDetailCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.EstimatedProductionDetailCommandValidator" Collapsed="true">
+    <Position X="32.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Commands\EstimatedProductionDetailCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.RemoveEstimationProductCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Commands\RemoveEstimationProductCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.UpdateEstimationProductCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAgAAEAAAAAAI=</HashCode>
+      <FileName>Estimations\Productions\Commands\UpdateEstimationProductCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Commands.UpdateEstimationProductCommandValidator" Collapsed="true">
+    <Position X="25.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Commands\UpdateEstimationProductCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.Entities.EstimatedProductionDetail" Collapsed="true">
+    <Position X="29" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAEAAQAAAAAAAAABAAABAABABAAAIAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Estimations\Productions\Entities\EstimatedProductionDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.ReadModels.EstimatedProductionDetailReadModel" Collapsed="true">
+    <Position X="34.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAABAAAAAIAAAAAAAAAEAAAA=</HashCode>
+      <FileName>Estimations\Productions\ReadModels\EstimatedProductionDetailReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.ReadModels.EstimatedProductionDocumentReadModel" Collapsed="true">
+    <Position X="9.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAI=</HashCode>
+      <FileName>Estimations\Productions\ReadModels\EstimatedProductionDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Estimations.Productions.EstimatedProductionDocument" Collapsed="true">
+    <Position X="36" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAQgAAAAAAAABgAABAAAAAIAAAAAAgAAEAAAAAAI=</HashCode>
+      <FileName>Estimations\Productions\EstimatedProductionDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.AddFabricConstructionCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACAAAIAIEAAAAAAAAAEAAAAKAAAQAAEAAAECAACA=</HashCode>
+      <FileName>FabricConstructions\Commands\AddFabricConstructionCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.PlaceConstructionCommandValidator" Collapsed="true">
+    <Position X="29" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Commands\AddFabricConstructionCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.ConstructionYarnDetailCommand" Collapsed="true">
+    <Position X="27.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAACAAAAAAAAAAAAAAAAAAAAAAABQAAgAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Commands\ConstructionYarnDetailCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.ConstructionYarnDetailCommandValidator" Collapsed="true">
+    <Position X="29" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Commands\ConstructionYarnDetailCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.RemoveFabricConstructionCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="25.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Commands\RemoveFabricConstructionCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.UpdateFabricConstructionCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgCCAAAIAIEIAAAAAAAAEAAAAKAAAQAAEAAAECAACA=</HashCode>
+      <FileName>FabricConstructions\Commands\UpdateFabricConstructionCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Commands.UpdateConstructionCommandValidator" Collapsed="true">
+    <Position X="18.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Commands\UpdateFabricConstructionCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.Entity.ConstructionYarnDetail" Collapsed="true">
+    <Position X="25.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEQAACAAAAAABAAABEAAAAAAAAIAQBQAggAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Entity\ConstructionYarnDetail.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.ReadModels.ConstructionYarnDetailReadModel" Collapsed="true">
+    <Position X="30.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAACAAAAAAAAAAAAAAAAAAAAAAABQAAgAAAAAA=</HashCode>
+      <FileName>FabricConstructions\ReadModels\ConstructionYarnDetailReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.ReadModels.FabricConstructionReadModel" Collapsed="true">
+    <Position X="15" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACAAAIAIEAAAAAAAAAEAAAAKAAAQAAAAAAACAACA=</HashCode>
+      <FileName>FabricConstructions\ReadModels\FabricConstructionReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.FabricConstructions.FabricConstructionDocument" Collapsed="true">
+    <Position X="13.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgACQAAJAIEAgADAACBAECAAoKAAAQAIEQAAECCACQ=</HashCode>
+      <FileName>FabricConstructions\FabricConstructionDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.ConstructionDocumentValueObject" Collapsed="true">
+    <Position X="22" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAAAAAAAAAAAAKAAAAAAEAAAACAAAA=</HashCode>
+      <FileName>GlobalValueObjects\ConstructionDocumentValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.CoreAccountValueObject" Collapsed="true">
+    <Position X="36" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>GlobalValueObjects\CoreAccountValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.EstimatedProductionDocumentValueObject" Collapsed="true">
+    <Position X="11.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAQAA=</HashCode>
+      <FileName>GlobalValueObjects\EstimatedProductionDocumentValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.MaterialTypeValueObject" Collapsed="true">
+    <Position X="34.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>GlobalValueObjects\MaterialTypeValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.Period" Collapsed="true">
+    <Position X="27.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAQAA=</HashCode>
+      <FileName>GlobalValueObjects\Period.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.WeavingUnit" Collapsed="true">
+    <Position X="27.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>GlobalValueObjects\WeavingUnit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.GlobalValueObjects.YarnNumberValueObject" Collapsed="true">
+    <Position X="11.5" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAQAAAAAEAgEAAAAAAAAAAAAAAAAACAQAA=</HashCode>
+      <FileName>GlobalValueObjects\YarnNumberValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.Commands.AddNewMachineCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAEAAAIAAAAAAIAAAJAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Commands\AddNewMachineCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.Commands.AddNewMachineCommandValidator" Collapsed="true">
+    <Position X="29" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Commands\AddNewMachineCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.Commands.RemoveExistingMachineCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Commands\RemoveExistingMachineCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.Commands.UpdateExistingMachineCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="27.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAiAAAEAAAIIAAAAAIAAAJAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Commands\UpdateExistingMachineCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.Commands.UpdateExistingMachineCommandValidator" Collapsed="true">
+    <Position X="29" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Commands\UpdateExistingMachineCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.ReadModels.MachineDocumentReadModel" Collapsed="true">
+    <Position X="11.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAEAAAIAAAAAAIAAAJAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\ReadModels\MachineDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.ValueObjects.MachineTypeValueObject" Collapsed="true">
+    <Position X="25.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAAQAA=</HashCode>
+      <FileName>Machines\ValueObjects\MachineTypeValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Machines.MachineDocument" Collapsed="true">
+    <Position X="9.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgQAAEAAAKAAAACAIBAAJAAAAAAAAgAAAAAAACAAQ=</HashCode>
+      <FileName>Machines\MachineDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.Commands.AddNewEnginePlanningCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAAAAAAAAAAAAAAAACIAAIAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Commands\AddNewEnginePlanningCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.Commands.AddNewEnginePlanningCommandValidator" Collapsed="true">
+    <Position X="22" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Commands\AddNewEnginePlanningCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.Commands.RemoveEnginePlanningCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="16.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Commands\RemoveEnginePlanningCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.Commands.UpdateEnginePlanningCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAACAAAAAAAAIAAAAAACIAAIAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Commands\UpdateEnginePlanningCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.Commands.UpdateEnginePlanningCommandValidator" Collapsed="true">
+    <Position X="22" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Commands\UpdateEnginePlanningCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.ReadModels.MachinesPlanningReadModel" Collapsed="true">
+    <Position X="16.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAAAAAAAAAAAAAAAACIAAIAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>MachinesPlanning\ReadModels\MachinesPlanningReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachinesPlanning.MachinesPlanningDocument" Collapsed="true">
+    <Position X="15" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>wAAAAAAAAAAAAABAAgADIIAIAAAAAACAAAAAAQkAAAA=</HashCode>
+      <FileName>MachinesPlanning\MachinesPlanningDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.Commands.AddNewMachineTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Commands\AddNewMachineTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.Commands.AddNewMachineTypeCommandValidator" Collapsed="true">
+    <Position X="32.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Commands\AddNewMachineTypeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.Commands.RemoveExistingMachineTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="22" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Commands\RemoveExistingMachineTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.Commands.UpdateExistingMachineTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAIAAAAAAAAAABAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Commands\UpdateExistingMachineTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.Commands.UpdateExistingMachineTypeCommandValidator" Collapsed="true">
+    <Position X="32.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Commands\UpdateExistingMachineTypeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.ReadModels.MachineTypeReadModel" Collapsed="true">
+    <Position X="23.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\ReadModels\MachineTypeReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.MachineTypes.MachineTypeDocument" Collapsed="true">
+    <Position X="20.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAEAAAAgAAAAABAAABABAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\MachineTypeDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.Commands.PlaceMaterialTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAgAAAAAAAgAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Commands\PlaceMaterialTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.Commands.PlaceMaterialTypeCommandValidator" Collapsed="true">
+    <Position X="32.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Commands\PlaceMaterialTypeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.Commands.RemoveMaterialTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="29" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Commands\RemoveMaterialTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.Commands.UpdateMaterialTypeCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAABAgIAAAAAAgAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Commands\UpdateMaterialTypeCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.Commands.UpdateMaterialTypeCommadValidator" Collapsed="true">
+    <Position X="16.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Commands\UpdateMaterialTypeCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.ReadModels.MaterialTypeReadModel" Collapsed="true">
+    <Position X="32.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAgAAAAAAAgAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\ReadModels\MaterialTypeReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Materials.MaterialTypeDocument" Collapsed="true">
+    <Position X="29" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAgCAAAAIAjAAQAAAAAAAAAAAAAQAAAAAg=</HashCode>
+      <FileName>MaterialTypes\MaterialTypeDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Movements.ReadModels.MovementReadModel" Collapsed="true">
+    <Position X="9.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Movements\ReadModels\MovementReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Movements.MovementDocument" Collapsed="true">
+    <Position X="36" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAEAIBAAAAAAAAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Movements\MovementDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.Commands.AddOperatorCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQEAAAAAAAAAAAAAAAQAAAAAAAAAAAQAEAAAAAAA=</HashCode>
+      <FileName>Operators\Commands\AddOperatorCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.Commands.AddOperatorCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operators\Commands\AddOperatorCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.Commands.RemoveOperatorCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operators\Commands\RemoveOperatorCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.Commands.UpdateOperatorCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="20.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACQEAAAAAAIAAAAAAAAQAAAAAAAAAAAQAEAAAAAAA=</HashCode>
+      <FileName>Operators\Commands\UpdateOperatorCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.Commands.UpdateOperatorCommandValidator" Collapsed="true">
+    <Position X="22" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operators\Commands\UpdateOperatorCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.ReadModels.OperatorReadModel" Collapsed="true">
+    <Position X="18.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQEAAAAAAAAAAAAAAAQAAAAAAAAAAAQAEAAAAAAA=</HashCode>
+      <FileName>Operators\ReadModels\OperatorReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Operators.OperatorDocument" Collapsed="true">
+    <Position X="15" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQEAAAAQAAAAAAAABAQAAAAQAQAAQEQAEAAAAAAA=</HashCode>
+      <FileName>Operators\OperatorDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.Commands.AddOrderCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEAAAAQACgAAYAAAAAAAAAAAQIAACMAAAAAAAAI=</HashCode>
+      <FileName>Orders\Commands\AddOrderCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.Commands.WeavingOrderCommandValidator" Collapsed="true">
+    <Position X="22" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Commands\AddOrderCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.Commands.RemoveOrderCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="32.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Commands\RemoveOrderCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.Commands.UpdateOrderCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACgEAAAAQAKgAAYAAAAAAAAAAAQIAACMAAAAAAAAI=</HashCode>
+      <FileName>Orders\Commands\UpdateOrderCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.Commands.UpdateWeavingOrderCommandValidator" Collapsed="true">
+    <Position X="36" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Commands\UpdateOrderCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.ReadModels.OrderReadModel" Collapsed="true">
+    <Position X="23.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgEIAAAQCCgAAQAAAAAAAAAAAQIAACMAEAAAAAAI=</HashCode>
+      <FileName>Orders\ReadModels\OrderReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Orders.OrderDocument" Collapsed="true">
+    <Position X="20.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAgUoAQCQCCgABwAABACAEAIAAYICAaMAkAAAAAAI=</HashCode>
+      <FileName>Orders\OrderDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.ProductionResults.Entities.ProductionResultProducts" Collapsed="true">
+    <Position X="11.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAQUAAAABAABAAAABAAEAADAgAAAYAAIAARAFgAA=</HashCode>
+      <FileName>ProductionResults\Entities\ProductionResultProducts.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.ProductionResults.ReadModels.ProductionResultReadModel" Collapsed="true">
+    <Position X="13.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgEAAEAAAAAAAIAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProductionResults\ReadModels\ProductionResultReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.ProductionResults.ProductionResultDocument" Collapsed="true">
+    <Position X="9.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgUQAEAAAAAAAIAAABAQAQAAAAAAAAAACAABAAAAA=</HashCode>
+      <FileName>ProductionResults\ProductionResultDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.Calculations.ConstantsValue" Collapsed="true">
+    <Position X="20.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgBAAgAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\Calculations\ConstantsValue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.Commands.CoreAccountCommand" Collapsed="true">
+    <Position X="34.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\Commands\CoreAccountCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.Commands.UnitIdCommand" Collapsed="true">
+    <Position X="30.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\Commands\UnitIdCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.BeamDocumentValueObject" Collapsed="true">
+    <Position X="25.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAEAAAAAIAIAAAgAAAUAAIIAAQAA=</HashCode>
+      <FileName>Shared\ValueObjects\BeamDocumentValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.BeamId" Collapsed="true">
+    <Position X="27.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\BeamId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.BrokenCauseId" Collapsed="true">
+    <Position X="36" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\BrokenCauseId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.ConstructionId" Collapsed="true">
+    <Position X="23.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\ConstructionId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.CoreAccount" Collapsed="true">
+    <Position X="32.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACEAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Shared\ValueObjects\CoreAccount.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.DailyOperationId" Collapsed="true">
+    <Position X="18.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\DailyOperationId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.DailyOperationMonitoringId" Collapsed="true">
+    <Position X="27.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\DailyOperationMonitoringId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.DailyOperationSizingId" Collapsed="true">
+    <Position X="11.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\DailyOperationSizingId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.FabricDefectId" Collapsed="true">
+    <Position X="18.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\FabricDefectId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.MachineId" Collapsed="true">
+    <Position X="13.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\MachineId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.MachineType" Collapsed="true">
+    <Position X="18.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAAQAA=</HashCode>
+      <FileName>Shared\ValueObjects\MachineType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.MachineTypeId" Collapsed="true">
+    <Position X="22" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\MachineTypeId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.ManufactureMachine" Collapsed="true">
+    <Position X="27.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAEAAAAAAAAAAIAAAIAAAAAAAAAAgAAAAAAQAA=</HashCode>
+      <FileName>Shared\ValueObjects\ManufactureMachine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.MaterialTypeId" Collapsed="true">
+    <Position X="30.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\MaterialTypeId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.OperatorId" Collapsed="true">
+    <Position X="16.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\OperatorId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.OrderId" Collapsed="true">
+    <Position X="22" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\OrderId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.OriginId" Collapsed="true">
+    <Position X="25.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\OriginId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.ShiftId" Collapsed="true">
+    <Position X="15" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\ShiftId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.SupplierId" Collapsed="true">
+    <Position X="27.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\SupplierId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.UnitId" Collapsed="true">
+    <Position X="29" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\UnitId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.UomId" Collapsed="true">
+    <Position X="32.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\UomId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.UserId" Collapsed="true">
+    <Position X="15" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\UserId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.YarnId" Collapsed="true">
+    <Position X="32.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\YarnId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shared.ValueObjects.YarnNumberId" Collapsed="true">
+    <Position X="9.75" Y="15.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shared\ValueObjects\YarnNumberId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.Commands.AddShiftCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Commands\AddShiftCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.Commands.AddShiftCommandValidator" Collapsed="true">
+    <Position X="16.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Commands\AddShiftCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.Commands.RemoveShiftCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Commands\RemoveShiftCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.Commands.UpdateShiftCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAQAIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Commands\UpdateShiftCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.Commands.UpdateShiftCommandValidator" Collapsed="true">
+    <Position X="20.25" Y="13.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Commands\UpdateShiftCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.ReadModels.ShiftReadModel" Collapsed="true">
+    <Position X="16.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAIAAgAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\ReadModels\ShiftReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.ValueObjects.ShiftValueObject" Collapsed="true">
+    <Position X="18.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAIAAgAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Shifts\ValueObjects\ShiftValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Shifts.ShiftDocument" Collapsed="true">
+    <Position X="13.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABAAYAIAAgAAAIAAAAQAAAAAA=</HashCode>
+      <FileName>Shifts\ShiftDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Commands.CreateStockAdjustmentCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="13.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAAAgAAAAACAAAIAIAAAIAAAAAAIAAAAIA=</HashCode>
+      <FileName>StockCard\Commands\CreateStockAdjustmentCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Commands.CreateStockAdjustmentCommandValidator" Collapsed="true">
+    <Position X="15" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Commands\CreateStockAdjustmentCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Sizing.MoveInBeamStockSizingEvent" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Sizing\MoveInBeamStockSizingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Sizing.AddBeamStockSizingEventEventValidator" Collapsed="true">
+    <Position X="13.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Sizing\MoveInBeamStockSizingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Sizing.MoveOutBeamStockSizingEvent" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Sizing\MoveOutBeamStockSizingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Sizing.MoveOutBeamStockSizingEventValidator" Collapsed="true">
+    <Position X="11.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Sizing\MoveOutBeamStockSizingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Warping.MoveInBeamStockWarpingEvent" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Warping\MoveInBeamStockWarpingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Warping.AddBeamStockWarpingEventValidator" Collapsed="true">
+    <Position X="15" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Warping\MoveInBeamStockWarpingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Warping.MoveOutBeamStockWarpingEvent" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Warping\MoveOutBeamStockWarpingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.Warping.MoveOutBeamStockWarpingEventValidator" Collapsed="true">
+    <Position X="13.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Events\Warping\MoveOutBeamStockWarpingEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.Events.BeamStockEvent" Collapsed="true">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAgAAAAAAAAAAAAAAAIAAAAAAAAAAAIA=</HashCode>
+      <FileName>StockCard\Events\BeamStockEvent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.ReadModels.StockCardReadModel" Collapsed="true">
+    <Position X="23.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAQAAAAAAAAAAIAAIABAAAAAAAAAIA=</HashCode>
+      <FileName>StockCard\ReadModels\StockCardReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.StockCard.StockCardDocument" Collapsed="true">
+    <Position X="22" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQAEAAAQAAABAAAAAAIAAIABAAAAAAAAAIA=</HashCode>
+      <FileName>StockCard\StockCardDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.Commands.PlaceNewSupplierCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAQAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Commands\PlaceNewSupplierCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.Commands.PlaceNewSupplierCommandValidator" Collapsed="true">
+    <Position X="36" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Commands\PlaceNewSupplierCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.Commands.RemoveSupplierCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="36" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Commands\RemoveSupplierCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.Commands.UpdateExsistingSupplierCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAgAAQAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Commands\UpdateExsistingSupplierCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.Commands.UpdateExsistingSupplierCommandValidator" Collapsed="true">
+    <Position X="36" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Commands\UpdateExsistingSupplierCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.ReadModels.WeavingSupplierDocumentReadModel" Collapsed="true">
+    <Position X="25.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAQAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\ReadModels\WeavingSupplierDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Suppliers.WeavingSupplierDocument" Collapsed="true">
+    <Position X="23.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAhAAQAAAgAAAAAAAAAQAAAAAg=</HashCode>
+      <FileName>Suppliers\WeavingSupplierDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.Commands.AddNewYarnNumberCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="34.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAwAAAAAEAgAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>YarnNumbers\Commands\AddNewYarnNumberCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.Commands.AddNewYarnNumberCommandValidator" Collapsed="true">
+    <Position X="36" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>YarnNumbers\Commands\AddNewYarnNumberCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.Commands.RemoveYarnNumberCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>YarnNumbers\Commands\RemoveYarnNumberCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.Commands.UpdateYarnNumberCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAwIAAAAEAgAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>YarnNumbers\Commands\UpdateYarnNumberCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.Commands.UpdateYarnNumberCommandValidator" Collapsed="true">
+    <Position X="13.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>YarnNumbers\Commands\UpdateYarnNumberCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.ReadModels.YarnNumberDocumentReadModel" Collapsed="true">
+    <Position X="36" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAwAAAAAEAgAAAAAAAAAAAAAAAAAACAAAA=</HashCode>
+      <FileName>YarnNumbers\ReadModels\YarnNumberDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.YarnNumbers.YarnNumberDocument" Collapsed="true">
+    <Position X="34.25" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAwAAAAAEBjAAAAAAAAAAAAAAAAAACAAAg=</HashCode>
+      <FileName>YarnNumbers\YarnNumberDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.Commands.CreateNewYarnCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAgAAQAAAAAAEQAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Commands\CreateNewYarnCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.Commands.CreateNewYarnCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Commands\CreateNewYarnCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.Commands.RemoveExsistingYarnCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="23.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Commands\RemoveExsistingYarnCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.Commands.UpdateExsistingYarnCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAQAAAAAIAAAAAAgAAQAAAAAAEQAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Commands\UpdateExsistingYarnCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.Commands.UpdateExsistingYarnCommandValidator" Collapsed="true">
+    <Position X="11.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Commands\UpdateExsistingYarnCommand.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.ReadModels.YarnDocumentReadModel" Collapsed="true">
+    <Position X="30.75" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAAAAAAAAAAgAAQAAAAAAEQAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\ReadModels\YarnDocumentReadModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.ValueObjects.CurrencyValueObject" Collapsed="true">
+    <Position X="16.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Yarns\ValueObjects\CurrencyValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.ValueObjects.SupplierDocumentValueObject" Collapsed="true">
+    <Position X="25.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAgAAQAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Yarns\ValueObjects\SupplierDocumentValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.ValueObjects.UomValueObject" Collapsed="true">
+    <Position X="34.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAgAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Yarns\ValueObjects\UomValueObject.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Manufactures.Domain.Yarns.YarnDocument" Collapsed="true">
+    <Position X="29" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQEAAAAAAAAAAAhAAQAAAAAQEQAQAAAQAAAAAg=</HashCode>
+      <FileName>Yarns\YarnDocument.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Manufactures.Domain.Beams.Queries.IBeamQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="9.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Beams\Queries\IBeamQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Beams.Repositories.IBeamRepository" Collapsed="true">
+    <Position X="11.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Beams\Repositories\IBeamRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.BeamStockMonitoring.Queries.IBeamStockMonitoringQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="13.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BeamStockMonitoring\Queries\IBeamStockMonitoringQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.BeamStockMonitoring.Repositories.IBeamStockMonitoringRepository" Collapsed="true">
+    <Position X="15" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BeamStockMonitoring\Repositories\IBeamStockMonitoringRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.BrokenCauses.Warping.Queries.IWarpingBrokenCauseQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="18.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Queries\IWarpingBrokenCauseQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.BrokenCauses.Warping.Repositories.IWarpingBrokenCauseRepository" Collapsed="true">
+    <Position X="20.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>BrokenCauses\Warping\Repositories\IWarpingBrokenCauseRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Loom.Queries.DailyOperationLoomReport.IDailyOperationLoomReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="22" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Queries\DailyOperationLoomReport\IDailyOperationLoomReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Loom.Queries.IDailyOperationLoomQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="20.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Queries\IDailyOperationLoomQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Loom.Repositories.IDailyOperationLoomRepository" Collapsed="true">
+    <Position X="23.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Loom\Repositories\IDailyOperationLoomRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Reaching.Queries.DailyOperationReachingReport.IDailyOperationReachingReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="29" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Queries\DailyOperationReachingReport\IDailyOperationReachingReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Reaching.Queries.IDailyOperationReachingBeamQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="25.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Queries\IDailyOperationReachingBeamQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Reaching.Queries.IDailyOperationReachingQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="27.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Queries\IDailyOperationReachingQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Reaching.Repositories.IDailyOperationReachingRepository" Collapsed="true">
+    <Position X="30.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Reaching\Repositories\IDailyOperationReachingRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingReport.IDailyOperationSizingReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="34.25" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Queries\DailyOperationSizingReport\IDailyOperationSizingReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Sizing.Queries.SizePickupReport.ISizePickupReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="15" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Queries\SizePickupReport\ISizePickupReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Sizing.Queries.IDailyOperationSizingQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="32.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Queries\IDailyOperationSizingQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Sizing.Repositories.IDailyOperationSizingRepository" Collapsed="true">
+    <Position X="36" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Sizing\Repositories\IDailyOperationSizingRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport.IDailyOperationWarpingReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="22" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\DailyOperationWarpingReport\IDailyOperationWarpingReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport.IWarpingBrokenThreadsReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="22" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\WarpingBrokenThreadsReport\IWarpingBrokenThreadsReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport.IWarpingProductionReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="23.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\WarpingProductionReport\IWarpingProductionReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.IDailyOperationWarpingBeamProductQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="9.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\IDailyOperationWarpingBeamProductQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.IDailyOperationWarpingBrokenCauseQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="13.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\IDailyOperationWarpingBrokenCauseQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.IDailyOperationWarpingDocumentQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="16.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\IDailyOperationWarpingDocumentQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Queries.IDailyOperationWarpingHistoryQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="18.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Queries\IDailyOperationWarpingHistoryQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Repositories.IDailyOperationWarpingBeamProductRepository" Collapsed="true">
+    <Position X="11.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Repositories\IDailyOperationWarpingBeamProductRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Repositories.IDailyOperationWarpingBrokenCauseRepository" Collapsed="true">
+    <Position X="15" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Repositories\IDailyOperationWarpingBrokenCauseRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Repositories.IDailyOperationWarpingHistoryRepository" Collapsed="true">
+    <Position X="20.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Repositories\IDailyOperationWarpingHistoryRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.DailyOperations.Warping.Repositories.IDailyOperationWarpingRepository" Collapsed="true">
+    <Position X="23.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>DailyOperations\Warping\Repositories\IDailyOperationWarpingRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Defects.FabricDefect.Queries.IFabricDefectQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="36" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Queries\IFabricDefectQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Defects.FabricDefect.Repositories.IFabricDefectRepository" Collapsed="true">
+    <Position X="9.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Defects\FabricDefect\Repositories\IFabricDefectRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Estimations.Productions.Queries.IEstimatedProductionDetailQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="25.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Queries\IEstimatedProductionDetailQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Estimations.Productions.Queries.IEstimatedProductionDocumentQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="29" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Queries\IEstimatedProductionDocumentQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Estimations.Productions.Repositories.IEstimatedProductionDetailRepository" Collapsed="true">
+    <Position X="27.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Repositories\IEstimatedProductionDetailRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Estimations.Productions.Repositories.IEstimatedProductionDocumentRepository" Collapsed="true">
+    <Position X="30.75" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Estimations\Productions\Repositories\IEstimatedProductionDocumentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.FabricConstructions.Queries.IConstructionYarnDetailQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="16.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Queries\IConstructionYarnDetailQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.FabricConstructions.Queries.IFabricConstructionQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="32.5" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Queries\IFabricConstructionQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.FabricConstructions.Repositories.IConstructionYarnDetailRepository" Collapsed="true">
+    <Position X="18.5" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Repositories\IConstructionYarnDetailRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.FabricConstructions.Repositories.IFabricConstructionRepository" Collapsed="true">
+    <Position X="34.25" Y="17.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>FabricConstructions\Repositories\IFabricConstructionRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Machines.Queries.IMachineQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="11.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Queries\IMachineQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Machines.Repositories.IMachineRepository" Collapsed="true">
+    <Position X="13.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Machines\Repositories\IMachineRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.MachinesPlanning.Queries.IMachinesPlanningReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="15" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Queries\MachinesPlanningReport\IMachinesPlanningReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.MachinesPlanning.Repositories.IMachinesPlanningRepository" Collapsed="true">
+    <Position X="16.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachinesPlanning\Repositories\IMachinesPlanningRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.MachineTypes.Queries.IMachineTypeQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="18.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Queries\IMachineTypeQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.MachineTypes.Repositories.IMachineTypeRepository" Collapsed="true">
+    <Position X="20.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MachineTypes\Repositories\IMachineTypeRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Materials.Repositories.IMaterialTypeRepository" Collapsed="true">
+    <Position X="22" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>MaterialTypes\Repositories\IMaterialTypeRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Movements.Repositories.IMovementRepository" Collapsed="true">
+    <Position X="23.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Movements\Repositories\IMovementRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Operators.Queries.IOperatorQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="25.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operators\Queries\IOperatorQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Operators.Repositories.IOperatorRepository" Collapsed="true">
+    <Position X="27.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Operators\Repositories\IOperatorRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Orders.Queries.OrderReport.IOrderReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="30.75" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Queries\OrderReport\IOrderReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Orders.Queries.IOrderQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="29" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Queries\IOrderQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Orders.Repositories.IOrderRepository" Collapsed="true">
+    <Position X="32.5" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Orders\Repositories\IOrderRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.ProductionResults.Queries.IProductionResultsReport.IProductionResultReportQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="34.25" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProductionResults\Queries\IProductionResultsReport\IProductionResultReportQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.ProductionResults.Queries.IProductionResultsQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="9.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProductionResults\Queries\IProductionResultsQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.ProductionResults.Repositories.IProductionResultRepository" Collapsed="true">
+    <Position X="36" Y="18.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProductionResults\Repositories\IProductionResultRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Shifts.Queries.IShiftQuery&lt;TModel&gt;" Collapsed="true">
+    <Position X="11.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Queries\IShiftQuery.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Shifts.Repositories.IShiftRepository" Collapsed="true">
+    <Position X="13.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Shifts\Repositories\IShiftRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.StockCard.Repositories.IStockCardRepository" Collapsed="true">
+    <Position X="16.75" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>StockCard\Repositories\IStockCardRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Suppliers.Repositories.IWeavingSupplierRepository" Collapsed="true">
+    <Position X="25.5" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Suppliers\Repositories\IWeavingSupplierRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.YarnNumbers.Repositories.IYarnNumberRepository" Collapsed="true">
+    <Position X="29" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>YarnNumbers\Repositories\IYarnNumberRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Manufactures.Domain.Yarns.Repositories.IYarnDocumentRepository" Collapsed="true">
+    <Position X="27.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Yarns\Repositories\IYarnDocumentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

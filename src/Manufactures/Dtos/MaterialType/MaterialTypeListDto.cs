@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System;
 
-namespace Manufactures.Dtos.MaterialType
+namespace Manufactures.DataTransferObjects.MaterialType
 {
     public class MaterialTypeListDto
     {

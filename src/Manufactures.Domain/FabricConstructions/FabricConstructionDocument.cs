@@ -1,184 +1,126 @@
 ﻿using Infrastructure.Domain;
-using Manufactures.Domain.FabricConstructions.ValueObjects;
 using Manufactures.Domain.FabricConstructions.ReadModels;
-using Manufactures.Domain.Events;
-using Manufactures.Domain.Shared.ValueObjects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Moonlay;
+using Manufactures.Domain.FabricConstructions.Entity;
 
 namespace Manufactures.Domain.FabricConstructions
 {
     public class FabricConstructionDocument : AggregateRoot<FabricConstructionDocument, FabricConstructionReadModel>
     {
         public string ConstructionNumber { get; private set; }
-        public DateTimeOffset Date { get; private set; }
+        public string MaterialType { get; private set; }
+        public string WovenType { get; private set; }
         public int AmountOfWarp { get; private set; }
         public int AmountOfWeft { get; private set; }
         public int Width { get; private set; }
-        public string WovenType { get; private set; }
         public string WarpType { get; private set; }
         public string WeftType { get; private set; }
+        public double ReedSpace { get; private set; }
+        //Jumlah Helai Benang
+        public double YarnStrandsAmount { get; private set; }
+        //Jumlah Total Benang
         public double TotalYarn { get; private set; }
-        public string MaterialTypeName { get; private set; }
-        public IReadOnlyCollection<ConstructionDetail> ListOfWarp { get; private set; }
-        public IReadOnlyCollection<ConstructionDetail> ListOfWeft { get; private set; }
+        public List<ConstructionYarnDetail> ConstructionWarpsDetail { get; private set; }
+        public List<ConstructionYarnDetail> ConstructionWeftsDetail { get; private set; }
 
-        public FabricConstructionDocument(Guid id,
-                                    string constructionNumber,
-                                    string wofenType,
-                                    string warpType,
-                                    string weftType,
-                                    int amountOfWarp,
-                                    int amountOfWeft,
-                                    int width,
-                                    double totalYarn,
-                                    string materialTypeName) : base(id)
+        public FabricConstructionDocument(Guid identity,
+                                          string constructionNumber,
+                                          string materialType,
+                                          string wovenType,
+                                          int amountOfWarp,
+                                          int amountOfWeft,
+                                          int width,
+                                          string warpType,
+                                          string weftType,
+                                          double reedSpace,
+                                          double yarnStrandsAmount,
+                                          double totalYarn) : base(identity)
         {
             // Set Properties
-            Identity = id;
+            Identity = identity;
             ConstructionNumber = constructionNumber;
+            MaterialType = materialType;
+            WovenType = wovenType;
             AmountOfWarp = amountOfWarp;
             AmountOfWeft = amountOfWeft;
             Width = width;
-            WovenType = wofenType;
             WarpType = warpType;
             WeftType = weftType;
+            ReedSpace = reedSpace;
+            YarnStrandsAmount = yarnStrandsAmount;
             TotalYarn = totalYarn;
-            MaterialTypeName = materialTypeName;
-            ListOfWarp = new List<ConstructionDetail>();
-            ListOfWeft = new List<ConstructionDetail>();
 
             this.MarkTransient();
 
             ReadModel = new FabricConstructionReadModel(Identity)
             {
                 ConstructionNumber = ConstructionNumber,
+                MaterialType = materialType,
+                WovenType = WovenType,
                 AmountOfWarp = AmountOfWarp,
                 AmountOfWeft = AmountOfWeft,
                 Width = Width,
-                WovenType = WovenType,
                 WarpType = WarpType,
                 WeftType = WeftType,
-                TotalYarn = TotalYarn,
-                MaterialTypeName = materialTypeName,
-                ListOfWarp = ListOfWarp.Serialize(),
-                ListOfWeft = ListOfWeft.Serialize()
+                ReedSpace = ReedSpace,
+                YarnStrandsAmount = YarnStrandsAmount,
+                TotalYarn = TotalYarn
             };
 
-            ReadModel.AddDomainEvent(new OnFabricConstructionPlaced(this.Identity));
+            //ReadModel.AddDomainEvent(new OnFabricConstructionPlaced(this.Identity));
         }
 
         public FabricConstructionDocument(FabricConstructionReadModel readModel) : base(readModel)
         {
             this.ConstructionNumber = readModel.ConstructionNumber;
+            this.MaterialType = readModel.MaterialType;
+            this.WovenType = readModel.WovenType;
             this.AmountOfWarp = readModel.AmountOfWarp;
             this.AmountOfWeft = readModel.AmountOfWeft;
             this.Width = readModel.Width;
-            this.WovenType = readModel.WovenType;
             this.WarpType = readModel.WarpType;
             this.WeftType = readModel.WeftType;
+            this.ReedSpace = readModel.ReedSpace;
+            this.YarnStrandsAmount = readModel.YarnStrandsAmount;
             this.TotalYarn = readModel.TotalYarn;
-            this.MaterialTypeName = readModel.MaterialTypeName;
-            this.ListOfWarp = !String.IsNullOrEmpty(readModel.ListOfWarp) ? readModel.ListOfWarp.Deserialize<List<ConstructionDetail>>() : null;
-            this.ListOfWeft = !String.IsNullOrEmpty(readModel.ListOfWeft) ? readModel.ListOfWeft.Deserialize<List<ConstructionDetail>>() : null;
-            this.Date = readModel.CreatedDate;
-        }
-
-        public void UpdateWarp(ConstructionDetail value)
-        {
-            foreach (var warp in ListOfWarp)
-            {
-                if (warp.YarnId == value.YarnId)
-                {
-
-                    warp.SetQuantity(value.Quantity);
-                    warp.SetInformation(value.Information);
-
-                    MarkModified();
-                }
-            }
-        }
-
-        public void UpdateWeft(ConstructionDetail value)
-        {
-            foreach(var weft in ListOfWeft)
-            {
-                if(weft.YarnId == value.YarnId)
-                {
-
-                    weft.SetQuantity(value.Quantity);
-                    weft.SetInformation(value.Information);
-
-                    MarkModified();
-                }
-            }
-        }
-
-        public void RemoveWarp(ConstructionDetail value)
-        {
-            var warps = ListOfWarp.ToList();
-            warps.Remove(value);
-            ListOfWarp = warps;
-            ReadModel.ListOfWarp = ListOfWarp.Serialize();
-
-            MarkModified();
-        }
-
-        public void RemoveWeft(ConstructionDetail value)
-        {
-            var wefts = ListOfWeft.ToList();
-            wefts.Remove(value);
-            ListOfWeft = wefts;
-            ReadModel.ListOfWeft = ListOfWeft.Serialize();
-
-            MarkModified();
-        }
-
-        public void AddWarp(ConstructionDetail value)
-        {
-            if (!ListOfWarp.Any(o => o.YarnId == value.YarnId))
-            {
-                var warps = ListOfWarp.ToList();
-                warps.Add(value);
-                ListOfWarp = warps;
-                ReadModel.ListOfWarp = ListOfWarp.Serialize();
-
-                MarkModified();
-            }
-        }
-
-        public void AddWeft(ConstructionDetail value)
-        {
-            if (!ListOfWeft.Any(o => o.YarnId == value.YarnId))
-            {
-                var wefts = ListOfWeft.ToList();
-                wefts.Add(value);
-                ListOfWeft = wefts;
-                ReadModel.ListOfWeft = ListOfWeft.Serialize();
-
-                MarkModified();
-            }
-        }
-
-
-        public void SetMaterialTypeName(string value)
-        {
-            if (MaterialTypeName != value)
-            {
-                MaterialTypeName = value;
-                ReadModel.MaterialTypeName = MaterialTypeName;
-
-                MarkModified();
-            }
         }
 
         public void SetConstructionNumber(string constructionNumber)
         {
+            Validator.ThrowIfNull(() => constructionNumber);
+
             if (constructionNumber != ConstructionNumber)
             {
                 ConstructionNumber = constructionNumber;
                 ReadModel.ConstructionNumber = ConstructionNumber;
+
+                MarkModified();
+            }
+        }
+
+        public void SetMaterialType(string materialType)
+        {
+            Validator.ThrowIfNull(() => materialType);
+
+            if (materialType != MaterialType)
+            {
+                MaterialType = materialType;
+                ReadModel.MaterialType = MaterialType;
+
+                MarkModified();
+            }
+        }
+
+        public void SetWovenType(string wovenType)
+        {
+            Validator.ThrowIfNull(() => wovenType);
+
+            if (wovenType != WovenType)
+            {
+                WovenType = wovenType;
+                ReadModel.WovenType = WovenType;
 
                 MarkModified();
             }
@@ -217,19 +159,10 @@ namespace Manufactures.Domain.FabricConstructions
             }
         }
 
-        public void SetWovenType(string wovenType)
-        {
-            if (wovenType != WovenType)
-            {
-                WovenType = wovenType;
-                ReadModel.WovenType = WovenType;
-
-                MarkModified();
-            }
-        }
-
         public void SetWarpType(string warpType)
         {
+            Validator.ThrowIfNull(() => warpType);
+
             if (warpType != WarpType)
             {
                 WarpType = warpType;
@@ -241,10 +174,34 @@ namespace Manufactures.Domain.FabricConstructions
 
         public void SetWeftType(string weftType)
         {
+            Validator.ThrowIfNull(() => weftType);
+
             if (weftType != WeftType)
             {
                 WeftType = weftType;
                 ReadModel.WeftType = WeftType;
+
+                MarkModified();
+            }
+        }
+
+        public void SetReedSpace(double reedSpace)
+        {
+            if (reedSpace != ReedSpace)
+            {
+                ReedSpace = reedSpace;
+                ReadModel.ReedSpace = ReedSpace;
+
+                MarkModified();
+            }
+        }
+
+        public void SetYarnStrandsAmount(double yarnStrandsAmount)
+        {
+            if (yarnStrandsAmount != YarnStrandsAmount)
+            {
+                YarnStrandsAmount = yarnStrandsAmount;
+                ReadModel.YarnStrandsAmount = YarnStrandsAmount;
 
                 MarkModified();
             }
@@ -259,6 +216,94 @@ namespace Manufactures.Domain.FabricConstructions
 
                 MarkModified();
             }
+        }
+
+        //---------------------------------------------------------------
+
+        //public void AddWarp(ConstructionYarnDetail value)
+        //{
+        //    if (!ListOfWarp.Any(o => o.YarnId == value.YarnId))
+        //    {
+        //        var warps = ListOfWarp.ToList();
+        //        warps.Add(value);
+        //        ListOfWarp = warps;
+        //        ReadModel.ListOfWarp = ListOfWarp.Serialize();
+
+        //        MarkModified();
+        //    }
+        //}
+
+        //public void UpdateWarp(ConstructionYarnDetail value)
+        //{
+        //    foreach (var warp in ListOfWarp)
+        //    {
+        //        if (warp.YarnId == value.YarnId)
+        //        {
+
+        //            warp.SetQuantity(value.Quantity);
+        //            warp.SetInformation(value.Information);
+
+        //            MarkModified();
+        //        }
+        //    }
+        //}
+
+        //public void RemoveWarp(ConstructionYarnDetail value)
+        //{
+        //    var warps = ListOfWarp.ToList();
+        //    warps.Remove(value);
+        //    ListOfWarp = warps;
+        //    ReadModel.ListOfWarp = ListOfWarp.Serialize();
+
+        //    MarkModified();
+        //}
+
+        //public void AddWeft(ConstructionYarnDetail value)
+        //{
+        //    if (!ListOfWeft.Any(o => o.YarnId == value.YarnId))
+        //    {
+        //        var wefts = ListOfWeft.ToList();
+        //        wefts.Add(value);
+        //        ListOfWeft = wefts;
+        //        ReadModel.ListOfWeft = ListOfWeft.Serialize();
+
+        //        MarkModified();
+        //    }
+        //}
+
+        //public void UpdateWeft(ConstructionYarnDetail value)
+        //{
+        //    foreach (var weft in ListOfWeft)
+        //    {
+        //        if (weft.YarnId == value.YarnId)
+        //        {
+
+        //            weft.SetQuantity(value.Quantity);
+        //            weft.SetInformation(value.Information);
+
+        //            MarkModified();
+        //        }
+        //    }
+        //}
+
+        //public void RemoveWeft(ConstructionYarnDetail value)
+        //{
+        //    var wefts = ListOfWeft.ToList();
+        //    wefts.Remove(value);
+        //    ListOfWeft = wefts;
+        //    ReadModel.ListOfWeft = ListOfWeft.Serialize();
+
+        //    MarkModified();
+        //}
+
+        public void SetModified()
+        {
+            MarkModified();
+        }
+
+        public void SetDeleted()
+        {
+            MarkRemoved();
         }
 
         protected override FabricConstructionDocument GetEntity()

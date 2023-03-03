@@ -32,7 +32,7 @@ namespace Manufactures.Application.Beams.CommandHandlers
 
             if (existingBeam == null)
             {
-                Validator.ErrorValidation(("BeamNumber", "Beam not available with number " + existingBeam.BeamNumber  ));
+                Validator.ErrorValidation(("BeamNumber", "Beam not available with number " + existingBeam.Number  ));
             }
 
             existingBeam.Remove();

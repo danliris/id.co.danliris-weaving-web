@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Manufactures.Application.Operators.CommandHandlers
 {
-    public class AddOperatorCommandHandler 
+    public class AddOperatorCommandHandler
         : ICommandHandler<AddOperatorCommand, OperatorDocument>
     {
         private readonly IStorage _storage;
@@ -19,22 +19,21 @@ namespace Manufactures.Application.Operators.CommandHandlers
         public AddOperatorCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _operatorRepository = 
+            _operatorRepository =
                 _storage.GetRepository<IOperatorRepository>();
         }
 
-        public async Task<OperatorDocument> Handle(AddOperatorCommand request, 
+        public async Task<OperatorDocument> Handle(AddOperatorCommand request,
                                                    CancellationToken cancellationToken)
         {
-            var coreAccount = 
-                new CoreAccount(request.CoreAccount.MongoId, 
-                                request.CoreAccount.Id.HasValue ? 
-                                    request.CoreAccount.Id.Value : 0, 
+            var coreAccount =
+                new CoreAccount(request.CoreAccount.MongoId,
+                                request.CoreAccount.Id.HasValue ? request.CoreAccount.Id.Value : 0,
                                 request.CoreAccount.Name);
-            var newOperator = 
+            var newOperator =
                 new OperatorDocument(Guid.NewGuid(),
                                      coreAccount,
-                                     new UnitId(request.UnitId.Id),
+                                     request.UnitId,
                                      request.Group,
                                      request.Assignment,
                                      request.Type);

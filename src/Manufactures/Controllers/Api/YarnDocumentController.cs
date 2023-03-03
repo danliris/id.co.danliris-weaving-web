@@ -4,7 +4,7 @@ using Manufactures.Domain.Materials.Repositories;
 using Manufactures.Domain.YarnNumbers.Repositories;
 using Manufactures.Domain.Yarns.Commands;
 using Manufactures.Domain.Yarns.Repositories;
-using Manufactures.Dtos.Yarn;
+using Manufactures.DataTransferObjects.Yarn;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay;
@@ -51,30 +51,30 @@ namespace Manufactures.Controllers.Api
             var yarns =
                 _yarnDocumentRepository.Find(query);
 
-            var results = new List<YarnDocumentListDto>();
+            var yarnDocuments = new List<YarnDocumentListDto>();
 
-            foreach(var yarn in yarns)
+            foreach (var yarn in yarns)
             {
 
-                var materialType = 
+                var materialType =
                     _materialTypeRepository.Find(o => o.Identity == yarn.MaterialTypeId.Value)
                                            .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
                                            .FirstOrDefault();
-                var yarnNumber = 
+                var yarnNumber =
                     _yarnNumberRepository.Find(o => o.Identity == yarn.YarnNumberId.Value)
-                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
+                                         .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType, x.AdditionalNumber))
                                          .FirstOrDefault();
 
                 var data = new YarnDocumentListDto(yarn, materialType, yarnNumber);
 
-                results.Add(data);
+                yarnDocuments.Add(data);
             }
-            
+
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                results =
-                    results.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                yarnDocuments =
+                    yarnDocuments.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
                                           entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
@@ -88,25 +88,103 @@ namespace Manufactures.Controllers.Api
 
                 if (orderDictionary.Values.Contains("asc"))
                 {
-                    results = results.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    yarnDocuments = yarnDocuments.OrderBy(x => prop.GetValue(x, null)).ToList();
                 }
                 else
                 {
-                    results = results.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    yarnDocuments = yarnDocuments.OrderByDescending(x => prop.GetValue(x, null)).ToList();
                 }
             }
 
-            results = results.Skip(page * size).Take(size).ToList();
-            int totalRows = results.Count();
+            var ResultYarnDocuments = yarnDocuments.Skip(page * size).Take(size).ToList();
+            int totalRows = yarnDocuments.Count();
+            int resultCount = ResultYarnDocuments.Count();
             page = page + 1;
 
             await Task.Yield();
 
-            return Ok(results, info: new
+            return Ok(ResultYarnDocuments, info: new
             {
                 page,
                 size,
-                total = totalRows
+                total = totalRows,
+                count = resultCount
+            });
+        }
+
+        [HttpGet("get-yarns-by-ids")]
+        public async Task<IActionResult> GetYarns(List<string> yarnIds,
+                                                  int page = 1,
+                                                  int size = 25,
+                                                  string order = "{}",
+                                                  string keyword = null,
+                                                  string filter = "{}")
+        {
+            page = page - 1;
+
+            var results = new List<YarnDocumentListDto>();
+            foreach (var yarnId in yarnIds)
+            {
+                var yarnGuid = Guid.Parse(yarnId);
+                var yarnDocuments =
+                    _yarnDocumentRepository
+                    .Find(o=>o.Identity.Equals(yarnGuid));
+
+                foreach (var yarnDocument in yarnDocuments)
+                {
+                    var materialType =
+                        _materialTypeRepository.Find(o => o.Identity == yarnDocument.MaterialTypeId.Value)
+                                               .Select(x => new MaterialTypeValueObject(x.Identity, x.Code, x.Name))
+                                               .FirstOrDefault();
+                    var yarnNumber =
+                        _yarnNumberRepository.Find(o => o.Identity == yarnDocument.YarnNumberId.Value)
+                                             .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType, x.AdditionalNumber))
+                                             .FirstOrDefault();
+
+                    var data = new YarnDocumentListDto(yarnDocument, materialType, yarnNumber);
+
+                    results.Add(data);
+                }
+
+                if (!string.IsNullOrEmpty(keyword))
+                {
+                    results =
+                        results.Where(entity => entity.Code.Contains(keyword, StringComparison.OrdinalIgnoreCase) ||
+                                                entity.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase)).ToList();
+                }
+
+                if (!order.Contains("{}"))
+                {
+                    Dictionary<string, string> orderDictionary =
+                        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                              orderDictionary.Keys.First().Substring(1);
+                    System.Reflection.PropertyInfo prop = typeof(YarnDocumentListDto).GetProperty(key);
+
+                    if (orderDictionary.Values.Contains("asc"))
+                    {
+                        results = results.OrderBy(x => prop.GetValue(x, null)).ToList();
+                    }
+                    else
+                    {
+                        results = results.OrderByDescending(x => prop.GetValue(x, null)).ToList();
+                    }
+                }
+            }
+
+            var ResultYarnDocuments = results.Skip(page * size).Take(size).ToList();
+            int totalRows = results.Count();
+            int resultCount = ResultYarnDocuments.Count();
+            page = page + 1;
+
+            await Task.Yield();
+
+            return Ok(ResultYarnDocuments, info: new
+            {
+                page,
+                size,
+                total = totalRows,
+                count = resultCount
             });
         }
 
@@ -123,7 +201,7 @@ namespace Manufactures.Controllers.Api
                                        .FirstOrDefault();
             var yarnNumberDocument =
                 _yarnNumberRepository.Find(item => item.Identity == yarn.YarnNumberId.Value)
-                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType))
+                                     .Select(x => new YarnNumberValueObject(x.Identity, x.Code, x.Number, x.RingType, x.AdditionalNumber))
                                      .FirstOrDefault();
             await Task.Yield();
 

@@ -4,54 +4,80 @@ using Manufactures.Domain.FabricConstructions.Repositories;
 using Manufactures.Domain.Estimations.Productions;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Repositories;
-using Manufactures.Domain.Estimations.Productions.ValueObjects;
 using Manufactures.Domain.Orders.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Moonlay;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Manufactures.Domain.Estimations.Productions.Entities;
+using Manufactures.Application.Helpers;
+using Manufactures.Domain.Shared.ValueObjects;
 
 namespace Manufactures.Application.Estimations.Productions.CommandHandlers
 {
     public class UpdateEstimationCommandHandler : ICommandHandler<UpdateEstimationProductCommand, EstimatedProductionDocument>
     {
         private readonly IStorage _storage;
-        private readonly IEstimationProductRepository _estimationProductRepository;
+        private readonly IEstimatedProductionDocumentRepository _estimatedProductionDocumentRepository;
+        private readonly IEstimatedProductionDetailRepository _estimatedProductionDetailRepository;
         private readonly IFabricConstructionRepository _constructionDocumentRepository;
-        private readonly IWeavingOrderDocumentRepository _weavingOrderDocumentRepository;
+        private readonly IOrderRepository _orderDocumentRepository;
 
         public UpdateEstimationCommandHandler(IStorage storage)
         {
             _storage = storage;
-            _estimationProductRepository = _storage.GetRepository<IEstimationProductRepository>();
+            _estimatedProductionDocumentRepository = _storage.GetRepository<IEstimatedProductionDocumentRepository>();
+            _estimatedProductionDetailRepository = _storage.GetRepository<IEstimatedProductionDetailRepository>();
             _constructionDocumentRepository = _storage.GetRepository<IFabricConstructionRepository>();
-            _weavingOrderDocumentRepository = _storage.GetRepository<IWeavingOrderDocumentRepository>();
+            _orderDocumentRepository = _storage.GetRepository<IOrderRepository>();
         }
 
         public async Task<EstimatedProductionDocument> Handle(UpdateEstimationProductCommand request, CancellationToken cancellationToken)
         {
-            var query = _estimationProductRepository.Query.Include(o => o.EstimationProducts);
-            var exsistingEstimation = _estimationProductRepository.Find(query).Where(entity => entity.Identity.Equals(request.Id)).FirstOrDefault();
+            var estimationDocuments =
+                _estimatedProductionDocumentRepository
+                    .Find(o => o.Identity == request.Id);
+            var estimationDocument =
+                estimationDocuments
+                    .FirstOrDefault();
+            var estimationDetails =
+                _estimatedProductionDetailRepository
+                    .Find(o => o.EstimatedProductionDocumentId == estimationDocument.Identity);
 
-            if(exsistingEstimation == null)
+            if(estimationDocument == null)
             {
-                Validator.ErrorValidation(("Estimation Document", "Unavailable exsisting Estimation Document with Id " + request.Id));
+                Validator.ErrorValidation(("EstimationDocumentId", "Estimasi Produksi dengan Id " + request.Id + " Tidak Ditemukan"));
             }
 
-            foreach(var product in exsistingEstimation.EstimationProducts)
+            //Update Data
+            //var updatedDetails = request.EstimatedDetails.Where(o => estimationDetails.Any(d => d.Identity == o.Identity));
+            foreach (var updatedDetail in request.EstimatedDetails)
             {
-                var requestProduct = request.EstimationProducts.Where(e => e.OrderNumber.Equals(product.OrderDocument.Deserialize<OrderDocumentValueObject>().OrderNumber)).FirstOrDefault();
-                var productGrade = new ProductGrade(requestProduct.GradeA, requestProduct.GradeB, requestProduct.GradeC, requestProduct.GradeD);
-                product.SetProductGrade(productGrade);
-                product.SetTotalGramEstimation(requestProduct.TotalGramEstimation);
+                var gradeALimit = Math.Round(updatedDetail.GradeA, 4);
+                var gradeBLimit = Math.Round(updatedDetail.GradeB, 4);
+                var gradeCLimit = Math.Round(updatedDetail.GradeC, 4);
+                var gradeDLimit = Math.Round(updatedDetail.GradeD, 4);
+
+                var dbDetail = estimationDetails.Find(o => o.Identity == updatedDetail.Id);
+                
+                dbDetail.SetGradeA(gradeALimit);
+                dbDetail.SetGradeB(gradeBLimit);
+                dbDetail.SetGradeC(gradeCLimit);
+                dbDetail.SetGradeD(gradeDLimit);
+
+                dbDetail.SetModified();
+
+                await _estimatedProductionDetailRepository.Update(dbDetail);
             }
 
-            await _estimationProductRepository.Update(exsistingEstimation);
+            estimationDocument.SetModified();
+
+            await _estimatedProductionDocumentRepository.Update(estimationDocument);
+
             _storage.Save();
 
-            return exsistingEstimation;
+            return estimationDocument;
         }
     }
 }

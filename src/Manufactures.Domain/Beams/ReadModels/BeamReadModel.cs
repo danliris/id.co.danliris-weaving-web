@@ -7,7 +7,11 @@ namespace Manufactures.Domain.Beams.ReadModels
     {
         public BeamReadModel(Guid identity) : base(identity) { }
 
-        public string BeamNumber { get; internal set; }
-        public string BeamType { get; internal set; }
+        public string Number { get; internal set; }
+        public string Type { get; internal set; }
+        public double EmptyWeight { get; internal set; }
+        public double? YarnLength { get; internal set; }
+        public double? YarnStrands { get; internal set; }
+        public Guid? ContructionId { get; internal set; }
     }
 }

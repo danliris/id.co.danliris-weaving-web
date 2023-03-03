@@ -1,0 +1,6 @@
+projectKey=danliris-weaving-webapi
+serverUrl=http://sonarmoonlay.southeastasia.cloudapp.azure.com
+serverVersion=7.7.0.23042
+dashboardUrl=http://sonarmoonlay.southeastasia.cloudapp.azure.com/dashboard?id=danliris-weaving-webapi
+ceTaskId=AWr4WqRMHwNWPa4PdonP
+ceTaskUrl=http://sonarmoonlay.southeastasia.cloudapp.azure.com/api/ce/task?id=AWr4WqRMHwNWPa4PdonP

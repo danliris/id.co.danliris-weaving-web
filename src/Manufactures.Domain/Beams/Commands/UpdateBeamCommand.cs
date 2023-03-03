@@ -10,11 +10,14 @@ namespace Manufactures.Domain.Beams.Commands
         [JsonProperty(PropertyName = "Id")]
         public Guid Id { get; private set; }
 
-        [JsonProperty(propertyName: "BeamNumber")]
-        public string BeamNumber { get; set; }
+        [JsonProperty(propertyName: "Number")]
+        public string Number { get; set; }
 
-        [JsonProperty(propertyName: "BeamType")]
-        public string BeamType { get; set; }
+        [JsonProperty(propertyName: "Type")]
+        public string Type { get; set; }
+
+        [JsonProperty(propertyName: "EmptyWeight")]
+        public double EmptyWeight { get; set; }
 
         public void SetId(Guid Id)
         {
@@ -27,8 +30,9 @@ namespace Manufactures.Domain.Beams.Commands
         public UpdateBeamCommandValidator()
         {
             RuleFor(command => command.Id).NotNull();
-            RuleFor(command => command.BeamNumber).NotEmpty();
-            RuleFor(command => command.BeamType).NotEmpty();
+            RuleFor(command => command.Number).NotEmpty();
+            RuleFor(command => command.Type).NotEmpty();
+            RuleFor(command => command.EmptyWeight).NotEmpty();
         }
     }
 }

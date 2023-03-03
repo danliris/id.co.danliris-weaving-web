@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\FinishDailyOperationLoomCommandHandlerTests.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdatePauseDailyOperationLoomCommandHandlerTests.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdateResumeDailyOperationLoomCommandHandlerTests.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
     <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="FluentAssertions" Version="5.5.3" />
@@ -15,7 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Barebone.Tests\Barebone.Tests.csproj" />
     <ProjectReference Include="..\Manufactures.Application\Manufactures.Application.csproj" />
+    <ProjectReference Include="..\Manufactures.Domain\Manufactures.Domain.csproj" />
+    <ProjectReference Include="..\Manufactures\Manufactures.csproj" />
   </ItemGroup>
 
 </Project>

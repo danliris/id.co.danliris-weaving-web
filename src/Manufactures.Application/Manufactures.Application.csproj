@@ -5,13 +5,39 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
-    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.4.5" />
-    <PackageReference Include="Moonlay.ExtCore.Mvc.Abstractions" Version="1.0.0" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\FinishDailyOperationLoomCommandHandler.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdatePauseDailyOperationLoomCommandHandler.cs" />
+    <Compile Remove="DailyOperations\Loom\CommandHandlers\UpdateResumeDailyOperationLoomCommandHandler.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\TotalBrokenEachYarnValueDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenGroupedReportQueryDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportBodyBrokenDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportFooterTotalDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderBrokenDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderSupplierDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportHeaderYarnDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportListOfYarnDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingBrokenThreadsReportMappedBodyBrokenDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\WarpingListBrokenDto.cs" />
+    <Compile Remove="DailyOperations\Warping\DataTransferObjects\WarpingBrokenThreadsReport\YarnNameRowSpanDto.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ExtCore.Data.Abstractions" Version="3.3.0" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.4.5" />
+    <PackageReference Include="Moonlay.ExtCore.Mvc.Abstractions" Version="1.0.0" />
+    <PackageReference Include="WindowsAzure.Storage" Version="9.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.External.DanLirisClient.CoreMicroservice\Infrastructure.External.DanLirisClient.CoreMicroservice.csproj" />
     <ProjectReference Include="..\Manufactures.Data.EntityFrameworkCore.SqlServer\Manufactures.Data.EntityFrameworkCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ProductionResults\CommandHandlers\" />
+    <Folder Include="Yarns\DataTransferObjects\" />
+    <Folder Include="Yarns\QueryHandlers\" />
   </ItemGroup>
 
 </Project>
