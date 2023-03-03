@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
 using System.Security.Claims;
@@ -113,12 +114,16 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
         [Fact]
         public async Task GetReport()
         {
-      
 
-            //_MockMediator
-            //     .Setup(s => s.Send(It.IsAny<IWeavingDailyOperationWarpingMachineQuery>(), It.IsAny<CancellationToken>()))
-            //     .ReturnsAsync(new WeavingDailyOperationWarpingMachineDto());
-
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            this.mockWeavingDailyOperationWarpingMachineRepository
+              .Setup(s => s.Query)
+               .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
+               {
+                    new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
+                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+               }.AsQueryable());
             this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.Now, DateTime.Now, "", "", "", "", "")).Returns(new List<WeavingDailyOperationWarpingMachineDto>());
             var unitUnderTest = CreateDailyOperationWarpingController();
             // Act
