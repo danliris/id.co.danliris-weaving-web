@@ -25,7 +25,7 @@ namespace Manufactures.Helpers.XlsTemplates
             double sumTHreadCut = 0;
             foreach (var item in machineDtos)
             {
-                reportDataTable.Rows.Add(idx, item.MCNo, item.ThreadCut, item.Length);
+                reportDataTable.Rows.Add(idx, item.Name, item.ThreadCut, item.Length);
                 sumLength += item.Length;
                 sumTHreadCut += item.ThreadCut;
                 idx++;
