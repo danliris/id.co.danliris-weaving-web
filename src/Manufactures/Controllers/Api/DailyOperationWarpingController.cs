@@ -726,8 +726,7 @@ namespace Manufactures.Controllers.Api
                         weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
                 }
             }
-
-            //int totalRows = dailyOperationWarpingDocuments.Count();
+             
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
             var total = result.Count();
 
