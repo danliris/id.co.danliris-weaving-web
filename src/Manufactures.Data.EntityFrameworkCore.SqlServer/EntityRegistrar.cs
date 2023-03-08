@@ -408,6 +408,18 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
+            modelBuilder.Entity<WeavingTroubleMachineTreeLosesReadModel>(etb =>
+            {
+                etb.ToTable("WeavingTroubleMachineTreeLoses");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Group).HasMaxLength(50);
+                etb.Property(p => p.Code).HasMaxLength(100);
+                etb.Property(p => p.Description).HasMaxLength(300);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
 
         }
     }

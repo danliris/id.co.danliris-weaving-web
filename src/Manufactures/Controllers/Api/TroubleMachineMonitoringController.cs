@@ -2,10 +2,13 @@
 using Manufactures.Application.TroubleMachineMonitoring.DTOs;
 using Manufactures.Application.TroubleMachineMonitoring.Queries;
 using Manufactures.Domain.TroubleMachineMonitoring.Commands;
+using Manufactures.Domain.TroubleMachineMonitoring.Queries;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +23,16 @@ namespace Manufactures.Controllers.Api
     public class TroubleMachineMonitoringController : ControllerApiBase
     {
         private readonly ITroubleMachineMonitoringQuery _troubleMachineMonitoring;
+        private readonly IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto> _losesQuery;
 
         public TroubleMachineMonitoringController(IServiceProvider serviceProvider,
                                              IWorkContext workContext,
-                                             ITroubleMachineMonitoringQuery TroubleMachineMonitoringQuery) : base(serviceProvider)
+                                             ITroubleMachineMonitoringQuery TroubleMachineMonitoringQuery,
+                                             IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto> losesQuery
+                                             ) : base(serviceProvider)
         {
             _troubleMachineMonitoring = TroubleMachineMonitoringQuery ?? throw new ArgumentNullException(nameof(TroubleMachineMonitoringQuery));
+            _losesQuery =  losesQuery?? throw new ArgumentNullException(nameof(IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto>));
         }
 
         [HttpGet]
@@ -132,6 +139,94 @@ namespace Manufactures.Controllers.Api
             var troubleMachine = await Mediator.Send(command);
 
             return Ok(troubleMachine.Identity);
+        }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFile(string month, int year, int monthId)
+        {
+            VerifyUser();
+
+            if (Request.Form.Files.Count > 0)
+            {
+                IFormFile UploadedFile = Request.Form.Files[0];
+                if (System.IO.Path.GetExtension(UploadedFile.FileName) == ".xlsx")
+                {
+
+                    using (var excelPack = new ExcelPackage())
+                    {
+                        using (var stream = UploadedFile.OpenReadStream())
+                        {
+                            excelPack.Load(stream);
+                        }
+                        var sheet = excelPack.Workbook.Worksheets;
+
+
+                        var weavingMachine = await _losesQuery.Upload(sheet, month, year, monthId);
+                        return Ok(weavingMachine);
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Ekstensi file harus bertipe .xlsx");
+
+                }
+            }
+            else
+            {
+                throw new Exception($"Gagal menyimpan data");
+            }
+
+
+        }
+        [HttpGet("treeLoses")]
+        public async Task<IActionResult> GetWarpingMachine(int page = 1,
+                                           int size = 25,
+                                           string order = "{}",
+                                           string keyword = null,
+                                           string filter = "{}")
+        {
+            VerifyUser();
+            var weavingDailyOperations = await _losesQuery.GetAll();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                weavingDailyOperations =
+                   weavingDailyOperations
+                       .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                    x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
+                                                                                                                // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
+
+            }
+
+            if (!order.Contains("{}"))
+            {
+                Dictionary<string, string> orderDictionary =
+                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+                          orderDictionary.Keys.First().Substring(1);
+                System.Reflection.PropertyInfo prop = typeof(WeavingTroubleMachingTreeLosesDto).GetProperty(key);
+
+                if (orderDictionary.Values.Contains("asc"))
+                {
+                    await Task.Yield();
+                    weavingDailyOperations =
+                        weavingDailyOperations.OrderBy(x => prop.GetValue(x, null));
+                }
+                else
+                {
+                    await Task.Yield();
+                    weavingDailyOperations =
+                        weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
+                }
+            }
+
+            //int totalRows = dailyOperationWarpingDocuments.Count();
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
         }
     }
 }
