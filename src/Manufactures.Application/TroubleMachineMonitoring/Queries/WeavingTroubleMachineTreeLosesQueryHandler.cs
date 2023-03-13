@@ -128,10 +128,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
 
         }
 
-        public List<WeavingTroubleMachingTreeLosesDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
-        {
-            throw new NotImplementedException();
-        }
+         
 
         public async Task<IEnumerable<WeavingTroubleMachingTreeLosesDto>> GetAll()
         {

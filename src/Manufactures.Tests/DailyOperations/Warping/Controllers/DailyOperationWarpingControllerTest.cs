@@ -194,12 +194,12 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
         [Fact]
-        public async Task GetWarpingMachineById()
+        public async Task GetWarpingMachineNotFound()
         {
 
             Guid newGuid = new Guid();
             DateTime _date = new DateTime();
-
+            
             this.mocWeavingQuery.Setup(s => s.GetById(newGuid)).ReturnsAsync(It.IsAny<WeavingDailyOperationWarpingMachineDto>);
                 //.Returns(It.IsAny<Task<WeavingDailyOperationWarpingMachineDto>>);
             var unitUnderTest = CreateDailyOperationWarpingController();
@@ -209,6 +209,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, GetStatusCode(result));
         }
+      
         [Fact]
         public async Task GetWarpingMachineall()
         {
@@ -236,7 +237,6 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
         public async Task GetWarpingMachineall_keyWord()
         {
 
-            Guid newGuid = new Guid();
             DateTime _date = new DateTime();
             WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto();
             dto.Group = "group";
