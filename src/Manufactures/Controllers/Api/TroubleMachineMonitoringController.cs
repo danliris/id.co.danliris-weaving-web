@@ -26,7 +26,7 @@ namespace Manufactures.Controllers.Api
         private readonly IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto> _losesQuery;
 
         public TroubleMachineMonitoringController(IServiceProvider serviceProvider,
-                                             IWorkContext workContext,
+                                             //IWorkContext workContext,
                                              ITroubleMachineMonitoringQuery TroubleMachineMonitoringQuery,
                                              IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto> losesQuery
                                              ) : base(serviceProvider)
@@ -195,34 +195,11 @@ namespace Manufactures.Controllers.Api
                    weavingDailyOperations
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Group.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
-                                                                                                                // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
-
+                                                                                                                
             }
 
-            if (!order.Contains("{}"))
-            {
-                Dictionary<string, string> orderDictionary =
-                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                          orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(WeavingTroubleMachingTreeLosesDto).GetProperty(key);
-
-                if (orderDictionary.Values.Contains("asc"))
-                {
-                    await Task.Yield();
-                    weavingDailyOperations =
-                        weavingDailyOperations.OrderBy(x => prop.GetValue(x, null));
-                }
-                else
-                {
-                    await Task.Yield();
-                    weavingDailyOperations =
-                        weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
-                }
-            }
-
-            //int totalRows = dailyOperationWarpingDocuments.Count();
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
             var total = result.Count();
 
