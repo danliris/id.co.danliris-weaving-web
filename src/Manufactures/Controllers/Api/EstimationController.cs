@@ -26,20 +26,20 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class EstimationController : ControllerApiBase
     {
-        private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
+       // private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
 
         private readonly IEstimatedProductionDocumentQuery<EstimatedProductionListDto> _estimatedProductionDocumentQuery;
-        private readonly IWeavingEstimatedProductionRepository _weavingEstimatedProductionRepository;
+        //private readonly IWeavingEstimatedProductionRepository _weavingEstimatedProductionRepository;
         private readonly IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto> _weavingProductionQuery;
         public EstimationController(IServiceProvider serviceProvider, 
-                                    IWorkContext workContext,
+                                     
                                     IEstimatedProductionDocumentQuery<EstimatedProductionListDto> estimatedProductionDocumentQuery,
                                     IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto> weavingEstimatedProductionQuery
                                     ) : base(serviceProvider)
         {
-            _estimationProductRepository = 
-                this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
-            _weavingEstimatedProductionRepository = this.Storage.GetRepository<IWeavingEstimatedProductionRepository>();
+            //_estimationProductRepository = 
+            //    this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
+            //_weavingEstimatedProductionRepository = this.Storage.GetRepository<IWeavingEstimatedProductionRepository>();
 
             _estimatedProductionDocumentQuery = estimatedProductionDocumentQuery ?? throw new ArgumentNullException(nameof(estimatedProductionDocumentQuery));
             _weavingProductionQuery = weavingEstimatedProductionQuery ?? throw new ArgumentNullException(nameof(weavingEstimatedProductionQuery));
