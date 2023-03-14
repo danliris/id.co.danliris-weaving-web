@@ -18,9 +18,9 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
         public string YearSP { get; internal set; }
         public string SPNo { get; internal set; }
         public string Plait { get; internal set; }
-        public float WarpLength { get; internal set; }
-        public float Weft { get; internal set; }
-        public float Width { get; internal set; }
+        public double WarpLength { get; internal set; }
+        public double Weft { get; internal set; }
+        public double Width { get; internal set; }
         public string WarpType { get; internal set; }
         public string WeftType1 { get; internal set; }
         public string WeftType2 { get; internal set; }
@@ -30,16 +30,17 @@ namespace Manufactures.Domain.Estimations.Productions.ReadModels
         public string Thread { get; internal set; }
         public string Construction1 { get; internal set; }
         public string Buyer { get; internal set; }
-        public float NumberOrder { get; internal set; }
+        public double NumberOrder { get; internal set; }
         public string Construction2 { get; internal set; }
         public string WarpXWeft { get; internal set; }
-        public float GradeA { get; internal set; }
-        public float GradeB { get; internal set; }
-        public float GradeC { get; internal set; }
-        public float Total { get; internal set; }
-        public float WarpBale { get; internal set; }
-        public float WeftBale { get; internal set; }
-        public float TotalBale { get; internal set; }
+        public double GradeA { get; internal set; }
+        public double GradeB { get; internal set; }
+        public double GradeC { get; internal set; }
+        public double Aval { get; internal set; }
+        public double Total { get; internal set; }
+        public double WarpBale { get; internal set; }
+        public double WeftBale { get; internal set; }
+        public double TotalBale { get; internal set; }
 
 
     }

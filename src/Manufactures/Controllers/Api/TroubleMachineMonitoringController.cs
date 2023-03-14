@@ -199,9 +199,9 @@ namespace Manufactures.Controllers.Api
                                     x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
                                                                                                                 
             }
-
+            var total = weavingDailyOperations.Count();
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
-            var total = result.Count();
+           
 
             return Ok(result, info: new { page, size, total });
         }
