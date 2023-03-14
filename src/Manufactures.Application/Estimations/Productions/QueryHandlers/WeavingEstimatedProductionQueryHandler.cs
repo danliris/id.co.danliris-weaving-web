@@ -106,74 +106,83 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
             foreach (var sheet in sheets)
             {
 
-                totalRows = sheet.Dimension.Rows;
-                var totalColumns = sheet.Dimension.Columns;
-
-                if (sheet.Name.Trim() == "SOURCE SP")
+                
+                if (!sheet.Name.Trim().Contains("SOURCE SP"))
                 {
-                    try
+                    error = "Tidak terdapat sheet SOURCE SP di File Excel";
+                }
+                else
+                {
+                    totalRows = sheet.Dimension.Rows;
+                    var totalColumns = sheet.Dimension.Columns;
+                    if (sheet.Name.Trim() == "SOURCE SP")
                     {
-                        for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
+                        try
                         {
-
-                            if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
+                            for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
-                                var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
-                                if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19] )== monthId)
-                                {
-                                    data = new WeavingEstimatedProduction(
-                                  Guid.NewGuid(), //
-                                  Convert.ToInt32(sheet.Cells[rowIndex, startCol + 15].Value), //tgl
-                                  month,
-                                  monthId,
-                                  year.ToString(),//year
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol]),//yearSP
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//SPNO
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Plait
-                                  Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 3])),//warpLength
-                                  Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 4])),//Weft
-                                  Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 5])),//Width
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//WarpType
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//weftType1
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//WeftType2
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//AL
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AP1
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//AP2
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Thread
-                                  converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//Construction
-                                  converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 14]),//Buyer
 
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 16])),//NumberOfOrder
-
-                                  converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 17]),//Construction2
-                                  converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 18]),//weftXWarp
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//GradeA
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//GradeB
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//GradeC
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Aval
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 25])),//WarpBale
-                                  Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 26])),//weftBale
-                                  Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 27]))),
-                                   Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28])))//TotalBale
-                                  );
-                                    await _repository.Update(data);
-                                    saved = 1;
-                                }
-                                else
+                                if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    isSave = 1;
+                                    var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
+                                    if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19]) == monthId)
+                                    {
+                                        data = new WeavingEstimatedProduction(
+                                      Guid.NewGuid(), //
+                                      Convert.ToInt32(sheet.Cells[rowIndex, startCol + 15].Value), //tgl
+                                      month,
+                                      monthId,
+                                      year.ToString(),//year
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol]),//yearSP
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//SPNO
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Plait
+                                      Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 3])),//warpLength
+                                      Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 4])),//Weft
+                                      Convert.ToDouble(converter.GeneratePureDouble(sheet.Cells[rowIndex, startCol + 5])),//Width
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//WarpType
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//weftType1
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//WeftType2
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//AL
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AP1
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//AP2
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Thread
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//Construction
+                                      converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 14]),//Buyer
+
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 16])),//NumberOfOrder
+
+                                      converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 17]),//Construction2
+                                      converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 18]),//weftXWarp
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//GradeA
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//GradeB
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//GradeC
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Aval
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 25])),//WarpBale
+                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 26])),//weftBale
+                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 27]))),
+                                       Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28])))//TotalBale
+                                      );
+                                        await _repository.Update(data);
+                                        saved = 1;
+                                    }
+                                    else
+                                    {
+                                        isSave = 1;
+                                    }
+
                                 }
 
                             }
-                            
+                        }
+                        catch (Exception ex)
+                        {
+                            error = "Cek pada baris ke-{rowIndex} - {ex.Message}";
+                            throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        error = "Cek pada baris ke-{rowIndex} - {ex.Message}";
-                        throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
-                    }
+
                 }
+                 
 
             }
             try
@@ -183,7 +192,10 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                     error = "Tahun dan bulan tidak sesuai";
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
 
-                }else
+                }else if(error != null)
+                {
+                    throw new Exception($"ERROR "+ error);
+                }
                 {
                     await Delete(month, year.ToString());
                     _storage.Save();
@@ -194,7 +206,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
             }
             catch (Exception ex)
             {
-                throw new Exception($"Gagal menyhimpan data, cek File yang diupload \n" + error);
+                throw new Exception($"ERROR \n" + error + "\n");
             }
 
         }

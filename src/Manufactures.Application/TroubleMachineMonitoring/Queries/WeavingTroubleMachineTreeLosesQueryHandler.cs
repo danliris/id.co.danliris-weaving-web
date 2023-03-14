@@ -39,62 +39,75 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
             WeavingTroubleMachineTreeLoses data;
             int rowIndex = 0;
             var totalRows = 0;
-
+            string error = "";
             foreach (var sheet in sheets)
             {
-
-                if (sheet.Name.Trim() == "Tree Loses")
+                if (!sheet.Name.Trim().Contains("Tree Loses"))
                 {
-                    try
-                    {
-                        totalRows = sheet.Dimension.Rows;
-                        var totalColumns = sheet.Dimension.Columns;
-                        for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
-                        {
+                    error = "Tidak terdapat sheet Tree Loses di File Excel";
+                }
+                else
+                {
 
-                            if (sheet.Cells[rowIndex, startCol].Value != null || Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) !=0)
+                    if (sheet.Name.Trim() == "Tree Loses")
+                    {
+                        try
+                        {
+                            totalRows = sheet.Dimension.Rows;
+                            var totalColumns = sheet.Dimension.Columns;
+                            for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
 
-                                data = new WeavingTroubleMachineTreeLoses(
-                                Guid.NewGuid(), //
-                                Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
-                                month,
-                                monthId,
-                                year.ToString(),//year
-                                converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//shift
-                                converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//description
-                                converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//warpingMachineNo
-                                converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Group
-                                converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//Code
+                                if (sheet.Cells[rowIndex, startCol].Value != null || Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) != 0)
+                                {
 
-                                Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 6])),//DownTImeMC
-                                Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 7])),//TimePerMinute
-                                Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 4])),//Start
-                                Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5]))//Finish
+                                    data = new WeavingTroubleMachineTreeLoses(
+                                    Guid.NewGuid(), //
+                                    Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
+                                    month,
+                                    monthId,
+                                    year.ToString(),//year
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//shift
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//description
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//warpingMachineNo
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Group
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//Code
 
-                                );
-                                await _repository.Update(data);
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 6])),//DownTImeMC
+                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 7])),//TimePerMinute
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 4])),//Start
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5]))//Finish
+
+                                    );
+                                    await _repository.Update(data);
+                                }
+
                             }
-
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
                         }
                     }
-                    catch (Exception ex)
-                    {
-                        throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
-                    }
                 }
-
             }
             try
             {
-                await Delete(month, year.ToString());
-                _storage.Save();
-                return ((rowIndex - 1) == totalRows && totalRows > 0);
+                if (error != null)
+                {
+                    throw new Exception(error);
+                }
 
+                else
+                {
+                    await Delete(month, year.ToString());
+                    _storage.Save();
+                    return ((rowIndex - 1) == totalRows && totalRows > 0);
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"Gagal menyhimpan data, cek File yang diupload");
+                throw new Exception($"ERROR \n" + error +"\n");
             }
 
         }
