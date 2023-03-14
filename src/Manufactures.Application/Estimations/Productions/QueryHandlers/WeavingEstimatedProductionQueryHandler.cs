@@ -225,7 +225,8 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                                 NumberOrder= y.NumberOrder,
                                 WarpBale= y.WarpBale,
                                 WeftBale = y.WeftBale,
-                                TotalBale = y.TotalBale
+                                TotalBale = y.TotalBale,
+                                WarpXWeft= y.WarpXWeft
 
                             });
             List<WeavingEstimatedProductionDto> listData = new List<WeavingEstimatedProductionDto>();

@@ -218,7 +218,7 @@ namespace Manufactures.Controllers.Api
                                    x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
             }
-            var total = weavingDailyOperations.Count();
+            
             var result = weavingDailyOperations.Select(y=> new 
             {
                 Month = y.Month,
@@ -226,7 +226,7 @@ namespace Manufactures.Controllers.Api
                 CreatedDate = y.CreatedDate
 
             }).Distinct();
-           
+            var total = result.Count();
 
             return Ok(result, info: new { page, size, total });
         }
