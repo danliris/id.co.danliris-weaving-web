@@ -40,8 +40,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
             IConfiguration _configuration = builder.Build();
             var myConnectionString1 = _configuration.GetConnectionString("Default");
             SqlConnection conn = new SqlConnection(myConnectionString1);
-            try
-            {
+            
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
 
@@ -55,13 +54,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                 conn.Close();
 
             }
-            catch (Exception ex)
-            {
-
-            }
-
-        }
-
+       
         public async Task<IEnumerable<WeavingEstimatedProductionDto>> GetAll()
         {
             var query = (_repository
@@ -244,6 +237,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                     GradeC = item.GradeC,
                     Aval = item.Aval,
                     Total = item.Total,
+                    WarpXWeft = item.WarpXWeft,
                     NumberOrder = item.NumberOrder,
                     WarpBale = item.WarpBale,
                     WeftBale = item.WeftBale,
