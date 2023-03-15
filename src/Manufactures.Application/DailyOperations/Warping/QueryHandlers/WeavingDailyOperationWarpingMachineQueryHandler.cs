@@ -70,6 +70,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             int rowIndex = 0;
             var totalRows = 0;
             string error = "";
+            int isSave = 0;
+            int saved = 0;
             foreach (var sheet in sheets)
             {
                 if (!sheet.Name.Trim().Contains("Produksi WP"))
@@ -126,8 +128,12 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//Eff
                                       );
                                         await _repository.Update(data);
+                                        saved = 1;
                                     }
-
+                                    else
+                                    {
+                                        isSave = 1;
+                                    }
                                 }
                             }
                         }
@@ -141,15 +147,23 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             try
             {
-                if (error != null)
+                if (isSave > 0 && saved == 0)
                 {
-                    throw new Exception(error);
-                }else
+                    error = "Tahun tidak sesuai";
+                    throw new Exception($"Tahun dan Bulan tidak sesuai");
+
+                }
+                else if (error == "" && saved == 0)
+                {
+                    throw new Exception($"ERROR " + error);
+                }
+                else
                 {
                     await Delete(month, year.ToString());
                     _storage.Save();
                     return ((rowIndex - 1) == totalRows && totalRows > 0);
                 }
+
 
             }
             catch (Exception ex)
