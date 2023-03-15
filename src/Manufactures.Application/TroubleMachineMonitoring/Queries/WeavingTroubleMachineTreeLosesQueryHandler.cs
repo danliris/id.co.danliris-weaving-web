@@ -81,6 +81,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                     Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5]))//Finish
 
                                     );
+                                    await _repository.Update(data);
                                     saved = 1;
                                 }
                                 
@@ -95,7 +96,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
             }
             try
             {
-                 if (error == "" && saved == 0)
+                 if (error != "" && saved == 0)
                 {
                     throw new Exception($"ERROR " + error);
                 }
