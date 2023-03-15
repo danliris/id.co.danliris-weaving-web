@@ -153,7 +153,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
 
                 }
-                else if (error == "" && saved == 0)
+                else if (error != "" && saved == 0)
                 {
                     throw new Exception($"ERROR " + error);
                 }
