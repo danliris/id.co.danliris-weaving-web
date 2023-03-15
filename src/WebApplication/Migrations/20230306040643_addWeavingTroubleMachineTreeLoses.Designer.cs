@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230306040643_addWeavingTroubleMachineTreeLoses")]
+    partial class addWeavingTroubleMachineTreeLoses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1035,102 +1037,6 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_EstimationProductDocuments");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.Estimations.Productions.ReadModels.WeavingEstimatedProductionReadModel", b =>
-                {
-                    b.Property<Guid>("Identity")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("AL");
-
-                    b.Property<string>("AP1");
-
-                    b.Property<string>("AP2");
-
-                    b.Property<double>("Aval");
-
-                    b.Property<string>("Buyer")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Construction1")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("Construction2")
-                        .HasMaxLength(300);
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset>("CreatedDate");
-
-                    b.Property<int>("Date");
-
-                    b.Property<bool?>("Deleted");
-
-                    b.Property<string>("DeletedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("DeletedDate");
-
-                    b.Property<double>("GradeA");
-
-                    b.Property<double>("GradeB");
-
-                    b.Property<double>("GradeC");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasMaxLength(32);
-
-                    b.Property<DateTimeOffset?>("ModifiedDate");
-
-                    b.Property<string>("Month")
-                        .HasMaxLength(50);
-
-                    b.Property<int>("MonthId");
-
-                    b.Property<double>("NumberOrder");
-
-                    b.Property<string>("Plait");
-
-                    b.Property<byte[]>("RowVersion")
-                        .IsConcurrencyToken()
-                        .ValueGeneratedOnAddOrUpdate();
-
-                    b.Property<string>("SPNo");
-
-                    b.Property<string>("Thread");
-
-                    b.Property<double>("Total");
-
-                    b.Property<double>("TotalBale");
-
-                    b.Property<double>("WarpBale");
-
-                    b.Property<double>("WarpLength");
-
-                    b.Property<string>("WarpType");
-
-                    b.Property<string>("WarpXWeft");
-
-                    b.Property<double>("Weft");
-
-                    b.Property<double>("WeftBale");
-
-                    b.Property<string>("WeftType1");
-
-                    b.Property<string>("WeftType2");
-
-                    b.Property<double>("Width");
-
-                    b.Property<string>("YearPeriode");
-
-                    b.Property<string>("YearSP");
-
-                    b.HasKey("Identity");
-
-                    b.ToTable("WeavingEstimatedProductions");
-                });
-
             modelBuilder.Entity("Manufactures.Domain.FabricConstructions.ReadModels.ConstructionYarnDetailReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
@@ -1787,7 +1693,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTime>("Start");
 
-                    b.Property<double>("TimePerMinutes");
+                    b.Property<int>("TimePerMinutes");
 
                     b.Property<string>("WarpingMachineNo");
 

@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230313030125_addWeavingEstimatedProduction")]
+    partial class addWeavingEstimatedProduction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1046,8 +1048,6 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("AP2");
 
-                    b.Property<double>("Aval");
-
                     b.Property<string>("Buyer")
                         .HasMaxLength(50);
 
@@ -1072,11 +1072,11 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<double>("GradeA");
+                    b.Property<float>("GradeA");
 
-                    b.Property<double>("GradeB");
+                    b.Property<float>("GradeB");
 
-                    b.Property<double>("GradeC");
+                    b.Property<float>("GradeC");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
@@ -1088,7 +1088,7 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<int>("MonthId");
 
-                    b.Property<double>("NumberOrder");
+                    b.Property<float>("NumberOrder");
 
                     b.Property<string>("Plait");
 
@@ -1100,27 +1100,27 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<string>("Thread");
 
-                    b.Property<double>("Total");
+                    b.Property<float>("Total");
 
-                    b.Property<double>("TotalBale");
+                    b.Property<float>("TotalBale");
 
-                    b.Property<double>("WarpBale");
+                    b.Property<float>("WarpBale");
 
-                    b.Property<double>("WarpLength");
+                    b.Property<float>("WarpLength");
 
                     b.Property<string>("WarpType");
 
                     b.Property<string>("WarpXWeft");
 
-                    b.Property<double>("Weft");
+                    b.Property<float>("Weft");
 
-                    b.Property<double>("WeftBale");
+                    b.Property<float>("WeftBale");
 
                     b.Property<string>("WeftType1");
 
                     b.Property<string>("WeftType2");
 
-                    b.Property<double>("Width");
+                    b.Property<float>("Width");
 
                     b.Property<string>("YearPeriode");
 
