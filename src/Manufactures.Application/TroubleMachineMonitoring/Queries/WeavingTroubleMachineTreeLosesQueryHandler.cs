@@ -40,6 +40,8 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
             int rowIndex = 0;
             var totalRows = 0;
             string error = "";
+            int isSave = 0;
+            int saved = 0;
             foreach (var sheet in sheets)
             {
                 if (!sheet.Name.Trim().Contains("Tree Loses"))
@@ -79,9 +81,9 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                     Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5]))//Finish
 
                                     );
-                                    await _repository.Update(data);
+                                    saved = 1;
                                 }
-
+                                
                             }
                         }
                         catch (Exception ex)
@@ -93,11 +95,10 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
             }
             try
             {
-                if (error != null)
+                 if (error == "" && saved == 0)
                 {
-                    throw new Exception(error);
+                    throw new Exception($"ERROR " + error);
                 }
-
                 else
                 {
                     await Delete(month, year.ToString());

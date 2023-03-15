@@ -192,10 +192,10 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                     error = "Tahun dan bulan tidak sesuai";
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
 
-                }else if(error != null)
+                }else if(error == "" && saved ==0)
                 {
                     throw new Exception($"ERROR "+ error);
-                }
+                }else
                 {
                     await Delete(month, year.ToString());
                     _storage.Save();
