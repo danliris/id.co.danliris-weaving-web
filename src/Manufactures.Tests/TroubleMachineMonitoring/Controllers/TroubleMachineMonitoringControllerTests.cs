@@ -122,6 +122,29 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.Controllers
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
 
+        [Fact]
+        public async Task GetDataByFilter()
+        {
+
+            DateTime _date = new DateTime();
+            WeavingTroubleMachingTreeLosesDto dto = new WeavingTroubleMachingTreeLosesDto();
+
+            dto.YearPeriode = "2023";
+            dto.Month = "Month";
+            dto.CreatedDate = _date.ToString();
+
+
+            List<WeavingTroubleMachingTreeLosesDto> newList = new List<WeavingTroubleMachingTreeLosesDto>();
+            newList.Add(dto);
+            IEnumerable<WeavingTroubleMachingTreeLosesDto> ienumData = newList;
+            this._mocklosesQuery.Setup(s => s.GetAll()).ReturnsAsync(ienumData);
+            var unitUnderTest = CreateTroubleMachineMonitoringController();
+            // Act
+            var result = await unitUnderTest.GetDataByFilter("Month", "2023");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
+        }
 
     }
 }
