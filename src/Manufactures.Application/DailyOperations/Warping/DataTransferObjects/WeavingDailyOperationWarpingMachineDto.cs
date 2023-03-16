@@ -9,6 +9,7 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
     public class WeavingDailyOperationWarpingMachineDto 
     {
         
+        public Guid Identity { get; set; }
         [JsonProperty(PropertyName = "Month")]
         public string Month {get; set; }
         [JsonProperty(PropertyName = "Year")]
