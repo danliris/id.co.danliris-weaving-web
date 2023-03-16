@@ -195,7 +195,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                 Finish = y.Finish.ToShortTimeString(),
                                 TimePerMinutes = Math.Round( y.TimePerMinutes),
                                 WarpingMachineNo = y.WarpingMachineNo
-                            });
+                            }).OrderByDescending(s=>s.CreatedDate);
             List<WeavingTroubleMachingTreeLosesDto> listData = new List<WeavingTroubleMachingTreeLosesDto>();
 
             foreach (var item in query)
