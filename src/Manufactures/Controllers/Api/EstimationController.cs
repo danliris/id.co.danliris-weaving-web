@@ -225,7 +225,7 @@ namespace Manufactures.Controllers.Api
                 YearPeriode = y.YearPeriode,
                 CreatedDate = y.CreatedDate
 
-            }).Distinct();
+            }).Distinct().Skip((page - 1) * size).Take(size).OrderByDescending(s => s.CreatedDate);
             var total = result.Count();
 
             return Ok(result, info: new { page, size, total });

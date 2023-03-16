@@ -194,14 +194,40 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
         [Fact]
+        public async Task GetWarpingMachineFound()
+        {
+
+            Guid newGuid = Guid.NewGuid();
+            DateTime _date = new DateTime();
+            WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto();
+            dto.Identity = newGuid;
+            dto.Group = "group";
+            dto.CreatedDate = _date.ToString();
+            dto.Name = "Name";
+
+            this.mocWeavingQuery.Setup(s => s.GetById(newGuid)).ReturnsAsync(dto);
+                //.Returns(It.IsAny<Task<WeavingDailyOperationWarpingMachineDto>>);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingMachineById(newGuid.ToString());
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
+        }
+        [Fact]
         public async Task GetWarpingMachineNotFound()
         {
 
-            Guid newGuid = new Guid();
+            Guid newGuid = Guid.NewGuid();
             DateTime _date = new DateTime();
-            
+            WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto();
+            dto.Identity = newGuid;
+            dto.Group = "group";
+            dto.CreatedDate = _date.ToString();
+            dto.Name = "Name";
+
             this.mocWeavingQuery.Setup(s => s.GetById(newGuid)).ReturnsAsync(It.IsAny<WeavingDailyOperationWarpingMachineDto>);
-                //.Returns(It.IsAny<Task<WeavingDailyOperationWarpingMachineDto>>);
+            //.Returns(It.IsAny<Task<WeavingDailyOperationWarpingMachineDto>>);
             var unitUnderTest = CreateDailyOperationWarpingController();
             // Act
             var result = await unitUnderTest.GetWarpingMachineById(newGuid.ToString());
@@ -209,7 +235,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             // Assert
             Assert.Equal((int)HttpStatusCode.NotFound, GetStatusCode(result));
         }
-      
+
         [Fact]
         public async Task GetWarpingMachineall()
         {
