@@ -58,7 +58,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
         public async Task<IEnumerable<WeavingEstimatedProductionDto>> GetAll()
         {
             var query = (_repository
-                            .Query
+                            .Query.OrderByDescending(s=>s.CreatedDate)
                             .Select(y =>
                              new WeavingEstimatedProductionDto
                              {
