@@ -199,11 +199,26 @@ namespace Manufactures.Controllers.Api
                                     x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
                                                                                                                 
             }
-            var total = weavingDailyOperations.Count();
-            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+             
+            var result = weavingDailyOperations.Select(y => new
+            {
+                Month = y.Month,
+                YearPeriode = y.YearPeriode,
+                CreatedDate = y.CreatedDate
+
+            }).Distinct().Skip((page - 1) * size).Take(size).OrderByDescending(s=>s.CreatedDate);
+            var total = result.Count(); 
            
 
             return Ok(result, info: new { page, size, total });
         }
+        [HttpGet("monthYear")]
+        public async Task<IActionResult> GetDataByFilter(string month, string yearPeriode)
+        {
+            var weavingDailyOperations = _losesQuery.GetDataByFilter(month, yearPeriode);
+
+            return Ok(weavingDailyOperations);
+        }
     }
+   
 }

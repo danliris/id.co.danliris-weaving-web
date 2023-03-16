@@ -121,8 +121,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
             IConfiguration _configuration = builder.Build();
             var myConnectionString1 = _configuration.GetConnectionString("Default");
             SqlConnection conn = new SqlConnection(myConnectionString1);
-            try
-            {
+           {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
 
@@ -136,11 +135,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                 conn.Close();
 
             }
-            catch (Exception ex)
-            {
-
-            }
-
+            
         }
 
          
@@ -180,6 +175,49 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
 
 
             return query;
+        }
+        public List<WeavingTroubleMachingTreeLosesDto> GetDataByFilter(string month, string yearPeriode)
+        {
+            var query = _repository
+                           .Query
+                           .Where(s => s.Month == month && s.YearPeriode == yearPeriode)
+                           .Select(y =>
+                            new WeavingTroubleMachingTreeLosesDto
+                            {
+                                Code= y.Code,
+                                CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy"),
+                                Date= y.Date,
+                                Description = y.Description,
+                                DownTimeMC=  y.DownTimeMC.ToShortTimeString(),
+                                Group=  y.Group,
+                                Shift = y.Shift,
+                                Start = y.Start.ToShortTimeString(),
+                                Finish = y.Finish.ToShortTimeString(),
+                                TimePerMinutes = Math.Round( y.TimePerMinutes),
+                                WarpingMachineNo = y.WarpingMachineNo
+                            });
+            List<WeavingTroubleMachingTreeLosesDto> listData = new List<WeavingTroubleMachingTreeLosesDto>();
+
+            foreach (var item in query)
+            {
+                WeavingTroubleMachingTreeLosesDto weavings = new WeavingTroubleMachingTreeLosesDto
+                {
+                    Code = item.Code,
+                    CreatedDate = item.CreatedDate,
+                    Date = item.Date,
+                    Description = item.Description,
+                    DownTimeMC = item.DownTimeMC,
+                    Group = item.Group,
+                    Shift = item.Shift,
+                    Start = item.Start,
+                    Finish = item.Finish,
+                    TimePerMinutes = item.TimePerMinutes,
+                    WarpingMachineNo = item.WarpingMachineNo
+                };
+                listData.Add(weavings);
+
+            }
+            return listData;
         }
     }
 }
