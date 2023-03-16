@@ -233,7 +233,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                                 TotalBale = y.TotalBale,
                                 WarpXWeft= y.WarpXWeft
 
-                            }).OrderByDescending(s => s.CreatedDate);
+                            }).OrderBy(s => s.Date);
             List<WeavingEstimatedProductionDto> listData = new List<WeavingEstimatedProductionDto>();
 
             foreach (var  item in query)
