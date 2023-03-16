@@ -97,5 +97,27 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.QueryHandlers
             // Assert
             result.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GetDataByFilter_StateUnderTest_ExpectedBehavior()
+        {
+            var queryHandler = this.CreateWeavingTroubleMachineTreeLosesQueryHandler();
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            mock
+              .Setup(s => s.Query)
+               .Returns(new List<WeavingTroubleMachineTreeLosesReadModel>
+               {
+                    new WeavingTroubleMachineTreeLoses(newGuid,1,"month",_date.Day,_date.Year.ToString(),"I","description","warpingMachineNo","group","code",
+                    _date,1,_date,_date).GetReadModel()
+               }.AsQueryable());
+
+
+            var result = queryHandler.GetDataByFilter("month", _date.Year.ToString());
+
+            // Assert
+            result.Should().NotBeNull();
+        }
+
     }
 }
