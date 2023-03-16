@@ -185,7 +185,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                  Group = y.Group,
                                  Name = y.Name,
                                  CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy")
-                             });
+                             }).OrderByDescending(s => s.CreatedDate);
 
             await Task.Yield();
 

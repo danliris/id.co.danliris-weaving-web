@@ -58,7 +58,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
         public async Task<IEnumerable<WeavingEstimatedProductionDto>> GetAll()
         {
             var query = (_repository
-                            .Query
+                            .Query.OrderByDescending(s=>s.CreatedDate)
                             .Select(y =>
                              new WeavingEstimatedProductionDto
                              {
@@ -233,7 +233,7 @@ namespace Manufactures.Application.Estimations.Productions.QueryHandlers
                                 TotalBale = y.TotalBale,
                                 WarpXWeft= y.WarpXWeft
 
-                            });
+                            }).OrderByDescending(s => s.CreatedDate);
             List<WeavingEstimatedProductionDto> listData = new List<WeavingEstimatedProductionDto>();
 
             foreach (var  item in query)
