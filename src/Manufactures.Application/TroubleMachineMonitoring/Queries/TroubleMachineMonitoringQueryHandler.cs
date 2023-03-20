@@ -1,4 +1,5 @@
 ﻿using ExtCore.Data.Abstractions;
+using Manufactures.Application.Helpers;
 using Manufactures.Application.TroubleMachineMonitoring.DTOs;
 using Manufactures.Application.TroubleMachineMonitoring.Queries;
 using Manufactures.Domain.FabricConstructions.Repositories;
@@ -6,9 +7,14 @@ using Manufactures.Domain.Machines.Repositories;
 using Manufactures.Domain.MachineTypes.Repositories;
 using Manufactures.Domain.Operators.Repositories;
 using Manufactures.Domain.Orders.Repositories;
+using Manufactures.Domain.TroubleMachineMonitoring.Entities;
 using Manufactures.Domain.TroubleMachineMonitoring.Repositories;
+using Microsoft.Extensions.Configuration;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -32,6 +38,8 @@ namespace Manufactures.Application.TroubleMachineMonitoring.QueryHandlers
         private readonly ITroubleMachineMonitoringRepository
             _troubleMachineMonitoringRepository;
 
+
+
         public TroubleMachineMonitoringQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
             _storage = storage;
@@ -47,6 +55,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.QueryHandlers
                 _storage.GetRepository<IMachineRepository>();
             _machineTypeRepository =
                 _storage.GetRepository<IMachineTypeRepository>();
+
         }
 
 
@@ -85,10 +94,10 @@ namespace Manufactures.Application.TroubleMachineMonitoring.QueryHandlers
                 var constructionNumber = constructions.GetValueOrDefault(order.ConstructionDocumentId);
                 var machine = machines.GetValueOrDefault(troubleMachine.MachineDocument.Value);
 
-                resultDto.SetOrderName(order.OrderNumber); 
+                resultDto.SetOrderName(order.OrderNumber);
                 resultDto.SetUnitId(order.UnitId);
                 resultDto.SetOperatorName(operatorName);
-                resultDto.SetMachineNumber(machine.MachineNumber); 
+                resultDto.SetMachineNumber(machine.MachineNumber);
                 resultDto.SetConstructionNumber(constructionNumber);
 
                 resultListDto.Add(resultDto);
@@ -144,6 +153,6 @@ namespace Manufactures.Application.TroubleMachineMonitoring.QueryHandlers
             existingTroubleMachineMonitoring.SetUnitId(order.UnitId.Value);
             return existingTroubleMachineMonitoring;
         }
-
-       }
+    }
+       
 }

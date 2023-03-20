@@ -3,11 +3,15 @@ using Manufactures.Application.Estimations.Productions.DataTransferObjects;
 using Manufactures.Domain.Estimations.Productions.Commands;
 using Manufactures.Domain.Estimations.Productions.Queries;
 using Manufactures.Domain.Estimations.Productions.Repositories;
+using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
+using Manufactures.Domain.Estimations.WeavingEstimationProductions.Repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moonlay.ExtCore.Mvc.Abstractions;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,18 +26,23 @@ namespace Manufactures.Controllers.Api
     [Authorize]
     public class EstimationController : ControllerApiBase
     {
-        private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
+       // private readonly IEstimatedProductionDocumentRepository _estimationProductRepository;
 
         private readonly IEstimatedProductionDocumentQuery<EstimatedProductionListDto> _estimatedProductionDocumentQuery;
-
+        //private readonly IWeavingEstimatedProductionRepository _weavingEstimatedProductionRepository;
+        private readonly IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto> _weavingProductionQuery;
         public EstimationController(IServiceProvider serviceProvider, 
-                                    IWorkContext workContext,
-                                    IEstimatedProductionDocumentQuery<EstimatedProductionListDto> estimatedProductionDocumentQuery) : base(serviceProvider)
+                                     
+                                    IEstimatedProductionDocumentQuery<EstimatedProductionListDto> estimatedProductionDocumentQuery,
+                                    IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto> weavingEstimatedProductionQuery
+                                    ) : base(serviceProvider)
         {
-            _estimationProductRepository = 
-                this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
+            //_estimationProductRepository = 
+            //    this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
+            //_weavingEstimatedProductionRepository = this.Storage.GetRepository<IWeavingEstimatedProductionRepository>();
 
             _estimatedProductionDocumentQuery = estimatedProductionDocumentQuery ?? throw new ArgumentNullException(nameof(estimatedProductionDocumentQuery));
+            _weavingProductionQuery = weavingEstimatedProductionQuery ?? throw new ArgumentNullException(nameof(weavingEstimatedProductionQuery));
         }
 
         [HttpGet]
@@ -151,5 +160,83 @@ namespace Manufactures.Controllers.Api
 
             return Ok(deletedEstimationDocument.Identity);
         }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFile(string month, int year, int monthId)
+        {
+            VerifyUser();
+
+            if (Request.Form.Files.Count > 0)
+            {
+                IFormFile UploadedFile = Request.Form.Files[0];
+                if (System.IO.Path.GetExtension(UploadedFile.FileName) == ".xlsx")
+                {
+
+                    using (var excelPack = new ExcelPackage())
+                    {
+                        using (var stream = UploadedFile.OpenReadStream())
+                        {
+                            excelPack.Load(stream);
+                        }
+                        var sheet = excelPack.Workbook.Worksheets;
+
+
+                        var weavingMachine = await _weavingProductionQuery.Upload(sheet, month, year, monthId);
+                        return Ok(weavingMachine);
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Ekstensi file harus bertipe .xlsx");
+
+                }
+            }
+            else
+            {
+                throw new Exception($"Gagal menyimpan data");
+            }
+
+
+        }
+        [HttpGet("WeavingEstimated")]
+        public async Task<IActionResult> GetWeavingEstimated(int page = 1,
+                                           int size = 25,
+                                           string order = "{}",
+                                           string keyword = null,
+                                           string filter = "{}")
+        {
+            VerifyUser();
+            var weavingDailyOperations = await _weavingProductionQuery.GetAll();
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                weavingDailyOperations =
+                   weavingDailyOperations
+                       .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
+
+            }
+            
+            var result = weavingDailyOperations.Select(y=> new 
+            {
+                Month = y.Month,
+                YearPeriode = y.YearPeriode,
+                CreatedDate = y.CreatedDate
+
+            }).Distinct().Skip((page - 1) * size).Take(size);
+            var total = result.Count();
+
+            return Ok(result, info: new { page, size, total });
+        }
+        [HttpGet("WeavingEstimated/monthYear")]
+        public async Task<IActionResult> GetWeavingEstimated(string month, string yearPeriode)
+        {
+            var weavingDailyOperations =    _weavingProductionQuery.GetDataByFilter(month, yearPeriode);
+ 
+            return Ok(weavingDailyOperations);
+        }
+
     }
 }

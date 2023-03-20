@@ -705,30 +705,29 @@ namespace Manufactures.Controllers.Api
 
             }
 
-            if (!order.Contains("{}"))
-            {
-                Dictionary<string, string> orderDictionary =
-                    JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
-                var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
-                          orderDictionary.Keys.First().Substring(1);
-                System.Reflection.PropertyInfo prop = typeof(DailyOperationWarpingListDto).GetProperty(key);
+            //if (!order.Contains("{}"))
+            //{
+            //    Dictionary<string, string> orderDictionary =
+            //        JsonConvert.DeserializeObject<Dictionary<string, string>>(order);
+            //    var key = orderDictionary.Keys.First().Substring(0, 1).ToUpper() +
+            //              orderDictionary.Keys.First().Substring(1);
+            //    System.Reflection.PropertyInfo prop = typeof(DailyOperationWarpingListDto).GetProperty(key);
 
-                if (orderDictionary.Values.Contains("asc"))
-                {
-                    await Task.Yield();
-                    weavingDailyOperations =
-                        weavingDailyOperations.OrderBy(x => prop.GetValue(x, null));
-                }
-                else
-                {
-                    await Task.Yield();
-                    weavingDailyOperations =
-                        weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
-                }
-            }
-
-            //int totalRows = dailyOperationWarpingDocuments.Count();
-            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            //    if (orderDictionary.Values.Contains("asc"))
+            //    {
+            //        await Task.Yield();
+            //        weavingDailyOperations =
+            //            weavingDailyOperations.OrderBy(x => prop.GetValue(x, null));
+            //    }
+            //    else
+            //    {
+            //        await Task.Yield();
+            //        weavingDailyOperations =
+            //            weavingDailyOperations.OrderByDescending(x => prop.GetValue(x, null));
+            //    }
+            //}
+             
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size).OrderByDescending(s => s.CreatedDate);
             var total = result.Count();
 
             return Ok(result, info: new { page, size, total });

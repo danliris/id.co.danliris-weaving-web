@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Estimations\WeavingEstimationProductions\ReadModels\" />
     <Folder Include="ProductionResults\Commands\" />
   </ItemGroup>
 
