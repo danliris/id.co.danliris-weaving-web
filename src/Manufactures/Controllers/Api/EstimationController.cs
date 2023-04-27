@@ -5,6 +5,7 @@ using Manufactures.Domain.Estimations.Productions.Queries;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Repositories;
+using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,9 @@ using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Manufactures.Controllers.Api
@@ -236,6 +239,36 @@ namespace Manufactures.Controllers.Api
             var weavingDailyOperations =    _weavingProductionQuery.GetDataByFilter(month, yearPeriode);
  
             return Ok(weavingDailyOperations);
+        }
+
+        [HttpGet("WeavingEstimated/download")]
+        public async Task<IActionResult> GetWeavingEstimatedExcel(string month, string yearPeriode)
+        {
+
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var weavingDailyOperations = _weavingProductionQuery.GetDataByFilter(month, yearPeriode);
+
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan Estimasi Produksi" + month + "_" + yearPeriode;
+                WeavingEstimatedProductionReportXlsTemplate xlsTemplate = new WeavingEstimatedProductionReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateXls(weavingDailyOperations,month, yearPeriode);
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
         }
 
     }

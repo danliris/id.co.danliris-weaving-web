@@ -1,7 +1,9 @@
 ﻿using Barebone.Tests;
 using Manufactures.Application.Estimations.Productions.DataTransferObjects;
 using Manufactures.Controllers.Api;
+using Manufactures.Data.EntityFrameworkCore.Estimations.Productions.Repositories;
 using Manufactures.Domain.Estimations.Productions.Queries;
+using Manufactures.Domain.Estimations.Productions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.Repositories;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Repositories;
@@ -14,6 +16,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
@@ -26,7 +29,8 @@ namespace Manufactures.Tests.Estimations.Controllers
     public class EstimationControllerTests : BaseControllerUnitTest
     {
         private readonly MockRepository mockRepository;
-       
+        private readonly Mock<IWeavingEstimatedProductionRepository> mockWeavingEstimatedProductionRepository;
+
         private readonly Mock<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>> _mockweavingestimationQuery;
         private readonly Mock<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>> _mockestimationQuery;
       
@@ -36,9 +40,12 @@ namespace Manufactures.Tests.Estimations.Controllers
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
 
-           
+            this.mockWeavingEstimatedProductionRepository = this.mockRepository.Create<IWeavingEstimatedProductionRepository>();
+
             this._mockweavingestimationQuery = this.mockRepository.Create<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>>();
             this._mockestimationQuery = this.mockRepository.Create<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>>();
+
+            this._MockStorage.Setup(x => x.GetRepository<IWeavingEstimatedProductionRepository>()).Returns(mockWeavingEstimatedProductionRepository.Object);
 
         }
         public EstimationController CreateEstimationController()
@@ -148,6 +155,30 @@ namespace Manufactures.Tests.Estimations.Controllers
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
+        [Fact]
+        public async Task GetReport()
+        {
 
+            Guid newGuid = new Guid();
+              this.mockWeavingEstimatedProductionRepository
+           .Setup(s => s.Query)
+            .Returns(new List<WeavingEstimatedProductionReadModel>
+            {
+                    new WeavingEstimatedProduction(newGuid,1,"Feb",2,"2023","2023","spno","plait",0,0,0,"","","","","","","","","",0,"","",0,0,0,0,0,0,0,0).GetReadModel()
+            }.AsQueryable());
+            List<WeavingEstimatedProductionDto> dto = new List<WeavingEstimatedProductionDto>();
+            dto.Add(new WeavingEstimatedProductionDto
+            {
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Month = "Feb"
+            });
+            this._mockweavingestimationQuery.Setup(s => s.GetDataByFilter("Feb", "2023")).Returns(new List<WeavingEstimatedProductionDto>());
+            var unitUnderTest = CreateEstimationController();
+            // Act
+            var result = await unitUnderTest.GetWeavingEstimatedExcel("Feb", "2023");
+
+            // Assert
+            Assert.Null(result);
+        }
     }
 }
