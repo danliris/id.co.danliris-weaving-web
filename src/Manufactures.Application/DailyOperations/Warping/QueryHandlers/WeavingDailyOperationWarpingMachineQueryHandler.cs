@@ -80,6 +80,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 }
                 else
                 {
+                    error = null;
                     totalRows = sheet.Dimension.Rows;
                     var totalColumns = sheet.Dimension.Columns;
 
