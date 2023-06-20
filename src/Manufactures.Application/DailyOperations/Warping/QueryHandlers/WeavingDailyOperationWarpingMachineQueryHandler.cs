@@ -72,20 +72,34 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             string error = "";
             int isSave = 0;
             int saved = 0;
+            int notError = 0;
             foreach (var sheet in sheets)
             {
-                if (!sheet.Name.Trim().Contains("Produksi WP"))
+                if (!sheet.Name.Trim().Contains("Produksi WP") )
                 {
-                    error = "Tidak terdapat sheet Produksi WP di File Excel";
+                    notError = 1;
                 }
                 else
                 {
-                    error = null;
-                    totalRows = sheet.Dimension.Rows;
-                    var totalColumns = sheet.Dimension.Columns;
+                    notError = 0;
+                    break;
+                }
+            }
+             
 
-                    if (sheet.Name.Trim() == "Produksi WP")
+                if (notError == 1)
+                {
+                    error = "Tidak terdapat sheet Produksi WP di File Excel";
+                }
+                else  
+                {
+                    foreach (var sheet in sheets)
                     {
+                        if (sheet.Name.Trim() == "Produksi WP")
+                        {
+                            error = null;
+                            totalRows = sheet.Dimension.Rows;
+                            var totalColumns = sheet.Dimension.Columns;
                         try
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
@@ -130,7 +144,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                     );
                                     await _repository.Update(data);
                                     saved = 1;
-                                    
                                 }
                             }
                         }
