@@ -582,6 +582,37 @@ namespace Manufactures.Controllers.Api
             }
 
         }
+        [HttpGet("get-warping-broken-report/download")]
+        public async Task<IActionResult> GetWarpingBrokenReportExcel(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
+        {
+
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
+
+
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan Putus Benang Warping" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                WeavingWarpingBrokenXlsTemplate xlsTemplate = new WeavingWarpingBrokenXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateXls(productionWarpingReport, fromDate, toDate, shift, mcNo, sp, threadNo, code);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
         //Controller for Daily Operation Warping Broken Report
         [HttpGet("get-warping-broken-report")]
         public async Task<IActionResult> GetWarpingBrokenReport(int month = 0,
