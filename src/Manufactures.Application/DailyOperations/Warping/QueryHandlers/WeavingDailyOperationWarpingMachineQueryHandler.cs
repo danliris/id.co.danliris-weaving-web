@@ -42,17 +42,17 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             SqlConnection conn = new SqlConnection(myConnectionString1);
             //try
             //{
-                conn.Open();
-                SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
+            conn.Open();
+            SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
 
-                String sql = "";
-                // set the connection to instance of SqlCommand  
-                sql = @"delete WeavingDailyOperationWarpingMachines where [month]= '" + month + "' and yearperiode='" + year + "'";
-                cmd.CommandText = sql;
-                cmd.Connection = conn;
-                cmd.ExecuteNonQuery();
+            String sql = "";
+            // set the connection to instance of SqlCommand  
+            sql = @"delete WeavingDailyOperationWarpingMachines where [month]= '" + month + "' and yearperiode='" + year + "'";
+            cmd.CommandText = sql;
+            cmd.Connection = conn;
+            cmd.ExecuteNonQuery();
 
-                conn.Close();
+            conn.Close();
 
             //}
             //catch (Exception ex)
@@ -70,36 +70,35 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             int rowIndex = 0;
             var totalRows = 0;
             string error = "";
-            int isSave = 0;
             int saved = 0;
             int notError = 0;
             foreach (var sheet in sheets)
             {
-                if (!sheet.Name.Trim().Contains("Produksi WP") )
+                if (!sheet.Name.Trim().Contains("Produksi WP"))
                 {
-                    notError = 1;
+                    notError = 0;
                 }
                 else
                 {
-                    notError = 0;
+                    notError = 1;
                     break;
                 }
             }
-             
 
-                if (notError == 1)
+
+            if (notError == 0)
+            {
+                error = "Tidak terdapat sheet Produksi WP di File Excel";
+            }
+            else
+            {
+                foreach (var sheet in sheets)
                 {
-                    error = "Tidak terdapat sheet Produksi WP di File Excel";
-                }
-                else  
-                {
-                    foreach (var sheet in sheets)
+                    if (sheet.Name.Trim() == "Produksi WP")
                     {
-                        if (sheet.Name.Trim() == "Produksi WP")
-                        {
-                            error = null;
-                            totalRows = sheet.Dimension.Rows;
-                            var totalColumns = sheet.Dimension.Columns;
+                        error = "";
+                        totalRows = sheet.Dimension.Rows;
+                        var totalColumns = sheet.Dimension.Columns;
                         try
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
@@ -107,8 +106,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    //if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 7]) == year)
-                                    //{
+
                                     data = new WeavingDailyOperationWarpingMachine(
                                     Guid.NewGuid(), //
                                     Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
@@ -153,11 +151,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         }
                     }
                 }
-            
+
             }
             try
             {
-                if (isSave > 0 && saved == 0)
+                if (saved == 0)
                 {
                     error = "Tahun tidak sesuai";
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
@@ -206,7 +204,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         {
             var query = _repository
                             .Query.OrderByDescending(o => o.CreatedDate)
-                            .Where(s=>s.Identity == id)
+                            .Where(s => s.Identity == id)
                             .Select(y =>
                              new WeavingDailyOperationWarpingMachineDto
                              {
@@ -217,7 +215,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                  CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy")
                              }).FirstOrDefault();
 
-          
+
 
             return query;
         }
@@ -244,14 +242,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                               Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date)
                           };
             var query = (from a in allData
-                        where 
-                        ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
-                        (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
-                        (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
-                        (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
-                        (code == null || (code != null && code != "" && a.code.Contains( code))) &&
-                        (a.Periode.Date  >= fromDate.Date && a.Periode.Date<= toDate.Date))
-                        select new { Name = a.name , ThreadCut  = a.threadCut, Length  =a.length}).GroupBy(l => l.Name)
+                         where
+                         ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
+                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
+                         (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
+                         (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
+                         (code == null || (code != null && code != "" && a.code.Contains(code))) &&
+                         (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
+                         select new { Name = a.name, ThreadCut = a.threadCut, Length = a.length }).GroupBy(l => l.Name)
                             .Select(cl => new
                             {
                                 Name = cl.First().Name,
