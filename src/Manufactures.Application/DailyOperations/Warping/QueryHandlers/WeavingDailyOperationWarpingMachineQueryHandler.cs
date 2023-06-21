@@ -70,24 +70,23 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             int rowIndex = 0;
             var totalRows = 0;
             string error = "";
-            int isSave = 0;
             int saved = 0;
             int notError = 0;
             foreach (var sheet in sheets)
             {
                 if (!sheet.Name.Trim().Contains("Produksi WP"))
                 {
-                    notError = 1;
+                    notError = 0;
                 }
                 else
                 {
-                    notError = 0;
+                    notError = 1;
                     break;
                 }
             }
 
 
-            if (notError == 1)
+            if (notError == 0)
             {
                 error = "Tidak terdapat sheet Produksi WP di File Excel";
             }
@@ -97,7 +96,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 {
                     if (sheet.Name.Trim() == "Produksi WP")
                     {
-                        error = null;
+                        error = "";
                         totalRows = sheet.Dimension.Rows;
                         var totalColumns = sheet.Dimension.Columns;
                         try
@@ -107,8 +106,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    //if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 7]) == year)
-                                    //{
+
                                     data = new WeavingDailyOperationWarpingMachine(
                                     Guid.NewGuid(), //
                                     Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
@@ -157,7 +155,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             try
             {
-                if (isSave > 0 && saved == 0)
+                if (saved == 0)
                 {
                     error = "Tahun tidak sesuai";
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
