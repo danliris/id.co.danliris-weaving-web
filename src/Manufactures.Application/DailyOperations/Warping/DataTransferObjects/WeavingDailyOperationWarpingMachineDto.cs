@@ -24,6 +24,18 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public string Name {get; set; }
         [JsonProperty(PropertyName = "CreatedDate")]
         public string CreatedDate { get; set; }
+        [JsonProperty(PropertyName = "ThreadCut")]
+        public double ThreadCut { get; set; }
+
+        [JsonProperty(PropertyName = "Length")]
+        public double Length { get; set; }
+        [JsonProperty(PropertyName = "Date")]
+        public DateTime Date { get; set; }
+        [JsonProperty(PropertyName = "Shift")]
+        public string Shift { get; set; }
+        [JsonProperty(PropertyName = "Efficiency")]
+        public string Efficiency { get; set; }
+
         // [JsonProperty(PropertyName = "Lot")]
         //public string Lot {get; set; }
         //[JsonProperty(PropertyName = "SP")]
@@ -40,8 +52,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         //public int TotalCone {get; set; }
         //[JsonProperty(PropertyName = "ThreadNo")]
         //public string ThreadNo { get; set; }
-        [JsonProperty(PropertyName = "Length")]
-        public double Length {get; set; }
         //[JsonProperty(PropertyName = "Uom")]
         //public string Uom {get; set; }
         //[JsonProperty(PropertyName = "Start")]
@@ -56,8 +66,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         //public double HNRight {get; set; }
         //[JsonProperty(PropertyName = "SpeedMeterPerMinute")]
         //public double SpeedMeterPerMinute {get; set; }
-        [JsonProperty(PropertyName = "ThreadCut")]
-        public double ThreadCut { get; set; }
         //[JsonProperty(PropertyName = "Capacity")]
         //public double Capacity {get; set; }
         //[JsonProperty(PropertyName = "Eff")]
