@@ -210,9 +210,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
         {
-
-
-
             var allData = from a in _repository.Query
                           select new
                           {
@@ -258,6 +255,44 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
             return list;
 
+        }
+
+        public List<WeavingDailyOperationWarpingMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code)
+        {
+            var allData = from a in _repository.Query
+                          where a.MCNo==(!string.IsNullOrEmpty(mcNo) ? mcNo : a.MCNo)
+                          && a.Shift==(!string.IsNullOrEmpty(shift) ? shift:a.Shift)
+                          && a.SP.ToUpper().Contains(!string.IsNullOrEmpty(sp) ? sp.ToUpper() : a.SP)
+                          && a.Name.ToUpper().Contains(!string.IsNullOrEmpty(name) ? name.ToUpper() : a.Name)
+                          && a.Code.ToUpper().Contains(!string.IsNullOrEmpty(code) ? code.ToUpper() : a.Code)
+                          select new
+                          {
+                              code = a.Code,
+                              threadNo = a.ThreadNo,
+                              shift = a.Shift,
+                              sp = a.SP,
+                              threadCut = a.ThreadCut,
+                              length = a.Length,
+                              mcNo = a.MCNo,
+                              day = a.Date,
+                              name = a.Name,
+                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date),
+                              a.Length,
+                              efficiency=a.Eff
+                          };
+            var query = (from a in allData
+                         where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+                         select new WeavingDailyOperationWarpingMachineDto
+                         {
+                             MCNo= a.mcNo,
+                             Date= a.Periode,
+                             Shift=a.shift,
+                             Length=a.Length,
+                             Efficiency= a.efficiency,
+                             ThreadCut=a.threadCut
+                         });
+
+            return query.ToList();
         }
     }
 }
