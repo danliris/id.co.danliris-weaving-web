@@ -224,9 +224,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
         {
-
-
-
             var allData = from a in _repository.Query
                           select new
                           {
