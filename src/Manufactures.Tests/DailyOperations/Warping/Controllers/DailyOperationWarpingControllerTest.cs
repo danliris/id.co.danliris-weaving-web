@@ -346,6 +346,52 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             var result = await unitUnderTest.UploadFile(DateTime.Now.Month.ToString(), DateTime.Now.Year, DateTime.Now.Month);
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
-        
+
+        [Fact]
+        public async Task GetExcelDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto
+            {
+                Name = "name",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Group = "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingDailyOperationReportExcel(DateTime.MinValue, DateTime.Now, "", "", "", "", "");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+        }
+
+        [Fact]
+        public async Task GetReportDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto
+            {
+                Name = "name",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Group = "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingDailyOperationReport(DateTime.MinValue, DateTime.Now, "", "", "", "", "");
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
     }
 }
