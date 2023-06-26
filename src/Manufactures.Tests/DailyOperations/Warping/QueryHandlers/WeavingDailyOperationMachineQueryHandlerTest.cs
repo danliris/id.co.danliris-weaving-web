@@ -121,5 +121,27 @@ namespace Manufactures.Tests.DailyOperations.Warping.QueryHandlers
             // Assert
             result.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GetReportsDaily_StateUnderTest_ExpectedBehavior()
+        {
+            var queryHandler = this.CreateWeavingDailyOperationWarpingMachineQueryHandler();
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            mockWeavingDailyOperationWarpingMachineRepository
+               .Setup(s => s.Query)
+                .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
+                {
+                    new WeavingDailyOperationWarpingMachine(newGuid,1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
+                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+                }.AsQueryable());
+
+
+            var result = queryHandler.GetDailyReports(_date, _date, "I", "mcno", "sp", "name", "code");
+
+            // Assert
+            result.Should().NotBeNull();
+        }
+
     }
 }

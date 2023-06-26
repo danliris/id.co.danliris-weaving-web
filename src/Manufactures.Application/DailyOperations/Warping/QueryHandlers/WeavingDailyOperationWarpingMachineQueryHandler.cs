@@ -272,11 +272,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         public List<WeavingDailyOperationWarpingMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code)
         {
             var allData = from a in _repository.Query
-                          where a.MCNo==(!string.IsNullOrEmpty(mcNo) ? mcNo : a.MCNo)
-                          && a.Shift==(!string.IsNullOrEmpty(shift) ? shift:a.Shift)
-                          && a.SP.ToUpper().Contains(!string.IsNullOrEmpty(sp) ? sp.ToUpper() : a.SP)
-                          && a.Name.ToUpper().Contains(!string.IsNullOrEmpty(name) ? name.ToUpper() : a.Name)
-                          && a.Code.ToUpper().Contains(!string.IsNullOrEmpty(code) ? code.ToUpper() : a.Code)
+                          where ((mcNo == null || (mcNo != null && mcNo != "" && a.MCNo == mcNo)) &&
+                        (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
+                        (sp == null || (sp != null && sp != "" && a.SP.Contains(sp))) &&
+                        (name == null || (name != null && name != "" && a.Name.Contains(name))) &&
+                        (code == null || (code != null && code != "" && a.Code.Contains(code)))) 
                           select new
                           {
                               code = a.Code,
