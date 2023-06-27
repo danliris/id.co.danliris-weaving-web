@@ -50,15 +50,15 @@ namespace Manufactures.Helpers.XlsTemplates
                 worksheet.Cells["A" + 7 + ":C" + 7 + ""].Merge = true;
                 worksheet.Cells["A" + 1 + ":C" + 10 + ""].Style.Font.Bold = true;
                 worksheet.Cells["A10"].LoadFromDataTable(reportDataTable, true);
-                worksheet.Cells["A" + (idx + 10)].Value = "GRAND TOTAL";
-                worksheet.Cells["C" + (idx + 10)].Value = sumTHreadCut;
-                worksheet.Cells["C" + (idx + 10)].Value = sumLength;
+                //worksheet.Cells["A" + (idx + 10)].Value = "GRAND TOTAL";
+                //worksheet.Cells["C" + (idx + 10)].Value = sumTHreadCut;
+                //worksheet.Cells["C" + (idx + 10)].Value = sumLength;
                 worksheet.Cells["A" + 10 + ":C" + (idx + 10) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
                 worksheet.Cells["A" + 10 + ":C" + (idx + 10) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
                 worksheet.Cells["A" + 10 + ":C" + (idx + 10) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
                 worksheet.Cells["A" + 10 + ":C" + (idx + 10) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + (idx + 10) + ":C" + (idx + 10) + ""].Style.Font.Bold = true;
-                worksheet.Cells["A" + (idx + 10) + ":B" + (idx + 10) + ""].Merge = true;
+                //worksheet.Cells["A" + (idx + 10) + ":C" + (idx + 10) + ""].Style.Font.Bold = true;
+                //worksheet.Cells["A" + (idx + 10) + ":B" + (idx + 10) + ""].Merge = true;
 
                 worksheet.Cells["A" + 1 + ":C" + (idx + 10) + ""].AutoFitColumns();
 
