@@ -70,21 +70,35 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             int rowIndex = 0;
             var totalRows = 0;
             string error = "";
-            int isSave = 0;
             int saved = 0;
+            int notError = 0;
             foreach (var sheet in sheets)
             {
-                if (!sheet.Name.Trim().Contains("Produksi WP"))
+                if (!sheet.Name.Trim().Contains("Produksi WP") )
                 {
-                    error = "Tidak terdapat sheet Produksi WP di File Excel";
+                    notError = 0;
                 }
                 else
                 {
-                    totalRows = sheet.Dimension.Rows;
-                    var totalColumns = sheet.Dimension.Columns;
+                    notError = 1;
+                    break;
+                }
+            }
+             
 
-                    if (sheet.Name.Trim() == "Produksi WP")
+                if (notError == 0)
+                {
+                    error = "Tidak terdapat sheet Produksi WP di File Excel";
+                }
+                else  
+                {
+                    foreach (var sheet in sheets)
                     {
+                        if (sheet.Name.Trim() == "Produksi WP")
+                        {
+                            error = "";
+                            totalRows = sheet.Dimension.Rows;
+                            var totalColumns = sheet.Dimension.Columns;
                         try
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
@@ -92,8 +106,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    //if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 7]) == year)
-                                    //{
+                                    
                                     data = new WeavingDailyOperationWarpingMachine(
                                     Guid.NewGuid(), //
                                     Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
@@ -129,7 +142,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                     );
                                     await _repository.Update(data);
                                     saved = 1;
-                                    
                                 }
                             }
                         }
@@ -143,7 +155,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             try
             {
-                if (isSave > 0 && saved == 0)
+                if (saved == 0)
                 {
                     error = "Tahun tidak sesuai";
                     throw new Exception($"Tahun dan Bulan tidak sesuai");
