@@ -82,8 +82,11 @@ using Manufactures.Application.Orders.QueryHandlers;
 using Manufactures.Domain.Orders.Queries;
 using Manufactures.Application.Orders.DataTransferObjects;
 using Manufactures.Application.Estimations.Productions.QueryHandlers;
+using Manufactures.Application.DailyOperations.Production.QueryHandlers;
 using Manufactures.Domain.Estimations.Productions.Queries;
+using Manufactures.Domain.DailyOperations.Productions.Queries;
 using Manufactures.Application.Estimations.Productions.DataTransferObjects;
+using Manufactures.Application.DailyOperations.Production.DataTransferObjects;
 using Manufactures.Application.Machines.QueryHandlers;
 using Manufactures.Domain.Machines.Queries;
 using Manufactures.Application.Machines.DataTransferObjects;
@@ -93,6 +96,7 @@ using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationW
 using Manufactures.Domain.TroubleMachineMonitoring.Queries;
 using Manufactures.Application.TroubleMachineMonitoring.DTOs;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
+using Manufactures.Domain.DailyOperations.WeavingDailyOperationMachineSizing.Queries;
 
 namespace DanLiris.Admin.Web
 {
@@ -187,6 +191,8 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
             services.AddTransient<IMachinesPlanningReportQuery<MachinesPlanningReportListDto>, MachinesPlanningReportQueryHandler>();
             services.AddTransient<IEstimatedProductionDocumentQuery<EstimatedProductionListDto>, EstimatedProductionQueryHandler>();
+            services.AddTransient<IDailyOperationMachineSizingDocumentQuery<DailyOperationMachineSizingListDto>, DailyOperationMachineSizingQueryHandler>();
+
             services.AddTransient<IOrderReportQuery<OrderReportListDto>, OrderReportQueryHandler>();
             services.AddTransient<IOrderByUnitAndPeriodQuery<OrderByUnitAndPeriodDto>, OrderQueryHandler>();
             services.AddTransient<IOrderQuery<OrderListDto>, OrderQueryHandler>();
@@ -198,6 +204,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>, WeavingDailyOperationWarpingMachineQueryHandler>();
             services.AddTransient<IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto>, WeavingTroubleMachineTreeLosesQueryHandler>();
             services.AddTransient<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>, WeavingEstimatedProductionQueryHandler>();
+            services.AddTransient<IWeavingDailyOperationMachineSizingQuery<WeavingDailyOperationMachineSizingDto>, WeavingDailyOperationMachineSizingQueryHandler>();
 
 
 
