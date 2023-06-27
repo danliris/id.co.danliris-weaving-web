@@ -178,7 +178,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             catch (Exception ex)
             {
-                throw new Exception($"ERROR \n" + error + "\n");
+                throw new Exception($"ERROR \n" + ex.Message + "\n");
             }
 
         }
