@@ -228,7 +228,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                           };
             var query = (from a in allData
                         where 
-                        ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
+                        ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo.Contains(mcNo))) &&
                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
                         (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
                         (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
@@ -260,11 +260,11 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
         public List<WeavingDailyOperationWarpingMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code)
         {
             var allData = from a in _repository.Query
-                          where ((mcNo == null || (mcNo != null && mcNo != "" && a.MCNo == mcNo)) &&
+                          where (mcNo == null || (mcNo != null && mcNo != "" && a.MCNo.Contains(mcNo))) &&
                         (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
                         (sp == null || (sp != null && sp != "" && a.SP.Contains(sp))) &&
                         (name == null || (name != null && name != "" && a.Name.Contains(name))) &&
-                        (code == null || (code != null && code != "" && a.Code.Contains(code)))) 
+                        (code == null || (code != null && code != "" && a.Code.Contains(code))) 
                           select new
                           {
                               code = a.Code,
