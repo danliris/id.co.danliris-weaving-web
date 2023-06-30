@@ -13,9 +13,9 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
         private string v3;
         private string v4;
         private string v5;
-        private double? v6;
-        private double? v7;
-        private double? v8;
+        private string v6;
+        private string v7;
+        private string v8;
         private string v9;
         private string v10;
         private string v11;
@@ -25,30 +25,30 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
         private string v15;
         private string v16;
         private string v17;
-        private double v18;
+        private string v18;
         private string v19;
         private string v20;
-        private double v21;
-        private double v22;
-        private double v23;
-        private double v24;
-        private double v25;
-        private double v26;
-        private double v27;
+        private string v21;
+        private string v22;
+        private string v23;
+        private string v24;
+        private string v25;
+        private string v26;
+        private string v27;
 
         public WeavingDailyOperationMachineSizings(Guid identity) : base(identity)
         {
         }
-        public double PeriodeId { get; internal set; }
+        public int PeriodeId { get; internal set; }
         public string Periode { get; internal set; }
         public string Year { get; internal set; }
         public int Date { get; internal set; }  
-        public int Week { get; internal set; }
+        public string Week { get; internal set; }
         public string MachineSizing { get; internal set; }
         public string Shift { get; internal set; }
         public string Group { get; internal set; }
         public string Lot { get; internal set; }
-        public double SP { get; internal set; }
+        public string SP { get; internal set; }
         public string YearProduction { get; internal set; }
         public string SPYear { get; internal set; }
         public string WarpType { get; internal set; }
@@ -57,54 +57,59 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
         public string Code { get; internal set; }
         public string ThreadOrigin { get; internal set; }
         public string Recipe { get; internal set; }
-        public double Water { get; internal set; }
+        public string Water { get; internal set; }
         public string BeamNo { get; internal set; }
         public string BeamWidth { get; internal set; }
         public string TekSQ { get; internal set; }
-        public double ThreadCount { get; internal set; }
-        public double Ne { get; internal set; }
-        public double TempSD1 { get; internal set; }
-        public double TempSD2 { get; internal set; }
-        public double VisCoseSD1 { get; internal set; }
-        public double VisCoseSD2 { get; internal set; }
-        public double F1 { get; internal set; }
-        public double F2 { get; internal set; }
-        public double FDS { get; internal set; }
-        public double FW { get; internal set; }
-        public double FP { get; internal set; }
-        public double A12 { get; internal set; }
-        public double A34 { get; internal set; }
+        public string ThreadCount { get; internal set; }
+        public string Ne { get; internal set; }
+        public string TempSD1 { get; internal set; }
+        public string TempSD2 { get; internal set; }
+        public string VisCoseSD1 { get; internal set; }
+        public string VisCoseSD2 { get; internal set; }
+        public string F1 { get; internal set; }
+        public string F2 { get; internal set; }
+        public string FDS { get; internal set; }
+        public string FW { get; internal set; }
+        public string FP { get; internal set; }
+        public string A12 { get; internal set; }
+        public string A34 { get; internal set; }
         public string B12 { get; internal set; }
         public string B34 { get; internal set; }
-        public double C1234 { get; internal set; }
+        public string C1234 { get; internal set; }
         public string Pis { get; internal set; }
         public string AddedLength { get; internal set; }
-        public double Length { get; internal set; }
-        public double EmptyBeamWeight { get; internal set; }
-        public double Bruto { get; internal set; }
-        public double Netto { get; internal set; }
-        public double Teoritis { get; internal set; }
+        public string Length { get; internal set; }
+        public string EmptyBeamWeight { get; internal set; }
+        public string Bruto { get; internal set; }
+        public string Netto { get; internal set; }
+        public string Teoritis { get; internal set; }
         public string SPU { get; internal set; }
-        public double WarpingLenght { get; internal set; }
-        public double FinalCounter { get; internal set; }
+        public string WarpingLenght { get; internal set; }
+        public string FinalCounter { get; internal set; }
         public string Draft { get; internal set; }
-        public double Speed { get; internal set; }
+        public string Speed { get; internal set; }
         public string Information { get; internal set; }
-        public double SpeedMin { get; internal set; }
-        public double Capacity { get; internal set; }
+        public string SpeedMin { get; internal set; }
+        public string Capacity { get; internal set; }
         public string Efficiency { get; internal set; }
+        public DateTimeOffset DeletedDate { get; internal set; }
+        public DateTimeOffset ModifiedDate { get; internal set; }
 
-        public WeavingDailyOperationMachineSizings(Guid identity,
-        double PeriodeId ,
+        public WeavingDailyOperationMachineSizings(
+            DateTimeOffset ModifiedDate,
+            DateTimeOffset DeletedDate,
+            Guid identity,
+        int PeriodeId ,
          string Periode ,
          string Year ,
          int Date ,
-         int Week ,
+         string Week ,
          string MachineSizing ,
          string Shift ,
          string Group ,
          string Lot ,
-         double SP ,
+         string SP ,
          string YearProduction ,
          string SPYear ,
          string WarpType ,
@@ -113,41 +118,41 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
          string Code ,
          string ThreadOrigin ,
          string Recipe ,
-         double Water ,
+         string Water ,
          string BeamNo ,
          string BeamWidth ,
          string TekSQ ,
-         double ThreadCount ,
-         double Ne ,
-         double TempSD1 ,
-         double TempSD2 ,
-         double VisCoseSD1 ,
-         double VisCoseSD2 ,
-         double F1 ,
-         double F2,
-         double FDS,
-         double FW,
-         double FP,
-         double A12,
-         double A34,
+         string ThreadCount ,
+         string Ne ,
+         string TempSD1 ,
+         string TempSD2 ,
+         string VisCoseSD1 ,
+         string VisCoseSD2 ,
+         string F1 ,
+         string F2,
+         string FDS,
+         string FW,
+         string FP,
+         string A12,
+         string A34,
          string B12,
          string B34,
-         double C1234,
+         string C1234,
          string Pis,
          string AddedLength,
-         double Length,
-         double EmptyBeamWeight,
-         double Bruto,
-         double Netto,
-         double Teoritis,
+         string Length,
+         string EmptyBeamWeight,
+         string Bruto,
+         string Netto,
+         string Teoritis,
          string SPU,
-         double WarpingLenght,
-         double FinalCounter,
+         string WarpingLenght,
+         string FinalCounter,
          string Draft,
-         double Speed,
+         string Speed,
          string Information,
-         double SpeedMin,
-         double Capacity,
+         string SpeedMin,
+         string Capacity,
          string Efficiency ) : base(identity)
         {
             
@@ -205,14 +210,16 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
             this.SpeedMin = SpeedMin;
             this.Capacity = Capacity;
             this.Efficiency = Efficiency;
-                MarkTransient();
+            this.DeletedDate = DeletedDate;
+            this.ModifiedDate = ModifiedDate;
+            MarkTransient();
 
            
 
             ReadModel = new WeavingDailyOperationMachineSizingReadModel(Identity)
             {
-
-               
+                ModifiedDate = this.ModifiedDate,
+                DeletedDate = this.DeletedDate,   
             PeriodeId = this.PeriodeId,
             Periode = this.Periode,
             Year = this.Year,
@@ -329,8 +336,10 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
             this.SpeedMin = readModel.SpeedMin;
             this.Capacity = readModel.Capacity;
             this.Efficiency = readModel.Efficiency;
+            this.DeletedDate = readModel.DeletedDate.Value;
+            this.ModifiedDate = readModel.ModifiedDate.Value;
 
-           
+
 
         }
 

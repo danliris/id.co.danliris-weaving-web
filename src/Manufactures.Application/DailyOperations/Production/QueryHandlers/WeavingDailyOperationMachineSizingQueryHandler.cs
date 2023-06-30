@@ -40,21 +40,21 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             IConfiguration _configuration = builder.Build();
             var myConnectionString1 = _configuration.GetConnectionString("Default");
             SqlConnection conn = new SqlConnection(myConnectionString1);
-            
-                conn.Open();
-                SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
 
-                String sql = "";
-                // set the connection to instance of SqlCommand  
-                sql = @"delete WeavingEstimatedProductions where [month]= '" + month + "' and yearperiode='" + year + "'";
-                cmd.CommandText = sql;
-                cmd.Connection = conn;
-                cmd.ExecuteNonQuery();
+            conn.Open();
+            SqlCommand cmd = new SqlCommand();// Creating instance of SqlCommand  
 
-                conn.Close();
+            String sql = "";
+            // set the connection to instance of SqlCommand  
+            sql = @"delete WeavingEstimatedProductions where [month]= '" + month + "' and yearperiode='" + year + "'";
+            cmd.CommandText = sql;
+            cmd.Connection = conn;
+            cmd.ExecuteNonQuery();
 
-            }
-       
+            conn.Close();
+
+        }
+
         public async Task<IEnumerable<WeavingDailyOperationMachineSizingDto>> GetAll()
         {
             var query = (_repository
@@ -92,10 +92,10 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
 
  
 
-        public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year, int monthId)
+        public async Task<bool> Upload(ExcelWorksheets sheets, string month, string year, int monthId)
         {
 
-            var startRow = 2;
+            var startRow = 5;
             var startCol = 1;
             WeavingDailyOperationMachineSizings data;
             int rowIndex = 0;
@@ -103,88 +103,103 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             int isSave = 0;
             int saved = 0;
             string error = "";
-            foreach (var sheet in sheets)
+            var s = sheets.Where(x => x.Name.Trim() == "MASTER");
+            foreach (var sheet in s)
             {
 
                 
-                if (!sheet.Name.Trim().Contains("SOURCE SP"))
-                {
-                    error = "Tidak terdapat sheet SOURCE SP di File Excel";
-                }
-                else
-                {
+                //if (!sheet.Name.Trim().Contains("MASTER"))
+                //{
+                //   error = "Tidak terdapat sheet MASTER SP di File Excel";
+                //}
+                //else
+                //{
+                    //totalRows = sheet.Dimension.Rows;
+                    //var totalColumns = sheet.Dimension.Columns;
+                    if (sheet.Name.Trim() == "MASTER")
+                    {
+
                     totalRows = sheet.Dimension.Rows;
                     var totalColumns = sheet.Dimension.Columns;
-                    if (sheet.Name.Trim() == "SOURCE SP")
-                    {
-                        try
+                    try
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
-                                    if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19]) == monthId)
-                                    {
+                                    // var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
+                                    // if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19]) == monthId)
+                                    //{
+                                    var col1 = Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value);
                                         data = new WeavingDailyOperationMachineSizings(
+                                        DateTimeOffset.MinValue,
+                                        DateTimeOffset.MinValue,
+
                                       Guid.NewGuid(), //
-                                      Convert.ToInt32(sheet.Cells[rowIndex, startCol + 15].Value), //tgl
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol]),
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol]),
-                                      year,//year
-                                       Convert.ToInt32(sheet.Cells[rowIndex, startCol]),//yearSP
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//SPNO
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Plait
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//warpLength
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//Weft
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 5])),//Width
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//WarpType
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//weftType1
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//WeftType2
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//AL
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AP1
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//AP2
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Thread
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//Construction
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 14])),//Buyer
+                                      monthId,
+                                      month,
+                                      year,
+
+                                     Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value),
+                                     //Convert.ToInt32(sheet.Cells[rowIndex, startCol]),
+                                     //Convert.ToInt32(sheet.Cells[rowIndex, startCol + 15].Value), //col 16,tgl
+                                     // Convert.ToInt32(sheet.Cells[rowIndex, startCol+1]),// col 1,excel col =  tgl
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol +2]),// col 1,excel col =  tgl
+                                   
+                                      // Convert.ToInt32(sheet.Cells[rowIndex, startCol+3]),// col 1,excel col =  tgl
+                                    
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//col 3,excel col =  mesin sizing
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//shift
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//LOT
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//SP
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//WarpType
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//weftType1
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//WeftType2
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AL
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//AP1
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//AP2
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//Thread
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),//Construction
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),//Buyer
 
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),//NumberOfOrder
 
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),//Construction2
-                                      converter.GeneratePureString(sheet.Cells[rowIndex, startCol + 18]),//weftXWarp
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//GradeA
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//GradeB
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//GradeC
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Aval
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 25])),//WarpBale
-                                      Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 26])),//weftBale
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 27]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),//TotalBale
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),//weftXWarp
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),//GradeA
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),//GradeB
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),//GradeC
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),//Aval
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),//WarpBale
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),//weftBale
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 26]),//TotalBale
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 27]),
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      Convert.ToDouble(converter.GenerateValueDouble((sheet.Cells[rowIndex, startCol + 28]))),
-                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28])
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 29]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 30]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 31]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 32]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 33]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 34]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 35]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 36]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 37]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 38]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 39]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 40]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 41]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 42]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 43]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 44]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 45]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 46]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 47]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 48]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 49]),
+                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 50])
 
 
 
@@ -192,15 +207,15 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                        );
                                         await _repository.Update(data);
                                         saved = 1;
-                                    }
-                                    else
-                                    {
-                                        isSave = 1;
-                                    }
-
-                                }
-
                             }
+                            else
+                            {
+                                isSave = 1;
+                            }
+
+                            //}
+
+                        }
                         }
                         catch (Exception ex)
                         {
@@ -209,7 +224,7 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                         }
                     }
 
-                }
+               // }
                  
 
             }
@@ -223,9 +238,10 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                 }else if(error != "" && saved ==0)
                 {
                     throw new Exception($"ERROR "+ error);
-                }else
+                }
+                else
                 {
-                    await Delete(month, year.ToString());
+                    //await Delete(month, year.ToString());
                     _storage.Save();
                     return ((rowIndex - 1) == totalRows && totalRows > 0);
                 }
