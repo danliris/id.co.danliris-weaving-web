@@ -169,7 +169,7 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpPost("upload")]
-        public async Task<IActionResult> UploadFile(string month, int year, int monthId)
+        public async Task<IActionResult> UploadFile(string month, string year, int monthId)
         {
             VerifyUser();
 
