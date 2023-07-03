@@ -21,13 +21,13 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "No MC", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Panjang", DataType = typeof(double) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "Effisiensi", DataType = typeof(double) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Effisiensi", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Putus Benang", DataType = typeof(double) });
 
             int index = 1;
             if (dailyOperationWarpingReportModel.Count == 0)
             {
-                dt.Rows.Add("", "", "", "", "", "", "");
+                dt.Rows.Add("", "", "", "", "", 0, "");
             }
             else
             {
@@ -35,8 +35,10 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
-
-                    dt.Rows.Add(index++,date, item.Shift, item.MCNo, item.Length, item.Efficiency, item.ThreadCut);
+                    double ef;
+                    var eff = double.TryParse(item.Efficiency, out ef) ? Math.Round(Convert.ToDouble(item.Efficiency) * 100,2) :0;
+                    var efficiency = eff.ToString() + "%";
+                    dt.Rows.Add(index++,date, item.Shift, item.MCNo, item.Length, efficiency, item.ThreadCut);
                 }
             }
 
