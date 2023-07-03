@@ -106,7 +106,8 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-
+                                    //if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 7]) == year)
+                                    //{
                                     data = new WeavingDailyOperationWarpingMachine(
                                     Guid.NewGuid(), //
                                     Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
@@ -142,6 +143,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                     );
                                     await _repository.Update(data);
                                     saved = 1;
+                                    
                                 }
                             }
                         }
