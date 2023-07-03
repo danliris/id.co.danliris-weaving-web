@@ -35,8 +35,6 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public string Shift { get; set; }
         [JsonProperty(PropertyName = "Efficiency")]
         public string Efficiency { get; set; }
-        [JsonProperty(PropertyName = "Eff")]
-        public decimal Eff { get; set; }
 
         // [JsonProperty(PropertyName = "Lot")]
         //public string Lot {get; set; }
