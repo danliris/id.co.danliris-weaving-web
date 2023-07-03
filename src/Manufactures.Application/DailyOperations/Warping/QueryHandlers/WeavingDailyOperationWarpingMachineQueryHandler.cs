@@ -304,7 +304,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                              ThreadCut=a.threadCut
                          });
 
-            return query.ToList();
+            return query.OrderByDescending(a=>a.Date).ToList();
         }
     }
 }
