@@ -35,7 +35,7 @@ namespace Manufactures.Helpers.XlsTemplates
             
             foreach (var item in machineDtos)
             {
-                reportDataTable.Rows.Add(item.SPNo, item.Date.ToString(), item.Construction1,item.WarpXWeft, item.GradeA,item.GradeB,item.GradeC,item.Aval,item.Total,item.NumberOrder,item.WarpBale,item.WeftBale,item.TotalBale);
+                reportDataTable.Rows.Add(item.Shift, item.Date.ToString(), item.MachineSizing, '0');
                 
             };
 
