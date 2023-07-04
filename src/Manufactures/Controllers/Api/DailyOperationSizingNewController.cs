@@ -237,8 +237,8 @@ namespace Manufactures.Controllers.Api
 
             return Ok(result, info: new { page, size, total });
         }
-        [HttpGet("WeavingEstimated/monthYear")]
-        public async Task<IActionResult> GetWeavingEstimated(string month, string yearPeriode)
+        [HttpGet("WeavingDailyOperationMachineSizing/monthYear")]
+        public async Task<IActionResult> GetWeavingDailyOperationMachineSizing(string month, string yearPeriode)
         {
             var weavingDailyOperations = _weavingDailyOperationMachineSizingQuery.GetDataByFilter(month, yearPeriode);
  

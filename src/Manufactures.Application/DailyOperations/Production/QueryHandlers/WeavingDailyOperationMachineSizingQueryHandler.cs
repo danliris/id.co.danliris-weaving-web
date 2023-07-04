@@ -46,7 +46,7 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
 
             String sql = "";
             // set the connection to instance of SqlCommand  
-            sql = @"delete WeavingEstimatedProductions where [month]= '" + month + "' and yearperiode='" + year + "'";
+            sql = @"delete WeavingDailyOperationMachineSizing where [periode]= '" + month + "' and year='" + year + "'";
             cmd.CommandText = sql;
             cmd.Connection = conn;
             cmd.ExecuteNonQuery();
@@ -191,7 +191,9 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 39]),
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 40]),
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 41]),
+
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 42]),
+
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 43]),
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 44]),
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 45]),
@@ -241,7 +243,7 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                 }
                 else
                 {
-                    //await Delete(month, year.ToString());
+                    await Delete(month, year.ToString());
                     _storage.Save();
                     return ((rowIndex - 1) == totalRows && totalRows > 0);
                 }
@@ -262,20 +264,62 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                            .Select(y =>
                             new WeavingDailyOperationMachineSizingDto
                             {
-                               // SPNo = y.SPNo,
+                                //Shift = y.Shift,
+                                //Date = y.Date,
+                                //MachineSizing = y.MachineSizing,
+                                //=====
                                 Date = y.Date,
-                                //Construction1 = y.Construction1,
-                                //Thread = y.Thread,
-                                //GradeA = y.GradeA,
-                                //GradeB = y.GradeB,
-                                //GradeC = y.GradeC,
-                                //Aval = y.Aval,
-                                //Total= y.Total,
-                                //NumberOrder= y.NumberOrder,
-                                //WarpBale= y.WarpBale,
-                                //WeftBale = y.WeftBale,
-                                //TotalBale = y.TotalBale,
-                                //WarpXWeft= y.WarpXWeft
+                                Week = y.Week,
+                                MachineSizing = y.MachineSizing,
+                                Shift = y.Shift,
+                                Group = y.Group,
+                                Lot = y.Lot,
+                                SP = y.SP,
+                                YearProduction = y.YearProduction,
+                                SPYear = y.SPYear,
+                                WarpType = y.WarpType,
+                                AL = y.AL,
+                                Construction = y.Construction,
+                                Code = y.Code,
+                                ThreadOrigin = y.ThreadOrigin,
+                                Recipe = y.Recipe,
+                                Water = y.Water,
+                                BeamNo = y.BeamNo,
+                                BeamWidth = y.BeamWidth,
+                                TekSQ = y.TekSQ,
+                                ThreadCount = y.ThreadCount,
+                                Ne = y.Ne,
+                                TempSD1 = y.TempSD1,
+                                TempSD2 = y.TempSD2,
+                                VisCoseSD1 = y.VisCoseSD1,
+                                VisCoseSD2 = y.VisCoseSD2,
+                                F1 = y.F1,
+                                F2 = y.F2,
+                                FDS = y.FDS,
+                                FW = y.FW,
+                                FP = y.FP,
+                                A12 = y.A12,
+                                A34 = y.A34,
+                                B12 = y.B12,
+                                B34 = y.B34,
+                                C1234 = y.C1234,
+                                Pis = y.Pis,
+                                AddedLength = y.AddedLength,
+                                Length = y.Length,
+                                EmptyBeamWeight = y.EmptyBeamWeight,
+                                Bruto = y.Bruto,
+                                Netto = y.Netto,
+                                Teoritis = y.Teoritis,
+                                SPU = y.SPU,
+                                WarpingLenght = y.WarpingLenght,
+                                FinalCounter = y.FinalCounter,
+                                Draft = y.Draft,
+                                Speed = y.Speed,
+                                Information = y.Information,
+                                SpeedMin = y.SpeedMin,
+                                Capacity = y.Capacity,
+                                Efficiency = y.Efficiency
+
 
                             }).OrderBy(s => s.Date);
             List<WeavingDailyOperationMachineSizingDto> listData = new List<WeavingDailyOperationMachineSizingDto>();
@@ -284,20 +328,72 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             {
                 WeavingDailyOperationMachineSizingDto weavings = new WeavingDailyOperationMachineSizingDto
                 {
-                    SPNo = item.SPNo,
+                    //Shift = item.Shift,
+                    //Date = item.Date,
+                    //MachineSizing = item.MachineSizing,
+                    //Thread = item.Thread,
+                    //GradeA = item.GradeA,
+                    //GradeB = item.GradeB,
+                    //GradeC = item.GradeC,
+                    //Aval = item.Aval,
+                    //Total = item.Total,
+                    //WarpXWeft = item.WarpXWeft,
+                    //NumberOrder = item.NumberOrder,
+                    //WarpBale = item.WarpBale,
+                    //WeftBale = item.WeftBale,
+                    //TotalBale = item.TotalBale
+
                     Date = item.Date,
-                    Construction1 = item.Construction1,
-                    Thread = item.Thread,
-                    GradeA = item.GradeA,
-                    GradeB = item.GradeB,
-                    GradeC = item.GradeC,
-                    Aval = item.Aval,
-                    Total = item.Total,
-                    WarpXWeft = item.WarpXWeft,
-                    NumberOrder = item.NumberOrder,
-                    WarpBale = item.WarpBale,
-                    WeftBale = item.WeftBale,
-                    TotalBale = item.TotalBale
+                    Week = item.Week,
+                    MachineSizing = item.MachineSizing,
+                    Shift = item.Shift,
+                    Group = item.Group,
+                    Lot = item.Lot,
+                    SP = item.SP,
+                    YearProduction = item.YearProduction,
+                    SPYear = item.SPYear,
+                    WarpType = item.WarpType,
+                    AL = item.AL,
+                    Construction = item.Construction,
+                    Code = item.Code,
+                    ThreadOrigin = item.ThreadOrigin,
+                    Recipe = item.Recipe,
+                    Water = item.Water,
+                    BeamNo = item.BeamNo,
+                    BeamWidth = item.BeamWidth,
+                    TekSQ = item.TekSQ,
+                    ThreadCount = item.ThreadCount,
+                    Ne = item.Ne,
+                    TempSD1 = item.TempSD1,
+                    TempSD2 = item.TempSD2,
+                    VisCoseSD1 = item.VisCoseSD1,
+                    VisCoseSD2 = item.VisCoseSD2,
+                    F1 = item.F1,
+                    F2 = item.F2,
+                    FDS = item.FDS,
+                    FW = item.FW,
+                    FP = item.FP,
+                    A12 = item.A12,
+                    A34 = item.A34,
+                    B12 = item.B12,
+                    B34 = item.B34,
+                    C1234 = item.C1234,
+                    Pis = item.Pis,
+                    AddedLength = item.AddedLength,
+                    Length = item.Length,
+                    EmptyBeamWeight = item.EmptyBeamWeight,
+                    Bruto = item.Bruto,
+                    Netto = item.Netto,
+                    Teoritis = item.Teoritis,
+                    SPU = item.SPU,
+                    WarpingLenght = item.WarpingLenght,
+                    FinalCounter = item.FinalCounter,
+                    Draft = item.Draft,
+                    Speed = item.Speed,
+                    Information = item.Information,
+                    SpeedMin = item.SpeedMin,
+                    Capacity = item.Capacity,
+                    Efficiency = item.Efficiency
                 };
                 listData.Add(weavings);
 
