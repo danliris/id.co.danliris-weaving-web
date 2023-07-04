@@ -120,25 +120,25 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//mcNo
                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Code
                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//Beam
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//reachingins
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//effins
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//cm
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//beamWidth
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//warp
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//cucukan
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),//comb
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//reachingins
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//effins
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//cm
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//beamWidth
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//warp
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//cucukan
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),//comb
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),
                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),//doffing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),//effdoffing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),//webbing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),//strands
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),//combno
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),//reed
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),//eff2
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25]),//checker
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 26])//info
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),//doffing
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),//effdoffing
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),//webbing
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),//strands
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),//combno
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),//reed
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),//eff2
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),//checker
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//info
                                     );
                                     await _repository.Update(data);
                                     saved = 1;
@@ -284,7 +284,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                  Webbing = y.Webbing,
                                  Year = y.Year,
                                  Periode= new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthId, y.Date)
-                             }).OrderByDescending(o=>o.Periode);
+                             }).OrderBy(o=>o.Periode);
 
             return query.ToList();
         }
