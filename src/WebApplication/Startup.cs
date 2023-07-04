@@ -206,6 +206,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>, WeavingEstimatedProductionQueryHandler>();
             services.AddTransient<IWeavingDailyOperationMachineSizingQuery<WeavingDailyOperationMachineSizingDto>, WeavingDailyOperationMachineSizingQueryHandler>();
 
+            services.AddTransient<IDailyOperationReachingMachineQuery<DailyOperationMachineReachingDto>, DailyOperationReachingMachineQueryHandler>();
 
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);
