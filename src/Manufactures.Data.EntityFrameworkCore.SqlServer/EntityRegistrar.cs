@@ -4,7 +4,9 @@
 using ExtCore.Data.EntityFramework;
 using Manufactures.Domain.FabricConstructions.ReadModels;
 using Manufactures.Domain.Estimations.Productions.Entities;
+using Manufactures.Domain.DailyOperations.Productions.Entities;
 using Manufactures.Domain.Estimations.Productions.ReadModels;
+using Manufactures.Domain.DailyOperations.Productions.ReadModels;
 using Manufactures.Domain.Materials.ReadModels;
 using Manufactures.Domain.Orders.ReadModels;
 using Manufactures.Domain.YarnNumbers.ReadModels;
@@ -434,6 +436,18 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
 
+            modelBuilder.Entity<WeavingDailyOperationMachineSizingReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationMachineSizing");
+                etb.HasKey(e => e.Identity);
+
+                //etb.Property(p => p.Buyer).HasMaxLength(50);
+                //etb.Property(p => p.Month).HasMaxLength(50);
+                //etb.Property(p => p.Construction1).HasMaxLength(300);
+                //etb.Property(p => p.Construction2).HasMaxLength(300);
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
         }
     }
 }
