@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230704014242_initial_DailyOperationReachingMachines")]
+    partial class initial_DailyOperationReachingMachines
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,37 +337,30 @@ namespace DanLiris.Admin.Web.Migrations
                     b.ToTable("Weaving_DailyOperationLoomHistories");
                 });
 
-            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Productions.ReadModels.WeavingDailyOperationMachineSizingReadModel", b =>
-            
+            modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationMachineReachingReadModel", b =>
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("A12");
-
-                    b.Property<string>("A34");
-
-                    b.Property<string>("AL");
-
-                    b.Property<string>("AddedLength");
-
-                    b.Property<string>("B12");
-
-                    b.Property<string>("B34");
-
-                    b.Property<string>("BeamNo");
+                    b.Property<string>("BeamNo")
+                        .HasMaxLength(100);
 
                     b.Property<string>("BeamWidth");
 
-                    b.Property<string>("Bruto");
+                    b.Property<string>("CM");
 
-                    b.Property<string>("C1234");
+                    b.Property<string>("Checker");
 
-                    b.Property<string>("Capacity");
+                    b.Property<string>("Code")
+                        .HasMaxLength(100);
 
-                    b.Property<string>("Code");
+                    b.Property<string>("CombEfficiency");
 
-                    b.Property<string>("Construction");
+                    b.Property<string>("CombNo");
+
+                    b.Property<string>("CombStrands");
+
+                    b.Property<string>("CombWidth");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
@@ -382,98 +377,59 @@ namespace DanLiris.Admin.Web.Migrations
 
                     b.Property<DateTimeOffset?>("DeletedDate");
 
-                    b.Property<string>("Draft");
+                    b.Property<string>("Doffing");
 
-                    b.Property<string>("Efficiency");
+                    b.Property<string>("DoffingEfficiency");
 
-                    b.Property<string>("EmptyBeamWeight");
+                    b.Property<string>("Eff2");
 
-                    b.Property<string>("F1");
-
-                    b.Property<string>("F2");
-
-                    b.Property<string>("FDS");
-
-                    b.Property<string>("FP");
-
-                    b.Property<string>("FW");
-
-                    b.Property<string>("FinalCounter");
-
-                    b.Property<string>("Group");
+                    b.Property<string>("Group")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Information");
 
-                    b.Property<string>("Length");
+                    b.Property<string>("InstallEfficiency");
 
-                    b.Property<string>("Lot");
+                    b.Property<string>("MCNo");
 
-                    b.Property<string>("MachineSizing");
+                    b.Property<string>("Margin");
 
                     b.Property<string>("ModifiedBy")
                         .HasMaxLength(32);
 
                     b.Property<DateTimeOffset?>("ModifiedDate");
 
-                    b.Property<string>("Ne");
+                    b.Property<string>("Month");
 
-                    b.Property<string>("Netto");
+                    b.Property<int>("MonthId");
 
-                    b.Property<string>("Periode");
+                    b.Property<string>("Operator");
 
-                    b.Property<int>("PeriodeId");
+                    b.Property<string>("ReachingEfficiency");
 
-                    b.Property<string>("Pis");
+                    b.Property<string>("ReachingInstall");
 
-                    b.Property<string>("Recipe");
+                    b.Property<string>("ReachingStrands");
+
+                    b.Property<string>("ReedSpace");
 
                     b.Property<byte[]>("RowVersion")
                         .IsConcurrencyToken()
                         .ValueGeneratedOnAddOrUpdate();
 
-                    b.Property<string>("SP");
-
-                    b.Property<string>("SPU");
-
-                    b.Property<string>("SPYear");
-
                     b.Property<string>("Shift");
 
-                    b.Property<string>("Speed");
+                    b.Property<string>("TotalWarp");
 
-                    b.Property<string>("SpeedMin");
-
-                    b.Property<string>("TekSQ");
-
-                    b.Property<string>("TempSD1");
-
-                    b.Property<string>("TempSD2");
-
-                    b.Property<string>("Teoritis");
-
-                    b.Property<string>("ThreadCount");
-
-                    b.Property<string>("ThreadOrigin");
-
-                    b.Property<string>("VisCoseSD1");
-
-                    b.Property<string>("VisCoseSD2");
-
-                    b.Property<string>("WarpType");
-
-                    b.Property<string>("WarpingLenght");
-
-                    b.Property<string>("Water");
-
-                    b.Property<string>("Week");
+                    b.Property<string>("Webbing");
 
                     b.Property<string>("Year");
 
-                    b.Property<string>("YearProduction");
+                    b.Property<string>("YearPeriode");
 
                     b.HasKey("Identity");
 
-                    b.ToTable("WeavingDailyOperationMachineSizing");
+                    b.ToTable("WeavingDailyOperationReachingMachines");
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Reaching.ReadModels.DailyOperationReachingHistoryReadModel", b =>
