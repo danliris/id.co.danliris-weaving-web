@@ -288,5 +288,32 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
             return query.ToList();
         }
+
+
+        public List<DailyOperationMachineReachingDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo)
+        {
+            var allData = from a in _repository.Query
+                          where (mcNo == null || (mcNo != null && mcNo != "" && a.MCNo.Contains(mcNo))) &&
+                                (shift == null || (shift != null && shift != "" && a.Shift == shift))
+                          select new
+                          {
+                              eff = a.Eff2,
+                              name = a.Operator,
+                              beamNo = a.BeamNo,
+                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date).Date
+                          };
+            var query = (from a in allData
+                         where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+                         group  a by new { a.name, a.Periode }  into g
+                         select new DailyOperationMachineReachingDto
+                         {
+                             Operator= g.Key.name,
+                             Periode=g.Key.Periode,
+                             BeamNo=g.Count().ToString(),
+                             Efficiency=g.Sum(a=> Convert.ToDecimal(a.eff))
+                         });
+
+            return query.OrderBy(a => a.Periode).ToList();
+        }
     }
 }
