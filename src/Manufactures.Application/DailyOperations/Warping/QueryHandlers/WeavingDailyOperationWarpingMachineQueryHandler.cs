@@ -299,14 +299,15 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                           };
             var query = (from a in allData
                          where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+                         group a by new { a.shift, a.Periode, a.mcNo } into g
                          select new WeavingDailyOperationWarpingMachineDto
                          {
-                             MCNo= a.mcNo,
-                             Date= a.Periode,
-                             Shift=a.shift,
-                             Length=a.Length,
-                             Efficiency= a.efficiency,
-                             ThreadCut=a.threadCut
+                             MCNo= g.Key.mcNo,
+                             Date= g.Key.Periode,
+                             Shift=g.Key.shift,
+                             Length=g.Sum(z=>z.Length),
+                             Eff= g.Sum(z => Convert.ToDecimal(z.efficiency)),
+                             ThreadCut= g.Sum(z => z.threadCut)
                          });
 
             return query.OrderByDescending(a=>a.Date).ToList();
