@@ -77,5 +77,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
 
         [JsonProperty(PropertyName = "Periode")]
         public DateTime Periode { get; set; }
+
+        [JsonProperty(PropertyName = "Efficiency")]
+        public decimal Efficiency { get; set; }
     }
 }
