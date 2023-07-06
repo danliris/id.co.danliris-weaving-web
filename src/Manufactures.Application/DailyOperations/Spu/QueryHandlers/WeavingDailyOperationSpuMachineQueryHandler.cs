@@ -5,7 +5,8 @@ using Manufactures.Application.Helpers;
 
 using Manufactures.Domain.DailyOperations.Spu.Queries.WeavingDailyOperationSpuMachines;
 
-using Manufactures.Domain.DailyOperations.Warping.Repositories;
+//using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Manufactures.Domain.DailyOperations.Productions.Repositories;
 
 using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
@@ -24,7 +25,9 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
         ConverterChecker converter = new ConverterChecker();
         GeneralHelper general = new GeneralHelper();
         private readonly IStorage _storage;
-        private readonly IWeavingDailyOperationWarpingMachineRepository _repository;
+        //private readonly IWeavingDailyOperationWarpingMachineRepository _repository;
+        private readonly IDailyOperationMachineSizingDetailRepository _repository;
+
         public WeavingDailyOperationSpuMachineQueryHandler(IStorage storage, IServiceProvider serviceProvider)
         {
 
@@ -32,7 +35,7 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                 storage;
 
             _repository =
-                _storage.GetRepository<IWeavingDailyOperationWarpingMachineRepository>();
+                _storage.GetRepository<IDailyOperationMachineSizingDetailRepository>();
         }
 
        
