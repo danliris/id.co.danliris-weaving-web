@@ -4,14 +4,16 @@ using DanLiris.Admin.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DanLiris.Admin.Web.Migrations
 {
     [DbContext(typeof(AppStorageContext))]
-    partial class AppStorageContextModelSnapshot : ModelSnapshot
+    [Migration("20230628085352_alter_column_WeavingDailyOperationMachineSizing")]
+    partial class alter_column_WeavingDailyOperationMachineSizing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,7 +338,6 @@ namespace DanLiris.Admin.Web.Migrations
                 });
 
             modelBuilder.Entity("Manufactures.Domain.DailyOperations.Productions.ReadModels.WeavingDailyOperationMachineSizingReadModel", b =>
-            
                 {
                     b.Property<Guid>("Identity")
                         .ValueGeneratedOnAdd();
