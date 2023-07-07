@@ -5,7 +5,8 @@ using Manufactures.Application.Helpers;
 
 using Manufactures.Domain.DailyOperations.Spu.Queries.WeavingDailyOperationSpuMachines;
 
-using Manufactures.Domain.DailyOperations.Warping.Repositories;
+//using Manufactures.Domain.DailyOperations.Warping.Repositories;
+using Manufactures.Domain.DailyOperations.Productions.Repositories;
 
 using Microsoft.Extensions.Configuration;
 using OfficeOpenXml;
@@ -17,74 +18,65 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
-{
-    public class WeavingDailyOperationSpuMachineQueryHandler : IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>
-    {
-        ConverterChecker converter = new ConverterChecker();
-        GeneralHelper general = new GeneralHelper();
-        private readonly IStorage _storage;
-        private readonly IWeavingDailyOperationWarpingMachineRepository _repository;
-        public WeavingDailyOperationSpuMachineQueryHandler(IStorage storage, IServiceProvider serviceProvider)
-        {
+//namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
+//{
+//    public class WeavingDailyOperationSpuMachineQueryHandler : IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>
+//    {
+//        ConverterChecker converter = new ConverterChecker();
+//        GeneralHelper general = new GeneralHelper();
+//        private readonly IStorage _storage;
+        
+//        private readonly IDailyOperationMachineSizingDetailRepository _repository;
 
-            _storage =
-                storage;
+//        public WeavingDailyOperationSpuMachineQueryHandler(IStorage storage, IServiceProvider serviceProvider)
+//        {
 
-            _repository =
-                _storage.GetRepository<IWeavingDailyOperationWarpingMachineRepository>();
-        }
+//            _storage =
+//                storage;
+
+//            _repository =
+//                _storage.GetRepository<IDailyOperationMachineSizingDetailRepository>();
+//        }
 
        
        
 
        
-        public List<WeavingDailyOperationSpuMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code)
-        {
-            var allData = from a in _repository.Query
-                          where (mcNo == null || (mcNo != null && mcNo != "" && a.MCNo.Contains(mcNo))) &&
-                        (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
-                        (sp == null || (sp != null && sp != "" && a.SP.Contains(sp))) &&
-                        (name == null || (name != null && name != "" && a.Name.Contains(name))) &&
-                        (code == null || (code != null && code != "" && a.Code.Contains(code))) 
-                          select new
-                          {
-                              code = a.Code,
-                              threadNo = a.ThreadNo,
-                              shift = a.Shift,
-                              sp = a.SP,
-                              threadCut = a.ThreadCut,
-                              length = a.Length,
-                              mcNo = a.MCNo,
-                              day = a.Date,
-                              name = a.Name,
-                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date),
-                              a.Length,
-                              efficiency=a.Eff
-                          };
-            var query = (from a in allData
-                         where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
-                         select new WeavingDailyOperationSpuMachineDto
-                         {
-                             MCNo= a.mcNo,
-                             Date= a.Periode,
-                             Shift=a.shift,
-                             Length=a.Length,
-                             Efficiency= a.efficiency,
-                             ThreadCut=a.threadCut
-                         });
+//        //public List<WeavingDailyOperationSpuMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui)
+//        //{
+//        //    var allData = from a in _repository.Query
+//        //                  where (machineSizing == null || (machineSizing != null && machineSizing != "" && a.MachineSizing.Contains(machineSizing))) &&
+//        //                (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
+//        //                (groupui == null || (groupui != null && groupui != "" && a.Group.Contains(groupui))) 
+//        //                  select new
+//        //                  {
+                             
+//        //                      shift = a.Shift,
+//        //                      groupui = a.Group,
+//        //                      machineSizing = a.MachineSizing,
+//        //                      periodeid=a.PeriodeId
+                          
+//        //                  };
+//        //    var query = (from a in allData
+//        //                // where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+//        //                 select new WeavingDailyOperationSpuMachineDto
+//        //                 {
+//        //                     MachineSizing = a.machineSizing,
+//        //                     Group = a.groupui,
+//        //                     Shift=a.shift
+//        //                 });
 
-            return query.OrderByDescending(a=>a.Date).ToList();
-        }
+//        //    return query.OrderByDescending(a=>a.Date).ToList();
+//        //}
 
-        public Task<IEnumerable<WeavingDailyOperationSpuMachineDto>> GetAll()
-        {
-            throw new NotImplementedException();
-        }
+//        public Task<IEnumerable<WeavingDailyOperationSpuMachineDto>> GetAll()
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        public Task<WeavingDailyOperationSpuMachineDto> GetById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
+//        public Task<WeavingDailyOperationSpuMachineDto> GetById(Guid id)
+//        {
+//            throw new NotImplementedException();
+//        }
+//    }
+//}

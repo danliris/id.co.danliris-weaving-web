@@ -124,11 +124,11 @@ namespace Manufactures.Controllers.Api
 
 
         [HttpGet("get-spu-daily-operation-report")]
-        public async Task<IActionResult> GetSpuDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code)
+        public async Task<IActionResult> GetSpuDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mesinSizing, string groupui)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
-            var productionSpuReport = _weavingDailyOperationSpuMachineQuery.GetDailyReports(fromDate, toDate, shift, mcNo, sp, name, code);
+            var productionSpuReport = _weavingDailyOperationSpuMachineQuery.GetDailyReports(fromDate, toDate, shift, mesinSizing, groupui);
 
             return Ok(productionSpuReport);
         }
