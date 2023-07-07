@@ -34,7 +34,9 @@ using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.DailyOperations.Spu.DataTransferObjects;
 //using Manufactures.Application.DailyOperations.Spu.DataTransferObjects.DailyOperationSpuReport;
-using Manufactures.Application.DailyOperations.Spu.QueryHandlers;
+//di bawah ini hrs d buka
+//using Manufactures.Application.DailyOperations.Spu.QueryHandlers;
+
 //using Manufactures.Application.DailyOperations.Spu.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
@@ -214,7 +216,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();
             services.AddTransient<ITroubleMachineMonitoringQuery, TroubleMachineMonitoringQueryHandler>();
             services.AddTransient<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>, WeavingDailyOperationWarpingMachineQueryHandler>();
-            services.AddTransient<IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>, WeavingDailyOperationSpuMachineQueryHandler>();
+            //services.AddTransient<IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>, WeavingDailyOperationSpuMachineQueryHandler>();
 
             services.AddTransient<IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto>, WeavingTroubleMachineTreeLosesQueryHandler>();
             services.AddTransient<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>, WeavingEstimatedProductionQueryHandler>();
