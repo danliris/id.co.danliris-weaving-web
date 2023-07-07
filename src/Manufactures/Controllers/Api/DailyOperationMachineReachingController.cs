@@ -2,13 +2,16 @@
 using Manufactures.Application.DailyOperations.Reaching.DataTransferObjects;
 using Manufactures.Domain.DailyOperations.Reaching.Queries;
 using Manufactures.Domain.DailyOperations.Reaching.Repositories;
+using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,7 +36,16 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var dailyOperationReachings = await _reachingQuery.GetAll();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                dailyOperationReachings =
+                   dailyOperationReachings
+                       .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Year.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
+            }
             var total = dailyOperationReachings.Count();
             var result = dailyOperationReachings.Skip((page - 1) * size).Take(size);
 
@@ -81,6 +93,48 @@ namespace Manufactures.Controllers.Api
             {
                 throw new Exception($"Gagal menyimpan data");
             }
+        }
+
+        [HttpGet("report")]
+        public async Task<IActionResult> GetWarpingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo)
+        {
+            VerifyUser();
+            var acceptRequest = Request.Headers.Values.ToList();
+            var productionWarpingReport = _reachingQuery.GetDailyReports(fromDate, toDate, shift, mcNo);
+
+            return Ok(productionWarpingReport);
+        }
+
+        [HttpGet("report-download")]
+        public async Task<IActionResult> GeReportExcel(DateTime fromDate, DateTime toDate, string shift, string mcNo)
+        {
+
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var reachingReport = _reachingQuery.GetDailyReports(fromDate, toDate, shift, mcNo);
+
+
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan Operasional Harian Reaching" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                ReachingDailyOperationReportXlsTemplate xlsTemplate = new ReachingDailyOperationReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateXls(reachingReport, fromDate, toDate, shift, mcNo);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
         }
     }
 }
