@@ -103,24 +103,40 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             int isSave = 0;
             int saved = 0;
             string error = "";
-            var s = sheets.Where(x => x.Name.Trim() == "MASTER");
-            foreach (var sheet in s)
+            //var s = sheets.Where(x => x.Name.Trim() == "MASTER");
+             
+            foreach (var sheet in sheets)
             {
-
-                
-                //if (!sheet.Name.Trim().Contains("MASTER"))
+                // if (!sheet.Name.Trim().Contains("SOURCE SP"))
                 //{
-                //   error = "Tidak terdapat sheet MASTER SP di File Excel";
+                //   error = "Tidak terdapat sheet SOURCE SP di File Excel";
+                //}
+
+                // if (sheet == null)
+                //{
+                //  error = "Tidak terdapat sheet MASTER SP di File Excel";
+
+                // throw new Exception($"Tidak terdapat sheet MASTER SP di File Excel");
                 //}
                 //else
                 //{
-                    //totalRows = sheet.Dimension.Rows;
-                    //var totalColumns = sheet.Dimension.Columns;
-                    if (sheet.Name.Trim() == "MASTER")
-                    {
+                //totalRows = sheet.Dimension.Rows;
+                //var totalColumns = sheet.Dimension.Columns;
+
+                if (!sheet.Name.Trim().Contains("MASTER"))
+                {
+                    error = "Tidak terdapat sheet MASTER di File Excel";
+                }
+               // if (sheet.Name.Trim() == "MASTER")
+                 //   {
+                    else {
+                
 
                     totalRows = sheet.Dimension.Rows;
                     var totalColumns = sheet.Dimension.Columns;
+
+                if (sheet.Name.Trim() == "MASTER")
+                {
                     try
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
@@ -209,25 +225,36 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                        );
                                         await _repository.Update(data);
                                         saved = 1;
-                            }
-                            else
-                            {
-                                isSave = 1;
-                            }
+                                }
+                                else
+                                {
+                                        isSave = 1;
+                                }
 
-                            //}
+                            
 
-                        }
+                            }
                         }
                         catch (Exception ex)
                         {
                             error = "Cek pada baris ke-{rowIndex} - {ex.Message}";
                             throw new Exception($"Gagal memproses Sheet  pada baris ke-{rowIndex} - {ex.Message}");
                         }
-                    }
 
-               // }
-                 
+                    //hrsnya disini    
+                    await Delete(month, year.ToString());
+                    _storage.Save();
+
+                    
+                 }
+                    //else
+                    //{
+                    //    throw new Exception($"Sheet MASTER tidak ditemukan !!");
+
+                    //}
+
+                 }
+
 
             }
             try
@@ -241,14 +268,17 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                 {
                     throw new Exception($"ERROR "+ error);
                 }
-                else
-                {
-                    await Delete(month, year.ToString());
-                    _storage.Save();
-                    return ((rowIndex - 1) == totalRows && totalRows > 0);
-                }
-                
 
+               
+
+                // else
+                //{
+                // await Delete(month, year.ToString());
+                //_storage.Save();
+                // return ((rowIndex - 1) == totalRows && totalRows > 0);
+                // }
+
+                return ((rowIndex - 1) == totalRows && totalRows > 0);
             }
             catch (Exception ex)
             {
