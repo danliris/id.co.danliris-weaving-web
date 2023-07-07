@@ -36,7 +36,16 @@ namespace Manufactures.Controllers.Api
         {
             VerifyUser();
             var dailyOperationReachings = await _reachingQuery.GetAll();
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                await Task.Yield();
+                dailyOperationReachings =
+                   dailyOperationReachings
+                       .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.Year.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
+            }
             var total = dailyOperationReachings.Count();
             var result = dailyOperationReachings.Skip((page - 1) * size).Take(size);
 
