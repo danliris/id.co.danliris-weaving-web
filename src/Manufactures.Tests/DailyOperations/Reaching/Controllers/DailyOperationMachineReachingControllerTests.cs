@@ -117,7 +117,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.Controllers
         }
 
         [Fact]
-        public async Task GetReportDaily()
+        public async Task GetByMonthYearDaily()
         {
 
             Guid newGuid = new Guid();
@@ -137,6 +137,58 @@ namespace Manufactures.Tests.DailyOperations.Reaching.Controllers
 
             // Assert
             Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task GetReportDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<DailyOperationMachineReachingDto> dto = new List<DailyOperationMachineReachingDto>();
+            dto.Add(new DailyOperationMachineReachingDto
+            {
+                BeamNo = "5",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Periode = DateTime.Now,
+                Shift="1",
+                Efficiency=1,
+                
+            });
+            this.mockWeavingQuery.Setup(s => s.GetDailyReports(DateTime.MinValue, DateTime.Now, "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationMachineReachingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingDailyOperationReport(DateTime.MinValue, DateTime.Now, "", "");
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
+        [Fact]
+        public async Task GetExcelDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<DailyOperationMachineReachingDto> dto = new List<DailyOperationMachineReachingDto>();
+            dto.Add(new DailyOperationMachineReachingDto
+            {
+                BeamNo = "5",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Periode = DateTime.Now,
+                Shift = "1",
+                Efficiency = 1,
+
+            });
+            this.mockWeavingQuery.Setup(s => s.GetDailyReports(DateTime.MinValue, DateTime.Now, "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationMachineReachingController();
+            // Act
+            var result = await unitUnderTest.GeReportExcel(DateTime.MinValue, DateTime.Now, "", "");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
         }
     }
 }
