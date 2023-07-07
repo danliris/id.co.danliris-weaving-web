@@ -32,6 +32,12 @@ using Manufactures.Application.DailyOperations.Warping.DataTransferObjects;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.DailyOperationWarpingReport;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperationWarpingReport;
+using Manufactures.Application.DailyOperations.Spu.DataTransferObjects;
+//using Manufactures.Application.DailyOperations.Spu.DataTransferObjects.DailyOperationSpuReport;
+//di bawah ini hrs d buka
+//using Manufactures.Application.DailyOperations.Spu.QueryHandlers;
+
+//using Manufactures.Application.DailyOperations.Spu.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
 using Manufactures.Application.MachinesPlanning.QueryHandlers.MachinesPlanningReport;
 using Manufactures.Application.Operators.DataTransferObjects;
@@ -52,6 +58,8 @@ using Manufactures.Domain.DailyOperations.Sizing.Queries.DailyOperationSizingRep
 using Manufactures.Domain.DailyOperations.Sizing.Queries.SizePickupReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.DailyOperationWarpingReport;
+using Manufactures.Domain.DailyOperations.Spu.Queries;
+//using Manufactures.Domain.DailyOperations.Spu.Queries.DailyOperationWarpingReport;
 using Manufactures.Domain.MachinesPlanning.Queries;
 using Manufactures.Domain.Operators.Queries;
 using Manufactures.Domain.Orders.Queries.OrderReport;
@@ -70,9 +78,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingProductionReport;
+//using Manufactures.Domain.DailyOperations.Spu.Queries.SpuProductionReport;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingProductionReport;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingProductionReport;
 using Manufactures.Application.DailyOperations.Warping.DataTransferObjects.WarpingBrokenThreadsReport;
+//using Manufactures.Application.DailyOperations.Spu.DataTransferObjects.SpuProductionReport;
+//using Manufactures.Application.DailyOperations.Spu.QueryHandlers.SpuProductionReport;
+//using Manufactures.Application.DailyOperations.Spu.DataTransferObjects.SpuBrokenThreadsReport;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WarpingBrokenThreadsReport;
 using Manufactures.Application.DailyOperations.Warping.QueryHandlers.WarpingBrokenThreadsReport;
 using Manufactures.Domain.FabricConstructions.Queries;
@@ -93,6 +105,7 @@ using Manufactures.Application.Machines.DataTransferObjects;
 using Manufactures.Application.TroubleMachineMonitoring.QueryHandlers;
 using Manufactures.Application.TroubleMachineMonitoring.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines;
+using Manufactures.Domain.DailyOperations.Spu.Queries.WeavingDailyOperationSpuMachines;
 using Manufactures.Domain.TroubleMachineMonitoring.Queries;
 using Manufactures.Application.TroubleMachineMonitoring.DTOs;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
@@ -183,9 +196,10 @@ namespace DanLiris.Admin.Web
             //Warping and Warping's Report
             services.AddTransient<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>, WarpingBrokenReportQueryHandler>();
             services.AddTransient<IWarpingProductionReportQuery<WarpingProductionReportListDto>, WarpingProductionReportQueryHandler>();
+           
             services.AddTransient<IDailyOperationWarpingReportQuery<DailyOperationWarpingReportListDto>, DailyOperationWarpingReportQueryHandler>();
             services.AddTransient<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>, DailyOperationWarpingQueryHandler>();
-
+           
             //Master Weaving
             services.AddTransient<IMachineQuery<MachineListDto>, MachinesQueryHandler>();
             services.AddTransient<IWarpingBrokenCauseQuery<WarpingBrokenCauseDto>, WarpingBrokenCauseQueryHandler>();
@@ -202,6 +216,8 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();
             services.AddTransient<ITroubleMachineMonitoringQuery, TroubleMachineMonitoringQueryHandler>();
             services.AddTransient<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>, WeavingDailyOperationWarpingMachineQueryHandler>();
+            //services.AddTransient<IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>, WeavingDailyOperationSpuMachineQueryHandler>();
+
             services.AddTransient<IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto>, WeavingTroubleMachineTreeLosesQueryHandler>();
             services.AddTransient<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>, WeavingEstimatedProductionQueryHandler>();
             services.AddTransient<IWeavingDailyOperationMachineSizingQuery<WeavingDailyOperationMachineSizingDto>, WeavingDailyOperationMachineSizingQueryHandler>();
