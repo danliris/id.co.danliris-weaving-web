@@ -120,5 +120,25 @@ namespace Manufactures.Tests.DailyOperations.Reaching.QueryHandlers
             // Assert
             result.Should().NotBeNull();
         }
+
+        [Fact]
+        public async Task GetReportsDaily_StateUnderTest_ExpectedBehavior()
+        {
+            var queryHandler = this.CreateWeavingDailyOperationReachingMachineQueryHandler();
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            mockReachingRepository
+               .Setup(s => s.Query)
+                .Returns(new List<DailyOperationMachineReachingReadModel>
+                {
+                    new DailyOperationMachineReaching(newGuid,1,"month",_date.Month,_date.Year.ToString(),_date.Year.ToString(),"I","","name",
+                    "mcNo","code","beamNo","","","","","","","","","","","","","","","","","","","").GetReadModel()
+                }.AsQueryable());
+
+            var result = queryHandler.GetDailyReports(_date, _date, "I", "mcno");
+
+            // Assert
+            result.Should().NotBeNull();
+        }
     }
 }
