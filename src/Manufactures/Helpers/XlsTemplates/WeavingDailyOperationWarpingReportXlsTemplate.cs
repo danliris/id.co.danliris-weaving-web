@@ -36,7 +36,7 @@ namespace Manufactures.Helpers.XlsTemplates
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
                     double ef;
-                    var eff = double.TryParse(item.Efficiency, out ef) ? Math.Round(Convert.ToDouble(item.Efficiency) * 100,2) :0;
+                    var eff = Math.Round(Convert.ToDouble(item.Eff) * 100,2);
                     var efficiency = eff.ToString() + "%";
                     dt.Rows.Add(index++,date, item.Shift, item.MCNo, item.Length, efficiency, item.ThreadCut);
                 }
