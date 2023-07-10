@@ -69,7 +69,7 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                               Group=a.Group,
                               year=a.Year,
                               periodeId=a.PeriodeId,
-                              date=a.Date,
+                              //date=a.Date,
 
                               // threadCut = a.ThreadCut,
                               //  length = a.Length,
@@ -97,7 +97,8 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
 
                              Shift = a.shift,
                              SPU = a.spu,
-                             Group = a.Group,
+                             Group = a.Group
+                            // Date=a.date
                              //Year=a.year,
                              //Length = a.Length,
                              //Efficiencysss = a.efficiency,
