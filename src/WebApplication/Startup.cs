@@ -35,7 +35,7 @@ using Manufactures.Application.DailyOperations.Warping.QueryHandlers.DailyOperat
 using Manufactures.Application.DailyOperations.Spu.DataTransferObjects;
 //using Manufactures.Application.DailyOperations.Spu.DataTransferObjects.DailyOperationSpuReport;
 //di bawah ini hrs d buka
-//using Manufactures.Application.DailyOperations.Spu.QueryHandlers;
+using Manufactures.Application.DailyOperations.Spu.QueryHandlers;
 
 //using Manufactures.Application.DailyOperations.Spu.QueryHandlers.DailyOperationWarpingReport;
 using Manufactures.Application.MachinesPlanning.DataTransferObjects;
@@ -103,6 +103,8 @@ using Manufactures.Application.Machines.QueryHandlers;
 using Manufactures.Domain.Machines.Queries;
 using Manufactures.Application.Machines.DataTransferObjects;
 using Manufactures.Application.TroubleMachineMonitoring.QueryHandlers;
+
+
 using Manufactures.Application.TroubleMachineMonitoring.Queries;
 using Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperationWarpingMachines;
 using Manufactures.Domain.DailyOperations.Spu.Queries.WeavingDailyOperationSpuMachines;
@@ -216,7 +218,7 @@ namespace DanLiris.Admin.Web
             services.AddTransient<IShiftQuery<ShiftDto>, ShiftQueryHandler>();
             services.AddTransient<ITroubleMachineMonitoringQuery, TroubleMachineMonitoringQueryHandler>();
             services.AddTransient<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>, WeavingDailyOperationWarpingMachineQueryHandler>();
-            //services.AddTransient<IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>, WeavingDailyOperationSpuMachineQueryHandler>();
+            services.AddTransient<IWeavingDailyOperationSpuMachineQuery<WeavingDailyOperationSpuMachineDto>, WeavingDailyOperationSpuMachineQueryHandler>();
 
             services.AddTransient<IWeavingTroubleMachineTreeLosesQuery<WeavingTroubleMachingTreeLosesDto>, WeavingTroubleMachineTreeLosesQueryHandler>();
             services.AddTransient<IWeavingEstimatedProductionQuery<WeavingEstimatedProductionDto>, WeavingEstimatedProductionQueryHandler>();
