@@ -1,8 +1,6 @@
-﻿using Manufactures.Domain.DailyOperations.Spu.Entities;
+﻿
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Manufactures.Application.DailyOperations.Spu.DataTransferObjects
 {
@@ -18,7 +16,7 @@ namespace Manufactures.Application.DailyOperations.Spu.DataTransferObjects
         [JsonProperty(PropertyName = "CreatedDate")]
         public string CreatedDate { get; set; }
 
-        // [JsonProperty(PropertyName = "Date")]
+       
         public int Date { get; set; }
 
         public string Week { get; set; }
