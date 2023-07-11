@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Manufactures.Domain.DailyOperations.WeavingDailyOperationMachineSizing.Repositories
 {
-    public interface IWeavingDailyOperationMachineSizingRepository : IAggregateRepository<WeavingDailyOperationMachineSizings,
+    public interface IWeavingDailyOperationMachineSizingRepository 
+        : IAggregateRepository<WeavingDailyOperationMachineSizings,
         WeavingDailyOperationMachineSizingReadModel>
     {
     }
