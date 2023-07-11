@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DailyOperations\Spu\QueryHandlers\" />
     <Folder Include="ProductionResults\CommandHandlers\" />
     <Folder Include="Yarns\DataTransferObjects\" />
     <Folder Include="Yarns\QueryHandlers\" />
