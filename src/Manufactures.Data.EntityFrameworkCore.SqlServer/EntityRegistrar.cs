@@ -461,6 +461,15 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
+
+            modelBuilder.Entity<DailyOperationLoomMachineReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationLoomMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
         }
     }
 }
