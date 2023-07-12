@@ -307,7 +307,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                              ThreadCut= g.Sum(z => z.threadCut)
                          });
 
-            return query.OrderByDescending(a=>a.Date).ToList();
+            return query.OrderBy(a=>a.Date).ThenBy(b=>b.Shift).ThenBy(c=>c.MCNo).ToList();
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Manufactures.Controllers.Api
                    dailyOperationReachings
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.MonthPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.Year.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
+                                   x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
             }
             var total = dailyOperationReachings.Count();

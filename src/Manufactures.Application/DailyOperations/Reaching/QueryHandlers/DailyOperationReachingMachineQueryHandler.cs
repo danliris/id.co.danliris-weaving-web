@@ -54,11 +54,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
             conn.Close();
 
-            //}
-            //catch (Exception ex)
-            //{
-
-            //}
 
         }
         public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year, int monthId)
@@ -155,13 +150,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             }
             try
             {
-                if (saved == 0)
-                {
-                    error = "Tahun tidak sesuai";
-                    throw new Exception($"Tahun dan Bulan tidak sesuai");
-
-                }
-                else if (error != "" && saved == 0)
+                if (error != "" && saved == 0)
                 {
                     throw new Exception($"ERROR " + error);
                 }
@@ -192,8 +181,9 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                  MonthId = y.Key.MonthId,
                                  Month = y.Key.Month,
                                  Year = y.Key.Year,
-                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy")
-                             });
+                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
+                                 UploadDate=y.Key.Date
+                             }).OrderByDescending(a=>a.UploadDate);
 
             await Task.Yield();
 
