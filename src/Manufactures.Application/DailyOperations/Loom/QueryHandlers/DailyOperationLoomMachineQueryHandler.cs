@@ -57,7 +57,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
         {
 
             var startRow = 3;
-            var startCol = 1;
+            var startCol = 2;
             DailyOperationLoomMachine data;
             int rowIndex = 0;
             var totalRows = 0;
@@ -190,13 +190,13 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
         {
             var query = _repository
                             .Query.OrderByDescending(o => o.CreatedDate)
-                            .GroupBy(r => new { r.MonthId, r.MonthPeriode, r.Year, r.CreatedDate.Date })
+                            .GroupBy(r => new { r.MonthPeriodeId, r.MonthPeriode, r.YearPeriode, r.CreatedDate.Date })
                             .Select(y =>
                              new DailyOperationLoomMachineDto
                              {
-                                 MonthId = y.Key.MonthId,
+                                 MonthPeriodeId = y.Key.MonthPeriodeId,
                                  MonthPeriode = y.Key.MonthPeriode,
-                                 Year = y.Key.Year,
+                                 YearPeriode = y.Key.YearPeriode,
                                  CreatedDate = y.Key.Date.ToString("dd-MM-yyyy")
                              });
 
