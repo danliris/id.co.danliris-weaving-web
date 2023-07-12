@@ -459,6 +459,28 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
+
+            modelBuilder.Entity<DailyOperationMachineReachingReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationReachingMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.Property(p => p.Group).HasMaxLength(100);
+                etb.Property(p => p.Code).HasMaxLength(100);
+                etb.Property(p => p.BeamNo).HasMaxLength(100);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationLoomMachineReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationLoomMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
         }
     }
 }
