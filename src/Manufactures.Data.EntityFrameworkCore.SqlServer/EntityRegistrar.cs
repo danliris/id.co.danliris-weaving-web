@@ -449,6 +449,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
             
+
             modelBuilder.Entity<DailyOperationMachineReachingReadModel>(etb =>
             {
                 etb.ToTable("WeavingDailyOperationReachingMachines");
