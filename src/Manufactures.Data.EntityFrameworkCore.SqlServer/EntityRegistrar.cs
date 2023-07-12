@@ -459,9 +459,7 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
-<<<<<<< Updated upstream
-=======
-            
+
             modelBuilder.Entity<DailyOperationMachineReachingReadModel>(etb =>
             {
                 etb.ToTable("WeavingDailyOperationReachingMachines");
@@ -483,7 +481,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });
->>>>>>> Stashed changes
         }
     }
 }
