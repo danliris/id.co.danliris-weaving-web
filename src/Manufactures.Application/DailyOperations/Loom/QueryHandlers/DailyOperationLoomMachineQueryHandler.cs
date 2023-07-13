@@ -197,8 +197,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                  MonthPeriodeId = y.Key.MonthPeriodeId,
                                  MonthPeriode = y.Key.MonthPeriode,
                                  YearPeriode = y.Key.YearPeriode,
-                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy")
-                             });
+                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
+                                 UploadDate= y.Key.Date
+                             }).OrderByDescending(o => o.UploadDate);
 
             await Task.Yield();
 
