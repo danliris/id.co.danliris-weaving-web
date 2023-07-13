@@ -287,20 +287,18 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                 (shift == null || (shift != null && shift != "" && a.Shift == shift))
                           select new
                           {
-                              eff = a.Eff2,
-                              name = a.Operator,
+                              code = a.Code,
                               beamNo = a.BeamNo,
                               Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date).Date
                           };
             var query = (from a in allData
                          where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
-                         group  a by new { a.name, a.Periode }  into g
+                         group  a by new { a.code, a.Periode }  into g
                          select new DailyOperationMachineReachingDto
                          {
-                             Operator= g.Key.name,
+                             Code= g.Key.code,
                              Periode=g.Key.Periode,
-                             BeamNo=g.Count().ToString(),
-                             Efficiency=g.Sum(a=> Convert.ToDecimal(a.eff))
+                             BeamNo=g.Count().ToString()
                          });
 
             return query.OrderBy(a => a.Periode).ToList();
