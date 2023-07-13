@@ -116,5 +116,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
 
         [JsonProperty(PropertyName = "Periode")]
         public DateTime Periode { get; set; }
+
+        [JsonProperty(PropertyName = "UploadDate")]
+        public DateTime UploadDate { get; set; }
     }
 }
