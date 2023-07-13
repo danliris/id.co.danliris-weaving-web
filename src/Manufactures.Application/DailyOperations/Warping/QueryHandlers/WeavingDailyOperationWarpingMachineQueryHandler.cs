@@ -104,44 +104,50 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
 
-                                if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
+                                if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)>0)
                                 {
-                                    
-                                    data = new WeavingDailyOperationWarpingMachine(
-                                    Guid.NewGuid(), //
-                                    Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
-                                    month,
-                                    monthId,//month
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
-                                    year.ToString(),//year
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//mcNo
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//Name
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//Group
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Lot
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//SP
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//YearSP
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//WarpType
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AL
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//COnstruction
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Code
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//BeamNo
-                                    Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 14])),//TotalCone
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),//ThreadNo
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 16])),//Length
-                                    "MT",//uom
-                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 17])),//start
-                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 18])),//Doff
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 19])),//HNLeft
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 20])),//HNMiddle
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//HNRight
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//Speed
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//ThreadCut
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Capacity
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//Eff
-                                    );
-                                    await _repository.Update(data);
-                                    saved = 1;
+                                    if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) < DateTime.DaysInMonth(year, monthId))
+                                    {
+                                        data = new WeavingDailyOperationWarpingMachine(
+                                        Guid.NewGuid(), //
+                                        Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
+                                        month,
+                                        monthId,//month
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
+                                        year.ToString(),//year
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//mcNo
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//Name
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//Group
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Lot
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//SP
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//YearSP
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//WarpType
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AL
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//COnstruction
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Code
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//BeamNo
+                                        Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 14])),//TotalCone
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),//ThreadNo
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 16])),//Length
+                                        "MT",//uom
+                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 17])),//start
+                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 18])),//Doff
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 19])),//HNLeft
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 20])),//HNMiddle
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//HNRight
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//Speed
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//ThreadCut
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Capacity
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//Eff
+                                        );
+                                        await _repository.Update(data);
+                                        saved = 1;
+                                    }
+                                    else
+                                    {
+                                        error = ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(year, monthId)}");
+                                    }
                                 }
                             }
                         }
