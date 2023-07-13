@@ -34,7 +34,7 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
-                    double ef;
+                    
                     var exspu = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
                     
                     var spufinal = exspu.ToString() + "%";
@@ -61,13 +61,13 @@ namespace Manufactures.Helpers.XlsTemplates
                 worksheet.Cells["A" + 5 + ":G" + 5 + ""].Merge = true;
                 worksheet.Cells["A" + 6 + ":G" + 6 + ""].Merge = true;
                 worksheet.Cells["A" + 7 + ":G" + 7 + ""].Merge = true;
-                worksheet.Cells["A" + 1 + ":G" + 10 + ""].Style.Font.Bold = true;
-                worksheet.Cells["A10"].LoadFromDataTable(dt, true);
+                worksheet.Cells["A" + 1 + ":G" + 8 + ""].Style.Font.Bold = true;
+                worksheet.Cells["A8"].LoadFromDataTable(dt, true);
               
-                worksheet.Cells["A" + 10 + ":D" + (index + 10) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 10 + ":D" + (index + 10) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 10 + ":D" + (index + 10) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 10 + ":D" + (index + 10) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                 
 
 
