@@ -96,63 +96,70 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
 
-                                if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
+                                if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)>0)
                                 {
-                                    data = new DailyOperationLoomMachine(
-                                    Guid.NewGuid(),
-                                    Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
-                                    month,
-                                    monthId,//month
-                                    year.ToString(),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 26]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 27]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 29]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 30]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 31]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 32]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 33]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 34]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 35]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 36]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 37]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 38]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 39]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 40]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 41]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 42]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 43]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 44]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 45]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 46])
-                                    );
-                                    await _repository.Update(data);
-                                    saved = 1;
+                                    if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) < DateTime.DaysInMonth(year, monthId))
+                                    {
+                                        data = new DailyOperationLoomMachine(
+                                        Guid.NewGuid(),
+                                        Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
+                                        month,
+                                        monthId,//month
+                                        year.ToString(),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 26]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 27]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 28]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 29]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 30]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 31]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 32]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 33]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 34]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 35]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 36]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 37]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 38]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 39]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 40]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 41]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 42]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 43]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 44]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 45]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 46])
+                                        );
+                                        await _repository.Update(data);
+                                        saved = 1;
+                                    }
+                                    else
+                                    {
+                                        error = ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(year, monthId)}");
+                                    }
                                 }
                             }
                         }
