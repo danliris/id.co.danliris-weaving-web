@@ -205,7 +205,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                  MonthPeriode = y.Key.MonthPeriode,
                                  YearPeriode = y.Key.YearPeriode,
                                  CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
-                                 UploadDate= y.Key.Date
+                                 UploadDate= y.Max(a=>a.CreatedDate)
                              }).OrderByDescending(o => o.UploadDate);
 
             await Task.Yield();
