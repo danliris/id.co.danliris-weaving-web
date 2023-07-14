@@ -32,6 +32,7 @@ using Manufactures.Domain.BeamStockMonitoring.ReadModels;
 using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.TroubleMachineMonitoring.ReadModels;
+using Manufactures.Domain.BeamStockUpload.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -465,6 +466,15 @@ namespace Manufactures.Data.EntityFrameworkCore
             modelBuilder.Entity<DailyOperationLoomMachineReadModel>(etb =>
             {
                 etb.ToTable("WeavingDailyOperationLoomMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<BeamStockReadModel>(etb =>
+            {
+                etb.ToTable("WeavingBeamStocks");
                 etb.HasKey(e => e.Identity);
 
                 etb.ApplyAuditTrail();
