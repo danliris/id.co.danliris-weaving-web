@@ -57,7 +57,7 @@ namespace Manufactures.Helpers.XlsTemplates
 
                 worksheet.Cells["A" + (idx + 7)].Value = "TOTAL BEAM";
                 worksheet.Cells["D" + (idx + 7)].Value = sumBeam;
-                worksheet.Cells["A" + (idx + 7) + ":D" + (idx + 7) + ""].Merge = true;
+                worksheet.Cells["A" + (idx + 7) + ":C" + (idx + 7) + ""].Merge = true;
                 worksheet.Cells["A" + (idx + 7)].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
                 worksheet.Cells["A" + (idx + 7) + ":D" + (idx + 7) + ""].Style.Font.Bold = true;
 
