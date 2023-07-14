@@ -118,6 +118,6 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         public DateTime Periode { get; set; }
 
         [JsonProperty(PropertyName = "UploadDate")]
-        public DateTime UploadDate { get; set; }
+        public DateTimeOffset UploadDate { get; set; }
     }
 }
