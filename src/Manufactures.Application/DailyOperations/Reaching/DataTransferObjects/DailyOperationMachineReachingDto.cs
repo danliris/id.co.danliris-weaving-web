@@ -75,7 +75,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.DataTransferObjects
         [JsonProperty(PropertyName = "CreatedDate")]
         public string CreatedDate { get; set; }
         [JsonProperty(PropertyName = "UploadDate")]
-        public DateTime UploadDate { get; set; }
+        public DateTimeOffset UploadDate { get; set; }
 
         [JsonProperty(PropertyName = "Periode")]
         public DateTime Periode { get; set; }

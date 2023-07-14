@@ -188,7 +188,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                  Month = y.Key.Month,
                                  Year = y.Key.Year,
                                  CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
-                                 UploadDate=y.Key.Date
+                                 UploadDate= y.Max(a => a.CreatedDate)
                              }).OrderByDescending(a=>a.UploadDate);
 
             await Task.Yield();
