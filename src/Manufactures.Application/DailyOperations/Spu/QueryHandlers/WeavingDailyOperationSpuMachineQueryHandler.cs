@@ -71,7 +71,10 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                          
                          });
 
-            return query.OrderByDescending(a => a.Date).ToList();
+            // return query.OrderByDescending(a => a.Date).ToList();
+            return query.OrderBy(a => a.Shift)
+                .OrderBy(a => a.MachineSizing)
+                .ToList();
         }
 
         public Task<IEnumerable<WeavingDailyOperationSpuMachineDto>> GetAll()
