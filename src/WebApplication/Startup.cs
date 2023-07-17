@@ -112,6 +112,9 @@ using Manufactures.Domain.TroubleMachineMonitoring.Queries;
 using Manufactures.Application.TroubleMachineMonitoring.DTOs;
 using Manufactures.Domain.Estimations.WeavingEstimationProductions.Queries;
 using Manufactures.Domain.DailyOperations.WeavingDailyOperationMachineSizing.Queries;
+using Manufactures.Application.BeamStockUpload.QueryHandlers;
+using Manufactures.Domain.BeamStockUpload.Queries;
+using Manufactures.Application.BeamStockUpload.DataTransferObjects;
 
 namespace DanLiris.Admin.Web
 {
@@ -226,6 +229,7 @@ namespace DanLiris.Admin.Web
 
             services.AddTransient<IDailyOperationReachingMachineQuery<DailyOperationMachineReachingDto>, DailyOperationReachingMachineQueryHandler>();
             services.AddTransient<IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto>, DailyOperationLoomMachineQueryHandler>();
+            services.AddTransient<IBeamStockQuery<BeamStockUploadDto>, BeamStockUploadQueryHandler>();
 
 
             services.AddExtCore(this.extensionsPath, includingSubpaths: true);

@@ -156,7 +156,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
             this.mockWeavingQuery.Setup(s => s.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString())).ReturnsAsync(dto);
             var unitUnderTest = CreateDailyOperationLoomMachineController();
             // Act
-            var result = await unitUnderTest.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString());
+            var result = await unitUnderTest.GetByMonthYear(1, 100, DateTime.Now.Month, DateTime.Now.Year.ToString());
 
             // Assert
             Assert.NotNull(result);
