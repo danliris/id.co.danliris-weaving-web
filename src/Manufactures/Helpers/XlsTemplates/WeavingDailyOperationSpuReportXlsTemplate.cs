@@ -21,7 +21,7 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "No MC", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
           
-            dt.Columns.Add(new DataColumn() { ColumnName = "SPUnya" });
+            dt.Columns.Add(new DataColumn() { ColumnName = "SPU" });
           
             int index = 1;
             if (dailyOperationWarpingReportModel.Count == 0)
@@ -34,14 +34,15 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
-                    var todec = Convert.ToDecimal(item.SPU);
-                    var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
-                    var spufinalbaru = exspubaru.ToString() ;
+                   // var todec = Convert.ToDecimal(item.SPU);
+                    //var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
+                    //var spufinalbaru = exspubaru.ToString() ;
 
                     //var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
                     // var spufinalbaru = exspubaru.ToString() + " %";
 
-                    dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru );
+                    //dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru );
+                    dt.Rows.Add(index++, item.MachineSizing, item.Shift, Math.Round(Convert.ToDouble(item.SPU) * 100, 2) + "%");
                 }
             }
 
