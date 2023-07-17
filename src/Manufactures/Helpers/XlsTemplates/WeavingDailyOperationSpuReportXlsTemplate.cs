@@ -34,11 +34,13 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
-                    
-                    var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
-                    
+                    var todec = Convert.ToDecimal(item.SPU);
+                    var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
                     var spufinalbaru = exspubaru.ToString() + " %";
-             
+
+                    //var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
+                    // var spufinalbaru = exspubaru.ToString() + " %";
+
                     dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru);
                 }
             }
