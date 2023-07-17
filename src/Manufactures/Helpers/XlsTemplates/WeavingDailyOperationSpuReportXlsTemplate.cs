@@ -34,15 +34,18 @@ namespace Manufactures.Helpers.XlsTemplates
                 {
                     var dateFormat = "dd/MM/yyyy";
                     var date = item.Date.ToString(dateFormat);
-                   // var todec = Convert.ToDecimal(item.SPU);
+                    // var todec = Convert.ToDecimal(item.SPU);
                     //var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
                     //var spufinalbaru = exspubaru.ToString() ;
 
-                    //var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
-                    // var spufinalbaru = exspubaru.ToString() + " %";
+                    var SPU = item.SPU.Replace(",", ".");
+                    double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
 
-                    //dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru );
-                    dt.Rows.Add(index++, item.MachineSizing, item.Shift, Math.Round(Convert.ToDouble(item.SPU) * 100, 2) + "%");
+                    //var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
+                     var spufinalbaru = _spu.ToString() + " %";
+
+                    dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru );
+                   // dt.Rows.Add(index++, item.MachineSizing, item.Shift, Convert.ToDouble(item.SPU) * 100 + "%");
                 }
             }
 
