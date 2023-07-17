@@ -21,7 +21,7 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "No MC", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
           
-            dt.Columns.Add(new DataColumn() { ColumnName = "SPU", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "SPU" });
           
             int index = 1;
             if (dailyOperationWarpingReportModel.Count == 0)
