@@ -24,26 +24,26 @@ namespace Manufactures.Controllers.Api
         public DailyOperationLoomMachineController(IServiceProvider serviceProvider, IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto> reachingQuery) : base(serviceProvider)
         {
             _reachingQuery = reachingQuery ?? throw new ArgumentNullException(nameof(reachingQuery));
-            //_reachingQuery = this.Storage.GetRepository<IDailyOperationReachingMachineRepository>();
+            //_reachingQuery = this.Storage.GetRepository<IDailyOperationLoomMachineRepository>();
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
             VerifyUser();
-            var dailyOperationReachings = await _reachingQuery.GetAll();
+            var dailyOperationLooms = await _reachingQuery.GetAll();
             if (!string.IsNullOrEmpty(keyword))
             {
                 await Task.Yield();
-                dailyOperationReachings =
-                   dailyOperationReachings
+                dailyOperationLooms =
+                   dailyOperationLooms
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.MonthPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
             }
-            var total = dailyOperationReachings.Count();
-            var result = dailyOperationReachings.Skip((page - 1) * size).Take(size);
+            var total = dailyOperationLooms.Count();
+            var result = dailyOperationLooms.Skip((page - 1) * size).Take(size);
 
             return Ok(result, info: new { page, size, total });
         }
