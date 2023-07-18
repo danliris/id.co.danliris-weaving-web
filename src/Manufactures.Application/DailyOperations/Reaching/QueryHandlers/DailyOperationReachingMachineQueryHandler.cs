@@ -101,7 +101,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
                                 if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)>0)
                                 {
-                                    if(Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)< DateTime.DaysInMonth(year, monthId))
+                                    if(Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)<= DateTime.DaysInMonth(year, monthId))
                                     {
                                         data = new DailyOperationMachineReaching(
                                             Guid.NewGuid(), //
@@ -142,6 +142,8 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                     else
                                     {
                                         error= ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(year, monthId)}");
+                                        saved = 0;
+                                        break;
                                     }
                                 }
                             }

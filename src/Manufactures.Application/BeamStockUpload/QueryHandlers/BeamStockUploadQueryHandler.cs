@@ -98,7 +98,7 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
 
                                 if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) > 0)
                                 {
-                                    if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) < DateTime.DaysInMonth(year, monthId))
+                                    if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) <= DateTime.DaysInMonth(year, monthId))
                                     {
                                         data = new BeamStock(
                                         Guid.NewGuid(),
@@ -119,7 +119,9 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
                                     }
                                     else
                                     {
+                                        saved = 0;
                                         error = ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(year, monthId)}");
+                                        break;
                                     }
                                 }
                             }
