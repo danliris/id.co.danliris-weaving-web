@@ -64,7 +64,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
         private readonly Mock<IWarpingBrokenThreadsReportQuery<WarpingBrokenThreadsReportListDto>> mockWarpBrokenQuery;
         private readonly Mock<IWeavingDailyOperationWarpingMachineQuery<WeavingDailyOperationWarpingMachineDto>> mocWeavingQuery;
         private readonly Mock<IDailyOperationWarpingDocumentQuery<DailyOperationWarpingListDto>> mockDailyWarpDocumentQuery;
-       
+        
         public DailyOperationWarpingControllerTest() :base()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
@@ -309,6 +309,36 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             // Assert
             Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
         }
+
+        [Fact]
+        public async Task GetExcelBroken()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            //this.mockWeavingDailyOperationWarpingMachineRepository
+            //  .Setup(s => s.Query)
+            //   .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
+            //   {
+            //        new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
+            //        "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+            //   }.AsQueryable());
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto
+            {
+                Name = "name",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Group = "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingBrokenReportExcel(DateTime.MinValue, DateTime.Now, "", "", "", "", "");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+        }
         [Fact]
         public async Task UploadOK()
         { 
@@ -316,6 +346,52 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             var result = await unitUnderTest.UploadFile(DateTime.Now.Month.ToString(), DateTime.Now.Year, DateTime.Now.Month);
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
         }
-        
+
+        [Fact]
+        public async Task GetExcelDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto
+            {
+                Name = "name",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Group = "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingDailyOperationReportExcel(DateTime.MinValue, DateTime.Now, "", "", "", "", "");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+        }
+
+        [Fact]
+        public async Task GetReportDaily()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
+            dto.Add(new WeavingDailyOperationWarpingMachineDto
+            {
+                Name = "name",
+                Year = DateTime.Now.Year.ToString(),
+                YearPeriode = DateTime.Now.Year.ToString(),
+                Group = "group"
+            });
+            this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.MinValue, DateTime.Now, "", "", "", "", "")).Returns(dto);
+            var unitUnderTest = CreateDailyOperationWarpingController();
+            // Act
+            var result = await unitUnderTest.GetWarpingDailyOperationReport(DateTime.MinValue, DateTime.Now, "", "", "", "", "");
+
+            // Assert
+            Assert.NotNull(result);
+        }
+
     }
 }

@@ -185,24 +185,24 @@ namespace Manufactures.Helpers.XlsTemplates
             int defaultRowIndex = 1;
             int defaultColIndex = 1;
             int totalCol = warpingBrokenThreadsReportListDto.GroupedItems[0].ItemsValue[0].Count;
-            int rowIndex = titleList.Count+1;// start row index table
+            int rowIndex = titleList.Count + 1;// start row index table
             int colIndex = defaultColIndex;// start col index table 1 means from A
 
             #region title sheet
             var i = 0;
-            foreach(var title in titleList)
+            foreach (var title in titleList)
             {
                 sheet.Cells[defaultRowIndex + i, defaultColIndex].Value = title;
                 sheet.Cells[defaultRowIndex + i, defaultColIndex].Style.Font.Bold = true;
                 sheet.Cells[defaultRowIndex + i, defaultColIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
-                sheet.Cells[defaultRowIndex + i, defaultColIndex,defaultRowIndex+i,totalCol].Merge = true;
+                sheet.Cells[defaultRowIndex + i, defaultColIndex, defaultRowIndex + i, totalCol].Merge = true;
                 i++;
             }
             #endregion
 
             sheet.Cells[rowIndex, colIndex].Value = "Penyebab";
             sheet.Cells[rowIndex, colIndex].Style.Font.Bold = true;
-            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment= OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            sheet.Cells[rowIndex, colIndex].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
             sheet.Cells[rowIndex, colIndex].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
             sheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thin);
             sheet.Cells[rowIndex, colIndex, rowIndex, ++colIndex].Merge = true;
@@ -282,7 +282,7 @@ namespace Manufactures.Helpers.XlsTemplates
             foreach (var groupedItem in warpingBrokenThreadsReportListDto.GroupedItems)
             {
                 int startRowData = rowIndex;
-                foreach (var item in groupedItem.ItemsValue.Select((data,index)=>new { Index = index, Data = data }))
+                foreach (var item in groupedItem.ItemsValue.Select((data, index) => new { Index = index, Data = data }))
                 {
                     if (item.Index == 0)
                     {

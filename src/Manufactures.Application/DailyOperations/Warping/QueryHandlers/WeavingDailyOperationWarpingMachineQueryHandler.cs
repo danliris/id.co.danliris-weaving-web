@@ -178,7 +178,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
             }
             catch (Exception ex)
             {
-                throw new Exception($"ERROR \n" + error + "\n");
+                throw new Exception($"ERROR \n" + ex.Message + "\n");
             }
 
         }
@@ -224,9 +224,6 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
         {
-
-
-
             var allData = from a in _repository.Query
                           select new
                           {
@@ -244,14 +241,14 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                               Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date)
                           };
             var query = (from a in allData
-                         where
-                         ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo == mcNo)) &&
-                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
-                         (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
-                         (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
-                         (code == null || (code != null && code != "" && a.code.Contains(code))) &&
-                         (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
-                         select new { Name = a.name, ThreadCut = a.threadCut, Length = a.length }).GroupBy(l => l.Name)
+                        where 
+                        ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo.Contains(mcNo))) &&
+                        (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
+                        (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
+                        (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
+                        (code == null || (code != null && code != "" && a.code.Contains( code))) &&
+                        (a.Periode.Date  >= fromDate.Date && a.Periode.Date<= toDate.Date))
+                        select new { Name = a.name , ThreadCut  = a.threadCut, Length  =a.length}).GroupBy(l => l.Name)
                             .Select(cl => new
                             {
                                 Name = cl.First().Name,
