@@ -54,8 +54,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         //public int TotalCone {get; set; }
         //[JsonProperty(PropertyName = "ThreadNo")]
         //public string ThreadNo { get; set; }
-        [JsonProperty(PropertyName = "Length")]
-        public double Length {get; set; }
+        //[JsonProperty(PropertyName = "Length")]
+        //public double Length {get; set; }
         //[JsonProperty(PropertyName = "Uom")]
         //public string Uom {get; set; }
         //[JsonProperty(PropertyName = "Start")]
@@ -70,8 +70,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         //public double HNRight {get; set; }
         //[JsonProperty(PropertyName = "SpeedMeterPerMinute")]
         //public double SpeedMeterPerMinute {get; set; }
-        [JsonProperty(PropertyName = "ThreadCut")]
-        public double ThreadCut { get; set; }
+        //[JsonProperty(PropertyName = "ThreadCut")]
+        //public double ThreadCut { get; set; }
         //[JsonProperty(PropertyName = "Capacity")]
         //public double Capacity {get; set; }
         //[JsonProperty(PropertyName = "Eff")]
