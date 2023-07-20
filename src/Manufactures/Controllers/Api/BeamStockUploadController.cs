@@ -1,6 +1,6 @@
 ﻿using Barebone.Controllers;
-using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
-using Manufactures.Domain.DailyOperations.Loom.Queries;
+using Manufactures.Application.BeamStockUpload.DataTransferObjects;
+using Manufactures.Domain.BeamStockUpload.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,42 +14,40 @@ using System.Threading.Tasks;
 namespace Manufactures.Controllers.Api
 {
     [Produces("application/json")]
-    [Route("weaving/daily-operations-loom-machine")]
+    [Route("weaving/beam-stocks")]
     [ApiController]
     [Authorize]
-    public class DailyOperationLoomMachineController: ControllerApiBase
+    public class BeamStockUploadController : ControllerApiBase
     {
-        private readonly IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto> _reachingQuery;
-        //Dependency Injection activated from constructor need IServiceProvider
-        public DailyOperationLoomMachineController(IServiceProvider serviceProvider, IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto> reachingQuery) : base(serviceProvider)
+        private readonly IBeamStockQuery<BeamStockUploadDto> _reachingQuery;
+        public BeamStockUploadController(IServiceProvider serviceProvider, IBeamStockQuery<BeamStockUploadDto> reachingQuery) : base(serviceProvider)
         {
             _reachingQuery = reachingQuery ?? throw new ArgumentNullException(nameof(reachingQuery));
-            //_reachingQuery = this.Storage.GetRepository<IDailyOperationLoomMachineRepository>();
         }
 
         [HttpGet]
         public async Task<IActionResult> Get(int page = 1, int size = 25, string order = "{}", string keyword = null, string filter = "{}")
         {
             VerifyUser();
-            var dailyOperationLooms = await _reachingQuery.GetAll();
+            var dailyOperationReachings = await _reachingQuery.GetAll();
             if (!string.IsNullOrEmpty(keyword))
             {
                 await Task.Yield();
-                dailyOperationLooms =
-                   dailyOperationLooms
+                dailyOperationReachings =
+                   dailyOperationReachings
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.MonthPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
 
             }
-            var total = dailyOperationLooms.Count();
-            var result = dailyOperationLooms.Skip((page - 1) * size).Take(size);
+            var total = dailyOperationReachings.Count();
+            var result = dailyOperationReachings.Skip((page - 1) * size).Take(size);
 
             return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("monthYear")]
-        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId=0, string year="")
+        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "")
         {
             var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year);
 
@@ -92,5 +90,6 @@ namespace Manufactures.Controllers.Api
                 throw new Exception($"Gagal menyimpan data");
             }
         }
+    
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Barebone.Tests;
-using Manufactures.Application.DailyOperations.Loom.DataTransferObjects;
+using Manufactures.Application.BeamStockUpload.DataTransferObjects;
 using Manufactures.Controllers.Api;
-using Manufactures.Domain.DailyOperations.Loom.Queries;
+using Manufactures.Domain.BeamStockUpload.Queries;
 using Manufactures.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
@@ -18,20 +18,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Manufactures.Tests.DailyOperations.Loom.Controllers
+namespace Manufactures.Tests.BeamStockUpload.Controllers
 {
-    public class DailyOperationLoomMachineControllerTest : BaseControllerUnitTest
+    public class BeamStockUploadControllerTests : BaseControllerUnitTest
     {
         private readonly MockRepository mockRepository;
-        private readonly Mock<IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto>> mockWeavingQuery;
+        private readonly Mock<IBeamStockQuery<BeamStockUploadDto>> mockWeavingQuery;
 
-        public DailyOperationLoomMachineControllerTest() : base()
+        public BeamStockUploadControllerTests() : base()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
-            this.mockWeavingQuery = this.mockRepository.Create<IDailyOperationLoomMachineQuery<DailyOperationLoomMachineDto>>();
+            this.mockWeavingQuery = this.mockRepository.Create<IBeamStockQuery<BeamStockUploadDto>>();
         }
 
-        public DailyOperationLoomMachineController CreateDailyOperationLoomMachineController()
+        public BeamStockUploadController CreateBeamStockUploadController()
         {
             var user = new Mock<ClaimsPrincipal>();
             var claims = new Claim[]
@@ -39,7 +39,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
                 new Claim("username", "unittestusername")
             };
             user.Setup(u => u.Claims).Returns(claims);
-            DailyOperationLoomMachineController controller = new DailyOperationLoomMachineController(_MockServiceProvider.Object, mockWeavingQuery.Object);//(DailyOperationWarpingController)Activator.CreateInstance(typeof(DailyOperationWarpingController), mockServiceProvider.Object);
+            BeamStockUploadController controller = new BeamStockUploadController(_MockServiceProvider.Object, mockWeavingQuery.Object);//(DailyOperationWarpingController)Activator.CreateInstance(typeof(DailyOperationWarpingController), mockServiceProvider.Object);
             controller.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext()
@@ -54,7 +54,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
             return controller;
         }
 
-        public DailyOperationLoomMachineController CreateDailyOperationReachingExcelController()
+        public BeamStockUploadController CreateDailyOperationReachingExcelController()
         {
             var user = new Mock<ClaimsPrincipal>();
             var claims = new Claim[]
@@ -62,7 +62,7 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
                 new Claim("username", "unittestusername")
             };
             user.Setup(u => u.Claims).Returns(claims);
-            DailyOperationLoomMachineController controller = new DailyOperationLoomMachineController(_MockServiceProvider.Object, mockWeavingQuery.Object);
+            BeamStockUploadController controller = new BeamStockUploadController(_MockServiceProvider.Object, mockWeavingQuery.Object);
             controller.ControllerContext = new ControllerContext()
             {
                 HttpContext = new DefaultHttpContext()
@@ -87,19 +87,19 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
 
         [Fact]
         public async Task GetLoomMachine()
-        { 
+        {
             Guid newGuid = new Guid();
             DateTime _date = new DateTime();
-            DailyOperationLoomMachineDto dto = new DailyOperationLoomMachineDto();
+            BeamStockUploadDto dto = new BeamStockUploadDto();
             dto.MonthPeriodeId = 1;
             dto.CreatedDate = _date.ToString();
             dto.YearPeriode = "2021";
 
-            List<DailyOperationLoomMachineDto> newList = new List<DailyOperationLoomMachineDto>();
+            List<BeamStockUploadDto> newList = new List<BeamStockUploadDto>();
             newList.Add(dto);
-            IEnumerable<DailyOperationLoomMachineDto> ienumData = newList;
+            IEnumerable<BeamStockUploadDto> ienumData = newList;
             this.mockWeavingQuery.Setup(s => s.GetAll()).ReturnsAsync(ienumData);
-            var unitUnderTest = CreateDailyOperationLoomMachineController();
+            var unitUnderTest = CreateBeamStockUploadController();
             // Act
             var result = await unitUnderTest.Get();
 
@@ -113,19 +113,19 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
 
             Guid newGuid = new Guid();
             DateTime _date = new DateTime();
-            DailyOperationLoomMachineDto dto = new DailyOperationLoomMachineDto();
+            BeamStockUploadDto dto = new BeamStockUploadDto();
             dto.MonthPeriodeId = 1;
             dto.CreatedDate = _date.ToString();
             dto.YearPeriode = "2021";
             dto.MonthPeriode = "Januari";
             var keyword = dto.YearPeriode;
-            List<DailyOperationLoomMachineDto> newList = new List<DailyOperationLoomMachineDto>();
+            List<BeamStockUploadDto> newList = new List<BeamStockUploadDto>();
             newList.Add(dto);
-            IEnumerable<DailyOperationLoomMachineDto> ienumData = newList;
+            IEnumerable<BeamStockUploadDto> ienumData = newList;
             this.mockWeavingQuery.Setup(s => s.GetAll()).ReturnsAsync(ienumData);
-            var unitUnderTest = CreateDailyOperationLoomMachineController();
+            var unitUnderTest = CreateBeamStockUploadController();
             // Act
-            var result = await unitUnderTest.Get(1,25,"{}",keyword, "{}");
+            var result = await unitUnderTest.Get(1, 25, "{}", keyword, "{}");
 
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
@@ -142,23 +142,27 @@ namespace Manufactures.Tests.DailyOperations.Loom.Controllers
         [Fact]
         public async Task GetByMonthYearDaily()
         {
-
             Guid newGuid = new Guid();
             DateTime _date = new DateTime();
-            List<DailyOperationLoomMachineDto> dto = new List<DailyOperationLoomMachineDto>();
-            dto.Add(new DailyOperationLoomMachineDto
+            List<BeamStockUploadDto> dto = new List<BeamStockUploadDto>();
+            dto.Add(new BeamStockUploadDto
             {
-                MonthId = "1",
-                Year = DateTime.Now.Year.ToString(),
+                MonthPeriodeId = DateTime.Now.Month,
                 YearPeriode = DateTime.Now.Year.ToString(),
-                AL = "1"
+                Beam = "1",
+                Code="a",
+                Information="a",
+                InReaching="a",
+                Reaching="a",
+                Sizing="a",
+                Shift="I",
+                Date=1
             });
             this.mockWeavingQuery.Setup(s => s.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString())).ReturnsAsync(dto);
-            var unitUnderTest = CreateDailyOperationLoomMachineController();
-            // Act
+            var unitUnderTest = CreateBeamStockUploadController();
+
             var result = await unitUnderTest.GetByMonthYear(1, 100, DateTime.Now.Month, DateTime.Now.Year.ToString());
 
-            // Assert
             Assert.NotNull(result);
         }
     }
