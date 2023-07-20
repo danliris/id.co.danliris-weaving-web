@@ -94,6 +94,15 @@ namespace Manufactures.Controllers.Api
         }
 
 
+        [HttpGet("get-sizing-daily-operation-report")]
+        public async Task<IActionResult> GetSizingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,string sp)
+        {
+            VerifyUser();
+            var acceptRequest = Request.Headers.Values.ToList();
+            var productionSpuReport = _weavingDailyOperationSpuMachineQuery.GetDailySizingReports(fromDate, toDate, shift, machineSizing, groupui, name, code,sp);
+
+            return Ok(productionSpuReport);
+        }
 
 
     }
