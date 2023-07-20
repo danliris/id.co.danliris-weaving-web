@@ -1,6 +1,6 @@
 ﻿
 using Newtonsoft.Json;
-
+using System;
 
 namespace Manufactures.Application.DailyOperations.Spu.DataTransferObjects
 {
@@ -69,6 +69,8 @@ namespace Manufactures.Application.DailyOperations.Spu.DataTransferObjects
         public string SpeedMin { get; set; }
         public string Capacity { get; set; }
         public string Efficiency { get; set; }
+        //tambahan ku
+        public DateTime Periode { get; set; }
 
 
 

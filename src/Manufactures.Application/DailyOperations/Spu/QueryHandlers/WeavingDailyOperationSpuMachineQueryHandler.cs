@@ -51,7 +51,10 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                               Group=a.Group,
                               year=a.Year,
                               periodeId=a.PeriodeId,
-                            
+                              length=a.Length,
+                              efficiency=a.Efficiency,
+
+
 
                                Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
                             
@@ -67,8 +70,67 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
 
                              Shift = a.shift,
                              SPU = a.spu,
-                             Group = a.Group
-                         
+                             Group = a.Group,
+                             Length=a.length,
+                             Efficiency=a.efficiency,
+                             Periode = a.Periode
+
+                         });
+
+            // return query.OrderByDescending(a => a.Date).ToList();
+            return query.OrderBy(a => a.Shift)
+                .OrderBy(a => a.MachineSizing)
+                .ToList();
+        }
+
+        public List<WeavingDailyOperationSpuMachineDto> GetDailySizingReports(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,string sp)
+        {
+            var allData = from a in _repository.Query
+                          where (shift == null || (shift != null && shift != "" && a.Shift.Contains(shift))) &&
+                          (groupui == null || (groupui != null && groupui != "" && a.Group.Contains(groupui))) &&
+                           (sp == null || (sp != null && sp != "" && a.SP.Contains(sp))) &&
+                           (code == null || (code != null && code != "" && a.Code.Contains(code))) &&
+                          (machineSizing == null || (machineSizing != null && machineSizing != "" && a.MachineSizing.Contains(machineSizing)))
+
+
+                          select new
+                          {
+                              //kecil = besar
+                              machineSizing = a.MachineSizing,
+
+                              shift = a.Shift,
+                              spu = a.SPU,
+                              Group = a.Group,
+                              year = a.Year,
+                              periodeId = a.PeriodeId,
+                              length = a.Length,
+                              efficiency = a.Efficiency,
+                              sp=a.SP,
+                              code=a.Code,
+
+
+
+                              Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
+
+
+                          };
+            var query = (from a in allData
+                         where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+
+                         select new WeavingDailyOperationSpuMachineDto
+                         {
+                             //besar = kecil
+                             MachineSizing = a.machineSizing,
+
+                             Shift = a.shift,
+                             SPU = a.spu,
+                             Group = a.Group,
+                             Length = a.length,
+                             Efficiency = a.efficiency,
+                             Periode = a.Periode,
+                             SP=a.sp,
+                             Code=a.code
+
                          });
 
             // return query.OrderByDescending(a => a.Date).ToList();
