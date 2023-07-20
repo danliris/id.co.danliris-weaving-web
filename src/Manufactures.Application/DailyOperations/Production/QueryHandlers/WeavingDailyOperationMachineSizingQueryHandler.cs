@@ -144,10 +144,15 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
 
                                 if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
                                 {
-                                    // var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
-                                    // if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19]) == monthId)
-                                    //{
-                                    var col1 = Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value);
+
+                                    //hrs nya di tulis disini utk kondisi jk baris tgl >28 utk bulan feb
+                                    if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) <= DateTime.DaysInMonth(Convert.ToInt32(year), monthId))
+                                    {
+                                        //------------------
+                                        // var tempp = converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]);
+                                        // if (converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 20]) == year && converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 19]) == monthId)
+                                        //{
+                                        var col1 = Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value);
                                         data = new WeavingDailyOperationMachineSizings(
                                         DateTimeOffset.MinValue,
                                         DateTimeOffset.MinValue,
@@ -162,10 +167,10 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                      //Convert.ToInt32(sheet.Cells[rowIndex, startCol + 15].Value), //col 16,tgl
                                      // Convert.ToInt32(sheet.Cells[rowIndex, startCol+1]),// col 1,excel col =  tgl
                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),
-                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol +2]),// col 1,excel col =  tgl
-                                   
+                                     converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),// col 1,excel col =  tgl
+
                                       // Convert.ToInt32(sheet.Cells[rowIndex, startCol+3]),// col 1,excel col =  tgl
-                                    
+
                                       converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//col 3,excel col =  mesin sizing
                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//shift
                                      converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//LOT
@@ -225,11 +230,26 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                        );
                                         await _repository.Update(data);
                                         saved = 1;
+                                    }
+                                    else
+                                    {
+                                        isSave = 1;
+                                        //tmbhn baru
+                                       // error = ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(Convert.ToInt32(year), monthId)}");
+                                        saved = 0;
+                                        break;
+                                    }
+                                    //kondisi else dr tgl >28 tulis disini
                                 }
                                 else
                                 {
-                                        isSave = 1;
+                                    //error = ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(Convert.ToInt32(year), monthId)}");
+                                    saved = 0;
+                                    break;
                                 }
+
+
+                                //----------------
 
                             
 
@@ -261,8 +281,8 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             {
                 if(isSave > 0 && saved == 0)
                 {
-                    error = "Tahun dan bulan tidak sesuai";
-                    throw new Exception($"Tahun dan Bulan tidak sesuai");
+                    error = "Gagal memproses Sheet  pada baris ke- " + rowIndex + "- bulan " + month + " hanya sampai tanggal " + DateTime.DaysInMonth(Convert.ToInt32(year), monthId);
+                    throw new Exception($"aaaGagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(Convert.ToInt32(year), monthId)}");
 
                 }else if(error != "" && saved ==0)
                 {
