@@ -38,14 +38,49 @@ namespace Manufactures.Helpers.XlsTemplates
                     //var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
                     //var spufinalbaru = exspubaru.ToString() ;
 
-                    var SPU = item.SPU.Replace(",", ".");
-                    double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
+                    //ini yg bisa k bwh
+                    //var SPU = item.SPU.Replace(",", ".");
+                    //double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
+                    //var spufinalbaru = _spu.ToString() + " %";
+                    //dt.Rows.Add(index++, item.MachineSizing, item.Shift, spufinalbaru);
+                    //smpe sini
 
-                    //var exspubaru = Math.Round(Convert.ToDouble(item.SPU) * 100, 2);
-                     var spufinalbaru = _spu.ToString() + " %";
+                   //ini bisa tp kurang sempurna
+                    //var nilaiSPUawal = item.SPU;
+                    //if (nilaiSPUawal == "#VALUE!")
+                    //{
+                    //    var nilaiMCawal = item.MachineSizing;
+                    //    nilaiSPUawal = "2";
+                    //    dt.Rows.Add(index++, "a", "b", "c");
+                    //}
+                    //else
+                    //{
+                    //    var SPU = item.SPU.Replace(",", ".");
+                    //    double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
+                    //    string spufinalbaru = _spu + " %";
+                    //    dt.Rows.Add(index++, item.MachineSizing, item.Shift, spufinalbaru);
+                    //}
+                    //smpai sini
 
-                    dt.Rows.Add(index++,item.MachineSizing, item.Shift, spufinalbaru );
-                   // dt.Rows.Add(index++, item.MachineSizing, item.Shift, Convert.ToDouble(item.SPU) * 100 + "%");
+                    var nilaiSPUawal = item.SPU;
+                    
+                    if (nilaiSPUawal == "#VALUE!")
+                    {
+                        var nilaiMCawal = item.MachineSizing;
+                        //nilaiSPUawal = "2";
+                        dt.Rows.Add(index++, item.MachineSizing, item.Shift, "#VALUE!");
+                    }
+                    else
+                    {
+                        var SPU = item.SPU.Replace(",", ".");
+                        double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
+                        string spufinalbaru = _spu + " %";
+                        dt.Rows.Add(index++, item.MachineSizing, item.Shift, spufinalbaru);
+                    }
+
+
+
+
                 }
             }
 
