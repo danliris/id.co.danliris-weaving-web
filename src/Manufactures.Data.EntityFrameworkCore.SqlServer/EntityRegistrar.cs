@@ -32,6 +32,7 @@ using Manufactures.Domain.BeamStockMonitoring.ReadModels;
 using Manufactures.Domain.BrokenCauses.Warping.ReadModels;
 using Manufactures.Domain.DailyOperations.Loom;
 using Manufactures.Domain.TroubleMachineMonitoring.ReadModels;
+using Manufactures.Domain.BeamStockUpload.ReadModels;
 
 namespace Manufactures.Data.EntityFrameworkCore
 {
@@ -449,8 +450,6 @@ namespace Manufactures.Data.EntityFrameworkCore
                 etb.ApplySoftDelete();
             });
             
-          
-
             modelBuilder.Entity<WeavingDailyOperationMachineSizingReadModel>(etb =>
             {
                 etb.ToTable("WeavingDailyOperationMachineSizing");
@@ -460,6 +459,24 @@ namespace Manufactures.Data.EntityFrameworkCore
                 //etb.Property(p => p.Month).HasMaxLength(50);
                 //etb.Property(p => p.Construction1).HasMaxLength(300);
                 //etb.Property(p => p.Construction2).HasMaxLength(300);
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<DailyOperationLoomMachineReadModel>(etb =>
+            {
+                etb.ToTable("WeavingDailyOperationLoomMachines");
+                etb.HasKey(e => e.Identity);
+
+                etb.ApplyAuditTrail();
+                etb.ApplySoftDelete();
+            });
+
+            modelBuilder.Entity<BeamStockReadModel>(etb =>
+            {
+                etb.ToTable("WeavingBeamStocks");
+                etb.HasKey(e => e.Identity);
+
                 etb.ApplyAuditTrail();
                 etb.ApplySoftDelete();
             });

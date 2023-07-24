@@ -54,11 +54,6 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
 
             conn.Close();
 
-            //}
-            //catch (Exception ex)
-            //{
-
-            //}
 
         }
         public async Task<bool> Upload(ExcelWorksheets sheets, string month, int year, int monthId)
@@ -104,44 +99,52 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
 
-                                if (sheet.Cells[rowIndex, startCol].Value != null || sheet.Cells[rowIndex, startCol].Value != "")
+                                if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)>0)
                                 {
-
-                                    data = new DailyOperationMachineReaching(
-                                    Guid.NewGuid(), //
-                                    Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
-                                    month,
-                                    monthId,//month
-                                    year.ToString(),
-                                    year.ToString(),//year
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//group
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//operator
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//mcNo
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Code
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//Beam
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//reachingins
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//effins
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//cm
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//beamWidth
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//warp
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//cucukan
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),//comb
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),//doffing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),//effdoffing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),//webbing
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),//strands
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),//combno
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),//reed
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),//eff2
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),//checker
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//info
-                                    );
-                                    await _repository.Update(data);
-                                    saved = 1;
+                                    if(Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)<= DateTime.DaysInMonth(year, monthId))
+                                    {
+                                        data = new DailyOperationMachineReaching(
+                                            Guid.NewGuid(), //
+                                            Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
+                                            month,
+                                            monthId,//month
+                                            year.ToString(),
+                                            year.ToString(),//year
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//group
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//operator
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//mcNo
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Code
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//Beam
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//reachingins
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//effins
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//cm
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//beamWidth
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//warp
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//cucukan
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),//comb
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 17]),//doffing
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 18]),//effdoffing
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 19]),//webbing
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 20]),//strands
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 21]),//combno
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 22]),//reed
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 23]),//eff2
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 24]),//checker
+                                            converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//info
+                                        );
+                                        await _repository.Update(data);
+                                        saved = 1;
+                                    }
+                                    else
+                                    {
+                                        error= ($"Gagal memproses Sheet  pada baris ke-{rowIndex} - bulan {month} hanya sampai tanggal {DateTime.DaysInMonth(year, monthId)}");
+                                        saved = 0;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -155,13 +158,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
             }
             try
             {
-                if (saved == 0)
-                {
-                    error = "Tahun tidak sesuai";
-                    throw new Exception($"Tahun dan Bulan tidak sesuai");
-
-                }
-                else if (error != "" && saved == 0)
+                if (error != "" && saved == 0)
                 {
                     throw new Exception($"ERROR " + error);
                 }
@@ -192,8 +189,9 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                  MonthId = y.Key.MonthId,
                                  Month = y.Key.Month,
                                  Year = y.Key.Year,
-                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy")
-                             });
+                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
+                                 UploadDate= y.Max(a => a.CreatedDate)
+                             }).OrderByDescending(a=>a.UploadDate);
 
             await Task.Yield();
 
