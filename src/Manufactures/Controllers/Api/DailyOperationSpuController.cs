@@ -104,6 +104,37 @@ namespace Manufactures.Controllers.Api
             return Ok(productionSpuReport);
         }
 
+        [HttpGet("get-sizing-daily-operation-report/download")]
+        public async Task<IActionResult> GetSizingDailyOperationReportExcel(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code, string sp)
+        {
+
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var productionWarpingReport = _weavingDailyOperationSpuMachineQuery.GetDailySizingReports(fromDate, toDate, shift, machineSizing, groupui, name, code, sp);
+
+
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan OPERASIONAL HARIAN SIZING" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                WeavingDailyOperationSizingReportXlsTemplate xlsTemplate = new WeavingDailyOperationSizingReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateDailyOperationSizingReportXls(productionWarpingReport, fromDate, toDate, shift, machineSizing, groupui, sp ,code);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
 
     }
 }
