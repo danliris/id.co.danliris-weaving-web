@@ -100,16 +100,19 @@ namespace Manufactures.Domain.DailyOperations.Productions.ReadModels
             DateTimeOffset ModifiedDate,
             DateTimeOffset DeletedDate,
             Guid identity,
+
         int PeriodeId ,
          string Periode ,
          string Year ,
          int Date ,
          string Week ,
+
          string MachineSizing ,
          string Shift ,
          string Group ,
          string Lot ,
          string SP ,
+
          string YearProduction ,
          string SPYear ,
          string WarpType ,

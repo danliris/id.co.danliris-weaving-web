@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Manufactures\Manufactures.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DailyOperations\DailySizingReport\" />
+  </ItemGroup>
+
 </Project>
