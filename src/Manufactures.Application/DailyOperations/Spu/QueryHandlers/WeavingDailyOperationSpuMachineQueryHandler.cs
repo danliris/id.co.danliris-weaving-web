@@ -88,8 +88,8 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
             var allData = from a in _repository.Query
                           where (shift == null || (shift != null && shift != "" && a.Shift.Contains(shift))) &&
                           (groupui == null || (groupui != null && groupui != "" && a.Group.Contains(groupui))) &&
-                           (sp == null || (sp != null && sp != "" && a.SP.Contains(sp))) &&
-                           (code == null || (code != null && code != "" && a.Code.Contains(code))) &&
+                           (sp == null || (sp != null && sp != "" && a.SP == sp)) &&
+                           (code == null || (code != null && code != "" && a.Code == code)) &&
                           (machineSizing == null || (machineSizing != null && machineSizing != "" && a.MachineSizing.Contains(machineSizing)))
 
 
