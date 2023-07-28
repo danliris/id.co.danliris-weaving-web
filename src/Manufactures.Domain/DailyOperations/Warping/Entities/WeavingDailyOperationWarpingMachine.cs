@@ -41,6 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
         public double ThreadCut { get; internal set; }
         public double Capacity { get; internal set; }
         public string Eff { get; internal set; }
+        public int Week { get; internal set; }
 
         public WeavingDailyOperationWarpingMachine(Guid identity, int Date,
           string Month,
@@ -71,7 +72,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
           double SpeedMeterPerMinute,
           double ThreadCut,
           double Capacity,
-          string Eff) : base(identity)
+          string Eff,
+          int Week) : base(identity)
         {
             this.Date = Date;
             this.Month = Month;
@@ -103,6 +105,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             this.ThreadCut = ThreadCut;
             this.Capacity = Capacity;
             this.Eff = Eff;
+            this.Week = Week;
             MarkTransient();
 
             ReadModel = new WeavingDailyOperationWarpingMachineReadModel(Identity)
@@ -136,7 +139,8 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
                 SpeedMeterPerMinute = this.SpeedMeterPerMinute,
                 ThreadCut = this.ThreadCut,
                 Capacity = this.Capacity,
-                Eff= this.Eff
+                Eff= this.Eff,
+                Week=this.Week
             };
 
         }
@@ -171,7 +175,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.Entities
             this.SpeedMeterPerMinute = readModel.SpeedMeterPerMinute;
             this.ThreadCut = readModel.ThreadCut;
             this.Capacity = readModel.Capacity;
-            
+            this.Week = readModel.Week;
         }
 
         protected override WeavingDailyOperationWarpingMachine GetEntity()

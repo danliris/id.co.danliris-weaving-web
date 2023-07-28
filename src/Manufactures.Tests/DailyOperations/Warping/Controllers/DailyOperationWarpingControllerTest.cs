@@ -292,7 +292,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
                .Returns(new List<WeavingDailyOperationWarpingMachineReadModel>
                {
                     new WeavingDailyOperationWarpingMachine(Guid.NewGuid(),1,"month",_date.Day,_date.Year.ToString(),_date.Year.ToString(),"I","mcno","name","group","lot","sp",_date.Year.ToString(),
-                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4").GetReadModel()
+                    "warpType","al","pp","code","beamno",1,"d",1,"mt",_date,_date,1,2,3,4,5,6,"4",1).GetReadModel()
                }.AsQueryable());
             List<WeavingDailyOperationWarpingMachineDto> dto = new List<WeavingDailyOperationWarpingMachineDto>();
             dto.Add(new WeavingDailyOperationWarpingMachineDto { 
