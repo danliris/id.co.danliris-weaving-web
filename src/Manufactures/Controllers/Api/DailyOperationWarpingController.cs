@@ -773,11 +773,9 @@ namespace Manufactures.Controllers.Api
                 weavingDailyOperations =
                    weavingDailyOperations
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.Name.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.MCNo.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
-                                                                                                                // x.OperationStatus.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
-
+                                   x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   //x.MCNo.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
+                                   x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase));
             }
             
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
@@ -798,6 +796,16 @@ namespace Manufactures.Controllers.Api
             }
 
             return Ok(dailyOperationWarpingDocument);
+        }
+
+        [HttpGet("monthYear")]
+        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "")
+        {
+            var weavingDailyOperations = await _weavingDailyOperationWarpingMachineQuery.GetByMonthYear(monthId, year);
+
+            var total = weavingDailyOperations.Count();
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpPost("upload")]

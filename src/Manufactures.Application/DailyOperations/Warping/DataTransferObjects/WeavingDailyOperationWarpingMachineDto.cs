@@ -12,6 +12,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public Guid Identity { get; set; }
         [JsonProperty(PropertyName = "Month")]
         public string Month {get; set; }
+        [JsonProperty(PropertyName = "MonthId")]
+        public int MonthId { get; set; }
         [JsonProperty(PropertyName = "Year")]
         public string Year {get; set; }
         [JsonProperty(PropertyName = "YearPeriode")]
@@ -37,6 +39,10 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public string Efficiency { get; set; }
         [JsonProperty(PropertyName = "Eff")]
         public decimal Eff { get; set; }
+        [JsonProperty(PropertyName = "Week")]
+        public int Week { get; set; }
+        [JsonProperty(PropertyName = "Day")]
+        public int Day { get; set; }
 
         // [JsonProperty(PropertyName = "Lot")]
         //public string Lot {get; set; }
