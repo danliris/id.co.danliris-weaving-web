@@ -14,5 +14,6 @@ namespace Manufactures.Domain.DailyOperations.Warping.Queries.WeavingDailyOperat
         Task<bool> Upload(ExcelWorksheets sheet,string month,int year,int monthId);
         List<TModel> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code);
         List<TModel> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code);
+        Task<List<TModel>> GetByMonthYear(int monthId, string year);
     }
 }

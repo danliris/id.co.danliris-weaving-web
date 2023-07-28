@@ -103,7 +103,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                         {
                             for (rowIndex = startRow; rowIndex <= totalRows; rowIndex++)
                             {
-
+                                var a = converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]);
                                 if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value)>0)
                                 {
                                     if (Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value) <= DateTime.DaysInMonth(year, monthId))
@@ -115,31 +115,32 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                         monthId,//month
                                         converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
                                         year.ToString(),//year
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//shift
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//mcNo
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//Name
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//Group
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Lot
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//SP
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//YearSP
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//WarpType
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//AL
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//COnstruction
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//Code
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//BeamNo
-                                        Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 14])),//TotalCone
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 15]),//ThreadNo
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 16])),//Length
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//shift
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//mcNo
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//Name
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 5]),//Group
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 6]),//Lot
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),//SP
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//YearSP
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//WarpType
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 11]),//AL
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 12]),//COnstruction
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 13]),//Code
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 14]),//BeamNo
+                                        Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 15])),//TotalCone
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 16]),//ThreadNo
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 17])),//Length
                                         "MT",//uom
-                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 17])),//start
-                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 18])),//Doff
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 19])),//HNLeft
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 20])),//HNMiddle
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//HNRight
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//Speed
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//ThreadCut
-                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//Capacity
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 25])//Eff
+                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 18])),//start
+                                        Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 19])),//Doff
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 20])),//HNLeft
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 21])),//HNMiddle
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 22])),//HNRight
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 23])),//Speed
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 24])),//ThreadCut
+                                        Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 25])),//Capacity
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 26]),//Eff
+                                        Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 1]))//Week
                                         );
                                         await _repository.Update(data);
                                         saved = 1;
@@ -191,20 +192,18 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public async Task<IEnumerable<WeavingDailyOperationWarpingMachineDto>> GetAll()
         {
-            var query = _repository
-                            .Query.OrderByDescending(o => o.CreatedDate)
-                            .Select(y =>
-                             new WeavingDailyOperationWarpingMachineDto
-                             {
-                                 MCNo = y.MCNo,
-                                 YearPeriode = y.YearPeriode,
-                                 Group = y.Group,
-                                 Name = y.Name,
-                                 CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy")
-                             });
+            var query = from a in _repository.Query
+                        orderby a.CreatedDate descending
+                        group a by new { a.YearPeriode, a.MonthId, a.Month, a.CreatedDate.Date } into g
+                        select new WeavingDailyOperationWarpingMachineDto
+                        {
+                            YearPeriode = g.Key.YearPeriode,
+                            Month = g.Key.Month,
+                            MonthId = g.Key.MonthId,
+                            CreatedDate = g.Key.Date.ToString("dd MMM yyyy")
+                        };
 
             await Task.Yield();
-
             return query;
         }
 
@@ -222,10 +221,28 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                  Name = y.Name,
                                  CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy")
                              }).FirstOrDefault();
-
-
-
             return query;
+        }
+
+        public async Task<List<WeavingDailyOperationWarpingMachineDto>> GetByMonthYear(int monthId, string year)
+        {
+            var query = _repository
+                            .Query.OrderByDescending(o => o.CreatedDate)
+                            .Where(s => s.MonthId == monthId && s.YearPeriode == year)
+                            .Select(y =>
+                             new WeavingDailyOperationWarpingMachineDto
+                             {
+                                 Day=y.Date,
+                                 MCNo = y.MCNo,
+                                 YearPeriode = y.YearPeriode,
+                                 Group = y.Group,
+                                 Name = y.Name,
+                                 CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy"),
+                                 Week=y.Week,
+                                 Shift=y.Shift,
+                                 
+                             });
+            return query.ToList();
         }
 
         public List<WeavingDailyOperationWarpingMachineDto> GetReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
