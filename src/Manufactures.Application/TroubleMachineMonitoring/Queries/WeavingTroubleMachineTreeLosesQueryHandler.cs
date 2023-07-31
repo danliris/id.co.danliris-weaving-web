@@ -69,16 +69,17 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                     month,
                                     monthId,
                                     year.ToString(),//year
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//shift
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//description
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 1]),//warpingMachineNo
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//Group
-                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),//Code
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 4]),//shift
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 10]),//description
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//warpingMachineNo
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//Group
+                                    converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 9]),//Code
 
-                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 6])),//DownTImeMC
-                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 7])),//TimePerMinute
-                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 4])),//Start
-                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5]))//Finish
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 7])),//DownTImeMC
+                                    Convert.ToDouble(converter.GenerateValueDouble(sheet.Cells[rowIndex, startCol + 8])),//TimePerMinute
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 5])),//Start
+                                    Convert.ToDateTime(converter.GeneratePureTime(sheet.Cells[rowIndex, startCol + 6])),//Finish
+                                    Convert.ToInt32(converter.GenerateValueInt(sheet.Cells[rowIndex, startCol + 1]))//Week
 
                                     );
                                     await _repository.Update(data);
@@ -194,7 +195,8 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                 Start = y.Start.ToShortTimeString(),
                                 Finish = y.Finish.ToShortTimeString(),
                                 TimePerMinutes = Math.Round( y.TimePerMinutes),
-                                WarpingMachineNo = y.WarpingMachineNo
+                                WarpingMachineNo = y.WarpingMachineNo,
+                                Week=y.Week
                             }).OrderBy(s=>s.Date);
             List<WeavingTroubleMachingTreeLosesDto> listData = new List<WeavingTroubleMachingTreeLosesDto>();
 
@@ -212,7 +214,8 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                     Start = item.Start,
                     Finish = item.Finish,
                     TimePerMinutes = item.TimePerMinutes,
-                    WarpingMachineNo = item.WarpingMachineNo
+                    WarpingMachineNo = item.WarpingMachineNo,
+                    Week=item.Week
                 };
                 listData.Add(weavings);
 
