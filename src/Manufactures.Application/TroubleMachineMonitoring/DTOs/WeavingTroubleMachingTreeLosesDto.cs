@@ -21,6 +21,7 @@ namespace Manufactures.Application.TroubleMachineMonitoring.DTOs
         public string  Start { get;  set; }
         public string  Finish { get; set; }
         public string CreatedDate { get; set; }
+        public int Week { get; set; }
 
     }
 }
