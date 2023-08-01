@@ -43,6 +43,12 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public int Week { get; set; }
         [JsonProperty(PropertyName = "Day")]
         public int Day { get; set; }
+        [JsonProperty(PropertyName = "AL")]
+        public string AL { get; set; }
+        [JsonProperty(PropertyName = "WarpType")]
+        public string WarpType { get; set; }
+        [JsonProperty(PropertyName = "Code")]
+        public string Code { get; set; }
 
         // [JsonProperty(PropertyName = "Lot")]
         //public string Lot {get; set; }
