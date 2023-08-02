@@ -192,16 +192,16 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
 
         public async Task<IEnumerable<WeavingDailyOperationWarpingMachineDto>> GetAll()
         {
-            var query = from a in _repository.Query
-                        orderby a.CreatedDate descending
+            var query = (from a in _repository.Query
                         group a by new { a.YearPeriode, a.MonthId, a.Month, a.CreatedDate.Date } into g
                         select new WeavingDailyOperationWarpingMachineDto
                         {
                             YearPeriode = g.Key.YearPeriode,
                             Month = g.Key.Month,
                             MonthId = g.Key.MonthId,
-                            CreatedDate = g.Key.Date.ToString("dd MMM yyyy")
-                        };
+                            CreatedDate = g.Key.Date.ToString("dd MMM yyyy"),
+                            UploadDate = g.Max(a => a.CreatedDate)
+                        }).OrderByDescending(a=>a.UploadDate);
 
             await Task.Yield();
             return query;
@@ -241,7 +241,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                  Week=y.Week,
                                  Shift=y.Shift,
                                  
-                             });
+                             }).OrderBy(a=>a.YearPeriode).ThenBy(a=>a.MonthId).ThenBy(a=>a.Week).ThenBy(a=>a.Shift).ThenBy(a=>a.MCNo);
             return query.ToList();
         }
 
