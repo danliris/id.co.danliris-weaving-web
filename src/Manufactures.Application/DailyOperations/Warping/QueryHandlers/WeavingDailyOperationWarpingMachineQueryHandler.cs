@@ -283,7 +283,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                 WarpType= cl.Key.warpType,
                                 ThreadCut=cl.Sum(a=>a.threadCut)
 
-                            }).ToList().OrderBy(a=>a.Periode).ThenBy(a=>a.Code);
+                            }).ToList().OrderBy(a=>a.Periode).ThenBy(a=>a.Code).ThenBy(a=>a.WarpType).ThenBy(a=>a.AL);
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
             foreach (var item in query)
             {
