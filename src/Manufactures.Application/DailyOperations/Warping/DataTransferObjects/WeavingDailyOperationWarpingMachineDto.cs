@@ -49,6 +49,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public string WarpType { get; set; }
         [JsonProperty(PropertyName = "Code")]
         public string Code { get; set; }
+        [JsonProperty(PropertyName = "UploadDate")]
+        public DateTimeOffset UploadDate { get; set; }
 
         // [JsonProperty(PropertyName = "Lot")]
         //public string Lot {get; set; }
