@@ -261,31 +261,39 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                               yearPeriode = a.YearPeriode,
                               day = a.Date,
                               name = a.Name,
+                              warpType= a.WarpType,
+                              al= a.AL,
                               Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date)
                           };
             var query = (from a in allData
-                        where 
-                        ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo.Contains(mcNo))) &&
-                        (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
-                        (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
-                        (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
-                        (code == null || (code != null && code != "" && a.code.Contains( code))) &&
-                        (a.Periode.Date  >= fromDate.Date && a.Periode.Date<= toDate.Date))
-                        select new { Name = a.name , ThreadCut  = a.threadCut, Length  =a.length}).GroupBy(l => l.Name)
+                         where
+                         ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo.Contains(mcNo))) &&
+                         (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
+                         (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
+                         (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
+                         (code == null || (code != null && code != "" && a.code.Contains(code))) &&
+                         (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
+                         select new { a.name, a.threadCut, Length = a.length, a.code, a.warpType, a.al, a.Periode })
+                        .GroupBy(l => new { l.Periode, l.code, l.warpType, l.al })
                             .Select(cl => new
                             {
-                                Name = cl.First().Name,
-                                ThreadCut = cl.Sum(c => c.ThreadCut),
-                                Length = cl.Sum(c => c.Length),
-                            }).ToList(); ;
+                                AL = cl.Key.al,
+                                Code = cl.Key.code,
+                                Periode = cl.Key.Periode,
+                                WarpType= cl.Key.warpType,
+                                ThreadCut=cl.Sum(a=>a.threadCut)
+
+                            }).ToList().OrderBy(a=>a.Periode).ThenBy(a=>a.Code).ThenBy(a=>a.WarpType).ThenBy(a=>a.AL);
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
             foreach (var item in query)
             {
                 WeavingDailyOperationWarpingMachineDto dto = new WeavingDailyOperationWarpingMachineDto
                 {
                     ThreadCut = item.ThreadCut,
-                    Length = item.Length,
-                    Name = item.Name
+                    AL= item.AL,
+                    WarpType=item.WarpType,
+                    Date=item.Periode,
+                    Code=item.Code
                 };
                 list.Add(dto);
             }
