@@ -216,9 +216,9 @@ namespace Manufactures.Controllers.Api
         public async Task<IActionResult> GetDataByFilter(int page = 1, int size = 100, string month="0", string yearPeriode="")
         {
             var weavingDailyOperations = _losesQuery.GetDataByFilter(month, yearPeriode);
-
-            var total = weavingDailyOperations.Count();
-            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            var data = weavingDailyOperations.OrderBy(a => a.YearPeriode).ThenBy(a => a.MonthId).ThenBy(s => s.Date).ThenBy(a => a.Shift);
+            var total = data.Count();
+            var result = data.Skip((page - 1) * size).Take(size);
             return Ok(result, info: new { page, size, total });
         }
     }
