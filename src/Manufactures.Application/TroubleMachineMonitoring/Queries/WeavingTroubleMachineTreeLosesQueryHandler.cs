@@ -216,8 +216,10 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                                 Finish = y.Finish.ToShortTimeString(),
                                 TimePerMinutes = Math.Round( y.TimePerMinutes),
                                 WarpingMachineNo = y.WarpingMachineNo,
-                                Week=y.Week
-                            }).OrderBy(a=>a.YearPeriode).OrderBy(a=>a.MonthId).OrderBy(s=>s.Date).OrderBy(a=>a.Shift);
+                                Week=y.Week,
+                                MonthId=y.MonthId,
+                                YearPeriode=y.YearPeriode
+                            });
             List<WeavingTroubleMachingTreeLosesDto> listData = new List<WeavingTroubleMachingTreeLosesDto>();
 
             foreach (var item in query)
@@ -235,7 +237,9 @@ namespace Manufactures.Application.TroubleMachineMonitoring.Queries
                     Finish = item.Finish,
                     TimePerMinutes = item.TimePerMinutes,
                     WarpingMachineNo = item.WarpingMachineNo,
-                    Week=item.Week
+                    Week=item.Week,
+                    MonthId = item.MonthId,
+                    YearPeriode=item.YearPeriode
                 };
                 listData.Add(weavings);
 

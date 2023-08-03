@@ -240,8 +240,29 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                  CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy"),
                                  Week=y.Week,
                                  Shift=y.Shift,
-                                 
-                             }).OrderBy(a=>a.YearPeriode).ThenBy(a=>a.MonthId).ThenBy(a=>a.Week).ThenBy(a=>a.Shift).ThenBy(a=>a.MCNo);
+                                 Lot=y.Lot,
+                                 SP=y.SP,
+                                 Year=y.Year,
+                                 YearSP=y.YearSP,
+                                 WarpType=y.WarpType,
+                                 AL=y.AL,
+                                 Construction=y.Construction,
+                                 Code=y.Code,
+                                 BeamNo=y.BeamNo,
+                                 TotalCone=y.TotalCone,
+                                 ThreadNo=y.ThreadNo,
+                                 Length=y.Length,
+                                 Start=y.Start,
+                                 Doff=y.Doff,
+                                 HNLeft=y.HNLeft,
+                                 HNMiddle=y.HNMiddle,
+                                 HNRight=y.HNRight,
+                                 SpeedMeterPerMinute=y.SpeedMeterPerMinute,
+                                 ThreadCut=y.ThreadCut,
+                                 Capacity=y.Capacity,
+                                 Eff= Convert.ToDecimal(y.Eff),
+                                 MonthId=y.MonthId
+                             }).OrderBy(a=>a.YearPeriode).ThenBy(a=>a.MonthId).ThenBy(a=>a.Day).ThenBy(a=>a.Week).ThenBy(a=>a.Shift).ThenBy(a=>a.MCNo);
             return query.ToList();
         }
 
@@ -269,7 +290,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                          where
                          ((mcNo == null || (mcNo != null && mcNo != "" && a.mcNo.Contains(mcNo))) &&
                          (shift == null || (shift != null && shift != "" && a.shift == shift)) &&
-                         (sp == null || (sp != null && sp != "" && a.sp.Contains(sp))) &&
+                         (sp == null || (sp != null && sp != "" && a.sp==sp)) &&
                          (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
                          (code == null || (code != null && code != "" && a.code.Contains(code))) &&
                          (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
