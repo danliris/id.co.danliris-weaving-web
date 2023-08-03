@@ -113,7 +113,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                                         Convert.ToInt32(sheet.Cells[rowIndex, startCol].Value), //tgl
                                         month,
                                         monthId,//month
-                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 7]),
+                                        converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 8]),
                                         year.ToString(),//year
                                         converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 2]),//shift
                                         converter.GenerateValueString(sheet.Cells[rowIndex, startCol + 3]),//mcNo
