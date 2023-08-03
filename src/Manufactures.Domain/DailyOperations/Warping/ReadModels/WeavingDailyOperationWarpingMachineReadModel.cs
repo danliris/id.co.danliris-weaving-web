@@ -41,6 +41,7 @@ namespace Manufactures.Domain.DailyOperations.Warping.ReadModels
         public double ThreadCut { get; internal set; }
         public double Capacity { get; internal set; }
         public string Eff { get; internal set; }
+        public int Week { get; internal set; }
 
     }
 }

@@ -49,7 +49,7 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.QueryHandlers
                 .Returns(new List<WeavingTroubleMachineTreeLosesReadModel>
                 {
                     new WeavingTroubleMachineTreeLoses(newGuid,1,"month",_date.Day,_date.Year.ToString(),"I","description","warpingMachineNo","group","code",
-                    _date,1,_date,_date).GetReadModel()
+                    _date,1,_date,_date,1).GetReadModel()
                 }.AsQueryable());
 
 
@@ -69,7 +69,7 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.QueryHandlers
                .Returns(new List<WeavingTroubleMachineTreeLosesReadModel>
                {
                     new WeavingTroubleMachineTreeLoses(newGuid,1,"month",_date.Day,_date.Year.ToString(),"I","description","warpingMachineNo","group","code",
-                    _date,1,_date,_date).GetReadModel()
+                    _date,1,_date,_date,1).GetReadModel()
                }.AsQueryable());
 
             var result = await queryHandler.GetById(newGuid);
@@ -89,7 +89,7 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.QueryHandlers
                 .Returns(new List<WeavingTroubleMachineTreeLosesReadModel>
                 {
                     new WeavingTroubleMachineTreeLoses(newGuid,1,"month",_date.Day,_date.Year.ToString(),"I","description","warpingMachineNo","group","code",
-                    _date,1,_date,_date).GetReadModel()
+                    _date,1,_date,_date,1).GetReadModel()
                 }.AsQueryable());
 
             var result = queryHandler.Delete(_date.Month.ToString(), _date.Year.ToString());
@@ -109,7 +109,7 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.QueryHandlers
                .Returns(new List<WeavingTroubleMachineTreeLosesReadModel>
                {
                     new WeavingTroubleMachineTreeLoses(newGuid,1,"month",_date.Day,_date.Year.ToString(),"I","description","warpingMachineNo","group","code",
-                    _date,1,_date,_date).GetReadModel()
+                    _date,1,_date,_date,1).GetReadModel()
                }.AsQueryable());
 
 

@@ -12,6 +12,8 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public Guid Identity { get; set; }
         [JsonProperty(PropertyName = "Month")]
         public string Month {get; set; }
+        [JsonProperty(PropertyName = "MonthId")]
+        public int MonthId { get; set; }
         [JsonProperty(PropertyName = "Year")]
         public string Year {get; set; }
         [JsonProperty(PropertyName = "YearPeriode")]
@@ -37,41 +39,49 @@ namespace Manufactures.Application.DailyOperations.Warping.DataTransferObjects
         public string Efficiency { get; set; }
         [JsonProperty(PropertyName = "Eff")]
         public decimal Eff { get; set; }
+        [JsonProperty(PropertyName = "Week")]
+        public int Week { get; set; }
+        [JsonProperty(PropertyName = "Day")]
+        public int Day { get; set; }
+        [JsonProperty(PropertyName = "AL")]
+        public string AL { get; set; }
+        [JsonProperty(PropertyName = "WarpType")]
+        public string WarpType { get; set; }
+        [JsonProperty(PropertyName = "Code")]
+        public string Code { get; set; }
+        [JsonProperty(PropertyName = "UploadDate")]
+        public DateTimeOffset UploadDate { get; set; }
 
-        // [JsonProperty(PropertyName = "Lot")]
-        //public string Lot {get; set; }
-        //[JsonProperty(PropertyName = "SP")]
-        //public string SP { get; set; }
-        //[JsonProperty(PropertyName = "YearSP")]
-        //public string YearSP { get; set; }
-        //[JsonProperty(PropertyName = "WarpType")]
-        //public string WarpType { get; set; }
-        //[JsonProperty(PropertyName = "Code")]
-        //public string Code {get; set; }
-        //[JsonProperty(PropertyName = "BeamNo")]
-        //public string BeamNo {get; set; }
-        //[JsonProperty(PropertyName = "TotalCone")]
-        //public int TotalCone {get; set; }
-        //[JsonProperty(PropertyName = "ThreadNo")]
-        //public string ThreadNo { get; set; }
-        //[JsonProperty(PropertyName = "Uom")]
-        //public string Uom {get; set; }
-        //[JsonProperty(PropertyName = "Start")]
-        //public DateTime Start {get; set; }
-        //[JsonProperty(PropertyName = "Doff")]
-        //public DateTime Doff {get; set; }
-        //[JsonProperty(PropertyName = "HNLeft")]
-        //public double HNLeft {get; set; }
-        //[JsonProperty(PropertyName = "HNMiddle")]
-        //public double HNMiddle {get; set; }
-        //[JsonProperty(PropertyName = "HNRight")]
-        //public double HNRight {get; set; }
-        //[JsonProperty(PropertyName = "SpeedMeterPerMinute")]
-        //public double SpeedMeterPerMinute {get; set; }
-        //[JsonProperty(PropertyName = "Capacity")]
-        //public double Capacity {get; set; }
-        //[JsonProperty(PropertyName = "Eff")]
-        //public double Eff {get; set; }
+        [JsonProperty(PropertyName = "Lot")]
+        public string Lot { get; set; }
+        [JsonProperty(PropertyName = "SP")]
+        public string SP { get; set; }
+        [JsonProperty(PropertyName = "YearSP")]
+        public string YearSP { get; set; }
+        [JsonProperty(PropertyName = "BeamNo")]
+        public string BeamNo { get; set; }
+        [JsonProperty(PropertyName = "TotalCone")]
+        public int TotalCone { get; set; }
+        [JsonProperty(PropertyName = "ThreadNo")]
+        public string ThreadNo { get; set; }
+        [JsonProperty(PropertyName = "Uom")]
+        public string Uom { get; set; }
+        [JsonProperty(PropertyName = "Start")]
+        public DateTime Start { get; set; }
+        [JsonProperty(PropertyName = "Doff")]
+        public DateTime Doff { get; set; }
+        [JsonProperty(PropertyName = "HNLeft")]
+        public double HNLeft { get; set; }
+        [JsonProperty(PropertyName = "HNMiddle")]
+        public double HNMiddle { get; set; }
+        [JsonProperty(PropertyName = "HNRight")]
+        public double HNRight { get; set; }
+        [JsonProperty(PropertyName = "SpeedMeterPerMinute")]
+        public double SpeedMeterPerMinute { get; set; }
+        [JsonProperty(PropertyName = "Capacity")]
+        public double Capacity { get; set; }
+        [JsonProperty(PropertyName = "Construction")]
+        public string Construction { get;  set; }
 
         //public WeavingDailyOperationWarpingMachineDto(WeavingDailyOperationWarpingMachine weaving)
         //{

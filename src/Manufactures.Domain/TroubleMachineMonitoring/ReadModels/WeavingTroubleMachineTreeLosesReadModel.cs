@@ -23,7 +23,8 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.ReadModels
         public double TimePerMinutes { get; internal set; }
         public DateTime Start { get; internal set; }
         public DateTime Finish { get; internal set; }
-        
+
+        public int Week { get; internal set; }
 
     }
 }
