@@ -1,20 +1,19 @@
 ﻿using Barebone.Controllers;
-//using Manufactures.Application.Estimations.Productions.DataTransferObjects;
+
 using Manufactures.Application.DailyOperations.Production.DataTransferObjects;
-//using Manufactures.Domain.Estimations.Productions.Commands;
+
 using Manufactures.Domain.DailyOperations.Productions.Commands;
 
 using Manufactures.Domain.DailyOperations.Productions.Queries;
-using Manufactures.Domain.DailyOperations.Productions.Repositories;
+
 using Manufactures.Domain.DailyOperations.WeavingDailyOperationMachineSizing.Queries;
-using Manufactures.Domain.DailyOperations.WeavingDailyOperationMachineSizing.Repositories;
+
 
 using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Moonlay.ExtCore.Mvc.Abstractions;
+
 using Newtonsoft.Json;
 using OfficeOpenXml;
 using System;
@@ -44,10 +43,7 @@ namespace Manufactures.Controllers.Api
                                     IWeavingDailyOperationMachineSizingQuery<WeavingDailyOperationMachineSizingDto> weavingEstimatedProductionQuery
                                     ) : base(serviceProvider)
         {
-            //_estimationProductRepository = 
-            //    this.Storage.GetRepository<IEstimatedProductionDocumentRepository>();
-            //_weavingEstimatedProductionRepository = this.Storage.GetRepository<IWeavingEstimatedProductionRepository>();
-
+           
             _dailyOperationMachineSizingDocumentQuery = estimatedProductionDocumentQuery ?? throw new ArgumentNullException(nameof(estimatedProductionDocumentQuery));
             _weavingDailyOperationMachineSizingQuery = weavingEstimatedProductionQuery ?? throw new ArgumentNullException(nameof(weavingEstimatedProductionQuery));
         }
