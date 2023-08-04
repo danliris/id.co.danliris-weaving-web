@@ -195,7 +195,6 @@ namespace Manufactures.Controllers.Api
                    weavingDailyOperations
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.Group.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
                                                                                                                 
             }
