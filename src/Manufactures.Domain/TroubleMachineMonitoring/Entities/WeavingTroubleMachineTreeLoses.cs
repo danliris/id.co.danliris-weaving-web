@@ -25,6 +25,7 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.Entities
         public DateTime Start { get; internal set; }
         public DateTime Finish { get; internal set; }
 
+        public int Week { get; internal set; }
         public WeavingTroubleMachineTreeLoses(Guid identity,
          int Date,
          string Month,
@@ -38,7 +39,7 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.Entities
          DateTime DownTimeMC,
          double TimePerMinutes,
          DateTime Start,
-         DateTime Finish) : base(identity)
+         DateTime Finish, int Week) : base(identity)
         {
             this.Date = Date;
             this.Month = Month;
@@ -53,6 +54,7 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.Entities
             this.TimePerMinutes = TimePerMinutes;
             this.Start = Start;
             this.Finish = Finish;
+            this.Week = Week;
             MarkTransient();
 
             ReadModel = new WeavingTroubleMachineTreeLosesReadModel(Identity)
@@ -69,7 +71,8 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.Entities
                 DownTimeMC = this.DownTimeMC,
                 TimePerMinutes = this.TimePerMinutes,
                 Start = this.Start,
-                Finish = this.Finish
+                Finish = this.Finish,
+                Week=this.Week
             };
         }
         public WeavingTroubleMachineTreeLoses(WeavingTroubleMachineTreeLosesReadModel readModel) :base (readModel)
@@ -87,6 +90,7 @@ namespace Manufactures.Domain.TroubleMachineMonitoring.Entities
             this.TimePerMinutes = readModel.TimePerMinutes;
             this.Start = readModel.Start;
             this.Finish = readModel.Finish;
+            this.Week = readModel.Week;
         }
         protected override WeavingTroubleMachineTreeLoses GetEntity()
         {

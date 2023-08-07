@@ -195,7 +195,6 @@ namespace Manufactures.Controllers.Api
                    weavingDailyOperations
                        .Where(x => x.CreatedDate.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                    x.Month.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
-                                   x.Group.Contains(keyword, StringComparison.CurrentCultureIgnoreCase) ||
                                     x.YearPeriode.Contains(keyword, StringComparison.CurrentCultureIgnoreCase)); //||
                                                                                                                 
             }
@@ -213,11 +212,13 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
         [HttpGet("monthYear")]
-        public async Task<IActionResult> GetDataByFilter(string month, string yearPeriode)
+        public async Task<IActionResult> GetDataByFilter(int page = 1, int size = 100, string month="0", string yearPeriode="")
         {
             var weavingDailyOperations = _losesQuery.GetDataByFilter(month, yearPeriode);
-
-            return Ok(weavingDailyOperations);
+            var data = weavingDailyOperations.OrderBy(a => a.YearPeriode).ThenBy(a => a.MonthId).ThenBy(s => s.Date).ThenBy(a => a.Shift);
+            var total = data.Count();
+            var result = data.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
     }
    
