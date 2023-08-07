@@ -291,12 +291,12 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
         public List<DailyOperationMachineReachingDto> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo)
         {
             var allData = from a in _repository.Query
-                          where (mcNo == null || (mcNo != null && mcNo != "" && a.MCNo.Contains(mcNo))) &&
+                          where (mcNo == null || (mcNo != null && mcNo != "" && a.MCNo==mcNo)) &&
                                 (shift == null || (shift != null && shift != "" && a.Shift == shift))
                           select new
                           {
                               code = a.Code,
-                              beamNo = a.BeamNo,
+                              doffing = a.Doffing,
                               Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthId, a.Date).Date
                           };
             var query = (from a in allData
@@ -306,10 +306,10 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                          {
                              Code= g.Key.code,
                              Periode=g.Key.Periode,
-                             BeamNo=g.Count().ToString()
+                             BeamNo=g.Sum(a=>!string.IsNullOrEmpty(a.doffing) ? Convert.ToInt32( a.doffing):0).ToString()
                          });
 
-            return query.OrderBy(a => a.Periode).ToList();
+            return query.OrderBy(a => a.Periode).ThenBy(a=>a.Code).ThenBy(a=>a.BeamNo).ToList();
         }
     }
 }
