@@ -193,28 +193,30 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
             return query;
         }
 
-        public async Task<List<BeamStockUploadDto>> GetByMonthYear(int monthId, string year)
+        public async Task<List<BeamStockUploadDto>> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift )
         {
-            var query = _repository
-                            .Query.OrderByDescending(o => o.CreatedDate)
-                            .Where(s => s.MonthPeriodeId == monthId && s.YearPeriode == year)
-                            .Select(y =>
-                             new BeamStockUploadDto
-                             {
-                                 YearPeriode = y.YearPeriode,
-                                 CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy"),
-                                 Date = y.Date,
-                                 Shift = y.Shift,
-                                 Beam=y.Beam,
-                                 Code=y.Code,
-                                 Information=y.Information,
-                                 InReaching=y.InReaching,
-                                 Reaching=y.Reaching,
-                                 MonthPeriode=y.MonthPeriode,
-                                 MonthPeriodeId=y.MonthPeriodeId,
-                                 Sizing=y.Sizing,
-                                 Periode = new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthPeriodeId, y.Date)
-                             }).OrderBy(o => o.Periode);
+            var query =  (from y in _repository.Query
+                         where y.MonthPeriodeId == monthId && y.YearPeriode == year
+                                  && (datestart > 0 ? y.Date >= datestart : y.Date >= 1)
+                                  && (datefinish > 0 ? y.Date <= datefinish : y.Date >= DateTime.DaysInMonth(Convert.ToInt32(year), monthId))
+                                  && (y.Shift == (string.IsNullOrEmpty(shift) ? y.Shift : shift))
+                          select
+                           new BeamStockUploadDto
+                           {
+                               YearPeriode = y.YearPeriode,
+                               CreatedDate = y.CreatedDate.ToString("dd-MM-yyyy"),
+                               Date = y.Date,
+                               Shift = y.Shift,
+                               Beam = y.Beam,
+                               Code = y.Code,
+                               Information = y.Information,
+                               InReaching = y.InReaching,
+                               Reaching = y.Reaching,
+                               MonthPeriode = y.MonthPeriode,
+                               MonthPeriodeId = y.MonthPeriodeId,
+                               Sizing = y.Sizing,
+                               Periode = new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthPeriodeId, y.Date)
+                           }).OrderBy(o => o.Periode);
 
             return query.ToList();
         }
