@@ -92,7 +92,7 @@ namespace Manufactures.Tests.BeamStockUpload.QueryHandlers
                 }.AsQueryable());
 
 
-            var result = queryHandler.GetByMonthYear(_date.Month, _date.Year.ToString());
+            var result = queryHandler.GetByMonthYear(_date.Month, _date.Year.ToString(), 0, 0, null);
 
             // Assert
             result.Should().NotBeNull();

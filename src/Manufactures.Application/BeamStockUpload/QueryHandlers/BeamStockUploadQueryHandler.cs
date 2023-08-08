@@ -198,7 +198,7 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
             var query =  (from y in _repository.Query
                          where y.MonthPeriodeId == monthId && y.YearPeriode == year
                                   && (datestart > 0 ? y.Date >= datestart : y.Date >= 1)
-                                  && (datefinish > 0 ? y.Date <= datefinish : y.Date >= DateTime.DaysInMonth(Convert.ToInt32(year), monthId))
+                                  && (datefinish > 0 ? y.Date <= datefinish : y.Date <= DateTime.DaysInMonth(Convert.ToInt32(year), monthId))
                                   && (y.Shift == (string.IsNullOrEmpty(shift) ? y.Shift : shift))
                           select
                            new BeamStockUploadDto
