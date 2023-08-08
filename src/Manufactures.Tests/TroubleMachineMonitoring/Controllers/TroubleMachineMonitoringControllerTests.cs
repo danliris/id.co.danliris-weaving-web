@@ -140,7 +140,7 @@ namespace Manufactures.Tests.TroubleMachineMonitoring.Controllers
             this._mocklosesQuery.Setup(s => s.GetAll()).ReturnsAsync(ienumData);
             var unitUnderTest = CreateTroubleMachineMonitoringController();
             // Act
-            var result = await unitUnderTest.GetDataByFilter("Month", "2023");
+            var result = await unitUnderTest.GetDataByFilter(1,100, dto.Month,dto.YearPeriode);
 
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
