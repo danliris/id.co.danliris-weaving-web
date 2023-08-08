@@ -47,9 +47,9 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("monthYear")]
-        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "")
+        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "", int datestart=0, int datefinish=0, string shift=null)
         {
-            var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year);
+            var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year,datestart,datefinish,shift);
 
             var total = weavingDailyOperations.Count();
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
