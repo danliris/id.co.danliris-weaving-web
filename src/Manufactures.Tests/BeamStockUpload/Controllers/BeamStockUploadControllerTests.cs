@@ -158,7 +158,7 @@ namespace Manufactures.Tests.BeamStockUpload.Controllers
                 Shift="I",
                 Date=1
             });
-            this.mockWeavingQuery.Setup(s => s.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString())).ReturnsAsync(dto);
+            this.mockWeavingQuery.Setup(s => s.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString(), 0, 0, null)).ReturnsAsync(dto);
             var unitUnderTest = CreateBeamStockUploadController();
 
             var result = await unitUnderTest.GetByMonthYear(1, 100, DateTime.Now.Month, DateTime.Now.Year.ToString());
