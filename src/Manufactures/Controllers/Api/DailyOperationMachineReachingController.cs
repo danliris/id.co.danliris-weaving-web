@@ -98,13 +98,15 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("report")]
-        public async Task<IActionResult> GetWarpingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo)
+        public async Task<IActionResult> GetWarpingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, int page, int size)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var productionWarpingReport = _reachingQuery.GetDailyReports(fromDate, toDate, shift, mcNo);
 
-            return Ok(productionWarpingReport);
+            var total = productionWarpingReport.Count();
+            var result = productionWarpingReport.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("report-download")]
