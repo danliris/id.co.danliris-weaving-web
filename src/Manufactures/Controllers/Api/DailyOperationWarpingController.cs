@@ -543,13 +543,15 @@ namespace Manufactures.Controllers.Api
         //    }
         //}
         [HttpGet("get-warping-production-report")]
-        public async Task<IActionResult> GetWarpingProductionReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code)
+        public async Task<IActionResult> GetWarpingProductionReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string threadNo, string code, int page, int size)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var productionWarpingReport = _weavingDailyOperationWarpingMachineQuery.GetReports(fromDate, toDate, shift, mcNo, sp, threadNo, code);
 
-            return Ok(productionWarpingReport);
+            var total = productionWarpingReport.Count();
+            var result = productionWarpingReport.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("get-warping-daily-operation-report")]
