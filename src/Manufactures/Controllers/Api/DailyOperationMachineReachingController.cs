@@ -53,11 +53,13 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("monthYear")]
-        public async Task<IActionResult> GetByMonthYear(int monthId, string year)
+        public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId=0, string year="")
         {
             var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year);
 
-            return Ok(weavingDailyOperations);
+            var total = weavingDailyOperations.Count();
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpPost("upload")]
@@ -96,13 +98,15 @@ namespace Manufactures.Controllers.Api
         }
 
         [HttpGet("report")]
-        public async Task<IActionResult> GetWarpingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo)
+        public async Task<IActionResult> GetWarpingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string mcNo, int page, int size)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var productionWarpingReport = _reachingQuery.GetDailyReports(fromDate, toDate, shift, mcNo);
 
-            return Ok(productionWarpingReport);
+            var total = productionWarpingReport.Count();
+            var result = productionWarpingReport.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
         }
 
         [HttpGet("report-download")]
