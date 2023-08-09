@@ -216,7 +216,7 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
                                MonthPeriodeId = y.MonthPeriodeId,
                                Sizing = y.Sizing,
                                Periode = new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthPeriodeId, y.Date)
-                           }).OrderBy(o => o.Periode);
+                           }).OrderBy(o => o.Periode).ThenBy(a=>a.Shift);
 
             return query.ToList();
         }
