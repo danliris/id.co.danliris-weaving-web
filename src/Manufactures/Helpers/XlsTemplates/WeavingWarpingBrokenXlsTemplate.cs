@@ -28,7 +28,7 @@ namespace Manufactures.Helpers.XlsTemplates
             {
                 var dateFormat = "dd/MM/yyyy";
                 var date = item.Date.ToString(dateFormat);
-                reportDataTable.Rows.Add(idx, date, item.Code, item.WarpType, item.AL, item.ThreadCut);
+                reportDataTable.Rows.Add(idx, date, item.Code, item.ThreadNo, item.AL, item.ThreadCut);
                 sumTHreadCut += item.ThreadCut;
                 idx++;
             };
