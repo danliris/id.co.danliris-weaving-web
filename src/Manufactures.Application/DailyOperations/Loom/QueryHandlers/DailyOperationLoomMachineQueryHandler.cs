@@ -333,7 +333,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                  WeftType2 = y.WeftType2,
                                  WeftType3 = y.WeftType3,
                                  Periode = new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthPeriodeId, y.Date)
-                             }).OrderBy(o => o.Periode);
+                             }).OrderBy(o => o.Periode).ThenBy(a => a.Shift);
 
             return query.ToList();
         }
