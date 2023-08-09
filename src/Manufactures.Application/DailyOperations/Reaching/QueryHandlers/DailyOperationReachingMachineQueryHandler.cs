@@ -282,7 +282,7 @@ namespace Manufactures.Application.DailyOperations.Reaching.QueryHandlers
                                  Webbing = y.Webbing,
                                  Year = y.Year,
                                  Periode= new DateTime(Convert.ToInt32(y.YearPeriode), y.MonthId, y.Date)
-                             }).OrderBy(o=>o.Periode).ThenBy(a=>a.Shift);
+                             }).OrderBy(o=>o.Periode).ThenBy(a=>a.Shift).ThenBy(a=>a.Group);
 
             return query.ToList();
         }
