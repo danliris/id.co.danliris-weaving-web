@@ -18,7 +18,7 @@ namespace Manufactures.Helpers.XlsTemplates
 
             dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
         
-            dt.Columns.Add(new DataColumn() { ColumnName = "No MC", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Mesin Sizing", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
           
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU" });
