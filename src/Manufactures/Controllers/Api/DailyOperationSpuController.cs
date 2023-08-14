@@ -95,13 +95,21 @@ namespace Manufactures.Controllers.Api
 
 
         [HttpGet("get-sizing-daily-operation-report")]
-        public async Task<IActionResult> GetSizingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,string sp)
+        public async Task<IActionResult> GetSizingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,string sp, int page, int size)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var productionSpuReport = _weavingDailyOperationSpuMachineQuery.GetDailySizingReports(fromDate, toDate, shift, machineSizing, groupui, name, code,sp);
 
-            return Ok(productionSpuReport);
+            //ini utk paging
+            var total = productionSpuReport.Count();
+            var result = productionSpuReport.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
+            //----------------------
+
+
+            //ini awalnya tnp paging
+            //return Ok(productionSpuReport);
         }
 
         [HttpGet("get-sizing-daily-operation-report/download")]
@@ -119,7 +127,7 @@ namespace Manufactures.Controllers.Api
                 byte[] xlsInBytes;
 
 
-                var fileName = "Laporan OPERASIONAL HARIAN SIZING" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                var fileName = "LAPORAN OPERASIONAL HARIAN SIZING" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
                 WeavingDailyOperationSizingReportXlsTemplate xlsTemplate = new WeavingDailyOperationSizingReportXlsTemplate();
                 MemoryStream xls = xlsTemplate.GenerateDailyOperationSizingReportXls(productionWarpingReport, fromDate, toDate, shift, machineSizing, groupui, sp ,code);
 
