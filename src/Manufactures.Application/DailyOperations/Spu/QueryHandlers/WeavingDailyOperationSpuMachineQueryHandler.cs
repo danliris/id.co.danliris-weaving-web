@@ -53,10 +53,10 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                               periodeId=a.PeriodeId,
                               length=a.Length,
                               efficiency=a.Efficiency,
-
-
-
-                               Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
+                              Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
+                              //sp 17 penambahan kolom
+                              code = a.Code,
+                              recipe = a.Recipe
                             
 
                           };
@@ -73,7 +73,9 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                              Group = a.Group,
                              Length=a.length,
                              Efficiency=a.efficiency,
-                             Periode = a.Periode
+                             Periode = a.Periode,
+                             Code=a.code,
+                             Recipe=a.recipe
 
                          });
 
