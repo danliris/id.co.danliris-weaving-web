@@ -17,23 +17,24 @@ namespace Manufactures.Helpers.XlsTemplates
             DataTable dt = new DataTable();
 
             dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
-        
-            dt.Columns.Add(new DataColumn() { ColumnName = "No MC", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "Shift", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Kode", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Mc Sz", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Resep", DataType = typeof(string) });
           
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU" });
           
             int index = 1;
             if (dailyOperationWarpingReportModel.Count == 0)
             {
-                dt.Rows.Add("", "", "", "");
+                dt.Rows.Add("", "", "", "", "", "");
             }
             else
             {
                 foreach (var item in dailyOperationWarpingReportModel)
                 {
                     var dateFormat = "dd/MM/yyyy";
-                    var date = item.Date.ToString(dateFormat);
+                    var finalPeriode = item.Periode.ToString(dateFormat);
                     // var todec = Convert.ToDecimal(item.SPU);
                     //var exspubaru = Math.Round(Convert.ToDouble(todec) * 100, 2);
                     //var spufinalbaru = exspubaru.ToString() ;
@@ -45,7 +46,7 @@ namespace Manufactures.Helpers.XlsTemplates
                     //dt.Rows.Add(index++, item.MachineSizing, item.Shift, spufinalbaru);
                     //smpe sini
 
-                   //ini bisa tp kurang sempurna
+                    //ini bisa tp kurang sempurna
                     //var nilaiSPUawal = item.SPU;
                     //if (nilaiSPUawal == "#VALUE!")
                     //{
@@ -68,14 +69,14 @@ namespace Manufactures.Helpers.XlsTemplates
                     {
                         var nilaiMCawal = item.MachineSizing;
                         //nilaiSPUawal = "2";
-                        dt.Rows.Add(index++, item.MachineSizing, item.Shift, "#VALUE!");
+                        dt.Rows.Add(index++, finalPeriode,item.Code,item.MachineSizing, item.Recipe, "#VALUE!");
                     }
                     else
                     {
                         var SPU = item.SPU.Replace(",", ".");
                         double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
                         string spufinalbaru = _spu + " %";
-                        dt.Rows.Add(index++, item.MachineSizing, item.Shift, spufinalbaru);
+                        dt.Rows.Add(index++, finalPeriode, item.Code,item.MachineSizing, item.Recipe, spufinalbaru);
                     }
 
 
@@ -105,10 +106,10 @@ namespace Manufactures.Helpers.XlsTemplates
                 worksheet.Cells["A" + 1 + ":G" + 8 + ""].Style.Font.Bold = true;
                 worksheet.Cells["A8"].LoadFromDataTable(dt, true);
               
-                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":D" + (index + 8) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                 
 
 

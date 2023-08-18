@@ -73,7 +73,7 @@ namespace Manufactures.Tests.DailyOperations.Production.Controllers
             this.mockWeavingQuery.Setup(s => s.GetAll()).ReturnsAsync(ienumData);
             var unitUnderTest = CreateDailyOperationSpuController();
             // Act
-            var result = await unitUnderTest.GetSizingDailyOperationReport(DateTime.Now.AddYears(-5), DateTime.Now, "1", "SZ 1", "A", "{}", "{}", "{}");
+            var result = await unitUnderTest.GetSizingDailyOperationReport(DateTime.Now.AddYears(-5), DateTime.Now, "1", "SZ 1", "A", "{}", "{}", "{}",1,25);
 
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
