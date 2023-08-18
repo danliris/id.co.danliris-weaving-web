@@ -80,8 +80,17 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                          });
 
             // return query.OrderByDescending(a => a.Date).ToList();
-            return query.OrderBy(a => a.Shift)
-                .OrderBy(a => a.MachineSizing)
+
+            //return query.OrderBy(a => a.Periode)
+            //.OrderBy(a => a.Code)
+            //.OrderBy(a => a.MachineSizing)
+            //.ToList();
+
+            return query.OrderBy(a => a.Periode)
+                .ThenBy(a => a.Code)
+                .ThenBy(a => a.MachineSizing)
+                .ThenBy(a => a.Recipe)
+                .ThenBy(a => a.SPU)
                 .ToList();
         }
 
