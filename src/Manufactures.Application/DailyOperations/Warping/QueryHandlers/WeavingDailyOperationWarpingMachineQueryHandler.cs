@@ -294,17 +294,17 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                          (threadNo == null || (threadNo != null && threadNo != "" && a.threadNo.Contains(threadNo))) &&
                          (code == null || (code != null && code != "" && a.code.Contains(code))) &&
                          (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
-                         select new { a.name, a.threadCut, Length = a.length, a.code, a.warpType, a.al, a.Periode })
-                        .GroupBy(l => new { l.Periode, l.code, l.warpType, l.al })
+                         select new { a.name, a.threadCut, Length = a.length, a.code, a.threadNo, a.al, a.Periode })
+                        .GroupBy(l => new { l.Periode, l.code, l.threadNo, l.al })
                             .Select(cl => new
                             {
                                 AL = cl.Key.al,
                                 Code = cl.Key.code,
                                 Periode = cl.Key.Periode,
-                                WarpType= cl.Key.warpType,
+                                ThreadNo= cl.Key.threadNo,
                                 ThreadCut=cl.Sum(a=>a.threadCut)
 
-                            }).ToList().OrderBy(a=>a.Periode).ThenBy(a=>a.Code).ThenBy(a=>a.WarpType).ThenBy(a=>a.AL);
+                            }).ToList().OrderBy(a=>a.Periode).ThenBy(a=>a.Code).ThenBy(a=>a.ThreadNo).ThenBy(a=>a.AL);
             List<WeavingDailyOperationWarpingMachineDto> list = new List<WeavingDailyOperationWarpingMachineDto>();
             foreach (var item in query)
             {
@@ -312,7 +312,7 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                 {
                     ThreadCut = item.ThreadCut,
                     AL= item.AL,
-                    WarpType=item.WarpType,
+                    ThreadNo=item.ThreadNo,
                     Date=item.Periode,
                     Code=item.Code
                 };
