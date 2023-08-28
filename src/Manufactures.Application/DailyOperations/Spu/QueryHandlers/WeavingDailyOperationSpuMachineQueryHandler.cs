@@ -56,7 +56,9 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                               Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
                               //sp 17 penambahan kolom
                               code = a.Code,
-                              recipe = a.Recipe
+                              recipe = a.Recipe,
+                              beamNo= a.BeamNo
+                              
                             
 
                           };
@@ -75,7 +77,8 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                              Efficiency=a.efficiency,
                              Periode = a.Periode,
                              Code=a.code,
-                             Recipe=a.recipe
+                             Recipe=a.recipe,
+                             BeamNo=a.beamNo
 
                          });
 
