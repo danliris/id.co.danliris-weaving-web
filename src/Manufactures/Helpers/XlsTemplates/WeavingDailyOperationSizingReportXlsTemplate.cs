@@ -40,25 +40,51 @@ namespace Manufactures.Helpers.XlsTemplates
                     var nilaiSPUawal = item.SPU;
                     var nilaiEfficiencyawal = item.Efficiency;
 
-                    if (nilaiSPUawal == "#VALUE!" || nilaiEfficiencyawal == "#VALUE!")
+
+                    //data eror SPU
+                    if (nilaiSPUawal == "#VALUE!")
                     {
-                        
-                        dt.Rows.Add(index++, finalPeriode, item.MachineSizing, item.Shift, "#VALUE!",item.Length, "#VALUE!");
+                        nilaiSPUawal = "#VALUE!";
+                 
                     }
-                
                     else
                     {
-                        //efisiensi
-                        var efisiensi = item.Efficiency.Replace(",", ".");
-                        double _efisiensi = Math.Round(Convert.ToDouble(efisiensi) * 100, 2);
-                        string efisiensifinal = _efisiensi + " %";
-
-                        //SPU
-                        var SPU = item.SPU.Replace(",", ".");
-                        double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
-                        string spufinalbaru = _spu + " %";
-                        dt.Rows.Add(index++, finalPeriode, item.MachineSizing, item.Shift, spufinalbaru,item.Length, efisiensifinal);
+                        var spuConvert = Math.Round(Convert.ToDouble(item.SPU.Replace(",", ".")) * 100, 2);
+                        nilaiSPUawal = spuConvert + "%";
+                  
                     }
+
+
+                    //data eror Efficiency
+                   if ( nilaiEfficiencyawal == "#VALUE!")
+                    {
+                        nilaiEfficiencyawal = "#VALUE!";
+
+                    }
+                    else
+                    {
+
+                        var efiiensiConvert = Math.Round(Convert.ToDouble(item.Efficiency.Replace(",", ".")) * 100, 2);
+                        nilaiEfficiencyawal = efiiensiConvert + "%";
+           
+                    }
+
+                   //tulis data ke excel
+                      dt.Rows.Add(index++, finalPeriode, item.MachineSizing, item.Shift, nilaiSPUawal, item.Length, nilaiEfficiencyawal);
+
+                    //else
+                    //{
+                    //    //efisiensi
+                    //    var efisiensi = item.Efficiency.Replace(",", ".");
+                    //    double _efisiensi = Math.Round(Convert.ToDouble(efisiensi) * 100, 2);
+                    //    string efisiensifinal = _efisiensi + " %";
+
+                    //    //SPU
+                    //    var SPU = item.SPU.Replace(",", ".");
+                    //    double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
+                    //    string spufinalbaru = _spu + " %";
+                    //    dt.Rows.Add(index++, finalPeriode, item.MachineSizing, item.Shift, spufinalbaru,item.Length, efisiensifinal);
+                    //}
 
 
 
