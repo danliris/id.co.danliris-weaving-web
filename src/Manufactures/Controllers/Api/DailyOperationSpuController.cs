@@ -50,17 +50,25 @@ namespace Manufactures.Controllers.Api
       
 
 
-
+        //SPU - Listview
         [HttpGet("get-spu-daily-operation-report")]
-        public async Task<IActionResult> GetSpuDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code)
+        public async Task<IActionResult> GetSpuDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,int page, int size)
         {
             VerifyUser();
             var acceptRequest = Request.Headers.Values.ToList();
             var productionSpuReport = _weavingDailyOperationSpuMachineQuery.GetDailyReports(fromDate, toDate, shift, machineSizing, groupui, name, code);
 
-            return Ok(productionSpuReport);
+            //ini utk paging
+            var total = productionSpuReport.Count();
+            var result = productionSpuReport.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
+            //----------------------
+
+            //ini awalnya tnp paging
+            //return Ok(productionSpuReport);
         }
 
+        //SPU - Download
         [HttpGet("get-spu-daily-operation-report/download")]
         public async Task<IActionResult> GetWarpingDailyOperationReportExcel(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code)
         {
@@ -94,6 +102,7 @@ namespace Manufactures.Controllers.Api
         }
 
 
+        //Laporan Harian Sizing - Listview
         [HttpGet("get-sizing-daily-operation-report")]
         public async Task<IActionResult> GetSizingDailyOperationReport(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code,string sp, int page, int size)
         {
@@ -112,6 +121,8 @@ namespace Manufactures.Controllers.Api
             //return Ok(productionSpuReport);
         }
 
+
+        //Laporan Harian Sizing - Download
         [HttpGet("get-sizing-daily-operation-report/download")]
         public async Task<IActionResult> GetSizingDailyOperationReportExcel(DateTime fromDate, DateTime toDate, string shift, string machineSizing, string groupui, string name, string code, string sp)
         {
