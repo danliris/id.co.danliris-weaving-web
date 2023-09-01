@@ -72,6 +72,14 @@ namespace Manufactures.Helpers.XlsTemplates
                         //nilaiSPUawal = "2";
                         dt.Rows.Add(index++, finalPeriode,item.Code,item.BeamNo,item.MachineSizing, item.Recipe, "#VALUE!");
                     }
+
+                    else if (nilaiSPUawal.Contains("%"))
+                    {
+                        nilaiSPUawal = item.SPU;
+                        dt.Rows.Add(index++, finalPeriode, item.Code, item.BeamNo, item.MachineSizing, item.Recipe, nilaiSPUawal);
+
+                    }
+
                     else
                     {
                         var SPU = item.SPU.Replace(",", ".");

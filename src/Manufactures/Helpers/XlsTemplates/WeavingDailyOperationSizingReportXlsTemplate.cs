@@ -41,11 +41,29 @@ namespace Manufactures.Helpers.XlsTemplates
                     var nilaiEfficiencyawal = item.Efficiency;
 
 
+
+                    //data % di SPU
+                   // if (nilaiSPUawal.Contains("%"))
+                    //{
+                      //  nilaiSPUawal = "berisi %";
+
+                    //}
+                   // else
+                   // {
+                  //      nilaiSPUawal = "ini else";
+                   // }
+
+
+
                     //data eror SPU
                     if (nilaiSPUawal == "#VALUE!")
                     {
                         nilaiSPUawal = "#VALUE!";
                  
+                    }
+                    else if(nilaiSPUawal.Contains("%"))
+                    {
+                        nilaiSPUawal = item.SPU;
                     }
                     else
                     {
