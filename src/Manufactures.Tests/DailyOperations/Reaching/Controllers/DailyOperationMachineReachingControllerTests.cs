@@ -133,7 +133,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.Controllers
             this.mockWeavingQuery.Setup(s => s.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString())).ReturnsAsync(dto);
             var unitUnderTest = CreateDailyOperationMachineReachingController();
             // Act
-            var result = await unitUnderTest.GetByMonthYear(DateTime.Now.Month, DateTime.Now.Year.ToString());
+            var result = await unitUnderTest.GetByMonthYear(1,1,DateTime.Now.Month, DateTime.Now.Year.ToString());
 
             // Assert
             Assert.NotNull(result);
@@ -159,7 +159,7 @@ namespace Manufactures.Tests.DailyOperations.Reaching.Controllers
             this.mockWeavingQuery.Setup(s => s.GetDailyReports(DateTime.MinValue, DateTime.Now, "", "")).Returns(dto);
             var unitUnderTest = CreateDailyOperationMachineReachingController();
             // Act
-            var result = await unitUnderTest.GetWarpingDailyOperationReport(DateTime.MinValue, DateTime.Now, "", "");
+            var result = await unitUnderTest.GetWarpingDailyOperationReport(DateTime.MinValue, DateTime.Now, "", "",1,1);
 
             // Assert
             Assert.NotNull(result);
