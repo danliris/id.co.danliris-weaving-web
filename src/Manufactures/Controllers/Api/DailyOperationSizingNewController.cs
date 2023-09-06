@@ -234,11 +234,20 @@ namespace Manufactures.Controllers.Api
             return Ok(result, info: new { page, size, total });
         }
         [HttpGet("WeavingDailyOperationMachineSizing/monthYear")]
-        public async Task<IActionResult> GetWeavingDailyOperationMachineSizing(string month, string yearPeriode)
+        public async Task<IActionResult> GetWeavingDailyOperationMachineSizing(string month, string yearPeriode, int page, int size)
         {
             var weavingDailyOperations = _weavingDailyOperationMachineSizingQuery.GetDataByFilter(month, yearPeriode);
- 
-            return Ok(weavingDailyOperations);
+            //awal tnp paging
+            //return Ok(weavingDailyOperations);
+            //------------------------
+
+            //utk paging
+            //ini utk paging
+            var total = weavingDailyOperations.Count();
+            var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
+            return Ok(result, info: new { page, size, total });
+            //----------------------
+           
         }
 
         [HttpGet("WeavingEstimated/download")]
