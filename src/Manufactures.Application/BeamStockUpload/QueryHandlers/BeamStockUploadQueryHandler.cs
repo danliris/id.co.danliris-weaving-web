@@ -193,7 +193,7 @@ namespace Manufactures.Application.BeamStockUpload.QueryHandlers
             return query;
         }
 
-        public async Task<List<BeamStockUploadDto>> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift )
+        public List<BeamStockUploadDto> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift )
         {
             var query =  (from y in _repository.Query
                          where y.MonthPeriodeId == monthId && y.YearPeriode == year
