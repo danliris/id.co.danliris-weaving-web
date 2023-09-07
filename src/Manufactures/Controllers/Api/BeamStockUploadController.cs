@@ -1,13 +1,16 @@
 ﻿using Barebone.Controllers;
 using Manufactures.Application.BeamStockUpload.DataTransferObjects;
 using Manufactures.Domain.BeamStockUpload.Queries;
+using Manufactures.Helpers.XlsTemplates;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,7 +52,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("monthYear")]
         public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "", int datestart=0, int datefinish=0, string shift=null)
         {
-            var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year,datestart,datefinish,shift);
+            var weavingDailyOperations =  _reachingQuery.GetByMonthYear(monthId, year,datestart,datefinish,shift);
 
             var total = weavingDailyOperations.Count();
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
@@ -90,6 +93,37 @@ namespace Manufactures.Controllers.Api
                 throw new Exception($"Gagal menyimpan data");
             }
         }
-    
+
+
+        [HttpGet("download")]
+        public async Task<IActionResult> GetBeamStockExcel( int monthId = 0, string year = "", int datestart = 0, int datefinish = 0, string shift = null)
+        {
+
+            try
+            {
+                VerifyUser();
+                var acceptRequest = Request.Headers.Values.ToList();
+
+                var weavingDailyOperations = _reachingQuery.GetByMonthYear(monthId, year, datestart, datefinish, shift);
+               
+                byte[] xlsInBytes;
+
+
+                var fileName = "Laporan Visualisasi Stock Beam " + datestart + "-" + monthId + "-" + year +" sd " + datefinish + "-" + monthId + "-" + year;
+                WeavingBeamStockReportXlsTemplate xlsTemplate = new WeavingBeamStockReportXlsTemplate();
+                MemoryStream xls = xlsTemplate.GenerateBeamStockReportXls(weavingDailyOperations, monthId, year, datestart, datefinish, shift);
+
+                fileName += ".xlsx";
+
+                xlsInBytes = xls.ToArray();
+                var file = File(xlsInBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                return file;
+            }
+            catch (Exception e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }
