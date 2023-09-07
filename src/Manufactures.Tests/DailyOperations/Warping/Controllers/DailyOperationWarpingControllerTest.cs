@@ -188,7 +188,7 @@ namespace Manufactures.Tests.DailyOperations.Warping.Controllers
             this.mocWeavingQuery.Setup(s => s.GetReports(DateTime.Now, DateTime.Now, "", "", "", "", "")).Returns(new List<WeavingDailyOperationWarpingMachineDto>());
             var unitUnderTest = CreateDailyOperationWarpingController();
             // Act
-            var result = await unitUnderTest.GetWarpingProductionReport(DateTime.Now, DateTime.Now,"","","","","");
+            var result = await unitUnderTest.GetWarpingProductionReport(DateTime.Now, DateTime.Now,"","","","","",1,1);
 
             // Assert
             Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
