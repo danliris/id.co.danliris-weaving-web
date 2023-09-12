@@ -295,7 +295,9 @@ namespace Manufactures.Application.DailyOperations.Warping.QueryHandlers
                          (code == null || (code != null && code != "" && a.code.Contains(code))) &&
                          (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date))
                          select new { a.name, a.threadCut, Length = a.length, a.code, a.threadNo, a.al, a.Periode })
+
                         .GroupBy(l => new { l.Periode, l.code, l.threadNo, l.al })
+
                             .Select(cl => new
                             {
                                 AL = cl.Key.al,
