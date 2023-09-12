@@ -21,6 +21,8 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         public string Shift { get;  set; }
         [JsonProperty(PropertyName = "MCNo")]
         public string MCNo { get;  set; }
+        [JsonProperty(PropertyName = "TotMCNo")]
+        public string TotMCNo { get; set; }
         [JsonProperty(PropertyName = "SPNo")]
         public string SPNo { get;  set; }
         [JsonProperty(PropertyName = "Year")]
@@ -60,28 +62,44 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         public string MonthId { get;  set; }
         [JsonProperty(PropertyName = "ProductionCMPX")]
         public string ProductionCMPX { get;  set; }
+        [JsonProperty(PropertyName = "TotProductionCMPX")]
+        public Decimal TotProductionCMPX { get; set; }
         [JsonProperty(PropertyName = "EFFMC")]
         public string EFFMC { get;  set; }
         [JsonProperty(PropertyName = "RPM")]
         public string RPM { get;  set; }
+        [JsonProperty(PropertyName = "TotRPM")]
+        public decimal TotRPM { get; set; }
         [JsonProperty(PropertyName = "T")]
         public string T { get;  set; }
         [JsonProperty(PropertyName = "F")]
         public string F { get;  set; }
+        [JsonProperty(PropertyName = "TotF")]
+        public decimal TotF { get; set; }
         [JsonProperty(PropertyName = "W")]
         public string W { get;  set; }
+        [JsonProperty(PropertyName = "TotW")]
+        public decimal TotW { get; set; }
         [JsonProperty(PropertyName = "L")]
         public string L { get;  set; }
         [JsonProperty(PropertyName = "Column1")]
         public string Column1 { get;  set; }
         [JsonProperty(PropertyName = "Production")]
         public string Production { get;  set; }
+        [JsonProperty(PropertyName = "TotProduction")]
+        public decimal TotProduction { get; set; }
         [JsonProperty(PropertyName = "Production100")]
         public string Production100 { get;  set; }
+        [JsonProperty(PropertyName = "TotProduction100")]
+        public decimal TotProduction100 { get; set; }
         [JsonProperty(PropertyName = "PercentEff")]
         public string PercentEff { get;  set; }
+        [JsonProperty(PropertyName = "TotPercentEff")]
+        public decimal TotPercentEff { get; set; }
         [JsonProperty(PropertyName = "MC2Eff")]
         public string MC2Eff { get;  set; }
+        [JsonProperty(PropertyName = "TotMC2Eff")]
+        public decimal TotMC2Eff { get; set; }
         [JsonProperty(PropertyName = "RPMProduction100")]
         public string RPMProduction100 { get;  set; }
         [JsonProperty(PropertyName = "Location")]
