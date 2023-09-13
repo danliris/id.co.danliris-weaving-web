@@ -337,5 +337,158 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
 
             return query.ToList();
         }
+
+
+        //jika pake "public async" hrs pake Await
+        public List<DailyOperationLoomMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string jenisMesin, string namaBlok, string namaMtc, string operatornya, string shift, string sp)
+        {
+            var allData = from a in _repository.Query
+                          where (jenisMesin == null || (jenisMesin != null && jenisMesin != "" && a.MachineNameType.Contains(jenisMesin))) &&
+                          (namaBlok == null || (namaBlok != null && namaBlok != "" && a.BlockName.Contains(namaBlok))) &&
+                          (namaMtc == null || (namaMtc != null && namaMtc != "" && a.MTCName.Contains(namaMtc))) &&
+                          (operatornya == null || (operatornya != null && operatornya != "" && a.Operator == operatornya)) &&
+                          (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
+                          (sp == null || (sp != null && sp != "" && a.SPYear == sp)) 
+                          
+
+
+                          select new
+                          {
+
+                              mcNo = a.MCNo,
+                              yearPeriode = a.YearPeriode,
+                              al = a.AL,
+                              createdDate = a.CreatedDate.ToString("dd-MM-yyyy"),
+                              ap = a.AP,
+                              ap2 = a.AP2,
+                              ap3 = a.AP3,
+                              block = a.Block,
+                              blockName = a.BlockName,
+                              t = a.T,
+                              ta = a.TA,
+                              column1 = a.Column1,
+                              construction = a.Construction,
+                              date = a.Date,
+                              eFFMC = a.EFFMC,
+                              f = a.F,
+                              l = a.L,
+                              length = a.Length,
+                              location = a.Location,
+                              machineNameType = a.MachineNameType,
+                              machineType = a.MachineType,
+                              monthId = a.MonthId,
+                              Operator = a.Operator,
+                              mc2Eff = a.MC2Eff,
+                              mcNo2 = a.MCNo2,
+                              mcRPM = a.MCRPM,
+                              mtc = a.MTC,
+                              shift = a.Shift,
+                              mtCLock = a.MTCLock,
+                              percentEff = a.PercentEff,
+                              year = a.Year,
+                              mTCName = a.MTCName,
+                              production = a.Production,
+                              production100 = a.Production100,
+                              productionCMPX = a.ProductionCMPX,
+                              rpm = a.RPM,
+                              rpmProduction100 = a.RPMProduction100,
+                              spNo = a.SPNo,
+                              spYear = a.SPYear,
+                              thread = a.Thread,
+                              threadType = a.ThreadType,
+                              warpType = a.WarpType,
+                              w = a.W,
+                              warp = a.Warp,
+                              weft = a.Weft,
+                              weftType = a.WeftType,
+                              weftType2 = a.WeftType2,
+                              weftType3 = a.WeftType3,
+                              Periode = new DateTime(Convert.ToInt32(a.YearPeriode), a.MonthPeriodeId, a.Date)
+                            
+                          };
+
+
+
+            var query = (from a in allData
+                         where (a.Periode.Date >= fromDate.Date && a.Periode.Date <= toDate.Date)
+
+                          select new DailyOperationLoomMachineDto
+                         {
+                             //besar = kecil
+                             MCNo = a.mcNo,
+                             YearPeriode = a.yearPeriode,
+                             AL = a.al,
+                             CreatedDate = a.createdDate,
+                             AP = a.ap,
+                             AP2 = a.ap2,
+                             AP3 = a.ap3,
+                             Block = a.block,
+                             BlockName = a.blockName,
+                             T = a.t,
+                             TA = a.ta,
+                             Column1 = a.column1,
+                             Construction = a.construction,
+                             Date = a.date,
+                             EFFMC = a.eFFMC,
+                             F = a.f,
+                             L = a.l,
+                             Length = a.length,
+                             Location = a.location,
+                             MachineNameType = a.machineNameType,
+                             MachineType = a.machineType,
+                             MonthId = a.monthId,
+                             Operator = a.Operator,
+                             MC2Eff = a.mc2Eff,
+                             MCNo2 = a.mcNo2,
+                             MCRPM = a.mcRPM,
+                             MTC = a.mtc,
+                             Shift = a.shift,
+                             MTCLock = a.mtCLock,
+                             PercentEff = a.percentEff,
+                             Year = a.year,
+                             MTCName = a.mTCName,
+                             Production = a.production,
+                             Production100 = a.production100,
+                             ProductionCMPX = a.productionCMPX,
+                             RPM = a.rpm,
+                             RPMProduction100 = a.rpmProduction100,
+                             SPNo = a.spNo,
+                             SPYear = a.spYear,
+                             Thread = a.thread,
+                             ThreadType = a.threadType,
+                             WarpType = a.warpType,
+                             W = a.w,
+                             Warp = a.warp,
+                             Weft = a.weft,
+                             WeftType = a.weftType,
+                             WeftType2 = a.weftType2,
+                             WeftType3 = a.weftType3,
+                             Periode=a.Periode
+                         }).GroupBy(r => new { r.Construction, r.ThreadType })
+                         .Select(y =>
+                             new DailyOperationLoomMachineDto
+                             {
+                                 Construction = y.Key.Construction,
+                                 ThreadType = y.Key.ThreadType,
+                                 TotProductionCMPX = y.Sum(z => Convert.ToDecimal(z.ProductionCMPX)),
+                                 TotProduction = y.Sum(z => Convert.ToDecimal(z.Production)),
+                                 TotProduction100 = y.Sum(z => Convert.ToDecimal(z.Production100)),
+                                 TotPercentEff = (y.Average(z => Convert.ToDecimal(z.PercentEff))*100),
+                                 TotMC2Eff = (y.Average(z => Convert.ToDecimal(z.MC2Eff))*100),
+                                 TotF = y.Average(z => Convert.ToDecimal(z.F)),
+                                 TotW = y.Average(z => Convert.ToDecimal(z.W)),
+                                 TotRPM = y.Average(z => Convert.ToDecimal(z.RPM)),
+                                 TotMCNo = y.First().MCNo.Count()
+                                 
+                             })
+                        
+                             ;
+
+            
+
+                 return query.OrderBy(a => a.Construction)
+                 //.ThenBy(a => a.Shift)
+                 .ToList();
+        }
     }
 }
