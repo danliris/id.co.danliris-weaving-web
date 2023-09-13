@@ -22,7 +22,7 @@ namespace Manufactures.Application.DailyOperations.Loom.DataTransferObjects
         [JsonProperty(PropertyName = "MCNo")]
         public string MCNo { get;  set; }
         [JsonProperty(PropertyName = "TotMCNo")]
-        public string TotMCNo { get; set; }
+        public decimal TotMCNo { get; set; }
         [JsonProperty(PropertyName = "SPNo")]
         public string SPNo { get;  set; }
         [JsonProperty(PropertyName = "Year")]

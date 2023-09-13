@@ -477,8 +477,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                  TotMC2Eff = (y.Average(z => Convert.ToDecimal(z.MC2Eff))*100),
                                  TotF = y.Average(z => Convert.ToDecimal(z.F)),
                                  TotW = y.Average(z => Convert.ToDecimal(z.W)),
-                                 TotRPM = y.Average(z => Convert.ToDecimal(z.RPM))
-                                 //TotMCNo=y.MCNo
+                                 TotRPM = y.Average(z => Convert.ToDecimal(z.RPM)),
+                                 TotMCNo = y.First().MCNo.Count()
+                                 
                              })
                         
                              ;
