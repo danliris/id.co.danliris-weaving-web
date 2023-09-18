@@ -128,7 +128,7 @@ namespace Manufactures.Controllers.Api
                 byte[] xlsInBytes;
 
 
-                var fileName = "Laporan Loom" + fromDate.ToShortDateString() + "_" + toDate.ToShortDateString();
+                var fileName = "Laporan Loom" + fromDate.ToShortDateString() + " SD " + toDate.ToShortDateString();
                 WeavingDailyOperationLoomReportXlsTemplate xlsTemplate = new WeavingDailyOperationLoomReportXlsTemplate();
                 MemoryStream xls = xlsTemplate.GenerateDailyOperationLoomReportXls(weavingDailyOperations, fromDate, toDate, jenisMesin, namaBlok, namaMtc, operatornya, shift, sp);
 
