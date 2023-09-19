@@ -52,7 +52,7 @@ namespace Manufactures.Controllers.Api
         [HttpGet("monthYear")]
         public async Task<IActionResult> GetByMonthYear(int page = 1, int size = 100, int monthId = 0, string year = "", int datestart=0, int datefinish=0, string shift=null)
         {
-            var weavingDailyOperations =  _reachingQuery.GetByMonthYear(monthId, year,datestart,datefinish,shift);
+            var weavingDailyOperations =  await _reachingQuery.GetByMonthYear(monthId, year,datestart,datefinish,shift);
 
             var total = weavingDailyOperations.Count();
             var result = weavingDailyOperations.Skip((page - 1) * size).Take(size);
@@ -104,7 +104,7 @@ namespace Manufactures.Controllers.Api
                 VerifyUser();
                 var acceptRequest = Request.Headers.Values.ToList();
 
-                var weavingDailyOperations = _reachingQuery.GetByMonthYear(monthId, year, datestart, datefinish, shift);
+                var weavingDailyOperations = await _reachingQuery.GetByMonthYear(monthId, year, datestart, datefinish, shift);
                
                 byte[] xlsInBytes;
 

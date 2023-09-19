@@ -10,8 +10,8 @@ namespace Manufactures.Domain.BeamStockUpload.Queries
     public interface IBeamStockQuery<TModel> : IQueries<TModel>
     {
         Task<bool> Upload(ExcelWorksheets sheet, string month, int year, int monthId);
-        //Task<List<TModel>> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
-        List<TModel> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
+        Task<List<TModel>> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
+        //List<TModel> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
 
        // List<TModel> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code);
 
