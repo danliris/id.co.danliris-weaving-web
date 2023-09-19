@@ -25,7 +25,7 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "Produksi Meter", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "100 % Produksi" });
             dt.Columns.Add(new DataColumn() { ColumnName = "% EFF" });
-            dt.Columns.Add(new DataColumn() { ColumnName = "EFF MC 2" });
+            dt.Columns.Add(new DataColumn() { ColumnName = "EFF MC" });
             dt.Columns.Add(new DataColumn() { ColumnName = "Fill" });//10
             dt.Columns.Add(new DataColumn() { ColumnName = "Warp" });
             dt.Columns.Add(new DataColumn() { ColumnName = "RPM" });//13

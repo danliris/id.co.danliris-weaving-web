@@ -343,9 +343,9 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
         public List<DailyOperationLoomMachineDto> GetDailyReports(DateTime fromDate, DateTime toDate, string jenisMesin, string namaBlok, string namaMtc, string operatornya, string shift, string sp)
         {
             var allData = from a in _repository.Query
-                          where (jenisMesin == null || (jenisMesin != null && jenisMesin != "" && a.MachineNameType.Contains(jenisMesin))) &&
-                          (namaBlok == null || (namaBlok != null && namaBlok != "" && a.BlockName.Contains(namaBlok))) &&
-                          (namaMtc == null || (namaMtc != null && namaMtc != "" && a.MTCName.Contains(namaMtc))) &&
+                          where (jenisMesin == null || (jenisMesin != null && jenisMesin != "" && a.MachineNameType == jenisMesin)) &&
+                          (namaBlok == null || (namaBlok != null && namaBlok != "" && a.BlockName == namaBlok)) &&
+                          (namaMtc == null || (namaMtc != null && namaMtc != "" && a.MTCName == namaMtc)) &&
                           (operatornya == null || (operatornya != null && operatornya != "" && a.Operator == operatornya)) &&
                           (shift == null || (shift != null && shift != "" && a.Shift == shift)) &&
                           (sp == null || (sp != null && sp != "" && a.SPYear == sp)) 
@@ -478,7 +478,7 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
                                  TotF = y.Average(z => Convert.ToDecimal(z.F)),
                                  TotW = y.Average(z => Convert.ToDecimal(z.W)),
                                  TotRPM = y.Average(z => Convert.ToDecimal(z.RPM)),
-                                 TotMCNo = y.First().MCNo.Count()
+                                 TotMCNo = y.Key.Construction.Count()
                                  
                              })
                         
