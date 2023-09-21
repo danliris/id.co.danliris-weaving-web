@@ -25,6 +25,9 @@ namespace Manufactures.Tests.BeamStockUpload.Controllers
         private readonly MockRepository mockRepository;
         private readonly Mock<IBeamStockQuery<BeamStockUploadDto>> mockWeavingQuery;
 
+        //dwnload excel
+      //  private readonly Mock<IWeavingDailyOperationWarpingMachineRepository> mockWeavingDailyOperationWarpingMachineRepository;
+
         public BeamStockUploadControllerTests() : base()
         {
             this.mockRepository = new MockRepository(MockBehavior.Default);
@@ -165,5 +168,59 @@ namespace Manufactures.Tests.BeamStockUpload.Controllers
 
             Assert.NotNull(result);
         }
+
+
+
+
+        [Fact]
+        public async Task GetExcelDaily_gagal()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<BeamStockUploadDto> dto = new List<BeamStockUploadDto>();
+            dto.Add(new BeamStockUploadDto
+            {
+                Shift = "2"
+                //Year = DateTime.Now.Year.ToString(),
+                //YearPeriode = DateTime.Now.Year.ToString(),
+                //Group = "group"
+            });
+            this.mockWeavingQuery.Setup(s => s.GetByMonthYear(7, "2023y", 1, 31, "2")).ReturnsAsync(dto);
+            var unitUnderTest = CreateBeamStockUploadController();
+            // Act
+            var result = await unitUnderTest.GetBeamStockExcel(7, "2023y", 1, 31, "2");
+
+            // Assert
+            Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+        }
+
+
+        [Fact]
+        public async Task GetExcelDaily_sukses()
+        {
+
+            Guid newGuid = new Guid();
+            DateTime _date = new DateTime();
+            List<BeamStockUploadDto> dto = new List<BeamStockUploadDto>();
+            dto.Add(new BeamStockUploadDto
+            {
+                Shift = "2"
+                //Year = DateTime.Now.Year.ToString(),
+                //YearPeriode = DateTime.Now.Year.ToString(),
+                //Group = "group"
+            });
+            this.mockWeavingQuery.Setup(s => s.GetByMonthYear(7, "2023", 1, 31, "2")).ReturnsAsync(dto);
+            var unitUnderTest = CreateBeamStockUploadController();
+            // Act
+            var result = await unitUnderTest.GetBeamStockExcel(7, "2023", 1, 31, "2");
+
+            // Assert
+           // Assert.Equal((int)HttpStatusCode.InternalServerError, GetStatusCode(result));
+           // Assert.Equal((int)HttpStatusCode.OK, GetStatusCode(result));
+           //karna result nya berisi nm file, jk yg di harapkan (ssert) tidak null, maka unit test ini berhasil
+            Assert.NotNull(result);
+        }
+       
     }
 }

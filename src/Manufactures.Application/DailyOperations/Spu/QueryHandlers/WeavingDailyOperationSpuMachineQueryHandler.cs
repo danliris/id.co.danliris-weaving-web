@@ -56,7 +56,9 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                               Periode = new DateTime(Convert.ToInt32(a.Year), a.PeriodeId, a.Date),
                               //sp 17 penambahan kolom
                               code = a.Code,
-                              recipe = a.Recipe
+                              recipe = a.Recipe,
+                              beamNo= a.BeamNo
+                              
                             
 
                           };
@@ -75,7 +77,8 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                              Efficiency=a.efficiency,
                              Periode = a.Periode,
                              Code=a.code,
-                             Recipe=a.recipe
+                             Recipe=a.recipe,
+                             BeamNo=a.beamNo
 
                          });
 
@@ -145,8 +148,9 @@ namespace Manufactures.Application.DailyOperations.Spu.QueryHandlers
                          });
 
             // return query.OrderByDescending(a => a.Date).ToList();
-            return query.OrderBy(a => a.Shift)
-                .OrderBy(a => a.MachineSizing)
+            return query.OrderBy(a => a.Periode)
+                .ThenBy(a => a.Shift)
+                .ThenBy(a => a.MachineSizing)
                 .ToList();
         }
 

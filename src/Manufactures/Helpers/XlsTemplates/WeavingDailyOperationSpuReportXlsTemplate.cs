@@ -19,7 +19,8 @@ namespace Manufactures.Helpers.XlsTemplates
             dt.Columns.Add(new DataColumn() { ColumnName = "No", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Tanggal", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Kode", DataType = typeof(string) });
-            dt.Columns.Add(new DataColumn() { ColumnName = "Mc Sz", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "No Beam", DataType = typeof(string) });
+            dt.Columns.Add(new DataColumn() { ColumnName = "Mesin Sizing", DataType = typeof(string) });
             dt.Columns.Add(new DataColumn() { ColumnName = "Resep", DataType = typeof(string) });
           
             dt.Columns.Add(new DataColumn() { ColumnName = "SPU" });
@@ -27,7 +28,7 @@ namespace Manufactures.Helpers.XlsTemplates
             int index = 1;
             if (dailyOperationWarpingReportModel.Count == 0)
             {
-                dt.Rows.Add("", "", "", "", "", "");
+                dt.Rows.Add("", "", "", "", "", "", "");
             }
             else
             {
@@ -69,14 +70,22 @@ namespace Manufactures.Helpers.XlsTemplates
                     {
                         var nilaiMCawal = item.MachineSizing;
                         //nilaiSPUawal = "2";
-                        dt.Rows.Add(index++, finalPeriode,item.Code,item.MachineSizing, item.Recipe, "#VALUE!");
+                        dt.Rows.Add(index++, finalPeriode,item.Code,item.BeamNo,item.MachineSizing, item.Recipe, "#VALUE!");
                     }
+
+                    else if (nilaiSPUawal.Contains("%"))
+                    {
+                        nilaiSPUawal = item.SPU;
+                        dt.Rows.Add(index++, finalPeriode, item.Code, item.BeamNo, item.MachineSizing, item.Recipe, nilaiSPUawal);
+
+                    }
+
                     else
                     {
                         var SPU = item.SPU.Replace(",", ".");
                         double _spu = Math.Round(Convert.ToDouble(SPU) * 100, 2);
                         string spufinalbaru = _spu + " %";
-                        dt.Rows.Add(index++, finalPeriode, item.Code,item.MachineSizing, item.Recipe, spufinalbaru);
+                        dt.Rows.Add(index++, finalPeriode, item.Code, item.BeamNo, item.MachineSizing, item.Recipe, spufinalbaru);
                     }
 
 
@@ -106,10 +115,10 @@ namespace Manufactures.Helpers.XlsTemplates
                 worksheet.Cells["A" + 1 + ":G" + 8 + ""].Style.Font.Bold = true;
                 worksheet.Cells["A8"].LoadFromDataTable(dt, true);
               
-                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 8 + ":F" + (index + 8) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":G" + (index + 8) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":G" + (index + 8) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":G" + (index + 8) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 8 + ":G" + (index + 8) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
                 
 
 
