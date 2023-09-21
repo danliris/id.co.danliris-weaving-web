@@ -42,17 +42,6 @@ namespace Manufactures.Helpers.XlsTemplates
 
 
 
-                    //data % di SPU
-                   // if (nilaiSPUawal.Contains("%"))
-                    //{
-                      //  nilaiSPUawal = "berisi %";
-
-                    //}
-                   // else
-                   // {
-                  //      nilaiSPUawal = "ini else";
-                   // }
-
 
 
                     //data eror SPU
