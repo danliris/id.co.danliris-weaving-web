@@ -314,10 +314,7 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                            .Select(y =>
                             new WeavingDailyOperationMachineSizingDto
                             {
-                                //Shift = y.Shift,
-                                //Date = y.Date,
-                                //MachineSizing = y.MachineSizing,
-                                //=====
+                               
                                 Date = y.Date,
                                 Week = y.Week,
                                 MachineSizing = y.MachineSizing,
@@ -378,20 +375,7 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
             {
                 WeavingDailyOperationMachineSizingDto weavings = new WeavingDailyOperationMachineSizingDto
                 {
-                    //Shift = item.Shift,
-                    //Date = item.Date,
-                    //MachineSizing = item.MachineSizing,
-                    //Thread = item.Thread,
-                    //GradeA = item.GradeA,
-                    //GradeB = item.GradeB,
-                    //GradeC = item.GradeC,
-                    //Aval = item.Aval,
-                    //Total = item.Total,
-                    //WarpXWeft = item.WarpXWeft,
-                    //NumberOrder = item.NumberOrder,
-                    //WarpBale = item.WarpBale,
-                    //WeftBale = item.WeftBale,
-                    //TotalBale = item.TotalBale
+                    
 
                     Date = item.Date,
                     Week = item.Week,
