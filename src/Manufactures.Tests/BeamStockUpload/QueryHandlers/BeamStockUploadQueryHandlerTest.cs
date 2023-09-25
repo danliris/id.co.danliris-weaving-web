@@ -51,7 +51,7 @@ namespace Manufactures.Tests.BeamStockUpload.QueryHandlers
                 .Returns(new List<BeamStockReadModel>
                 {
                     new BeamStock(newGuid,1,_date.Year.ToString(),"month",_date.Month,"I","","name","","","","").GetReadModel()
-                }.AsQueryable());
+                }.AsQueryable);
 
             var result = await queryHandler.GetAll();
 
