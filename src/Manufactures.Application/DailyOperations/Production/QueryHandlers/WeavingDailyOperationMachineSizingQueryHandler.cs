@@ -368,7 +368,9 @@ namespace Manufactures.Application.DailyOperations.Production.QueryHandlers
                                 Efficiency = y.Efficiency
 
 
-                            }).OrderBy(s => s.Date);
+                            }).OrderBy(s => s.Date)
+                              .ThenBy(a => a.Shift)
+                              .ThenBy(a => a.MachineSizing);
             List<WeavingDailyOperationMachineSizingDto> listData = new List<WeavingDailyOperationMachineSizingDto>();
 
             foreach (var  item in query)
