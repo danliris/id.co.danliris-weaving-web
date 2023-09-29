@@ -11,5 +11,9 @@ namespace Manufactures.Domain.BeamStockUpload.Queries
     {
         Task<bool> Upload(ExcelWorksheets sheet, string month, int year, int monthId);
         Task<List<TModel>> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
+        //List<TModel> GetByMonthYear(int monthId, string year, int datestart, int datefinish, string shift);
+
+       // List<TModel> GetDailyReports(DateTime fromDate, DateTime toDate, string shift, string mcNo, string sp, string name, string code);
+
     }
 }
