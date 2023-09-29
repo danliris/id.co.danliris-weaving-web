@@ -32,7 +32,7 @@ namespace Manufactures.Helpers.XlsTemplates
           
 
 
-            int index = 1;
+            int index = 0;
             if (dailyOperationWarpingReportModel.Count == 0)
             {
                 dt.Rows.Add("", "", "", "", "", "", "", "", "", "", "", "", "");
@@ -56,14 +56,15 @@ namespace Manufactures.Helpers.XlsTemplates
                     var dateFormat = "dd/MM/yyyy";
                     var finalPeriode = item.Periode.ToString(dateFormat);
 
+                    index++;
+
+                    dt.Rows.Add(index, item.Construction,item.ThreadType, Math.Round(item.TotProductionCMPX,2),item.TotMCNo, Math.Round(item.TotProduction,2), Math.Round(item.TotProduction100,2), Math.Round(item.TotPercentEff,2), Math.Round(item.TotMC2Eff,2), Math.Round(item.TotF,2), Math.Round(item.TotW,2), Math.Round(item.TotRPM,MidpointRounding.AwayFromZero));
+
+                    //var a = Math.Round(466.5, MidpointRounding.AwayFromZero);
+
+                    //var b = Math.Round(466.2, MidpointRounding.AwayFromZero);
+
                    
-
-
-
-                    dt.Rows.Add(index++, item.Construction,item.ThreadType, Math.Round(item.TotProductionCMPX,2),item.TotMCNo, Math.Round(item.TotProduction,2), Math.Round(item.TotProduction100,2), Math.Round(item.TotPercentEff,2), Math.Round(item.TotMC2Eff,2), Math.Round(item.TotF,2), Math.Round(item.TotW,2), Math.Round(item.TotRPM,2));
-
-
-
                     //grand total
                     GrandTotProductionCMPX += Convert.ToDouble(item.TotProductionCMPX);
                     GrandTotMCNo += Convert.ToDouble(item.TotMCNo);
@@ -74,15 +75,15 @@ namespace Manufactures.Helpers.XlsTemplates
                     GrandTotF += Convert.ToDouble(item.TotF);
                     GrandTotW += Convert.ToDouble(item.TotW);
                     GrandTotRPM += Convert.ToDouble(item.TotRPM);
-
+                  
 
                 }
                 //penak iki
                 //var total = dailyOperationWarpingReportModel.Sum(x => x.TotProductionCMPX);
                 //query pake linq
                 //dt.Rows.Add("GRAND TOTAL","","", GrandTotProductionCMPX, dailyOperationWarpingReportModel.Sum(x=>x.TotProductionCMPX));
-                dt.Rows.Add("GRAND TOTAL", "", "", Math.Round(GrandTotProductionCMPX,2), Math.Round(GrandTotMCNo,2), Math.Round(GrandTotProduction,2), Math.Round(GrandTotProduction100,2), Math.Round(GrandTotPercentEff,2), Math.Round(GrandTotMC2Eff,2), Math.Round(GrandTotF,2), Math.Round(GrandTotW,2), Math.Round(GrandTotRPM,2));
-
+                dt.Rows.Add("GRAND TOTAL", "", "", Math.Round(GrandTotProductionCMPX,2), Math.Round(GrandTotMCNo,2), Math.Round(GrandTotProduction,2), Math.Round(GrandTotProduction100,2), Math.Round(GrandTotPercentEff/index,2), Math.Round(GrandTotMC2Eff/index,2), Math.Round(GrandTotF/index,2), Math.Round(GrandTotW/index,2), Math.Round(GrandTotRPM/index, MidpointRounding.AwayFromZero));
+                //var a = index;
             }
 
 
@@ -113,10 +114,10 @@ namespace Manufactures.Helpers.XlsTemplates
                 worksheet.Cells["A" + 11 + ":L" + 11 + ""].Style.Font.Bold = true;
                 worksheet.Cells["A11"].LoadFromDataTable(dt, true);
               
-                worksheet.Cells["A" + 11 + ":L" + (index + 11) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 11 + ":L" + (index + 11) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 11 + ":L" + (index + 11) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
-                worksheet.Cells["A" + 11 + ":L" + (index + 11) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 11 + ":L" + (index + 12) + ""].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 11 + ":L" + (index + 12) + ""].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 11 + ":L" + (index + 12) + ""].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                worksheet.Cells["A" + 11 + ":L" + (index + 12) + ""].Style.Border.Right.Style = ExcelBorderStyle.Thin;
 
                 //sni jg bs
                 //worksheet.Cells["A" + (index + 14)].Value = "TOTAL BEAM";
