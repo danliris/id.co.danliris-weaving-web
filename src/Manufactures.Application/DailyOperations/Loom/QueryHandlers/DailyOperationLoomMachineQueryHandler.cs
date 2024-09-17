@@ -198,17 +198,19 @@ namespace Manufactures.Application.DailyOperations.Loom.QueryHandlers
         public async Task<IEnumerable<DailyOperationLoomMachineDto>> GetAll()
         {
             var query = _repository
-                            .Query.OrderByDescending(o => o.CreatedDate)
-                            .GroupBy(r => new { r.MonthPeriodeId, r.MonthPeriode, r.YearPeriode, r.CreatedDate.Date })
-                            .Select(y =>
-                             new DailyOperationLoomMachineDto
-                             {
-                                 MonthPeriodeId = y.Key.MonthPeriodeId,
-                                 MonthPeriode = y.Key.MonthPeriode,
-                                 YearPeriode = y.Key.YearPeriode,
-                                 CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
-                                 UploadDate= y.Max(a=>a.CreatedDate)
-                             }).OrderByDescending(o => o.UploadDate);
+                .Query.OrderByDescending(o => o.CreatedDate)
+                //.GroupBy(r => new { r.MonthPeriodeId, r.MonthPeriode, r.YearPeriode, r.CreatedDate.Date })
+                .GroupBy(r => new { r.MonthPeriodeId, r.MonthPeriode, r.YearPeriode })
+                .Select(y =>
+                    new DailyOperationLoomMachineDto
+                    {
+                        MonthPeriodeId = y.Key.MonthPeriodeId,
+                        MonthPeriode = y.Key.MonthPeriode,
+                        YearPeriode = y.Key.YearPeriode,
+                        //CreatedDate = y.Key.Date.ToString("dd-MM-yyyy"),
+                        CreatedDate = y.Max(a => a.CreatedDate).ToString("dd-MM-yyyy"),
+                        UploadDate = y.Max(a => a.CreatedDate)
+                    }).OrderByDescending(o => o.UploadDate);
 
             await Task.Yield();
 
